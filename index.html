@@ -2,11 +2,15 @@
 <html>
 <head>
     <title>Sannivesham</title>
+
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         body {
             margin: 0;
             font-family: Arial;
-            background: #0d0d0d;
+            background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
             color: white;
         }
 
@@ -21,13 +25,20 @@
             border: 3px solid #ff9933;
         }
 
+        .telugu {
+            margin-top: 10px;
+            color: #ccc;
+            font-size: 16px;
+        }
+
         h1 {
             color: #ff9933;
-            margin: 10px 0;
+            margin: 5px 0;
+            font-size: 30px;
         }
 
         .about {
-            background: #1a1a1a;
+            background: #1f1f1f;
             margin: 20px;
             padding: 20px;
             border-radius: 12px;
@@ -60,11 +71,26 @@
         }
 
         .insta {
-            background: #e1306c;
+            background: #E1306C;
         }
 
         .youtube {
-            background: #ff0000;
+            background: #FF0000;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .event-btn {
+            display:inline-block;
+            margin-top:10px;
+            padding:12px 20px;
+            background:#ff9933;
+            color:black;
+            text-decoration:none;
+            border-radius:8px;
+            font-weight:bold;
         }
     </style>
 </head>
@@ -74,32 +100,24 @@
     <!-- HEADER -->
     <div class="header">
         <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/Logo%20(2).png" class="logo">
-        <h1>సన్నివేశం 🌸</h1>
+
+        <div class="telugu">తెలుగు 🌸</div>
+        <h1>సన్నివేశం</h1>
     </div>
 
     <!-- ABOUT -->
     <div class="about">
         <p>
-            తెలుగు 🌸 సన్నివేశం 🌿 <br><br>
-            సంస్కృతి • సంప్రదాయం • సంబరాలు <br><br>
+            సంస్కృతి • సంప్రదాయం • సంభాషణ <br><br>
             సంప్రదాయానికి స్వరం <br>
             ఆలోచనలకు విరామం 🕊️
         </p>
     </div>
 
-    <!-- EVENTS BUTTON -->
+    <!-- EVENTS -->
     <div class="about">
         <h2>మా కార్యక్రమాలు</h2>
-        <a href="events.html" style="
-            display:inline-block;
-            margin-top:10px;
-            padding:12px 20px;
-            background:#ff9933;
-            color:black;
-            text-decoration:none;
-            border-radius:8px;
-            font-weight:bold;
-        ">
+        <a href="events.html" class="event-btn">
             ప్రతిభా వేదిక 🎭
         </a>
     </div>
@@ -107,11 +125,11 @@
     <!-- SOCIAL -->
     <div class="buttons">
         <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" target="_blank" class="btn insta">
-            Instagram 📸
+            <i class="fa-brands fa-instagram"></i> Instagram
         </a>
 
         <a href="https://youtube.com/@sannivesham" target="_blank" class="btn youtube">
-            YouTube ▶️
+            <i class="fa-brands fa-youtube"></i> YouTube
         </a>
     </div>
 
