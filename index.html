@@ -3,6 +3,9 @@
 <head>
     <title>సన్నివేశం</title>
 
+    <!-- Mobile View -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Telugu Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
 
@@ -17,80 +20,83 @@
             color: #333;
         }
 
+        /* HEADER */
         .header {
             text-align: center;
-            padding: 40px 20px 20px;
+            padding: 30px 15px;
         }
 
         .logo {
-            width: 130px;
+            width: 90px;
             border-radius: 50%;
             border: 3px solid #ff9933;
-            box-shadow: 0 0 15px rgba(255,153,51,0.4);
+            box-shadow: 0 0 10px rgba(255,153,51,0.4);
         }
 
         .tag {
-            margin-top: 15px;
+            margin-top: 10px;
             color: #666;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         h1 {
             color: #ff6600;
-            margin: 8px 0;
-            font-size: 34px;
+            margin: 5px 0;
+            font-size: 24px;
         }
 
+        /* CARDS */
         .about {
             background: #ffffff;
-            margin: 20px;
-            padding: 25px;
-            border-radius: 15px;
+            margin: 15px;
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .about p {
             color: #444;
-            line-height: 1.8;
-            font-size: 16px;
+            line-height: 1.7;
+            font-size: 15px;
         }
 
+        /* EVENTS BUTTON */
         .event-btn {
-            display:inline-block;
-            margin-top:15px;
-            padding:12px 22px;
+            display: block;
+            margin: 15px auto;
+            padding: 12px;
             background: #ff9933;
-            color:white;
-            text-decoration:none;
-            border-radius:10px;
-            font-weight:bold;
-            transition:0.3s;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            width: 80%;
+            text-align: center;
+            transition: 0.3s;
         }
 
         .event-btn:hover {
             background: #ff6600;
-            transform: scale(1.05);
         }
 
+        /* SOCIAL BUTTONS */
         .buttons {
-            text-align: center;
-            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
         }
 
         .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 22px;
+            width: 80%;
+            margin: 8px;
+            padding: 12px;
             border-radius: 10px;
             text-decoration: none;
             color: white;
             font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
+            text-align: center;
         }
 
         .insta {
@@ -103,6 +109,39 @@
 
         .btn i {
             margin-right: 8px;
+        }
+
+        /* DESKTOP VIEW */
+        @media (min-width: 768px) {
+
+            .logo {
+                width: 130px;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+
+            .about {
+                margin: 20px auto;
+                width: 60%;
+                padding: 25px;
+            }
+
+            .buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .btn {
+                width: auto;
+                padding: 12px 22px;
+            }
+
+            .event-btn {
+                width: auto;
+                padding: 12px 22px;
+            }
         }
     </style>
 </head>
