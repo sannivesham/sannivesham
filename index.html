@@ -3,10 +3,9 @@
 <head>
     <title>సన్నివేశం</title>
 
-    <!-- Mobile View -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Telugu Font -->
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
 
     <!-- Icons -->
@@ -20,127 +19,105 @@
             color: #333;
         }
 
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background: #ff9933;
+            padding: 12px;
+            position: sticky;
+            top: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         /* HEADER */
         .header {
             text-align: center;
-            padding: 30px 15px;
+            padding: 20px;
+            animation: fadeIn 1s;
         }
 
         .logo {
             width: 90px;
             border-radius: 50%;
-            border: 3px solid #ff9933;
-            box-shadow: 0 0 10px rgba(255,153,51,0.4);
-        }
-
-        .tag {
-            margin-top: 10px;
-            color: #666;
-            font-size: 14px;
         }
 
         h1 {
             color: #ff6600;
-            margin: 5px 0;
-            font-size: 24px;
+        }
+
+        .tag {
+            color: #666;
         }
 
         /* CARDS */
-        .about {
-            background: #ffffff;
+        .section {
+            background: white;
             margin: 15px;
             padding: 18px;
             border-radius: 12px;
-            text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 1s;
         }
 
-        .about p {
-            color: #444;
+        .section p {
             line-height: 1.7;
-            font-size: 15px;
         }
 
-        /* EVENTS BUTTON */
-        .event-btn {
-            display: block;
-            margin: 15px auto;
-            padding: 12px;
-            background: #ff9933;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
-            width: 80%;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .event-btn:hover {
-            background: #ff6600;
-        }
-
-        /* SOCIAL BUTTONS */
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px;
-        }
-
+        /* BUTTONS */
         .btn {
-            width: 80%;
-            margin: 8px;
+            display: block;
+            margin: 10px auto;
             padding: 12px;
             border-radius: 10px;
             text-decoration: none;
             color: white;
-            font-size: 16px;
+            width: 80%;
             text-align: center;
+        }
+
+        .event-btn {
+            background: #ff9933;
         }
 
         .insta {
-            background: linear-gradient(45deg, #E1306C, #C13584);
+            background: #E1306C;
         }
 
         .youtube {
-            background: linear-gradient(45deg, #FF0000, #cc0000);
+            background: red;
         }
 
-        .btn i {
-            margin-right: 8px;
+        .call {
+            background: green;
         }
 
-        /* DESKTOP VIEW */
+        .whatsapp {
+            background: #25D366;
+        }
+
+        /* ANIMATION */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* DESKTOP */
         @media (min-width: 768px) {
-
-            .logo {
-                width: 130px;
-            }
-
-            h1 {
-                font-size: 34px;
-            }
-
-            .about {
-                margin: 20px auto;
+            .section {
                 width: 60%;
-                padding: 25px;
-            }
-
-            .buttons {
-                flex-direction: row;
-                justify-content: center;
+                margin: 20px auto;
             }
 
             .btn {
                 width: auto;
-                padding: 12px 22px;
-            }
-
-            .event-btn {
-                width: auto;
-                padding: 12px 22px;
+                display: inline-block;
+                margin: 10px;
             }
         }
     </style>
@@ -148,41 +125,61 @@
 
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/Logo%20(2).png" class="logo">
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="#">Home</a>
+    <a href="events.html" target="_blank">Events</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+</div>
 
-        <div class="tag">తెలుగు 🌸</div>
-        <h1>సన్నివేశం</h1>
-    </div>
+<!-- HEADER -->
+<div class="header">
+    <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/Logo%20(2).png" class="logo">
+    <div class="tag">తెలుగు 🌸</div>
+    <h1>సన్నివేశం</h1>
+</div>
 
-    <!-- ABOUT -->
-    <div class="about">
-        <p>
-            సంస్కృతి • సంప్రదాయం • సంభాషణ <br><br>
-            మన సంప్రదాయాల సౌందర్యాన్ని పంచే వేదిక 🌿 <br>
-            సృజనాత్మక ఆలోచనలకు ఒక కొత్త దారి ✨
-        </p>
-    </div>
+<!-- ABOUT -->
+<div class="section" id="about">
+    <p>
+        సంస్కృతి • సంప్రదాయం • సంభాషణ <br><br>
+        మన సంప్రదాయాల సౌందర్యాన్ని పంచే వేదిక 🌿 <br>
+        సృజనాత్మక ఆలోచనలకు ఒక కొత్త దారి ✨
+    </p>
+</div>
 
-    <!-- EVENTS -->
-    <div class="about">
-        <h2>మా కార్యక్రమాలు</h2>
-        <a href="events.html" target="_blank" class="event-btn">
-            ప్రతిభా వేదిక 🎭
-        </a>
-    </div>
+<!-- EVENTS -->
+<div class="section">
+    <h2>మా కార్యక్రమాలు</h2>
+    <a href="events.html" target="_blank" class="btn event-btn">
+        ప్రతిభా వేదిక 🎭
+    </a>
+</div>
 
-    <!-- SOCIAL -->
-    <div class="buttons">
-        <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" target="_blank" class="btn insta">
-            <i class="fa-brands fa-instagram"></i> Instagram
-        </a>
+<!-- SOCIAL -->
+<div class="section">
+    <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" target="_blank" class="btn insta">
+        <i class="fa-brands fa-instagram"></i> Instagram
+    </a>
 
-        <a href="https://youtube.com/@sannivesham" target="_blank" class="btn youtube">
-            <i class="fa-brands fa-youtube"></i> YouTube
-        </a>
-    </div>
+    <a href="https://youtube.com/@sannivesham" target="_blank" class="btn youtube">
+        <i class="fa-brands fa-youtube"></i> YouTube
+    </a>
+</div>
+
+<!-- CONTACT -->
+<div class="section" id="contact">
+    <h2>Get in Touch 📞</h2>
+
+    <a href="tel:9493226037" class="btn call">
+        📞 Call Now
+    </a>
+
+    <a href="https://wa.me/919493226037" target="_blank" class="btn whatsapp">
+        💬 WhatsApp
+    </a>
+</div>
 
 </body>
 </html>
