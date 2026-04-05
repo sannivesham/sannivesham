@@ -3,38 +3,48 @@
 <head>
     <title>ప్రతిభా వేదిక</title>
 
+    <!-- MOBILE FIX -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
+
     <style>
         body {
             margin: 0;
-            font-family: Arial;
-            background: #0d0d0d;
-            color: white;
+            font-family: 'Noto Sans Telugu', sans-serif;
+            background: linear-gradient(to bottom, #fff7e6, #ffe4c4);
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            color: #ff9933;
+            color: #ff6600;
             margin: 20px;
+            font-size: 24px;
         }
 
         .event {
-            background: #1f1f1f;
-            margin: 20px;
-            padding: 20px;
+            background: #ffffff;
+            margin: 15px;
+            padding: 18px;
             border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .event p {
-            color: #ccc;
+            color: #444;
             line-height: 1.8;
+            font-size: 15px;
             text-align: justify;
         }
 
+        /* GALLERY */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
+            grid-template-columns: repeat(2, 1fr); /* mobile 2 images */
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .gallery img {
@@ -47,15 +57,37 @@
             transform: scale(1.05);
         }
 
+        /* BACK BUTTON */
         .back {
             text-align: center;
             margin: 20px;
         }
 
         .back a {
-            color: #ff9933;
+            display: inline-block;
+            padding: 10px 18px;
+            background: #ff9933;
+            color: white;
             text-decoration: none;
-            font-size: 18px;
+            border-radius: 8px;
+        }
+
+        /* DESKTOP */
+        @media (min-width: 768px) {
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .event {
+                width: 60%;
+                margin: 20px auto;
+                padding: 25px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(3, 1fr); /* desktop 3 images */
+            }
         }
     </style>
 </head>
@@ -76,21 +108,14 @@
 ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది. ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి, ఉపాధ్యాయులకు మరియు అందరికీ మా హృదయపూర్వక కృతజ్ఞతలు.
 </p>
 
-<!-- GALLERY -->
 <div class="gallery">
 
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_221107048.jpg.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_222322319.jpg.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_223503004.jpg.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_230413689.jpg.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5855.JPG.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5883%20(1).JPG.jpeg">
-
 <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5940%20(1).JPG.jpeg">
 
 </div>
@@ -98,7 +123,7 @@
 </div>
 
 <div class="back">
-    <a href="index.html">⬅️ హోమ్‌కు వెళ్లండి</a>
+    <a href="index.html">⬅️ హోమ్</a>
 </div>
 
 </body>
