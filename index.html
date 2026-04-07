@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>సన్నివేశం</title>
@@ -8,21 +8,21 @@
     <!-- Telugu Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             margin: 0;
             font-family: 'Noto Sans Telugu', sans-serif;
             background: linear-gradient(135deg, #fdf6e3, #fceabb);
-            position: relative;
             overflow-x: hidden;
             color: #333;
         }
 
-        /* BACKGROUND DESIGN */
+        /* BACKGROUND TEXTURE */
         body::before {
             content: "";
             position: fixed;
@@ -38,17 +38,21 @@
 
         /* NAVBAR */
         .navbar {
+            position: sticky;
+            top: 0;
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 20px;
             background: #ff9933;
             padding: 14px;
             font-weight: bold;
+            z-index: 1000;
         }
 
         .navbar a {
             color: white;
             text-decoration: none;
+            font-size: 14px;
         }
 
         /* HEADER */
@@ -59,7 +63,7 @@
         }
 
         .logo {
-            width: 140px;
+            width: 150px;
             border-radius: 50%;
             transition: 0.4s;
         }
@@ -69,12 +73,12 @@
         }
 
         .brand {
-            font-size: 32px;
+            font-size: 34px;
             color: #ff6600;
             font-weight: bold;
         }
 
-        /* SECTION */
+        /* SECTIONS */
         .section {
             background: rgba(255,255,255,0.95);
             margin: 15px;
@@ -103,13 +107,8 @@
             transition: 0.3s;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
+        .btn:hover { transform: scale(1.05); }
+        .btn:active { transform: scale(0.95); }
 
         .event-btn { background: #ff9933; }
         .insta { background: #E1306C; }
@@ -117,7 +116,7 @@
         .call { background: green; }
         .whatsapp { background: #25D366; }
 
-        /* SPEAKER BUTTON (TOP RIGHT) */
+        /* SPEAKER */
         #musicBtn {
             position: fixed;
             top: 80px;
@@ -125,23 +124,31 @@
             background: #ff9933;
             border: none;
             border-radius: 50%;
-            padding: 12px;
+            padding: 14px;
             font-size: 18px;
             color: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 999;
+            z-index: 9999;
+        }
+
+        /* POPUP */
+        #musicPopup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff9933;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 9999;
         }
 
         /* ANIMATIONS */
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeIn {
@@ -149,7 +156,7 @@
             to { opacity: 1; }
         }
 
-        /* DESKTOP IMPROVEMENT */
+        /* DESKTOP */
         @media (min-width: 768px) {
             .section {
                 width: 50%;
@@ -161,8 +168,8 @@
             }
 
             .navbar {
-                gap: 50px;
-                font-size: 18px;
+                gap: 40px;
+                font-size: 16px;
             }
         }
 
@@ -172,11 +179,12 @@
 <body>
 
 <!-- MUSIC -->
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop autoplay muted>
     <source src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48.mpeg" type="audio/mpeg">
 </audio>
 
 <button id="musicBtn">🔊</button>
+<div id="musicPopup">🔊 Tap anywhere to experience divine sound</div>
 
 <!-- NAVBAR -->
 <div class="navbar">
@@ -184,6 +192,8 @@
     <a href="events.html">Events</a>
     <a href="books.html">Books</a>
     <a href="festivals.html">Festivals</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
 </div>
 
 <!-- HEADER -->
@@ -209,8 +219,17 @@
     <a href="https://youtube.com/@sannivesham" class="btn youtube">YouTube</a>
 </div>
 
+<!-- ABOUT -->
+<div class="section" id="about">
+    <h2>About Us 🪔</h2>
+    <p>
+        సన్నివేశం ఒక సాంస్కృతిక వేదిక. మన సంస్కృతి, సంప్రదాయం మరియు విలువలను 
+        కొత్త తరానికి చేరవేయడం మా లక్ష్యం.
+    </p>
+</div>
+
 <!-- CONTACT -->
-<div class="section">
+<div class="section" id="contact">
     <h2>Get in Touch 📞</h2>
 
     <a href="tel:9493226037" class="btn call">Call</a>
@@ -221,15 +240,19 @@
 <script>
 let music = document.getElementById("bgMusic");
 let btn = document.getElementById("musicBtn");
-let started = false;
+let popup = document.getElementById("musicPopup");
 
+// autoplay try
+music.play().catch(()=>{});
+
+// first click enable sound
 document.body.addEventListener("click", function () {
-    if (!started) {
-        music.play();
-        started = true;
-    }
+    music.muted = false;
+    music.play();
+    popup.style.display = "none";
 }, { once: true });
 
+// button control
 btn.onclick = function () {
     if (music.paused) {
         music.play();
