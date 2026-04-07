@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Font -->
+    <!-- Telugu Font -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
 
     <!-- Icons -->
@@ -19,14 +19,19 @@
             color: #333;
         }
 
+        /* SPECIAL FONT FOR SANNIVESHAM */
+        .brand {
+            font-size: 26px;
+            color: #ff6600;
+            font-weight: bold;
+        }
+
         /* NAVBAR */
         .navbar {
             display: flex;
             justify-content: space-around;
             background: #ff9933;
             padding: 12px;
-            position: sticky;
-            top: 0;
         }
 
         .navbar a {
@@ -39,7 +44,6 @@
         .header {
             text-align: center;
             padding: 20px;
-            animation: fadeIn 1s;
         }
 
         .logo {
@@ -47,29 +51,19 @@
             border-radius: 50%;
         }
 
-        h1 {
-            color: #ff6600;
-        }
-
         .tag {
             color: #666;
         }
 
-        /* CARDS */
+        /* SECTION */
         .section {
             background: white;
             margin: 15px;
             padding: 18px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            animation: fadeIn 1s;
         }
 
-        .section p {
-            line-height: 1.7;
-        }
-
-        /* BUTTONS */
         .btn {
             display: block;
             margin: 10px auto;
@@ -81,43 +75,16 @@
             text-align: center;
         }
 
-        .event-btn {
-            background: #ff9933;
-        }
+        .event-btn { background: #ff9933; }
+        .insta { background: #E1306C; }
+        .youtube { background: red; }
+        .call { background: green; }
+        .whatsapp { background: #25D366; }
 
-        .insta {
-            background: #E1306C;
-        }
-
-        .youtube {
-            background: red;
-        }
-
-        .call {
-            background: green;
-        }
-
-        .whatsapp {
-            background: #25D366;
-        }
-
-        /* ANIMATION */
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        /* DESKTOP */
         @media (min-width: 768px) {
             .section {
                 width: 60%;
                 margin: 20px auto;
-            }
-
-            .btn {
-                width: auto;
-                display: inline-block;
-                margin: 10px;
             }
         }
     </style>
@@ -129,6 +96,8 @@
 <div class="navbar">
     <a href="#">Home</a>
     <a href="events.html" target="_blank">Events</a>
+    <a href="books.html" target="_blank">Books</a>
+    <a href="festivals.html" target="_blank">Festivals</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
 </div>
@@ -137,7 +106,7 @@
 <div class="header">
     <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/Logo%20(2).png" class="logo">
     <div class="tag">తెలుగు 🌸</div>
-    <h1>సన్నివేశం</h1>
+    <div class="brand">సన్నివేశం</div>
 </div>
 
 <!-- ABOUT -->
@@ -152,9 +121,13 @@
 <!-- EVENTS -->
 <div class="section">
     <h2>మా కార్యక్రమాలు</h2>
-    <a href="events.html" target="_blank" class="btn event-btn">
-        ప్రతిభా వేదిక 🎭
-    </a>
+    <a href="events.html" target="_blank" class="btn event-btn">ప్రతిభా వేదిక 🎭</a>
+</div>
+
+<!-- FESTIVALS -->
+<div class="section">
+    <h2>పండుగలు 🎉</h2>
+    <a href="festivals.html" target="_blank" class="btn event-btn">పండుగల వివరాలు</a>
 </div>
 
 <!-- SOCIAL -->
@@ -172,13 +145,8 @@
 <div class="section" id="contact">
     <h2>Get in Touch 📞</h2>
 
-    <a href="tel:9493226037" class="btn call">
-        📞 Call Now
-    </a>
-
-    <a href="https://wa.me/919493226037" target="_blank" class="btn whatsapp">
-        💬 WhatsApp
-    </a>
+    <a href="tel:9493226037" class="btn call">📞 Call Now</a>
+    <a href="https://wa.me/919493226037" target="_blank" class="btn whatsapp">💬 WhatsApp</a>
 </div>
 
 </body>
