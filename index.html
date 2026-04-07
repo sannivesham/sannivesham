@@ -16,12 +16,9 @@
         body {
             margin: 0;
             font-family: 'Noto Sans Telugu', sans-serif;
-
             background: linear-gradient(135deg, #fdf6e3, #fceabb);
-
             position: relative;
             overflow-x: hidden;
-
             color: #333;
         }
 
@@ -38,17 +35,14 @@
                 radial-gradient(circle at 40% 80%, rgba(255,100,0,0.15) 2px, transparent 2px);
 
             background-size: 120px 120px;
-
             z-index: -1;
         }
 
-        /* NAVBAR */
         .navbar {
             display: flex;
             justify-content: space-around;
             background: #ff9933;
             padding: 12px;
-            font-size: 14px;
         }
 
         .navbar a {
@@ -57,7 +51,6 @@
             font-weight: bold;
         }
 
-        /* HEADER */
         .header {
             text-align: center;
             padding: 20px;
@@ -66,45 +59,22 @@
         .logo {
             width: 130px;
             border-radius: 50%;
-            transition: transform 0.4s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.1);
-        }
-
-        .tag {
-            color: #666;
-            margin-top: 5px;
         }
 
         .brand {
             font-size: 30px;
             color: #ff6600;
             font-weight: bold;
-            margin-top: 5px;
         }
 
-        /* SECTION */
         .section {
             background: rgba(255,255,255,0.9);
             margin: 15px;
             padding: 18px;
             border-radius: 14px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            animation: fadeIn 0.8s ease forwards;
-            transition: 0.3s;
         }
 
-        .section:hover {
-            transform: translateY(-5px);
-        }
-
-        .section h2 {
-            margin-bottom: 15px;
-        }
-
-        /* BUTTONS */
         .btn {
             display: block;
             margin: 10px auto;
@@ -114,17 +84,6 @@
             color: white;
             width: 85%;
             text-align: center;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
         }
 
         .event-btn { background: #ff9933; }
@@ -133,28 +92,17 @@
         .call { background: green; }
         .whatsapp { background: #25D366; }
 
-        /* ANIMATION */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* DESKTOP */
-        @media (min-width: 768px) {
-            .section {
-                width: 60%;
-                margin: 20px auto;
-            }
-
-            .navbar {
-                font-size: 16px;
-            }
+        /* MUSIC BUTTON */
+        #musicBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff9933;
+            border: none;
+            border-radius: 50%;
+            padding: 12px;
+            font-size: 18px;
+            color: white;
         }
 
     </style>
@@ -162,60 +110,80 @@
 
 <body>
 
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48.mpeg" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn">🔊</button>
+
 <!-- NAVBAR -->
 <div class="navbar">
     <a href="#">Home</a>
-    <a href="events.html" target="_blank">Events</a>
-    <a href="books.html" target="_blank">Books</a>
-    <a href="festivals.html" target="_blank">Festivals</a>
-    <a href="#contact">Contact</a>
+    <a href="events.html">Events</a>
+    <a href="books.html">Books</a>
+    <a href="festivals.html">Festivals</a>
 </div>
 
 <!-- HEADER -->
 <div class="header">
     <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/Logo%20(2).png" class="logo">
-    <div class="tag">తెలుగు 🌸</div>
     <div class="brand">సన్నివేశం</div>
-</div>
-
-<!-- ABOUT -->
-<div class="section">
-    <p>
-        సంస్కృతి • సంప్రదాయం • సంభాషణ <br><br>
-        మన సంప్రదాయాల సౌందర్యాన్ని పంచే వేదిక 🌿 <br>
-        సృజనాత్మక ఆలోచనలకు ఒక కొత్త దారి ✨
-    </p>
 </div>
 
 <!-- MAIN -->
 <div class="section">
     <h2>సృజనాత్మక విభాగాలు</h2>
 
-    <a href="events.html" target="_blank" class="btn event-btn">ప్రతిభా వేదిక 🎭</a>
-    <a href="festivals.html" target="_blank" class="btn event-btn">పండుగలు 🎉</a>
-    <a href="books.html" target="_blank" class="btn event-btn">పుస్తకాలు 📚</a>
+    <a href="events.html" class="btn event-btn">ప్రతిభా వేదిక 🎭</a>
+    <a href="festivals.html" class="btn event-btn">పండుగలు 🎉</a>
+    <a href="books.html" class="btn event-btn">పుస్తకాలు 📚</a>
 </div>
 
 <!-- SOCIAL -->
 <div class="section">
     <h2>Follow Us 🔗</h2>
 
-    <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" target="_blank" class="btn insta">
-        <i class="fa-brands fa-instagram"></i> Instagram
+    <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" class="btn insta">
+        Instagram
     </a>
 
-    <a href="https://youtube.com/@sannivesham" target="_blank" class="btn youtube">
-        <i class="fa-brands fa-youtube"></i> YouTube
+    <a href="https://youtube.com/@sannivesham" class="btn youtube">
+        YouTube
     </a>
 </div>
 
 <!-- CONTACT -->
-<div class="section" id="contact">
-    <h2>Get in Touch 📞</h2>
+<div class="section">
+    <h2>Contact 📞</h2>
 
-    <a href="tel:9493226037" class="btn call">📞 Call Now</a>
-    <a href="https://wa.me/919493226037" target="_blank" class="btn whatsapp">💬 WhatsApp</a>
+    <a href="tel:9493226037" class="btn call">Call</a>
+    <a href="https://wa.me/919493226037" class="btn whatsapp">WhatsApp</a>
 </div>
+
+<!-- SCRIPT -->
+<script>
+let music = document.getElementById("bgMusic");
+let btn = document.getElementById("musicBtn");
+let isPlaying = false;
+
+document.body.addEventListener("click", function () {
+    if (!isPlaying) {
+        music.play();
+        isPlaying = true;
+    }
+}, { once: true });
+
+btn.onclick = function () {
+    if (music.paused) {
+        music.play();
+        btn.innerHTML = "🔊";
+    } else {
+        music.pause();
+        btn.innerHTML = "🔇";
+    }
+};
+</script>
 
 </body>
 </html>
