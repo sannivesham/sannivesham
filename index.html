@@ -16,19 +16,16 @@
         body {
             margin: 0;
             font-family: 'Noto Sans Telugu', sans-serif;
-            background: linear-gradient(135deg, #fdf6e3, #fceabb);
-            background-attachment: fixed;
-            color: #333;
-        }
 
-        body::before {
-            content: "";
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top left, rgba(255,140,0,0.15), transparent 50%),
-                        radial-gradient(circle at bottom right, rgba(255,100,0,0.15), transparent 50%);
-            z-index: -1;
+            /* TEXTURE + COLOR */
+            background: 
+                linear-gradient(rgba(253,246,227,0.9), rgba(252,234,187,0.9)),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+
+            background-size: cover;
+            background-attachment: fixed;
+
+            color: #333;
         }
 
         /* NAVBAR */
@@ -76,7 +73,7 @@
 
         /* SECTION */
         .section {
-            background: white;
+            background: rgba(255,255,255,0.9);
             margin: 15px;
             padding: 18px;
             border-radius: 14px;
