@@ -10,7 +10,6 @@
 
 <style>
 
-/* RESET */
 *{
     margin:0;
     padding:0;
@@ -24,70 +23,55 @@ body{
     min-height:100vh;
 }
 
-/* 🖼️ BACKGROUND IMAGE */
+/* ================= BACKGROUND ================= */
 .bg-image{
     position:fixed;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
+    top:0;
+    left:0;
     z-index:-6;
 
-    background:
-    url("https://images.unsplash.com/photo-1520975922284-9a9b7c6d7f0f?auto=format&fit=crop&w=1600&q=80");
-
+    background:url("https://images.unsplash.com/photo-1520975922284-9a9b7c6d7f0f?auto=format&fit=crop&w=1600&q=80");
     background-size:cover;
     background-position:center;
-
     filter:brightness(0.35) contrast(1.2);
 }
 
-/* 🌑 OVERLAY */
 .overlay{
     position:fixed;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
+    top:0;
+    left:0;
     z-index:-5;
-
-    background:radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.85) 80%);
+    background:radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 80%);
 }
 
-/* 🔥 EMBERS */
 .embers{
     position:fixed;
     width:100%;
     height:100%;
     z-index:-4;
-
     background-image:
-    radial-gradient(circle, rgba(255,140,0,0.35) 1px, transparent 3px),
-    radial-gradient(circle, rgba(255,200,120,0.25) 1px, transparent 3px);
-
+    radial-gradient(circle, rgba(255,140,0,0.35) 1px, transparent 3px);
     background-size:120px 120px;
     opacity:0.25;
-
     animation: float 12s linear infinite;
 }
 
-/* 🌫️ SMOKE */
 .smoke{
     position:fixed;
     width:100%;
     height:100%;
     z-index:-3;
-
     background-image:
     radial-gradient(rgba(255,255,255,0.05) 2px, transparent 2px);
-
     background-size:90px 90px;
     opacity:0.12;
-
     animation: drift 60s linear infinite;
 }
 
-/* ⚡ LIGHTNING */
 .lightning{
     position:fixed;
     width:100%;
@@ -96,22 +80,18 @@ body{
     animation: flash 7s infinite;
 }
 
-/* NAVBAR */
+/* ================= NAVBAR ================= */
 .navbar{
     position:sticky;
     top:0;
     z-index:999;
-
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
     gap:18px;
-
     padding:14px;
-
     background:rgba(0,0,0,0.75);
     backdrop-filter:blur(10px);
-
     border-bottom:1px solid rgba(255,180,80,0.2);
 }
 
@@ -121,7 +101,7 @@ body{
     font-weight:bold;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 .header{
     text-align:center;
     padding:50px 20px;
@@ -133,7 +113,6 @@ body{
     margin:auto;
     border-radius:50%;
     overflow:hidden;
-
     border:2px solid rgba(255,180,80,0.4);
     box-shadow:0 0 40px rgba(255,140,0,0.2);
 }
@@ -148,61 +127,9 @@ body{
     margin-top:20px;
     font-size:48px;
     color:#ffb347;
-    text-shadow:0 0 20px rgba(255,140,0,0.3);
 }
 
-/* SECTION */
-.section{
-    width:92%;
-    max-width:950px;
-    margin:30px auto;
-
-    background:rgba(10,10,10,0.85);
-    border-radius:20px;
-    padding:30px;
-
-    border:1px solid rgba(255,180,80,0.15);
-}
-
-/* GRID */
-.grid-box{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:18px;
-}
-
-/* BUTTONS */
-.btn{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:18px;
-    min-height:85px;
-
-    border-radius:14px;
-    text-decoration:none;
-
-    font-weight:bold;
-    color:#fff3dd;
-
-    background:linear-gradient(135deg,#b86b1d,#ff9f2f,#b86b1d);
-
-    transition:0.3s;
-}
-
-.btn:hover{
-    transform:translateY(-6px) scale(1.03);
-}
-
-/* FOOTER */
-.footer{
-    text-align:center;
-    padding:30px;
-    color:#aaa;
-}
-
-/* 🔱 INTRO SCREEN */
+/* ================= INTRO ================= */
 #intro{
     position:fixed;
     width:100%;
@@ -216,50 +143,22 @@ body{
     justify-content:center;
     flex-direction:column;
 
-    background:
-    radial-gradient(circle at center, rgba(255,140,0,0.15), transparent 40%),
-    linear-gradient(180deg,#000,#050505,#000);
+    background:radial-gradient(circle, rgba(255,140,0,0.15), transparent 40%), #000;
 
     animation: fadeOut 1s ease 4s forwards;
 }
 
-.intro-content{
-    text-align:center;
+#intro h1{
+    font-size:42px;
+    color:#ffb347;
 }
 
 .chakra{
     font-size:60px;
     animation: spin 3s linear infinite;
-    margin-bottom:10px;
 }
 
-#intro h1{
-    font-size:40px;
-    color:#ffb347;
-    letter-spacing:2px;
-    text-shadow:0 0 20px rgba(255,140,0,0.4);
-}
-
-.loader{
-    margin-top:25px;
-    width:180px;
-    height:4px;
-    background:rgba(255,255,255,0.1);
-    border-radius:10px;
-    overflow:hidden;
-    position:relative;
-}
-
-.loader::before{
-    content:"";
-    position:absolute;
-    width:40%;
-    height:100%;
-    background:linear-gradient(90deg,#ff9a2f,#ffb347,#ff6a00);
-    animation: load 1.5s infinite;
-}
-
-/* MUSIC BUTTON */
+/* ================= MUSIC ================= */
 #musicBtn{
     position:fixed;
     top:85px;
@@ -272,49 +171,50 @@ body{
     color:white;
     font-size:22px;
     z-index:100000;
-    cursor:pointer;
 }
 
-/* ANIMATIONS */
-@keyframes load{
-    from{left:-40%;}
-    to{left:100%;}
-}
-
-@keyframes spin{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-}
-
-@keyframes fadeOut{
-    to{opacity:0;visibility:hidden;}
-}
-
-@keyframes float{
-    from{transform:translateY(0);}
-    to{transform:translateY(-200px);}
-}
-
-@keyframes drift{
-    from{transform:translateY(0);}
-    to{transform:translateY(-300px);}
-}
-
+/* ================= ANIMATIONS ================= */
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+@keyframes float{to{transform:translateY(-200px)}}
+@keyframes drift{to{transform:translateY(-300px)}}
 @keyframes flash{
-    0%,90%,100%{background:transparent;}
-    92%{background:rgba(255,255,255,0.08);}
-    96%{background:rgba(255,200,120,0.05);}
+0%,90%,100%{background:transparent;}
+92%{background:rgba(255,255,255,0.08);}
 }
 
-/* MOBILE */
-@media(max-width:700px){
-    .grid-box{
-        grid-template-columns:1fr;
-    }
+/* ================= SECTION ================= */
+.section{
+    width:92%;
+    max-width:950px;
+    margin:30px auto;
+    background:rgba(10,10,10,0.85);
+    border-radius:20px;
+    padding:30px;
+    border:1px solid rgba(255,180,80,0.15);
+}
 
-    .title{
-        font-size:38px;
-    }
+.grid-box{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.btn{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+    min-height:85px;
+    border-radius:14px;
+    text-decoration:none;
+    font-weight:bold;
+    color:#fff3dd;
+    background:linear-gradient(135deg,#b86b1d,#ff9f2f,#b86b1d);
+}
+
+.btn:hover{
+    transform:translateY(-6px) scale(1.03);
 }
 
 </style>
@@ -322,13 +222,10 @@ body{
 
 <body>
 
-<!-- 🔱 INTRO -->
+<!-- INTRO -->
 <div id="intro">
-    <div class="intro-content">
-        <div class="chakra">⚔️</div>
-        <h1>సన్నివేశం</h1>
-        <div class="loader"></div>
-    </div>
+    <div class="chakra">⚔️</div>
+    <h1>సన్నివేశం</h1>
 </div>
 
 <!-- BACKGROUND -->
@@ -348,7 +245,7 @@ body{
 <!-- NAV -->
 <div class="navbar">
     <a href="#home">ముఖ్యపుట</a>
-    <a href="#sections">విభాగాలు</a>
+    <a href="#sections">సృజనాత్మక విభాగాలు</a>
     <a href="#social">మాతో కలవండి</a>
     <a href="#about">మా గురించి</a>
     <a href="#contact">సంప్రదించండి</a>
@@ -362,48 +259,116 @@ body{
     <div class="title">సన్నివేశం</div>
 </div>
 
-<!-- CONTENT -->
+<!-- SECTION START -->
 <div class="section" id="sections">
-    <h2 style="text-align:center;color:#ffcc99;">సృజనాత్మక విభాగాలు ⚔️</h2>
+    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
+        సృజనాత్మక విభాగాలు ⚔️
+    </h2>
 
     <div class="grid-box">
+
         <a class="btn" href="events.html">ప్రతిభా వేదిక 🎭</a>
         <a class="btn" href="festivals.html">పండుగలు 🔥</a>
         <a class="btn" href="books.html">పుస్తకాలు 📜</a>
         <a class="btn" href="ithihasalu.html">ఇతిహాసాలు 🏹</a>
+
+        /* CONTINUATION OF GRID BOX */
         <a class="btn" href="temples.html">దేవాలయ చరిత్ర 🛕</a>
         <a class="btn" href="shlokas.html">శ్లోకాలు 🪔</a>
         <a class="btn" href="gitarangam.html">భగవద్గీత 🎶</a>
+
     </div>
 </div>
 
+<!-- SOCIAL SECTION -->
+<div class="section" id="social">
+
+    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
+        మాతో కలవండి 🔗
+    </h2>
+
+    <div class="grid-box">
+
+        <a class="btn" href="https://www.instagram.com/" target="_blank">
+            ఇన్‌స్టాగ్రామ్ 📸
+        </a>
+
+        <a class="btn" href="https://youtube.com/" target="_blank">
+            యూట్యూబ్ ▶️
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ABOUT -->
+<div class="section" id="about">
+
+    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
+        మా గురించి 🪔
+    </h2>
+
+    <p style="text-align:center;line-height:2;color:#ddd;font-size:17px;">
+        సన్నివేశం ఒక సాంస్కృతిక వేదిక ✨<br><br>
+        భారతీయ సంస్కృతి, సంప్రదాయం, చరిత్ర మరియు విలువలను<br>
+        కొత్త తరానికి అందించాలనే లక్ష్యంతో రూపొందించబడింది.
+    </p>
+
+</div>
+
+<!-- CONTACT -->
+<div class="section" id="contact">
+
+    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
+        సంప్రదించండి 📞
+    </h2>
+
+    <div class="grid-box">
+
+        <a class="btn" href="tel:9493226037">
+            కాల్ చేయండి 📞
+        </a>
+
+        <a class="btn" href="https://wa.me/919493226037" target="_blank">
+            వాట్సాప్ 💬
+        </a>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
 <div class="footer">
-© 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
+    © 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
 </div>
 
 <!-- SCRIPT -->
 <script>
 
-setTimeout(() => {
-    document.getElementById("intro").style.display = "none";
-}, 4500);
+// INTRO REMOVE
+setTimeout(()=>{
+    document.getElementById("intro").style.display="none";
+},4000);
 
-const music = document.getElementById("bgMusic");
-const btn = document.getElementById("musicBtn");
+// MUSIC
+const music=document.getElementById("bgMusic");
+const btn=document.getElementById("musicBtn");
 
 music.play().catch(()=>{});
 
-document.body.addEventListener("click", function(){
+// enable on first touch (mobile fix)
+document.body.addEventListener("click",()=>{
     music.play();
-}, { once:true });
+},{once:true});
 
-btn.onclick = function(){
+// toggle button
+btn.onclick=()=>{
     if(music.paused){
         music.play();
-        btn.innerHTML = "🔊";
+        btn.innerHTML="🔊";
     }else{
         music.pause();
-        btn.innerHTML = "🔇";
+        btn.innerHTML="🔇";
     }
 };
 
