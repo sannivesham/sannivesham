@@ -1,8 +1,364 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ధర్మ పరీక్ష ⚔️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Noto Sans Telugu',sans-serif;
+background:black;
+color:white;
+overflow-x:hidden;
+min-height:100vh;
+}
+
+/* BACKGROUND */
+
+.bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-10;
+
+background:
+linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.92)),
+url("https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1600&auto=format&fit=crop");
+
+background-size:cover;
+background-position:center;
+}
+
+/* PARTICLES */
+
+.particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-9;
+
+background-image:
+radial-gradient(rgba(255,170,60,0.35) 1px,transparent 2px);
+
+background-size:120px 120px;
+
+animation:moveParticles 20s linear infinite;
+}
+
+@keyframes moveParticles{
+
+from{
+transform:translateY(0);
+}
+
+to{
+transform:translateY(-250px);
+}
+
+}
+
+/* CONTAINER */
+
+.container{
+
+width:92%;
+max-width:800px;
+
+margin:40px auto;
+
+background:rgba(10,10,10,0.84);
+
+border-radius:26px;
+
+padding:35px;
+
+border:1px solid rgba(255,180,80,0.14);
+
+box-shadow:0 10px 30px rgba(0,0,0,0.45);
+
+}
+
+/* TITLE */
+
+.title{
+text-align:center;
+font-size:42px;
+color:#ffb347;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#dddddd;
+margin-bottom:30px;
+}
+
+/* INPUT */
+
+.input-box{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:14px;
+
+outline:none;
+
+font-size:18px;
+
+background:#1b1b1b;
+
+color:white;
+
+margin-bottom:20px;
+}
+
+/* BUTTON */
+
+.btn{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:16px;
+
+background:
+linear-gradient(135deg,#d68422,#ffab3d);
+
+color:white;
+
+font-size:20px;
+font-weight:bold;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.02);
+}
+
+/* QUIZ */
+
+#quizBox{
+display:none;
+}
+
+#liveScore{
+
+margin-bottom:20px;
+
+font-size:22px;
+
+color:#ffcc99;
+
+font-weight:bold;
+}
+
+.question{
+
+font-size:26px;
+
+margin-bottom:25px;
+
+line-height:1.7;
+}
+
+.option{
+
+background:#1a1a1a;
+
+padding:16px;
+
+border-radius:14px;
+
+margin-bottom:15px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+border:1px solid rgba(255,180,80,0.08);
+
+}
+
+.option:hover{
+
+background:#2a2a2a;
+
+transform:translateX(4px);
+
+}
+
+/* RESULT */
+
+#resultBox{
+display:none;
+text-align:center;
+}
+
+.score{
+
+font-size:42px;
+
+color:#ffb347;
+
+margin:20px 0;
+}
+
+/* LEADERBOARD */
+
+.leaderboard{
+
+margin-top:30px;
+
+text-align:left;
+}
+
+.rank{
+
+background:#151515;
+
+padding:14px;
+
+border-radius:12px;
+
+margin-bottom:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.title{
+font-size:34px;
+}
+
+.question{
+font-size:22px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="particles"></div>
+
+<div class="container">
+
+<div class="title">
+ధర్మ పరీక్ష ⚔️
+</div>
+
+<div class="subtitle">
+మీ జ్ఞానాన్ని పరీక్షించుకోండి
+</div>
+
+<!-- START -->
+
+<div id="startBox">
+
+<input
+type="text"
+id="playerName"
+class="input-box"
+placeholder="మీ పేరు నమోదు చేయండి">
+
+<button class="btn" onclick="startQuiz()">
+
+పరీక్ష ప్రారంభించండి 🚩
+
+</button>
+
+</div>
+
+<!-- QUIZ -->
+
+<div id="quizBox">
+
+<div id="questionNumber"></div>
+
+<div id="liveScore">
+
+స్కోర్ : 0
+
+</div>
+
+<div class="question" id="questionText"></div>
+
+<div id="optionsBox"></div>
+
+</div>
+
+<!-- RESULT -->
+
+<div id="resultBox">
+
+<h2>పరీక్ష పూర్తయింది 🎉</h2>
+
+<div class="score" id="scoreText"></div>
+
+<button class="btn" onclick="restartQuiz()">
+
+మళ్ళీ ప్రయత్నించండి 🔁
+
+</button>
+
+<div class="leaderboard">
+
+<h3 style="margin:20px 0;color:#ffcc99;">
+
+🏆 నాయకుల పట్టిక
+
+</h3>
+
+<div id="leaderboardList"></div>
+
+</div>
+
+</div>
+
+</div>
+
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+/* FIREBASE IMPORTS */
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
 getFirestore,
 collection,
 addDoc,
@@ -11,7 +367,9 @@ query,
 orderBy,
 limit
 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* FIREBASE */
 
@@ -52,30 +410,6 @@ answer:"అయోధ్య"
 },
 
 {
-question:"హనుమంతుడు ఏ దేవుని అవతారంగా భావిస్తారు?",
-options:["శివుడు","వాయుదేవుడు","విష్ణువు","ఇంద్రుడు"],
-answer:"వాయుదేవుడు"
-},
-
-{
-question:"శ్రీరాముడి భార్య ఎవరు?",
-options:["ద్రౌపది","రుక్మిణి","సీతాదేవి","సత్యభామ"],
-answer:"సీతాదేవి"
-},
-
-{
-question:"లక్ష్మణుడి తల్లి పేరు ఏమిటి?",
-options:["కౌసల్య","కైకేయి","సుమిత్ర","గాంధారి"],
-answer:"సుమిత్ర"
-},
-
-{
-question:"మహాభారతంలో పాండవులు మొత్తం ఎంతమంది?",
-options:["3","5","7","10"],
-answer:"5"
-},
-
-{
 question:"అర్జునుడికి గీతను ఎవరు బోధించారు?",
 options:["వ్యాసుడు","కర్ణుడు","శ్రీకృష్ణుడు","భీష్ముడు"],
 answer:"శ్రీకృష్ణుడు"
@@ -88,18 +422,6 @@ answer:"దుర్యోధనుడు"
 },
 
 {
-question:"భీముడి బలం ఏ విషయంలో ప్రసిద్ధి?",
-options:["విలువిద్య","గదాయుద్ధం","సంగీతం","గుర్రపు స్వారీ"],
-answer:"గదాయుద్ధం"
-},
-
-{
-question:"అభిమన్యుడు ఎవరి కుమారుడు?",
-options:["భీముడు","యుధిష్ఠిరుడు","అర్జునుడు","కర్ణుడు"],
-answer:"అర్జునుడు"
-},
-
-{
 question:"లంక దహనం చేసినవాడు ఎవరు?",
 options:["అంగదుడు","హనుమంతుడు","సుగ్రీవుడు","జాంబవంతుడు"],
 answer:"హనుమంతుడు"
@@ -109,6 +431,30 @@ answer:"హనుమంతుడు"
 question:"గీత బోధ జరిగిన యుద్ధభూమి పేరు ఏమిటి?",
 options:["పంచవటి","అయోధ్య","కురుక్షేత్రం","ద్వారక"],
 answer:"కురుక్షేత్రం"
+},
+
+{
+question:"భగవద్గీతలో ఎన్ని అధ్యాయాలు ఉన్నాయి?",
+options:["12","15","18","24"],
+answer:"18"
+},
+
+{
+question:"హనుమంతుడి తల్లి పేరు ఏమిటి?",
+options:["అంజనా దేవి","కౌసల్య","సుమిత్ర","తార"],
+answer:"అంజనా దేవి"
+},
+
+{
+question:"మహాభారతాన్ని రచించినవారు ఎవరు?",
+options:["వాల్మీకి","వ్యాస మహర్షి","శుక మహర్షి","పరశురాముడు"],
+answer:"వ్యాస మహర్షి"
+},
+
+{
+question:"శ్రీకృష్ణుడి జన్మస్థలం ఏది?",
+options:["అయోధ్య","మథుర","ద్వారక","కాశీ"],
+answer:"మథుర"
 }
 
 ];
@@ -127,17 +473,19 @@ let player = "";
 
 window.startQuiz = function(){
 
-player = document.getElementById("playerName").value;
+player =
+document.getElementById("playerName").value;
 
-if(player.trim() === ""){
+if(player.trim()===""){
 
 alert("దయచేసి మీ పేరు నమోదు చేయండి");
 
 return;
 }
 
-selectedQuestions = [...questions]
-.sort(()=>0.5 - Math.random())
+selectedQuestions =
+[...questions]
+.sort(()=>0.5-Math.random())
 .slice(0,5);
 
 document.getElementById("startBox").style.display="none";
@@ -152,7 +500,8 @@ loadQuestion();
 
 function loadQuestion(){
 
-const q = selectedQuestions[currentQuestion];
+const q =
+selectedQuestions[currentQuestion];
 
 document.getElementById("questionNumber").innerHTML =
 `ప్రశ్న ${currentQuestion+1} / 5`;
@@ -170,7 +519,6 @@ q.options.forEach(option=>{
 optionsHTML += `
 
 <div class="option"
-
 onclick="checkAnswer(this,'${option}')">
 
 ${option}
@@ -196,23 +544,23 @@ selectedQuestions[currentQuestion].answer;
 const allOptions =
 document.querySelectorAll(".option");
 
-/* DISABLE MULTIPLE CLICKS */
+/* DISABLE */
 
 allOptions.forEach(opt=>{
 
-opt.style.pointerEvents = "none";
+opt.style.pointerEvents="none";
 
 });
 
 /* CORRECT */
 
-if(selected === correct){
+if(selected===correct){
 
 score++;
 
-element.style.background = "#1f8b24";
+element.style.background="#1f8b24";
 
-element.style.border =
+element.style.border=
 "2px solid #4dff57";
 
 }
@@ -221,20 +569,20 @@ element.style.border =
 
 else{
 
-element.style.background = "#8b1f1f";
+element.style.background="#8b1f1f";
 
-element.style.border =
+element.style.border=
 "2px solid red";
 
 /* SHOW CORRECT */
 
 allOptions.forEach(opt=>{
 
-if(opt.innerText === correct){
+if(opt.innerText===correct){
 
-opt.style.background = "#1f8b24";
+opt.style.background="#1f8b24";
 
-opt.style.border =
+opt.style.border=
 "2px solid #4dff57";
 
 }
@@ -248,17 +596,19 @@ opt.style.border =
 document.getElementById("liveScore").innerHTML =
 `స్కోర్ : ${score}`;
 
-/* NEXT QUESTION */
+/* NEXT */
 
 setTimeout(()=>{
 
 currentQuestion++;
 
-if(currentQuestion < 5){
+if(currentQuestion<5){
 
 loadQuestion();
 
-}else{
+}
+
+else{
 
 showResult();
 
@@ -281,15 +631,21 @@ document.getElementById("scoreText").innerHTML =
 
 /* SAVE ONLINE */
 
-await addDoc(collection(db, "leaderboard"), {
+await addDoc(
 
-name: player,
+collection(db,"leaderboard"),
 
-score: score,
+{
 
-time: Date.now()
+name:player,
 
-});
+score:score,
+
+time:Date.now()
+
+}
+
+);
 
 /* LOAD LEADERBOARD */
 
@@ -297,13 +653,13 @@ loadLeaderboard();
 
 }
 
-/* LEADERBOARD */
+/* LOAD LEADERBOARD */
 
 async function loadLeaderboard(){
 
 const q = query(
 
-collection(db, "leaderboard"),
+collection(db,"leaderboard"),
 
 orderBy("score","desc"),
 
@@ -311,11 +667,12 @@ limit(10)
 
 );
 
-const querySnapshot = await getDocs(q);
+const querySnapshot =
+await getDocs(q);
 
-let html = "";
+let html="";
 
-let rank = 1;
+let rank=1;
 
 querySnapshot.forEach((doc)=>{
 
@@ -325,7 +682,8 @@ html += `
 
 <div class="rank">
 
-🏆 ${rank}. ${data.name}
+🏆 ${rank}.
+${data.name}
 — ${data.score}/5
 
 </div>
@@ -350,3 +708,6 @@ location.reload();
 }
 
 </script>
+
+</body>
+</html>
