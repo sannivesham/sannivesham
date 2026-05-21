@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,6 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+
+/* ================= RESET ================= */
 
 *{
     margin:0;
@@ -21,22 +24,29 @@ body{
     color:white;
     overflow-x:hidden;
     min-height:100vh;
+    background:black;
 }
 
 /* ================= BACKGROUND ================= */
+
 .bg-image{
     position:fixed;
     width:100%;
     height:100%;
     top:0;
     left:0;
-    z-index:-6;
+    z-index:-8;
 
-    background:url("https://images.unsplash.com/photo-1520975922284-9a9b7c6d7f0f?auto=format&fit=crop&w=1600&q=80");
+    background:
+    url("https://images.unsplash.com/photo-1520975922284-9a9b7c6d7f0f?auto=format&fit=crop&w=1600&q=80");
+
     background-size:cover;
     background-position:center;
-    filter:brightness(0.35) contrast(1.2);
+
+    filter:brightness(0.28) contrast(1.2);
 }
+
+/* ================= OVERLAY ================= */
 
 .overlay{
     position:fixed;
@@ -44,77 +54,326 @@ body{
     height:100%;
     top:0;
     left:0;
+    z-index:-7;
+
+    background:
+    radial-gradient(circle at center,
+    transparent 15%,
+    rgba(0,0,0,0.88) 80%);
+}
+
+/* ================= FLOATING PARTICLES ================= */
+
+.floating-particles{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
     z-index:-5;
-    background:radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 80%);
-}
+    pointer-events:none;
 
-.embers{
-    position:fixed;
-    width:100%;
-    height:100%;
-    z-index:-4;
     background-image:
-    radial-gradient(circle, rgba(255,140,0,0.35) 1px, transparent 3px);
+    radial-gradient(rgba(255,180,80,0.35) 1px, transparent 2px),
+    radial-gradient(rgba(255,120,0,0.25) 1px, transparent 2px);
+
     background-size:120px 120px;
-    opacity:0.25;
-    animation: float 12s linear infinite;
+
+    animation:particlesMove 20s linear infinite;
 }
 
-.smoke{
+@keyframes particlesMove{
+
+    from{
+        transform:translateY(0px);
+    }
+
+    to{
+        transform:translateY(-250px);
+    }
+
+}
+
+/* ================= CHAKRA ================= */
+
+.chakra-bg{
+    position:fixed;
+
+    width:420px;
+    height:420px;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    border:2px solid rgba(255,160,60,0.12);
+
+    box-shadow:
+    0 0 40px rgba(255,140,0,0.08),
+    inset 0 0 40px rgba(255,140,0,0.05);
+
+    z-index:-4;
+
+    animation:chakraRotate 35s linear infinite;
+}
+
+.chakra-bg::before,
+.chakra-bg::after{
+
+    content:"";
+    position:absolute;
+
+    width:100%;
+    height:2px;
+
+    background:rgba(255,170,70,0.08);
+
+    top:50%;
+    left:0;
+}
+
+.chakra-bg::after{
+    transform:rotate(90deg);
+}
+
+@keyframes chakraRotate{
+
+    from{
+        transform:translate(-50%,-50%) rotate(0deg);
+    }
+
+    to{
+        transform:translate(-50%,-50%) rotate(360deg);
+    }
+
+}
+
+/* ================= DIVINE LIGHT ================= */
+
+.divine-light{
     position:fixed;
     width:100%;
     height:100%;
-    z-index:-3;
-    background-image:
-    radial-gradient(rgba(255,255,255,0.05) 2px, transparent 2px);
-    background-size:90px 90px;
-    opacity:0.12;
-    animation: drift 60s linear infinite;
+    top:0;
+    left:0;
+
+    z-index:-6;
+
+    background:
+    radial-gradient(circle at center,
+    rgba(255,140,0,0.12),
+    transparent 45%);
+
+    animation:divinePulse 5s ease-in-out infinite;
 }
+
+@keyframes divinePulse{
+
+    0%{
+        opacity:0.5;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.5;
+    }
+
+}
+
+/* ================= FOG ================= */
+
+.fog-layer{
+    position:fixed;
+    width:200%;
+    height:100%;
+    top:0;
+    left:-50%;
+
+    z-index:-3;
+
+    opacity:0.08;
+
+    background:
+    radial-gradient(circle,
+    rgba(255,255,255,0.08) 1px,
+    transparent 3px);
+
+    background-size:180px 180px;
+
+    animation:fogMove 80s linear infinite;
+}
+
+@keyframes fogMove{
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(300px);
+    }
+
+}
+
+/* ================= LIGHTNING ================= */
 
 .lightning{
     position:fixed;
     width:100%;
     height:100%;
     z-index:-2;
-    animation: flash 7s infinite;
+
+    animation:flash 7s infinite;
+}
+
+@keyframes flash{
+
+    0%,90%,100%{
+        background:transparent;
+    }
+
+    92%{
+        background:rgba(255,255,255,0.08);
+    }
+
 }
 
 /* ================= NAVBAR ================= */
+
 .navbar{
     position:sticky;
     top:0;
     z-index:999;
+
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
     gap:18px;
-    padding:14px;
-    background:rgba(0,0,0,0.75);
+
+    padding:18px;
+
+    background:rgba(0,0,0,0.72);
+
     backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,180,80,0.2);
+
+    border-bottom:1px solid rgba(255,180,80,0.15);
 }
 
 .navbar a{
+
     text-decoration:none;
+
     color:#ffd9a3;
+
     font-weight:bold;
+
+    font-size:17px;
+
+    transition:0.3s;
+}
+
+.navbar a:hover{
+    color:#ffb347;
+}
+
+/* ================= INTRO ================= */
+
+#intro{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:
+    radial-gradient(circle,
+    rgba(255,140,0,0.15),
+    transparent 40%),
+    #000;
+
+    animation:fadeOut 1s ease 4s forwards;
+}
+
+#intro h1{
+
+    font-size:50px;
+
+    color:#ffb347;
+
+    text-shadow:0 0 20px rgba(255,140,0,0.4);
+}
+
+.intro-symbol{
+
+    font-size:65px;
+
+    margin-bottom:15px;
+
+    animation:spin 4s linear infinite;
+}
+
+/* ================= MUSIC BUTTON ================= */
+
+#musicBtn{
+    position:fixed;
+
+    top:85px;
+    right:18px;
+
+    width:58px;
+    height:58px;
+
+    border:none;
+    border-radius:50%;
+
+    background:
+    linear-gradient(135deg,#ff9a2f,#ff6a00);
+
+    color:white;
+
+    font-size:24px;
+
+    z-index:100000;
+
+    cursor:pointer;
+
+    box-shadow:0 5px 18px rgba(0,0,0,0.4);
 }
 
 /* ================= HEADER ================= */
+
 .header{
     text-align:center;
     padding:50px 20px;
 }
 
 .logo-container{
-    width:180px;
-    height:180px;
+
+    width:190px;
+    height:190px;
+
     margin:auto;
+
     border-radius:50%;
     overflow:hidden;
-    border:2px solid rgba(255,180,80,0.4);
-    box-shadow:0 0 40px rgba(255,140,0,0.2);
+
+    border:3px solid rgba(255,180,80,0.3);
+
+    box-shadow:
+    0 0 40px rgba(255,140,0,0.25);
 }
 
 .logo{
@@ -124,97 +383,118 @@ body{
 }
 
 .title{
-    margin-top:20px;
-    font-size:48px;
+
+    margin-top:22px;
+
+    font-size:52px;
+
     color:#ffb347;
-}
 
-/* ================= INTRO ================= */
-#intro{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:99999;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-
-    background:radial-gradient(circle, rgba(255,140,0,0.15), transparent 40%), #000;
-
-    animation: fadeOut 1s ease 4s forwards;
-}
-
-#intro h1{
-    font-size:42px;
-    color:#ffb347;
-}
-
-.chakra{
-    font-size:60px;
-    animation: spin 3s linear infinite;
-}
-
-/* ================= MUSIC ================= */
-#musicBtn{
-    position:fixed;
-    top:85px;
-    right:18px;
-    width:55px;
-    height:55px;
-    border:none;
-    border-radius:50%;
-    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
-    color:white;
-    font-size:22px;
-    z-index:100000;
-}
-
-/* ================= ANIMATIONS ================= */
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
-@keyframes float{to{transform:translateY(-200px)}}
-@keyframes drift{to{transform:translateY(-300px)}}
-@keyframes flash{
-0%,90%,100%{background:transparent;}
-92%{background:rgba(255,255,255,0.08);}
+    text-shadow:0 0 18px rgba(255,140,0,0.35);
 }
 
 /* ================= SECTION ================= */
+
 .section{
+
     width:92%;
     max-width:950px;
+
     margin:30px auto;
-    background:rgba(10,10,10,0.85);
-    border-radius:20px;
-    padding:30px;
+
+    background:rgba(10,10,10,0.82);
+
+    border-radius:24px;
+
+    padding:35px;
+
     border:1px solid rgba(255,180,80,0.15);
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 .grid-box{
+
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:22px;
 }
 
 .btn{
+
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:18px;
-    min-height:85px;
-    border-radius:14px;
+
+    min-height:95px;
+
+    border-radius:18px;
+
     text-decoration:none;
+
+    font-size:20px;
     font-weight:bold;
+
     color:#fff3dd;
-    background:linear-gradient(135deg,#b86b1d,#ff9f2f,#b86b1d);
+
+    background:
+    linear-gradient(135deg,#d68422,#ffab3d);
+
+    transition:0.3s;
 }
 
 .btn:hover{
-    transform:translateY(-6px) scale(1.03);
+
+    transform:
+    translateY(-6px)
+    scale(1.03);
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+@keyframes fadeOut{
+
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+
+    .grid-box{
+        grid-template-columns:1fr;
+    }
+
+    .title{
+        font-size:42px;
+    }
+
+    .navbar{
+        gap:14px;
+    }
+
+    .navbar a{
+        font-size:14px;
+    }
+
 }
 
 </style>
@@ -223,152 +503,291 @@ body{
 <body>
 
 <!-- INTRO -->
+
 <div id="intro">
-    <div class="chakra">⚔️</div>
+
+    <div class="intro-symbol">⚔️</div>
+
     <h1>సన్నివేశం</h1>
+
 </div>
 
 <!-- BACKGROUND -->
+
 <div class="bg-image"></div>
+
 <div class="overlay"></div>
-<div class="embers"></div>
-<div class="smoke"></div>
+
+<div class="floating-particles"></div>
+
+<div class="chakra-bg"></div>
+
+<div class="divine-light"></div>
+
+<div class="fog-layer"></div>
+
 <div class="lightning"></div>
 
 <!-- MUSIC -->
+
 <audio id="bgMusic" loop>
     <source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg">
 </audio>
 
 <button id="musicBtn">🔊</button>
 
-<!-- NAV -->
+<!-- NAVBAR -->
+
 <div class="navbar">
+
     <a href="#home">ముఖ్యపుట</a>
+
     <a href="#sections">సృజనాత్మక విభాగాలు</a>
+
     <a href="#social">మాతో కలవండి</a>
+
     <a href="#about">మా గురించి</a>
+
     <a href="#contact">సంప్రదించండి</a>
+
 </div>
 
 <!-- HEADER -->
+
 <div class="header" id="home">
+
     <div class="logo-container">
+
         <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/Logo%20(1).png" class="logo">
+
     </div>
-    <div class="title">సన్నివేశం</div>
+
+    <div class="title">
+        సన్నివేశం
+    </div>
+
 </div>
 
-<!-- SECTION START -->
+<!-- START SECTION -->
+
 <div class="section" id="sections">
-    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
-        సృజనాత్మక విభాగాలు ⚔️
-    </h2>
 
-    <div class="grid-box">
+<h2 style="
+text-align:center;
+color:#ffcc99;
+margin-bottom:28px;
+font-size:34px;
+">
 
-        <a class="btn" href="events.html">ప్రతిభా వేదిక 🎭</a>
-        <a class="btn" href="festivals.html">పండుగలు 🔥</a>
-        <a class="btn" href="books.html">పుస్తకాలు 📜</a>
-        <a class="btn" href="ithihasalu.html">ఇతిహాసాలు 🏹</a>
-        <a class="btn" href="sravana.html">శ్రావణ కార్యక్రమం 🔔</a>
-        <a class="btn" href="temples.html">దేవాలయ చరిత్ర 🛕</a>
-        <a class="btn" href="shlokas.html">శ్లోకాలు 🪔</a>
-        <a class="btn" href="gitarangam.html">భగవద్గీత 🎶</a>
+సృజనాత్మక విభాగాలు ⚔️
 
-    </div>
+</h2>
+
+<div class="grid-box">
+
+<a class="btn" href="events.html">
+ప్రతిభా వేదిక 🎭
+</a>
+
+<a class="btn" href="festivals.html">
+పండుగలు 🔥
+</a>
+
+<a class="btn" href="books.html">
+పుస్తకాలు 📜
+</a>
+
+<a class="btn" href="ithihasalu.html">
+ఇతిహాసాలు 🏹
+</a>
+
+
+    
+<a class="btn" href="temples.html">
+దేవాలయ చరిత్ర 🛕
+</a>
+
+<a class="btn" href="sravana.html">
+శ్రావణ కార్యక్రమం 🔔
+</a>
+
+<a class="btn" href="shlokas.html">
+శ్లోకాలు 🪔
+</a>
+
+<a class="btn" href="gitarangam.html">
+భగవద్గీత 🎶
+</a>
+
+</div>
 </div>
 
-<!-- SOCIAL SECTION -->
+<!-- SOCIAL -->
+
 <div class="section" id="social">
 
-    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
-        మాతో కలవండి 🔗
-    </h2>
+<h2 style="
+text-align:center;
+color:#ffcc99;
+margin-bottom:28px;
+font-size:34px;
+">
 
-    <div class="grid-box">
+మాతో కలవండి 🔗
 
-        <a class="btn" href="https://www.instagram.com/" target="_blank">
-            ఇన్‌స్టాగ్రామ్ 📸
-        </a>
+</h2>
 
-        <a class="btn" href="https://youtube.com/" target="_blank">
-            యూట్యూబ్ ▶️
-        </a>
+<div class="grid-box">
 
-    </div>
+<a class="btn"
+href="https://www.instagram.com/"
+target="_blank">
+
+ఇన్‌స్టాగ్రామ్ 📸
+
+</a>
+
+<a class="btn"
+href="https://youtube.com/"
+target="_blank">
+
+యూట్యూబ్ ▶️
+
+</a>
+
+</div>
 
 </div>
 
 <!-- ABOUT -->
+
 <div class="section" id="about">
 
-    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
-        మా గురించి 🪔
-    </h2>
+<h2 style="
+text-align:center;
+color:#ffcc99;
+margin-bottom:28px;
+font-size:34px;
+">
 
-    <p style="text-align:center;line-height:2;color:#ddd;font-size:17px;">
-        సన్నివేశం ఒక సాంస్కృతిక వేదిక ✨<br><br>
-        భారతీయ సంస్కృతి, సంప్రదాయం, చరిత్ర మరియు విలువలను<br>
-        కొత్త తరానికి అందించాలనే లక్ష్యంతో రూపొందించబడింది.
-    </p>
+మా గురించి 🪔
+
+</h2>
+
+<p style="
+text-align:center;
+line-height:2.2;
+font-size:18px;
+color:#dddddd;
+">
+
+సన్నివేశం ఒక సాంస్కృతిక వేదిక ✨
+<br><br>
+
+భారతీయ సంస్కృతి, సంప్రదాయం,
+చరిత్ర మరియు విలువలను
+కొత్త తరానికి అందించాలనే
+లక్ష్యంతో రూపొందించబడింది.
+
+</p>
 
 </div>
 
 <!-- CONTACT -->
+
 <div class="section" id="contact">
 
-    <h2 style="text-align:center;color:#ffcc99;margin-bottom:20px;">
-        సంప్రదించండి 📞
-    </h2>
+<h2 style="
+text-align:center;
+color:#ffcc99;
+margin-bottom:28px;
+font-size:34px;
+">
 
-    <div class="grid-box">
+సంప్రదించండి 📞
 
-        <a class="btn" href="tel:9493226037">
-            కాల్ చేయండి 📞
-        </a>
+</h2>
 
-        <a class="btn" href="https://wa.me/919493226037" target="_blank">
-            వాట్సాప్ 💬
-        </a>
+<div class="grid-box">
 
-    </div>
+<a class="btn"
+href="tel:9493226037">
+
+కాల్ చేయండి 📞
+
+</a>
+
+<a class="btn"
+href="https://wa.me/919493226037"
+target="_blank">
+
+వాట్సాప్ 💬
+
+</a>
+
+</div>
 
 </div>
 
 <!-- FOOTER -->
-<div class="footer">
-    © 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
+
+<div class="footer" style="
+text-align:center;
+padding:35px 20px;
+color:#aaaaaa;
+font-size:15px;
+">
+
+© 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
+
 </div>
 
 <!-- SCRIPT -->
+
 <script>
 
-// INTRO REMOVE
+/* INTRO */
+
 setTimeout(()=>{
-    document.getElementById("intro").style.display="none";
+
+document.getElementById("intro").style.display="none";
+
 },4000);
 
-// MUSIC
+/* MUSIC */
+
 const music=document.getElementById("bgMusic");
+
 const btn=document.getElementById("musicBtn");
 
 music.play().catch(()=>{});
 
-// enable on first touch (mobile fix)
+/* MOBILE FIX */
+
 document.body.addEventListener("click",()=>{
-    music.play();
+
+music.play();
+
 },{once:true});
 
-// toggle button
+/* TOGGLE */
+
 btn.onclick=()=>{
-    if(music.paused){
-        music.play();
-        btn.innerHTML="🔊";
-    }else{
-        music.pause();
-        btn.innerHTML="🔇";
-    }
+
+if(music.paused){
+
+music.play();
+
+btn.innerHTML="🔊";
+
+}else{
+
+music.pause();
+
+btn.innerHTML="🔇";
+
+}
+
 };
 
 </script>
