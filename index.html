@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -23,65 +24,105 @@
 
         body{
             font-family:'Noto Sans Telugu', sans-serif;
-            background:
-            radial-gradient(circle at top left, rgba(255,140,0,0.12), transparent 30%),
-            radial-gradient(circle at bottom right, rgba(255,120,0,0.10), transparent 30%),
-            linear-gradient(135deg,#050505,#0d0d0d,#111111);
             color:white;
             overflow-x:hidden;
             min-height:100vh;
             position:relative;
+
+            background:
+            radial-gradient(circle at top left, rgba(255,140,0,0.12), transparent 30%),
+            radial-gradient(circle at bottom right, rgba(255,120,0,0.10), transparent 30%),
+            linear-gradient(135deg,#030303,#090909,#111111);
         }
 
-        /* Decorative Background */
+        /* Animated Stars */
+
+        .stars{
+            position:fixed;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index:-3;
+
+            background-image:
+            radial-gradient(white 1px, transparent 1px);
+
+            background-size:55px 55px;
+
+            opacity:0.12;
+
+            animation:starsMove 25s linear infinite;
+        }
+
+        @keyframes starsMove{
+
+            from{
+                transform:translateY(0px);
+            }
+
+            to{
+                transform:translateY(-100px);
+            }
+
+        }
+
+        /* Floating Orange Lights */
 
         body::before{
             content:"";
             position:fixed;
             width:100%;
             height:100%;
-            background-image:
-            radial-gradient(circle, rgba(255,153,51,0.12) 2px, transparent 2px),
-            radial-gradient(circle, rgba(255,153,51,0.08) 1px, transparent 1px);
-            background-size:120px 120px, 60px 60px;
+            top:0;
+            left:0;
             z-index:-2;
-            animation:bgmove 18s linear infinite;
+
+            background:
+
+            radial-gradient(circle at 15% 20%, rgba(255,140,0,0.22) 0%, transparent 18%),
+
+            radial-gradient(circle at 80% 15%, rgba(255,180,80,0.16) 0%, transparent 18%),
+
+            radial-gradient(circle at 50% 85%, rgba(255,120,0,0.12) 0%, transparent 20%),
+
+            radial-gradient(circle at 90% 75%, rgba(255,150,50,0.12) 0%, transparent 20%);
+
+            filter:blur(10px);
+
+            animation:lightsFloat 10s ease-in-out infinite alternate;
         }
 
-        @keyframes bgmove{
+        @keyframes lightsFloat{
+
             from{
                 transform:translateY(0px);
             }
 
             to{
-                transform:translateY(-120px);
+                transform:translateY(-25px);
             }
+
         }
 
-        /* Floating Glow */
+        /* Decorative Pattern */
 
-        .glow1,
-        .glow2{
+        body::after{
+            content:"";
             position:fixed;
-            border-radius:50%;
-            filter:blur(90px);
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
             z-index:-1;
-        }
 
-        .glow1{
-            width:300px;
-            height:300px;
-            background:rgba(255,140,0,0.15);
-            top:-50px;
-            left:-50px;
-        }
+            background-image:
 
-        .glow2{
-            width:250px;
-            height:250px;
-            background:rgba(255,100,0,0.12);
-            bottom:-50px;
-            right:-50px;
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+
+            background-size:40px 40px;
         }
 
         /* Navbar */
@@ -90,62 +131,90 @@
             position:sticky;
             top:0;
             z-index:999;
-            background:rgba(10,10,10,0.88);
-            backdrop-filter:blur(10px);
+
+            background:rgba(0,0,0,0.82);
+
+            backdrop-filter:blur(12px);
+
             display:flex;
             justify-content:center;
-            gap:18px;
-            padding:16px;
-            border-bottom:1px solid rgba(255,153,51,0.15);
+            flex-wrap:wrap;
+            gap:22px;
+
+            padding:18px;
+
+            border-bottom:1px solid rgba(255,153,51,0.12);
         }
 
         .navbar a{
-            color:#ffb366;
             text-decoration:none;
-            font-size:14px;
+            color:#ffcc99;
+            font-size:15px;
             font-weight:bold;
             transition:0.3s;
         }
 
         .navbar a:hover{
-            color:white;
+            color:#ff9933;
         }
 
         /* Music Button */
 
         #musicBtn{
             position:fixed;
-            top:80px;
+            top:85px;
             right:18px;
-            width:50px;
-            height:50px;
+
+            width:58px;
+            height:58px;
+
             border:none;
             border-radius:50%;
+
             background:linear-gradient(135deg,#ff8c00,#ff6600);
+
             color:white;
-            font-size:20px;
+            font-size:24px;
+
             z-index:9999;
-            box-shadow:0 4px 15px rgba(0,0,0,0.45);
+
+            box-shadow:0 6px 18px rgba(0,0,0,0.45);
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        #musicBtn:hover{
+            transform:scale(1.08);
         }
 
         /* Header */
 
         .header{
             text-align:center;
-            padding:40px 20px 25px;
+            padding:45px 20px 25px;
             animation:fadeIn 1s ease;
         }
 
-        /* Circle Logo */
+        /* Logo Circle */
 
         .logo-container{
-            width:180px;
-            height:180px;
+
+            width:190px;
+            height:190px;
+
             margin:auto;
+
             border-radius:50%;
             overflow:hidden;
+
             border:4px solid rgba(255,153,51,0.35);
-            box-shadow:0 0 35px rgba(255,140,0,0.25);
+
+            box-shadow:
+            0 0 35px rgba(255,140,0,0.25),
+            0 0 60px rgba(255,120,0,0.10);
+
             background:#111;
         }
 
@@ -155,85 +224,150 @@
             object-fit:cover;
         }
 
+        /* Title */
+
         .title{
-            margin-top:18px;
-            font-size:42px;
+            margin-top:22px;
+            font-size:48px;
             color:#ff9933;
             font-weight:bold;
+
             animation:glow 2s infinite alternate;
         }
 
         .tagline{
-            margin-top:12px;
+            margin-top:14px;
             color:#dddddd;
-            font-size:15px;
+            font-size:16px;
             line-height:1.8;
         }
 
-        /* Section */
+        /* Section Box */
 
         .section{
-            width:90%;
-            max-width:650px;
-            margin:25px auto;
-            background:rgba(20,20,20,0.88);
-            border:1px solid rgba(255,153,51,0.12);
-            border-radius:24px;
-            padding:28px 22px;
-            box-shadow:0 8px 25px rgba(0,0,0,0.45);
+
+            width:92%;
+            max-width:950px;
+
+            margin:28px auto;
+
+            background:rgba(18,18,18,0.88);
+
+            border:1px solid rgba(255,153,51,0.10);
+
+            border-radius:26px;
+
+            padding:35px 28px;
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.45);
+
             animation:fadeUp 1s ease;
         }
 
         .section h2{
+
             text-align:center;
-            color:#ffb366;
-            margin-bottom:22px;
-            font-size:24px;
+            color:#ffcc99;
+
+            margin-bottom:28px;
+
+            font-size:30px;
+        }
+
+        /* Grid Layout */
+
+        .grid-box{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:20px;
         }
 
         /* Buttons */
 
         .btn{
-            display:block;
-            width:100%;
-            padding:16px;
-            margin-top:14px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            min-height:82px;
+
             text-align:center;
+
             text-decoration:none;
+
             color:white;
-            border-radius:16px;
-            font-size:16px;
+
+            border-radius:18px;
+
+            font-size:18px;
             font-weight:bold;
+
+            background:
+            linear-gradient(135deg,#ff9a2f,#ff7b00);
+
+            box-shadow:
+            0 5px 14px rgba(0,0,0,0.25);
+
             transition:0.3s;
-            background:linear-gradient(135deg,#ff8c00,#ff6600);
-            box-shadow:0 4px 12px rgba(0,0,0,0.25);
+
+            padding:16px;
         }
 
         .btn:hover{
-            transform:translateY(-3px) scale(1.02);
+
+            transform:
+            translateY(-4px)
+            scale(1.02);
+
+            box-shadow:
+            0 10px 22px rgba(255,120,0,0.28);
         }
 
-        /* About */
+        /* About Text */
 
         .about{
+
             text-align:center;
+
             color:#ddd;
-            line-height:1.9;
-            font-size:15px;
+
+            line-height:2;
+
+            font-size:17px;
         }
 
         /* Footer */
 
         .footer{
+
             text-align:center;
-            padding:30px 20px;
+
+            padding:35px 20px;
+
             color:#aaa;
+
             font-size:14px;
         }
 
         /* Animations */
 
+        @keyframes glow{
+
+            from{
+                text-shadow:0 0 12px rgba(255,153,51,0.35);
+            }
+
+            to{
+                text-shadow:0 0 28px rgba(255,153,51,0.95);
+            }
+        }
+
         @keyframes fadeUp{
+
             from{
                 opacity:0;
                 transform:translateY(25px);
@@ -246,6 +380,7 @@
         }
 
         @keyframes fadeIn{
+
             from{
                 opacity:0;
             }
@@ -255,49 +390,47 @@
             }
         }
 
-        @keyframes glow{
-            from{
-                text-shadow:0 0 12px rgba(255,153,51,0.35);
-            }
+        /* Mobile */
 
-            to{
-                text-shadow:0 0 25px rgba(255,153,51,0.9);
-            }
-        }
+        @media(max-width:700px){
 
-        /* Desktop */
-
-        @media(min-width:768px){
-
-            .navbar{
-                gap:35px;
-            }
-
-            .navbar a{
-                font-size:16px;
+            .grid-box{
+                grid-template-columns:1fr;
             }
 
             .title{
-                font-size:48px;
+                font-size:40px;
             }
 
-            .section{
-                padding:35px;
+            .section h2{
+                font-size:24px;
+            }
+
+            .btn{
+                font-size:17px;
+            }
+
+            .navbar{
+                gap:16px;
+            }
+
+            .navbar a{
+                font-size:13px;
             }
 
         }
 
     </style>
+
 </head>
 
 <body>
 
-    <!-- Background Glow -->
+    <!-- Stars -->
 
-    <div class="glow1"></div>
-    <div class="glow2"></div>
+    <div class="stars"></div>
 
-    <!-- Audio -->
+    <!-- Background Music -->
 
     <audio id="bgMusic" loop autoplay muted>
         <source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg" type="audio/mpeg">
@@ -312,10 +445,15 @@
     <div class="navbar">
 
         <a href="#">ముఖ్యపుట</a>
+
         <a href="events.html">కార్యక్రమాలు</a>
+
         <a href="festivals.html">పండుగలు</a>
+
         <a href="books.html">పుస్తకాలు</a>
+
         <a href="#about">మా గురించి</a>
+
         <a href="#contact">సంప్రదించండి</a>
 
     </div>
@@ -340,55 +478,63 @@
 
     </div>
 
-    <!-- Creative Section -->
+    <!-- Main Section -->
 
     <div class="section">
 
         <h2>సృజనాత్మక విభాగాలు ✨</h2>
 
-        <a href="events.html" class="btn">
-            ప్రతిభా వేదిక 🎭
-        </a>
+        <div class="grid-box">
 
-        <a href="festivals.html" class="btn">
-            పండుగలు 🎉
-        </a>
+            <a href="events.html" class="btn">
+                ప్రతిభా వేదిక 🎭
+            </a>
 
-        <a href="books.html" class="btn">
-            పుస్తకాలు 📚
-        </a>
+            <a href="festivals.html" class="btn">
+                పండుగలు 🎉
+            </a>
 
-        <a href="ithihasalu.html" class="btn">
-            ఇతిహాసాలు 📜
-        </a>
+            <a href="books.html" class="btn">
+                పుస్తకాలు 📚
+            </a>
 
-        <a href="temples.html" class="btn">
-            దేవాలయ చరిత్ర 🛕
-        </a>
+            <a href="ithihasalu.html" class="btn">
+                ఇతిహాసాలు 📜
+            </a>
 
-        <a href="shlokas.html" class="btn">
-            శ్లోకాలు 📖
-        </a>
+            <a href="temples.html" class="btn">
+                దేవాలయ చరిత్ర 🛕
+            </a>
 
-        <a href="gitarangam.html" class="btn">
-            భగవద్గీత గానరంగం 🎶
-        </a>
+            <a href="shlokas.html" class="btn">
+                శ్లోకాలు 📖
+            </a>
+
+            <a href="gitarangam.html" class="btn">
+                భగవద్గీత గానరంగం 🎶
+            </a>
+
+        </div>
 
     </div>
 
-    <!-- Social Section -->
+    <!-- Social -->
 
     <div class="section">
 
         <h2>మాతో కలవండి 🔗</h2>
 
-        <a href="https://www.instagram.com/sannivesham?igsh=NjhiZzBtNHBtd2g1" class="btn">
-            ఇన్‌స్టాగ్రామ్
-        </a>
+        <div class="grid-box">
 
-        <a href="https://youtube.com/@sannivesham" class="btn">
-            యూట్యూబ్
-        </a>
+            <a href="https://www.instagram.com/" class="btn">
+                ఇన్‌స్టాగ్రామ్
+            </a>
+
+            <a href="https://youtube.com/" class="btn">
+                యూట్యూబ్
+            </a>
+
+        </div>
 
     </div>
 
@@ -400,10 +546,13 @@
 
         <div class="about">
 
-            సన్నివేశం ఒక సాంస్కృతిక వేదిక.  
-            మన సంస్కృతి, సంప్రదాయం మరియు విలువలను  
-            కొత్త తరానికి అందించాలనే లక్ష్యంతో  
-            ఈ వేదికను నిర్మించాము ✨
+            సన్నివేశం ఒక సాంస్కృతిక వేదిక ✨
+            <br><br>
+
+            భారతీయ సంస్కృతి, సంప్రదాయం,
+            చరిత్ర మరియు విలువలను
+            కొత్త తరానికి అందించాలనే
+            లక్ష్యంతో ఈ వేదిక నిర్మించబడింది.
 
         </div>
 
@@ -415,13 +564,17 @@
 
         <h2>సంప్రదించండి 📞</h2>
 
-        <a href="tel:9493226037" class="btn">
-            కాల్ చేయండి 📞
-        </a>
+        <div class="grid-box">
 
-        <a href="https://wa.me/919493226037" class="btn">
-            వాట్సాప్ 💬
-        </a>
+            <a href="tel:9493226037" class="btn">
+                కాల్ చేయండి 📞
+            </a>
+
+            <a href="https://wa.me/919493226037" class="btn">
+                వాట్సాప్ 💬
+            </a>
+
+        </div>
 
     </div>
 
@@ -441,29 +594,34 @@
         let btn = document.getElementById("musicBtn");
 
         // Try autoplay
+
         music.play().catch(()=>{});
 
-        // First interaction enables sound
+        // First touch enables sound
+
         document.body.addEventListener("click", function(){
 
             music.muted = false;
+
             music.play();
 
         }, { once:true });
 
-        // Speaker Button
+        // Speaker button
+
         btn.onclick = function(){
 
             if(music.paused){
 
                 music.play();
+
                 btn.innerHTML = "🔊";
 
             }else{
 
                 music.pause();
-                btn.innerHTML = "🔇";
 
+                btn.innerHTML = "🔇";
             }
 
         };
