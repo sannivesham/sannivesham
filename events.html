@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* BACKGROUND TEXTURE */
+        /* BACKGROUND DESIGN */
         body::before {
             content: "";
             position: fixed;
@@ -62,10 +62,21 @@
             animation: fadeIn 1s ease;
         }
 
+        .logo {
+            width: 130px;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .logo:hover {
+            transform: scale(1.08);
+        }
+
         .title {
             font-size: 34px;
             color: #ff6600;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         .subtitle {
@@ -76,12 +87,17 @@
 
         /* EVENT BOX */
         .event-box {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.96);
             margin: 18px;
             padding: 22px;
             border-radius: 18px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
             animation: fadeUp 0.8s ease;
+            transition: 0.3s;
+        }
+
+        .event-box:hover {
+            transform: translateY(-5px);
         }
 
         .event-box h2 {
@@ -90,12 +106,12 @@
             margin-bottom: 20px;
         }
 
-        /* IMAGES */
+        /* GALLERY */
         .gallery {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .gallery img {
@@ -112,7 +128,7 @@
         /* BUTTON */
         .back-btn {
             display: block;
-            width: 200px;
+            width: 220px;
             margin: 30px auto;
             text-align: center;
             background: #ff9933;
@@ -164,6 +180,10 @@
             .navbar a {
                 font-size: 16px;
             }
+
+            .logo {
+                width: 160px;
+            }
         }
 
     </style>
@@ -182,6 +202,8 @@
 <!-- HEADER -->
 <div class="header">
 
+    <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/Logo%20(1).png" class="logo">
+
     <div class="title">ప్రతిభా వేదిక 🎭</div>
 
     <div class="subtitle">
@@ -196,35 +218,39 @@
     <h2>ప్రాథమిక ఉన్నత పాఠశాల కార్యక్రమం 🪔</h2>
 
     <p>
-        సన్నివేశం బృందంగా మేము ప్రాథమిక ఉన్నత పాఠశాలలో ప్రతిభా వేదిక కార్యక్రమాన్ని నిర్వహించాము. 
-        ఈ కార్యక్రమంలో భాగంగా మేము అందమైన అక్షరరచన, చిత్రలేఖనం, ఆటలు, పఠనం, రచన, కథ చెప్పడం వంటి 
+        సన్నివేశం బృందంగా మేము ప్రాథమిక ఉన్నత పాఠశాలలో ప్రతిభా వేదిక కార్యక్రమాన్ని నిర్వహించాము.
+        ఈ కార్యక్రమంలో భాగంగా మేము అందమైన అక్షరరచన, చిత్రలేఖనం, ఆటలు, పఠనం, రచన, కథ చెప్పడం వంటి
         అనేక ఆసక్తికర కార్యక్రమాలను నిర్వహించాము.
         <br><br>
-        ఈ కార్యక్రమానికి పాఠశాల ప్రధానోపాధ్యాయురాలు గారూ, ఉపాధ్యాయులు అందించిన సహకారం ఎంతో అమూల్యమైనది. 
+
+        ఈ కార్యక్రమానికి పాఠశాల ప్రధానోపాధ్యాయురాలు గారూ, ఉపాధ్యాయులు అందించిన సహకారం ఎంతో అమూల్యమైనది.
         వారు అందరూ ఎంతో ఆదరణతో మమ్మల్ని ప్రోత్సహించారు. వారి నుండి మేము అనేక విషయాలు నేర్చుకున్నాము.
         <br><br>
+
         అలాగే మేము విద్యార్థులకు తెలుగు భాష మహత్త్వం మరియు మన సంస్కృతి గొప్పతనం గురించి తెలియజేశాము.
         <br><br>
-        ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది. ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి, 
-        ఉపాధ్యాయులకు మరియు అందరికీ మా హృదయపూర్వక కృతజ్ఞతలు.
+
+        ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది.
+        ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి, ఉపాధ్యాయులకు మరియు అందరికీ
+        మా హృదయపూర్వక కృతజ్ఞతలు.
     </p>
 
     <!-- GALLERY -->
     <div class="gallery">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_221107048.jpg.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/FunPic_20260329_221107048.jpg">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_222322319.jpg.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/FunPic_20260329_222322319.jpg">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_223503004.jpg.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/FunPic_20260329_223503004.jpg">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_230413689.jpg.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/FunPic_20260329_230413689.jpg">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5855.JPG.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/IMG_5855.JPG">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5883%20(1).JPG.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/IMG_5883%20(1).JPG">
 
-        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5940%20(1).JPG.jpeg">
+        <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/IMG_5940%20(1).JPG">
 
     </div>
 
