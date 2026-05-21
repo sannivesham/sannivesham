@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>సన్నివేశం | మహాభారతం</title>
+<title>సన్నివేశం</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
 
@@ -22,77 +22,9 @@ body{
     color:white;
     overflow-x:hidden;
     min-height:100vh;
-    background:#000;
 }
 
-/* =========================
-   🔱 INTRO SCREEN
-========================= */
-#intro{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:99999;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-
-    background:
-    radial-gradient(circle at center, rgba(255,140,0,0.15), transparent 40%),
-    linear-gradient(180deg,#000,#050505,#000);
-
-    animation: fadeOut 1s ease 4s forwards;
-}
-
-.intro-content{
-    text-align:center;
-    color:#ffcc99;
-}
-
-.chakra{
-    font-size:60px;
-    animation: spin 3s linear infinite;
-    margin-bottom:10px;
-}
-
-#intro h1{
-    font-size:38px;
-    color:#ffb347;
-    letter-spacing:2px;
-    text-shadow:0 0 20px rgba(255,140,0,0.4);
-}
-
-#intro p{
-    margin-top:10px;
-    color:#ddd;
-}
-
-.loader{
-    margin-top:25px;
-    width:180px;
-    height:4px;
-    background:rgba(255,255,255,0.1);
-    border-radius:10px;
-    overflow:hidden;
-    position:relative;
-}
-
-.loader::before{
-    content:"";
-    position:absolute;
-    width:40%;
-    height:100%;
-    background:linear-gradient(90deg,#ff9a2f,#ffb347,#ff6a00);
-    animation: load 1.5s infinite;
-}
-
-/* =========================
-   🖼️ BACKGROUND IMAGE
-========================= */
+/* 🖼️ BACKGROUND IMAGE */
 .bg-image{
     position:fixed;
     top:0;
@@ -110,7 +42,7 @@ body{
     filter:brightness(0.35) contrast(1.2);
 }
 
-/* 🌑 DARK OVERLAY */
+/* 🌑 OVERLAY */
 .overlay{
     position:fixed;
     top:0;
@@ -161,13 +93,10 @@ body{
     width:100%;
     height:100%;
     z-index:-2;
-
     animation: flash 7s infinite;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* NAVBAR */
 .navbar{
     position:sticky;
     top:0;
@@ -273,9 +202,80 @@ body{
     color:#aaa;
 }
 
-/* =========================
-   ANIMATIONS
-========================= */
+/* 🔱 INTRO SCREEN */
+#intro{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:
+    radial-gradient(circle at center, rgba(255,140,0,0.15), transparent 40%),
+    linear-gradient(180deg,#000,#050505,#000);
+
+    animation: fadeOut 1s ease 4s forwards;
+}
+
+.intro-content{
+    text-align:center;
+}
+
+.chakra{
+    font-size:60px;
+    animation: spin 3s linear infinite;
+    margin-bottom:10px;
+}
+
+#intro h1{
+    font-size:40px;
+    color:#ffb347;
+    letter-spacing:2px;
+    text-shadow:0 0 20px rgba(255,140,0,0.4);
+}
+
+.loader{
+    margin-top:25px;
+    width:180px;
+    height:4px;
+    background:rgba(255,255,255,0.1);
+    border-radius:10px;
+    overflow:hidden;
+    position:relative;
+}
+
+.loader::before{
+    content:"";
+    position:absolute;
+    width:40%;
+    height:100%;
+    background:linear-gradient(90deg,#ff9a2f,#ffb347,#ff6a00);
+    animation: load 1.5s infinite;
+}
+
+/* MUSIC BUTTON */
+#musicBtn{
+    position:fixed;
+    top:85px;
+    right:18px;
+    width:55px;
+    height:55px;
+    border:none;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
+    color:white;
+    font-size:22px;
+    z-index:100000;
+    cursor:pointer;
+}
+
+/* ANIMATIONS */
 @keyframes load{
     from{left:-40%;}
     to{left:100%;}
@@ -322,22 +322,28 @@ body{
 
 <body>
 
-<!-- 🔱 INTRO SCREEN -->
+<!-- 🔱 INTRO -->
 <div id="intro">
     <div class="intro-content">
         <div class="chakra">⚔️</div>
-        <h1>ENTER KURUKSHETRA</h1>
-        <p>సత్యం • ధర్మం • యుద్ధం</p>
+        <h1>సన్నివేశం</h1>
         <div class="loader"></div>
     </div>
 </div>
 
-<!-- BACKGROUND LAYERS -->
+<!-- BACKGROUND -->
 <div class="bg-image"></div>
 <div class="overlay"></div>
 <div class="embers"></div>
 <div class="smoke"></div>
 <div class="lightning"></div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg">
+</audio>
+
+<button id="musicBtn">🔊</button>
 
 <!-- NAV -->
 <div class="navbar">
@@ -356,7 +362,7 @@ body{
     <div class="title">సన్నివేశం</div>
 </div>
 
-<!-- SECTIONS -->
+<!-- CONTENT -->
 <div class="section" id="sections">
     <h2 style="text-align:center;color:#ffcc99;">సృజనాత్మక విభాగాలు ⚔️</h2>
 
@@ -375,10 +381,32 @@ body{
 © 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
 </div>
 
+<!-- SCRIPT -->
 <script>
+
 setTimeout(() => {
     document.getElementById("intro").style.display = "none";
 }, 4500);
+
+const music = document.getElementById("bgMusic");
+const btn = document.getElementById("musicBtn");
+
+music.play().catch(()=>{});
+
+document.body.addEventListener("click", function(){
+    music.play();
+}, { once:true });
+
+btn.onclick = function(){
+    if(music.paused){
+        music.play();
+        btn.innerHTML = "🔊";
+    }else{
+        music.pause();
+        btn.innerHTML = "🔇";
+    }
+};
+
 </script>
 
 </body>
