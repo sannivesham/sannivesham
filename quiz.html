@@ -18,182 +18,196 @@ box-sizing:border-box;
 }
 
 body{
-font-family:'Noto Sans Telugu',sans-serif;
-background:black;
-color:white;
-overflow-x:hidden;
+
+font-family:'Noto Sans Telugu', sans-serif;
+
 min-height:100vh;
-}
 
-/* BACKGROUND */
+display:flex;
+justify-content:center;
+align-items:center;
 
-.bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-10;
+overflow:hidden;
+
+color:white;
 
 background:
-linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.92)),
-url("https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1600&auto=format&fit=crop");
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.85)),
+url('https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1400&auto=format&fit=crop');
 
 background-size:cover;
 background-position:center;
+
+position:relative;
 }
 
-/* PARTICLES */
+/* Floating particles */
 
-.particles{
-position:fixed;
-top:0;
-left:0;
+body::before{
+
+content:"";
+
+position:absolute;
+
 width:100%;
 height:100%;
-z-index:-9;
 
 background-image:
-radial-gradient(rgba(255,170,60,0.35) 1px,transparent 2px);
+radial-gradient(circle, rgba(255,140,0,0.7) 1px, transparent 1px);
 
-background-size:120px 120px;
+background-size:90px 90px;
 
-animation:moveParticles 20s linear infinite;
+opacity:0.25;
+
+animation:moveParticles 18s linear infinite;
 }
 
 @keyframes moveParticles{
 
 from{
-transform:translateY(0);
+transform:translateY(0px);
 }
 
 to{
-transform:translateY(-250px);
+transform:translateY(-120px);
+}
 }
 
-}
-
-/* CONTAINER */
+/* Main Box */
 
 .container{
 
 width:92%;
-max-width:800px;
+max-width:500px;
 
-margin:40px auto;
+background:rgba(0,0,0,0.72);
 
-background:rgba(10,10,10,0.84);
+border:1px solid rgba(255,140,0,0.25);
 
-border-radius:26px;
+border-radius:30px;
 
-padding:35px;
+padding:35px 25px;
 
-border:1px solid rgba(255,180,80,0.14);
+backdrop-filter:blur(8px);
 
-box-shadow:0 10px 30px rgba(0,0,0,0.45);
+box-shadow:
+0 0 40px rgba(255,140,0,0.15);
 
+position:relative;
+
+z-index:10;
 }
 
-/* TITLE */
+/* Heading */
 
-.title{
+h1{
+
 text-align:center;
+
 font-size:42px;
+
 color:#ffb347;
-margin-bottom:10px;
+
+margin-bottom:15px;
+
+text-shadow:
+0 0 20px rgba(255,140,0,0.5);
 }
 
-.subtitle{
+p{
+
 text-align:center;
-color:#dddddd;
+
+color:#ddd;
+
 margin-bottom:30px;
+
+font-size:18px;
 }
 
-/* INPUT */
+/* Input */
 
-.input-box{
+input{
 
 width:100%;
 
-padding:16px;
+padding:18px;
 
 border:none;
-
-border-radius:14px;
 
 outline:none;
 
-font-size:18px;
+border-radius:18px;
 
-background:#1b1b1b;
+background:#1a1a1a;
 
 color:white;
 
-margin-bottom:20px;
+font-size:18px;
+
+margin-bottom:25px;
 }
 
-/* BUTTON */
+/* Buttons */
 
-.btn{
+button{
 
 width:100%;
 
-padding:16px;
+padding:18px;
 
 border:none;
 
-border-radius:16px;
+border-radius:20px;
 
 background:
-linear-gradient(135deg,#d68422,#ffab3d);
+linear-gradient(135deg,#ffb347,#ff8c00);
 
 color:white;
 
-font-size:20px;
+font-size:22px;
+
 font-weight:bold;
 
 cursor:pointer;
 
 transition:0.3s;
+
+margin-top:10px;
 }
 
-.btn:hover{
-transform:scale(1.02);
+button:hover{
+
+transform:scale(1.03);
 }
 
-/* QUIZ */
+/* Quiz */
 
 #quizBox{
+
 display:none;
 }
 
-#liveScore{
-
-margin-bottom:20px;
-
-font-size:22px;
-
-color:#ffcc99;
-
-font-weight:bold;
-}
+/* Question */
 
 .question{
 
-font-size:26px;
+font-size:24px;
 
 margin-bottom:25px;
 
 line-height:1.7;
 }
 
+/* Options */
+
 .option{
 
-background:#1a1a1a;
+background:#1b1b1b;
 
-padding:16px;
+padding:18px;
 
-border-radius:14px;
+border-radius:18px;
 
 margin-bottom:15px;
 
@@ -201,66 +215,113 @@ cursor:pointer;
 
 transition:0.3s;
 
-border:1px solid rgba(255,180,80,0.08);
-
+border:1px solid rgba(255,140,0,0.15);
 }
 
 .option:hover{
 
-background:#2a2a2a;
+transform:translateX(5px);
 
-transform:translateX(4px);
-
+background:#262626;
 }
 
-/* RESULT */
+/* Correct */
 
-#resultBox{
+.correct{
+
+background:green !important;
+}
+
+/* Wrong */
+
+.wrong{
+
+background:red !important;
+}
+
+/* Score */
+
+#scoreBox{
+
 display:none;
+
 text-align:center;
 }
 
-.score{
+#scoreBox h2{
 
-font-size:42px;
+font-size:40px;
 
 color:#ffb347;
 
-margin:20px 0;
+margin-bottom:20px;
 }
 
-/* LEADERBOARD */
+/* Leaderboard */
 
-.leaderboard{
+.leaderboardPopup{
 
-margin-top:30px;
+position:fixed;
 
-text-align:left;
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.85);
+
+display:none;
+
+justify-content:center;
+align-items:center;
+
+z-index:99999;
 }
 
-.rank{
+.leaderboardBox{
 
-background:#151515;
+width:90%;
+max-width:400px;
 
-padding:14px;
+background:#111;
 
-border-radius:12px;
+border:2px solid #ff9933;
 
-margin-bottom:10px;
+border-radius:25px;
+
+padding:25px;
+
+box-shadow:
+0 0 40px rgba(255,140,0,0.4);
+
+text-align:center;
 }
 
-/* MOBILE */
+.leaderboardBox h2{
 
-@media(max-width:700px){
+color:#ffb347;
 
-.title{
-font-size:34px;
+margin-bottom:20px;
 }
 
-.question{
-font-size:22px;
-}
+.player{
 
+background:#1b1b1b;
+
+margin:10px 0;
+
+padding:15px;
+
+border-radius:15px;
+
+display:flex;
+
+justify-content:space-between;
+
+color:white;
+
+font-size:18px;
 }
 
 </style>
@@ -269,34 +330,24 @@ font-size:22px;
 
 <body>
 
-<div class="bg"></div>
-
-<div class="particles"></div>
-
 <div class="container">
 
-<div class="title">
-ధర్మ పరీక్ష ⚔️
-</div>
+<!-- START SCREEN -->
 
-<div class="subtitle">
-మీ జ్ఞానాన్ని పరీక్షించుకోండి
-</div>
+<div id="startScreen">
 
-<!-- START -->
+<h1>ధర్మ పరీక్ష ⚔️</h1>
 
-<div id="startBox">
+<p>మీ జ్ఞానాన్ని పరీక్షించుకోండి</p>
 
-<input
-type="text"
-id="playerName"
-class="input-box"
-placeholder="మీ పేరు నమోదు చేయండి">
+<input type="text" id="username" placeholder="మీ పేరు నమోదు చేయండి">
 
-<button class="btn" onclick="startQuiz()">
-
+<button onclick="startQuiz()">
 పరీక్ష ప్రారంభించండి 🚩
+</button>
 
+<button onclick="openLeaderboard()">
+🏆 లీడర్‌బోర్డ్
 </button>
 
 </div>
@@ -305,45 +356,41 @@ placeholder="మీ పేరు నమోదు చేయండి">
 
 <div id="quizBox">
 
-<div id="questionNumber"></div>
+<div class="question" id="question"></div>
 
-<div id="liveScore">
-
-స్కోర్ : 0
+<div id="options"></div>
 
 </div>
 
-<div class="question" id="questionText"></div>
+<!-- SCORE -->
 
-<div id="optionsBox"></div>
+<div id="scoreBox">
 
-</div>
+<h2>🎉 పరీక్ష ముగిసింది</h2>
 
-<!-- RESULT -->
+<p id="finalScore"></p>
 
-<div id="resultBox">
-
-<h2>పరీక్ష పూర్తయింది 🎉</h2>
-
-<div class="score" id="scoreText"></div>
-
-<button class="btn" onclick="restartQuiz()">
-
-మళ్ళీ ప్రయత్నించండి 🔁
-
+<button onclick="location.reload()">
+మళ్లీ ప్రారంభించండి
 </button>
 
-<div class="leaderboard">
+</div>
 
-<h3 style="margin:20px 0;color:#ffcc99;">
+</div>
 
-🏆 నాయకుల పట్టిక
+<!-- LEADERBOARD -->
 
-</h3>
+<div class="leaderboardPopup" id="leaderboardPopup">
+
+<div class="leaderboardBox">
+
+<h2>🏆 ధర్మ వీరులు</h2>
 
 <div id="leaderboardList"></div>
 
-</div>
+<button onclick="closeLeaderboard()">
+మూసివేయండి
+</button>
 
 </div>
 
@@ -351,14 +398,10 @@ placeholder="మీ పేరు నమోదు చేయండి">
 
 <script type="module">
 
-/* FIREBASE IMPORTS */
-
 import { initializeApp }
-
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-
 getFirestore,
 collection,
 addDoc,
@@ -366,12 +409,11 @@ getDocs,
 query,
 orderBy,
 limit
-
 }
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* FIREBASE */
+/* Firebase */
 
 const firebaseConfig = {
 
@@ -386,80 +428,355 @@ storageBucket: "sannivesham-quiz.firebasestorage.app",
 messagingSenderId: "726198930572",
 
 appId: "1:726198930572:web:298f21668e5e9636c6bfa9"
-
 };
 
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-/* QUESTIONS */
+/* Questions */
 
 const questions = [
 
 {
-question:"శ్రీరాముడి తండ్రి పేరు ఏమిటి?",
-options:["దశరథుడు","జనకుడు","భీష్ముడు","పాండు"],
-answer:"దశరథుడు"
+q:"శ్రీరాముడి తండ్రి పేరు ఏమిటి?",
+o:["దశరథుడు","జనకుడు","భీష్ముడు","పాండు"],
+a:"దశరథుడు"
 },
 
 {
-question:"శ్రీరాముడి జన్మస్థలం ఏది?",
-options:["ద్వారక","మథుర","అయోధ్య","హస్తినాపురం"],
-answer:"అయోధ్య"
+q:"శ్రీరాముడి జన్మస్థలం ఏది?",
+o:["ద్వారక","మథుర","అయోధ్య","హస్తినాపురం"],
+a:"అయోధ్య"
 },
 
 {
-question:"అర్జునుడికి గీతను ఎవరు బోధించారు?",
-options:["వ్యాసుడు","కర్ణుడు","శ్రీకృష్ణుడు","భీష్ముడు"],
-answer:"శ్రీకృష్ణుడు"
+q:"శ్రీరాముడి భార్య ఎవరు?",
+o:["ద్రౌపది","రుక్మిణి","సీతాదేవి","సత్యభామ"],
+a:"సీతాదేవి"
 },
 
 {
-question:"కౌరవుల పెద్దవాడు ఎవరు?",
-options:["దుశ్శాసనుడు","దుర్యోధనుడు","వికర్ణుడు","అశ్వత్థామ"],
-answer:"దుర్యోధనుడు"
+q:"లక్ష్మణుడి తల్లి పేరు ఏమిటి?",
+o:["కౌసల్య","కైకేయి","సుమిత్ర","గాంధారి"],
+a:"సుమిత్ర"
 },
 
 {
-question:"లంక దహనం చేసినవాడు ఎవరు?",
-options:["అంగదుడు","హనుమంతుడు","సుగ్రీవుడు","జాంబవంతుడు"],
-answer:"హనుమంతుడు"
+q:"మహాభారతంలో పాండవులు మొత్తం ఎంతమంది?",
+o:["3","5","7","10"],
+a:"5"
 },
 
 {
-question:"గీత బోధ జరిగిన యుద్ధభూమి పేరు ఏమిటి?",
-options:["పంచవటి","అయోధ్య","కురుక్షేత్రం","ద్వారక"],
-answer:"కురుక్షేత్రం"
+q:"అర్జునుడికి గీతను ఎవరు బోధించారు?",
+o:["వ్యాసుడు","కర్ణుడు","శ్రీకృష్ణుడు","భీష్ముడు"],
+a:"శ్రీకృష్ణుడు"
 },
 
 {
-question:"భగవద్గీతలో ఎన్ని అధ్యాయాలు ఉన్నాయి?",
-options:["12","15","18","24"],
-answer:"18"
+q:"కౌరవుల పెద్దవారు ఎవరు?",
+o:["దుశ్శాసనుడు","దుర్యోధనుడు","వికర్ణుడు","అశ్వత్థామ"],
+a:"దుర్యోధనుడు"
 },
 
 {
-question:"హనుమంతుడి తల్లి పేరు ఏమిటి?",
-options:["అంజనా దేవి","కౌసల్య","సుమిత్ర","తార"],
-answer:"అంజనా దేవి"
+q:"భీముడి బలం ఏ విషయంలో ప్రసిద్ధి?",
+o:["విలువిద్య","గదాయుద్ధం","సంగీతం","గుర్రపు స్వారీ"],
+a:"గదాయుద్ధం"
 },
 
 {
-question:"మహాభారతాన్ని రచించినవారు ఎవరు?",
-options:["వాల్మీకి","వ్యాస మహర్షి","శుక మహర్షి","పరశురాముడు"],
-answer:"వ్యాస మహర్షి"
+q:"అభిమన్యుడు ఎవరి కుమారుడు?",
+o:["భీముడు","యుధిష్ఠిరుడు","అర్జునుడు","కర్ణుడు"],
+a:"అర్జునుడు"
 },
 
 {
-question:"శ్రీకృష్ణుడి జన్మస్థలం ఏది?",
-options:["అయోధ్య","మథుర","ద్వారక","కాశీ"],
-answer:"మథుర"
+q:"భగవద్గీతను మొదట ఎవరు వినారు?",
+o:["అర్జునుడు","భీముడు","సంజయుడు","ధృతరాష్ట్రుడు"],
+a:"అర్జునుడు"
+},
+
+{
+q:"“కర్మణ్యేవాధికారస్తే” అనే శ్లోకం ఏ గ్రంథంలో ఉంది?",
+o:["రామాయణం","మహాభారతం","భగవద్గీత","భాగవతం"],
+a:"భగవద్గీత"
+},
+
+{
+q:"శ్రీకృష్ణుడి జన్మస్థలం ఏది?",
+o:["అయోధ్య","మథుర","ద్వారక","కాశీ"],
+a:"మథుర"
+},
+
+{
+q:"రామాయణాన్ని రచించిన మహర్షి ఎవరు?",
+o:["వ్యాసుడు","వాల్మీకి","విశ్వామిత్రుడు","వశిష్ఠుడు"],
+a:"వాల్మీకి"
+},
+
+{
+q:"మహాభారతాన్ని రచించినవారు ఎవరు?",
+o:["వాల్మీకి","వ్యాస మహర్షి","శుక మహర్షి","పరశురాముడు"],
+a:"వ్యాస మహర్షి"
+},
+
+{
+q:"హనుమంతుడి తల్లి పేరు ఏమిటి?",
+o:["అంజనా దేవి","కౌసల్య","సుమిత్ర","తార"],
+a:"అంజనా దేవి"
+},
+
+{
+q:"ద్రౌపది స్వయంవరంలో అర్జునుడు ఏ ఆయుధంతో గెలిచారు?",
+o:["ఖడ్గం","గద","ధనుస్సు","శూలం"],
+a:"ధనుస్సు"
+},
+
+{
+q:"కర్ణుడి తల్లి ఎవరు?",
+o:["గాంధారి","కుంతి","మాద్రి","సత్యవతి"],
+a:"కుంతి"
+},
+
+{
+q:"శ్రీరాముడి సోదరులు ఎవరెవరు?",
+o:["భరతుడు, లక్ష్మణుడు, శత్రుఘ్నుడు","అర్జునుడు, భీముడు","కృష్ణుడు, బలరాముడు","నకులుడు, సహదేవుడు"],
+a:"భరతుడు, లక్ష్మణుడు, శత్రుఘ్నుడు"
+},
+
+{
+q:"గీత బోధ జరిగిన యుద్ధభూమి పేరు ఏమిటి?",
+o:["పంచవటి","అయోధ్య","కురుక్షేత్రం","ద్వారక"],
+a:"కురుక్షేత్రం"
+},
+
+{
+q:"వానరసేన రాజు ఎవరు?",
+o:["విభీషణుడు","వాలి","సుగ్రీవుడు","జాంబవంతుడు"],
+a:"సుగ్రీవుడు"
+},
+
+{
+q:"రావణుడికి మొత్తం ఎన్ని తలలు ఉన్నాయి?",
+o:["5","7","10","12"],
+a:"10"
+},
+
+{
+q:"పాండవులలో పెద్దవారు ఎవరు?",
+o:["అర్జునుడు","భీముడు","యుధిష్ఠిరుడు","నకులుడు"],
+a:"యుధిష్ఠిరుడు"
+},
+
+{
+q:"శ్రీకృష్ణుడి అన్నయ్య ఎవరు?",
+o:["అర్జునుడు","బలరాముడు","సాత్యకి","ఉద్ధవుడు"],
+a:"బలరాముడు"
+},
+
+{
+q:"ధృతరాష్ట్రుడికి యుద్ధవార్తలు చెప్పినవారు ఎవరు?",
+o:["దుర్యోధనుడు","సంజయుడు","భీష్ముడు","కర్ణుడు"],
+a:"సంజయుడు"
+},
+
+{
+q:"రాముడికి అరణ్యవాసం ఎంత సంవత్సరాలు?",
+o:["10","12","14","16"],
+a:"14"
+},
+
+{
+q:"గాంధారి ఎవరి తల్లి?",
+o:["పాండవులు","కౌరవులు","యాదవులు","వానరులు"],
+a:"కౌరవులు"
+},
+
+{
+q:"లంక దహనం చేసినవారు ఎవరు?",
+o:["అంగదుడు","హనుమంతుడు","సుగ్రీవుడు","జాంబవంతుడు"],
+a:"హనుమంతుడు"
+},
+
+{
+q:"భగవద్గీత ఏ మహాకావ్యంలో భాగం?",
+o:["రామాయణం","భాగవతం","మహాభారతం","స్కంద పురాణం"],
+a:"మహాభారతం"
+},
+
+{
+q:"సీతాదేవి తండ్రి ఎవరు?",
+o:["జనకుడు","దశరథుడు","వాలి","విభీషణుడు"],
+a:"జనకుడు"
+},
+
+{
+q:"రాముడి గురువు ఎవరు?",
+o:["వశిష్ఠుడు","ద్రోణుడు","కృపాచార్యుడు","శుక్రాచార్యుడు"],
+a:"వశిష్ఠుడు"
+},
+
+{
+q:"కుంభకర్ణుడు ఎవరి సోదరుడు?",
+o:["వాలి","రావణుడు","సుగ్రీవుడు","భరతుడు"],
+a:"రావణుడు"
+},
+
+{
+q:"భీష్ముడి అసలు పేరు ఏమిటి?",
+o:["దేవవ్రతుడు","అర్జునుడు","వికర్ణుడు","దుర్యోధనుడు"],
+a:"దేవవ్రతుడు"
+},
+
+{
+q:"ద్రోణాచార్యుని కుమారుడు ఎవరు?",
+o:["అశ్వత్థామ","అభిమన్యుడు","వికర్ణుడు","ఘటోత్కచుడు"],
+a:"అశ్వత్థామ"
+},
+
+{
+q:"పాండవుల తల్లి ఎవరు?",
+o:["గాంధారి","కుంతి","సత్యవతి","మాద్రి"],
+a:"కుంతి"
+},
+
+{
+q:"అర్జునుడి విల్లు పేరు ఏమిటి?",
+o:["పినాకం","గాండీవం","విజయము","శారంగం"],
+a:"గాండీవం"
+},
+
+{
+q:"శ్రీరాముడు ఏ వంశానికి చెందినవారు?",
+o:["చంద్రవంశం","సూర్యవంశం","నాగవంశం","కురు వంశం"],
+a:"సూర్యవంశం"
+},
+
+{
+q:"గీతలో శ్రీకృష్ణుడు తన విశ్వరూపాన్ని ఎవరికీ చూపించారు?",
+o:["భీముడు","సంజయుడు","అర్జునుడు","కర్ణుడు"],
+a:"అర్జునుడు"
+},
+
+{
+q:"భీముడి కుమారుడు ఎవరు?",
+o:["అభిమన్యుడు","ఘటోత్కచుడు","ఇరావాన్","లక్ష్మణ కుమారుడు"],
+a:"ఘటోత్కచుడు"
+},
+
+{
+q:"రావణుడి కుమారుడు ఎవరు?",
+o:["ఇంద్రజిత్","విభీషణుడు","కుంభకర్ణుడు","జాంబవంతుడు"],
+a:"ఇంద్రజిత్"
+},
+
+{
+q:"శకుని ఎవరి మామయ్య?",
+o:["పాండవులు","కౌరవులు","యాదవులు","వానరులు"],
+a:"కౌరవులు"
+},
+
+{
+q:"భరతుడు ఎవరి కుమారుడు?",
+o:["కౌసల్య","సుమిత్ర","కైకేయి","గాంధారి"],
+a:"కైకేయి"
+},
+
+{
+q:"హనుమంతుడు ఎవరికి పరమభక్తుడు?",
+o:["శివుడు","విష్ణువు","శ్రీరాముడు","కృష్ణుడు"],
+a:"శ్రీరాముడు"
+},
+
+{
+q:"కురుక్షేత్ర యుద్ధం ఎన్ని రోజులు జరిగింది?",
+o:["10","12","18","21"],
+a:"18"
+},
+
+{
+q:"ద్రౌపది ఎవరికి భార్య?",
+o:["అర్జునుడు మాత్రమే","భీముడు మాత్రమే","ఐదుగురు పాండవులు","కర్ణుడు"],
+a:"ఐదుగురు పాండవులు"
+},
+
+{
+q:"రాముడి పాదుకలను రాజసింహాసనంపై ఉంచి పాలించినవారు ఎవరు?",
+o:["లక్ష్మణుడు","శత్రుఘ్నుడు","భరతుడు","హనుమంతుడు"],
+a:"భరతుడు"
+},
+
+{
+q:"గీతలో “యోగేశ్వరుడు” అని ఎవరిని పిలుస్తారు?",
+o:["అర్జునుడు","భీముడు","శ్రీకృష్ణుడు","వ్యాసుడు"],
+a:"శ్రీకృష్ణుడు"
+},
+
+{
+q:"మహాభారత యుద్ధంలో కర్ణుడిని సంహరించినవారు ఎవరు?",
+o:["భీముడు","యుధిష్ఠిరుడు","అర్జునుడు","శ్రీకృష్ణుడు"],
+a:"అర్జునుడు"
 }
 
-];
+{
+q:"అర్జునుడి కుమారుడైన ఇరావాన్ ఎవరి ద్వారా జన్మించారు?",
+o:["ఉలూపి","ద్రౌపది","సుభద్ర","చిత్రాంగద"],
+a:"ఉలూపి"
+},
 
-/* VARIABLES */
+{
+q:"శ్రీకృష్ణుడి తల్లి ఎవరు?",
+o:["కుంతి","దేవకి","యశోద","రుక్మిణి"],
+a:"దేవకి"
+},
+
+{
+q:"రావణుడి భార్య ఎవరు?",
+o:["మందోదరి","తార","అహల్య","సత్యభామ"],
+a:"మందోదరి"
+},
+
+{
+q:"అర్జునుడి రథసారథిగా ఉన్నవారు ఎవరు?",
+o:["భీముడు","శ్రీకృష్ణుడు","సాత్యకి","కర్ణుడు"],
+a:"శ్రీకృష్ణుడు"
+},
+
+{
+q:"పాండవులు అజ్ఞాతవాసం ఎన్ని సంవత్సరాలు చేశారు?",
+o:["1","2","5","12"],
+a:"1"
+},
+
+{
+q:"శ్రీరాముడి తల్లి ఎవరు?",
+o:["సుమిత్ర","కైకేయి","కౌసల్య","గాంధారి"],
+a:"కౌసల్య"
+},
+
+{
+q:"గీతలో అర్జునుడిని ఎక్కువగా ఏ పేరుతో సంబోధించారు?",
+o:["పార్థ","వాసుదేవ","ధర్మరాజు","భీమసేనుడు"],
+a:"పార్థ"
+},
+
+{
+q:"హనుమంతుడు సంజీవని పర్వతాన్ని ఎవరి కోసం తీసుకువచ్చారు?",
+o:["శ్రీరాముడు","భరతుడు","లక్ష్మణుడు","సుగ్రీవుడు"],
+a:"లక్ష్మణుడు"
+},
+
+{
+q:"దుర్యోధనుడి తండ్రి ఎవరు?",
+o:["పాండు","ధృతరాష్ట్రుడు","భీష్ముడు","ద్రోణుడు"],
+a:"ధృతరాష్ట్రుడు"
+}
+
+  
+
+];
 
 let selectedQuestions = [];
 
@@ -467,244 +784,174 @@ let currentQuestion = 0;
 
 let score = 0;
 
-let player = "";
+let username = "";
 
-/* START QUIZ */
+/* Start Quiz */
 
 window.startQuiz = function(){
 
-player =
-document.getElementById("playerName").value;
+username =
+document.getElementById("username").value;
 
-if(player.trim()===""){
+if(username.trim() === ""){
 
-alert("దయచేసి మీ పేరు నమోదు చేయండి");
+alert("పేరు నమోదు చేయండి");
 
 return;
 }
 
-selectedQuestions =
-[...questions]
-.sort(()=>0.5-Math.random())
-.slice(0,5);
-
-document.getElementById("startBox").style.display="none";
+document.getElementById("startScreen").style.display="none";
 
 document.getElementById("quizBox").style.display="block";
 
-loadQuestion();
+selectedQuestions =
+questions.sort(()=>0.5 - Math.random()).slice(0,5);
 
+showQuestion();
 }
 
-/* LOAD QUESTION */
+/* Show Question */
 
-function loadQuestion(){
+function showQuestion(){
 
-const q =
-selectedQuestions[currentQuestion];
+const q = selectedQuestions[currentQuestion];
 
-document.getElementById("questionNumber").innerHTML =
-`ప్రశ్న ${currentQuestion+1} / 5`;
+document.getElementById("question").innerHTML =
+`${currentQuestion+1}. ${q.q}`;
 
-document.getElementById("questionText").innerHTML =
-q.question;
+const optionsDiv =
+document.getElementById("options");
 
-document.getElementById("liveScore").innerHTML =
-`స్కోర్ : ${score}`;
+optionsDiv.innerHTML = "";
 
-let optionsHTML = "";
+q.o.forEach(option=>{
 
-q.options.forEach(option=>{
+const div =
+document.createElement("div");
 
-optionsHTML += `
+div.classList.add("option");
 
-<div class="option"
-onclick="checkAnswer(this,'${option}')">
+div.innerHTML = option;
 
-${option}
+div.onclick = ()=>checkAnswer(div, option);
 
-</div>
-
-`;
-
+optionsDiv.appendChild(div);
 });
-
-document.getElementById("optionsBox").innerHTML =
-optionsHTML;
-
 }
 
-/* CHECK ANSWER */
+/* Check Answer */
 
-window.checkAnswer = function(element,selected){
+function checkAnswer(element, selected){
 
 const correct =
-selectedQuestions[currentQuestion].answer;
+selectedQuestions[currentQuestion].a;
 
 const allOptions =
 document.querySelectorAll(".option");
-
-/* DISABLE */
 
 allOptions.forEach(opt=>{
 
 opt.style.pointerEvents="none";
 
+if(opt.innerHTML === correct){
+
+opt.classList.add("correct");
+}
+
+if(opt.innerHTML === selected &&
+selected !== correct){
+
+opt.classList.add("wrong");
+}
 });
 
-/* CORRECT */
-
-if(selected===correct){
+if(selected === correct){
 
 score++;
-
-element.style.background="#1f8b24";
-
-element.style.border=
-"2px solid #4dff57";
-
 }
-
-/* WRONG */
-
-else{
-
-element.style.background="#8b1f1f";
-
-element.style.border=
-"2px solid red";
-
-/* SHOW CORRECT */
-
-allOptions.forEach(opt=>{
-
-if(opt.innerText===correct){
-
-opt.style.background="#1f8b24";
-
-opt.style.border=
-"2px solid #4dff57";
-
-}
-
-});
-
-}
-
-/* UPDATE SCORE */
-
-document.getElementById("liveScore").innerHTML =
-`స్కోర్ : ${score}`;
-
-/* NEXT */
 
 setTimeout(()=>{
 
 currentQuestion++;
 
-if(currentQuestion<5){
+if(currentQuestion < selectedQuestions.length){
 
-loadQuestion();
+showQuestion();
 
-}
+}else{
 
-else{
-
-showResult();
-
+finishQuiz();
 }
 
 },1200);
-
 }
 
-/* RESULT */
+/* Finish Quiz */
 
-async function showResult(){
+async function finishQuiz(){
 
 document.getElementById("quizBox").style.display="none";
 
-document.getElementById("resultBox").style.display="block";
+document.getElementById("scoreBox").style.display="block";
 
-document.getElementById("scoreText").innerHTML =
-`${player} — ${score}/5`;
+document.getElementById("finalScore").innerHTML =
+`${username} గారి స్కోర్ : ${score}/5 🔥`;
 
-/* SAVE ONLINE */
+await addDoc(collection(db,"leaderboard"),{
 
-await addDoc(
-
-collection(db,"leaderboard"),
-
-{
-
-name:player,
-
-score:score,
-
-time:Date.now()
-
+name:username,
+score:score
+});
 }
 
-);
+/* Leaderboard */
 
-/* LOAD LEADERBOARD */
+window.openLeaderboard = async function(){
 
-loadLeaderboard();
+document.getElementById("leaderboardPopup").style.display="flex";
 
-}
+const leaderboardList =
+document.getElementById("leaderboardList");
 
-/* LOAD LEADERBOARD */
+leaderboardList.innerHTML="Loading...";
 
-async function loadLeaderboard(){
-
-const q = query(
-
+const q =
+query(
 collection(db,"leaderboard"),
-
 orderBy("score","desc"),
-
 limit(10)
-
 );
 
 const querySnapshot =
 await getDocs(q);
 
-let html="";
+leaderboardList.innerHTML="";
 
-let rank=1;
+let rank = 1;
 
 querySnapshot.forEach((doc)=>{
 
 const data = doc.data();
 
-html += `
+leaderboardList.innerHTML += `
 
-<div class="rank">
+<div class="player">
 
-🏆 ${rank}.
-${data.name}
-— ${data.score}/5
+<span>${rank}. ${data.name}</span>
+
+<span>${data.score}/5</span>
 
 </div>
 
 `;
 
 rank++;
-
 });
-
-document.getElementById("leaderboardList").innerHTML =
-html;
-
 }
 
-/* RESTART */
+window.closeLeaderboard = function(){
 
-window.restartQuiz = function(){
-
-location.reload();
-
+document.getElementById("leaderboardPopup").style.display="none";
 }
 
 </script>
