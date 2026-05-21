@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ప్రతిభా వేదిక | సన్నివేశం</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Telugu Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
+
+    <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Telugu', sans-serif;
+            background: linear-gradient(135deg, #fff7e6, #ffe0b2);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND TEXTURE */
+        body::before {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255,140,0,0.12) 2px, transparent 2px),
+                radial-gradient(circle at 80% 60%, rgba(255,120,0,0.12) 2px, transparent 2px),
+                radial-gradient(circle at 40% 80%, rgba(255,100,0,0.12) 2px, transparent 2px);
+            background-size: 120px 120px;
+            z-index: -1;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: #ff9933;
+            padding: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 25px 15px;
+            animation: fadeIn 1s ease;
+        }
+
+        .title {
+            font-size: 34px;
+            color: #ff6600;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: #666;
+            font-size: 15px;
+        }
+
+        /* EVENT BOX */
+        .event-box {
+            background: rgba(255,255,255,0.95);
+            margin: 18px;
+            padding: 22px;
+            border-radius: 18px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            animation: fadeUp 0.8s ease;
+        }
+
+        .event-box h2 {
+            color: #ff6600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* IMAGES */
+        .gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 14px;
+            transition: 0.4s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.03);
+        }
+
+        /* BUTTON */
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            text-align: center;
+            background: #ff9933;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* DESKTOP */
+        @media (min-width: 768px) {
+
+            .event-box {
+                width: 70%;
+                margin: 30px auto;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navbar {
+                gap: 40px;
+            }
+
+            .navbar a {
+                font-size: 16px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="#">Events</a>
+    <a href="festivals.html">Festivals</a>
+    <a href="books.html">Books</a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+
+    <div class="title">ప్రతిభా వేదిక 🎭</div>
+
+    <div class="subtitle">
+        విద్యార్థుల ప్రతిభను వెలికితీసే ఒక అందమైన ప్రయత్నం ✨
+    </div>
+
+</div>
+
+<!-- EVENT SECTION -->
+<div class="event-box">
+
+    <h2>ప్రాథమిక ఉన్నత పాఠశాల కార్యక్రమం 🪔</h2>
+
+    <p>
+        సన్నివేశం బృందంగా మేము ప్రాథమిక ఉన్నత పాఠశాలలో ప్రతిభా వేదిక కార్యక్రమాన్ని నిర్వహించాము. 
+        ఈ కార్యక్రమంలో భాగంగా మేము అందమైన అక్షరరచన, చిత్రలేఖనం, ఆటలు, పఠనం, రచన, కథ చెప్పడం వంటి 
+        అనేక ఆసక్తికర కార్యక్రమాలను నిర్వహించాము.
+        <br><br>
+        ఈ కార్యక్రమానికి పాఠశాల ప్రధానోపాధ్యాయురాలు గారూ, ఉపాధ్యాయులు అందించిన సహకారం ఎంతో అమూల్యమైనది. 
+        వారు అందరూ ఎంతో ఆదరణతో మమ్మల్ని ప్రోత్సహించారు. వారి నుండి మేము అనేక విషయాలు నేర్చుకున్నాము.
+        <br><br>
+        అలాగే మేము విద్యార్థులకు తెలుగు భాష మహత్త్వం మరియు మన సంస్కృతి గొప్పతనం గురించి తెలియజేశాము.
+        <br><br>
+        ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది. ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి, 
+        ఉపాధ్యాయులకు మరియు అందరికీ మా హృదయపూర్వక కృతజ్ఞతలు.
+    </p>
+
+    <!-- GALLERY -->
+    <div class="gallery">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_221107048.jpg.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_222322319.jpg.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_223503004.jpg.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/FunPic_20260329_230413689.jpg.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5855.JPG.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5883%20(1).JPG.jpeg">
+
+        <img src="https://raw.githubusercontent.com/sannivesham/sannivesham/main/IMG_5940%20(1).JPG.jpeg">
+
+    </div>
+
+</div>
+
+<!-- BACK BUTTON -->
+<a href="index.html" class="back-btn">
+    ⬅ తిరిగి వెళ్ళండి
+</a>
+
+</body>
+</html>
