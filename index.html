@@ -25,8 +25,93 @@ body{
     background:#000;
 }
 
-/* 🌑 SKY */
-.sky{
+/* =========================
+   🔱 INTRO SCREEN
+========================= */
+#intro{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:
+    radial-gradient(circle at center, rgba(255,140,0,0.15), transparent 40%),
+    linear-gradient(180deg,#000,#050505,#000);
+
+    animation: fadeOut 1s ease 4s forwards;
+}
+
+.intro-content{
+    text-align:center;
+    color:#ffcc99;
+}
+
+.chakra{
+    font-size:60px;
+    animation: spin 3s linear infinite;
+    margin-bottom:10px;
+}
+
+#intro h1{
+    font-size:38px;
+    color:#ffb347;
+    letter-spacing:2px;
+    text-shadow:0 0 20px rgba(255,140,0,0.4);
+}
+
+#intro p{
+    margin-top:10px;
+    color:#ddd;
+}
+
+.loader{
+    margin-top:25px;
+    width:180px;
+    height:4px;
+    background:rgba(255,255,255,0.1);
+    border-radius:10px;
+    overflow:hidden;
+    position:relative;
+}
+
+.loader::before{
+    content:"";
+    position:absolute;
+    width:40%;
+    height:100%;
+    background:linear-gradient(90deg,#ff9a2f,#ffb347,#ff6a00);
+    animation: load 1.5s infinite;
+}
+
+/* =========================
+   🖼️ BACKGROUND IMAGE
+========================= */
+.bg-image{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-6;
+
+    background:
+    url("https://images.unsplash.com/photo-1520975922284-9a9b7c6d7f0f?auto=format&fit=crop&w=1600&q=80");
+
+    background-size:cover;
+    background-position:center;
+
+    filter:brightness(0.35) contrast(1.2);
+}
+
+/* 🌑 DARK OVERLAY */
+.overlay{
     position:fixed;
     top:0;
     left:0;
@@ -34,40 +119,7 @@ body{
     height:100%;
     z-index:-5;
 
-    background:
-    radial-gradient(circle at 20% 20%, rgba(255,160,60,0.10), transparent 35%),
-    radial-gradient(circle at 80% 30%, rgba(255,80,0,0.08), transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(255,200,120,0.06), transparent 45%),
-    linear-gradient(180deg,#010101,#070707,#000000);
-
-    animation: skyShift 10s ease-in-out infinite alternate;
-}
-
-@keyframes skyShift{
-    from{filter:brightness(1);}
-    to{filter:brightness(1.15);}
-}
-
-/* 🌫️ SMOKE */
-.smoke{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:-4;
-
-    background-image:
-    radial-gradient(rgba(255,255,255,0.06) 2px, transparent 2px);
-    background-size:90px 90px;
-
-    opacity:0.10;
-    animation: smokeMove 60s linear infinite;
-}
-
-@keyframes smokeMove{
-    from{transform:translateY(0);}
-    to{transform:translateY(-300px);}
+    background:radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.85) 80%);
 }
 
 /* 🔥 EMBERS */
@@ -75,9 +127,7 @@ body{
     position:fixed;
     width:100%;
     height:100%;
-    top:0;
-    left:0;
-    z-index:-3;
+    z-index:-4;
 
     background-image:
     radial-gradient(circle, rgba(255,140,0,0.35) 1px, transparent 3px),
@@ -86,12 +136,23 @@ body{
     background-size:120px 120px;
     opacity:0.25;
 
-    animation: emberFloat 12s linear infinite;
+    animation: float 12s linear infinite;
 }
 
-@keyframes emberFloat{
-    from{transform:translateY(0);}
-    to{transform:translateY(-200px);}
+/* 🌫️ SMOKE */
+.smoke{
+    position:fixed;
+    width:100%;
+    height:100%;
+    z-index:-3;
+
+    background-image:
+    radial-gradient(rgba(255,255,255,0.05) 2px, transparent 2px);
+
+    background-size:90px 90px;
+    opacity:0.12;
+
+    animation: drift 60s linear infinite;
 }
 
 /* ⚡ LIGHTNING */
@@ -99,21 +160,14 @@ body{
     position:fixed;
     width:100%;
     height:100%;
-    top:0;
-    left:0;
     z-index:-2;
-    animation: flash 6s infinite;
+
+    animation: flash 7s infinite;
 }
 
-@keyframes flash{
-    0%,90%,100%{background:transparent;}
-    92%{background:rgba(255,255,255,0.08);}
-    93%{background:transparent;}
-    96%{background:rgba(255,200,120,0.05);}
-    97%{background:transparent;}
-}
-
-/* NAVBAR */
+/* =========================
+   NAVBAR
+========================= */
 .navbar{
     position:sticky;
     top:0;
@@ -121,8 +175,8 @@ body{
 
     display:flex;
     justify-content:center;
-    gap:18px;
     flex-wrap:wrap;
+    gap:18px;
 
     padding:14px;
 
@@ -136,10 +190,6 @@ body{
     text-decoration:none;
     color:#ffd9a3;
     font-weight:bold;
-}
-
-.navbar a:hover{
-    color:#ffb347;
 }
 
 /* HEADER */
@@ -156,10 +206,7 @@ body{
     overflow:hidden;
 
     border:2px solid rgba(255,180,80,0.4);
-
-    box-shadow:
-    0 0 30px rgba(255,140,0,0.25),
-    0 0 80px rgba(255,80,0,0.15);
+    box-shadow:0 0 40px rgba(255,140,0,0.2);
 }
 
 .logo{
@@ -181,20 +228,11 @@ body{
     max-width:950px;
     margin:30px auto;
 
-    background:rgba(15,10,5,0.92);
+    background:rgba(10,10,10,0.85);
     border-radius:20px;
-
     padding:30px;
 
     border:1px solid rgba(255,180,80,0.15);
-
-    box-shadow:0 10px 40px rgba(0,0,0,0.6);
-}
-
-.section h2{
-    text-align:center;
-    margin-bottom:25px;
-    color:#ffcc99;
 }
 
 /* GRID */
@@ -221,8 +259,6 @@ body{
 
     background:linear-gradient(135deg,#b86b1d,#ff9f2f,#b86b1d);
 
-    border:1px solid rgba(255,200,120,0.25);
-
     transition:0.3s;
 }
 
@@ -235,6 +271,39 @@ body{
     text-align:center;
     padding:30px;
     color:#aaa;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes load{
+    from{left:-40%;}
+    to{left:100%;}
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+@keyframes fadeOut{
+    to{opacity:0;visibility:hidden;}
+}
+
+@keyframes float{
+    from{transform:translateY(0);}
+    to{transform:translateY(-200px);}
+}
+
+@keyframes drift{
+    from{transform:translateY(0);}
+    to{transform:translateY(-300px);}
+}
+
+@keyframes flash{
+    0%,90%,100%{background:transparent;}
+    92%{background:rgba(255,255,255,0.08);}
+    96%{background:rgba(255,200,120,0.05);}
 }
 
 /* MOBILE */
@@ -253,10 +322,21 @@ body{
 
 <body>
 
-<!-- 🔱 BACKGROUND LAYERS -->
-<div class="sky"></div>
-<div class="smoke"></div>
+<!-- 🔱 INTRO SCREEN -->
+<div id="intro">
+    <div class="intro-content">
+        <div class="chakra">⚔️</div>
+        <h1>ENTER KURUKSHETRA</h1>
+        <p>సత్యం • ధర్మం • యుద్ధం</p>
+        <div class="loader"></div>
+    </div>
+</div>
+
+<!-- BACKGROUND LAYERS -->
+<div class="bg-image"></div>
+<div class="overlay"></div>
 <div class="embers"></div>
+<div class="smoke"></div>
 <div class="lightning"></div>
 
 <!-- NAV -->
@@ -270,22 +350,17 @@ body{
 
 <!-- HEADER -->
 <div class="header" id="home">
-
     <div class="logo-container">
         <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/Logo%20(1).png" class="logo">
     </div>
-
     <div class="title">సన్నివేశం</div>
-
 </div>
 
 <!-- SECTIONS -->
 <div class="section" id="sections">
-
-    <h2>సృజనాత్మక విభాగాలు ⚔️</h2>
+    <h2 style="text-align:center;color:#ffcc99;">సృజనాత్మక విభాగాలు ⚔️</h2>
 
     <div class="grid-box">
-
         <a class="btn" href="events.html">ప్రతిభా వేదిక 🎭</a>
         <a class="btn" href="festivals.html">పండుగలు 🔥</a>
         <a class="btn" href="books.html">పుస్తకాలు 📜</a>
@@ -293,43 +368,18 @@ body{
         <a class="btn" href="temples.html">దేవాలయ చరిత్ర 🛕</a>
         <a class="btn" href="shlokas.html">శ్లోకాలు 🪔</a>
         <a class="btn" href="gitarangam.html">భగవద్గీత 🎶</a>
-
-    </div>
-</div>
-
-<!-- SOCIAL -->
-<div class="section" id="social">
-    <h2>మాతో కలవండి 🔱</h2>
-
-    <div class="grid-box">
-        <a class="btn" href="https://www.instagram.com/">ఇన్‌స్టాగ్రామ్</a>
-        <a class="btn" href="https://youtube.com/">యూట్యూబ్</a>
-    </div>
-</div>
-
-<!-- ABOUT -->
-<div class="section" id="about">
-    <h2>మా గురించి 🪔</h2>
-
-    <p style="text-align:center;line-height:2;color:#ddd;">
-        ఇది కేవలం వెబ్‌సైట్ కాదు...<br>
-        ఇది మహాభారత యుద్ధభూమి భావనతో రూపొందించిన ఒక డిజిటల్ అనుభవం ⚔️🔥
-    </p>
-</div>
-
-<!-- CONTACT -->
-<div class="section" id="contact">
-    <h2>సంప్రదించండి 📞</h2>
-
-    <div class="grid-box">
-        <a class="btn" href="tel:9493226037">కాల్ చేయండి</a>
-        <a class="btn" href="https://wa.me/919493226037">వాట్సాప్</a>
     </div>
 </div>
 
 <div class="footer">
 © 2026 సన్నివేశం • మహాభారత ప్రేరణతో రూపొందించబడింది
 </div>
+
+<script>
+setTimeout(() => {
+    document.getElementById("intro").style.display = "none";
+}, 4500);
+</script>
 
 </body>
 </html>
