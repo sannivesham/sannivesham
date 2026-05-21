@@ -1,1 +1,557 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ధర్మ పరీక్ష ⚔️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Noto Sans Telugu', sans-serif;
+    background:black;
+    color:white;
+    overflow-x:hidden;
+    min-height:100vh;
+}
+
+/* BACKGROUND */
+
+.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-10;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.92)),
+    url("https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1600&auto=format&fit=crop");
+
+    background-size:cover;
+    background-position:center;
+}
+
+/* PARTICLES */
+
+.particles{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-8;
+
+    background-image:
+    radial-gradient(rgba(255,170,60,0.30) 1px, transparent 2px);
+
+    background-size:120px 120px;
+
+    animation:moveParticles 20s linear infinite;
+}
+
+@keyframes moveParticles{
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(-250px);
+    }
+}
+
+/* GLOW */
+
+.glow{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-9;
+
+    background:
+    radial-gradient(circle at center,
+    rgba(255,140,0,0.12),
+    transparent 50%);
+
+    animation:pulse 5s infinite;
+}
+
+@keyframes pulse{
+
+    0%{opacity:0.5;}
+    50%{opacity:1;}
+    100%{opacity:0.5;}
+
+}
+
+/* MAIN */
+
+.container{
+    width:92%;
+    max-width:800px;
+
+    margin:40px auto;
+
+    background:rgba(10,10,10,0.84);
+
+    border-radius:26px;
+
+    padding:35px;
+
+    border:1px solid rgba(255,180,80,0.12);
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.title{
+    text-align:center;
+    color:#ffb347;
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#dddddd;
+    margin-bottom:30px;
+}
+
+/* INPUT */
+
+.input-box{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    outline:none;
+
+    font-size:18px;
+
+    background:#1c1c1c;
+    color:white;
+
+    margin-bottom:20px;
+}
+
+/* BUTTON */
+
+.btn{
+    width:100%;
+    padding:16px;
+
+    border:none;
+    border-radius:16px;
+
+    background:
+    linear-gradient(135deg,#d68422,#ffab3d);
+
+    color:white;
+
+    font-size:20px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.02);
+}
+
+/* QUIZ */
+
+#quizBox{
+    display:none;
+}
+
+.question{
+    font-size:26px;
+    margin-bottom:25px;
+    line-height:1.7;
+}
+
+.option{
+    background:#1b1b1b;
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:15px;
+    cursor:pointer;
+    transition:0.3s;
+    border:1px solid rgba(255,180,80,0.08);
+}
+
+.option:hover{
+    background:#2a2a2a;
+    transform:translateX(4px);
+}
+
+/* SCORE */
+
+#resultBox{
+    display:none;
+    text-align:center;
+}
+
+.score{
+    font-size:42px;
+    color:#ffb347;
+    margin:20px 0;
+}
+
+/* LEADERBOARD */
+
+.leaderboard{
+    margin-top:30px;
+    text-align:left;
+}
+
+.leaderboard h3{
+    color:#ffcc99;
+    margin-bottom:15px;
+}
+
+.rank{
+    background:#161616;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .title{
+        font-size:34px;
+    }
+
+    .question{
+        font-size:22px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="glow"></div>
+<div class="particles"></div>
+
+<div class="container">
+
+    <div class="title">
+        ధర్మ పరీక్ష ⚔️
+    </div>
+
+    <div class="subtitle">
+        మీ జ్ఞానాన్ని పరీక్షించుకోండి
+    </div>
+
+    <!-- START -->
+
+    <div id="startBox">
+
+        <input type="text"
+        id="playerName"
+        class="input-box"
+        placeholder="మీ పేరు నమోదు చేయండి">
+
+        <button class="btn" onclick="startQuiz()">
+            పరీక్ష ప్రారంభించండి 🚩
+        </button>
+
+    </div>
+
+    <!-- QUIZ -->
+
+    <div id="quizBox">
+
+        <div id="questionNumber"></div>
+
+        <div class="question" id="questionText"></div>
+
+        <div id="optionsBox"></div>
+
+    </div>
+
+    <!-- RESULT -->
+
+    <div id="resultBox">
+
+        <h2>పరీక్ష పూర్తయింది 🎉</h2>
+
+        <div class="score" id="scoreText"></div>
+
+        <button class="btn" onclick="restartQuiz()">
+            మళ్ళీ ప్రయత్నించండి 🔁
+        </button>
+
+        <div class="leaderboard">
+
+            <h3>🏆 నాయకుల పట్టిక</h3>
+
+            <div id="leaderboardList"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* QUESTIONS */
+
+const questions = [
+
+{
+question:"శ్రీరాముడి తండ్రి పేరు ఏమిటి?",
+options:["దశరథుడు","జనకుడు","భీష్ముడు","పాండు"],
+answer:"దశరథుడు"
+},
+
+{
+question:"శ్రీరాముడి జన్మస్థలం ఏది?",
+options:["ద్వారక","మథుర","అయోధ్య","హస్తినాపురం"],
+answer:"అయోధ్య"
+},
+
+{
+question:"హనుమంతుడు ఏ దేవుని అవతారంగా భావిస్తారు?",
+options:["శివుడు","వాయుదేవుడు","విష్ణువు","ఇంద్రుడు"],
+answer:"వాయుదేవుడు"
+},
+
+{
+question:"శ్రీరాముడి భార్య ఎవరు?",
+options:["ద్రౌపది","రుక్మిణి","సీతాదేవి","సత్యభామ"],
+answer:"సీతాదేవి"
+},
+
+{
+question:"లక్ష్మణుడి తల్లి పేరు ఏమిటి?",
+options:["కౌసల్య","కైకేయి","సుమిత్ర","గాంధారి"],
+answer:"సుమిత్ర"
+},
+
+{
+question:"మహాభారతంలో పాండవులు మొత్తం ఎంతమంది?",
+options:["3","5","7","10"],
+answer:"5"
+},
+
+{
+question:"అర్జునుడికి గీతను ఎవరు బోధించారు?",
+options:["వ్యాసుడు","కర్ణుడు","శ్రీకృష్ణుడు","భీష్ముడు"],
+answer:"శ్రీకృష్ణుడు"
+},
+
+{
+question:"కౌరవుల పెద్దవాడు ఎవరు?",
+options:["దుశ్శాసనుడు","దుర్యోధనుడు","వికర్ణుడు","అశ్వత్థామ"],
+answer:"దుర్యోధనుడు"
+},
+
+{
+question:"భీముడి బలం ఏ విషయంలో ప్రసిద్ధి?",
+options:["విలువిద్య","గదాయుద్ధం","సంగీతం","గుర్రపు స్వారీ"],
+answer:"గదాయుద్ధం"
+},
+
+{
+question:"అభిమన్యుడు ఎవరి కుమారుడు?",
+options:["భీముడు","యుధిష్ఠిరుడు","అర్జునుడు","కర్ణుడు"],
+answer:"అర్జునుడు"
+},
+
+{
+question:"భగవద్గీతలో ఎన్ని అధ్యాయాలు ఉన్నాయి?",
+options:["12","15","18","24"],
+answer:"18"
+},
+
+{
+question:"లంక దహనం చేసినవాడు ఎవరు?",
+options:["అంగదుడు","హనుమంతుడు","సుగ్రీవుడు","జాంబవంతుడు"],
+answer:"హనుమంతుడు"
+}
+
+];
+
+/* VARIABLES */
+
+let selectedQuestions = [];
+let currentQuestion = 0;
+let score = 0;
+let player = "";
+
+/* START QUIZ */
+
+function startQuiz(){
+
+    player = document.getElementById("playerName").value;
+
+    if(player.trim() === ""){
+
+        alert("దయచేసి మీ పేరు నమోదు చేయండి");
+
+        return;
+    }
+
+    selectedQuestions = [...questions]
+    .sort(()=>0.5 - Math.random())
+    .slice(0,5);
+
+    document.getElementById("startBox").style.display="none";
+
+    document.getElementById("quizBox").style.display="block";
+
+    loadQuestion();
+}
+
+/* LOAD QUESTION */
+
+function loadQuestion(){
+
+    const q = selectedQuestions[currentQuestion];
+
+    document.getElementById("questionNumber").innerHTML =
+    `ప్రశ్న ${currentQuestion+1} / 5`;
+
+    document.getElementById("questionText").innerHTML =
+    q.question;
+
+    let optionsHTML = "";
+
+    q.options.forEach(option=>{
+
+        optionsHTML += `
+        <div class="option"
+        onclick="checkAnswer('${option}')">
+
+        ${option}
+
+        </div>
+        `;
+    });
+
+    document.getElementById("optionsBox").innerHTML =
+    optionsHTML;
+}
+
+/* CHECK */
+
+function checkAnswer(selected){
+
+    const correct =
+    selectedQuestions[currentQuestion].answer;
+
+    if(selected === correct){
+
+        score++;
+    }
+
+    currentQuestion++;
+
+    if(currentQuestion < 5){
+
+        loadQuestion();
+
+    }else{
+
+        showResult();
+    }
+}
+
+/* RESULT */
+
+function showResult(){
+
+    document.getElementById("quizBox").style.display="none";
+
+    document.getElementById("resultBox").style.display="block";
+
+    document.getElementById("scoreText").innerHTML =
+    `${player} — ${score}/5`;
+
+    saveLeaderboard();
+
+    loadLeaderboard();
+}
+
+/* SAVE */
+
+function saveLeaderboard(){
+
+    let leaderboard =
+    JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+    leaderboard.push({
+        name:player,
+        score:score
+    });
+
+    leaderboard.sort((a,b)=>b.score-a.score);
+
+    leaderboard = leaderboard.slice(0,10);
+
+    localStorage.setItem(
+        "leaderboard",
+        JSON.stringify(leaderboard)
+    );
+}
+
+/* LOAD LEADERBOARD */
+
+function loadLeaderboard(){
+
+    let leaderboard =
+    JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+    let html = "";
+
+    leaderboard.forEach((item,index)=>{
+
+        html += `
+        <div class="rank">
+
+        ${index+1}. ${item.name}
+        — ${item.score}/5
+
+        </div>
+        `;
+    });
+
+    document.getElementById("leaderboardList").innerHTML =
+    html;
+}
+
+/* RESTART */
+
+function restartQuiz(){
+
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
