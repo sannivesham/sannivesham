@@ -37,7 +37,7 @@ body{
 
 }
 
-/* ================= BACKGROUND IMAGE ================= */
+/* ================= BACKGROUND ================= */
 
 .bg-image{
 
@@ -67,7 +67,7 @@ body{
 
 }
 
-/* ================= DIVINE LIGHT ================= */
+/* ================= GLOW ================= */
 
 .divine-light{
 
@@ -84,7 +84,7 @@ body{
     background:
     radial-gradient(
     circle at center,
-    rgba(255,179,71,0.16),
+    rgba(255,179,71,0.15),
     transparent 60%
     );
 
@@ -108,48 +108,30 @@ body{
 
 }
 
-/* ================= CONTAINER ================= */
+/* ================= MAIN CONTAINER ================= */
 
 .about-container{
 
     width:92%;
 
-    max-width:950px;
+    max-width:1100px;
 
     margin:60px auto;
 
-    padding:45px;
+    padding:40px;
 
     border-radius:30px;
 
     background:
     rgba(0,0,0,0.72);
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(12px);
 
     border:
     1px solid rgba(255,255,255,0.08);
 
     box-shadow:
-    0 0 40px rgba(255,179,71,0.15);
-
-    animation:floatBox 6s ease infinite;
-
-}
-
-@keyframes floatBox{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-5px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
+    0 0 40px rgba(255,179,71,0.18);
 
 }
 
@@ -159,7 +141,7 @@ body{
 
     text-align:center;
 
-    font-size:52px;
+    font-size:54px;
 
     margin-bottom:12px;
 
@@ -198,54 +180,91 @@ body{
 
 }
 
-/* ================= FOUNDER ================= */
+/* ================= SUB TITLE ================= */
 
-.founder{
+.sub{
 
     text-align:center;
 
-    font-size:30px;
-
     color:#ffd86f;
 
-    margin-top:15px;
+    font-size:22px;
+
+    margin-bottom:40px;
 
 }
 
-/* ================= LINE ================= */
+/* ================= TEAM CARD ================= */
 
-.line{
+.member-card{
 
-    width:120px;
+    margin-bottom:35px;
 
-    height:4px;
+    padding:30px;
 
-    margin:24px auto;
-
-    border-radius:10px;
+    border-radius:24px;
 
     background:
     linear-gradient(
-    to right,
-    #ffb347,
-    #7597de
+    135deg,
+    rgba(255,179,71,0.10),
+    rgba(117,151,222,0.10),
+    rgba(43,16,85,0.15)
     );
+
+    border:
+    1px solid rgba(255,255,255,0.06);
+
+    backdrop-filter:blur(8px);
+
+    transition:0.4s;
+
+}
+
+.member-card:hover{
+
+    transform:
+    translateY(-5px)
+    scale(1.01);
+
+    box-shadow:
+    0 0 25px rgba(255,179,71,0.15);
+
+}
+
+/* ================= NAME ================= */
+
+.member-name{
+
+    font-size:34px;
+
+    margin-bottom:15px;
+
+    color:#ffcf7d;
+
+}
+
+/* ================= ROLE ================= */
+
+.member-role{
+
+    font-size:20px;
+
+    margin-bottom:22px;
+
+    color:#9ecbff;
 
 }
 
 /* ================= TEXT ================= */
 
-.about-text{
+.member-text{
 
-    text-align:center;
+    font-size:18px;
 
-    font-size:20px;
-
-    line-height:2.3;
+    line-height:2.2;
 
     color:#eeeeee;
-
-    margin-top:20px;
 
 }
 
@@ -284,19 +303,6 @@ body{
 
     animation:titleMove 6s ease infinite;
 
-    box-shadow:
-    0 5px 20px rgba(0,0,0,0.3);
-
-    transition:0.3s;
-
-}
-
-.back-btn:hover{
-
-    transform:
-    translateY(-4px)
-    scale(1.03);
-
 }
 
 /* ================= MOBILE ================= */
@@ -304,20 +310,24 @@ body{
 @media(max-width:700px){
 
     .main-title{
-        font-size:40px;
+        font-size:42px;
     }
 
-    .founder{
-        font-size:24px;
+    .member-name{
+        font-size:28px;
     }
 
-    .about-text{
+    .member-role{
         font-size:18px;
+    }
+
+    .member-text{
+        font-size:16px;
         line-height:2;
     }
 
     .about-container{
-        padding:30px;
+        padding:25px;
     }
 
 }
@@ -333,7 +343,7 @@ body{
 
 <div class="divine-light"></div>
 
-<!-- ABOUT CONTAINER -->
+<!-- MAIN -->
 
 <div class="about-container">
 
@@ -341,20 +351,175 @@ body{
 సన్నివేశం
 </h1>
 
-<div class="founder">
-వ్యవస్థాపకుడు • రేశ్వంత్ ⚔️
+<div class="sub">
+మా బృందం • తెలుగు భావసంపత్తి వేదిక
 </div>
 
-<div class="line"></div>
+<!-- RESHWANTH -->
 
-<div class="about-text">
+<div class="member-card">
 
-“సన్నివేశం” తెలుగు భాష, సంస్కృతి, సాహిత్యం మరియు భారతీయ సంప్రదాయాల గొప్పతనాన్ని యువతకు చేరవేయాలనే లక్ష్యంతో ప్రారంభించబడిన ఒక సాంస్కృతిక వేదిక.
+<div class="member-name">
+రేశ్వంత్
+</div>
 
-నేటి తరానికి తెలుగు తీయదనం, భావవ్యక్తీకరణ అందం, సాహిత్య విలువలు మరియు సంప్రదాయాల గొప్పతనం తెలియజేయాలనే ఆలోచనతో ఈ వేదిక రూపుదిద్దుకుంది.
+<div class="member-role">
+వ్యవస్థాపకుడు ⚔️
+</div>
 
-శ్లోకాలు, ఇతిహాసాలు, భగవద్గీత, ప్రశ్నావళులు, సాంస్కృతిక కార్యక్రమాలు మరియు సృజనాత్మక విభాగాల ద్వారా యువతలో ఆత్మవిశ్వాసం, ఆలోచనా శక్తి మరియు సంస్కృతి పట్ల గౌరవం పెంపొందించడం “సన్నివేశం” ప్రధాన ఉద్దేశ్యం.
+<div class="member-text">
 
+“నేను రేశ్వంత్”.
+“సన్నివేశం” అనే తెలుగు భావసంపత్తి వేదికను ప్రారంభించిన వ్యవస్థాపకుడిని. తెలుగు సంస్కృతి, సాహిత్యం మరియు భారతీయ సంప్రదాయాల గొప్పతనాన్ని యువతకు చేరవేయాలనే లక్ష్యంతో ఈ వేదికను నిర్మించాను. నేటి తరానికి తెలుగు తీయదనం, భావవ్యక్తీకరణ అందం, సాహిత్య విలువలు మరియు సంప్రదాయాల గొప్పతనం తెలియజేయాలనే ఆలోచనతో ఈ ప్రయాణం ప్రారంభమైంది. శ్లోకాలు, ఇతిహాసాలు, భగవద్గీత, ప్రశ్నావళులు మరియు సాంస్కృతిక కార్యక్రమాల ద్వారా యువతలో ఆత్మవిశ్వాసం, ఆలోచనా శక్తి మరియు సంస్కృతి పట్ల గౌరవం పెంపొందించడమే “సన్నివేశం” ప్రధాన ఉద్దేశ్యం.
+
+</div>
+
+</div>
+
+<!-- LIKHITHA -->
+
+<div class="member-card">
+
+<div class="member-name">
+లిఖిత
+</div>
+
+<div class="member-role">
+సంపాదకురాలు
+</div>
+
+<div class="member-text">
+
+“నేను లిఖిత”.
+“సన్నివేశం” వేదికలో సంపాదకురాలిగా బాధ్యతలు నిర్వహిస్తున్నాను. తెలుగు భాష అందం, భావవ్యక్తీకరణ మరియు సాహిత్య విలువలు ప్రతి ఒక్కరికీ చేరేలా విషయాలను సరళంగా మరియు ఆకర్షణీయంగా అందించేందుకు కృషి చేస్తున్నాను.
+
+</div>
+
+</div>
+
+<!-- HARSHITH -->
+
+<div class="member-card">
+
+<div class="member-name">
+హర్షిత్
+</div>
+
+<div class="member-role">
+వ్యాఖ్యాత
+</div>
+
+<div class="member-text">
+
+“నేను హర్షిత్”.
+“సన్నివేశం” వేదికలో వ్యాఖ్యాతగా నా బాధ్యతలను నిర్వర్తిస్తున్నాను. తెలుగు భాష మాధుర్యం, సంస్కృతి మరియు భారతీయ సంప్రదాయాల గొప్పతనాన్ని అందరికీ ఆకర్షణీయంగా పరిచయం చేయడం నా ప్రధాన లక్ష్యం.
+
+</div>
+
+</div>
+
+<!-- LASYA -->
+
+<div class="member-card">
+
+<div class="member-name">
+లాస్య
+</div>
+
+<div class="member-role">
+సాంస్కృతిక విభాగ ప్రధానిగా
+</div>
+
+<div class="member-text">
+
+“నేను లాస్య”.
+“సన్నివేశం” వేదికలో సాంస్కృతిక విభాగ ప్రధానిగా నా బాధ్యతలను నిర్వహిస్తున్నాను. తెలుగు సంస్కృతి, సంప్రదాయాలు మరియు భారతీయ కళల గొప్పతనాన్ని యువతకు చేరవేయడం నా ప్రధాన లక్ష్యం.
+
+</div>
+
+</div>
+
+<!-- NAVANEESHWAR -->
+
+<div class="member-card">
+
+<div class="member-name">
+నవనీశ్వర్
+</div>
+
+<div class="member-role">
+నిర్వహణ బాధ్యుడు
+</div>
+
+<div class="member-text">
+
+“నేను నవనీశ్వర్”.
+“సన్నివేశం” వేదికలో నిర్వహణ బాధ్యతలను నిర్వర్తిస్తున్నాను. ప్రతి కార్యక్రమం సక్రమంగా మరియు విజయవంతంగా జరిగేలా ప్రణాళికలు రూపొందించడం నా ప్రధాన బాధ్యత.
+
+</div>
+
+</div>
+
+<!-- SURYA -->
+
+<div class="member-card">
+
+<div class="member-name">
+సూర్య
+</div>
+
+<div class="member-role">
+కార్యక్రమ సమన్వయకర్త
+</div>
+
+<div class="member-text">
+
+“నేను సూర్య”.
+“సన్నివేశం” వేదికలో కార్యక్రమ సమన్వయకర్తగా నా బాధ్యతలను నిర్వహిస్తున్నాను. ప్రతి కార్యక్రమం సమయపాలనతో మరియు సమర్థవంతంగా జరిగేలా సమన్వయం చేయడం నా ప్రధాన లక్ష్యం.
+
+</div>
+
+</div>
+
+<!-- BINDU -->
+
+<div class="member-card">
+
+<div class="member-name">
+బిందు
+</div>
+
+<div class="member-role">
+సాహిత్య విభాగ ప్రధానిగా
+</div>
+
+<div class="member-text">
+
+“నేను బిందు”.
+“సన్నివేశం” వేదికలో సాహిత్య విభాగ ప్రధానిగా నా బాధ్యతలను నిర్వహిస్తున్నాను. తెలుగు సాహిత్యం, కవిత్వం మరియు భావవ్యక్తీకరణ గొప్పతనాన్ని యువతకు చేరవేయడం నా ప్రధాన లక్ష్యం.
+
+</div>
+
+</div>
+
+<!-- BHARGAVI -->
+
+<div class="member-card">
+
+<div class="member-name">
+భార్గవి
+</div>
+
+<div class="member-role">
+ప్రధాన కార్యదర్శి
+</div>
+
+<div class="member-text">
+
+“నేను భార్గవి”.
+“సన్నివేశం” వేదికలో ప్రధాన కార్యదర్శిగా నా బాధ్యతలను నిర్వహిస్తున్నాను. సంస్థ కార్యక్రమాలు సక్రమంగా మరియు సమర్థవంతంగా కొనసాగేందుకు సమన్వయం చేయడం నా ప్రధాన లక్ష్యం.
+
+</div>
 
 </div>
 
