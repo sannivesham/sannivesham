@@ -28,10 +28,20 @@ body{
     color:white;
     overflow-x:hidden;
     min-height:100vh;
-    background:black;
+
+    /* 🌌 MOVING SKY ENERGY BACKGROUND */
+    background:linear-gradient(135deg,#2b1055,#7597de,#ffb347);
+    background-size:400% 400%;
+    animation:bgMove 12s ease infinite;
 }
 
-/* ================= BACKGROUND ================= */
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* ================= BACKGROUND OVERLAYS ================= */
 
 .bg-image{
     position:fixed;
@@ -49,8 +59,6 @@ body{
     background-position:center;
 }
 
-/* ================= DIVINE ================= */
-
 .divine-light{
     position:fixed;
     width:100%;
@@ -58,7 +66,8 @@ body{
     top:0;
     left:0;
     z-index:-7;
-    background:radial-gradient(circle at center, rgba(255,140,0,0.14), transparent 50%);
+
+    background:radial-gradient(circle at center, rgba(255,140,0,0.18), transparent 60%);
     animation:divinePulse 5s infinite;
 }
 
@@ -66,27 +75,6 @@ body{
     0%{opacity:0.5;}
     50%{opacity:1;}
     100%{opacity:0.5;}
-}
-
-/* ================= PARTICLES ================= */
-
-.floating-particles{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:-6;
-    background:
-    radial-gradient(rgba(255,180,80,0.3) 1px, transparent 2px),
-    radial-gradient(rgba(255,120,0,0.2) 1px, transparent 2px);
-    background-size:120px 120px;
-    animation:move 20s linear infinite;
-}
-
-@keyframes move{
-    from{transform:translateY(0);}
-    to{transform:translateY(-250px);}
 }
 
 /* ================= INTRO ================= */
@@ -98,19 +86,21 @@ body{
     top:0;
     left:0;
     z-index:99999;
+
     display:flex;
     align-items:center;
     justify-content:center;
     flex-direction:column;
-    background:black;
+
+    background:#000;
     animation:fadeOut 1s ease 4s forwards;
 }
 
-/* KNIFE ANIMATION */
+/* ⚔️ SPINNING KNIFE EFFECT */
 .intro-symbol{
     font-size:65px;
-    margin-bottom:15px;
-    animation:spin 1.5s linear infinite, glow 2s infinite alternate;
+    margin-bottom:18px;
+    animation:spin 1.2s linear infinite, glow 2s infinite alternate;
 }
 
 @keyframes spin{
@@ -119,18 +109,18 @@ body{
 }
 
 @keyframes glow{
-    from{opacity:0.6;transform:scale(0.95);}
-    to{opacity:1;transform:scale(1.05);}
+    from{transform:scale(0.95);opacity:0.6;}
+    to{transform:scale(1.05);opacity:1;}
 }
 
-/* INTRO TITLE GRADIENT FIX */
+/* 🌈 INTRO GRADIENT TEXT */
 #intro h1{
     font-size:52px;
     background:linear-gradient(270deg,#ffb347,#d68422,#7597de,#ffb347);
     background-size:400% 400%;
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    animation:introMove 5s ease infinite;
+    animation:introMove 4s ease infinite;
 }
 
 @keyframes introMove{
@@ -143,7 +133,7 @@ body{
     to{opacity:0;visibility:hidden;}
 }
 
-/* ================= NAV ================= */
+/* ================= NAVBAR ================= */
 
 .navbar{
     position:sticky;
@@ -185,14 +175,16 @@ body{
     object-fit:cover;
 }
 
-/* TITLE (KEEP + ANIMATE) */
+/* 🌈 TITLE ANIMATION */
 .title{
     margin-top:24px;
     font-size:54px;
+
     background:linear-gradient(270deg,#ffb347,#d68422,#7597de,#ffb347);
     background-size:400% 400%;
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
+
     animation:introMove 6s ease infinite;
 }
 
@@ -205,6 +197,7 @@ body{
     background:rgba(10,10,10,0.82);
     border-radius:26px;
     padding:35px;
+    border:1px solid rgba(255,180,80,0.15);
 }
 
 .section h2{
@@ -214,14 +207,16 @@ body{
     font-size:34px;
 }
 
-/* GRID */
+/* ================= GRID ================= */
+
 .grid-box{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:22px;
 }
 
-/* BUTTONS */
+/* ================= BUTTONS ================= */
+
 .btn{
     display:flex;
     justify-content:center;
@@ -244,6 +239,38 @@ body{
     100%{background-position:0% 50%;}
 }
 
+/* ================= MUSIC BUTTON ================= */
+
+#musicBtn{
+    position:fixed;
+    top:85px;
+    right:18px;
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    z-index:100000;
+}
+
+/* ================= ABOUT BOX ================= */
+
+.more-about{
+    display:flex;
+    justify-content:center;
+    margin-top:25px;
+}
+
+.more-about a{
+    padding:12px 18px;
+    border-radius:15px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -258,9 +285,15 @@ body{
 <!-- BACKGROUND -->
 <div class="bg-image"></div>
 <div class="divine-light"></div>
-<div class="floating-particles"></div>
 
-<!-- NAV -->
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg">
+</audio>
+
+<button id="musicBtn">🔊</button>
+
+<!-- NAVBAR -->
 <div class="navbar">
 <a href="#home">ముఖ్యపుట</a>
 <a href="#sections">సృజనాత్మక విభాగాలు</a>
@@ -298,35 +331,59 @@ body{
 
 <!-- SOCIAL -->
 <div class="section" id="social">
-<h2>మాతో కలవండి</h2>
+<h2>మాతో కలవండి 🔗</h2>
+
 <div class="grid-box">
 <a class="btn" href="https://instagram.com">ఇన్‌స్టాగ్రామ్</a>
 <a class="btn" href="https://youtube.com">యూట్యూబ్</a>
 </div>
 </div>
 
-<!-- ABOUT (FULL RESTORED CONTENT PRESERVED) -->
+<!-- ABOUT -->
 <div class="section" id="about">
 <h2>మా గురించి 🪔</h2>
 
 <p style="text-align:center;line-height:2.2;font-size:18px;color:#ddd;">
 సన్నివేశం ఒక సాంస్కృతిక వేదిక  
 <br><br>
-“సన్నివేశం” అనేది తెలుగు భాష, సాహిత్యం, సంస్కృతి, కళలను యువతకు చేరవేయాలనే లక్ష్యంతో ప్రారంభమైన ఒక సాంస్కృతిక వేదిక.  
-మన తెలుగు తీయదనాన్ని, సంప్రదాయాల గొప్పతనాన్ని, భావవ్యక్తీకరణ అందాన్ని సమాజానికి పరిచయం చేయడం దీని ప్రధాన ఉద్దేశ్యం.  
-పద్యాలు, కథలు, సంభాషణలు, సాహిత్య చర్చలు, సాంస్కృతిక కార్యక్రమాల ద్వారా తెలుగు భాషపై ప్రేమను పెంపొందించడం కోసం “సన్నివేశం” కృషి చేస్తుంది.
+“సన్నివేశం” అనేది తెలుగు భాష, సాహిత్యం, సంస్కృతి, కళలను యువతకు చేరవేయాలనే లక్ష్యంతో ప్రారంభమైన ఒక సాంస్కృతిక వేదిక...
 </p>
+
+<div class="more-about">
+<a class="btn" href="about.html">More About Us</a>
+</div>
 
 </div>
 
 <!-- CONTACT -->
 <div class="section" id="contact">
 <h2>సంప్రదించండి 📞</h2>
+
 <div class="grid-box">
 <a class="btn" href="tel:9493226037">కాల్ చేయండి</a>
 <a class="btn" href="https://wa.me/919493226037">వాట్సాప్</a>
 </div>
 </div>
+
+<!-- SCRIPT -->
+<script>
+const music=document.getElementById("bgMusic");
+const btn=document.getElementById("musicBtn");
+
+document.body.addEventListener("click",()=>{
+    music.play();
+},{once:true});
+
+btn.onclick=()=>{
+if(music.paused){
+music.play();
+btn.innerHTML="🔊";
+}else{
+music.pause();
+btn.innerHTML="🔇";
+}
+};
+</script>
 
 </body>
 </html>
