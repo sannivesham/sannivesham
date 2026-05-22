@@ -11,10 +11,16 @@
 
 <style>
 
+/* ================= RESET ================= */
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
@@ -27,39 +33,82 @@ body{
 
     overflow-x:hidden;
 
-    background:
-    linear-gradient(
-    135deg,
-    #2b1055,
-    #7597de,
-    #ffb347
-    );
-
-    background-size:400% 400%;
-
-    animation:bgMove 12s ease infinite;
+    background:black;
 
 }
 
-/* BACKGROUND ANIMATION */
+/* ================= BACKGROUND IMAGE ================= */
 
-@keyframes bgMove{
+.bg-image{
+
+    position:fixed;
+
+    width:100%;
+    height:100%;
+
+    top:0;
+    left:0;
+
+    z-index:-10;
+
+    background:
+    linear-gradient(
+    rgba(0,0,0,0.45),
+    rgba(0,0,0,0.60)
+    ),
+
+    url("https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/gemini-watermark-removed.png");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+}
+
+/* ================= DIVINE LIGHT ================= */
+
+.divine-light{
+
+    position:fixed;
+
+    width:100%;
+    height:100%;
+
+    top:0;
+    left:0;
+
+    z-index:-9;
+
+    background:
+    radial-gradient(
+    circle at center,
+    rgba(255,179,71,0.16),
+    transparent 60%
+    );
+
+    animation:glowMove 6s ease infinite;
+
+}
+
+@keyframes glowMove{
 
     0%{
-        background-position:0% 50%;
+        opacity:0.5;
     }
 
     50%{
-        background-position:100% 50%;
+        opacity:1;
     }
 
     100%{
-        background-position:0% 50%;
+        opacity:0.5;
     }
 
 }
 
-/* CONTAINER */
+/* ================= CONTAINER ================= */
 
 .about-container{
 
@@ -69,26 +118,24 @@ body{
 
     margin:60px auto;
 
-    padding:40px;
+    padding:45px;
 
     border-radius:30px;
 
     background:
     rgba(0,0,0,0.72);
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(10px);
 
     border:
     1px solid rgba(255,255,255,0.08);
 
     box-shadow:
-    0 0 35px rgba(255,179,71,0.18);
+    0 0 40px rgba(255,179,71,0.15);
 
     animation:floatBox 6s ease infinite;
 
 }
-
-/* FLOAT EFFECT */
 
 @keyframes floatBox{
 
@@ -97,7 +144,7 @@ body{
     }
 
     50%{
-        transform:translateY(-6px);
+        transform:translateY(-5px);
     }
 
     100%{
@@ -106,15 +153,15 @@ body{
 
 }
 
-/* TITLE */
+/* ================= TITLE ================= */
 
 .main-title{
 
     text-align:center;
 
-    font-size:48px;
+    font-size:52px;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
 
     background:
     linear-gradient(
@@ -135,8 +182,6 @@ body{
 
 }
 
-/* GRADIENT MOVE */
-
 @keyframes titleMove{
 
     0%{
@@ -153,7 +198,7 @@ body{
 
 }
 
-/* FOUNDER */
+/* ================= FOUNDER ================= */
 
 .founder{
 
@@ -161,13 +206,13 @@ body{
 
     font-size:30px;
 
-    margin-top:15px;
-
     color:#ffd86f;
+
+    margin-top:15px;
 
 }
 
-/* LINE */
+/* ================= LINE ================= */
 
 .line{
 
@@ -175,20 +220,24 @@ body{
 
     height:4px;
 
-    margin:22px auto;
+    margin:24px auto;
 
     border-radius:10px;
 
     background:
-    linear-gradient(to right,#ffb347,#7597de);
+    linear-gradient(
+    to right,
+    #ffb347,
+    #7597de
+    );
 
 }
 
-/* CONTENT */
+/* ================= TEXT ================= */
 
 .about-text{
 
-    margin-top:20px;
+    text-align:center;
 
     font-size:20px;
 
@@ -196,11 +245,15 @@ body{
 
     color:#eeeeee;
 
-    text-align:center;
+    margin-top:20px;
 
 }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
+
+.btn-wrap{
+    text-align:center;
+}
 
 .back-btn{
 
@@ -208,15 +261,15 @@ body{
 
     margin-top:35px;
 
-    padding:14px 28px;
+    padding:14px 30px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     text-decoration:none;
 
-    color:white;
-
     font-weight:bold;
+
+    color:white;
 
     background:
     linear-gradient(
@@ -231,25 +284,40 @@ body{
 
     animation:titleMove 6s ease infinite;
 
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.3);
+
+    transition:0.3s;
+
 }
 
-/* CENTER */
+.back-btn:hover{
 
-.btn-wrap{
-    text-align:center;
+    transform:
+    translateY(-4px)
+    scale(1.03);
+
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media(max-width:700px){
 
     .main-title{
-        font-size:38px;
+        font-size:40px;
+    }
+
+    .founder{
+        font-size:24px;
     }
 
     .about-text{
         font-size:18px;
         line-height:2;
+    }
+
+    .about-container{
+        padding:30px;
     }
 
 }
@@ -259,6 +327,14 @@ body{
 
 <body>
 
+<!-- BACKGROUND -->
+
+<div class="bg-image"></div>
+
+<div class="divine-light"></div>
+
+<!-- ABOUT CONTAINER -->
+
 <div class="about-container">
 
 <h1 class="main-title">
@@ -266,22 +342,21 @@ body{
 </h1>
 
 <div class="founder">
-Founder • రేశ్వంత్ ⚔️
+వ్యవస్థాపకుడు • రేశ్వంత్ ⚔️
 </div>
 
 <div class="line"></div>
 
 <div class="about-text">
 
-“సన్నివేశం” అనే వేదికను నేను — రేశ్వంత్ — తెలుగు భాష, సంస్కృతి, సాహిత్యం మరియు భారతీయ సంప్రదాయాలపై ఉన్న ప్రేమతో ప్రారంభించాను.
+“సన్నివేశం” తెలుగు భాష, సంస్కృతి, సాహిత్యం మరియు భారతీయ సంప్రదాయాల గొప్పతనాన్ని యువతకు చేరవేయాలనే లక్ష్యంతో ప్రారంభించబడిన ఒక సాంస్కృతిక వేదిక.
 
-నేటి యువతలో మన భాషపై ఆసక్తి తగ్గిపోతున్న సమయంలో, తెలుగు తీయదనాన్ని కొత్త తరానికి చేరవేయాలని ఒక ఆలోచన వచ్చింది.  
-ఆ ఆలోచనే “సన్నివేశం”గా రూపుదిద్దుకుంది.
+నేటి తరానికి తెలుగు తీయదనం, భావవ్యక్తీకరణ అందం, సాహిత్య విలువలు మరియు సంప్రదాయాల గొప్పతనం తెలియజేయాలనే ఆలోచనతో ఈ వేదిక రూపుదిద్దుకుంది.
 
-ఈ వేదిక ద్వారా శ్లోకాలు, ఇతిహాసాలు, భగవద్గీత, సాంస్కృతిక కార్యక్రమాలు, ప్రశ్నావళులు మరియు సృజనాత్మక విభాగాల ద్వారా యువతలో ఆత్మవిశ్వాసం, సంస్కృతి పట్ల గౌరవం మరియు ఆలోచనా శక్తి పెరగాలని నా లక్ష్యం.
+శ్లోకాలు, ఇతిహాసాలు, భగవద్గీత, ప్రశ్నావళులు, సాంస్కృతిక కార్యక్రమాలు మరియు సృజనాత్మక విభాగాల ద్వారా యువతలో ఆత్మవిశ్వాసం, ఆలోచనా శక్తి మరియు సంస్కృతి పట్ల గౌరవం పెంపొందించడం “సన్నివేశం” ప్రధాన ఉద్దేశ్యం.
 
 “సన్నివేశం” కేవలం ఒక వెబ్‌సైట్ కాదు —  
-మన తెలుగు ఆత్మను, సంప్రదాయాన్ని, భావవ్యక్తీకరణను వెలిగించే ఒక చిన్న ప్రయత్నం.
+తెలుగు ఆత్మను వెలిగించే ఒక చిన్న ప్రయత్నం.
 
 </div>
 
