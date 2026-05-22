@@ -31,7 +31,7 @@ body{
     background:black;
 }
 
-/* ================= BACKGROUND ================= */
+/* ================= BACKGROUND IMAGE ================= */
 
 .bg-image{
     position:fixed;
@@ -51,7 +51,7 @@ body{
     filter:contrast(1.15);
 }
 
-/* ================= DIVINE LIGHT ================= */
+/* ================= DIVINE GLOW ================= */
 
 .divine-light{
     position:fixed;
@@ -59,9 +59,11 @@ body{
     height:100%;
     top:0;
     left:0;
+
     z-index:-7;
 
-    background:radial-gradient(circle at center,
+    background:
+    radial-gradient(circle at center,
     rgba(255,140,0,0.14),
     transparent 50%);
 
@@ -69,12 +71,22 @@ body{
 }
 
 @keyframes divinePulse{
-    0%{opacity:0.5;}
-    50%{opacity:1;}
-    100%{opacity:0.5;}
+
+    0%{
+        opacity:0.5;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.5;
+    }
+
 }
 
-/* ================= PARTICLES ================= */
+/* ================= FLOATING PARTICLES ================= */
 
 .floating-particles{
     position:fixed;
@@ -82,7 +94,9 @@ body{
     height:100%;
     top:0;
     left:0;
+
     z-index:-6;
+
     pointer-events:none;
 
     background-image:
@@ -90,51 +104,80 @@ body{
     radial-gradient(rgba(255,120,0,0.20) 1px, transparent 2px);
 
     background-size:120px 120px;
+
     animation:particlesMove 20s linear infinite;
 }
 
 @keyframes particlesMove{
-    from{transform:translateY(0px);}
-    to{transform:translateY(-250px);}
+
+    from{
+        transform:translateY(0px);
+    }
+
+    to{
+        transform:translateY(-250px);
+    }
+
 }
 
-/* ================= FOG ================= */
+/* ================= MOVING FOG ================= */
 
 .fog-layer{
     position:fixed;
+
     width:200%;
     height:100%;
+
     top:0;
     left:-50%;
+
     z-index:-5;
+
     opacity:0.08;
 
-    background:radial-gradient(circle,
+    background:
+    radial-gradient(circle,
     rgba(255,255,255,0.08) 1px,
     transparent 3px);
 
     background-size:180px 180px;
+
     animation:fogMove 80s linear infinite;
 }
 
 @keyframes fogMove{
-    from{transform:translateX(0);}
-    to{transform:translateX(300px);}
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(300px);
+    }
+
 }
 
-/* ================= LIGHTNING ================= */
+/* ================= LIGHTNING FLASH ================= */
 
 .lightning{
     position:fixed;
     width:100%;
     height:100%;
     z-index:-4;
+
     animation:flash 7s infinite;
 }
 
 @keyframes flash{
-    0%,90%,100%{background:transparent;}
-    92%{background:rgba(255,255,255,0.06);}
+
+    0%,90%,100%{
+        background:transparent;
+    }
+
+    92%{
+        background:rgba(255,255,255,0.06);
+    }
+
 }
 
 /* ================= INTRO ================= */
@@ -145,6 +188,7 @@ body{
     height:100%;
     top:0;
     left:0;
+
     z-index:99999;
 
     display:flex;
@@ -152,7 +196,8 @@ body{
     justify-content:center;
     flex-direction:column;
 
-    background:radial-gradient(circle,
+    background:
+    radial-gradient(circle,
     rgba(255,140,0,0.15),
     transparent 40%),
     #000;
@@ -161,23 +206,45 @@ body{
 }
 
 .intro-symbol{
+
     font-size:65px;
+
     margin-bottom:15px;
+
     animation:glowPulse 2s infinite alternate;
 }
 
 #intro h1{
+
     font-size:52px;
+
     color:#ffb347;
+
+    text-shadow:
+    0 0 15px rgba(255,140,0,0.4);
 }
 
 @keyframes glowPulse{
-    from{opacity:0.6;transform:scale(0.95);}
-    to{opacity:1;transform:scale(1.05);}
+
+    from{
+        opacity:0.6;
+        transform:scale(0.95);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1.05);
+    }
+
 }
 
 @keyframes fadeOut{
-    to{opacity:0;visibility:hidden;}
+
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+
 }
 
 /* ================= NAVBAR ================= */
@@ -185,22 +252,34 @@ body{
 .navbar{
     position:sticky;
     top:0;
+
     z-index:999;
+
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
+
     gap:22px;
+
     padding:18px;
+
     background:rgba(0,0,0,0.72);
+
     backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,180,80,0.12);
+
+    border-bottom:
+    1px solid rgba(255,180,80,0.12);
 }
 
 .navbar a{
+
     text-decoration:none;
+
     color:#ffd9a3;
+
     font-size:16px;
     font-weight:bold;
+
     transition:0.3s;
 }
 
@@ -208,21 +287,33 @@ body{
     color:#ffb347;
 }
 
-/* ================= MUSIC ================= */
+/* ================= MUSIC BUTTON ================= */
 
 #musicBtn{
     position:fixed;
+
     top:85px;
     right:18px;
+
     width:58px;
     height:58px;
+
     border:none;
     border-radius:50%;
-    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
+
+    background:
+    linear-gradient(135deg,#ff9a2f,#ff6a00);
+
     color:white;
+
     font-size:24px;
+
     z-index:100000;
+
     cursor:pointer;
+
+    box-shadow:
+    0 5px 18px rgba(0,0,0,0.45);
 }
 
 /* ================= HEADER ================= */
@@ -233,12 +324,20 @@ body{
 }
 
 .logo-container{
+
     width:190px;
     height:190px;
+
     margin:auto;
+
     border-radius:50%;
     overflow:hidden;
-    border:3px solid rgba(255,180,80,0.3);
+
+    border:
+    3px solid rgba(255,180,80,0.3);
+
+    box-shadow:
+    0 0 40px rgba(255,140,0,0.22);
 }
 
 .logo{
@@ -248,82 +347,134 @@ body{
 }
 
 .title{
+
     margin-top:24px;
+
     font-size:54px;
+
     color:#ffb347;
+
+    text-shadow:
+    0 0 18px rgba(255,140,0,0.35);
 }
 
 /* ================= SECTION ================= */
 
 .section{
+
     width:92%;
     max-width:950px;
+
     margin:30px auto;
-    background:rgba(10,10,10,0.82);
+
+    background:
+    rgba(10,10,10,0.82);
+
     border-radius:26px;
+
     padding:35px;
-    border:1px solid rgba(255,180,80,0.14);
+
+    border:
+    1px solid rgba(255,180,80,0.14);
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.4);
 }
 
 .section h2{
+
     text-align:center;
+
     color:#ffcc99;
+
     margin-bottom:28px;
+
     font-size:34px;
 }
 
 /* ================= GRID ================= */
 
 .grid-box{
+
     display:grid;
+
     grid-template-columns:1fr 1fr;
+
     gap:22px;
 }
 
-/* ================= BUTTON ================= */
+/* ================= BUTTONS ================= */
 
 .btn{
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     min-height:110px;
+
     border-radius:20px;
+
     text-decoration:none;
+
+    text-align:center;
+
     font-size:20px;
     font-weight:bold;
+
     color:#fff3dd;
+
     padding:14px;
-    background:linear-gradient(135deg,#d68422,#ffab3d);
+
+    background:
+    linear-gradient(135deg,#d68422,#ffab3d);
+
     transition:0.3s;
+
+    box-shadow:
+    0 5px 18px rgba(0,0,0,0.25);
 }
 
 .btn:hover{
-    transform:translateY(-6px) scale(1.03);
-}
 
-/* ================= ABOUT BOX (NEW) ================= */
+    transform:
+    translateY(-6px)
+    scale(1.03);
 
-.about-box{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:110px;
-    border-radius:20px;
-    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
-    color:white;
-    font-size:22px;
-    font-weight:bold;
+    box-shadow:
+    0 10px 22px rgba(255,140,0,0.22);
 }
 
 /* ================= MOBILE ================= */
 
 @media(max-width:700px){
-    .grid-box{grid-template-columns:1fr 1fr;}
+
+    .grid-box{
+        grid-template-columns:1fr 1fr;
+        gap:16px;
+    }
+
+    .btn{
+        min-height:120px;
+        font-size:16px;
+        padding:10px;
+    }
+
+    .title{
+        font-size:42px;
+    }
+
+    .navbar{
+        gap:14px;
+    }
+
+    .navbar a{
+        font-size:14px;
+    }
+
 }
 
-
-
-    </style>
+</style>
 </head>
 
 <body>
@@ -366,7 +517,9 @@ body{
         <img src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/Logo%20(1).png" class="logo">
     </div>
 
-    <div class="title">సన్నివేశం</div>
+    <div class="title">
+        సన్నివేశం
+    </div>
 
 </div>
 
@@ -387,6 +540,7 @@ body{
 <a class="btn" href="gitarangam.html">భగవద్గీత</a>
 
 </div>
+
 </div>
 
 <!-- SOCIAL -->
@@ -400,6 +554,7 @@ body{
 <a class="btn" href="https://youtube.com/" target="_blank">యూట్యూబ్</a>
 
 </div>
+
 </div>
 
 <!-- ABOUT -->
@@ -407,21 +562,11 @@ body{
 
 <h2>మా గురించి 🪔</h2>
 
-<div class="grid-box">
-
-<!-- ✅ NEW BOX ADDED -->
-<div class="about-box">
-More About Us
-</div>
-
-</div>
-
 <p style="
 text-align:center;
 line-height:2.2;
 font-size:18px;
 color:#dddddd;
-margin-top:25px;
 ">
 
 సన్నివేశం ఒక సాంస్కృతిక వేదిక 
@@ -434,6 +579,19 @@ margin-top:25px;
 
 </p>
 
+<!-- ✅ ONLY ADDED BOX -->
+<div style="
+display:flex;
+justify-content:center;
+margin-top:20px;
+">
+
+<a href="about.html" class="btn" style="min-width:220px;">
+More About Us
+</a>
+
+</div>
+
 </div>
 
 <!-- CONTACT -->
@@ -444,7 +602,6 @@ margin-top:25px;
 <div class="grid-box">
 
 <a class="btn" href="tel:9493226037">కాల్ చేయండి</a>
-
 <a class="btn" href="https://wa.me/919493226037" target="_blank">వాట్సాప్</a>
 
 </div>
@@ -466,23 +623,19 @@ font-size:15px;
 <!-- SCRIPT -->
 <script>
 
-// INTRO
 setTimeout(()=>{
 document.getElementById("intro").style.display="none";
 },4000);
 
-// MUSIC
 const music=document.getElementById("bgMusic");
 const btn=document.getElementById("musicBtn");
 
 music.play().catch(()=>{});
 
-// autoplay fix
 document.body.addEventListener("click",()=>{
 music.play();
 },{once:true});
 
-// toggle
 btn.onclick=()=>{
 if(music.paused){
 music.play();
