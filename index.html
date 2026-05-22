@@ -12,6 +12,7 @@
 <style>
 
 /* ================= RESET ================= */
+
 *{
     margin:0;
     padding:0;
@@ -26,6 +27,7 @@ body{
     font-family:'Noto Sans Telugu', sans-serif;
     color:white;
     overflow-x:hidden;
+    min-height:100vh;
     background:black;
 }
 
@@ -38,13 +40,16 @@ body{
     top:0;
     left:0;
     z-index:-10;
+
     background:
     linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.88)),
     url("https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1600&auto=format&fit=crop");
+
     background-size:cover;
     background-position:center;
 }
 
+/* SKY ENERGY */
 .sky-energy{
     position:fixed;
     width:200%;
@@ -52,10 +57,12 @@ body{
     top:-50%;
     left:-50%;
     z-index:-9;
+
     background:
     radial-gradient(circle at 20% 30%, rgba(255,140,0,0.10), transparent 40%),
     radial-gradient(circle at 70% 60%, rgba(120,160,255,0.10), transparent 45%),
     radial-gradient(circle at 40% 80%, rgba(255,200,100,0.08), transparent 50%);
+
     animation:skyMove 25s linear infinite;
 }
 
@@ -71,6 +78,8 @@ body{
     position:fixed;
     width:100%;
     height:100%;
+    top:0;
+    left:0;
     z-index:-8;
     background:radial-gradient(circle, rgba(255,140,0,0.14), transparent 50%);
     animation:glow 5s infinite;
@@ -116,18 +125,13 @@ body{
     animation:fadeOut 1s ease 4s forwards;
 }
 
-.intro-symbol{
-    font-size:65px;
-    animation:pop 2s infinite alternate;
-}
-
 #intro h1{
     font-size:60px;
     background:linear-gradient(270deg,#2b1055,#7597de,#ffb347,#2b1055);
     background-size:600% 600%;
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    animation:zoom 1.6s forwards, gradient 6s infinite;
+    animation:zoom 1.6s forwards;
     transform:scale(0.4);
     opacity:0;
 }
@@ -140,7 +144,7 @@ body{
     to{opacity:0;visibility:hidden;}
 }
 
-/* ================= NAV ================= */
+/* ================= NAVBAR ================= */
 
 .navbar{
     position:sticky;
@@ -148,14 +152,15 @@ body{
     z-index:999;
     display:flex;
     justify-content:center;
-    gap:20px;
+    flex-wrap:wrap;
+    gap:22px;
     padding:18px;
-    background:rgba(0,0,0,0.7);
+    background:rgba(0,0,0,0.72);
 }
 
 .navbar a{
-    color:#ffd9a3;
     text-decoration:none;
+    color:#ffd9a3;
     font-weight:bold;
 }
 
@@ -214,21 +219,22 @@ body{
 
 .btn{
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     min-height:110px;
     border-radius:20px;
     text-decoration:none;
     font-weight:bold;
-    color:white;
+    color:#fff3dd;
+
     background:linear-gradient(270deg,#2b1055,#7597de,#ffb347,#2b1055);
     background-size:600% 600%;
-    animation:gradient 6s infinite;
+    animation:move 6s infinite;
 }
 
 /* ================= ANIMATION ================= */
 
-@keyframes gradient{
+@keyframes move{
     0%{background-position:0% 50%;}
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
@@ -249,29 +255,47 @@ body{
     font-size:24px;
 }
 
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+    .grid-box{
+        grid-template-columns:1fr 1fr;
+        gap:16px;
+    }
+
+    .title{
+        font-size:52px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- INTRO -->
 <div id="intro">
-    <div class="intro-symbol">⚔️</div>
-    <h1>సన్నివేశం</h1>
+<h1>సన్నివేశం</h1>
 </div>
 
+<!-- BACKGROUND -->
 <div class="bg-image"></div>
 <div class="sky-energy"></div>
 <div class="divine-light"></div>
 <div class="floating-particles"></div>
 
+<!-- NAVBAR -->
 <div class="navbar">
+
 <a href="#home">ముఖ్యపుట</a>
-<a href="#sections">విభాగాలు</a>
-<a href="#social">సోషల్</a>
+<a href="#sections">సృజనాత్మక విభాగాలు</a>
+<a href="#social">మాతో కలవండి</a>
 <a href="#about">మా గురించి</a>
 <a href="#contact">సంప్రదించండి</a>
+
 </div>
 
+<!-- HEADER -->
 <div class="header" id="home">
 
 <div class="logo-container">
@@ -282,14 +306,39 @@ body{
 
 </div>
 
+<!-- ================= CREATIVE SECTIONS (RESTORED) ================= -->
+<div class="section" id="sections">
+
+<h2 style="text-align:center;margin-bottom:20px;">సృజనాత్మక విభాగాలు ⚔️</h2>
+
+<div class="grid-box">
+
+<a class="btn" href="events.html">ప్రతిభా వేదిక</a>
+<a class="btn" href="festivals.html">పండుగలు</a>
+<a class="btn" href="quiz.html">ప్రశ్నావళి</a>
+<a class="btn" href="ithihasalu.html">ఇతిహాసాలు</a>
+
+<a class="btn" href="temples.html">దేవాలయ చరిత్ర</a>
+<a class="btn" href="sravana.html">శ్రావణ కార్యక్రమం</a>
+<a class="btn" href="shlokas.html">శ్లోకాలు</a>
+<a class="btn" href="gitarangam.html">భగవద్గీత</a>
+
+</div>
+
+</div>
+
 <!-- SOCIAL -->
 <div class="section" id="social">
+
 <h2 style="text-align:center;margin-bottom:20px;">మాతో కలవండి</h2>
 
 <div class="grid-box">
-<a class="btn" href="#">Instagram</a>
-<a class="btn" href="#">YouTube</a>
+
+<a class="btn" href="https://instagram.com">ఇన్‌స్టాగ్రామ్</a>
+<a class="btn" href="https://youtube.com">యూట్యూబ్</a>
+
 </div>
+
 </div>
 
 <!-- ABOUT -->
@@ -302,7 +351,9 @@ body{
 </p>
 
 <div style="display:flex;justify-content:center;margin-top:20px;">
-<a href="about.html" class="btn" style="min-width:220px;">More About Us</a>
+<a href="about.html" class="btn" style="min-width:220px;">
+More About Us
+</a>
 </div>
 
 </div>
@@ -313,16 +364,20 @@ body{
 <h2 style="text-align:center;margin-bottom:20px;">సంప్రదించండి</h2>
 
 <div class="grid-box">
-<a class="btn" href="tel:9493226037">Call</a>
-<a class="btn" href="https://wa.me/919493226037">WhatsApp</a>
-</div>
+
+<a class="btn" href="tel:9493226037">కాల్ చేయండి</a>
+<a class="btn" href="https://wa.me/919493226037">వాట్సాప్</a>
 
 </div>
 
-<div style="text-align:center;padding:25px;color:#aaa;">
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:30px;color:#aaa;">
 © 2026 సన్నివేశం
 </div>
 
+<!-- MUSIC -->
 <audio id="bgMusic" loop>
 <source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg">
 </audio>
@@ -337,8 +392,6 @@ document.getElementById("intro").style.display="none";
 
 const music=document.getElementById("bgMusic");
 const btn=document.getElementById("musicBtn");
-
-music.play().catch(()=>{});
 
 document.body.addEventListener("click",()=>{
 music.play();
