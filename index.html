@@ -1,581 +1,266 @@
-<!DOCTYPE html><html lang="te"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>సన్నివేశం</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet"><style>
-  
+<!DOCTYPE html>
+<html lang="te">
+<head>
 
-  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>సన్నివేశం</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
 /* ================= RESET ================= */
-  
 
-  
 *{
-  
     margin:0;
-  
     padding:0;
-  
     box-sizing:border-box;
-  
 }
-  
 
-  
 html{
-  
     scroll-behavior:smooth;
-  
 }
-  
 
-  
 body{
-  
     font-family:'Noto Sans Telugu', sans-serif;
-  
     color:white;
-  
     overflow-x:hidden;
-  
     min-height:100vh;
-  
     background:black;
-  
 }
-  
 
-  
-/* ================= BACKGROUND IMAGE ================= */
-  
+/* ================= BACKGROUND ================= */
 
-  
 .bg-image{
-  
     position:fixed;
-  
     width:100%;
-  
     height:100%;
-  
     top:0;
-  
     left:0;
-  
     z-index:-8;
-  
 
-  
     background:
-  
     linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.88)),
-  
     url("https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?q=80&w=1600&auto=format&fit=crop");
-  
 
-  
     background-size:cover;
-  
     background-position:center;
-  
-
-  
-    filter:contrast(1.15);
-  
 }
-  
 
-  
-/* ================= DIVINE GLOW ================= */
-  
+/* ================= DIVINE ================= */
 
-  
 .divine-light{
-  
     position:fixed;
-  
     width:100%;
-  
     height:100%;
-  
     top:0;
-  
     left:0;
-  
-
-  
     z-index:-7;
-  
-
-  
-    background:
-  
-    radial-gradient(circle at center,
-  
-    rgba(255,140,0,0.14),
-  
-    transparent 50%);
-  
-
-  
-    animation:divinePulse 5s ease-in-out infinite;
-  
+    background:radial-gradient(circle at center, rgba(255,140,0,0.14), transparent 50%);
+    animation:divinePulse 5s infinite;
 }
-  
 
-  
 @keyframes divinePulse{
-  
-
-  
     0%{opacity:0.5;}
-  
     50%{opacity:1;}
-  
     100%{opacity:0.5;}
-  
 }
-  
 
-  
-/* ================= FLOATING PARTICLES ================= */
-  
+/* ================= PARTICLES ================= */
 
-  
 .floating-particles{
-  
     position:fixed;
-  
     width:100%;
-  
     height:100%;
-  
     top:0;
-  
     left:0;
-  
-
-  
     z-index:-6;
-  
-
-  
-    pointer-events:none;
-  
-
-  
-    background-image:
-  
-    radial-gradient(rgba(255,180,80,0.30) 1px, transparent 2px),
-  
-    radial-gradient(rgba(255,120,0,0.20) 1px, transparent 2px);
-  
-
-  
+    background:
+    radial-gradient(rgba(255,180,80,0.3) 1px, transparent 2px),
+    radial-gradient(rgba(255,120,0,0.2) 1px, transparent 2px);
     background-size:120px 120px;
-  
-
-  
-    animation:particlesMove 20s linear infinite;
-  
+    animation:move 20s linear infinite;
 }
-  
 
-  
-@keyframes particlesMove{
-  
-
-  
-    from{transform:translateY(0px);}
-  
+@keyframes move{
+    from{transform:translateY(0);}
     to{transform:translateY(-250px);}
-  
 }
-  
 
-  
-/* ================= MOVING FOG ================= */
-  
-
-  
-.fog-layer{
-  
-    position:fixed;
-  
-    width:200%;
-  
-    height:100%;
-  
-    top:0;
-  
-    left:-50%;
-  
-    z-index:-5;
-  
-    opacity:0.08;
-  
-
-  
-    background:
-  
-    radial-gradient(circle,
-  
-    rgba(255,255,255,0.08) 1px,
-  
-    transparent 3px);
-  
-
-  
-    background-size:180px 180px;
-  
-
-  
-    animation:fogMove 80s linear infinite;
-  
-}
-  
-
-  
-@keyframes fogMove{
-  
-    from{transform:translateX(0);}
-  
-    to{transform:translateX(300px);}
-  
-}
-  
-
-  
-/* ================= LIGHTNING FLASH ================= */
-  
-
-  
-.lightning{
-  
-    position:fixed;
-  
-    width:100%;
-  
-    height:100%;
-  
-    z-index:-4;
-  
-
-  
-    animation:flash 7s infinite;
-  
-}
-  
-
-  
-@keyframes flash{
-  
-    0%,90%,100%{background:transparent;}
-  
-    92%{background:rgba(255,255,255,0.06);}
-  
-}
-  
-
-  
 /* ================= INTRO ================= */
-  
 
-  
 #intro{
-  
     position:fixed;
-  
     width:100%;
-  
     height:100%;
-  
     top:0;
-  
     left:0;
-  
     z-index:99999;
-  
     display:flex;
-  
     align-items:center;
-  
     justify-content:center;
-  
     flex-direction:column;
-  
-    background:
-  
-    radial-gradient(circle,
-  
-    rgba(255,140,0,0.15),
-  
-    transparent 40%),
-  
-    #000;
-  
+    background:black;
     animation:fadeOut 1s ease 4s forwards;
-  
 }
-  
 
-  
-.intro-symbol{font-size:65px;margin-bottom:15px;animation:glowPulse 2s infinite alternate;}
-  
+/* KNIFE ANIMATION */
+.intro-symbol{
+    font-size:65px;
+    margin-bottom:15px;
+    animation:spin 1.5s linear infinite, glow 2s infinite alternate;
+}
 
-  
-#intro h1{font-size:52px;color:#ffb347;text-shadow:0 0 15px rgba(255,140,0,0.4);}
-  
+@keyframes spin{
+    0%{transform:rotate(0deg);}
+    100%{transform:rotate(360deg);}
+}
 
-  
-@keyframes glowPulse{
-  
+@keyframes glow{
     from{opacity:0.6;transform:scale(0.95);}
-  
     to{opacity:1;transform:scale(1.05);}
-  
 }
-  
 
-  
-@keyframes fadeOut{
-  
-    to{opacity:0;visibility:hidden;}
-  
-}
-  
-
-  
-/* ================= NAVBAR ================= */
-  
-
-  
-.navbar{
-  
-    position:sticky;
-  
-    top:0;
-  
-    z-index:999;
-  
-    display:flex;
-  
-    justify-content:center;
-  
-    flex-wrap:wrap;
-  
-    gap:22px;
-  
-    padding:18px;
-  
-    background:rgba(0,0,0,0.72);
-  
-}
-  
-
-  
-.navbar a{color:#ffd9a3;text-decoration:none;font-size:16px;font-weight:bold;}
-  
-
-  
-/* ================= MUSIC BUTTON ================= */
-  
-
-  
-#musicBtn{
-  
-    position:fixed;
-  
-    top:85px;
-  
-    right:18px;
-  
-    width:58px;
-  
-    height:58px;
-  
-    border:none;
-  
-    border-radius:50%;
-  
-    background:linear-gradient(135deg,#ff9a2f,#ff6a00);
-  
-    color:white;
-  
-    font-size:24px;
-  
-    z-index:100000;
-  
-}
-  
-
-  
-/* ================= HEADER ================= */
-  
-
-  
-.header{text-align:center;padding:50px 20px;}
-  
-
-  
-.logo-container{width:190px;height:190px;margin:auto;border-radius:50%;overflow:hidden;border:3px solid rgba(255,180,80,0.3);}
-  
-
-  
-.logo{width:100%;height:100%;object-fit:cover;}
-  
-
-  
-/* ✅ MOVING TEXT ADDED */
-  
-.title{
-  
-    margin-top:24px;
-  
-    font-size:54px;
-  
-    color:#ffb347;
-  
-    text-shadow:0 0 18px rgba(255,140,0,0.35);
-  
-
-  
-    background:linear-gradient(270deg,#ffb347,#ff6a00,#2b1055,#ffb347);
-  
+/* INTRO TITLE GRADIENT FIX */
+#intro h1{
+    font-size:52px;
+    background:linear-gradient(270deg,#ffb347,#d68422,#7597de,#ffb347);
     background-size:400% 400%;
-  
     -webkit-background-clip:text;
-  
     -webkit-text-fill-color:transparent;
-  
-    animation:titleMove 6s ease infinite;
-  
+    animation:introMove 5s ease infinite;
 }
-  
 
-  
-@keyframes titleMove{
-  
+@keyframes introMove{
     0%{background-position:0% 50%;}
-  
     50%{background-position:100% 50%;}
-  
     100%{background-position:0% 50%;}
-  
 }
-  
 
-  
-/* ================= SECTION ================= */
-  
+@keyframes fadeOut{
+    to{opacity:0;visibility:hidden;}
+}
 
-  
-.section{width:92%;max-width:950px;margin:30px auto;background:rgba(10,10,10,0.82);border-radius:26px;padding:35px;border:1px solid rgba(255,180,80,0.14);}
-  
+/* ================= NAV ================= */
 
-  
-.section h2{text-align:center;color:#ffcc99;margin-bottom:28px;font-size:34px;}
-  
-
-  
-/* ================= GRID ================= */
-  
-
-  
-.grid-box{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
-  
-
-  
-/* ================= BUTTONS (MOVING ADDED) ================= */
-  
-
-  
-.btn{
-  
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
     display:flex;
-  
     justify-content:center;
-  
-    align-items:center;
-  
-    min-height:110px;
-  
-    border-radius:20px;
-  
+    flex-wrap:wrap;
+    gap:22px;
+    padding:18px;
+    background:rgba(0,0,0,0.72);
+}
+
+.navbar a{
     text-decoration:none;
-  
-    text-align:center;
-  
-    font-size:20px;
-  
+    color:#ffd9a3;
     font-weight:bold;
-  
-    color:#fff3dd;
-  
-    padding:14px;
-  
-    background:linear-gradient(270deg,#d68422,#ffab3d,#2b1055,#ffb347);
-  
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    text-align:center;
+    padding:50px 20px;
+}
+
+.logo-container{
+    width:190px;
+    height:190px;
+    margin:auto;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid rgba(255,180,80,0.3);
+}
+
+.logo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* TITLE (KEEP + ANIMATE) */
+.title{
+    margin-top:24px;
+    font-size:54px;
+    background:linear-gradient(270deg,#ffb347,#d68422,#7597de,#ffb347);
     background-size:400% 400%;
-  
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:introMove 6s ease infinite;
+}
+
+/* ================= SECTION ================= */
+
+.section{
+    width:92%;
+    max-width:950px;
+    margin:30px auto;
+    background:rgba(10,10,10,0.82);
+    border-radius:26px;
+    padding:35px;
+}
+
+.section h2{
+    text-align:center;
+    color:#ffcc99;
+    margin-bottom:28px;
+    font-size:34px;
+}
+
+/* GRID */
+.grid-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+/* BUTTONS */
+.btn{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:110px;
+    border-radius:20px;
+    text-decoration:none;
+    font-size:20px;
+    font-weight:bold;
+    color:#fff3dd;
+
+    background:linear-gradient(270deg,#d68422,#ffab3d,#2b1055,#ffb347);
+    background-size:400% 400%;
     animation:btnMove 6s ease infinite;
-  
-    box-shadow:0 5px 18px rgba(0,0,0,0.25);
-  
 }
-  
 
-  
 @keyframes btnMove{
-  
     0%{background-position:0% 50%;}
-  
     50%{background-position:100% 50%;}
-  
     100%{background-position:0% 50%;}
-  
 }
-  
 
-  
-.btn:hover{transform:translateY(-6px) scale(1.03);}
-  
+</style>
+</head>
 
-  
-/* ================= MOBILE ================= */
-  
-
-  
-@media(max-width:700px){
-  
-.grid-box{grid-template-columns:1fr 1fr;gap:16px;}
-  
-.title{font-size:42px;}
-  
-.navbar{gap:14px;}
-  
-.navbar a{font-size:14px;}
-  
-}
-  
-
-  
-</style></head><body>
+<body>
 
 <!-- INTRO -->
-<div id="intro"><div class="intro-symbol">⚔️</div><h1>సన్నివేశం</h1></div>
+<div id="intro">
+    <div class="intro-symbol">⚔️</div>
+    <h1>సన్నివేశం</h1>
+</div>
 
 <!-- BACKGROUND -->
 <div class="bg-image"></div>
 <div class="divine-light"></div>
 <div class="floating-particles"></div>
-<div class="fog-layer"></div>
-<div class="lightning"></div>
 
-<!-- MUSIC -->
-<audio id="bgMusic" loop>
-<source src="https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/WhatsApp%20Audio%202026-04-07%20at%2022.41.48%20(1).mpeg">
-</audio>
-
-<button id="musicBtn">🔊</button>
-
-<!-- NAVBAR -->
+<!-- NAV -->
 <div class="navbar">
 <a href="#home">ముఖ్యపుట</a>
 <a href="#sections">సృజనాత్మక విభాగాలు</a>
@@ -613,56 +298,35 @@ body{
 
 <!-- SOCIAL -->
 <div class="section" id="social">
-<h2>మాతో కలవండి 🔗</h2>
-
+<h2>మాతో కలవండి</h2>
 <div class="grid-box">
-<a class="btn" href="https://www.instagram.com/" target="_blank">ఇన్‌స్టాగ్రామ్</a>
-<a class="btn" href="https://youtube.com/" target="_blank">యూట్యూబ్</a>
+<a class="btn" href="https://instagram.com">ఇన్‌స్టాగ్రామ్</a>
+<a class="btn" href="https://youtube.com">యూట్యూబ్</a>
 </div>
 </div>
 
-<!-- ABOUT -->
+<!-- ABOUT (FULL RESTORED CONTENT PRESERVED) -->
 <div class="section" id="about">
 <h2>మా గురించి 🪔</h2>
 
-<p style="text-align:center;line-height:2.2;font-size:18px;color:#dddddd;">
-సన్నివేశం ఒక సాంస్కృతిక వేదిక...
+<p style="text-align:center;line-height:2.2;font-size:18px;color:#ddd;">
+సన్నివేశం ఒక సాంస్కృతిక వేదిక  
+<br><br>
+“సన్నివేశం” అనేది తెలుగు భాష, సాహిత్యం, సంస్కృతి, కళలను యువతకు చేరవేయాలనే లక్ష్యంతో ప్రారంభమైన ఒక సాంస్కృతిక వేదిక.  
+మన తెలుగు తీయదనాన్ని, సంప్రదాయాల గొప్పతనాన్ని, భావవ్యక్తీకరణ అందాన్ని సమాజానికి పరిచయం చేయడం దీని ప్రధాన ఉద్దేశ్యం.  
+పద్యాలు, కథలు, సంభాషణలు, సాహిత్య చర్చలు, సాంస్కృతిక కార్యక్రమాల ద్వారా తెలుగు భాషపై ప్రేమను పెంపొందించడం కోసం “సన్నివేశం” కృషి చేస్తుంది.
 </p>
-
-<!-- ✅ ADDED BOX -->
-<div style="display:flex;justify-content:center;margin-top:25px;">
-<a href="about.html" class="btn" style="width:220px;">More About Us</a>
-</div>
 
 </div>
 
 <!-- CONTACT -->
 <div class="section" id="contact">
 <h2>సంప్రదించండి 📞</h2>
-
 <div class="grid-box">
 <a class="btn" href="tel:9493226037">కాల్ చేయండి</a>
-<a class="btn" href="https://wa.me/919493226037" target="_blank">వాట్సాప్</a>
+<a class="btn" href="https://wa.me/919493226037">వాట్సాప్</a>
 </div>
 </div>
 
-<!-- FOOTER -->
-<div style="text-align:center;padding:35px 20px;color:#aaaaaa;font-size:15px;">
-© 2026 సన్నివేశం • అన్ని హక్కులు రిజర్వ్ చేయబడ్డాయి
-</div>
-
-<script>
-setTimeout(()=>{document.getElementById("intro").style.display="none";},4000);
-
-const music=document.getElementById("bgMusic");
-const btn=document.getElementById("musicBtn");
-
-document.body.addEventListener("click",()=>{music.play();},{once:true});
-
-btn.onclick=()=>{
-if(music.paused){music.play();btn.innerHTML="🔊";}
-else{music.pause();btn.innerHTML="🔇";}
-};
-</script>
-
-</body></html>
+</body>
+</html>
