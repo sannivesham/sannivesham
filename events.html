@@ -37,7 +37,7 @@ body{
 
 }
 
-/* ================= BACKGROUND IMAGE ================= */
+/* ================= BACKGROUND ================= */
 
 .bg-image{
 
@@ -54,7 +54,7 @@ body{
     background:
     linear-gradient(
     rgba(0,0,0,0.65),
-    rgba(0,0,0,0.78)
+    rgba(0,0,0,0.80)
     ),
 
     url("https://raw.githubusercontent.com/sannivesham/phothos.sannivesham/main/gemini-watermark-removed.png");
@@ -208,6 +208,9 @@ body{
 .logo{
 
     width:170px;
+    height:170px;
+
+    object-fit:cover;
 
     border-radius:50%;
 
@@ -357,8 +360,13 @@ body{
 .gallery img{
 
     width:100%;
+    height:320px;
+
+    object-fit:cover;
 
     border-radius:22px;
+
+    cursor:pointer;
 
     transition:0.5s;
 
@@ -375,6 +383,83 @@ body{
 
     box-shadow:
     0 0 25px rgba(255,179,71,0.25);
+
+}
+
+/* ================= POPUP ================= */
+
+.popup{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:
+    rgba(0,0,0,0.92);
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    flex-direction:column;
+
+    z-index:99999;
+
+}
+
+.popup img{
+
+    max-width:92%;
+    max-height:82%;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 0 35px rgba(255,179,71,0.3);
+
+}
+
+.popup-btns{
+
+    margin-top:20px;
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+.popup-btn{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    270deg,
+    #ff9a2f,
+    #2b1055,
+    #7597de,
+    #ffb347
+    );
+
+    background-size:400% 400%;
+
+    animation:titleMove 6s ease infinite;
 
 }
 
@@ -577,11 +662,89 @@ body{
 
 </div>
 
+<!-- POPUP -->
+
+<div class="popup" id="popup">
+
+<img id="popupImg">
+
+<div class="popup-btns">
+
+<button class="popup-btn" onclick="prevImage()">⬅</button>
+
+<button class="popup-btn" onclick="closePopup()">✖</button>
+
+<button class="popup-btn" onclick="nextImage()">➡</button>
+
+</div>
+
+</div>
+
 <!-- BUTTON -->
 
 <a href="index.html" class="back-btn">
 ⬅ తిరిగి వెళ్ళండి
 </a>
+
+<script>
+
+const images=document.querySelectorAll(".gallery img");
+
+const popup=document.getElementById("popup");
+
+const popupImg=document.getElementById("popupImg");
+
+let current=0;
+
+images.forEach((img,index)=>{
+
+    img.onclick=()=>{
+
+        current=index;
+
+        popup.style.display="flex";
+
+        popupImg.src=img.src;
+
+    };
+
+});
+
+function closePopup(){
+
+    popup.style.display="none";
+
+}
+
+function nextImage(){
+
+    current++;
+
+    if(current>=images.length){
+
+        current=0;
+
+    }
+
+    popupImg.src=images[current].src;
+
+}
+
+function prevImage(){
+
+    current--;
+
+    if(current<0){
+
+        current=images.length-1;
+
+    }
+
+    popupImg.src=images[current].src;
+
+}
+
+</script>
 
 </body>
 </html>
