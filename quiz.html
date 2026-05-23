@@ -44,7 +44,6 @@ padding:35px 25px;
 backdrop-filter:blur(8px);
 }
 
-/* TITLE */
 h1{
 text-align:center;
 font-size:42px;
@@ -109,16 +108,29 @@ font-size:22px;
 margin-bottom:20px;
 }
 
+/* OPTIONS */
 .option{
 background:#1b1b1b;
 padding:15px;
 border-radius:15px;
 margin-bottom:10px;
 cursor:pointer;
+transition:0.2s;
 }
 
 .option.selected{
 border:2px solid #ffb347;
+}
+
+/* ✅ CORRECT / WRONG COLORS */
+.option.correct{
+background:#1e7a1e !important;
+border:2px solid #00ff00;
+}
+
+.option.wrong{
+background:#7a1e1e !important;
+border:2px solid #ff0000;
 }
 
 .resultText{
@@ -126,10 +138,7 @@ text-align:center;
 margin-top:10px;
 }
 
-/* ========================= */
-/* 🔥 3 LEADERBOARDS ADDED */
-/* ========================= */
-
+/* LEADERBOARDS */
 .leaderboardGrid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -177,10 +186,10 @@ font-size:13px;
 
 <div class="container">
 
-<!-- START -->
 <div id="startScreen">
 
 <h1>ధర్మ పరీక్ష ⚔️</h1>
+
 <p>రామాయణం • మహాభారతం • భగవద్గీత</p>
 
 <input type="text" id="username" placeholder="మీ పేరు నమోదు చేయండి">
@@ -195,21 +204,21 @@ font-size:13px;
 
 <button onclick="startQuiz()">పరీక్ష ప్రారంభించండి 🚩</button>
 
-<!-- 🔥 ORIGINAL LEADERBOARD REPLACED WITH 3 BOXES -->
+<!-- 3 LEADERBOARDS -->
 <div class="leaderboardGrid">
 
 <div class="lbBox">
-<h2>🟢 సులభం</h2>
+<h2>Easy</h2>
 <div id="easyList">Loading...</div>
 </div>
 
 <div class="lbBox">
-<h2>🟠 మధ్యస్థం</h2>
+<h2>Medium</h2>
 <div id="mediumList">Loading...</div>
 </div>
 
 <div class="lbBox">
-<h2>🔴 కఠినం</h2>
+<h2>Hard</h2>
 <div id="hardList">Loading...</div>
 </div>
 
@@ -219,22 +228,17 @@ font-size:13px;
 
 <!-- QUIZ -->
 <div id="quizBox" style="display:none;">
-
 <div class="question" id="question"></div>
-
 <div id="options"></div>
-
-<button onclick="submitAnswer()">సమాధానం సమర్పించండి</button>
-
+<button onclick="submitAnswer()">Submit</button>
 <div class="resultText" id="resultText"></div>
-
 </div>
 
 <!-- SCORE -->
 <div id="scoreBox" style="display:none; text-align:center;">
-<h2>🎉 పరీక్ష ముగిసింది</h2>
+<h2>🎉 Quiz Completed</h2>
 <p id="finalScore"></p>
-<button onclick="location.reload()">మళ్లీ ప్రారంభించండి</button>
+<button onclick="location.reload()">Restart</button>
 </div>
 
 </div>
@@ -252,7 +256,6 @@ orderBy,
 limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* FIREBASE */
 const firebaseConfig = {
 apiKey: "AIzaSyAr2dGcs3uPgmDMLCaMI8_e3c5kasf7RYY",
 authDomain: "sannivesham-quiz.firebaseapp.com",
@@ -264,8 +267,6 @@ appId: "1:726198930572:web:298f21668e5e9636c6bfa9"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-/* ✅ YOUR ORIGINAL QUESTIONS (UNCHANGED) */
 
 const easyQuestions = [ /* your full list stays here */ 
 
@@ -1024,11 +1025,9 @@ const hardQuestions = [ /* your full list stays here */
     a: "శ్రీకృష్ణుడు 574, అర్జునుడు 84, సంజయుడు 41, ధృతరాష్ట్రుడు 1"
   }
 ];
-
 let selectedQuestions=[], currentQuestion=0, score=0;
 let username="", selectedLevel="", questionLimit=0, selectedOption=null;
 
-/* LEVEL */
 window.selectLevel=function(level,count,el){
 selectedLevel=level;
 questionLimit=count;
@@ -1036,11 +1035,11 @@ document.querySelectorAll(".levelBtn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-/* START */
 window.startQuiz=function(){
+
 username=document.getElementById("username").value;
 if(!username||!selectedLevel){
-alert("పేరు & స్థాయి ఎంచుకోండి");
+alert("Enter name and level");
 return;
 }
 
@@ -1083,34 +1082,49 @@ options.appendChild(div);
 });
 }
 
+/* 🔥 FIXED ANSWER SHOW LOGIC */
 window.submitAnswer=function(){
 
 if(!selectedOption){
-alert("ఒక సమాధానం ఎంచుకోండి");
+alert("Select an answer");
 return;
 }
 
-if(selectedOption===selectedQuestions[currentQuestion].a){
-score++;
+const correct=selectedQuestions[currentQuestion].a;
+
+const all=document.querySelectorAll(".option");
+
+all.forEach(opt=>{
+opt.style.pointerEvents="none";
+
+if(opt.innerText===correct){
+opt.classList.add("correct"); // always green
 }
 
-currentQuestion++;
+if(opt.innerText===selectedOption && selectedOption!==correct){
+opt.classList.add("wrong"); // red if wrong
+}
+});
 
+if(selectedOption===correct) score++;
+
+setTimeout(()=>{
+currentQuestion++;
 if(currentQuestion<selectedQuestions.length){
 showQuestion();
 }else{
 finishQuiz();
 }
+},1500);
 }
 
-/* FINISH */
 async function finishQuiz(){
 
 document.getElementById("quizBox").style.display="none";
 document.getElementById("scoreBox").style.display="block";
 
 document.getElementById("finalScore").innerText=
-`${username} స్కోర్: ${score}/${questionLimit}`;
+`${username} Score: ${score}/${questionLimit}`;
 
 await addDoc(collection(db,selectedLevel+"_leaderboard"),{
 name:username,
@@ -1120,7 +1134,7 @@ score:score
 loadBoards();
 }
 
-/* 🔥 3 LEADERBOARDS */
+/* LEADERBOARDS */
 async function loadBoard(level,id){
 
 const box=document.getElementById(id);
@@ -1144,8 +1158,7 @@ box.innerHTML+=`
 <div class="lbPlayer">
 <span class="rank">${r}. ${d.name}</span>
 <span class="score">${d.score}</span>
-</div>
-`;
+</div>`;
 r++;
 });
 }
