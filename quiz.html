@@ -18,6 +18,10 @@ padding:0;
 box-sizing:border-box;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
 
 font-family:'Noto Sans Telugu', sans-serif;
@@ -80,7 +84,7 @@ transform:translateY(-120px);
 .container{
 
 width:92%;
-max-width:520px;
+max-width:650px;
 
 background:rgba(0,0,0,0.72);
 
@@ -122,7 +126,7 @@ text-align:center;
 
 color:#ddd;
 
-margin-bottom:30px;
+margin-bottom:25px;
 
 font-size:18px;
 }
@@ -147,7 +151,50 @@ color:white;
 
 font-size:18px;
 
+margin-bottom:20px;
+}
+
+/* LEVEL BUTTONS */
+
+.levels{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
 margin-bottom:25px;
+}
+
+.levelBtn{
+
+padding:15px;
+
+border:none;
+
+border-radius:18px;
+
+background:#1a1a1a;
+
+color:white;
+
+font-size:18px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+border:2px solid transparent;
+}
+
+.levelBtn:hover{
+
+transform:scale(1.03);
+}
+
+.levelBtn.active{
+
+border:2px solid #ffb347;
+
+background:#2a1b00;
 }
 
 /* BUTTON */
@@ -175,7 +222,7 @@ cursor:pointer;
 
 transition:0.3s;
 
-margin-top:10px;
+margin-top:15px;
 }
 
 button:hover{
@@ -198,7 +245,7 @@ font-size:24px;
 
 margin-bottom:25px;
 
-line-height:1.7;
+line-height:1.8;
 }
 
 /* OPTIONS */
@@ -229,6 +276,12 @@ transform:translateX(5px);
 background:#262626;
 }
 
+.option.selected{
+
+border:2px solid #ffb347;
+background:#2a1b00;
+}
+
 /* CORRECT */
 
 .correct{
@@ -241,6 +294,19 @@ background:green !important;
 .wrong{
 
 background:red !important;
+}
+
+/* RESULT */
+
+.resultText{
+
+text-align:center;
+
+margin-top:15px;
+
+font-size:20px;
+
+font-weight:bold;
 }
 
 /* SCORE */
@@ -261,7 +327,7 @@ color:#ffb347;
 margin-bottom:20px;
 }
 
-/* LIVE LEADERBOARD */
+/* LEADERBOARD */
 
 .liveLeaderboard{
 
@@ -290,15 +356,6 @@ margin-bottom:20px;
 font-size:28px;
 }
 
-.loading{
-
-text-align:center;
-
-color:#aaa;
-
-padding:20px;
-}
-
 .player{
 
 background:#1b1b1b;
@@ -318,15 +375,6 @@ align-items:center;
 font-size:18px;
 
 border:1px solid rgba(255,140,0,0.15);
-
-transition:0.3s;
-}
-
-.player:hover{
-
-transform:scale(1.02);
-
-background:#222;
 }
 
 .rank{
@@ -341,6 +389,13 @@ color:#00ff99;
 font-weight:bold;
 }
 
+.loading{
+
+text-align:center;
+padding:20px;
+color:#aaa;
+}
+
 @media(max-width:600px){
 
 h1{
@@ -348,15 +403,15 @@ font-size:34px;
 }
 
 .question{
-font-size:21px;
-}
-
-button{
 font-size:20px;
 }
 
 .option{
 font-size:16px;
+}
+
+.levels{
+grid-template-columns:1fr;
 }
 
 }
@@ -369,25 +424,43 @@ font-size:16px;
 
 <div class="container">
 
-<!-- START SCREEN -->
+<!-- START -->
 
 <div id="startScreen">
 
 <h1>ధర్మ పరీక్ష ⚔️</h1>
 
-<p>మీ జ్ఞానాన్ని పరీక్షించుకోండి</p>
+<p>
+రామాయణం • మహాభారతం • భగవద్గీత
+</p>
 
 <input type="text" id="username" placeholder="మీ పేరు నమోదు చేయండి">
+
+<div class="levels">
+
+<button class="levelBtn" onclick="selectLevel('easy',10,this)">
+సులభం 🟢
+</button>
+
+<button class="levelBtn" onclick="selectLevel('medium',15,this)">
+మధ్యస్థం 🟠
+</button>
+
+<button class="levelBtn" onclick="selectLevel('hard',20,this)">
+కఠినం 🔴
+</button>
+
+</div>
 
 <button onclick="startQuiz()">
 పరీక్ష ప్రారంభించండి 🚩
 </button>
 
-<!-- LIVE LEADERBOARD -->
-
 <div class="liveLeaderboard">
 
-<h2>🏆 విజేతల పట్టిక</h2>
+<h2>
+🏆 విజేతల పట్టిక
+</h2>
 
 <div id="leaderboardList">
 
@@ -408,6 +481,12 @@ Loading...
 <div class="question" id="question"></div>
 
 <div id="options"></div>
+
+<button id="submitBtn" onclick="submitAnswer()">
+సమాధానం సమర్పించండి
+</button>
+
+<div class="resultText" id="resultText"></div>
 
 </div>
 
@@ -467,84 +546,226 @@ const db = getFirestore(app);
 
 /* QUESTIONS */
 
-const questions = [ 
+const easyQuestions = [
 
-
-  {
-q:"శ్రీరాముడి తండ్రి పేరు ఏమిటి?",
-o:["దశరథుడు","జనకుడు","భీష్ముడు","పాండు"],
+{
+q:"శ్రీరాముని తండ్రి పేరేమిటి?",
+o:["జనకుడు","దశరథుడు","రావణుడు","వాలి"],
 a:"దశరథుడు"
 },
 
 {
-q:"శ్రీరాముడి జన్మస్థలం ఏది?",
-o:["ద్వారక","మథుర","అయోధ్య","హస్తినాపురం"],
+q:"రామాయణ మహాకావ్యాన్ని రచించిన మహర్షి ఎవరు?",
+o:["వేదవ్యాసుడు","వశిష్ఠుడు","వాల్మీకి","విశ్వామిత్రుడు"],
+a:"వాల్మీకి"
+},
+
+{
+q:"శ్రీరాముడు జన్మించిన నగరం ఏది?",
+o:["మధుర","అయోధ్య","లంక","మిథిల"],
 a:"అయోధ్య"
 },
 
 {
-q:"శ్రీరాముడి భార్య ఎవరు?",
-o:["ద్రౌపది","రుక్మిణి","సీతాదేవి","సత్యభామ"],
-a:"సీతాదేవి"
-},
-
-{
-q:"లక్ష్మణుడి తల్లి పేరు ఏమిటి?",
-o:["కౌసల్య","కైకేయి","సుమిత్ర","గాంధారి"],
+q:"లక్ష్మణుడి తల్లి పేరేమిటి?",
+o:["కౌసల్య","కైకేయి","సుమిత్ర","శాంత"],
 a:"సుమిత్ర"
 },
 
 {
-q:"మహాభారతంలో పాండవులు మొత్తం ఎంతమంది?",
-o:["3","5","7","10"],
-a:"5"
+q:"లంకకు రాజు ఎవరు?",
+o:["విభీషణుడు","కుంభకర్ణుడు","రావణుడు","ఇంద్రజిత్తు"],
+a:"రావణుడు"
 },
 
 {
-q:"అర్జునుడికి గీతను ఎవరు బోధించారు?",
-o:["వ్యాసుడు","కర్ణుడు","శ్రీకృష్ణుడు","భీష్ముడు"],
-a:"శ్రీకృష్ణుడు"
+q:"పాండవులు ఎంతమంది?",
+o:["ముగ్గురు","ఐదుగురు","వందమంది","ఏడుగురు"],
+a:"ఐదుగురు"
 },
 
 {
-q:"హనుమంతుడి తల్లి పేరు ఏమిటి?",
-o:["అంజనా దేవి","కౌసల్య","సుమిత్ర","తార"],
-a:"అంజనా దేవి"
+q:"మహాభారతాన్ని రచించిన మహర్షి ఎవరు?",
+o:["వాల్మీకి","వేదవ్యాసుడు","విశ్వామిత్రుడు","భరద్వాజుడు"],
+a:"వేదవ్యాసుడు"
 },
 
 {
-q:"గీత బోధ జరిగిన యుద్ధభూమి పేరు ఏమిటి?",
-o:["పంచవటి","అయోధ్య","కురుక్షేత్రం","ద్వారక"],
+q:"కురుక్షేత్ర యుద్ధం ఎక్కడ జరిగింది?",
+o:["హస్తినాపురం","కురుక్షేత్రం","ఇంద్రప్రస్థం","విరాట నగరం"],
 a:"కురుక్షేత్రం"
 },
 
 {
-q:"భగవద్గీతలో ఎన్ని అధ్యాయాలు ఉన్నాయి?",
-o:["12","15","18","24"],
-a:"18"
+q:"భగవద్గీతను శ్రీకృష్ణుడు ఎవరికి బోధించాడు?",
+o:["ధర్మరాజుకు","అర్జునుడికి","కర్ణుడికి","దుర్యోధనుడికి"],
+a:"అర్జునుడికి"
 },
 
 {
-q:"రామాయణాన్ని రచించిన మహర్షి ఎవరు?",
-o:["వ్యాసుడు","వాల్మీకి","విశ్వామిత్రుడు","వశిష్ఠుడు"],
-a:"వాల్మీకి"
+q:"భగవద్గీతలో మొత్తం ఎన్ని అధ్యాయాలు ఉన్నాయి?",
+o:["12","16","18","24"],
+a:"18"
+}
+
+];
+
+/* MEDIUM */
+
+const mediumQuestions = [
+
+{
+q:"అహల్యకు శాపవిమోచనం ఏ రూపంలో ఉన్నప్పుడు కలిగింది?",
+o:["కప్ప","శిల","చెట్టు","పక్షి"],
+a:"శిల"
+},
+
+{
+q:"రావణాసురుడి తండ్రి ఎవరు?",
+o:["పులస్త్యుడు","విశ్రవసుడు","సుమాలి","కశ్యపుడు"],
+a:"విశ్రవసుడు"
+},
+
+{
+q:"కుంభకర్ణుడు సాధారణంగా ఎన్ని నెలలు నిద్రపోయేవాడు?",
+o:["3","6","12","2"],
+a:"6"
+},
+
+{
+q:"లంకను దహనం చేసిన తర్వాత హనుమంతుడు తన తోక మంటను ఎక్కడ ఆర్పాడు?",
+o:["గంగా","సముద్రం","బావి","ఆకాశ గంగ"],
+a:"సముద్రం"
+},
+
+{
+q:"ఏకలవ్యుడు గురుదక్షిణగా ఏమి ఇచ్చాడు?",
+o:["బంగారం","విల్లు","కుడిచేతి బొటనవేలు","ఖడ్గం"],
+a:"కుడిచేతి బొటనవేలు"
+},
+
+{
+q:"అభిమన్యుడి భార్య ఎవరు?",
+o:["ద్రౌపది","ఉత్తర","సుభద్ర","హిడింబి"],
+a:"ఉత్తర"
+},
+
+{
+q:"శకుని ఏ రాజ్యానికి రాజు?",
+o:["మగధ","గాంధార","పాంచాల","మత్స్య"],
+a:"గాంధార"
+},
+
+{
+q:"భగవద్గీతలో 'రాజవిద్య రాజగుహ్య యోగము' ఎన్నో అధ్యాయం?",
+o:["2","9","12","15"],
+a:"9"
+},
+
+{
+q:"త్రిగుణాలు ఏవి?",
+o:["సత్య ధర్మ శాంతి","సత్త్వ రజస్ తమస్","కామ క్రోధ లోభ","జీవాత్మ పరమాత్మ"],
+a:"సత్త్వ రజస్ తమస్"
+},
+
+{
+q:"'శ్రద్ధావాన్ లభతే జ్ఞానం' అర్థం ఏమిటి?",
+o:["ధనం ఉన్నవాడికి జ్ఞానం","శ్రద్ధ ఉన్నవాడికి జ్ఞానం","వృద్ధులకు మాత్రమే జ్ఞానం","గురువు లేకుండానే జ్ఞానం"],
+a:"శ్రద్ధ ఉన్నవాడికి జ్ఞానం"
+}
+
+];
+
+/* HARD */
+
+const hardQuestions = [
+
+{
+q:"రావణుడు రచించిన ప్రసిద్ధ స్తోత్రం ఏది?",
+o:["శివాష్టకం","శివ తాండవ స్తోత్రం","లింగాష్టకం","దేవి స్తోత్రం"],
+a:"శివ తాండవ స్తోత్రం"
+},
+
+{
+q:"హనుమంతుడు బ్రహ్మాస్త్రానికి ఎందుకు బందీ అయ్యాడు?",
+o:["భయపడ్డాడు","గౌరవించాడు","శక్తిలేక","నిద్రపోయాడు"],
+a:"గౌరవించాడు"
+},
+
+{
+q:"అగస్త్య మహర్షి రాముడికి ఉపదేశించిన స్తోత్రం ఏది?",
+o:["విష్ణు సహస్రనామం","ఆదిత్య హృదయం","హనుమాన్ చాలీసా","రామ రక్ష"],
+a:"ఆదిత్య హృదయం"
+},
+
+{
+q:"ఊర్మిళ ఎన్ని సంవత్సరాలు నిద్రపోయింది?",
+o:["10","14","12","7"],
+a:"14"
+},
+
+{
+q:"పుష్పక విమానం అసలు ఎవరిది?",
+o:["ఇంద్రుడు","కుబేరుడు","వరుణుడు","యముడు"],
+a:"కుబేరుడు"
+},
+
+{
+q:"అర్జునుడికి పాశుపతాస్త్రం ఇచ్చిన శివుడు ఏ రూపంలో వచ్చాడు?",
+o:["భైరవ","కిరాత","శరభ","వీరభద్ర"],
+a:"కిరాత"
+},
+
+{
+q:"పాండవుల అక్షయపాత్రను ఎవరు ఇచ్చారు?",
+o:["శివుడు","సూర్యుడు","ఇంద్రుడు","కృష్ణుడు"],
+a:"సూర్యుడు"
+},
+
+{
+q:"ధర్మరాజుతో చివరివరకు వచ్చిన కుక్క ఎవరి రూపం?",
+o:["ఇంద్రుడు","యమధర్మరాజు","శివుడు","వరుణుడు"],
+a:"యమధర్మరాజు"
+},
+
+{
+q:"భగవద్గీతలో కర్మ సిద్ధాంత హృదయంగా భావించే శ్లోకం ఏది?",
+o:["2.11","2.47","2.22","2.20"],
+a:"2.47"
+},
+
+{
+q:"'క్షేత్రం - క్షేత్రజ్ఞుడు' అనగా ఏమిటి?",
+o:["భూమి-రైతు","శరీరం-ఆత్మ","దేవాలయం-పూజారి","యుద్ధరంగం-సైనికుడు"],
+a:"శరీరం-ఆత్మ"
 }
 
 ];
 
 let selectedQuestions = [];
-
 let currentQuestion = 0;
-
 let score = 0;
-
 let username = "";
+let selectedLevel = "";
+let questionLimit = 0;
+let selectedOption = null;
 
-/* LOAD LEADERBOARD */
+/* SELECT LEVEL */
+
+window.selectLevel = function(level,count,element){
+
+selectedLevel = level;
+questionLimit = count;
+
+document.querySelectorAll(".levelBtn")
+.forEach(btn=>btn.classList.remove("active"));
+
+element.classList.add("active");
 
 loadLeaderboard();
+}
 
-/* START QUIZ */
+/* START */
 
 window.startQuiz = function(){
 
@@ -554,7 +775,12 @@ document.getElementById("username").value;
 if(username.trim() === ""){
 
 alert("పేరు నమోదు చేయండి");
+return;
+}
 
+if(selectedLevel === ""){
+
+alert("ఒక స్థాయిని ఎంచుకోండి");
 return;
 }
 
@@ -562,10 +788,24 @@ document.getElementById("startScreen").style.display="none";
 
 document.getElementById("quizBox").style.display="block";
 
+let questionPool = [];
+
+if(selectedLevel === "easy"){
+questionPool = easyQuestions;
+}
+
+if(selectedLevel === "medium"){
+questionPool = mediumQuestions;
+}
+
+if(selectedLevel === "hard"){
+questionPool = hardQuestions;
+}
+
 selectedQuestions =
-questions
+questionPool
 .sort(()=>0.5 - Math.random())
-.slice(0,5);
+.slice(0,questionLimit);
 
 showQuestion();
 }
@@ -574,8 +814,11 @@ showQuestion();
 
 function showQuestion(){
 
-const q =
-selectedQuestions[currentQuestion];
+selectedOption = null;
+
+document.getElementById("resultText").innerHTML = "";
+
+const q = selectedQuestions[currentQuestion];
 
 document.getElementById("question").innerHTML =
 `${currentQuestion+1}. ${q.q}`;
@@ -594,16 +837,30 @@ div.classList.add("option");
 
 div.innerHTML = option;
 
-div.onclick = ()=>checkAnswer(div,option);
+div.onclick = ()=>{
+
+document.querySelectorAll(".option")
+.forEach(opt=>opt.classList.remove("selected"));
+
+div.classList.add("selected");
+
+selectedOption = option;
+};
 
 optionsDiv.appendChild(div);
 
 });
 }
 
-/* CHECK ANSWER */
+/* SUBMIT */
 
-function checkAnswer(element,selected){
+window.submitAnswer = function(){
+
+if(selectedOption === null){
+
+alert("ఒక సమాధానం ఎంచుకోండి");
+return;
+}
 
 const correct =
 selectedQuestions[currentQuestion].a;
@@ -621,8 +878,8 @@ opt.classList.add("correct");
 }
 
 if(
-opt.innerHTML === selected &&
-selected !== correct
+opt.innerHTML === selectedOption &&
+selectedOption !== correct
 ){
 
 opt.classList.add("wrong");
@@ -630,9 +887,17 @@ opt.classList.add("wrong");
 
 });
 
-if(selected === correct){
+if(selectedOption === correct){
 
 score++;
+
+document.getElementById("resultText").innerHTML =
+"✅ సరైన సమాధానం";
+
+}else{
+
+document.getElementById("resultText").innerHTML =
+`❌ తప్పు సమాధానం <br><br> ✅ సరైన సమాధానం : ${correct}`;
 }
 
 setTimeout(()=>{
@@ -648,10 +913,11 @@ showQuestion();
 finishQuiz();
 }
 
-},1200);
+},2200);
+
 }
 
-/* FINISH QUIZ */
+/* FINISH */
 
 async function finishQuiz(){
 
@@ -660,10 +926,10 @@ document.getElementById("quizBox").style.display="none";
 document.getElementById("scoreBox").style.display="block";
 
 document.getElementById("finalScore").innerHTML =
-`${username} గారి స్కోర్ : ${score}/5 🔥`;
+`${username} గారి స్కోర్ : ${score}/${questionLimit} 🔥`;
 
 await addDoc(
-collection(db,"leaderboard"),
+collection(db,selectedLevel + "_leaderboard"),
 {
 name:username,
 score:score
@@ -673,9 +939,13 @@ score:score
 loadLeaderboard();
 }
 
-/* LOAD LEADERBOARD */
+/* LEADERBOARD */
 
 async function loadLeaderboard(){
+
+if(selectedLevel === ""){
+return;
+}
 
 const leaderboardList =
 document.getElementById("leaderboardList");
@@ -685,7 +955,7 @@ leaderboardList.innerHTML =
 
 const q =
 query(
-collection(db,"leaderboard"),
+collection(db,selectedLevel + "_leaderboard"),
 orderBy("score","desc"),
 limit(10)
 );
@@ -710,7 +980,7 @@ ${rank}. ${data.name}
 </span>
 
 <span class="score">
-${data.score}/5
+${data.score}
 </span>
 
 </div>
@@ -720,6 +990,7 @@ ${data.score}/5
 rank++;
 
 });
+
 }
 
 </script>
