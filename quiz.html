@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>క్విజ్ - సన్నివేశం</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="quiz-body">
+
+    <div class="quiz-bg"></div>
+
+    <div id="loader">
+        <div class="loader-content">
+            <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
+            <h1>సన్నివేశం</h1>
+            <div class="loader-line"></div>
+        </div>
+    </div>
+
+    <nav class="glass-navbar">
+        <a href="index.html#categories">← వెనుకకు</a>
+        <a href="index.html">ప్రారంభం</a>
+        <a href="quiz.html">క్విజ్</a>
+    </nav>
+
+    <section class="quiz-page">
+
+        <div id="startBox" class="quiz-start-area">
+
+            <div class="name-box">
+                <h1>తెలుగు ప్రశ్నావళి 🧠</h1>
+                <p>మీ పేరు నమోదు చేసి ప్రారంభించండి</p>
+
+                <input type="text" id="playerName" placeholder="మీ పేరు">
+
+<button class="gold-btn" onclick="startQuiz()">
+  ప్రారంభించండి
+</button>            </div>
+
+            <div class="leaderboard-box">
+                <h2>🏆 లీడర్ బోర్డ్</h2>
+                <div id="leaderboard"></div>
+            </div>
+
+        </div>
+        </div>
+
+        <div id="quizBox" class="quiz-box hide">
+            <h2 id="questionCount"></h2>
+            <h1 id="questionText"></h1>
+            <div id="liveScoreCard" class="score-card">
+                స్కోర్: 0
+            </div>
+
+            <div id="optionsBox"></div>
+        </div>
+
+        <div id="resultBox" class="quiz-box hide">
+            <h1>మీ స్కోర్ 🎉</h1>
+            <p id="scoreText"></p>
+            <button class="gold-btn" onclick="location.reload()">
+                మళ్లీ ఆడండి
+            </button>        </div>
+
+    </section>
+
+    <footer class="simple-footer">
+        <p class="footer-quote">✨ జ్ఞానం సంస్కృతికి నిజమైన వెలుగు ✨</p>
+<script type="module" src="social-links.js"></script>
+        <p>© 2026 సన్నివేశం</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module" src="quiz.js"></script>
+    <script type="module">
+        import { db } from "./firebase-config.js";
+
+        import {
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        async function loadQuizBackground() {
+            const snap = await getDoc(doc(db, "settings", "backgrounds"));
+
+            if (!snap.exists()) return;
+
+            const data = snap.data();
+
+            const bg = document.querySelector(".quiz-bg");
+
+            if (!bg) return;
+
+            if (window.innerWidth <= 700 && data.quizMobile) {
+                bg.style.backgroundImage =
+                    `linear-gradient(rgba(10,5,0,0.60),
+        rgba(10,5,0,0.65)),
+        url("${data.quizMobile}")`;
+            } else if (data.quizPc) {
+                bg.style.backgroundImage =
+                    `linear-gradient(rgba(10,5,0,0.65),
+        rgba(10,5,0,0.70)),
+        url("${data.quizPc}")`;
+            }
+        }
+
+        loadQuizBackground();
+    </script>
+    <audio id="bgMusic" loop>
+  <source src="music/traditional.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" class="music-btn">
+  🔊
+</button>
+
+<script src="music.js"></script>
+</body>
+
+</html>
