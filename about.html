@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>మా గురించి - సన్నివేశం</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="about-body">
+
+    <div class="about-bg"></div>
+
+    <!-- LOADER -->
+
+    <div id="loader">
+
+        <div class="loader-content">
+
+            <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
+
+            <h1>సన్నివేశం</h1>
+
+            <div class="loader-line"></div>
+
+        </div>
+
+    </div>
+
+    <!-- NAVBAR -->
+
+    <nav class="glass-navbar">
+
+        <a href="index.html">← వెనుకకు</a>
+
+        <a href="index.html">ప్రారంభం</a>
+
+        <a href="about.html">మా గురించి</a>
+
+    </nav>
+
+    <!-- ABOUT PAGE -->
+
+    <section class="about-page">
+
+        <!-- TITLE -->
+        <div class="about-main-box">
+
+            <h1 id="aboutTitle">
+                Loading...
+            </h1>
+
+            <p id="aboutDescription">
+                Loading...
+            </p>
+
+            <h2>మా ప్రధాన లక్ష్యం</h2>
+
+            <p id="aboutMission">
+                Loading...
+            </p>
+
+            <h2>మా దృక్పథం</h2>
+
+            <p id="aboutVision">
+                Loading...
+            </p>
+
+        </div>
+        <!-- TEAM -->
+
+        <h2 class="crew-heading">
+            మా బృందం
+        </h2>
+
+        <div id="aboutMembersList" class="crew-list">
+        </div>
+
+    </section>
+    <div id="aboutSection" class="dash-section">
+
+        <h2>About Page</h2>
+
+        <input type="text" id="aboutTitle" placeholder="About Title">
+
+        <textarea id="aboutDescription" placeholder="About Description"></textarea>
+
+        <textarea id="aboutMission" placeholder="Mission"></textarea>
+
+        <textarea id="aboutVision" placeholder="Vision"></textarea>
+
+        <button id="saveAboutBtn">
+            Save About
+        </button>
+
+        <p id="aboutMessage"></p>
+
+    </div>
+    <!-- FOOTER -->
+
+    <footer class="simple-footer">
+
+        <p class="footer-quote">
+            ✨ సంస్కృతి మన మూలం • సంప్రదాయం మన గౌరవం ✨
+        </p>
+
+       <script type="module" src="social-links.js"></script>
+
+        <p>
+            © 2026 సన్నివేశం
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module" src="about.js"></script>
+    <audio id="bgMusic" loop>
+  <source src="music/traditional.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" class="music-btn">
+  🔊
+</button>
+
+<script src="music.js"></script>
+</body>
+
+</html>
