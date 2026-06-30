@@ -20,18 +20,6 @@
     </div>
   </div>
 
-  <div id="sponsorModal" class="sponsor-modal">
-    <div class="sponsor-modal-box">
-
-      <span id="sponsorCloseBtn" class="sponsor-close-btn">×</span>
-
-      <a id="sponsorLink" href="#" target="_blank" class="sponsor-modal-link">
-        <img id="sponsorImage" class="sponsor-modal-img" src="" alt="Sponsor">
-      </a>
-
-    </div>
-  </div>
-
   <nav class="glass-navbar">
     <a href="#home">ప్రారంభం</a>
     <a href="#intro">పరిచయం</a>
@@ -292,36 +280,6 @@
     }
 
     loadHomeCards();
-
-    async function loadSponsorPopup() {
-      try {
-        const snap = await getDoc(
-          doc(db, "settings", "sponsor")
-        );
-
-        if (!snap.exists()) return;
-
-        const data = snap.data();
-
-        if (!data.image) return;
-
-        document.getElementById("sponsorImage").src = data.image;
-        document.getElementById("sponsorLink").href = data.link || "#";
-
-        document.getElementById("sponsorModal").style.display = "flex";
-      }
-
-      catch (error) {
-        console.log("Sponsor Popup Load Error:", error);
-      }
-    }
-
-    loadSponsorPopup();
-
-    document.getElementById("sponsorCloseBtn")
-      .addEventListener("click", () => {
-        document.getElementById("sponsorModal").style.display = "none";
-      });
   </script>
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
