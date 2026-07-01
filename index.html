@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>సన్నివేశం - తెలుగు సంస్కృతి</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="home-bg"></div>
+
+  <div id="loader">
+    <div class="loader-content">
+      <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
+      <h1>సన్నివేశం</h1>
+      <div class="loader-line"></div>
+    </div>
+  </div>
+
+  <div id="sponsorModal" class="sponsor-modal">
+    <div class="sponsor-modal-box">
+
+      <span id="sponsorCloseBtn" class="sponsor-close-btn">×</span>
+
+      <a id="sponsorLink" href="#" target="_blank" class="sponsor-modal-link">
+        <img id="sponsorImage" class="sponsor-modal-img" src="" alt="Sponsor">
+      </a>
+
+    </div>
+  </div>
+
+  <nav class="glass-navbar">
+    <a href="#home">ప్రారంభం</a>
+    <a href="#intro">పరిచయం</a>
+    <a href="#categories">విభాగాలు</a>
+    <a href="#about">మా గురించి</a>
+    <a href="#contact">సంప్రదించండి</a>
+  </nav>
+
+  <section id="home" class="home-page">
+
+    <div class="top-brand">
+      <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
+
+      <div class="brand-text">
+        <h1>సన్నివేశం</h1>
+        <p>సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+      </div>
+    </div>
+    <div class="impact-box">
+
+  <div class="impact-card">
+    <span id="schoolCount">0</span>
+    <p>పాఠశాలలు</p>
+  </div>
+
+  <div class="impact-card">
+    <span id="studentCount">0</span>
+    <p>విద్యార్థులు</p>
+  </div>
+
+</div>
+
+    <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
+
+      <div id="qotdCard" class="qotd-card" style="display:none;">
+        <h3>నేటి ప్రశ్న</h3>
+
+        <p id="qotdQuestionText" class="qotd-question-text"></p>
+
+        <div id="qotdOptions" class="qotd-options"></div>
+      </div>
+
+      <div id="wordCard" class="word-card" style="display:none;">
+        <h3>నేటి పదం</h3>
+
+        <p id="wordOfDayText" class="word-of-day-text"></p>
+      </div>
+
+    </div>
+
+    <section id="intro" class="intro-box">
+      <h2>సన్నివేశం గురించి</h2>
+
+      <p>
+        సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
+        ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
+        ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
+        మా ప్రధాన లక్ష్యం.
+      </p>
+
+      <p>
+        ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
+        తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
+        మా ఆశయం.
+      </p>
+    </section>
+
+    <section id="categories" class="category-section">
+      <h2 class="category-heading">విభాగాలు</h2>
+
+      <div class="category-grid">
+
+        <a href="events.html" class="category-card">
+          <img id="eventsCardImg" src="images/events.png">
+          <div class="category-title">కార్యక్రమాలు</div>
+        </a>
+
+        <a href="festivals.html" class="category-card">
+          <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు">
+          <div class="category-title">పండుగలు</div>
+        </a>
+
+        <a href="temples.html" class="category-card">
+          <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు">
+          <div class="category-title">దేవాలయాలు</div>
+        </a>
+
+        <a href="stories.html" class="category-card">
+          <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
+          <div class="category-title">కథలు</div>
+        </a>
+
+        <a href="gita-slokas.html" class="category-card">
+          <img id="slokasCardImg" src="images/gita.png" alt="శ్లోకాలు">
+          <div class="category-title">శ్లోకాలు</div>
+        </a>
+
+        <a href="quiz.html" class="category-card">
+          <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్">
+          <div class="category-title">క్విజ్</div>
+        </a>
+
+      </div>
+    </section>
+
+    <a href="about.html" id="about" class="about-card">
+      <div class="about-overlay"></div>
+
+      <div class="about-content">
+        <h2>మా గురించి</h2>
+        <p>
+          మా గురించి, మా టీమ్ సభ్యులు,
+          మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
+        </p>
+      </div>
+
+      <span class="about-arrow">➜</span>
+    </a>
+
+  </section>
+
+  <section id="contact" class="contact-section">
+
+    <h2>సంప్రదించండి</h2>
+
+    <div class="contact-container">
+
+      <a id="homeInstagram" href="javascript:void(0)" target="_blank" class="contact-box">
+        <img src="images/instagram.png" alt="Instagram">
+        <span>Sannivesham</span>
+      </a>
+
+      <a id="homeFacebook" href="#" target="_blank" class="contact-box">
+        <img src="images/facebook.png" alt="Facebook">
+        <span>Sannivesham</span>
+      </a>
+
+      <a id="homeYoutube" href="javascript:void(0)" target="_blank" class="contact-box">
+        <img src="images/youtube.png" alt="YouTube">
+        <span>Sannivesham</span>
+      </a>
+
+      <a id="homeWhatsapp" href="javascript:void(0)" target="_blank" class="contact-box">
+        <img src="images/whatsapp.png" alt="WhatsApp">
+        <span>WhatsApp</span>
+      </a>
+
+      <a id="homePhone" href="javascript:void(0)" class="contact-box">
+        <img src="images/phone.png" alt="Phone">
+        <span>Phone</span>
+      </a>
+
+      <a id="homeEmail" href="javascript:void(0)" class="contact-box">
+        <img src="images/email.png" alt="Email">
+        <span>Email</span>
+      </a>
+
+      <a id="homeWhatsappChannel" href="javascript:void(0)" target="_blank" class="whatsapp-channel-box">
+
+        <div class="channel-text">
+          <h3>వాట్సాప్ ఛానల్</h3>
+
+          <p>
+            మా కార్యక్రమాలు, అప్డేట్స్ మరియు
+            సాంస్కృతిక విషయాల కోసం మా వాట్సాప్
+            ఛానల్‌లో చేరండి.
+          </p>
+        </div>
+
+        <div class="join-btn">
+          ఛానెల్‌లో చేరండి
+        </div>
+
+      </a>
+
+    </div>
+
+  </section>
+
+  <footer class="home-footer">
+
+    <p class="home-footer-quote">
+      ✨సంస్కృతి మన ప్రాణం • సంప్రదాయం మన పరంపర • తెలుగు మన గౌరవం ✨
+    </p>
+
+    
+
+    <p class="home-footer-copy">
+      © 2026 సన్నివేశం
+    </p>
+
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadHomeBackground() {
+      try {
+        const snap = await getDoc(
+          doc(db, "settings", "backgrounds")
+        );
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        const bg = document.querySelector(".home-bg");
+
+        if (!bg) return;
+
+        if (window.innerWidth <= 700 && data.homeMobile) {
+          bg.style.backgroundImage =
+            `linear-gradient(
+              rgba(10,5,0,0.55),
+              rgba(10,5,0,0.60)
+            ),
+            url("${data.homeMobile}")`;
+        }
+
+        else if (data.homePc) {
+          bg.style.backgroundImage =
+            `linear-gradient(
+              rgba(10,5,0,0.60),
+              rgba(10,5,0,0.65)
+            ),
+            url("${data.homePc}")`;
+        }
+      }
+
+      catch (error) {
+        console.log("Background Load Error:", error);
+      }
+    }
+
+    loadHomeBackground();
+    async function loadHomeCards() {
+
+      const snap = await getDoc(
+        doc(db, "settings", "homeCards")
+      );
+
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+
+      if (data.eventsCard)
+        document.getElementById("eventsCardImg").src =
+          data.eventsCard;
+
+      if (data.festivalsCard)
+        document.getElementById("festivalsCardImg").src =
+          data.festivalsCard;
+
+      if (data.templesCard)
+        document.getElementById("templesCardImg").src =
+          data.templesCard;
+
+      if (data.storiesCard)
+        document.getElementById("storiesCardImg").src =
+          data.storiesCard;
+
+      if (data.slokasCard)
+        document.getElementById("slokasCardImg").src =
+          data.slokasCard;
+
+      if (data.quizCard)
+        document.getElementById("quizCardImg").src =
+          data.quizCard;
+    }
+
+    loadHomeCards();
+
+    async function loadSponsorPopup() {
+      try {
+        const snap = await getDoc(
+          doc(db, "settings", "sponsor")
+        );
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        if (!data.image) return;
+
+        document.getElementById("sponsorImage").src = data.image;
+        document.getElementById("sponsorLink").href = data.link || "#";
+
+        document.getElementById("sponsorModal").style.display = "flex";
+      }
+
+      catch (error) {
+        console.log("Sponsor Popup Load Error:", error);
+      }
+    }
+
+    loadSponsorPopup();
+
+    document.getElementById("sponsorCloseBtn")
+      .addEventListener("click", () => {
+        document.getElementById("sponsorModal").style.display = "none";
+      });
+
+    function getTodayKey() {
+      const now = new Date();
+
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function loadQuestionOfDay() {
+      try {
+        const todayKey = getTodayKey();
+
+        const snap = await getDoc(
+          doc(db, "qotd", todayKey)
+        );
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        if (!data.question || !Array.isArray(data.options)) return;
+
+        document.getElementById("qotdQuestionText").innerText =
+          data.question;
+
+        const optionsBox = document.getElementById("qotdOptions");
+        optionsBox.innerHTML = "";
+
+        data.options.forEach((optionText, index) => {
+          const btn = document.createElement("button");
+          btn.className = "qotd-option-btn";
+          btn.innerText = optionText;
+
+          btn.addEventListener("click", () => {
+            const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
+
+            allBtns.forEach((b) => b.classList.add("disabled-option"));
+
+            allBtns[data.correct].classList.add("correct-option");
+
+            if (index !== data.correct) {
+              btn.classList.add("wrong-option");
+            }
+          });
+
+          optionsBox.appendChild(btn);
+        });
+
+        document.getElementById("qotdCard").style.display = "block";
+        document.getElementById("qotdWordSection").style.display = "flex";
+      }
+
+      catch (error) {
+        console.log("Question Of Day Load Error:", error);
+      }
+    }
+
+    async function loadWordOfDay() {
+      try {
+        const todayKey = getTodayKey();
+
+        const snap = await getDoc(
+          doc(db, "wordOfDay", todayKey)
+        );
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        if (!data.text) return;
+
+        document.getElementById("wordOfDayText").innerText = data.text;
+        document.getElementById("wordCard").style.display = "block";
+
+        document.getElementById("qotdWordSection").style.display = "flex";
+      }
+
+      catch (error) {
+        console.log("Word Of Day Load Error:", error);
+      }
+    }
+
+    loadQuestionOfDay();
+    loadWordOfDay();
+  </script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicBtn" class="music-btn">
+    🔊
+  </button>
+
+  <script src="music.js"></script>
+
+<script src="script.js"></script>
+
+<script>
+function animateCounter(id, target){
+
+  let count = 0;
+  const increment = Math.ceil(target / 100);
+
+  const timer = setInterval(() => {
+
+    count += increment;
+
+    if(count >= target){
+      count = target;
+      clearInterval(timer);
+    }
+
+    document.getElementById(id).innerText = count;
+
+  },20);
+}
+
+window.addEventListener("load", () => {
+
+  animateCounter("schoolCount", 10);
+  animateCounter("studentCount", 2000);
+
+});
+</script>
+
+</body>
+</html>
