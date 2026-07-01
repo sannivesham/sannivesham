@@ -869,11 +869,23 @@ body {
 
 .sponsor-modal-img {
   width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
   display: block;
-
   border-radius: 18px;
-
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 480px) {
+  .sponsor-modal-box {
+    width: 85%;
+    max-width: 320px;
+  }
+
+  .sponsor-modal-img {
+    max-height: 60vh;
+  }
 }
 
 .sponsor-close-btn {
