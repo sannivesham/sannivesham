@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sannivesham.app",
+      "sha256_cert_fingerprints": [
+        "EF:09:7E:8C:1D:B1:7F:C4:D8:60:31:1D:45:9C:4D:A4:76:5E:DD:44:A5:54:7D:41:A6:68:51:E9:6E:A6:CE:73"
+      ]
+    }
+  }
+]
