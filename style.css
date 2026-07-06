@@ -31,7 +31,7 @@ body {
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll;
 
   color: #fff;
 }
@@ -1639,7 +1639,7 @@ body {
 }
 
 .home-bg {
-  position: fixed;
+  position: scroll;
   top: 0;
   left: 0;
 
