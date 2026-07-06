@@ -220,7 +220,7 @@
         <span>Sannivesham</span>
       </a>
 
-      <a id="homeFacebook" href="#" target="_blank" class="contact-box">
+      <a id="homeFacebook" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/facebook.png" alt="Facebook">
         <span>Sannivesham</span>
       </a>
@@ -499,8 +499,7 @@ confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.re
         document.getElementById("sponsorImage").src = data.image;
         document.getElementById("sponsorLink").href = data.link || "#";
         document.getElementById("sponsorModal").style.display = "flex";
-        document.getElementById("sponsorModal").style.display = "flex";
-window._sponsorShowing = true;
+        window._sponsorShowing = true;
       } catch (e) { console.log("Sponsor Popup Load Error:", e); }
     }
     loadSponsorPopup();
@@ -668,6 +667,9 @@ window._sponsorShowing = true;
     loadQuestionOfDay();
     loadWordOfDay();
   </script>
+
+  <script type="module" src="social-links.js"></script>
+
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
   </audio>
@@ -681,8 +683,6 @@ window._sponsorShowing = true;
   </button>
 
   <script src="music.js"></script>
-
-<script src="script.js"></script>
 
 <script>
 function animateCounter(id, target){
