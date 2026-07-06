@@ -159,7 +159,7 @@
 
     color:#ffd166;
 
-    font-size:34px;
+    font-size:32px;
 
     margin:0 0 8px;
 
@@ -171,7 +171,7 @@
 
     opacity:.9;
 
-    margin:8px 0;
+    margin:6px 0;
 
 }
 
@@ -385,13 +385,16 @@
   }
 
   .quiz-category-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
 
-  .quiz-category-card{
+    grid-template-columns: 1fr;
 
-    min-height:300px;
+    gap: 22px;
+
+}
+
+ .quiz-category-card{
+
+    min-height:420px;
 
 }
 
