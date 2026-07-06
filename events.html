@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>కార్యక్రమాలు - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="events-body">
+  <div class="events-bg"></div>
+  <div id="loader">
+    <div class="loader-content">
+      <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
+      <h1>సన్నివేశం</h1>
+      <div class="loader-line"></div>
+    </div>
+  </div>
+
+  <nav class="glass-navbar">
+    <a href="index.html#categories">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="events.html">కార్యక్రమాలు</a>
+  </nav>
+
+  <section class="events-page">
+
+    <h1>మా కార్యక్రమాలు</h1>
+
+    <div class="events-list">
+
+      <div class="event-box">
+
+        <div class="event-text">
+
+          <h2>ప్రాథమిక ఉన్నత పాఠశాల కార్యక్రమం 🪔</h2>
+
+          <p>
+            సన్నివేశం బృందంగా మేము ప్రాథమిక ఉన్నత పాఠశాలలో
+            ప్రతిభా వేదిక కార్యక్రమాన్ని నిర్వహించాము.
+            ఈ కార్యక్రమంలో భాగంగా మేము అందమైన అక్షరరచన,
+            చిత్రలేఖనం, ఆటలు, పఠనం, రచన, కథ చెప్పడం వంటి
+            అనేక ఆసక్తికర కార్యక్రమాలను నిర్వహించాము.
+          </p>
+
+          <p>
+            ఈ కార్యక్రమానికి పాఠశాల ప్రధానోపాధ్యాయురాలు గారూ,
+            ఉపాధ్యాయులు అందించిన సహకారం ఎంతో అమూల్యమైనది.
+            వారు అందరూ ఎంతో ఆదరణతో మమ్మల్ని ప్రోత్సహించారు.
+          </p>
+
+          <p>
+            అలాగే మేము విద్యార్థులకు తెలుగు భాష మహత్త్వం
+            మరియు మన సంస్కృతి గొప్పతనం గురించి తెలియజేశాము.
+          </p>
+
+          <p>
+            ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది.
+            ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి,
+            ఉపాధ్యాయులకు మరియు అందరికీ మా హృదయపూర్వక కృతజ్ఞతలు.
+          </p>
+
+        </div>
+
+        <div class="event-gallery">
+          <img src="images/school1.jpg" onclick="openImage(0)" alt="School Event Photo 1">
+          <img src="images/school2.jpg" onclick="openImage(1)" alt="School Event Photo 2">
+          <img src="images/school3.jpg" onclick="openImage(2)" alt="School Event Photo 3">
+          <img src="images/school4.jpg" onclick="openImage(3)" alt="School Event Photo 4">
+          <img src="images/school5.jpg" onclick="openImage(4)" alt="School Event Photo 5">
+          <img src="images/school6.jpg" onclick="openImage(5)" alt="School Event Photo 6">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <div id="imageModal" class="image-modal">
+    <span class="close-btn" onclick="closeImage()">✕</span>
+
+    <button class="modal-arrow left-arrow" onclick="prevImage()">‹</button>
+
+    <img id="popupImage">
+
+    <button class="modal-arrow right-arrow" onclick="nextImage()">›</button>
+  </div>
+
+  <footer class="simple-footer">
+
+    <script type="module" src="social-links.js"></script>
+
+    <p>
+      © 2026 సన్నివేశం • తెలుగు సంస్కృతి మరియు సంప్రదాయం
+    </p>
+
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module" src="events.js"></script>
+  <script type="module">
+    import { db } from "./firebase-config.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadEventsBackground() {
+      const snap = await getDoc(doc(db, "settings", "backgrounds"));
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+      const bg = document.querySelector(".events-bg");
+
+      if (window.innerWidth <= 700 && data.eventsMobile) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.eventsMobile}")`;
+      } else if (data.eventsPc) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.eventsPc}")`;
+      }
+    }
+
+    loadEventsBackground();
+  </script>
+  <audio id="bgMusic" loop>
+  <source src="music/traditional.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" class="music-btn">
+  🔊
+</button>
+
+<script src="music.js"></script>
+</body>
+
+</html>

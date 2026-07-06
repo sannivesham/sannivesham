@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz CMS | Sannivesham</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quiz-cms.css">
+
+</head>
+
+<body>
+
+<div class="quizcms-bg"></div>
+
+<nav class="glass-navbar">
+
+    <a href="dashboard.html">← Dashboard</a>
+
+    <a href="index.html">Home</a>
+
+    <span>Quiz CMS</span>
+
+</nav>
+
+<section class="quizcms-page">
+
+<div class="cms-card">
+
+<h1>Quiz Management</h1>
+
+<div class="cms-grid">
+
+<div class="cms-field">
+
+<label>Category</label>
+
+<select id="category">
+
+<option value="general">General</option>
+
+<option value="hari">Hari</option>
+
+<option value="hara">Hara</option>
+
+<option value="devi">Devi</option>
+
+<option value="telugu">Telugu</option>
+
+</select>
+
+</div>
+
+
+<div class="cms-field">
+
+<label>Difficulty</label>
+
+<select id="difficulty">
+
+<option value="easy">Easy</option>
+
+<option value="medium">Medium</option>
+
+<option value="hard">Hard</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="cms-field">
+
+<label>Question</label>
+
+<textarea id="question" rows="4"></textarea>
+
+</div>
+
+<div class="cms-grid">
+
+<div class="cms-field">
+
+<label>Option A</label>
+
+<input type="text" id="option1">
+
+</div>
+
+<div class="cms-field">
+
+<label>Option B</label>
+
+<input type="text" id="option2">
+
+</div>
+
+<div class="cms-field">
+
+<label>Option C</label>
+
+<input type="text" id="option3">
+
+</div>
+
+<div class="cms-field">
+
+<label>Option D</label>
+
+<input type="text" id="option4">
+
+</div>
+
+</div>
+
+<div class="cms-grid">
+
+<div class="cms-field">
+
+<label>Correct Answer</label>
+
+<select id="answer">
+
+<option value="option1">Option A</option>
+
+<option value="option2">Option B</option>
+
+<option value="option3">Option C</option>
+
+<option value="option4">Option D</option>
+
+</select>
+
+</div>
+
+<div class="cms-field">
+
+<label>Question Image (Optional)</label>
+
+<input type="file" id="questionImage">
+
+</div>
+
+</div>
+
+<div class="cms-buttons">
+
+<button id="saveQuestion">
+
+Save Question
+
+</button>
+
+<button id="clearQuestion">
+
+Clear
+
+</button>
+
+</div>
+
+</div>
+
+<div class="cms-card">
+
+<h2>Saved Questions</h2>
+
+<input
+type="text"
+id="searchQuestion"
+placeholder="Search Question...">
+
+<div id="questionList">
+
+</div>
+
+</div>
+
+</section>
+
+<script type="module" src="quiz-cms.js"></script>
+
+</body>
+
+</html>

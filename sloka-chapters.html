@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>శ్లోక అధ్యాయాలు - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="slokas-body">
+
+  <div class="slokas-bg"></div>
+
+  <nav class="glass-navbar">
+    <a href="gita-slokas.html">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="gita-slokas.html">శ్లోకాలు</a>
+  </nav>
+
+  <section class="slokas-page">
+
+    <div class="slokas-title-box">
+      <h1 id="slokaCategoryTitle">అధ్యాయాలు</h1>
+    </div>
+
+    <div class="slokas-grid" id="slokaChaptersGrid"></div>
+
+  </section>
+
+  <script type="module" src="sloka-chapters.js"></script>
+  <script src="script.js"></script>
+  <script type="module" src="social-links.js"></script>
+<script type="module">
+  import { db } from "./firebase-config.js";
+
+  import {
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  async function loadSlokasBackground() {
+    const snap = await getDoc(doc(db, "settings", "backgrounds"));
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const bg = document.querySelector(".slokas-bg");
+
+    if (!bg) return;
+
+    if (window.innerWidth <= 700 && data.slokasMobile) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(10,5,0,0.60), rgba(10,5,0,0.65)), url("${data.slokasMobile}")`;
+    } else if (data.slokasPc) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(10,5,0,0.65), rgba(10,5,0,0.70)), url("${data.slokasPc}")`;
+    }
+  }
+
+  loadSlokasBackground();
+</script>
+</body>
+</html>

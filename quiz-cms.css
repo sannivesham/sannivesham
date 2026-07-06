@@ -1,0 +1,309 @@
+/* ===========================
+   QUIZ CMS
+=========================== */
+
+.quizcms-bg{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+    linear-gradient(rgba(8,5,0,.83),rgba(8,5,0,.88)),
+    url("images/admin-bg.jpg");
+    background-size:cover;
+    background-position:center;
+}
+
+.quizcms-page{
+
+    width:92%;
+    max-width:1300px;
+    margin:110px auto 70px;
+
+}
+
+.cms-card{
+
+    background:rgba(20,12,5,.60);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,209,102,.25);
+    border-radius:26px;
+    padding:35px;
+    margin-bottom:35px;
+
+    box-shadow:
+    0 0 30px rgba(255,209,102,.08);
+
+}
+
+.cms-card h1,
+.cms-card h2{
+
+    text-align:center;
+    color:#FFD166;
+    margin-bottom:30px;
+    font-size:40px;
+
+}
+
+.cms-grid{
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+    margin-bottom:25px;
+
+}
+
+.cms-field{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.cms-field label{
+
+    color:#FFD166;
+    margin-bottom:8px;
+    font-weight:bold;
+
+}
+
+.cms-field input,
+.cms-field textarea,
+.cms-field select{
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,209,102,.25);
+
+    color:white;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+.cms-field textarea{
+
+    resize:vertical;
+
+}
+
+.cms-field input:focus,
+.cms-field textarea:focus,
+.cms-field select:focus{
+
+    border-color:#FFD166;
+
+    box-shadow:0 0 15px rgba(255,209,102,.30);
+
+}
+
+.cms-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    margin-top:30px;
+
+}
+
+.cms-buttons button{
+
+    border:none;
+
+    border-radius:35px;
+
+    padding:14px 35px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+#saveQuestion{
+
+    background:#D4AF37;
+
+    color:#111;
+
+}
+
+#clearQuestion{
+
+    background:#333;
+
+    color:white;
+
+}
+
+.cms-buttons button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 0 20px rgba(255,209,102,.25);
+
+}
+
+#searchQuestion{
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:15px;
+
+    border:1px solid rgba(255,209,102,.25);
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    font-size:16px;
+
+    margin-bottom:30px;
+
+}
+
+#questionList{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+/* Each Saved Question */
+
+.question-card{
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,209,102,.20);
+
+    border-radius:18px;
+
+    padding:22px;
+
+}
+
+.question-card h3{
+
+    color:#FFD166;
+
+    margin-bottom:10px;
+
+}
+
+.question-card p{
+
+    color:white;
+
+    margin:6px 0;
+
+}
+
+.question-actions{
+
+    margin-top:20px;
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.question-actions button{
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:25px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+.edit-btn{
+
+    background:#D4AF37;
+
+    color:#111;
+
+}
+
+.delete-btn{
+
+    background:#9b2226;
+
+    color:white;
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.cms-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.cms-card{
+
+padding:22px;
+
+}
+
+.cms-card h1,
+.cms-card h2{
+
+font-size:28px;
+
+}
+
+.cms-buttons{
+
+flex-direction:column;
+
+}
+
+.cms-buttons button{
+
+width:100%;
+
+}
+
+.question-actions{
+
+flex-direction:column;
+
+}
+
+.question-actions button{
+
+width:100%;
+
+}
+
+}

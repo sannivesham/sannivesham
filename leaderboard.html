@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard | Sannivesham</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+  <div class="quiz-bg"></div>
+
+  <nav class="glass-navbar">
+    <a href="quiz.html">← వెనుకకు</a>
+    <a href="index.html">హోమ్</a>
+  </nav>
+
+  <section class="play-quiz-page">
+
+    <div class="play-quiz-card">
+      <h1 id="lbTitle" style="color:#ffd166;text-align:center;margin-bottom:28px;">
+        🏆 లీడర్‌బోర్డ్
+      </h1>
+
+      <div id="lbList"></div>
+
+      <div style="text-align:center;margin-top:28px;">
+        <button onclick="window.location.href='quiz.html'"
+          style="padding:13px 32px;border-radius:30px;background:#d4af37;color:#111;border:none;font-weight:bold;font-size:16px;cursor:pointer;">
+          వెనుకకు
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="script.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadQuizBackground() {
+      const snap = await getDoc(doc(db, "settings", "backgrounds"));
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+      const bg = document.querySelector(".quiz-bg");
+      if (!bg) return;
+
+      if (window.innerWidth <= 700 && data.quizMobile) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
+      } else if (data.quizPc) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+      }
+    }
+
+    loadQuizBackground();
+  </script>
+
+</body>
+
+</html>

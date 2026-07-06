@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Quiz Result | Sannivesham</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+  <div class="quiz-bg"></div>
+
+  <section class="play-quiz-page">
+
+    <div class="play-quiz-card result-card">
+
+      <h1>🎉 Quiz Completed</h1>
+
+      <p id="resultType">Quiz</p>
+
+      <h2 id="finalScore">0 / 10</h2>
+
+      <p id="accuracyText">Accuracy: 0%</p>
+
+      <p id="pointsText">+0 Points</p>
+
+    <p id="lifetimeScore">⭐ Lifetime Score : 0</p>
+
+<p id="communityScore">🌍 Community Score : 0</p>
+
+      <div class="quiz-bottom-buttons">
+
+        <button onclick="window.location.href='quiz.html'">
+          Play Again
+        </button>
+
+        <button onclick="window.location.href='leaderboard.html'">
+          Leaderboard
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script src="script.js"></script>
+  <script type="module" src="quiz-result.js"></script>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadQuizBackground() {
+      const snap = await getDoc(doc(db, "settings", "backgrounds"));
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+      const bg = document.querySelector(".quiz-bg");
+      if (!bg) return;
+
+      if (window.innerWidth <= 700 && data.quizMobile) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
+      } else if (data.quizPc) {
+        bg.style.backgroundImage =
+          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+      }
+    }
+
+    loadQuizBackground();
+  </script>
+
+</body>
+
+</html>

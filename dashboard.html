@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-body">
+
+  <div class="dashboard-bg"></div>
+
+  <section class="dashboard-page">
+
+    <div class="dashboard-box dashboard-wide">
+
+      <h1>సన్నివేశం Dashboard ⚡</h1>
+
+      <div class="dashboard-nav">
+        <button class="dash-btn" data-section="newQuizSection">
+  Quiz CMS
+</button>
+  <button class="dash-btn active" data-section="eventsSection">Events</button>
+  <button class="dash-btn" data-section="festivalsSection">Festivals</button>
+  <button class="dash-btn" data-section="templesSection">Temples</button>
+  <button class="dash-btn" data-section="storiesSection">Stories</button>
+  <button class="dash-btn" data-section="slokasSection">Slokas</button>
+  <button class="dash-btn" data-section="quizSection">Quiz</button>
+
+  <button class="dash-btn" data-section="aboutSection">
+    About
+  </button>
+
+  <button class="dash-btn" data-section="backgroundsSection">
+    Backgrounds
+  </button>
+  <button class="dash-btn" data-section="socialSection">
+  Social Links
+</button>
+<button class="dash-btn" data-section="homeCardsSection">
+  Home Cards
+</button>
+<button class="dash-btn" data-section="sponsorSection">
+  Sponsor
+</button>
+<button class="dash-btn" data-section="qotdSection">
+  Question of the Day
+</button>
+<button class="dash-btn" data-section="wordOfDaySection">
+  Word of the Day
+</button>
+<button id="logoutBtn">
+  Logout
+</button>
+</div>
+
+      <!-- EVENTS SECTION -->
+      <div id="eventsSection" class="dash-section active-section">
+
+        <div class="add-event-box">
+
+          <h2>కొత్త ఈవెంట్ జోడించండి</h2>
+
+          <div id="newEventImageGrid" class="cms-image-grid"></div>
+
+          <input type="text" id="eventTitle" placeholder="ఈవెంట్ పేరు">
+
+          <input type="text" id="eventLocation" placeholder="కార్యక్రమ స్థలం">
+
+          <input type="text" id="eventTime" placeholder="తేదీ & సమయం">
+
+          <textarea id="eventDescription" placeholder="ఈవెంట్ వివరాలు"></textarea>
+
+          <button id="saveEventBtn">
+            ఈవెంట్ సేవ్ చేయండి
+          </button>
+
+          <p id="eventMessage"></p>
+
+        </div>
+
+        <h2 class="admin-section-title">అన్ని ఈవెంట్స్</h2>
+
+        <div id="adminEventsList"></div>
+
+      </div>
+
+      <!-- FESTIVALS SECTION -->
+      <div id="festivalsSection" class="dash-section">
+
+        <div class="add-event-box">
+
+          <h2>కొత్త పండుగ జోడించండి</h2>
+
+          <input type="text" id="festivalTitle" placeholder="పండుగ పేరు">
+
+<div id="festivalCardImageGrid" class="festival-card-upload-box">
+  <span>＋ Festival Card Image</span>
+</div>
+
+          <input type="text" id="festivalFooterQuote" placeholder="Footer Quote">
+
+          <h3>Sections</h3>
+
+          <div id="festivalSectionsContainer"></div>
+
+          <button id="addFestivalSectionBtn">
+            + Section Add
+          </button>
+
+          <button id="saveFestivalBtn">
+            Festival Save
+          </button>
+
+          <p id="festivalMessage"></p>
+
+        </div>
+
+        <h2 class="admin-section-title">
+          అన్ని పండుగలు
+        </h2>
+
+        <div id="adminFestivalsList"></div>
+
+      </div>
+
+      <div id="templesSection" class="dash-section">
+
+  <div class="add-event-box">
+
+    <h2>కొత్త దేవాలయం జోడించండి</h2>
+
+    <input type="text" id="templeTitle" placeholder="దేవాలయం పేరు">
+
+    <div id="templeCardImageGrid" class="festival-card-upload-box">
+      <span>＋ Temple Card Image</span>
+    </div>
+
+    <input type="text" id="templeFooterQuote" placeholder="Footer Quote">
+
+    <h3>Sections</h3>
+
+    <div id="templeSectionsContainer"></div>
+
+    <button id="addTempleSectionBtn">
+      + Section Add
+    </button>
+
+    <button id="saveTempleBtn">
+      Temple Save
+    </button>
+
+    <p id="templeMessage"></p>
+
+  </div>
+
+  <h2 class="admin-section-title">అన్ని దేవాలయాలు</h2>
+
+  <div id="adminTemplesList"></div>
+
+</div>
+
+<!-- STORIES SECTION -->
+<div id="storiesSection" class="dash-section">
+
+  <div class="add-event-box">
+    <h2>కొత్త Story Category</h2>
+
+    <input type="text" id="storyCategoryTitle" placeholder="Category Name">
+
+    <div id="storyCategoryImageBox" class="festival-card-upload-box">
+      <span>＋ Category Card Image</span>
+    </div>
+
+    <button id="saveStoryCategoryBtn">Save Category</button>
+
+    <p id="storyCategoryMessage"></p>
+  </div>
+
+  <h2 class="admin-section-title">Story Categories</h2>
+
+  <div id="adminStoryCategoriesList"></div>
+
+  <hr>
+
+  <h2 class="admin-section-title">Story Parts</h2>
+
+  <select id="storyCategorySelect">
+    <option value="">Select Category</option>
+  </select>
+
+  <input type="text" id="storyPartTitle" placeholder="Part Name">
+
+  <div id="storyPartImageBox" class="festival-card-upload-box">
+    <span>＋ Part Card Image</span>
+  </div>
+
+  <button id="saveStoryPartBtn">Save Part</button>
+
+  <p id="storyPartMessage"></p>
+
+  <div id="adminStoryPartsList"></div>
+
+</div>
+
+      <!-- SLOKAS SECTION -->
+      <div id="slokasSection" class="dash-section">
+
+  <div class="add-event-box">
+
+    <h2>Sloka Category</h2>
+
+    <input type="text"
+           id="slokaCategoryTitle"
+           placeholder="Category Name">
+
+    <div id="slokaCategoryImageBox"
+         class="festival-card-upload-box">
+
+      <span>＋ Category Image</span>
+
+    </div>
+
+    <button id="saveSlokaCategoryBtn">
+      Save Category
+    </button>
+
+    <p id="slokaCategoryMessage"></p>
+
+  </div>
+
+  <h2 class="admin-section-title">
+    Sloka Categories
+  </h2>
+
+  <div id="adminSlokaCategoriesList"></div>
+ 
+
+<h2 class="admin-section-title">Slokas</h2>
+<select id="slokaDirectCategorySelect">
+  <option value="">Select Category</option>
+</select>
+
+<input type="text" id="slokaNumber" placeholder="Sloka Number">
+
+<textarea id="slokaText" placeholder="Sloka Text"></textarea>
+
+<textarea id="slokaTeluguMeaning" placeholder="Telugu Meaning"></textarea>
+
+<textarea id="slokaEnglishMeaning" placeholder="English Meaning"></textarea>
+
+<button id="saveSlokaBtn">
+  Save Sloka
+</button>
+
+<p id="slokaMessage"></p>
+
+<div id="adminSlokasList"></div>
+
+</div>
+
+      <!-- QUIZ CMS SECTION -->
+      <div id="newQuizSection" class="dash-section">
+
+        <div class="add-event-box">
+          <h2>Quiz CMS</h2>
+
+          <p style="color:white; text-align:center; line-height:1.8; margin-bottom:22px;">
+            Add, edit, delete, and manage all quiz questions from the separate Quiz CMS page.
+          </p>
+
+          <a href="quiz-cms.html" class="privacy-btn" style="display:inline-block; margin:auto;">
+            Open Quiz CMS
+          </a>
+        </div>
+
+      </div>
+
+      <!-- QUIZ PAGE SECTION -->
+      <div id="quizSection" class="dash-section">
+
+        <div class="add-event-box">
+          <h2>Quiz Page</h2>
+
+          <p style="color:white; text-align:center; line-height:1.8; margin-bottom:22px;">
+            Open the public quiz page to test the quiz UI and gameplay.
+          </p>
+
+          <a href="quiz.html" class="privacy-btn" style="display:inline-block; margin:auto;">
+            Open Quiz Page
+          </a>
+        </div>
+
+      </div>
+
+    <!-- ABOUT SECTION -->
+
+<div id="aboutSection" class="dash-section">
+
+  <h2 class="admin-section-title">
+    About Page Settings
+  </h2>
+
+  <div class="add-event-box">
+
+    <input
+      type="text"
+      id="aboutTitle"
+      placeholder="About Page Title">
+
+    <textarea
+      id="aboutDescription"
+      placeholder="About Description"></textarea>
+
+    <textarea
+      id="aboutMission"
+      placeholder="Mission"></textarea>
+
+    <textarea
+      id="aboutVision"
+      placeholder="Vision"></textarea>
+
+    <div
+      id="aboutPcBgBox"
+      class="festival-card-upload-box">
+
+      <span>＋ PC Background</span>
+
+    </div>
+
+    <div
+      id="aboutMobileBgBox"
+      class="festival-card-upload-box">
+
+      <span>＋ Mobile Background</span>
+
+    </div>
+
+    <button id="saveAboutSettingsBtn">
+      Save About Settings
+    </button>
+
+    <p id="aboutSettingsMessage"></p>
+
+  </div>
+
+  <hr>
+
+  <h2 class="admin-section-title">
+    Team Members
+  </h2>
+
+  <div class="add-event-box">
+
+    <input
+      type="text"
+      id="memberName"
+      placeholder="Member Name">
+
+    <input
+      type="text"
+      id="memberPosition"
+      placeholder="Member Position">
+
+    <textarea
+      id="memberDescription"
+      placeholder="Member Description"></textarea>
+
+    <div
+      id="memberImageBox"
+      class="festival-card-upload-box">
+
+      <span>＋ Member Image</span>
+
+    </div>
+
+    <button id="saveMemberBtn">
+      Save Member
+    </button>
+
+    <p id="memberMessage"></p>
+
+  </div>
+
+  <div id="adminMembersList"></div>
+
+</div>
+<div id="socialSection" class="dash-section">
+
+  <div class="add-event-box">
+
+    <h2>Social Links</h2>
+
+    <input
+      type="text"
+      id="instagramLink"
+      placeholder="Instagram URL">
+
+    <input
+      type="text"
+      id="youtubeLink"
+      placeholder="YouTube URL">
+
+    <input
+      type="text"
+      id="whatsappLink"
+      placeholder="WhatsApp URL">
+
+    <input
+      type="text"
+      id="facebookLink"
+      placeholder="Facebook URL">
+
+    <input
+      type="text"
+      id="emailLink"
+      placeholder="Email">
+    <input
+      type="text"
+      id="phoneNumber"
+      placeholder="Phone Number">
+    <input type="text" id="whatsappChannelLink" placeholder="WhatsApp Channel URL">
+    <button id="saveSocialLinksBtn">
+      Save Social Links
+    </button>
+
+    <p id="socialLinksMessage"></p>
+
+  </div>
+
+</div>
+<div id="homeCardsSection" class="dash-section">
+
+  <h2 class="admin-section-title">
+    Home Page Cards
+  </h2>
+
+  <div class="add-event-box">
+
+    <div id="eventsCardBox" class="festival-card-upload-box">
+      <span>＋ Events Card</span>
+    </div>
+
+    <div id="festivalsCardBox" class="festival-card-upload-box">
+      <span>＋ Festivals Card</span>
+    </div>
+
+    <div id="templesCardBox" class="festival-card-upload-box">
+      <span>＋ Temples Card</span>
+    </div>
+
+    <div id="storiesCardBox" class="festival-card-upload-box">
+      <span>＋ Stories Card</span>
+    </div>
+
+    <div id="slokasCardBox" class="festival-card-upload-box">
+      <span>＋ Slokas Card</span>
+    </div>
+
+    <div id="quizCardBox" class="festival-card-upload-box">
+      <span>＋ Quiz Card</span>
+    </div>
+
+    <button id="saveHomeCardsBtn">
+      Save Home Cards
+    </button>
+
+    <p id="homeCardsMessage"></p>
+
+  </div>
+
+</div>
+<div id="sponsorSection" class="dash-section">
+
+  <h2 class="admin-section-title">
+    Sponsor Popup
+  </h2>
+
+  <div class="add-event-box">
+
+    <div id="sponsorImageBox" class="festival-card-upload-box">
+      <span>＋ Sponsor Image</span>
+    </div>
+
+    <input type="text" id="sponsorLinkInput" placeholder="Sponsor Link (https://...)">
+
+    <button id="saveSponsorBtn">
+      Save Sponsor
+    </button>
+
+    <p id="sponsorMessage"></p>
+
+  </div>
+
+</div>
+<div id="qotdSection" class="dash-section">
+
+  <h2 class="admin-section-title">
+    Question of the Day
+  </h2>
+
+  <div class="add-event-box">
+
+    <input type="date" id="qotdDate">
+
+    <input type="text" id="qotdQuestionInput" placeholder="ప్రశ్న (Question)">
+
+    <input type="text" id="qotdOption0" placeholder="Option 1">
+    <input type="text" id="qotdOption1" placeholder="Option 2">
+    <input type="text" id="qotdOption2" placeholder="Option 3">
+    <input type="text" id="qotdOption3" placeholder="Option 4">
+
+    <select id="qotdCorrectSelect">
+      <option value="0">Correct: Option 1</option>
+      <option value="1">Correct: Option 2</option>
+      <option value="2">Correct: Option 3</option>
+      <option value="3">Correct: Option 4</option>
+    </select>
+
+    <button id="saveQotdBtn">
+      Save Question
+    </button>
+
+    <p id="qotdMessage"></p>
+
+  </div>
+
+  <h3 class="admin-section-title">
+    Scheduled Questions
+  </h3>
+
+  <div id="qotdList" class="cms-list"></div>
+
+</div>
+<div id="wordOfDaySection" class="dash-section">
+
+  <h2 class="admin-section-title">
+    Word of the Day
+  </h2>
+
+  <div class="add-event-box">
+
+    <input type="date" id="wordDate">
+
+    <textarea id="wordTextInput" placeholder="పదం / వాక్యం (Word / Sentence)"></textarea>
+
+    <button id="saveWordBtn">
+      Save Word
+    </button>
+
+    <p id="wordMessage"></p>
+
+  </div>
+
+  <h3 class="admin-section-title">
+    Scheduled Words
+  </h3>
+
+  <div id="wordList" class="cms-list"></div>
+
+</div>
+ <div id="backgroundsSection" class="dash-section">
+
+        <h2>Background Manager</h2>
+
+        <div class="bg-manager-box">
+
+          <div class="bg-row">
+            <h3>Home PC Background</h3>
+            <button class="bg-upload-btn" data-key="homePc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Home Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="homeMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Events PC Background</h3>
+            <button class="bg-upload-btn" data-key="eventsPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Events Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="eventsMobile">Upload</button>
+          </div>
+          <div class="bg-row">
+            <h3>Festivals PC Background</h3>
+            <button class="bg-upload-btn" data-key="festivalsPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Festivals Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="festivalsMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Temples PC Background</h3>
+            <button class="bg-upload-btn" data-key="templesPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Temples Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="templesMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Stories PC Background</h3>
+            <button class="bg-upload-btn" data-key="storiesPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Stories Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="storiesMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Slokas PC Background</h3>
+            <button class="bg-upload-btn" data-key="slokasPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Slokas Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="slokasMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Quiz PC Background</h3>
+            <button class="bg-upload-btn" data-key="quizPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Quiz Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="quizMobile">Upload</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script type="module" src="dashboard.js"></script>
+
+</body>
+
+</html>

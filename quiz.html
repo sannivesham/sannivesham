@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz | Sannivesham</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quiz.css">
+
+</head>
+
+<body>
+
+    <div class="quiz-bg"></div>
+
+    <nav class="glass-navbar">
+
+        <a href="index.html#categories">← Back</a>
+
+        <a href="index.html">Home</a>
+
+        <a href="quiz.html">Quiz</a>
+
+    </nav>
+
+    <section class="quiz-page">
+
+        <div class="quiz-title-box">
+
+            <h1>సన్నివేశం క్విజ్</h1>
+
+            <p>
+                Test your knowledge of Telugu culture, Indian traditions,
+                temples, festivals and scriptures.
+            </p>
+
+        </div>
+
+        <div class="general-quiz-box">
+
+            <h2>General Quiz</h2>
+
+            <div class="difficulty-buttons">
+
+                <button id="easyQuizBtn">🟢 Easy</button>
+
+                <button id="mediumQuizBtn">🟡 Medium</button>
+
+                <button id="hardQuizBtn">🔴 Hard</button>
+
+            </div>
+
+            <button
+                class="start-quiz-btn"
+                id="startGeneralQuiz">
+
+                ▶ Start Quiz
+
+            </button>
+
+            <button
+                class="leaderboard-btn"
+                id="generalLeaderboardBtn">
+
+                🏆 Leaderboard
+
+            </button>
+
+        </div>
+
+        <h2 class="quiz-section-title">
+
+            Category Quizzes
+
+        </h2>
+
+        <div class="quiz-category-grid">
+
+            <!-- ================= Hari ================= -->
+
+            <div class="quiz-category-card" data-category="hari">
+
+                <img src="images/hari.png" alt="Hari">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>Hari</h2>
+
+                    <p class="community-score">
+                        Community Score
+                    </p>
+
+                    <span id="hariScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+
+                            ▶ Start Quiz
+
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+
+                            🏆 Leaderboard
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+                <!-- ================= Hara ================= -->
+
+            <div class="quiz-category-card" data-category="hara">
+
+                <img src="images/hara.png" alt="Hara">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>Hara</h2>
+
+                    <p class="community-score">
+                        Community Score
+                    </p>
+
+                    <span id="haraScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ Start Quiz
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 Leaderboard
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= Devi ================= -->
+
+            <div class="quiz-category-card" data-category="devi">
+
+                <img src="images/devi.png" alt="Devi">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>Devi</h2>
+
+                    <p class="community-score">
+                        Community Score
+                    </p>
+
+                    <span id="deviScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ Start Quiz
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 Leaderboard
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= Telugu ================= -->
+
+            <div class="quiz-category-card" data-category="telugu">
+
+                <img src="images/telugu.png" alt="Telugu">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>Telugu</h2>
+
+                    <p class="community-score">
+                        Community Score
+                    </p>
+
+                    <span id="teluguScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ Start Quiz
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 Leaderboard
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="simple-footer">
+
+        <script type="module" src="social-links.js"></script>
+
+        <a
+            href="privacy-policy.html"
+            class="privacy-btn">
+
+            Privacy Policy
+
+        </a>
+
+        <a
+            href="terms-and-conditions.html"
+            class="privacy-btn">
+
+            Terms & Conditions
+
+        </a>
+
+        <p>
+            © 2026 Sannivesham
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script type="module" src="quiz.js"></script>
+
+    <script type="module">
+      import { db } from "./firebase-config.js";
+
+      import {
+        doc,
+        getDoc
+      } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+      async function loadQuizBackground() {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+        const bg = document.querySelector(".quiz-bg");
+        if (!bg) return;
+
+        if (window.innerWidth <= 700 && data.quizMobile) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
+        } else if (data.quizPc) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+        }
+      }
+
+      loadQuizBackground();
+    </script>
+
+</body>
+
+</html>        

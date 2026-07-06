@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Quiz | Sannivesham</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="quiz.css">
+
+</head>
+
+<body>
+
+<div class="quiz-bg"></div>
+
+<section class="play-quiz-page">
+
+<div class="play-quiz-card">
+
+<div class="quiz-top">
+
+<h2 id="quizTypeTitle">
+
+General Quiz
+
+</h2>
+
+<div id="timer">
+
+30
+
+</div>
+
+</div>
+
+
+<div class="progress-container">
+
+<div
+class="progress-bar"
+id="progressBar">
+
+</div>
+
+</div>
+
+
+<p
+class="question-count"
+id="questionCount">
+
+Question 1 / 10
+
+</p>
+
+
+<h2
+class="quiz-question"
+id="quizQuestion">
+
+Loading...
+
+</h2>
+
+
+<div
+class="quiz-options">
+
+<button class="option-btn"></button>
+
+<button class="option-btn"></button>
+
+<button class="option-btn"></button>
+
+<button class="option-btn"></button>
+
+</div>
+
+
+<div
+class="quiz-bottom-buttons">
+
+<button
+id="nextQuestionBtn">
+
+Next →
+
+</button>
+
+<button
+id="quitQuizBtn">
+
+Quit Quiz
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+<script type="module"
+src="play-quiz.js"></script>
+
+<script type="module">
+  import { db } from "./firebase-config.js";
+
+  import {
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  async function loadQuizBackground() {
+    const snap = await getDoc(doc(db, "settings", "backgrounds"));
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const bg = document.querySelector(".quiz-bg");
+    if (!bg) return;
+
+    if (window.innerWidth <= 700 && data.quizMobile) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
+    } else if (data.quizPc) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+    }
+  }
+
+  loadQuizBackground();
+</script>
+
+</body>
+
+</html>

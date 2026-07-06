@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>శ్లోకాలు - సన్నివేశం</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="slokas-body">
+
+  <!-- BACKGROUND -->
+  <div class="slokas-bg"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+
+    <div class="loader-content">
+
+      <img src="images/logo.png"
+           class="loader-logo"
+           alt="Sannivesham Logo">
+
+      <h1>సన్నివేశం</h1>
+
+      <div class="loader-line"></div>
+
+    </div>
+
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="glass-navbar">
+
+    <a href="index.html#categories">
+      ← వెనుకకు
+    </a>
+
+    <a href="index.html">
+      ప్రారంభం
+    </a>
+
+    <a href="gita-slokas.html">
+      శ్లోకాలు
+    </a>
+
+  </nav>
+
+  <!-- PAGE -->
+  <section class="slokas-page">
+
+    <div class="slokas-title-box">
+
+      <h1>శ్లోకాలు</h1>
+
+      <p>
+        భగవద్గీత, సహస్రనామాలు, సుప్రభాతాలు మరియు ఇతర ఆధ్యాత్మిక శ్లోకాల సమాహారం
+      </p>
+
+    </div>
+
+    <div class="slokas-grid"></div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="simple-footer">
+
+    <p class="footer-quote">
+      ✨ గీతా జ్ఞానం జీవితానికి మార్గదర్శకం ✨
+    </p>
+
+<script type="module" src="social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script type="module">
+
+    import { db } from "./firebase-config.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadSlokasBackground() {
+
+      const snap =
+      await getDoc(
+        doc(db, "settings", "backgrounds")
+      );
+
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+
+      const bg =
+      document.querySelector(".slokas-bg");
+
+      if (!bg) return;
+
+      if (
+        window.innerWidth <= 700 &&
+        data.slokasMobile
+      ) {
+
+        bg.style.backgroundImage =
+        `linear-gradient(
+          rgba(10,5,0,0.60),
+          rgba(10,5,0,0.65)
+        ),
+        url("${data.slokasMobile}")`;
+
+      }
+
+      else if (data.slokasPc) {
+
+        bg.style.backgroundImage =
+        `linear-gradient(
+          rgba(10,5,0,0.65),
+          rgba(10,5,0,0.70)
+        ),
+        url("${data.slokasPc}")`;
+
+      }
+
+    }
+
+    loadSlokasBackground();
+
+  </script>
+
+  <script type="module" src="slokas.js"></script>
+
+</body>
+</html>
