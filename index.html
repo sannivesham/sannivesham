@@ -386,16 +386,7 @@
     document.getElementById("googleLoginBtn").addEventListener("click", async () => {
       try {
         const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider);
-        import {
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        const result = await signInWithPopup(auth, provider);
         await checkAndSetName(result.user);
       } catch (e) {
         document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
