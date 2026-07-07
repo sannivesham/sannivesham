@@ -383,15 +383,10 @@
     });
 
     // ─── GOOGLE LOGIN ─────────────────────────────────────
-    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-      }
-    });
+   document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  await signInWithRedirect(auth, provider);
+});
 
     // ─── PHONE LOGIN ──────────────────────────────────────
     document.getElementById("sendOtpBtn").addEventListener("click", async () => {
