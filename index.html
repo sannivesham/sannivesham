@@ -383,15 +383,57 @@
     });
 
     // ─── GOOGLE LOGIN ─────────────────────────────────────
-   document.getElementById("googleLoginBtn").addEventListener("click", async () => {
-  const provider = new GoogleAuthProvider();
-  await signInWithRedirect(auth, provider);
-});
+    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
+      }
+    });
 
     // ─── PHONE LOGIN ──────────────────────────────────────
+    document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+      const phone = document.getElementById("phoneInput").value.trim();
+      if (!phone) {
+        document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి";
+        return;
+      }
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+        }
+let formattedPhone = phone.replace(/\s+/g, "");
+if (!formattedPhone.startsWith("+")) {
+  formattedPhone = "+91" + formattedPhone;
+}
+confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
+        showStep("loginStep2");
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
+      }
+    });
 
+    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+      const otp = document.getElementById("otpInput").value.trim();
+      try {
+        const result = await confirmationResult.confirm(otp);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("otpMsg").innerText = "OTP తప్పుగా ఉంది";
+      }
+    });
 
-    
+    async function checkAndSetName(user) {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (!userSnap.exists()) {
+        showStep("loginStep3");
+      } else {
+        hideModal("loginModal");
+      }
+    }
+
     // ─── SAVE NAME ────────────────────────────────────────
     document.getElementById("saveNameBtn").addEventListener("click", async () => {
       const name = document.getElementById("nameInput").value.trim();
@@ -431,7 +473,7 @@
         }
       } catch (e) { console.log("Background Load Error:", e); }
     }
-
+    loadHomeBackground();
 
     // ─── HOME CARDS ──────────────────────────────────────
     async function loadHomeCards() {
