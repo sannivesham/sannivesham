@@ -39,7 +39,17 @@
         <button id="googleLoginBtn" class="auth-google-btn">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
         </button>
-       <p id="loginMsg" class="auth-msg"></p>
+        <div class="auth-divider">లేదా</div>
+        <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్" class="auth-input">
+        <div id="recaptcha-container"></div>
+        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
+        <p id="loginMsg" class="auth-msg"></p>
+      </div>
+
+      <div id="loginStep2" style="display:none;">
+        <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
+        <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
+        <p id="otpMsg" class="auth-msg"></p>
       </div>
 
       <div id="loginStep3" style="display:none;">
