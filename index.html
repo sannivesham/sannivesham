@@ -116,9 +116,13 @@
             <span>🧩 చిత్ర గడులు (Sliding Puzzle):</span>
             <strong id="statsSlidingPuzzle" style="color: var(--gold);">0 చాప్టర్లు</strong>
           </div>
-          <div style="display: flex; justify-content: space-between; padding-bottom: 2px;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
             <span>🔢 సుడోకు (Sudoku):</span>
             <strong id="statsSudoku" style="color: var(--gold);">0 లెవెల్స్</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 2px;">
+            <span>📍 జతపరుచు (Connect Dots):</span>
+            <strong id="statsConnectDots" style="color: var(--gold);">0 లెవెల్స్</strong>
           </div>
         </div>
       </div>
@@ -156,6 +160,10 @@
         <a href="https://sannivesham.github.io/sudoko/" class="game-sub-card">
           <div class="game-sub-icon">🔢</div>
           <div class="game-sub-title">సుడోకు</div>
+        </a>
+        <a href="https://sannivesham.github.io/connect-dots/" class="game-sub-card">
+          <div class="game-sub-icon">📍</div>
+          <div class="game-sub-title">జతపరుచు</div>
         </a>
       </div>
     </div>
@@ -216,7 +224,7 @@
         సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
         ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
         ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
-        మా ప్రధాన లక్ష్యం.
+        మా ప్రధాన लक्ष्यం.
       </p>
       <p>
         ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
@@ -397,10 +405,12 @@
           const wsCount = progress.wordSearch?.completedLevels?.length || 0;
           const spCount = progress.slidingPuzzle?.completedLevels?.length || 0;
           const sdCount = progress.sudoku?.completedLevels?.length || 0;
+          const cdCount = progress.connectDots?.completedLevels?.length || 0;
 
           document.getElementById("statsWordSearch").innerText = `${wsCount} చాప్టర్లు`;
           document.getElementById("statsSlidingPuzzle").innerText = `${spCount} చాప్టర్లు`;
           document.getElementById("statsSudoku").innerText = `${sdCount} లెవెల్స్`;
+          document.getElementById("statsConnectDots").innerText = `${cdCount} లెవెల్స్`;
         }
       } else {
         document.getElementById("profileBtn").innerText = "👤";
@@ -533,7 +543,8 @@
         gameProgress: {
           wordSearch: { completedLevels: [], metrics: {} },
           slidingPuzzle: { completedLevels: [], metrics: {} },
-          sudoku: { completedLevels: [], metrics: {} }
+          sudoku: { completedLevels: [], metrics: {} },
+          connectDots: { completedLevels: [], metrics: {} }
         }
       });
       document.getElementById("profileName").innerText = name;
