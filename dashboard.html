@@ -25,7 +25,7 @@
   <button class="dash-btn active" data-section="eventsSection">Events</button>
   <button class="dash-btn" data-section="festivalsSection">Festivals</button>
   <button class="dash-btn" data-section="templesSection">Temples</button>
-  <button class="dash-btn" data-section="storiesSection">Stories</button>
+  <button class="dash-btn" data-section="librarySection">Library</button>
   <button class="dash-btn" data-section="slokasSection">Slokas</button>
   <button class="dash-btn" data-section="quizSection">Quiz</button>
 
@@ -163,48 +163,81 @@
 </div>
 
 <!-- STORIES SECTION -->
-<div id="storiesSection" class="dash-section">
+
+<!-- LIBRARY SECTION -->
+<div id="librarySection" class="dash-section">
 
   <div class="add-event-box">
-    <h2>కొత్త Story Category</h2>
+    <h2>కొత్త Library Category</h2>
 
-    <input type="text" id="storyCategoryTitle" placeholder="Category Name">
+    <input type="text" id="libCategoryTitle" placeholder="Category Title (e.g. స్తోత్రాలు)">
+    <input type="text" id="libCategoryEmoji" placeholder="Emoji (optional, e.g. 🕉️)">
 
-    <div id="storyCategoryImageBox" class="festival-card-upload-box">
-      <span>＋ Category Card Image</span>
+    <div id="libCategoryImageBox" class="festival-card-upload-box">
+      <span>＋ Category Image</span>
     </div>
 
-    <button id="saveStoryCategoryBtn">Save Category</button>
+    <input type="number" id="libCategoryOrder" placeholder="Order (optional, lower shows first)">
 
-    <p id="storyCategoryMessage"></p>
+    <button id="saveLibCategoryBtn">Save Category</button>
+
+    <p id="libCategoryMessage"></p>
   </div>
 
-  <h2 class="admin-section-title">Story Categories</h2>
+  <h2 class="admin-section-title">Library Categories</h2>
 
-  <div id="adminStoryCategoriesList"></div>
+  <div id="adminLibCategoriesList"></div>
 
   <hr>
 
-  <h2 class="admin-section-title">Story Parts</h2>
+  <div class="add-event-box">
+    <h2>కొత్త Subcategory</h2>
 
-  <select id="storyCategorySelect">
-    <option value="">Select Category</option>
-  </select>
+    <select id="libSubcategoryCategorySelect">
+      <option value="">Select Category</option>
+    </select>
 
-  <input type="text" id="storyPartTitle" placeholder="Part Name">
+    <input type="text" id="libSubcategoryTitle" placeholder="Subcategory Title (e.g. Ganesha Stotras)">
 
-  <div id="storyPartImageBox" class="festival-card-upload-box">
-    <span>＋ Part Card Image</span>
+    <input type="number" id="libSubcategoryOrder" placeholder="Order (optional, lower shows first)">
+
+    <button id="saveLibSubcategoryBtn">Save Subcategory</button>
+
+    <p id="libSubcategoryMessage"></p>
   </div>
 
-  <button id="saveStoryPartBtn">Save Part</button>
+  <h2 class="admin-section-title">Subcategories</h2>
 
-  <p id="storyPartMessage"></p>
+  <div id="adminLibSubcategoriesList"></div>
 
-  <div id="adminStoryPartsList"></div>
+  <hr>
+
+  <div class="add-event-box">
+    <h2>కొత్త Content</h2>
+
+    <select id="libContentSubcategorySelect">
+      <option value="">Select Subcategory</option>
+    </select>
+
+    <input type="text" id="libContentTitle" placeholder="Content Title">
+
+    <textarea id="libContentText" placeholder="Telugu Text"></textarea>
+
+    <input type="text" id="libContentAudioUrl" placeholder="Audio URL (optional - YouTube/Drive link)">
+
+    <input type="number" id="libContentOrder" placeholder="Order (optional, lower shows first)">
+
+    <button id="saveLibContentBtn">Save Content</button>
+
+    <p id="libContentMessage"></p>
+  </div>
+
+  <h2 class="admin-section-title">Content</h2>
+
+  <div id="adminLibContentList"></div>
 
 </div>
-
+      
       <!-- SLOKAS SECTION -->
       <div id="slokasSection" class="dash-section">
 
