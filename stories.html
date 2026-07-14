@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="te">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>కథలు - సన్నివేశం</title>
+  <title>గ్రంథాలయం - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body class="stories-body">
-
   <div class="stories-bg"></div>
-
   <div id="loader">
     <div class="loader-content">
       <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
@@ -19,55 +15,40 @@
       <div class="loader-line"></div>
     </div>
   </div>
-
   <nav class="glass-navbar">
     <a href="index.html#categories">← వెనుకకు</a>
     <a href="index.html">ప్రారంభం</a>
-    <a href="stories.html">కథలు</a>
+    <a href="stories.html">గ్రంథాలయం</a>
   </nav>
-
   <section class="stories-page">
-
     <div class="stories-title-box">
-      <h1>కథలు</h1>
-      <p>ఇతిహాసాలు, పురాణాలు మరియు నీతి కథల సమాహారం</p>
+      <h1>గ్రంథాలయం</h1>
+      <p>స్తోత్రాలు, సహస్రనామాలు మరియు ఆధ్యాత్మిక గ్రంథాల సమాహారం</p>
     </div>
-
 <div class="stories-grid" id="storiesGrid"></div>
-
   </section>
-
   <footer class="simple-footer">
-    <p class="footer-quote">✨ కథలు మన సంస్కృతికి జ్ఞాన దీపాలు ✨</p>
+    <p class="footer-quote">✨ గ్రంథాలయం మన సంస్కృతికి జ్ఞాన నిధి ✨</p>
 <script type="module" src="social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
   </footer>
-
   <script src="script.js"></script>
   <script type="module">
     import { db } from "./firebase-config.js";
-
     import {
       doc,
       getDoc
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
     async function loadStoriesBackground() {
       const snap = await getDoc(doc(db, "settings", "backgrounds"));
-
       if (!snap.exists()) return;
-
       const data = snap.data();
-
       const bg = document.querySelector(".stories-bg");
-
       if (!bg) return;
-
       if (window.innerWidth <= 700 && data.storiesMobile) {
         bg.style.backgroundImage =
           `linear-gradient(rgba(10,5,0,0.60),
         rgba(10,5,0,0.65)),
         url("${data.storiesMobile}")`;
-
       } else if (data.storiesPc) {
         bg.style.backgroundImage =
           `linear-gradient(rgba(10,5,0,0.65),
@@ -75,20 +56,15 @@
         url("${data.storiesPc}")`;
       }
     }
-
     loadStoriesBackground();
   </script>
-
   <script type="module" src="stories.js"></script>
   <audio id="bgMusic" loop>
   <source src="music/traditional.mp3" type="audio/mpeg">
 </audio>
-
 <button id="musicBtn" class="music-btn">
   🔊
 </button>
-
 <script src="music.js"></script>
 </body>
-
 </html>
