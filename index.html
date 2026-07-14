@@ -514,30 +514,21 @@
     });
 
     // Background
-   async function loadHomeBackground() {
-  try {
-    const snap = await getDoc(doc(db, "settings", "backgrounds"));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    const bg = document.querySelector(".home-bg");
-    if (!bg) return;
-    
-    // Explicit full-property assignment blocks ensuring mobile app wrappers interpret the styling values seamlessly
-    if (window.innerWidth <= 700 && data.homeMobile) {
-      bg.style.background = `linear-gradient(rgba(10,5,0,0.45), rgba(10,5,0,0.45)), url("${data.homeMobile}")`;
-      bg.style.backgroundSize = "cover";
-      bg.style.backgroundPosition = "center top";
-      bg.style.backgroundRepeat = "no-repeat";
-    } else if (data.homePc) {
-      bg.style.background = `linear-gradient(rgba(10,5,0,0.60), rgba(10,5,0,0.65)), url("${data.homePc}")`;
-      bg.style.backgroundSize = "cover";
-      bg.style.backgroundPosition = "center top";
-      bg.style.backgroundRepeat = "no-repeat";
+    async function loadHomeBackground() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".home-bg");
+        if (!bg) return;
+        if (window.innerWidth <= 700 && data.homeMobile) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.55),rgba(10,5,0,0.60)),url("${data.homeMobile}")`;
+        } else if (data.homePc) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
+        }
+      } catch (e) {}
     }
-  } catch (e) { 
-    console.log("Background Load Error:", e); 
-  }
-}
+    loadHomeBackground();
 
     // Home cards
     async function loadHomeCards() {
