@@ -1826,3 +1826,68 @@ if (saveQuizBtn) {
     document.getElementById("newQuizAnswer").selectedIndex = 0;
   });
 }
+
+/* =================================
+   LIBRARY CATEGORIES CMS SUBSYSTEM
+==================================== */
+const libCategoryImageBox = document.getElementById("libraryCategoryImageBox") || document.getElementById("categoryImageBox");
+const saveLibCategoryBtn = document.getElementById("saveLibraryCategoryBtn") || document.getElementById("saveCategoryBtn");
+
+// Handles interactive selection & image ingestion via Cloudinary
+if (libCategoryImageBox) {
+  libCategoryImageBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+
+    libCategoryImageBox.dataset.image = url;
+    libCategoryImageBox.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:4px;">`;
+  });
+}
+
+// Fires state mutations back up to Firestore database instance
+if (saveLibCategoryBtn) {
+  saveLibCategoryBtn.addEventListener("click", async () => {
+    const titleInput = document.getElementById("libraryCategoryTitle") || document.getElementById("categoryTitle") || document.querySelector('input[placeholder*="Title"]');
+    const emojiInput = document.getElementById("libraryCategoryEmoji") || document.getElementById("categoryEmoji") || document.querySelector('input[placeholder*="Emoji"]');
+    const orderInput = document.getElementById("libraryCategoryOrder") || document.getElementById("categoryOrder") || document.querySelector('input[placeholder*="order"]');
+    
+    const title = titleInput ? titleInput.value.trim() : "";
+    const emoji = emojiInput ? emojiInput.value.trim() : "";
+    const order = orderInput ? parseInt(orderInput.value.trim()) : 0;
+    const cardImage = libCategoryImageBox ? (libCategoryImageBox.dataset.image || "") : "";
+
+    if (!cardImage) {
+      alert("⚠️ దయచేసి ఒక చిత్రాన్ని అప్‌లోడ్ చేయండి (Please upload a category image first)");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "libraryCategories"), {
+        title: title || "Untitled Category",
+        emoji: emoji || "",
+        order: isNaN(order) ? 999 : order,
+        cardImage,
+        createdAt: serverTimestamp()
+      });
+
+      alert("✅ వర్గం విజయవంతంగా సేవ్ అయింది! (Library Category Saved)");
+      
+      // Cleanup DOM Element States on Successful Add
+      if (titleInput) titleInput.value = "";
+      if (emojiInput) emojiInput.value = "";
+      if (orderInput) orderInput.value = "";
+      if (libCategoryImageBox) {
+        delete libCategoryImageBox.dataset.image;
+        libCategoryImageBox.innerHTML = `+ Category Image`;
+      }
+      
+      if (typeof loadLibraryCategoriesAdmin === "function") {
+        loadLibraryCategoriesAdmin();
+      }
+
+    } catch (error) {
+      console.error("Error saving library category:", error);
+      alert("❌ సేవ్ చేయడం విఫలమైంది: " + error.message);
+    }
+  });
+}
