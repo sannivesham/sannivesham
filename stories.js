@@ -1,44 +1,39 @@
 import { db } from "./firebase-config.js";
-
 import {
   collection,
-  getDocs,
-  query,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const storiesGrid = document.getElementById("storiesGrid");
 
-async function loadStoryCategories() {
+async function loadLibraryCategories() {
+  const snapshot = await getDocs(collection(db, "libraryCategories"));
 
-  const q = query(
-    collection(db, "storyCategories"),
-    orderBy("createdAt", "asc")
-  );
+  let categories = [];
+  snapshot.forEach((docItem) => {
+    categories.push({ id: docItem.id, ...docItem.data() });
+  });
 
-  const snapshot = await getDocs(q);
+  categories.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
 
   storiesGrid.innerHTML = "";
 
-  snapshot.forEach((docItem) => {
-
-    const category = docItem.data();
-
+  categories.forEach((category) => {
     storiesGrid.innerHTML += `
-      <a href="story-parts.html?category=${docItem.id}"
+      <a href="story-parts.html?category=${category.id}"
          class="story-card">
-
-        <img src="${category.cardImage}"
+        <img src="${category.image}"
              alt="${category.title}">
-
         <div class="story-name">
-          ${category.title}
+          ${category.emoji ? category.emoji + " " : ""}${category.title}
         </div>
-
       </a>
     `;
   });
-
 }
 
-loadStoryCategories();
+loadLibraryCategories();
