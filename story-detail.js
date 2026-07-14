@@ -1,52 +1,64 @@
 import { db } from "./firebase-config.js";
-
 import {
   doc,
-  getDoc
+  getDoc,
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
-const storyId = params.get("id");
-
+const subcategoryId = params.get("id");
 const detailBox = document.getElementById("storyDetailBox");
 
-async function loadStoryDetail() {
-  if (!storyId) {
-    detailBox.innerHTML = "<h2>Story Not Found</h2>";
+async function loadLibraryContent() {
+  if (!subcategoryId) {
+    detailBox.innerHTML = "<h2>Content Not Found</h2>";
     return;
   }
 
-  const snap = await getDoc(doc(db, "storyParts", storyId));
-
-  if (!snap.exists()) {
-    detailBox.innerHTML = "<h2>Story Not Found</h2>";
+  const subSnap = await getDoc(doc(db, "librarySubcategories", subcategoryId));
+  if (!subSnap.exists()) {
+    detailBox.innerHTML = "<h2>Content Not Found</h2>";
     return;
   }
+  const subTitle = subSnap.data().title || "";
 
-  const story = snap.data();
+  const snapshot = await getDocs(collection(db, "libraryContent"));
 
-  let sectionsHTML = "";
+  let items = [];
+  snapshot.forEach((docItem) => {
+    const data = docItem.data();
+    if (data.subcategoryId === subcategoryId) {
+      items.push({ id: docItem.id, ...data });
+    }
+  });
 
-  (story.sections || []).forEach((section) => {
-    sectionsHTML += `
+  items.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
+
+  let contentHTML = "";
+
+  items.forEach((item) => {
+    contentHTML += `
       <div class="festival-section">
-        <h2>${section.title || ""}</h2>
-
+        <h2>${item.title || ""}</h2>
+        <p>${(item.text || "").replace(/\n/g, "<br>")}</p>
         ${
-          section.image
-            ? `<img src="${section.image}" class="festival-section-image">`
+          item.audioUrl
+            ? `<a href="${item.audioUrl}" target="_blank" class="privacy-btn">🔊 వినండి</a>`
             : ""
         }
-
-        <p>${(section.content || "").replace(/\n/g, "<br>")}</p>
       </div>
     `;
   });
 
   detailBox.innerHTML = `
-    <h1>${story.title}</h1>
-    ${sectionsHTML || "<p>ఇంకా కథ వివరాలు జోడించలేదు.</p>"}
+    <h1>${subTitle}</h1>
+    ${contentHTML || "<p>ఇంకా వివరాలు జోడించలేదు.</p>"}
   `;
 }
 
-loadStoryDetail();
+loadLibraryContent();
