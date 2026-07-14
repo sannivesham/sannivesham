@@ -1128,160 +1128,85 @@ async function openTempleInlineEditor(id) {
   });
 }
 loadAdminTemples();
-// STORIES CMS - CARD IMAGE
 
-const storyCardBox = document.getElementById("storyCardImageGrid");
 
-if (storyCardBox) {
-  storyCardBox.addEventListener("click", async () => {
+// LIBRARY CATEGORY CMS
+
+const libCategoryImageBox = document.getElementById("libCategoryImageBox");
+
+if (libCategoryImageBox) {
+  libCategoryImageBox.addEventListener("click", async () => {
     const url = await uploadImage();
     if (!url) return;
 
-    storyCardBox.dataset.image = url;
-    storyCardBox.innerHTML = `<img src="${url}">`;
-  });
-}
-// STORY SECTIONS
-
-const addStorySectionBtn =
-document.getElementById("addStorySectionBtn");
-
-const storySectionsContainer =
-document.getElementById("storySectionsContainer");
-
-if (
-  addStorySectionBtn &&
-  storySectionsContainer
-) {
-
-  addStorySectionBtn.addEventListener(
-    "click",
-    () => {
-
-      const box = document.createElement("div");
-
-      box.className =
-      "festival-section-box";
-
-      box.innerHTML = `
-
-        <h4>Story Section</h4>
-
-        <input
-          type="text"
-          placeholder="Section Title"
-          class="story-section-title">
-
-        <textarea
-          placeholder="Section Content"
-          class="story-section-content">
-        </textarea>
-
-        <div
-          class="section-image-slot story-section-image">
-
-          <span>＋ Story Image</span>
-
-        </div>
-
-        <button
-          class="remove-story-section-btn">
-
-          Delete Section
-
-        </button>
-      `;
-
-      storySectionsContainer.appendChild(box);
-
-      const imageSlot =
-      box.querySelector(".story-section-image");
-
-      imageSlot.addEventListener(
-        "click",
-        async () => {
-
-          const url = await uploadImage();
-
-          if (!url) return;
-
-          imageSlot.dataset.image = url;
-
-          imageSlot.innerHTML =
-          `<img src="${url}">`;
-
-        }
-      );
-
-      box.querySelector(
-        ".remove-story-section-btn"
-      ).addEventListener(
-        "click",
-        () => box.remove()
-      );
-
-    }
-  );
-
-}
-// STORY CATEGORY CMS
-
-const storyCategoryImageBox = document.getElementById("storyCategoryImageBox");
-
-if (storyCategoryImageBox) {
-  storyCategoryImageBox.addEventListener("click", async () => {
-    const url = await uploadImage();
-    if (!url) return;
-
-    storyCategoryImageBox.dataset.image = url;
-    storyCategoryImageBox.innerHTML = `<img src="${url}">`;
+    libCategoryImageBox.dataset.image = url;
+    libCategoryImageBox.innerHTML = `<img src="${url}">`;
   });
 }
 
-const saveStoryCategoryBtn = document.getElementById("saveStoryCategoryBtn");
+const saveLibCategoryBtn = document.getElementById("saveLibCategoryBtn");
 
-if (saveStoryCategoryBtn) {
-  saveStoryCategoryBtn.addEventListener("click", async () => {
-    const title = document.getElementById("storyCategoryTitle").value.trim();
-    const cardImage = storyCategoryImageBox.dataset.image || "";
+if (saveLibCategoryBtn) {
+  saveLibCategoryBtn.addEventListener("click", async () => {
+    const title = document.getElementById("libCategoryTitle").value.trim();
+    const emoji = document.getElementById("libCategoryEmoji").value.trim();
+    const orderValue = document.getElementById("libCategoryOrder").value.trim();
+    const image = libCategoryImageBox.dataset.image || "";
 
-    if (!title || !cardImage) {
-      document.getElementById("storyCategoryMessage").innerText =
-        "Category name and image required";
+    if (!title || !image) {
+      document.getElementById("libCategoryMessage").innerText =
+        "Category title and image required";
       return;
     }
 
-    await addDoc(collection(db, "storyCategories"), {
+    await addDoc(collection(db, "libraryCategories"), {
       title,
-      cardImage,
+      emoji,
+      image,
+      order: orderValue ? Number(orderValue) : Date.now(),
       createdAt: serverTimestamp()
     });
 
-    document.getElementById("storyCategoryMessage").innerText =
+    document.getElementById("libCategoryTitle").value = "";
+    document.getElementById("libCategoryEmoji").value = "";
+    document.getElementById("libCategoryOrder").value = "";
+    libCategoryImageBox.dataset.image = "";
+    libCategoryImageBox.innerHTML = `<span>＋ Category Image</span>`;
+
+    document.getElementById("libCategoryMessage").innerText =
       "✅ Category saved";
 
-    loadStoryCategoriesAdmin();
+    loadLibCategoriesAdmin();
+    loadLibCategoryOptions();
   });
 }
 
-async function loadStoryCategoriesAdmin() {
-  const list = document.getElementById("adminStoryCategoriesList");
+async function loadLibCategoriesAdmin() {
+  const list = document.getElementById("adminLibCategoriesList");
   if (!list) return;
 
-  const q = query(collection(db, "storyCategories"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
+  const snapshot = await getDocs(collection(db, "libraryCategories"));
+
+  let categories = [];
+  snapshot.forEach((item) => {
+    categories.push({ id: item.id, ...item.data() });
+  });
+
+  categories.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
 
   list.innerHTML = "";
 
-  snapshot.forEach((item) => {
-    const data = item.data();
-
+  categories.forEach((data) => {
     list.innerHTML += `
       <div class="admin-event-card">
-        <img src="${data.cardImage}" alt="${data.title}">
+        <img src="${data.image}" alt="${data.title}">
         <div>
-          <h3>${data.title}</h3>
-          <button class="delete-story-category-btn" data-id="${item.id}">
+          <h3>${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
+          <button class="delete-lib-category-btn" data-id="${data.id}">
             Delete
           </button>
         </div>
@@ -1289,301 +1214,305 @@ async function loadStoryCategoriesAdmin() {
     `;
   });
 
-  document.querySelectorAll(".delete-story-category-btn").forEach((btn) => {
+  list.querySelectorAll(".delete-lib-category-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      if (!confirm("Delete this category?")) return;
+      if (!confirm("Delete this category? Its subcategories/content will remain orphaned unless deleted separately.")) return;
 
-      await deleteDoc(doc(db, "storyCategories", btn.dataset.id));
-      loadStoryCategoriesAdmin();
+      await deleteDoc(doc(db, "libraryCategories", btn.dataset.id));
+      loadLibCategoriesAdmin();
+      loadLibCategoryOptions();
     });
   });
 }
 
-loadStoryCategoriesAdmin();
-// STORY PARTS CMS
-
-const storyPartImageBox = document.getElementById("storyPartImageBox");
-
-if (storyPartImageBox) {
-  storyPartImageBox.addEventListener("click", async () => {
-    const url = await uploadImage();
-    if (!url) return;
-
-    storyPartImageBox.dataset.image = url;
-    storyPartImageBox.innerHTML = `<img src="${url}">`;
-  });
-}
-
-async function loadStoryCategoryOptions() {
-  const select = document.getElementById("storyCategorySelect");
+async function loadLibCategoryOptions() {
+  const select = document.getElementById("libSubcategoryCategorySelect");
   if (!select) return;
 
-  const q = query(collection(db, "storyCategories"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
+  const snapshot = await getDocs(collection(db, "libraryCategories"));
+
+  let categories = [];
+  snapshot.forEach((item) => {
+    categories.push({ id: item.id, ...item.data() });
+  });
+
+  categories.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
 
   select.innerHTML = `<option value="">Select Category</option>`;
 
-  snapshot.forEach((item) => {
-    const data = item.data();
-
+  categories.forEach((data) => {
     select.innerHTML += `
-      <option value="${item.id}">
-        ${data.title}
+      <option value="${data.id}">
+        ${data.emoji ? data.emoji + " " : ""}${data.title}
       </option>
     `;
   });
 }
 
-const saveStoryPartBtn = document.getElementById("saveStoryPartBtn");
+loadLibCategoriesAdmin();
+loadLibCategoryOptions();
 
-if (saveStoryPartBtn) {
-  saveStoryPartBtn.addEventListener("click", async () => {
-    const categoryId = document.getElementById("storyCategorySelect").value;
-    const title = document.getElementById("storyPartTitle").value.trim();
-    const cardImage = storyPartImageBox.dataset.image || "";
+// LIBRARY SUBCATEGORY CMS
 
-    if (!categoryId || !title || !cardImage) {
-      document.getElementById("storyPartMessage").innerText =
-        "Category, Part name and image required";
+const saveLibSubcategoryBtn = document.getElementById("saveLibSubcategoryBtn");
+
+if (saveLibSubcategoryBtn) {
+  saveLibSubcategoryBtn.addEventListener("click", async () => {
+    const categoryId = document.getElementById("libSubcategoryCategorySelect").value;
+    const title = document.getElementById("libSubcategoryTitle").value.trim();
+    const orderValue = document.getElementById("libSubcategoryOrder").value.trim();
+
+    if (!categoryId || !title) {
+      document.getElementById("libSubcategoryMessage").innerText =
+        "Category and subcategory title required";
       return;
     }
 
-    await addDoc(collection(db, "storyParts"), {
+    await addDoc(collection(db, "librarySubcategories"), {
       categoryId,
       title,
-      cardImage,
-      sections: [],
+      order: orderValue ? Number(orderValue) : Date.now(),
       createdAt: serverTimestamp()
     });
 
-    document.getElementById("storyPartMessage").innerText =
-      "✅ Part saved";
+    document.getElementById("libSubcategoryTitle").value = "";
+    document.getElementById("libSubcategoryOrder").value = "";
 
-    loadStoryPartsAdmin();
+    document.getElementById("libSubcategoryMessage").innerText =
+      "✅ Subcategory saved";
+
+    loadLibSubcategoriesAdmin();
+    loadLibSubcategoryOptions();
   });
 }
 
-async function loadStoryPartsAdmin() {
-  const list = document.getElementById("adminStoryPartsList");
+async function loadLibSubcategoriesAdmin() {
+  const list = document.getElementById("adminLibSubcategoriesList");
   if (!list) return;
 
-  const q = query(collection(db, "storyParts"), orderBy("createdAt", "asc"));
-  const snapshot = await getDocs(q);
+  const catSnap = await getDocs(collection(db, "libraryCategories"));
+  const categoryMap = {};
+  catSnap.forEach((item) => {
+    categoryMap[item.id] = item.data().title;
+  });
+
+  const snapshot = await getDocs(collection(db, "librarySubcategories"));
+
+  let subcategories = [];
+  snapshot.forEach((item) => {
+    subcategories.push({ id: item.id, ...item.data() });
+  });
+
+  subcategories.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
 
   list.innerHTML = "";
 
-  snapshot.forEach((item) => {
-    const data = item.data();
-
+  subcategories.forEach((data) => {
     list.innerHTML += `
       <div class="admin-event-card">
-        <img src="${data.cardImage}" alt="${data.title}">
         <div>
           <h3>${data.title}</h3>
-          <p>Category ID: ${data.categoryId}</p>
-          <button class="edit-story-part-btn"
-        data-id="${item.id}">
-  Edit
-</button>
-
-<button class="delete-story-part-btn"
-        data-id="${item.id}">
-  Delete
-</button>
-
-<div class="story-inline-editor"
-     id="storyEdit-${item.id}">
-</div>
+          <p>Category: ${categoryMap[data.categoryId] || "Unknown"}</p>
+          <button class="delete-lib-subcategory-btn" data-id="${data.id}">
+            Delete
+          </button>
         </div>
       </div>
     `;
   });
-  document.querySelectorAll(".edit-story-part-btn").forEach((btn) => {
 
-  btn.addEventListener("click", () => {
-
-    openStoryInlineEditor(
-      btn.dataset.id
-    );
-
-  });
-
-});
-  document.querySelectorAll(".delete-story-part-btn").forEach((btn) => {
+  list.querySelectorAll(".delete-lib-subcategory-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      if (!confirm("Delete this part?")) return;
+      if (!confirm("Delete this subcategory? Its content will remain orphaned unless deleted separately.")) return;
 
-      await deleteDoc(doc(db, "storyParts", btn.dataset.id));
-      loadStoryPartsAdmin();
+      await deleteDoc(doc(db, "librarySubcategories", btn.dataset.id));
+      loadLibSubcategoriesAdmin();
+      loadLibSubcategoryOptions();
     });
   });
 }
 
-loadStoryCategoryOptions();
-loadStoryPartsAdmin();
-async function openStoryInlineEditor(id) {
-  const snap = await getDoc(doc(db, "storyParts", id));
-  if (!snap.exists()) return;
+async function loadLibSubcategoryOptions() {
+  const select = document.getElementById("libContentSubcategorySelect");
+  if (!select) return;
 
-  const story = snap.data();
-  const editor = document.getElementById(`storyEdit-${id}`);
+  const catSnap = await getDocs(collection(db, "libraryCategories"));
+  const categoryMap = {};
+  catSnap.forEach((item) => {
+    categoryMap[item.id] = item.data().title;
+  });
 
-  function sectionHTML(section = {}, index = "New") {
-    return `
-      <div class="festival-section-box inline-story-section-edit">
+  const snapshot = await getDocs(collection(db, "librarySubcategories"));
 
-        <h4>Section ${index}</h4>
+  let subcategories = [];
+  snapshot.forEach((item) => {
+    subcategories.push({ id: item.id, ...item.data() });
+  });
 
-        <input class="inline-story-section-title"
-               value="${section.title || ""}"
-               placeholder="Section Title">
+  subcategories.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
 
-        <textarea class="inline-story-section-content"
-                  placeholder="Section Content">${section.content || ""}</textarea>
+  select.innerHTML = `<option value="">Select Subcategory</option>`;
 
-        <div class="section-image-slot inline-story-section-image"
-             data-image="${section.image || ""}">
-          ${
-            section.image
-              ? `<img src="${section.image}">`
-              : `<span>＋ Story Image</span>`
-          }
+  subcategories.forEach((data) => {
+    select.innerHTML += `
+      <option value="${data.id}">
+        ${categoryMap[data.categoryId] || "?"} → ${data.title}
+      </option>
+    `;
+  });
+}
+
+loadLibSubcategoriesAdmin();
+loadLibSubcategoryOptions();
+
+// LIBRARY CONTENT CMS
+
+const saveLibContentBtn = document.getElementById("saveLibContentBtn");
+
+if (saveLibContentBtn) {
+  saveLibContentBtn.addEventListener("click", async () => {
+    const subcategoryId = document.getElementById("libContentSubcategorySelect").value;
+    const title = document.getElementById("libContentTitle").value.trim();
+    const text = document.getElementById("libContentText").value.trim();
+    const audioUrl = document.getElementById("libContentAudioUrl").value.trim();
+    const orderValue = document.getElementById("libContentOrder").value.trim();
+
+    if (!subcategoryId || !title || !text) {
+      document.getElementById("libContentMessage").innerText =
+        "Subcategory, title and text required";
+      return;
+    }
+
+    await addDoc(collection(db, "libraryContent"), {
+      subcategoryId,
+      title,
+      text,
+      audioUrl,
+      order: orderValue ? Number(orderValue) : Date.now(),
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById("libContentTitle").value = "";
+    document.getElementById("libContentText").value = "";
+    document.getElementById("libContentAudioUrl").value = "";
+    document.getElementById("libContentOrder").value = "";
+
+    document.getElementById("libContentMessage").innerText =
+      "✅ Content saved";
+
+    loadLibContentAdmin();
+  });
+}
+
+async function loadLibContentAdmin() {
+  const list = document.getElementById("adminLibContentList");
+  if (!list) return;
+
+  const subSnap = await getDocs(collection(db, "librarySubcategories"));
+  const subMap = {};
+  subSnap.forEach((item) => {
+    subMap[item.id] = item.data().title;
+  });
+
+  const snapshot = await getDocs(collection(db, "libraryContent"));
+
+  let items = [];
+  snapshot.forEach((item) => {
+    items.push({ id: item.id, ...item.data() });
+  });
+
+  items.sort((a, b) => {
+    const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
+    const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+    return aOrder - bOrder;
+  });
+
+  list.innerHTML = "";
+
+  items.forEach((data) => {
+    list.innerHTML += `
+      <div class="admin-event-card">
+        <div>
+          <h3>${data.title}</h3>
+          <p>Subcategory: ${subMap[data.subcategoryId] || "Unknown"}</p>
+          <p>${(data.text || "").slice(0, 80)}${data.text && data.text.length > 80 ? "..." : ""}</p>
+          ${data.audioUrl ? `<p>🔊 Audio linked</p>` : ""}
+          <button class="edit-lib-content-btn" data-id="${data.id}">
+            Edit
+          </button>
+          <button class="delete-lib-content-btn" data-id="${data.id}">
+            Delete
+          </button>
+          <div class="lib-content-inline-editor" id="libContentEdit-${data.id}"></div>
         </div>
-
-        <div class="image-control-box">
-
-          <label>Width %</label>
-          <input type="number" class="story-img-width-input" value="${section.imgWidth || 75}">
-
-          <label>Height px</label>
-          <input type="number" class="story-img-height-input" value="${section.imgHeight || 420}">
-
-          <label>Brightness %</label>
-          <input type="number" class="story-img-brightness-input" value="${section.imgBrightness || 100}">
-
-          <label>Alignment</label>
-          <select class="story-img-position-input">
-            <option value="left" ${section.imgPosition === "left" ? "selected" : ""}>Left</option>
-            <option value="center" ${section.imgPosition === "center" ? "selected" : ""}>Center</option>
-            <option value="right" ${section.imgPosition === "right" ? "selected" : ""}>Right</option>
-          </select>
-
-        </div>
-
-        <button class="remove-inline-story-section-btn">
-          Delete Section
-        </button>
-
       </div>
     `;
-  }
-
-  let sectionsHTML = "";
-
-  (story.sections || []).forEach((section, index) => {
-    sectionsHTML += sectionHTML(section, index + 1);
   });
+
+  list.querySelectorAll(".edit-lib-content-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openLibContentInlineEditor(btn.dataset.id, items);
+    });
+  });
+
+  list.querySelectorAll(".delete-lib-content-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this content?")) return;
+
+      await deleteDoc(doc(db, "libraryContent", btn.dataset.id));
+      loadLibContentAdmin();
+    });
+  });
+}
+
+function openLibContentInlineEditor(id, items) {
+  const data = items.find((item) => item.id === id);
+  if (!data) return;
+
+  const editor = document.getElementById(`libContentEdit-${id}`);
 
   editor.innerHTML = `
     <div class="festival-edit-panel">
-
-      <input class="inline-story-title"
-             value="${story.title || ""}"
-             placeholder="Story Part Title">
-
-      <div class="festival-card-upload-box inline-story-card-image"
-           data-image="${story.cardImage || ""}">
-        ${
-          story.cardImage
-            ? `<img src="${story.cardImage}">`
-            : `<span>＋ Story Part Image</span>`
-        }
-      </div>
-
-      <h3>Sections</h3>
-
-      <div class="inline-story-sections-list">
-        ${sectionsHTML}
-      </div>
-
-      <button class="add-inline-story-section-btn">
-        + Add Section
-      </button>
-
-      <button class="save-inline-story-btn">
+      <input class="edit-lib-content-title" value="${data.title || ""}" placeholder="Title">
+      <textarea class="edit-lib-content-text" placeholder="Telugu Text">${data.text || ""}</textarea>
+      <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="Audio URL">
+      <button class="save-lib-content-edit-btn">
         Save Changes
       </button>
-
     </div>
   `;
 
-  function attachStoryEditorEvents() {
-    editor.querySelector(".inline-story-card-image").onclick = async (e) => {
-      const url = await uploadImage();
-      if (!url) return;
-
-      e.currentTarget.dataset.image = url;
-      e.currentTarget.innerHTML = `<img src="${url}">`;
-    };
-
-    editor.querySelectorAll(".inline-story-section-image").forEach((slot) => {
-      slot.onclick = async () => {
-        const url = await uploadImage();
-        if (!url) return;
-
-        slot.dataset.image = url;
-        slot.innerHTML = `<img src="${url}">`;
-      };
-    });
-
-    editor.querySelectorAll(".remove-inline-story-section-btn").forEach((btn) => {
-      btn.onclick = () => {
-        btn.closest(".inline-story-section-edit").remove();
-      };
-    });
-  }
-
-  attachStoryEditorEvents();
-
-  editor.querySelector(".add-inline-story-section-btn").addEventListener("click", () => {
-    const list = editor.querySelector(".inline-story-sections-list");
-
-    list.insertAdjacentHTML(
-      "beforeend",
-      sectionHTML({}, "New")
-    );
-
-    attachStoryEditorEvents();
-  });
-
-  editor.querySelector(".save-inline-story-btn").addEventListener("click", async () => {
-    const sectionBoxes = editor.querySelectorAll(".inline-story-section-edit");
-
-    const sections = [];
-
-    sectionBoxes.forEach((box) => {
-      sections.push({
-        title: box.querySelector(".inline-story-section-title").value.trim(),
-        content: box.querySelector(".inline-story-section-content").value.trim(),
-        image: box.querySelector(".inline-story-section-image").dataset.image || "",
-        imgWidth: Number(box.querySelector(".story-img-width-input").value) || 75,
-        imgHeight: Number(box.querySelector(".story-img-height-input").value) || 420,
-        imgBrightness: Number(box.querySelector(".story-img-brightness-input").value) || 100,
-        imgPosition: box.querySelector(".story-img-position-input").value || "center"
-      });
-    });
-
-    await updateDoc(doc(db, "storyParts", id), {
-      title: editor.querySelector(".inline-story-title").value.trim(),
-      cardImage: editor.querySelector(".inline-story-card-image").dataset.image || "",
-      sections,
+  editor.querySelector(".save-lib-content-edit-btn").addEventListener("click", async () => {
+    await updateDoc(doc(db, "libraryContent", id), {
+      title: editor.querySelector(".edit-lib-content-title").value.trim(),
+      text: editor.querySelector(".edit-lib-content-text").value.trim(),
+      audioUrl: editor.querySelector(".edit-lib-content-audio").value.trim(),
       updatedAt: serverTimestamp()
     });
 
-    alert("✅ Story updated");
-    loadStoryPartsAdmin();
+    alert("✅ Content updated");
+    loadLibContentAdmin();
   });
 }
+
+loadLibContentAdmin();
+
+
+
+
+
 // SLOKA CATEGORY CMS
 
 const slokaCategoryImageBox =
