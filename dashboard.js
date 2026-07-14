@@ -998,6 +998,9 @@ async function openTempleInlineEditor(id) {
 
           <label>Alignment</label>
           <select class="temple-img-position-input">
+
+
+
             <option value="left" ${section.imgPosition === "left" ? "selected" : ""}>Left</option>
             <option value="center" ${section.imgPosition === "center" ? "selected" : ""}>Center</option>
             <option value="right" ${section.imgPosition === "right" ? "selected" : ""}>Right</option>
@@ -1996,6 +1999,8 @@ async function loadQuizScoresAdmin() {
   document.getElementById("adminQuizScoresList");
 
   if (!list) return;
+
+
 
   const snapshot =
   await getDocs(collection(db, "quizScores"));
