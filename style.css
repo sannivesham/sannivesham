@@ -201,7 +201,7 @@ body {
 }
 
 /* ==========================================================================
-   CATEGORY GRID SYTEM
+   CATEGORY GRID SYSTEM
    ========================================================================== */
 
 .category-heading {
@@ -875,24 +875,6 @@ body.admin-body, body.dashboard-body { background: #050300; }
    ========================================================================== */
 
 @media (max-width: 700px) {
-  /* ROOT PLATFORM BACKGROUND CONFIGURATION FOR HIGH DENSITY SCREENS */
-  .home-bg {
-    width: 100vw !important;
-    height: 100vh !important;
-    height: 100lvh !important; /* Locks structural calculation boundaries inside the viewport */
-    position: fixed !important;
-    top: 0; left: 0;
-    z-index: -999;
-    pointer-events: none;
-    
-    /* FIXED: Adjusted properties to ensure images stretch properly across all viewport frames */
-    background-size: cover !important; 
-    background-repeat: no-repeat !important;
-    background-position: center top !important;
-    background-attachment: scroll !important; /* Prevents background flicker on web wrappers */
-    background-color: #160804;
-  }
-
   body:not(.events-body) {
     background: transparent !important;
   }
@@ -1012,4 +994,24 @@ body.admin-body, body.dashboard-body { background: #050300; }
   .quiz-page { padding: 110px 15px 25px; }
   .quiz-box { padding: 28px 20px; border-radius: 24px; h1 { font-size: 34px; } }
   #questionText { font-size: 23px; } #optionsBox { grid-template-columns: 1fr; } .option-btn { min-height: 58px; }
+}
+
+/* ==========================================================================
+   STRICT MOBILE APP CORE OVERRIDE (FORCING LOCAL ASSET RENDERING)
+   ========================================================================== */
+@media (max-width: 700px) {
+  .home-bg {
+    background: linear-gradient(rgba(10, 5, 0, 0.45), rgba(10, 5, 0, 0.45)), 
+                url("images/homebg-mobile.jpg") !important;
+    background-size: cover !important; 
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100lvh !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
