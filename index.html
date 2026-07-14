@@ -70,7 +70,7 @@
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
         </button>
         <div class="auth-divider">లేదా</div>
-        <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్" class="auth-input">
+        <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
         <div id="recaptcha-container"></div>
         <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
         <p id="loginMsg" class="auth-msg"></p>
@@ -102,27 +102,7 @@
         ⭐ క్విజ్ స్కోర్: <span id="profileScore">0</span>
       </div>
 
-      <div class="profile-games-panel" style="text-align: left; background: rgba(237, 227, 200, 0.03); border: 1px solid rgba(201, 162, 75, 0.2); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
-        <h3 style="font-family: 'Cinzel', serif; color: var(--gold); margin: 0 0 12px 0; font-size: 1.1rem; text-align: center; border-bottom: 1px solid rgba(201, 162, 75, 0.2); padding-bottom: 6px;">🎮 ఆటల ప్రగతి (Game Stats)</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.95rem;">
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🔍 పద శోధన (Word Search):</span>
-            <strong id="statsWordSearch" style="color: var(--gold);">0 చాప్టర్లు</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🧩 చిత్ర గడులు (Sliding Puzzle):</span>
-            <strong id="statsSlidingPuzzle" style="color: var(--gold);">0 చాప్టర్లు</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🔢 సుడోకు (Sudoku):</span>
-            <strong id="statsSudoku" style="color: var(--gold);">0 లెవెల్స్</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding-bottom: 2px;">
-            <span>📍 జతపరుచు (Connect Dots):</span>
-            <strong id="statsConnectDots" style="color: var(--gold);">0 లెవెల్స్</strong>
-          </div>
-        </div>
-      </div>
+  
 
       <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
     </div>
@@ -207,8 +187,8 @@
         <p id="qotdQuestionText" class="qotd-question-text"></p>
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ స్కోర్: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 లీడర్‌బోర్డ్</button>
+          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టికడ్</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
           <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
@@ -216,7 +196,7 @@
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
-        <h3>నేటి పదం</h3>
+        <h3>నేటి అంశంం</h3>
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
     </div>
@@ -244,7 +224,7 @@
         <!-- STORIES FIRST -->
         <a href="stories.html" class="category-card">
           <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
-          <div class="category-title">కథలు</div>
+          <div class="category-title">గ్రంథాలయం</div>
         </a>
 
         <a href="festivals.html" class="category-card">
@@ -282,7 +262,7 @@
       <div class="about-content">
         <h2>మా గురించి</h2>
         <p>
-          మా గురించి, మా టీమ్ సభ్యులు,
+          మా గురించి, మా బృందం సభ్యులు,
           మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
         </p>
       </div>
