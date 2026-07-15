@@ -15,6 +15,24 @@
       margin-top: 10px !important;
       margin-bottom: 25px !important;
     }
+
+    /* Bigger category cards on mobile only - desktop untouched */
+    @media (max-width: 700px) {
+      #storiesGrid.stories-grid {
+        gap: 22px !important;
+      }
+      #storiesGrid .story-card {
+        min-height: 220px !important;
+      }
+      #storiesGrid .story-card img {
+        height: 180px !important;
+        object-fit: cover !important;
+      }
+      #storiesGrid .story-name {
+        font-size: 1.15rem !important;
+        padding: 12px !important;
+      }
+    }
   </style>
 </head>
 <body class="stories-body">
