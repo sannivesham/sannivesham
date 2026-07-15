@@ -43,8 +43,8 @@ async function loadLibrarySubcategories() {
 
   subcategories.forEach((sub) => {
     partsGrid.innerHTML += `
-      <a href="story-detail.html?id=${sub.id}" class="story-card">
-        <div class="story-name">${sub.title}</div>
+      <a href="story-detail.html?id=${sub.id}" class="subcategory-card">
+        📿 ${sub.title}
       </a>
     `;
   });
