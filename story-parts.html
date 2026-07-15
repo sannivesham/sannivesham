@@ -5,6 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>గ్రంథాలయం - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Scoped fixes for this page only - does not touch style.css */
+    .subcategory-page {
+      padding-top: 20px !important;
+      margin-top: 0 !important;
+    }
+    .subcategory-page .stories-title-box {
+      margin-top: 10px !important;
+      margin-bottom: 25px !important;
+    }
+    .subcategory-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      padding: 10px 20px 40px;
+    }
+    .subcategory-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 220px;
+      padding: 18px 30px;
+      background: linear-gradient(145deg, rgba(30,18,6,0.85), rgba(15,8,2,0.9));
+      border: 1px solid rgba(255, 200, 100, 0.35);
+      border-radius: 14px;
+      color: #ffd27a;
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 0 12px rgba(255, 180, 60, 0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      text-align: center;
+    }
+    .subcategory-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 210, 120, 0.8);
+      box-shadow: 0 4px 20px rgba(255, 180, 60, 0.35);
+    }
+  </style>
 </head>
 <body class="stories-body">
   <div class="stories-bg"></div>
@@ -13,11 +54,11 @@
     <a href="index.html">ప్రారంభం</a>
     <a href="stories.html">గ్రంథాలయం</a>
   </nav>
-  <section class="stories-page">
+  <section class="stories-page subcategory-page">
     <div class="stories-title-box">
       <h1 id="storyCategoryTitle">గ్రంథాలయం</h1>
     </div>
-   <div class="stories-grid story-parts-grid" id="storyPartsGrid"></div>
+   <div class="subcategory-grid" id="storyPartsGrid"></div>
   </section>
   <script type="module" src="story-parts.js"></script>
   <script src="script.js"></script>
