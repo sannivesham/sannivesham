@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>గ్రంథాలయం - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -16,21 +19,24 @@
       margin-bottom: 25px !important;
     }
 
-    /* Bigger category cards on mobile only - desktop untouched */
+    /* Bigger category cards on mobile only - desktop untouched. Still 2 per row. */
     @media (max-width: 700px) {
       #storiesGrid.stories-grid {
-        gap: 22px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
       }
       #storiesGrid .story-card {
-        min-height: 220px !important;
+        width: 100% !important;
       }
       #storiesGrid .story-card img {
-        height: 180px !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 3 / 4 !important;
         object-fit: cover !important;
       }
       #storiesGrid .story-name {
-        font-size: 1.15rem !important;
-        padding: 12px !important;
+        font-size: 1.05rem !important;
+        padding: 10px !important;
       }
     }
   </style>
@@ -60,7 +66,7 @@
     <p class="footer-quote">✨ గ్రంథాలయం మన సంస్కృతికి జ్ఞాన నిధి ✨</p>
 <script type="module" src="social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
   </footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
   <script type="module">
     import { db } from "./firebase-config.js";
     import {
@@ -93,13 +99,13 @@
     }
     loadStoriesBackground();
   </script>
-  <script type="module" src="stories.js"></script>
+  <script type="module" src="stories.js?v=2"></script>
   <audio id="bgMusic" loop>
   <source src="music/traditional.mp3" type="audio/mpeg">
 </audio>
 <button id="musicBtn" class="music-btn">
   🔊
 </button>
-<script src="music.js"></script>
+<script src="music.js?v=2"></script>
 </body>
 </html>
