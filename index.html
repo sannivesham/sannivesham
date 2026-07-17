@@ -4,9 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -37,32 +34,6 @@
     .game-sub-title {
       font-size: 1rem;
       font-weight: 500;
-    }
-
-    /* Force all auth-style modals (login, profile, leaderboard, games)
-       to cover the full screen in the app WebView */
-    .auth-modal {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: rgba(0, 0, 0, 0.75) !important;
-      z-index: 9999 !important;
-      align-items: center !important;
-      justify-content: center !important;
-      overflow-y: auto !important;
-    }
-    .auth-modal-box {
-      max-height: 85vh !important;
-      overflow-y: auto !important;
-      width: 90% !important;
-      max-width: 480px !important;
-      margin: auto !important;
     }
   </style>
 </head>
@@ -101,7 +72,7 @@
         <div class="auth-divider">లేదా</div>
         <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
         <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn" class="auth-btn">ప్రస్తుతం మొబైల్ లాగిన్ అందుబాటులో లేద</button>
+        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
         <p id="loginMsg" class="auth-msg"></p>
       </div>
 
@@ -128,7 +99,7 @@
       <h2 id="profileName"></h2>
       
       <div class="profile-score-badge" style="margin-bottom: 20px;">
-        ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
+        ⭐ క్విజ్ స్కోర్: <span id="profileScore">0</span>
       </div>
 
   
@@ -141,7 +112,7 @@
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2>🏆 అగ్రస్థాన పట్టిక</h2>
+      <h2>🏆 లీడర్‌బోర్డ్</h2>
       <div id="leaderboardList" class="leaderboard-list"></div>
     </div>
   </div>
@@ -217,7 +188,7 @@
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
           <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టికడ్</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
           <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
@@ -348,13 +319,13 @@
     <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
@@ -525,12 +496,7 @@
     // Background
     async function loadHomeBackground() {
       try {
-        let snap;
-        try {
-          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
-        } catch (e) {
-          snap = await getDoc(doc(db, "settings", "backgrounds"));
-        }
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.querySelector(".home-bg");
@@ -648,7 +614,7 @@
     function updateQotdScoreRow(userData) {
       document.getElementById("qotdScoreRow").style.display = "flex";
       document.getElementById("qotdLoginHint").style.display = "none";
-      document.getElementById("qotdScoreDisplay").innerText = `⭐ సాధించిన అంకాలు: ${userData.score || 0}`;
+      document.getElementById("qotdScoreDisplay").innerText = `⭐ స్కోర్: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -713,7 +679,7 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <button id="profileBtn" class="profile-btn">👤</button>
 
-  <script src="music.js?v=2"></script>
+  <script src="music.js"></script>
 
   <script>
     function animateCounter(id, target) {
