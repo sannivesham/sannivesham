@@ -38,6 +38,32 @@
       font-size: 1rem;
       font-weight: 500;
     }
+
+    /* Force all auth-style modals (login, profile, leaderboard, games)
+       to cover the full screen in the app WebView */
+    .auth-modal {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: rgba(0, 0, 0, 0.75) !important;
+      z-index: 9999 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow-y: auto !important;
+    }
+    .auth-modal-box {
+      max-height: 85vh !important;
+      overflow-y: auto !important;
+      width: 90% !important;
+      max-width: 480px !important;
+      margin: auto !important;
+    }
   </style>
 </head>
 
