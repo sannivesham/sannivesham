@@ -1,12 +1,14 @@
+index.html
+
+
+
+
 <!DOCTYPE html>
 <html lang="te">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -322,13 +324,13 @@
     <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
@@ -499,12 +501,7 @@
     // Background
     async function loadHomeBackground() {
       try {
-        let snap;
-        try {
-          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
-        } catch (e) {
-          snap = await getDoc(doc(db, "settings", "backgrounds"));
-        }
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.querySelector(".home-bg");
@@ -687,7 +684,7 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <button id="profileBtn" class="profile-btn">👤</button>
 
-  <script src="music.js?v=2"></script>
+  <script src="music.js"></script>
 
   <script>
     function animateCounter(id, target) {
