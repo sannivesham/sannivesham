@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>అధ్యాయాలు - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .chapter-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-bottom: 60px;
+    }
+    .chapter-card {
+      background: rgba(20,12,5,0.65);
+      border: 1px solid rgba(255,209,102,0.3);
+      border-radius: 18px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-decoration: none;
+      color: white;
+      backdrop-filter: blur(10px);
+      transition: 0.2s ease;
+    }
+    .chapter-card:hover {
+      border-color: #ffd166;
+      background: rgba(255,209,102,0.07);
+    }
+    .chapter-card-left h3 {
+      color: #ffd166;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .chapter-card-left p {
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+    }
+    .chapter-card-arrow {
+      color: #ffd166;
+      font-size: 22px;
+    }
+    .continue-banner {
+      max-width: 700px;
+      margin: 0 auto 20px;
+      background: rgba(255,209,102,0.1);
+      border: 1px solid rgba(255,209,102,0.4);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .continue-banner p {
+      color: #ffd166;
+      font-size: 15px;
+    }
+    .continue-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: #ffd166;
+      color: #1a1a1a;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body class="stories-body">
+
+  <div class="stories-bg"></div>
+
+  <nav class="glass-navbar">
+    <a href="ithihasalu.html">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="ithihasalu.html">ఇతిహాసాలు</a>
+  </nav>
+
+  <section class="stories-page">
+    <div class="stories-title-box">
+      <h1 id="catTitle">అధ్యాయాలు</h1>
+    </div>
+
+    <div id="continueBanner" style="display:none;"></div>
+    <div class="chapter-list" id="chapterList"></div>
+  </section>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ ఇతిహాసాలు మన జాతి గర్వం ✨</p>
+    <script type="module" src="social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module" src="ithihasalu-chapters.js"></script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <script src="music.js"></script>
+
+</body>
+</html>
