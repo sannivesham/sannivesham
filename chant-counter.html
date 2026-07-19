@@ -71,13 +71,22 @@
     }
     .deity-icon { font-size: 2.1rem; margin-bottom: 8px; }
     .deity-name { color: #EDE3C8; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; }
-    .deity-community {
-      font-size: 0.72rem;
-      color: #C9A24B;
-      opacity: 0.85;
+    .deity-stats {
       border-top: 1px solid rgba(201,162,75,0.2);
       padding-top: 6px;
       margin-top: 4px;
+    }
+    .deity-community {
+      font-size: 0.7rem;
+      color: #C9A24B;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+    .deity-my-rounds {
+      font-size: 0.7rem;
+      color: #EDE3C8;
+      opacity: 0.65;
+      line-height: 1.5;
     }
 
     /* STEP 2: count selection */
@@ -396,7 +405,7 @@
   <script type="module">
     import { db, auth } from "./firebase-config.js";
     import {
-      doc, getDoc, setDoc, updateDoc, increment,
+      doc, getDoc, setDoc, increment,
       collection, getDocs
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
     import {
@@ -416,15 +425,23 @@
     ];
 
     let currentUser = null;
-    let userReady = false;
-    let personalProgress = {}; // { ganesha: { rounds, chants }, ... }
-    let communityTotals = {};  // { ganesha: { rounds, chants }, ... }
+    let personalProgress = {};  // { ganesha: { date: "2026-07-19", rounds: N }, ... } - resets daily
+    let communityTotals = {};   // { ganesha: { rounds: N }, ... } - all-time, never resets
 
     let selectedDeity = null;
     let targetCount = 108;
     let currentCount = 0;
 
     const LOCAL_KEY = "sannivesham_japa_progress";
+
+    function getTodayKey() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+    const todayKey = getTodayKey();
 
     function loadLocalProgress() {
       try {
@@ -436,8 +453,15 @@
       try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
     }
 
-    function getMyTotalRounds() {
-      return Object.values(personalProgress).reduce((sum, d) => sum + (d.rounds || 0), 0);
+    // Returns today's rounds for a deity - if the stored date isn't today, it's effectively 0
+    function getTodayRounds(deityId) {
+      const record = personalProgress[deityId];
+      if (!record || record.date !== todayKey) return 0;
+      return record.rounds || 0;
+    }
+
+    function getMyTotalRoundsToday() {
+      return deities.reduce((sum, d) => sum + getTodayRounds(d.id), 0);
     }
 
     // ---- DOM refs ----
@@ -459,14 +483,18 @@
     function renderDeityGrid() {
       deityGrid.innerHTML = "";
       deities.forEach(d => {
-        const community = communityTotals[d.id]?.rounds || 0;
+        const communityRounds = communityTotals[d.id]?.rounds || 0;
+        const myRoundsToday = getTodayRounds(d.id);
         const card = document.createElement("div");
         card.className = "deity-card";
         card.dataset.id = d.id;
         card.innerHTML = `
           <div class="deity-icon">${d.icon}</div>
           <div class="deity-name">${d.name}</div>
-          <div class="deity-community">👥 ${community.toLocaleString("en-IN")} రౌండ్లు</div>
+          <div class="deity-stats">
+            <div class="deity-community">🌐 కమ్యూనిటీ: ${communityRounds.toLocaleString("en-IN")}</div>
+            <div class="deity-my-rounds">🙏 రౌండ్లు (నేడు): ${myRoundsToday}</div>
+          </div>
         `;
         card.addEventListener("click", () => {
           selectedDeity = d;
@@ -478,9 +506,9 @@
     }
 
     function renderMyTotal() {
-      const total = getMyTotalRounds();
+      const total = getMyTotalRoundsToday();
       myTotalLabel.innerText = total > 0
-        ? `మీరు ఇప్పటివరకు మొత్తం ${total.toLocaleString("en-IN")} రౌండ్లు పూర్తి చేశారు 🙏`
+        ? `మీరు నేడు మొత్తం ${total} రౌండ్లు పూర్తి చేశారు 🙏`
         : "";
     }
 
@@ -533,9 +561,9 @@
       mantraText.innerText = selectedDeity.mantra;
       counterTargetLabel.innerText = `/ ${targetCount}`;
 
-      const existing = personalProgress[selectedDeity.id];
-      mantraMyProgress.innerText = existing && existing.rounds > 0
-        ? `మీరు ఇప్పటివరకు ${selectedDeity.name} కోసం ${existing.rounds} రౌండ్లు పూర్తి చేశారు`
+      const todayRounds = getTodayRounds(selectedDeity.id);
+      mantraMyProgress.innerText = todayRounds > 0
+        ? `మీరు నేడు ${selectedDeity.name} కోసం ${todayRounds} రౌండ్లు పూర్తి చేశారు`
         : "";
 
       completedBox.classList.remove("show");
@@ -556,43 +584,44 @@
     async function saveCompletedRound() {
       const id = selectedDeity.id;
 
-      // Update local in-memory progress immediately
-      if (!personalProgress[id]) personalProgress[id] = { rounds: 0, chants: 0 };
-      personalProgress[id].rounds += 1;
-      personalProgress[id].chants += targetCount;
+      // Update / reset today's personal round count
+      const existing = personalProgress[id];
+      const currentTodayRounds = (existing && existing.date === todayKey) ? existing.rounds : 0;
+      personalProgress[id] = {
+        date: todayKey,
+        rounds: currentTodayRounds + 1
+      };
 
       if (currentUser) {
-        // Save to Firestore for the logged-in user
+        // Save today's rounds to Firestore (overwritten daily, not incremented forever)
         try {
           await setDoc(doc(db, "users", currentUser.uid), {
             japaProgress: {
               deities: {
                 [id]: {
-                  rounds: increment(1),
-                  chants: increment(targetCount)
+                  date: todayKey,
+                  rounds: personalProgress[id].rounds
                 }
               }
             }
           }, { merge: true });
         } catch (e) {}
 
-        // Update community totals (only counted for logged-in users)
+        // Community total: all-time, never resets, counted only for logged-in users
         try {
           await setDoc(doc(db, "japaCommunity", id), {
-            rounds: increment(1),
-            chants: increment(targetCount)
+            rounds: increment(1)
           }, { merge: true });
 
-          if (!communityTotals[id]) communityTotals[id] = { rounds: 0, chants: 0 };
+          if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
           communityTotals[id].rounds += 1;
-          communityTotals[id].chants += targetCount;
-          renderDeityGrid();
         } catch (e) {}
       } else {
-        // Save to localStorage for guests
+        // Guests: save today's rounds to localStorage only, no community credit
         saveLocalProgress(personalProgress);
       }
 
+      renderDeityGrid();
       renderMyTotal();
     }
 
@@ -634,7 +663,7 @@
       window.location.href = "index.html";
     });
 
-    // ---- Load community totals (visible to everyone, logged in or not) ----
+    // ---- Load community totals (all-time, visible to everyone) ----
     async function loadCommunityTotals() {
       try {
         const snap = await getDocs(collection(db, "japaCommunity"));
@@ -663,7 +692,7 @@
         personalProgress = loadLocalProgress();
       }
 
-      userReady = true;
+      renderDeityGrid();
       renderMyTotal();
     });
 
