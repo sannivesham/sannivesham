@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="te">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,99 +8,169 @@
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
 }
 
 body{
-    background:#0d0b08;
-    color:white;
+background:#090603;
+color:#fff;
 }
 
 .header{
-    padding:25px;
-    text-align:center;
-}
-
-.header h1{
-    color:#d4af37;
-    font-size:32px;
+padding:25px;
+text-align:center;
+font-size:40px;
+font-weight:bold;
+color:#d4af37;
 }
 
 .back-btn{
-    position:fixed;
-    top:20px;
-    left:20px;
-    background:#1f1b15;
-    color:#ffd166;
-    border:1px solid #d4af37;
-    padding:10px 18px;
-    border-radius:30px;
-    text-decoration:none;
-    font-weight:bold;
-    z-index:100;
+position:fixed;
+top:20px;
+left:20px;
+padding:10px 18px;
+border-radius:30px;
+border:1px solid #d4af37;
+background:#17120d;
+color:#ffd166;
+text-decoration:none;
+font-weight:bold;
 }
 
 .videos-grid{
-    width:95%;
-    max-width:1300px;
-    margin:30px auto;
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:25px;
+width:95%;
+max-width:1300px;
+margin:30px auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:25px;
 }
 
 .video-card{
-    background:#1a1612;
-    border:1px solid rgba(212,175,55,.35);
-    border-radius:18px;
-    overflow:hidden;
-    text-decoration:none;
-    transition:.25s;
+background:#18130d;
+border-radius:18px;
+overflow:hidden;
+border:1px solid rgba(212,175,55,.4);
+transition:.3s;
+text-decoration:none;
 }
 
 .video-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 0 20px rgba(212,175,55,.35);
+transform:translateY(-6px);
+box-shadow:0 0 20px rgba(212,175,55,.35);
 }
 
 .video-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    display:block;
+width:100%;
+height:180px;
+object-fit:cover;
+display:block;
 }
 
 .video-name{
-    padding:15px;
-    text-align:center;
-    color:#ffd166;
-    font-size:18px;
-    font-weight:600;
+padding:15px;
+font-size:18px;
+font-weight:600;
+color:#ffd166;
+text-align:center;
+}
+
+.empty{
+text-align:center;
+margin-top:100px;
+font-size:22px;
+color:#ccc;
 }
 </style>
-
 </head>
 
 <body>
 
-<a href="index.html" class="back-btn">
-← వెనుకకు
-</a>
+<a href="index.html" class="back-btn">← వెనుకకు</a>
 
 <div class="header">
-<h1>వీడియోలు</h1>
+వీడియోలు
 </div>
 
-<div class="videos-grid">
+<div class="videos-grid" id="videosGrid"></div>
 
-</div>
+<script type="module">
 
-<!-- IMPORTANT -->
-<script type="module" src="video.js"></script>
+import { db } from "./firebase-config.js";
+
+import {
+collection,
+getDocs,
+query,
+orderBy
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const videosGrid=document.getElementById("videosGrid");
+
+async function loadVideos(){
+
+try{
+
+const q=query(
+collection(db,"videos"),
+orderBy("createdAt","desc")
+);
+
+const snapshot=await getDocs(q);
+
+videosGrid.innerHTML="";
+
+if(snapshot.empty){
+videosGrid.innerHTML="<div class='empty'>ఇంకా వీడియోలు లేవు.</div>";
+return;
+}
+
+snapshot.forEach(docItem=>{
+
+const data=docItem.data();
+
+const title=
+data.title||
+data.videoTitle||
+"Untitled";
+
+const image=
+data.cardImage||
+data.thumbnail||
+data.image||
+"https://dummyimage.com/600x350/222/ffffff&text=No+Thumbnail";
+
+videosGrid.innerHTML+=`
+
+<a class="video-card" href="video-player.html?id=${docItem.id}">
+
+<img src="${image}">
+
+<div class="video-name">${title}</div>
+
+</a>
+
+`;
+
+});
+
+}
+catch(err){
+
+console.error(err);
+
+videosGrid.innerHTML="<div class='empty'>వీడియోలను లోడ్ చేయలేకపోయాము.</div>";
+
+}
+
+}
+
+loadVideos();
+
+</script>
 
 </body>
-
 </html>
