@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -34,6 +37,64 @@
     .game-sub-title {
       font-size: 1rem;
       font-weight: 500;
+    }
+
+    /* Force all auth-style modals (login, profile, leaderboard, games)
+       to cover the full screen in the app WebView */
+    .auth-modal {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: rgba(0, 0, 0, 0.75) !important;
+      z-index: 9999 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow-y: auto !important;
+    }
+    .auth-modal-box {
+      max-height: 85vh !important;
+      overflow-y: auto !important;
+      width: 90% !important;
+      max-width: 480px !important;
+      margin: auto !important;
+    }
+
+    /* Music & profile buttons: stay near the top only, scroll away with content
+       instead of floating fixed on screen at all times */
+    .music-btn,
+    .profile-btn {
+      position: absolute !important;
+      top: 130px !important;
+      right: 20px !important;
+    }
+    .profile-btn {
+      top: 190px !important;
+    }
+
+    /* Category boxes: full image visible, clean 2-column grid, no odd cropping */
+    @media (max-width: 700px) {
+      .category-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+      .category-card {
+        width: 100% !important;
+        overflow: hidden !important;
+      }
+      .category-card img {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 3 / 4 !important;
+        object-fit: cover !important;
+        object-position: center !important;
+      }
     }
   </style>
 </head>
@@ -72,7 +133,7 @@
         <div class="auth-divider">లేదా</div>
         <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
         <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
+        <button id="sendOtpBtn" class="auth-btn">ప్రస్తుతం మొబైల్ లాగిన్ అందుబాటులో లేద</button>
         <p id="loginMsg" class="auth-msg"></p>
       </div>
 
@@ -99,7 +160,7 @@
       <h2 id="profileName"></h2>
       
       <div class="profile-score-badge" style="margin-bottom: 20px;">
-        ⭐ క్విజ్ స్కోర్: <span id="profileScore">0</span>
+        ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
       </div>
 
   
@@ -112,7 +173,7 @@
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2>🏆 లీడర్‌బోర్డ్</h2>
+      <h2>🏆 అగ్రస్థాన పట్టిక</h2>
       <div id="leaderboardList" class="leaderboard-list"></div>
     </div>
   </div>
@@ -188,7 +249,7 @@
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
           <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టికడ్</button>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
           <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
@@ -252,6 +313,37 @@
         <a href="quiz.html" class="category-card">
           <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్">
           <div class="category-title">ప్రశ్నావళి</div>
+        </a>
+
+        <!-- NEW CARDS: pages to be built one by one -->
+        <a href="itihasalu.html" class="category-card">
+          <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
+          <div class="category-title">ఇతిహాసాలు</div>
+        </a>
+
+        <a href="videos.html" class="category-card">
+          <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు">
+          <div class="category-title">వీడియోలు</div>
+        </a>
+
+        <a href="calendar.html" class="category-card">
+          <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్">
+          <div class="category-title">క్యాలెండర్</div>
+        </a>
+
+        <a href="chant-counter.html" class="category-card">
+          <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్">
+          <div class="category-title">జప కౌంటర్</div>
+        </a>
+
+        <a href="pooja-room.html" class="category-card">
+          <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది">
+          <div class="category-title">పూజా గది</div>
+        </a>
+
+        <a href="store.html" class="category-card">
+          <img id="storeCardImg" src="images/store.png" alt="స్టోర్">
+          <div class="category-title">స్టోర్</div>
         </a>
 
       </div>
@@ -319,13 +411,13 @@
     <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, getDocFromServer, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
@@ -336,6 +428,8 @@
     let currentUser = null;
     let confirmationResult = null;
     let todayKey = getTodayKey();
+    let authInitialized = false;
+    let qotdAlreadyAnsweredToday = false;
 
     function getTodayKey() {
       const now = new Date();
@@ -377,6 +471,14 @@
       } else {
         document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
+      }
+
+      // Only load QOTD / Word of Day AFTER we know the real auth state,
+      // so "already answered" is checked correctly on first render.
+      if (!authInitialized) {
+        authInitialized = true;
+        loadQuestionOfDay();
+        loadWordOfDay();
       }
     });
 
@@ -496,7 +598,12 @@
     // Background
     async function loadHomeBackground() {
       try {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        let snap;
+        try {
+          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
+        } catch (e) {
+          snap = await getDoc(doc(db, "settings", "backgrounds"));
+        }
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.querySelector(".home-bg");
@@ -562,6 +669,7 @@
             alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
           }
         }
+        qotdAlreadyAnsweredToday = alreadyAnswered;
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
@@ -589,6 +697,10 @@
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
+      // Guard 1: block instantly if already answered in this render
+      if (qotdAlreadyAnsweredToday) return;
+      qotdAlreadyAnsweredToday = true;
+
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
       allBtns.forEach((b, i) => {
@@ -596,9 +708,23 @@
         if (i === correctIndex) b.classList.add("correct-option");
       });
       if (selectedIndex !== correctIndex) allBtns[selectedIndex].classList.add("wrong-option");
+
       if (currentUser) {
-        const isCorrect = selectedIndex === correctIndex;
         const userRef = doc(db, "users", currentUser.uid);
+
+        // Guard 2: re-check against the server right before writing,
+        // so logout/login, multiple tabs, or slow network can never double-score.
+        const freshSnap = await getDoc(userRef);
+        const freshData = freshSnap.exists() ? freshSnap.data() : {};
+        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
+
+        if (alreadyOnServer) {
+          document.getElementById("profileScore").innerText = freshData.score || 0;
+          updateQotdScoreRow(freshData);
+          return;
+        }
+
+        const isCorrect = selectedIndex === correctIndex;
         const updateData = { answeredDates: arrayUnion(todayKey) };
         if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
         await updateDoc(userRef, updateData);
@@ -614,7 +740,7 @@
     function updateQotdScoreRow(userData) {
       document.getElementById("qotdScoreRow").style.display = "flex";
       document.getElementById("qotdLoginHint").style.display = "none";
-      document.getElementById("qotdScoreDisplay").innerText = `⭐ స్కోర్: ${userData.score || 0}`;
+      document.getElementById("qotdScoreDisplay").innerText = `⭐ సాధించిన అంకాలు: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -665,9 +791,6 @@
         document.getElementById("qotdWordSection").style.display = "flex";
       } catch (e) {}
     }
-
-    loadQuestionOfDay();
-    loadWordOfDay();
   </script>
 
   <script type="module" src="social-links.js"></script>
@@ -679,7 +802,7 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <button id="profileBtn" class="profile-btn">👤</button>
 
-  <script src="music.js"></script>
+  <script src="music.js?v=2"></script>
 
   <script>
     function animateCounter(id, target) {
