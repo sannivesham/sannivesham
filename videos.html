@@ -1,0 +1,50 @@
+import { db } from "./firebase-config.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const videosGrid = document.querySelector(".videos-grid");
+
+async function loadVideos() {
+  try {
+    const q = query(
+      collection(db, "videos"),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    videosGrid.innerHTML = "";
+
+    snapshot.forEach((docItem) => {
+      const video = docItem.data();
+
+      if (!video.title || !video.cardImage) {
+        console.log("Skipped broken video:", video);
+        return;
+      }
+
+      videosGrid.innerHTML += `
+        <a href="video-player.html?id=${docItem.id}" class="video-card festival-card">
+          <img src="${video.cardImage}" alt="${video.title}">
+          <div class="video-name festival-name">${video.title}</div>
+        </a>
+      `;
+    });
+
+    if (snapshot.empty) {
+      videosGrid.innerHTML =
+        "<p style='color:white;text-align:center;'>ఇంకా వీడియోలు జోడించలేదు.</p>";
+    }
+
+  } catch (error) {
+    console.log("Videos loading error:", error);
+    videosGrid.innerHTML = "<p style='color:white;'>Videos loading error</p>";
+  }
+}
+
+loadVideos();
