@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>వీడియో - సన్నివేశం</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #000;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .video-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
+    transition: opacity 0.3s ease;
+  }
+
+  .video-back-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,209,102,0.35);
+    color: #ffd166;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .video-title-text {
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+  }
+
+  #mainVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .video-tap-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    z-index: 5;
+  }
+
+  .video-tap-left {
+    left: 0;
+  }
+
+  .video-tap-right {
+    right: 0;
+  }
+
+  .seek-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) scale(0.6);
+    color: #ffd166;
+    font-size: 26px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+    text-shadow: 0 0 12px rgba(0,0,0,0.8);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .seek-indicator-left {
+    left: 15%;
+  }
+
+  .seek-indicator-right {
+    right: 15%;
+  }
+
+  .seek-indicator.show {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+
+  .video-center-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid rgba(255,209,102,0.6);
+    color: #ffd166;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 8;
+    transition: opacity 0.25s ease;
+  }
+
+  .video-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    padding: 14px 18px 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .video-progress-container {
+    position: relative;
+    height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .video-progress-buffer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgba(255,255,255,0.35);
+    border-radius: 10px;
+  }
+
+  .video-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: #d4af37;
+    border-radius: 10px;
+  }
+
+  .video-progress-handle {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 14px;
+    height: 14px;
+    background: #ffd166;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px rgba(255,209,102,0.8);
+  }
+
+  .video-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .video-nav-btn,
+  .video-play-btn,
+  .video-fullscreen-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,209,102,0.3);
+    color: #ffd166;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .video-play-btn {
+    background: #d4af37;
+    color: #111;
+    border: none;
+  }
+
+  .video-time-text {
+    color: white;
+    font-size: 13px;
+    min-width: 38px;
+  }
+
+  .video-time-sep {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+  }
+
+  .video-fullscreen-btn {
+    margin-left: auto;
+  }
+
+  .controls-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .video-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffd166;
+    font-size: 15px;
+    z-index: 10;
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="video-topbar" id="videoTopbar">
+    <a href="videos.html" class="video-back-btn">← వెనుకకు</a>
+    <h2 id="videoTitleText" class="video-title-text">Loading...</h2>
+  </div>
+
+  <div class="video-wrapper" id="videoWrapper">
+
+    <p class="video-loading" id="videoLoadingText">లోడ్ అవుతోంది...</p>
+
+    <video id="mainVideo" playsinline></video>
+
+    <div class="video-tap-zone video-tap-left" id="tapLeft"></div>
+    <div class="video-tap-zone video-tap-right" id="tapRight"></div>
+
+    <div class="seek-indicator seek-indicator-left" id="seekIndicatorLeft">-5</div>
+    <div class="seek-indicator seek-indicator-right" id="seekIndicatorRight">+5</div>
+
+    <div class="video-center-play" id="centerPlayBtn">▶</div>
+
+    <div class="video-controls" id="videoControls">
+
+      <div class="video-progress-container" id="progressContainer">
+        <div class="video-progress-buffer" id="progressBuffer"></div>
+        <div class="video-progress-fill" id="progressFill"></div>
+        <div class="video-progress-handle" id="progressHandle"></div>
+      </div>
+
+      <div class="video-controls-row">
+        <button id="prevVideoBtn" class="video-nav-btn">⏮</button>
+        <button id="playPauseBtn" class="video-play-btn">▶</button>
+        <button id="nextVideoBtn" class="video-nav-btn">⏭</button>
+
+        <span id="currentTimeText" class="video-time-text">0:00</span>
+        <span class="video-time-sep">/</span>
+        <span id="durationText" class="video-time-text">0:00</span>
+
+        <button id="fullscreenBtn" class="video-fullscreen-btn">⛶</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+
+    import {
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get("id");
+
+    const video = document.getElementById("mainVideo");
+    const titleText = document.getElementById("videoTitleText");
+    const loadingText = document.getElementById("videoLoadingText");
+
+    const tapLeft = document.getElementById("tapLeft");
+    const tapRight = document.getElementById("tapRight");
+    const seekIndicatorLeft = document.getElementById("seekIndicatorLeft");
+    const seekIndicatorRight = document.getElementById("seekIndicatorRight");
+
+    const centerPlayBtn = document.getElementById("centerPlayBtn");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const prevVideoBtn = document.getElementById("prevVideoBtn");
+    const nextVideoBtn = document.getElementById("nextVideoBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+    const progressContainer = document.getElementById("progressContainer");
+    const progressBuffer = document.getElementById("progressBuffer");
+    const progressFill = document.getElementById("progressFill");
+    const progressHandle = document.getElementById("progressHandle");
+
+    const currentTimeText = document.getElementById("currentTimeText");
+    const durationText = document.getElementById("durationText");
+
+    const videoControls = document.getElementById("videoControls");
+    const videoTopbar = document.getElementById("videoTopbar");
+    const videoWrapper = document.getElementById("videoWrapper");
+
+    let allVideos = [];
+    let currentIndex = -1;
+    let isDragging = false;
+    let hideControlsTimer = null;
+
+    /* ===========================
+       LOAD VIDEO + PLAYLIST
+    =========================== */
+
+    async function init() {
+      if (!videoId) {
+        titleText.innerText = "Video Not Found";
+        loadingText.innerText = "Video ID లేదు";
+        return;
+      }
+
+      const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+
+      allVideos = [];
+      snapshot.forEach((docItem) => {
+        allVideos.push({ id: docItem.id, ...docItem.data() });
+      });
+
+      currentIndex = allVideos.findIndex((v) => v.id === videoId);
+
+      if (currentIndex === -1) {
+        const snap = await getDoc(doc(db, "videos", videoId));
+        if (!snap.exists()) {
+          titleText.innerText = "Video Not Found";
+          loadingText.innerText = "వీడియో దొరకలేదు";
+          return;
+        }
+        loadVideoData({ id: videoId, ...snap.data() });
+        return;
+      }
+
+      loadVideoData(allVideos[currentIndex]);
+    }
+
+    function loadVideoData(data) {
+      if (!data.videoUrl) {
+        loadingText.innerText = "వీడియో ఫైల్ దొరకలేదు";
+        return;
+      }
+
+      titleText.innerText = data.title || "వీడియో";
+      video.src = data.videoUrl;
+      loadingText.style.display = "block";
+      loadingText.innerText = "లోడ్ అవుతోంది...";
+      video.load();
+
+      updateNavButtons();
+    }
+
+    function updateNavButtons() {
+      prevVideoBtn.disabled = currentIndex <= 0;
+      nextVideoBtn.disabled =
+        currentIndex === -1 || currentIndex >= allVideos.length - 1;
+
+      prevVideoBtn.style.opacity = prevVideoBtn.disabled ? "0.35" : "1";
+      nextVideoBtn.style.opacity = nextVideoBtn.disabled ? "0.35" : "1";
+    }
+
+    prevVideoBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        window.location.href = `video-player.html?id=${allVideos[currentIndex - 1].id}`;
+      }
+    });
+
+    nextVideoBtn.addEventListener("click", () => {
+      if (currentIndex < allVideos.length - 1) {
+        window.location.href = `video-player.html?id=${allVideos[currentIndex + 1].id}`;
+      }
+    });
+
+    /* ===========================
+       PLAY / PAUSE
+    =========================== */
+
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    centerPlayBtn.addEventListener("click", togglePlay);
+    playPauseBtn.addEventListener("click", togglePlay);
+
+    video.addEventListener("play", () => {
+      centerPlayBtn.innerHTML = "⏸";
+      playPauseBtn.innerHTML = "⏸";
+      centerPlayBtn.style.opacity = "0";
+      resetHideControlsTimer();
+    });
+
+    video.addEventListener("pause", () => {
+      centerPlayBtn.innerHTML = "▶";
+      playPauseBtn.innerHTML = "▶";
+      centerPlayBtn.style.opacity = "1";
+      showControls();
+    });
+
+    video.addEventListener("loadeddata", () => {
+      loadingText.style.display = "none";
+      durationText.innerText = formatTime(video.duration);
+    });
+
+    video.addEventListener("waiting", () => {
+      loadingText.style.display = "block";
+      loadingText.innerText = "బఫర్ అవుతోంది...";
+    });
+
+    video.addEventListener("playing", () => {
+      loadingText.style.display = "none";
+    });
+
+    video.addEventListener("ended", () => {
+      if (currentIndex < allVideos.length - 1) {
+        window.location.href = `video-player.html?id=${allVideos[currentIndex + 1].id}`;
+      }
+    });
+
+    /* ===========================
+       DOUBLE TAP SEEK
+    =========================== */
+
+    function setupDoubleTap(zone, indicator, seconds) {
+      let lastTap = 0;
+
+      zone.addEventListener("click", () => {
+        const now = Date.now();
+
+        if (now - lastTap < 350) {
+          video.currentTime = Math.min(
+            Math.max(video.currentTime + seconds, 0),
+            video.duration || Infinity
+          );
+
+          indicator.classList.add("show");
+          clearTimeout(indicator._hideTimer);
+          indicator._hideTimer = setTimeout(() => {
+            indicator.classList.remove("show");
+          }, 500);
+
+          lastTap = 0;
+        } else {
+          lastTap = now;
+          setTimeout(() => {
+            if (Date.now() - lastTap >= 340) {
+              toggleControlsVisibility();
+            }
+          }, 350);
+        }
+      });
+    }
+
+    setupDoubleTap(tapLeft, seekIndicatorLeft, -5);
+    setupDoubleTap(tapRight, seekIndicatorRight, 5);
+
+    /* ===========================
+       PROGRESS BAR
+    =========================== */
+
+    video.addEventListener("timeupdate", () => {
+      if (isDragging) return;
+      updateProgressUI();
+    });
+
+    video.addEventListener("progress", () => {
+      if (video.buffered.length > 0 && video.duration) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        progressBuffer.style.width = `${(bufferedEnd / video.duration) * 100}%`;
+      }
+    });
+
+    function updateProgressUI() {
+      if (!video.duration) return;
+      const percent = (video.currentTime / video.duration) * 100;
+      progressFill.style.width = `${percent}%`;
+      progressHandle.style.left = `${percent}%`;
+      currentTimeText.innerText = formatTime(video.currentTime);
+    }
+
+    function formatTime(seconds) {
+      if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+
+    function seekFromEvent(e) {
+      const rect = progressContainer.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let percent = (clientX - rect.left) / rect.width;
+      percent = Math.min(Math.max(percent, 0), 1);
+
+      progressFill.style.width = `${percent * 100}%`;
+      progressHandle.style.left = `${percent * 100}%`;
+
+      if (video.duration) {
+        video.currentTime = percent * video.duration;
+      }
+    }
+
+    progressContainer.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      seekFromEvent(e);
+    });
+
+    progressContainer.addEventListener("touchstart", (e) => {
+      isDragging = true;
+      seekFromEvent(e);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (isDragging) seekFromEvent(e);
+    });
+
+    window.addEventListener("touchmove", (e) => {
+      if (isDragging) seekFromEvent(e);
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+
+    window.addEventListener("touchend", () => {
+      isDragging = false;
+    });
+
+    /* ===========================
+       FULLSCREEN
+    =========================== */
+
+    fullscreenBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        videoWrapper.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    });
+
+    /* ===========================
+       AUTO-HIDE CONTROLS
+    =========================== */
+
+    function showControls() {
+      videoControls.classList.remove("controls-hidden");
+      videoTopbar.classList.remove("controls-hidden");
+      resetHideControlsTimer();
+    }
+
+    function hideControls() {
+      if (video.paused) return;
+      videoControls.classList.add("controls-hidden");
+      videoTopbar.classList.add("controls-hidden");
+    }
+
+    function resetHideControlsTimer() {
+      clearTimeout(hideControlsTimer);
+      hideControlsTimer = setTimeout(hideControls, 3000);
+    }
+
+    function toggleControlsVisibility() {
+      if (videoControls.classList.contains("controls-hidden")) {
+        showControls();
+      } else {
+        hideControls();
+      }
+    }
+
+    videoWrapper.addEventListener("mousemove", showControls);
+
+    init();
+  </script>
+
+</body>
+</html>
