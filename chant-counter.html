@@ -39,7 +39,14 @@
       color: #EDE3C8;
       opacity: 0.75;
       font-size: 0.95rem;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
+    }
+    .japa-my-total {
+      text-align: center;
+      color: #C9A24B;
+      font-size: 0.88rem;
+      margin-bottom: 26px;
+      opacity: 0.9;
     }
 
     /* STEP 1: deity grid */
@@ -52,7 +59,7 @@
       background: rgba(237,227,200,0.05);
       border: 1px solid rgba(201,162,75,0.3);
       border-radius: 14px;
-      padding: 18px 8px;
+      padding: 16px 6px 12px;
       text-align: center;
       cursor: pointer;
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
@@ -63,7 +70,15 @@
       background: rgba(255,209,102,0.08);
     }
     .deity-icon { font-size: 2.1rem; margin-bottom: 8px; }
-    .deity-name { color: #EDE3C8; font-size: 0.9rem; font-weight: 600; }
+    .deity-name { color: #EDE3C8; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; }
+    .deity-community {
+      font-size: 0.72rem;
+      color: #C9A24B;
+      opacity: 0.85;
+      border-top: 1px solid rgba(201,162,75,0.2);
+      padding-top: 6px;
+      margin-top: 4px;
+    }
 
     /* STEP 2: count selection */
     .count-options {
@@ -150,7 +165,7 @@
       border-radius: 16px;
       padding: 20px;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 22px;
     }
     .mantra-deity-label {
       color: #C9A24B;
@@ -164,6 +179,12 @@
       font-size: 1.35rem;
       line-height: 1.7;
       font-weight: 600;
+    }
+    .mantra-my-progress {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: #EDE3C8;
+      opacity: 0.75;
     }
 
     .counter-wrap {
@@ -239,6 +260,15 @@
       cursor: pointer;
     }
 
+    .login-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #C9A24B;
+      opacity: 0.75;
+      margin-top: 14px;
+    }
+    .login-note a { color: #ffd166; text-decoration: underline; cursor: pointer; }
+
     .completed-box {
       display: none;
       text-align: center;
@@ -274,8 +304,14 @@
     <div class="japa-step active" id="stepDeity">
       <h1 class="japa-title">ఎవరిని జపించాలనుకుంటున్నారు?</h1>
       <p class="japa-subtitle">మీ ఇష్ట దైవాన్ని ఎంచుకోండి</p>
+      <p class="japa-my-total" id="myTotalLabel"></p>
 
       <div class="deity-grid" id="deityGrid"></div>
+
+      <p class="login-note" id="loginNote" style="display:none;">
+        లాగిన్ చేస్తే మీ జపం సేవ్ అవుతుంది మరియు కమ్యూనిటీ లెక్కలో కలుస్తుంది —
+        <a id="loginNoteBtn">లాగిన్ చేయండి</a>
+      </p>
     </div>
 
     <!-- STEP 2: choose count -->
@@ -307,6 +343,7 @@
       <div class="mantra-box">
         <div class="mantra-deity-label" id="mantraDeityLabel"></div>
         <div class="mantra-text" id="mantraText"></div>
+        <div class="mantra-my-progress" id="mantraMyProgress"></div>
       </div>
 
       <div class="counter-wrap">
@@ -356,7 +393,16 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <script src="music.js?v=2"></script>
 
-  <script>
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+      doc, getDoc, setDoc, updateDoc, increment,
+      collection, getDocs
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
     const deities = [
       { id: "ganesha", icon: "🐘", name: "గణేశుడు", mantra: "ఓం గం గణపతయే నమః" },
       { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
@@ -369,10 +415,32 @@
       { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
     ];
 
+    let currentUser = null;
+    let userReady = false;
+    let personalProgress = {}; // { ganesha: { rounds, chants }, ... }
+    let communityTotals = {};  // { ganesha: { rounds, chants }, ... }
+
     let selectedDeity = null;
     let targetCount = 108;
     let currentCount = 0;
 
+    const LOCAL_KEY = "sannivesham_japa_progress";
+
+    function loadLocalProgress() {
+      try {
+        const raw = localStorage.getItem(LOCAL_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) { return {}; }
+    }
+    function saveLocalProgress(data) {
+      try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
+    }
+
+    function getMyTotalRounds() {
+      return Object.values(personalProgress).reduce((sum, d) => sum + (d.rounds || 0), 0);
+    }
+
+    // ---- DOM refs ----
     const stepDeity = document.getElementById("stepDeity");
     const stepCount = document.getElementById("stepCount");
     const stepCounter = document.getElementById("stepCounter");
@@ -380,28 +448,41 @@
     const countSubtitle = document.getElementById("countSubtitle");
     const countNextBtn = document.getElementById("countNextBtn");
     const customCountInput = document.getElementById("customCountInput");
+    const myTotalLabel = document.getElementById("myTotalLabel");
+    const loginNote = document.getElementById("loginNote");
 
     function showStep(step) {
       [stepDeity, stepCount, stepCounter].forEach(s => s.classList.remove("active"));
       step.classList.add("active");
     }
 
-    // Render deity grid
-    deities.forEach(d => {
-      const card = document.createElement("div");
-      card.className = "deity-card";
-      card.dataset.id = d.id;
-      card.innerHTML = `
-        <div class="deity-icon">${d.icon}</div>
-        <div class="deity-name">${d.name}</div>
-      `;
-      card.addEventListener("click", () => {
-        selectedDeity = d;
-        countSubtitle.innerText = `${d.name} జపం కోసం సంఖ్యను ఎంచుకోండి`;
-        showStep(stepCount);
+    function renderDeityGrid() {
+      deityGrid.innerHTML = "";
+      deities.forEach(d => {
+        const community = communityTotals[d.id]?.rounds || 0;
+        const card = document.createElement("div");
+        card.className = "deity-card";
+        card.dataset.id = d.id;
+        card.innerHTML = `
+          <div class="deity-icon">${d.icon}</div>
+          <div class="deity-name">${d.name}</div>
+          <div class="deity-community">👥 ${community.toLocaleString("en-IN")} రౌండ్లు</div>
+        `;
+        card.addEventListener("click", () => {
+          selectedDeity = d;
+          countSubtitle.innerText = `${d.name} జపం కోసం సంఖ్యను ఎంచుకోండి`;
+          showStep(stepCount);
+        });
+        deityGrid.appendChild(card);
       });
-      deityGrid.appendChild(card);
-    });
+    }
+
+    function renderMyTotal() {
+      const total = getMyTotalRounds();
+      myTotalLabel.innerText = total > 0
+        ? `మీరు ఇప్పటివరకు మొత్తం ${total.toLocaleString("en-IN")} రౌండ్లు పూర్తి చేశారు 🙏`
+        : "";
+    }
 
     document.getElementById("backToDeityBtn").addEventListener("click", () => {
       showStep(stepDeity);
@@ -442,6 +523,7 @@
     const counterRingProgress = document.getElementById("counterRingProgress");
     const mantraDeityLabel = document.getElementById("mantraDeityLabel");
     const mantraText = document.getElementById("mantraText");
+    const mantraMyProgress = document.getElementById("mantraMyProgress");
     const tapBtn = document.getElementById("tapBtn");
     const completedBox = document.getElementById("completedBox");
     const completedSub = document.getElementById("completedSub");
@@ -450,6 +532,12 @@
       mantraDeityLabel.innerText = selectedDeity.name;
       mantraText.innerText = selectedDeity.mantra;
       counterTargetLabel.innerText = `/ ${targetCount}`;
+
+      const existing = personalProgress[selectedDeity.id];
+      mantraMyProgress.innerText = existing && existing.rounds > 0
+        ? `మీరు ఇప్పటివరకు ${selectedDeity.name} కోసం ${existing.rounds} రౌండ్లు పూర్తి చేశారు`
+        : "";
+
       completedBox.classList.remove("show");
       tapBtn.style.display = "block";
       updateCounterUI();
@@ -465,6 +553,49 @@
       );
     }
 
+    async function saveCompletedRound() {
+      const id = selectedDeity.id;
+
+      // Update local in-memory progress immediately
+      if (!personalProgress[id]) personalProgress[id] = { rounds: 0, chants: 0 };
+      personalProgress[id].rounds += 1;
+      personalProgress[id].chants += targetCount;
+
+      if (currentUser) {
+        // Save to Firestore for the logged-in user
+        try {
+          await setDoc(doc(db, "users", currentUser.uid), {
+            japaProgress: {
+              deities: {
+                [id]: {
+                  rounds: increment(1),
+                  chants: increment(targetCount)
+                }
+              }
+            }
+          }, { merge: true });
+        } catch (e) {}
+
+        // Update community totals (only counted for logged-in users)
+        try {
+          await setDoc(doc(db, "japaCommunity", id), {
+            rounds: increment(1),
+            chants: increment(targetCount)
+          }, { merge: true });
+
+          if (!communityTotals[id]) communityTotals[id] = { rounds: 0, chants: 0 };
+          communityTotals[id].rounds += 1;
+          communityTotals[id].chants += targetCount;
+          renderDeityGrid();
+        } catch (e) {}
+      } else {
+        // Save to localStorage for guests
+        saveLocalProgress(personalProgress);
+      }
+
+      renderMyTotal();
+    }
+
     tapBtn.addEventListener("click", () => {
       if (currentCount >= targetCount) return;
       currentCount++;
@@ -473,9 +604,11 @@
       if (navigator.vibrate) navigator.vibrate(15);
 
       if (currentCount >= targetCount) {
-        completedSub.innerText = `${selectedDeity.name} - ${targetCount} జపం పూర్తయింది 🙏`;
-        completedBox.classList.add("show");
-        tapBtn.style.display = "none";
+        saveCompletedRound().then(() => {
+          completedSub.innerText = `${selectedDeity.name} - ${targetCount} జపం పూర్తయింది 🙏`;
+          completedBox.classList.add("show");
+          tapBtn.style.display = "none";
+        });
       }
     });
 
@@ -496,6 +629,45 @@
       tapBtn.style.display = "block";
       updateCounterUI();
     });
+
+    document.getElementById("loginNoteBtn").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    // ---- Load community totals (visible to everyone, logged in or not) ----
+    async function loadCommunityTotals() {
+      try {
+        const snap = await getDocs(collection(db, "japaCommunity"));
+        snap.forEach(d => {
+          communityTotals[d.id] = d.data();
+        });
+      } catch (e) {}
+      renderDeityGrid();
+    }
+
+    // ---- Load personal progress (Firestore if logged in, else localStorage) ----
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+
+      if (user) {
+        loginNote.style.display = "none";
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) {
+            const data = snap.data();
+            personalProgress = (data.japaProgress && data.japaProgress.deities) || {};
+          }
+        } catch (e) {}
+      } else {
+        loginNote.style.display = "block";
+        personalProgress = loadLocalProgress();
+      }
+
+      userReady = true;
+      renderMyTotal();
+    });
+
+    loadCommunityTotals();
   </script>
 </body>
 </html>
