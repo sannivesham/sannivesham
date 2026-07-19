@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>క్యాలెండర్ - సన్నివేశం</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Noto Sans Telugu', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #b3e5fc 0%, #e1f5fe 25%, #ffffff 50%, #e0f7fa 75%, #b2ebf2 100%);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Floating snowflakes */
+  .snowflake {
+    position: fixed;
+    top: -10%;
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 2px rgba(180,220,255,0.8);
+    user-select: none;
+    pointer-events: none;
+    animation: fall linear infinite;
+    z-index: 1;
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-10vh) translateX(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) translateX(40px) rotate(360deg);
+      opacity: 0.3;
+    }
+  }
+
+  /* Frosted glass ice patterns in background */
+  .ice-shard {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 0;
+  }
+
+  .ice-shard.one {
+    width: 300px;
+    height: 300px;
+    top: -80px;
+    left: -80px;
+    background: rgba(179, 229, 252, 0.55);
+  }
+
+  .ice-shard.two {
+    width: 400px;
+    height: 400px;
+    bottom: -120px;
+    right: -100px;
+    background: rgba(178, 235, 242, 0.55);
+  }
+
+  .ice-shard.three {
+    width: 220px;
+    height: 220px;
+    top: 60%;
+    left: 10%;
+    background: rgba(225, 245, 254, 0.6);
+  }
+
+  /* Main card */
+  .coming-soon-box {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 32px;
+    padding: 60px 45px;
+    text-align: center;
+    max-width: 520px;
+    width: 90%;
+    box-shadow:
+      0 8px 40px rgba(100, 180, 220, 0.35),
+      inset 0 0 30px rgba(255, 255, 255, 0.4);
+  }
+
+  .ice-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(150, 220, 255, 0.8));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-14px); }
+  }
+
+  .coming-soon-box h1 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #01579b;
+    text-shadow: 0 2px 12px rgba(255,255,255,0.8);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .coming-soon-box p {
+    font-size: 18px;
+    color: #0277bd;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    font-weight: 400;
+  }
+
+  .divider-line {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #4fc3f7, transparent);
+    margin: 0 auto 30px;
+    border-radius: 10px;
+  }
+
+  .back-btn {
+    display: inline-block;
+    padding: 14px 38px;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 6px 20px rgba(2, 136, 209, 0.4);
+    transition: 0.3s ease;
+  }
+
+  .back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(2, 136, 209, 0.55);
+  }
+
+  @media (max-width: 600px) {
+    .coming-soon-box {
+      padding: 45px 25px;
+    }
+
+    .coming-soon-box h1 {
+      font-size: 30px;
+    }
+
+    .coming-soon-box p {
+      font-size: 15px;
+    }
+
+    .ice-icon {
+      font-size: 46px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="ice-shard one"></div>
+  <div class="ice-shard two"></div>
+  <div class="ice-shard three"></div>
+
+  <div class="coming-soon-box">
+    <div class="ice-icon">❄️</div>
+    <h1>త్వరలో వస్తుంది</h1>
+    <div class="divider-line"></div>
+    <p>
+      మా క్యాలెండర్ విభాగం ప్రస్తుతం తయారీలో ఉంది.<br>
+      పండుగలు, కార్యక్రమాలు మరియు ముఖ్యమైన తేదీలను<br>
+      ఒకే చోట చూసే అవకాశం త్వరలో మీకు అందుబాటులోకి వస్తుంది.
+    </p>
+    <a href="index.html" class="back-btn">ప్రారంభానికి తిరిగి వెళ్ళండి</a>
+  </div>
+
+  <script>
+    const flakes = ["❄", "❅", "❆"];
+    const body = document.body;
+    const flakeCount = 35;
+
+    for (let i = 0; i < flakeCount; i++) {
+      const flake = document.createElement("div");
+      flake.className = "snowflake";
+      flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+      flake.style.left = Math.random() * 100 + "vw";
+      flake.style.fontSize = (Math.random() * 18 + 10) + "px";
+      flake.style.animationDuration = (Math.random() * 6 + 6) + "s";
+      flake.style.animationDelay = (Math.random() * 5) + "s";
+      flake.style.opacity = Math.random() * 0.6 + 0.4;
+      body.appendChild(flake);
+    }
+  </script>
+
+</body>
+</html>
