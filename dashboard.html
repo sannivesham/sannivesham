@@ -496,6 +496,208 @@
       <span>＋ Quiz Card</span>
     </div>
 
+     <div id="itihasaluCardBox" class="festival-card-upload-box">
+      <span>＋ Itihasalu Card</span>
+    </div>
+
+    <div id="videosCardBox" class="festival-card-upload-box">
+      <span>＋ Videos Card</span>
+    </div>
+
+    <div id="calendarCardBox" class="festival-card-upload-box">
+      <span>＋ Calendar Card</span>
+    </div>
+
+    <div id="chantCounterCardBox" class="festival-card-upload-box">
+      <span>＋ Chant Counter Card</span>
+    </div>
+
+    <div id="poojaRoomCardBox" class="festival-card-upload-box">
+      <span>＋ Pooja Room Card</span>
+    </div>
+
+    <div id="storeCardBox" class="festival-card-upload-box">
+      <span>＋ Store Card</span>
+    </div>
+
+    <button id="saveHomeCardsBtn">
+      Save Home Cards
+    </button>
+
+    <p id="homeCardsMessage"></p>
+
+  </div>
+
+</div>
+dashboard.js — Home Cards section changes
+Find this block:
+js// HOME CARDS CMS
+
+const homeCardBoxes = {
+  eventsCard: document.getElementById("eventsCardBox"),
+  festivalsCard: document.getElementById("festivalsCardBox"),
+  templesCard: document.getElementById("templesCardBox"),
+  storiesCard: document.getElementById("storiesCardBox"),
+  slokasCard: document.getElementById("slokasCardBox"),
+  quizCard: document.getElementById("quizCardBox")
+};
+
+Object.keys(homeCardBoxes).forEach((key) => {
+  const box = homeCardBoxes[key];
+
+  if (!box) return;
+
+  box.addEventListener("click", async () => {
+    const url = await uploadImage();
+
+    if (!url) return;
+
+    box.dataset.image = url;
+    box.innerHTML = `<img src="${url}">`;
+  });
+});
+
+const saveHomeCardsBtn =
+document.getElementById("saveHomeCardsBtn");
+
+if (saveHomeCardsBtn) {
+  saveHomeCardsBtn.addEventListener("click", async () => {
+    await setDoc(
+      doc(db, "settings", "homeCards"),
+      {
+        eventsCard: homeCardBoxes.eventsCard.dataset.image || "",
+        festivalsCard: homeCardBoxes.festivalsCard.dataset.image || "",
+        templesCard: homeCardBoxes.templesCard.dataset.image || "",
+        storiesCard: homeCardBoxes.storiesCard.dataset.image || "",
+        slokasCard: homeCardBoxes.slokasCard.dataset.image || "",
+        quizCard: homeCardBoxes.quizCard.dataset.image || "",
+        updatedAt: serverTimestamp()
+      },
+      { merge: true }
+    );
+
+    document.getElementById("homeCardsMessage").innerText =
+      "✅ Home cards saved";
+  });
+}
+Replace with:
+js// HOME CARDS CMS
+
+const homeCardBoxes = {
+  eventsCard: document.getElementById("eventsCardBox"),
+  festivalsCard: document.getElementById("festivalsCardBox"),
+  templesCard: document.getElementById("templesCardBox"),
+  storiesCard: document.getElementById("storiesCardBox"),
+  slokasCard: document.getElementById("slokasCardBox"),
+  quizCard: document.getElementById("quizCardBox"),
+  itihasaluCard: document.getElementById("itihasaluCardBox"),
+  videosCard: document.getElementById("videosCardBox"),
+  calendarCard: document.getElementById("calendarCardBox"),
+  chantCounterCard: document.getElementById("chantCounterCardBox"),
+  poojaRoomCard: document.getElementById("poojaRoomCardBox"),
+  storeCard: document.getElementById("storeCardBox")
+};
+
+Object.keys(homeCardBoxes).forEach((key) => {
+  const box = homeCardBoxes[key];
+
+  if (!box) return;
+
+  box.addEventListener("click", async () => {
+    const url = await uploadImage();
+
+    if (!url) return;
+
+    box.dataset.image = url;
+    box.innerHTML = `<img src="${url}">`;
+  });
+});
+
+async function loadHomeCardsAdmin() {
+  const snap = await getDoc(doc(db, "settings", "homeCards"));
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  Object.keys(homeCardBoxes).forEach((key) => {
+    const box = homeCardBoxes[key];
+    if (!box) return;
+    if (data[key]) {
+      box.dataset.image = data[key];
+      box.innerHTML = `<img src="${data[key]}">`;
+    }
+  });
+}
+
+loadHomeCardsAdmin();
+
+const saveHomeCardsBtn =
+document.getElementById("saveHomeCardsBtn");
+
+if (saveHomeCardsBtn) {
+  saveHomeCardsBtn.addEventListener("click", async () => {
+    await setDoc(
+      doc(db, "settings", "homeCards"),
+      {
+        eventsCard: homeCardBoxes.eventsCard.dataset.image || "",
+        festivalsCard: homeCardBoxes.festivalsCard.dataset.image || "",
+        templesCard: homeCardBoxes.templesCard.dataset.image || "",
+        storiesCard: homeCardBoxes.storiesCard.dataset.image || "",
+        slokasCard: homeCardBoxes.slokasCard.dataset.image || "",
+        quizCard: homeCardBoxes.quizCard.dataset.image || "",
+        itihasaluCard: homeCardBoxes.itihasaluCard.dataset.image || "",
+        videosCard: homeCardBoxes.videosCard.dataset.image || "",
+        calendarCard: homeCardBoxes.calendarCard.dataset.image || "",
+        chantCounterCard: homeCardBoxes.chantCounterCard.dataset.image || "",
+        poojaRoomCard: homeCardBoxes.poojaRoomCard.dataset.image || "",
+        storeCard: homeCardBoxes.storeCard.dataset.image || "",
+        updatedAt: serverTimestamp()
+      },
+      { merge: true }
+    );
+
+    document.getElementById("homeCardsMessage").innerText =
+      "✅ Home cards saved";
+  });
+}
+I also added loadHomeCardsAdmin() so previously uploaded images now show up already filled in when you reopen the dashboard — your original code didn't have that for Home Cards, so every visit looked blank even after saving. Small bonus fix, didn't change anything else.
+index.html — one small change to actually use these uploads
+Find:
+js    // Home cards
+    async function loadHomeCards() {
+      const snap = await getDoc(doc(db, "settings", "homeCards"));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.eventsCard) document.getElementById("eventsCardImg").src = data.eventsCard;
+      if (data.festivalsCard) document.getElementById("festivalsCardImg").src = data.festivalsCard;
+      if (data.templesCard) document.getElementById("templesCardImg").src = data.templesCard;
+      if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
+      if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
+      if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
+    }
+    loadHomeCards();
+Replace with:
+js    // Home cards
+    async function loadHomeCards() {
+      const snap = await getDoc(doc(db, "settings", "homeCards"));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.eventsCard) document.getElementById("eventsCardImg").src = data.eventsCard;
+      if (data.festivalsCard) document.getElementById("festivalsCardImg").src = data.festivalsCard;
+      if (data.templesCard) document.getElementById("templesCardImg").src = data.templesCard;
+      if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
+      if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
+      if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
+      if (data.itihasaluCard) document.getElementById("itihasaluCardImg").src = data.itihasaluCard;
+      if (data.videosCard) document.getElementById("videosCardImg").src = data.videosCard;
+      if (data.calendarCard) document.getElementById("calendarCardImg").src = data.calendarCard;
+      if (data.chantCounterCard) document.getElementById("chantCounterCardImg").src = data.chantCounterCard;
+      if (data.poojaRoomCard) document.getElementById("poojaRoomCardImg").src = data.poojaRoomCard;
+      if (data.storeCard) document.getElementById("storeCardImg").src = data.storeCard;
+    }
+    loadHomeCards();
+Now: go to the dashboard's Home Cards tab, upload an image for each of the 6 new sections, hit Save — and the broken images on the home page will be replaced with your uploaded ones immediately (no code redeploy needed, since it's all pulled from Firestore).
+
     <button id="saveHomeCardsBtn">
       Save Home Cards
     </button>
