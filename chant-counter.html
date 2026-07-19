@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>జప కౌంటర్ - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .japa-page {
+      min-height: 100vh;
+      padding: 100px 20px 60px;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .japa-step { display: none; width: 100%; max-width: 520px; }
+    .japa-step.active { display: block; animation: fadeIn 0.35s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .japa-title {
+      text-align: center;
+      color: #ffd166;
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      text-shadow: 0 0 16px rgba(255,190,90,0.25);
+    }
+    .japa-subtitle {
+      text-align: center;
+      color: #EDE3C8;
+      opacity: 0.75;
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    /* STEP 1: deity grid */
+    .deity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .deity-card {
+      background: rgba(237,227,200,0.05);
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: 14px;
+      padding: 18px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .deity-card:hover, .deity-card.selected {
+      transform: translateY(-3px);
+      border-color: #ffd166;
+      background: rgba(255,209,102,0.08);
+    }
+    .deity-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .deity-name { color: #EDE3C8; font-size: 0.9rem; font-weight: 600; }
+
+    /* STEP 2: count selection */
+    .count-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .count-option-btn {
+      background: rgba(237,227,200,0.05);
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: 12px;
+      padding: 16px;
+      color: #ffd166;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .count-option-btn.selected {
+      border-color: #ffd166;
+      background: rgba(255,209,102,0.1);
+    }
+    .count-option-btn span {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #EDE3C8;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    .custom-count-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(237,227,200,0.05);
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: 12px;
+      padding: 10px 16px;
+    }
+    .custom-count-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffd166;
+      font-size: 1.1rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .custom-count-box input::placeholder { color: rgba(237,227,200,0.4); }
+
+    .japa-next-btn {
+      display: block;
+      margin: 26px auto 0;
+      padding: 12px 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(201,162,75,0.5);
+      background: linear-gradient(180deg, #C9A24B, #8a6a26);
+      color: #1a1206;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .japa-next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .japa-back-link {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      color: #C9A24B;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* STEP 3: mantra + counter */
+    .mantra-box {
+      background: rgba(237,227,200,0.05);
+      border: 1px solid rgba(201,162,75,0.35);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .mantra-deity-label {
+      color: #C9A24B;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .mantra-text {
+      color: #ffd166;
+      font-size: 1.35rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .counter-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .counter-ring-box {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+    .counter-ring-box svg { transform: rotate(-90deg); }
+    .counter-ring-bg { fill: none; stroke: rgba(237,227,200,0.1); stroke-width: 10; }
+    .counter-ring-progress {
+      fill: none;
+      stroke: url(#japaGradient);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+    .counter-center {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .counter-current {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #ffd166;
+      line-height: 1;
+    }
+    .counter-target {
+      font-size: 0.95rem;
+      color: #EDE3C8;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .tap-btn {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe6a3, #C9A24B 55%, #8a6a26 100%);
+      border: none;
+      color: #2a1c06;
+      font-size: 1.1rem;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 2px 6px rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: transform 0.08s ease;
+      user-select: none;
+    }
+    .tap-btn:active { transform: scale(0.92); }
+
+    .japa-controls-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .japa-small-btn {
+      background: rgba(237,227,200,0.05);
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: 999px;
+      padding: 8px 18px;
+      color: #EDE3C8;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .completed-box {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .completed-box.show { display: block; animation: fadeIn 0.4s ease; }
+    .completed-icon { font-size: 3rem; margin-bottom: 10px; }
+    .completed-title {
+      color: #ffd166;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .completed-sub {
+      color: #EDE3C8;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body class="stories-body">
+  <div class="stories-bg"></div>
+  <nav class="glass-navbar">
+    <a href="index.html#categories">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="chant-counter.html">జప కౌంటర్</a>
+  </nav>
+
+  <div class="japa-page">
+
+    <!-- STEP 1: choose deity -->
+    <div class="japa-step active" id="stepDeity">
+      <h1 class="japa-title">ఎవరిని జపించాలనుకుంటున్నారు?</h1>
+      <p class="japa-subtitle">మీ ఇష్ట దైవాన్ని ఎంచుకోండి</p>
+
+      <div class="deity-grid" id="deityGrid"></div>
+    </div>
+
+    <!-- STEP 2: choose count -->
+    <div class="japa-step" id="stepCount">
+      <h1 class="japa-title">ఎన్ని సార్లు జపించాలి?</h1>
+      <p class="japa-subtitle" id="countSubtitle"></p>
+
+      <div class="count-options">
+        <div class="count-option-btn" data-count="108">
+          108
+          <span>ఒక మాల</span>
+        </div>
+        <div class="count-option-btn" data-count="1000">
+          1000
+          <span>సంపూర్ణ జపం</span>
+        </div>
+        <div class="custom-count-box">
+          <input type="number" id="customCountInput" placeholder="మీ స్వంత సంఖ్య నమోదు చేయండి" min="1">
+        </div>
+      </div>
+
+      <button class="japa-next-btn" id="countNextBtn" disabled>జపం ప్రారంభించండి</button>
+      <span class="japa-back-link" id="backToDeityBtn">← దైవాన్ని మార్చండి</span>
+    </div>
+
+    <!-- STEP 3: mantra + counter -->
+    <div class="japa-step" id="stepCounter">
+
+      <div class="mantra-box">
+        <div class="mantra-deity-label" id="mantraDeityLabel"></div>
+        <div class="mantra-text" id="mantraText"></div>
+      </div>
+
+      <div class="counter-wrap">
+
+        <div class="counter-ring-box">
+          <svg width="220" height="220" viewBox="0 0 220 220">
+            <defs>
+              <linearGradient id="japaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe6a3"/>
+                <stop offset="100%" stop-color="#C9A24B"/>
+              </linearGradient>
+            </defs>
+            <circle class="counter-ring-bg" cx="110" cy="110" r="98"></circle>
+            <circle class="counter-ring-progress" id="counterRingProgress" cx="110" cy="110" r="98"
+              stroke-dasharray="615.75" stroke-dashoffset="615.75"></circle>
+          </svg>
+          <div class="counter-center">
+            <div class="counter-current" id="counterCurrent">0</div>
+            <div class="counter-target" id="counterTargetLabel">/ 108</div>
+          </div>
+        </div>
+
+        <button class="tap-btn" id="tapBtn">జపించండి</button>
+
+        <div class="japa-controls-row">
+          <span class="japa-small-btn" id="resetCountBtn">↺ మళ్ళీ మొదలు</span>
+          <span class="japa-small-btn" id="changeDeityBtn">🔁 దైవం మార్చు</span>
+        </div>
+
+        <div class="completed-box" id="completedBox">
+          <div class="completed-icon">🙏</div>
+          <div class="completed-title">జపం పూర్తయింది!</div>
+          <div class="completed-sub" id="completedSub"></div>
+          <span class="japa-small-btn" id="startAgainBtn">మళ్ళీ ప్రారంభించండి</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js?v=2"></script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <script src="music.js?v=2"></script>
+
+  <script>
+    const deities = [
+      { id: "ganesha", icon: "🐘", name: "గణేశుడు", mantra: "ఓం గం గణపతయే నమః" },
+      { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
+      { id: "vishnu", icon: "🪷", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
+      { id: "lakshmi", icon: "🌸", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
+      { id: "durga", icon: "🗡️", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
+      { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
+      { id: "krishna", icon: "🪈", name: "కృష్ణుడు", mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
+      { id: "hanuman", icon: "🐒", name: "హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
+      { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
+    ];
+
+    let selectedDeity = null;
+    let targetCount = 108;
+    let currentCount = 0;
+
+    const stepDeity = document.getElementById("stepDeity");
+    const stepCount = document.getElementById("stepCount");
+    const stepCounter = document.getElementById("stepCounter");
+    const deityGrid = document.getElementById("deityGrid");
+    const countSubtitle = document.getElementById("countSubtitle");
+    const countNextBtn = document.getElementById("countNextBtn");
+    const customCountInput = document.getElementById("customCountInput");
+
+    function showStep(step) {
+      [stepDeity, stepCount, stepCounter].forEach(s => s.classList.remove("active"));
+      step.classList.add("active");
+    }
+
+    // Render deity grid
+    deities.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "deity-card";
+      card.dataset.id = d.id;
+      card.innerHTML = `
+        <div class="deity-icon">${d.icon}</div>
+        <div class="deity-name">${d.name}</div>
+      `;
+      card.addEventListener("click", () => {
+        selectedDeity = d;
+        countSubtitle.innerText = `${d.name} జపం కోసం సంఖ్యను ఎంచుకోండి`;
+        showStep(stepCount);
+      });
+      deityGrid.appendChild(card);
+    });
+
+    document.getElementById("backToDeityBtn").addEventListener("click", () => {
+      showStep(stepDeity);
+    });
+
+    // Count selection
+    document.querySelectorAll(".count-option-btn[data-count]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".count-option-btn[data-count]").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        customCountInput.value = "";
+        targetCount = parseInt(btn.dataset.count);
+        countNextBtn.disabled = false;
+      });
+    });
+
+    customCountInput.addEventListener("input", () => {
+      document.querySelectorAll(".count-option-btn[data-count]").forEach(b => b.classList.remove("selected"));
+      const val = parseInt(customCountInput.value);
+      if (val && val > 0) {
+        targetCount = val;
+        countNextBtn.disabled = false;
+      } else {
+        countNextBtn.disabled = true;
+      }
+    });
+
+    countNextBtn.addEventListener("click", () => {
+      if (!selectedDeity || !targetCount) return;
+      currentCount = 0;
+      startJapaSession();
+    });
+
+    // Counter setup
+    const CIRCUMFERENCE = 615.75;
+    const counterCurrent = document.getElementById("counterCurrent");
+    const counterTargetLabel = document.getElementById("counterTargetLabel");
+    const counterRingProgress = document.getElementById("counterRingProgress");
+    const mantraDeityLabel = document.getElementById("mantraDeityLabel");
+    const mantraText = document.getElementById("mantraText");
+    const tapBtn = document.getElementById("tapBtn");
+    const completedBox = document.getElementById("completedBox");
+    const completedSub = document.getElementById("completedSub");
+
+    function startJapaSession() {
+      mantraDeityLabel.innerText = selectedDeity.name;
+      mantraText.innerText = selectedDeity.mantra;
+      counterTargetLabel.innerText = `/ ${targetCount}`;
+      completedBox.classList.remove("show");
+      tapBtn.style.display = "block";
+      updateCounterUI();
+      showStep(stepCounter);
+    }
+
+    function updateCounterUI() {
+      counterCurrent.innerText = currentCount;
+      const progress = Math.min(currentCount / targetCount, 1);
+      counterRingProgress.setAttribute(
+        "stroke-dashoffset",
+        CIRCUMFERENCE - progress * CIRCUMFERENCE
+      );
+    }
+
+    tapBtn.addEventListener("click", () => {
+      if (currentCount >= targetCount) return;
+      currentCount++;
+      updateCounterUI();
+
+      if (navigator.vibrate) navigator.vibrate(15);
+
+      if (currentCount >= targetCount) {
+        completedSub.innerText = `${selectedDeity.name} - ${targetCount} జపం పూర్తయింది 🙏`;
+        completedBox.classList.add("show");
+        tapBtn.style.display = "none";
+      }
+    });
+
+    document.getElementById("resetCountBtn").addEventListener("click", () => {
+      currentCount = 0;
+      completedBox.classList.remove("show");
+      tapBtn.style.display = "block";
+      updateCounterUI();
+    });
+
+    document.getElementById("changeDeityBtn").addEventListener("click", () => {
+      showStep(stepDeity);
+    });
+
+    document.getElementById("startAgainBtn").addEventListener("click", () => {
+      currentCount = 0;
+      completedBox.classList.remove("show");
+      tapBtn.style.display = "block";
+      updateCounterUI();
+    });
+  </script>
+</body>
+</html>
