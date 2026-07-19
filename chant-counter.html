@@ -49,7 +49,6 @@
       opacity: 0.9;
     }
 
-    /* STEP 1: deity grid */
     .deity-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -89,7 +88,6 @@
       line-height: 1.5;
     }
 
-    /* STEP 2: count selection */
     .count-options {
       display: flex;
       flex-direction: column;
@@ -167,7 +165,6 @@
       text-decoration: underline;
     }
 
-    /* STEP 3: mantra + counter */
     .mantra-box {
       background: rgba(237,227,200,0.05);
       border: 1px solid rgba(201,162,75,0.35);
@@ -314,9 +311,7 @@
       <h1 class="japa-title">ఎవరిని జపించాలనుకుంటున్నారు?</h1>
       <p class="japa-subtitle">మీ ఇష్ట దైవాన్ని ఎంచుకోండి</p>
       <p class="japa-my-total" id="myTotalLabel"></p>
-
       <div class="deity-grid" id="deityGrid"></div>
-
       <p class="login-note" id="loginNote" style="display:none;">
         లాగిన్ చేస్తే మీ జపం సేవ్ అవుతుంది మరియు కమ్యూనిటీ లెక్కలో కలుస్తుంది —
         <a id="loginNoteBtn">లాగిన్ చేయండి</a>
@@ -327,7 +322,6 @@
     <div class="japa-step" id="stepCount">
       <h1 class="japa-title">ఎన్ని సార్లు జపించాలి?</h1>
       <p class="japa-subtitle" id="countSubtitle"></p>
-
       <div class="count-options">
         <div class="count-option-btn" data-count="108">
           108
@@ -341,14 +335,12 @@
           <input type="number" id="customCountInput" placeholder="మీ స్వంత సంఖ్య నమోదు చేయండి" min="1">
         </div>
       </div>
-
       <button class="japa-next-btn" id="countNextBtn" disabled>జపం ప్రారంభించండి</button>
       <span class="japa-back-link" id="backToDeityBtn">← దైవాన్ని మార్చండి</span>
     </div>
 
-    <!-- STEP 3: mantra + counter -->
+    <!-- STEP 3: counter -->
     <div class="japa-step" id="stepCounter">
-
       <div class="mantra-box">
         <div class="mantra-deity-label" id="mantraDeityLabel"></div>
         <div class="mantra-text" id="mantraText"></div>
@@ -356,7 +348,6 @@
       </div>
 
       <div class="counter-wrap">
-
         <div class="counter-ring-box">
           <svg width="220" height="220" viewBox="0 0 220 220">
             <defs>
@@ -388,24 +379,22 @@
           <div class="completed-sub" id="completedSub"></div>
           <span class="japa-small-btn" id="startAgainBtn">మళ్ళీ ప్రారంభించండి</span>
         </div>
-
       </div>
-
     </div>
 
   </div>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js"></script>
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
   </audio>
   <button id="musicBtn" class="music-btn">🔊</button>
-  <script src="music.js?v=2"></script>
+  <script src="music.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
     import {
-      doc, getDoc, setDoc, increment,
+      doc, getDoc, setDoc, updateDoc, increment,
       collection, getDocs
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
     import {
@@ -413,21 +402,20 @@
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     const deities = [
-      { id: "ganesha", icon: "🐘", name: "గణేశుడు", mantra: "ఓం గం గణపతయే నమః" },
-      { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
-      { id: "vishnu", icon: "🪷", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
-      { id: "lakshmi", icon: "🌸", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
-      { id: "durga", icon: "🗡️", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
-      { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
-      { id: "krishna", icon: "🪈", name: "కృష్ణుడు", mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
-      { id: "hanuman", icon: "🐒", name: "హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
-      { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
+      { id: "ganesha",   icon: "🐘", name: "గణేశుడు",      mantra: "ఓం గం గణపతయే నమః" },
+      { id: "shiva",     icon: "🔱", name: "శివుడు",        mantra: "ఓం నమః శివాయ" },
+      { id: "vishnu",    icon: "🪷", name: "విష్ణువు",      mantra: "ఓం నమో నారాయణాయ" },
+      { id: "lakshmi",   icon: "🌸", name: "లక్ష్మీదేవి",   mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
+      { id: "durga",     icon: "🗡️", name: "దుర్గాదేవి",    mantra: "ఓం దుం దుర్గాయై నమః" },
+      { id: "rama",      icon: "🏹", name: "శ్రీరాముడు",    mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
+      { id: "krishna",   icon: "🪈", name: "కృష్ణుడు",      mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
+      { id: "hanuman",   icon: "🐒", name: "హనుమంతుడు",    mantra: "ఓం హనుమతే నమః" },
+      { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి",  mantra: "ఓం ఐం సరస్వత్యై నమః" }
     ];
 
     let currentUser = null;
-    let personalProgress = {};  // { ganesha: { date: "2026-07-19", rounds: N }, ... } - resets daily
-    let communityTotals = {};   // { ganesha: { rounds: N }, ... } - all-time, never resets
-
+    let personalProgress = {};
+    let communityTotals = {};
     let selectedDeity = null;
     let targetCount = 108;
     let currentCount = 0;
@@ -449,11 +437,11 @@
         return raw ? JSON.parse(raw) : {};
       } catch (e) { return {}; }
     }
+
     function saveLocalProgress(data) {
       try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
     }
 
-    // Returns today's rounds for a deity - if the stored date isn't today, it's effectively 0
     function getTodayRounds(deityId) {
       const record = personalProgress[deityId];
       if (!record || record.date !== todayKey) return 0;
@@ -464,7 +452,7 @@
       return deities.reduce((sum, d) => sum + getTodayRounds(d.id), 0);
     }
 
-    // ---- DOM refs ----
+    // DOM refs
     const stepDeity = document.getElementById("stepDeity");
     const stepCount = document.getElementById("stepCount");
     const stepCounter = document.getElementById("stepCounter");
@@ -512,11 +500,8 @@
         : "";
     }
 
-    document.getElementById("backToDeityBtn").addEventListener("click", () => {
-      showStep(stepDeity);
-    });
+    document.getElementById("backToDeityBtn").addEventListener("click", () => showStep(stepDeity));
 
-    // Count selection
     document.querySelectorAll(".count-option-btn[data-count]").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".count-option-btn[data-count]").forEach(b => b.classList.remove("selected"));
@@ -544,7 +529,6 @@
       startJapaSession();
     });
 
-    // Counter setup
     const CIRCUMFERENCE = 615.75;
     const counterCurrent = document.getElementById("counterCurrent");
     const counterTargetLabel = document.getElementById("counterTargetLabel");
@@ -560,12 +544,10 @@
       mantraDeityLabel.innerText = selectedDeity.name;
       mantraText.innerText = selectedDeity.mantra;
       counterTargetLabel.innerText = `/ ${targetCount}`;
-
       const todayRounds = getTodayRounds(selectedDeity.id);
       mantraMyProgress.innerText = todayRounds > 0
         ? `మీరు నేడు ${selectedDeity.name} కోసం ${todayRounds} రౌండ్లు పూర్తి చేశారు`
         : "";
-
       completedBox.classList.remove("show");
       tapBtn.style.display = "block";
       updateCounterUI();
@@ -584,7 +566,6 @@
     async function saveCompletedRound() {
       const id = selectedDeity.id;
 
-      // Update / reset today's personal round count
       const existing = personalProgress[id];
       const currentTodayRounds = (existing && existing.date === todayKey) ? existing.rounds : 0;
       personalProgress[id] = {
@@ -593,7 +574,7 @@
       };
 
       if (currentUser) {
-        // Save today's rounds to Firestore (overwritten daily, not incremented forever)
+        // Save personal progress
         try {
           await setDoc(doc(db, "users", currentUser.uid), {
             japaProgress: {
@@ -605,19 +586,32 @@
               }
             }
           }, { merge: true });
-        } catch (e) {}
+        } catch (e) {
+          console.log("Personal japa save error:", e);
+        }
 
-        // Community total: all-time, never resets, counted only for logged-in users
+        // Community total — try update first, create if missing
         try {
-          await setDoc(doc(db, "japaCommunity", id), {
+          await updateDoc(doc(db, "japaCommunity", id), {
             rounds: increment(1)
-          }, { merge: true });
+          });
+        } catch (e) {
+          // Document doesn't exist yet — create it
+          try {
+            await setDoc(doc(db, "japaCommunity", id), {
+              rounds: 1
+            });
+          } catch (e2) {
+            console.log("Community japa save error:", e2);
+          }
+        }
 
-          if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
-          communityTotals[id].rounds += 1;
-        } catch (e) {}
+        // Update local communityTotals so UI reflects immediately
+        if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
+        communityTotals[id].rounds += 1;
+
       } else {
-        // Guests: save today's rounds to localStorage only, no community credit
+        // Guest — save to localStorage only, no community credit
         saveLocalProgress(personalProgress);
       }
 
@@ -629,7 +623,6 @@
       if (currentCount >= targetCount) return;
       currentCount++;
       updateCounterUI();
-
       if (navigator.vibrate) navigator.vibrate(15);
 
       if (currentCount >= targetCount) {
@@ -648,9 +641,7 @@
       updateCounterUI();
     });
 
-    document.getElementById("changeDeityBtn").addEventListener("click", () => {
-      showStep(stepDeity);
-    });
+    document.getElementById("changeDeityBtn").addEventListener("click", () => showStep(stepDeity));
 
     document.getElementById("startAgainBtn").addEventListener("click", () => {
       currentCount = 0;
@@ -663,18 +654,20 @@
       window.location.href = "index.html";
     });
 
-    // ---- Load community totals (all-time, visible to everyone) ----
+    // Load community totals from Firestore
     async function loadCommunityTotals() {
       try {
         const snap = await getDocs(collection(db, "japaCommunity"));
         snap.forEach(d => {
           communityTotals[d.id] = d.data();
         });
-      } catch (e) {}
+      } catch (e) {
+        console.log("Community totals load error:", e);
+      }
       renderDeityGrid();
     }
 
-    // ---- Load personal progress (Firestore if logged in, else localStorage) ----
+    // Auth state
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
 
@@ -698,5 +691,6 @@
 
     loadCommunityTotals();
   </script>
+
 </body>
 </html>
