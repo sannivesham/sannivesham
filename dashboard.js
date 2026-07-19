@@ -2383,13 +2383,21 @@ if (saveSocialLinksBtn) {
 loadSocialLinksAdmin();
 // HOME CARDS CMS
 
+// HOME CARDS CMS
+
 const homeCardBoxes = {
   eventsCard: document.getElementById("eventsCardBox"),
   festivalsCard: document.getElementById("festivalsCardBox"),
   templesCard: document.getElementById("templesCardBox"),
   storiesCard: document.getElementById("storiesCardBox"),
   slokasCard: document.getElementById("slokasCardBox"),
-  quizCard: document.getElementById("quizCardBox")
+  quizCard: document.getElementById("quizCardBox"),
+  itihasaluCard: document.getElementById("itihasaluCardBox"),
+  videosCard: document.getElementById("videosCardBox"),
+  calendarCard: document.getElementById("calendarCardBox"),
+  chantCounterCard: document.getElementById("chantCounterCardBox"),
+  poojaRoomCard: document.getElementById("poojaRoomCardBox"),
+  storeCard: document.getElementById("storeCardBox")
 };
 
 Object.keys(homeCardBoxes).forEach((key) => {
@@ -2407,6 +2415,24 @@ Object.keys(homeCardBoxes).forEach((key) => {
   });
 });
 
+async function loadHomeCardsAdmin() {
+  const snap = await getDoc(doc(db, "settings", "homeCards"));
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  Object.keys(homeCardBoxes).forEach((key) => {
+    const box = homeCardBoxes[key];
+    if (!box) return;
+    if (data[key]) {
+      box.dataset.image = data[key];
+      box.innerHTML = `<img src="${data[key]}">`;
+    }
+  });
+}
+
+loadHomeCardsAdmin();
+
 const saveHomeCardsBtn =
 document.getElementById("saveHomeCardsBtn");
 
@@ -2421,6 +2447,12 @@ if (saveHomeCardsBtn) {
         storiesCard: homeCardBoxes.storiesCard.dataset.image || "",
         slokasCard: homeCardBoxes.slokasCard.dataset.image || "",
         quizCard: homeCardBoxes.quizCard.dataset.image || "",
+        itihasaluCard: homeCardBoxes.itihasaluCard.dataset.image || "",
+        videosCard: homeCardBoxes.videosCard.dataset.image || "",
+        calendarCard: homeCardBoxes.calendarCard.dataset.image || "",
+        chantCounterCard: homeCardBoxes.chantCounterCard.dataset.image || "",
+        poojaRoomCard: homeCardBoxes.poojaRoomCard.dataset.image || "",
+        storeCard: homeCardBoxes.storeCard.dataset.image || "",
         updatedAt: serverTimestamp()
       },
       { merge: true }
