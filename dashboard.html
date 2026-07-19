@@ -29,6 +29,7 @@
   <button class="dash-btn" data-section="videosSection">Videos</button>
   <button class="dash-btn" data-section="slokasSection">Slokas</button>
   <button class="dash-btn" data-section="quizSection">Quiz</button>
+  <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
 
   <button class="dash-btn" data-section="aboutSection">
     About
@@ -87,6 +88,63 @@
         <div id="adminEventsList"></div>
 
       </div>
+
+        <!-- CATEGORY -->
+  <div class="add-event-box">
+    <h2>Category జోడించండి</h2>
+    <input type="text" id="ithiCatTitle" placeholder="Category Title (రామాయణం)">
+    <input type="number" id="ithiCatOrder" placeholder="Order (1, 2, 3...)">
+    <div id="ithiCatImageBox" class="festival-card-upload-box">
+      <span>＋ Category Image</span>
+    </div>
+    <button id="saveIthiCatBtn">Save Category</button>
+    <p id="ithiCatMsg"></p>
+  </div>
+
+  <h2 class="admin-section-title">Categories</h2>
+  <div id="ithiCatList" class="cms-list"></div>
+
+  <hr style="border-color:rgba(255,209,102,0.2);margin:30px 0;">
+
+  <!-- SUB CATEGORY -->
+  <div class="add-event-box">
+    <h2>Sub Category జోడించండి</h2>
+    <select id="ithiSubCatSelect">
+      <option value="">Select Category</option>
+    </select>
+    <input type="text" id="ithiSubTitle" placeholder="Sub Category Title (బాల కాండ)">
+    <input type="number" id="ithiSubOrder" placeholder="Order">
+    <button id="saveIthiSubBtn">Save Sub Category</button>
+    <p id="ithiSubMsg"></p>
+  </div>
+
+  <h2 class="admin-section-title">Sub Categories</h2>
+  <div id="ithiSubList" class="cms-list"></div>
+
+  <hr style="border-color:rgba(255,209,102,0.2);margin:30px 0;">
+
+  <!-- SHLOKA -->
+  <div class="add-event-box">
+    <h2>శ్లోకం జోడించండి</h2>
+    <select id="ithiShlokaSubSelect">
+      <option value="">Select Sub Category</option>
+    </select>
+    <input type="text" id="ithiShlokaNumber" placeholder="శ్లోక సంఖ్య (1.1, 1.2...)">
+    <textarea id="ithiShlokaText" placeholder="శ్లోకం (Telugu text)"></textarea>
+    <textarea id="ithiShlokaExplanation" placeholder="వివరణ (Explanation)"></textarea>
+    <input type="text" id="ithiShlokaAudio" placeholder="Audio URL (Optional - YouTube/Drive)">
+    <input type="number" id="ithiShlokaOrder" placeholder="Order">
+    <button id="saveIthiShlokaBtn">Save శ్లోకం</button>
+    <p id="ithiShlokaMsg"></p>
+  </div>
+
+  <h2 class="admin-section-title">శ్లోకాలు జాబితా</h2>
+  <select id="ithiShlokaFilterSub" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:16px;">
+    <option value="">Filter by Sub Category</option>
+  </select>
+  <div id="ithiShlokaList" class="cms-list"></div>
+
+</div>
 
       <!-- FESTIVALS SECTION -->
       <div id="festivalsSection" class="dash-section">
@@ -163,7 +221,12 @@
 
 </div>
 
-<!-- STORIES SECTION -->
+<!-- SECTION — add after storiesSection div -->
+<div id="ithihasaluSection" class="dash-section">
+
+  <h2 class="admin-section-title">📜 ఇతిహాసాలు CMS</h2>
+
+
 
 <!-- LIBRARY SECTION -->
 <div id="librarySection" class="dash-section">
