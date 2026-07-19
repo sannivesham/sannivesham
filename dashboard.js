@@ -3107,3 +3107,237 @@ document.getElementById("newQuizAnswer").selectedIndex=0;
 
 });
 }
+
+// ═══════════════════════════════════════
+// ITHIHASALU CMS
+// ═══════════════════════════════════════
+
+// Category image upload
+const ithiCatImageBox = document.getElementById("ithiCatImageBox");
+if (ithiCatImageBox) {
+  ithiCatImageBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    ithiCatImageBox.dataset.image = url;
+    ithiCatImageBox.innerHTML = `<img src="${url}">`;
+  });
+}
+
+// Save category
+const saveIthiCatBtn = document.getElementById("saveIthiCatBtn");
+if (saveIthiCatBtn) {
+  saveIthiCatBtn.addEventListener("click", async () => {
+    const title = document.getElementById("ithiCatTitle").value.trim();
+    const order = Number(document.getElementById("ithiCatOrder").value) || 0;
+    const image = ithiCatImageBox?.dataset.image || "";
+    if (!title) { document.getElementById("ithiCatMsg").innerText = "Title required"; return; }
+    await addDoc(collection(db, "ithihasaluCategories"), { title, image, order, createdAt: serverTimestamp() });
+    document.getElementById("ithiCatMsg").innerText = "✅ Category saved";
+    document.getElementById("ithiCatTitle").value = "";
+    document.getElementById("ithiCatOrder").value = "";
+    if (ithiCatImageBox) { ithiCatImageBox.dataset.image = ""; ithiCatImageBox.innerHTML = "<span>＋ Category Image</span>"; }
+    loadIthiCats();
+  });
+}
+
+async function loadIthiCats() {
+  const list = document.getElementById("ithiCatList");
+  const subSelect = document.getElementById("ithiSubCatSelect");
+  if (!list) return;
+
+  const snap = await getDocs(query(collection(db, "ithihasaluCategories"), orderBy("order", "asc")));
+  list.innerHTML = "";
+  if (subSelect) subSelect.innerHTML = `<option value="">Select Category</option>`;
+
+  snap.forEach(d => {
+    const data = d.data();
+    if (subSelect) subSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
+
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text">
+        ${data.image ? `<img src="${data.image}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;margin-right:10px;">` : ""}
+        <span>${data.title}</span>
+      </div>
+      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+    `;
+    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete?")) return;
+      await deleteDoc(doc(db, "ithihasaluCategories", d.id));
+      loadIthiCats();
+    });
+    list.appendChild(row);
+  });
+}
+
+// Save sub category
+const saveIthiSubBtn = document.getElementById("saveIthiSubBtn");
+if (saveIthiSubBtn) {
+  saveIthiSubBtn.addEventListener("click", async () => {
+    const categoryId = document.getElementById("ithiSubCatSelect").value;
+    const title = document.getElementById("ithiSubTitle").value.trim();
+    const order = Number(document.getElementById("ithiSubOrder").value) || 0;
+    if (!categoryId || !title) { document.getElementById("ithiSubMsg").innerText = "Category and title required"; return; }
+    await addDoc(collection(db, "ithihasaluSubCategories"), { categoryId, title, order, createdAt: serverTimestamp() });
+    document.getElementById("ithiSubMsg").innerText = "✅ Sub category saved";
+    document.getElementById("ithiSubTitle").value = "";
+    document.getElementById("ithiSubOrder").value = "";
+    loadIthiSubs();
+  });
+}
+
+async function loadIthiSubs() {
+  const list = document.getElementById("ithiSubList");
+  const shlokaSubSelect = document.getElementById("ithiShlokaSubSelect");
+  const filterSub = document.getElementById("ithiShlokaFilterSub");
+  if (!list) return;
+
+  const snap = await getDocs(query(collection(db, "ithihasaluSubCategories"), orderBy("order", "asc")));
+  const catSnap = await getDocs(collection(db, "ithihasaluCategories"));
+  const catMap = {};
+  catSnap.forEach(d => { catMap[d.id] = d.data().title; });
+
+  list.innerHTML = "";
+  if (shlokaSubSelect) shlokaSubSelect.innerHTML = `<option value="">Select Sub Category</option>`;
+  if (filterSub) filterSub.innerHTML = `<option value="">All Sub Categories</option>`;
+
+  snap.forEach(d => {
+    const data = d.data();
+    if (shlokaSubSelect) shlokaSubSelect.innerHTML += `<option value="${d.id}">${catMap[data.categoryId] || ""} → ${data.title}</option>`;
+    if (filterSub) filterSub.innerHTML += `<option value="${d.id}">${catMap[data.categoryId] || ""} → ${data.title}</option>`;
+
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text">
+        <span class="cms-list-item-date">${catMap[data.categoryId] || ""}</span>
+        ${data.title}
+      </div>
+      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+    `;
+    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete?")) return;
+      await deleteDoc(doc(db, "ithihasaluSubCategories", d.id));
+      loadIthiSubs();
+    });
+    list.appendChild(row);
+  });
+}
+
+// Save shloka
+const saveIthiShlokaBtn = document.getElementById("saveIthiShlokaBtn");
+if (saveIthiShlokaBtn) {
+  saveIthiShlokaBtn.addEventListener("click", async () => {
+    const subCategoryId = document.getElementById("ithiShlokaSubSelect").value;
+    const number = document.getElementById("ithiShlokaNumber").value.trim();
+    const shloka = document.getElementById("ithiShlokaText").value.trim();
+    const explanation = document.getElementById("ithiShlokaExplanation").value.trim();
+    const audioUrl = document.getElementById("ithiShlokaAudio").value.trim();
+    const order = Number(document.getElementById("ithiShlokaOrder").value) || 0;
+
+    if (!subCategoryId || !number || !shloka) {
+      document.getElementById("ithiShlokaMsg").innerText = "Sub category, number and shloka required";
+      return;
+    }
+
+    await addDoc(collection(db, "ithihasaluShlokas"), {
+      subCategoryId, number, shloka, explanation, audioUrl, order, createdAt: serverTimestamp()
+    });
+
+    document.getElementById("ithiShlokaMsg").innerText = "✅ శ్లోకం saved";
+    document.getElementById("ithiShlokaNumber").value = "";
+    document.getElementById("ithiShlokaText").value = "";
+    document.getElementById("ithiShlokaExplanation").value = "";
+    document.getElementById("ithiShlokaAudio").value = "";
+    document.getElementById("ithiShlokaOrder").value = "";
+    loadIthiShlokas();
+  });
+}
+
+// Filter shlokas
+const ithiFilterSub = document.getElementById("ithiShlokaFilterSub");
+if (ithiFilterSub) {
+  ithiFilterSub.addEventListener("change", () => loadIthiShlokas(ithiFilterSub.value));
+}
+
+async function loadIthiShlokas(filterSubId = "") {
+  const list = document.getElementById("ithiShlokaList");
+  if (!list) return;
+
+  list.innerHTML = "<p style='color:rgba(255,255,255,0.5)'>లోడ్ అవుతోంది...</p>";
+
+  const snap = await getDocs(query(collection(db, "ithihasaluShlokas"), orderBy("order", "asc")));
+  list.innerHTML = "";
+
+  const items = [];
+  snap.forEach(d => {
+    const data = d.data();
+    if (!filterSubId || data.subCategoryId === filterSubId) {
+      items.push({ id: d.id, ...data });
+    }
+  });
+
+  if (items.length === 0) {
+    list.innerHTML = "<p style='color:rgba(255,255,255,0.5);text-align:center'>శ్లోకాలు లేవు</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "flex-start";
+    row.style.gap = "12px";
+
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <span style="color:#ffd166;font-weight:bold;">శ్లోకం ${item.number || ""}</span>
+        <div style="display:flex;gap:8px;">
+          <button class="ithi-edit-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
+          <button class="ithi-delete-btn cms-list-delete-btn" data-id="${item.id}">Delete</button>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:0;">${(item.shloka || "").substring(0, 80)}...</p>
+
+      <div class="ithi-edit-box" id="ithiEdit-${item.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
+        <input class="ithi-edit-number" value="${item.number || ""}" placeholder="Number" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        <textarea class="ithi-edit-shloka" placeholder="Shloka" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:100px;">${item.shloka || ""}</textarea>
+        <textarea class="ithi-edit-explanation" placeholder="Explanation" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:100px;">${item.explanation || ""}</textarea>
+        <input class="ithi-edit-audio" value="${item.audioUrl || ""}" placeholder="Audio URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        <button class="ithi-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+      </div>
+    `;
+
+    row.querySelector(".ithi-edit-btn").addEventListener("click", () => {
+      const box = document.getElementById(`ithiEdit-${item.id}`);
+      box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+
+    row.querySelector(".ithi-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete this shloka?")) return;
+      await deleteDoc(doc(db, "ithihasaluShlokas", item.id));
+      loadIthiShlokas(filterSubId);
+    });
+
+    row.querySelector(".ithi-save-edit-btn").addEventListener("click", async () => {
+      const box = document.getElementById(`ithiEdit-${item.id}`);
+      await updateDoc(doc(db, "ithihasaluShlokas", item.id), {
+        number: box.querySelector(".ithi-edit-number").value.trim(),
+        shloka: box.querySelector(".ithi-edit-shloka").value.trim(),
+        explanation: box.querySelector(".ithi-edit-explanation").value.trim(),
+        audioUrl: box.querySelector(".ithi-edit-audio").value.trim(),
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ Updated");
+      loadIthiShlokas(filterSubId);
+    });
+
+    list.appendChild(row);
+  });
+}
+
+// Init
+loadIthiCats();
+loadIthiSubs();
+loadIthiShlokas();
