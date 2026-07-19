@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>శ్లోకం - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .shloka-detail-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 100px 20px 80px;
+    }
+    .shloka-detail-card {
+      background: rgba(20,12,5,0.70);
+      border: 1px solid rgba(255,209,102,0.3);
+      border-radius: 24px;
+      padding: 36px 30px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 20px;
+    }
+    .shloka-number-label {
+      color: rgba(255,209,102,0.6);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .shloka-text-main {
+      color: #ffd166;
+      font-size: 20px;
+      line-height: 2;
+      font-weight: 600;
+      white-space: pre-wrap;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,209,102,0.2);
+      padding-bottom: 24px;
+    }
+    .shloka-explanation-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .shloka-explanation-text {
+      color: rgba(255,255,255,0.88);
+      font-size: 17px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+    .shloka-audio-box {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,209,102,0.2);
+    }
+    .shloka-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      background: rgba(255,209,102,0.12);
+      border: 1px solid rgba(255,209,102,0.4);
+      color: #ffd166;
+      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .shloka-audio-btn:hover {
+      background: rgba(255,209,102,0.22);
+    }
+    .shloka-nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .shloka-nav-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,209,102,0.3);
+      background: rgba(20,12,5,0.65);
+      color: #ffd166;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      backdrop-filter: blur(10px);
+      transition: 0.2s ease;
+    }
+    .shloka-nav-btn:hover {
+      border-color: #ffd166;
+      background: rgba(255,209,102,0.1);
+    }
+    .shloka-nav-btn.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    @media (max-width: 600px) {
+      .shloka-detail-card { padding: 24px 18px; }
+      .shloka-text-main { font-size: 17px; }
+      .shloka-explanation-text { font-size: 15px; }
+    }
+  </style>
+</head>
+<body class="stories-body">
+
+  <div class="stories-bg"></div>
+
+  <nav class="glass-navbar">
+    <a id="backToList" href="ithihasalu.html">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="ithihasalu.html">ఇతిహాసాలు</a>
+  </nav>
+
+  <div class="shloka-detail-page">
+    <div class="shloka-detail-card" id="shlokaCard">
+      <p style="color:white;text-align:center">లోడ్ అవుతోంది...</p>
+    </div>
+    <div class="shloka-nav-row" id="navRow"></div>
+  </div>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ ఇతిహాసాలు మన జాతి గర్వం ✨</p>
+    <script type="module" src="social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module" src="ithihasalu-detail.js"></script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <script src="music.js"></script>
+
+</body>
+</html>
