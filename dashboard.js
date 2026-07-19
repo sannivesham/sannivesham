@@ -1835,7 +1835,253 @@ async function loadSlokasAdmin() {
 }
 
 loadSlokaDirectCategories();
-loadSlokasAdmin();// QUIZ QUESTIONS CMS
+loadSlokasAdmin();
+
+/* ==============================
+   VIDEOS CMS
+============================== */
+
+const CLOUD_NAME_VIDEO = "du5em76za";
+const VIDEO_UPLOAD_PRESET = "sannivesham_upload";
+
+function uploadVideoFile() {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "video/*";
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return resolve(null);
+
+      const statusText = document.createElement("span");
+      statusText.innerText = "అప్‌లోడ్ అవుతోంది... దయచేసి వేచి ఉండండి";
+      statusText.style.color = "#ffd166";
+      statusText.style.display = "block";
+      statusText.style.marginTop = "8px";
+
+      const videoFileBox = document.getElementById("videoFileBox");
+      if (videoFileBox) videoFileBox.appendChild(statusText);
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", VIDEO_UPLOAD_PRESET);
+
+      try {
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME_VIDEO}/video/upload`,
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok || !data.secure_url) {
+          throw new Error("Video upload failed");
+        }
+
+        resolve(data.secure_url);
+      } catch (error) {
+        console.error(error);
+        alert("Video upload failed: " + error.message);
+        resolve(null);
+      } finally {
+        statusText.remove();
+      }
+    };
+
+    input.click();
+  });
+}
+
+// VIDEO CARD IMAGE
+const videoCardImageGrid = document.getElementById("videoCardImageGrid");
+
+if (videoCardImageGrid) {
+  videoCardImageGrid.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+
+    videoCardImageGrid.dataset.image = url;
+    videoCardImageGrid.innerHTML = `<img src="${url}">`;
+  });
+}
+
+// VIDEO FILE
+const videoFileBox = document.getElementById("videoFileBox");
+
+if (videoFileBox) {
+  videoFileBox.addEventListener("click", async () => {
+    const url = await uploadVideoFile();
+    if (!url) return;
+
+    videoFileBox.dataset.video = url;
+    videoFileBox.innerHTML = `
+      <video src="${url}" style="width:100%;max-height:180px;" controls></video>
+    `;
+  });
+}
+
+// SAVE VIDEO
+const saveVideoBtn = document.getElementById("saveVideoBtn");
+
+if (saveVideoBtn) {
+  saveVideoBtn.addEventListener("click", async () => {
+    const title = document.getElementById("videoTitle").value.trim();
+    const cardImage = videoCardImageGrid.dataset.image || "";
+    const videoUrl = videoFileBox.dataset.video || "";
+
+    if (!title || !cardImage || !videoUrl) {
+      document.getElementById("videoMessage").innerText =
+        "దయచేసి పేరు, కార్డ్ ఇమేజ్ మరియు వీడియో ఫైల్ జోడించండి";
+      return;
+    }
+
+    saveVideoBtn.disabled = true;
+    saveVideoBtn.innerText = "Saving...";
+
+    try {
+      await addDoc(collection(db, "videos"), {
+        title,
+        cardImage,
+        videoUrl,
+        createdAt: serverTimestamp()
+      });
+
+      document.getElementById("videoTitle").value = "";
+
+      videoCardImageGrid.dataset.image = "";
+      videoCardImageGrid.innerHTML = `<span>＋ Video Card Image</span>`;
+
+      videoFileBox.dataset.video = "";
+      videoFileBox.innerHTML = `<span>＋ Select Video File</span>`;
+
+      document.getElementById("videoMessage").innerText =
+        "✅ వీడియో సేవ్ అయింది";
+
+      loadAdminVideos();
+    } catch (error) {
+      console.error(error);
+      document.getElementById("videoMessage").innerText =
+        "❌ Error: " + error.message;
+    } finally {
+      saveVideoBtn.disabled = false;
+      saveVideoBtn.innerText = "వీడియో సేవ్ చేయండి";
+    }
+  });
+}
+
+// LOAD VIDEOS LIST
+async function loadAdminVideos() {
+  const list = document.getElementById("adminVideosList");
+  if (!list) return;
+
+  const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+
+  list.innerHTML = "";
+
+  snapshot.forEach((item) => {
+    const data = item.data();
+
+    list.innerHTML += `
+      <div class="admin-event-card">
+        <img src="${data.cardImage}" alt="${data.title}">
+
+        <div>
+          <h3>${data.title}</h3>
+          <p>${data.videoUrl ? "🎬 Video attached" : "⚠️ No video file"}</p>
+
+          <button class="edit-video-btn" data-id="${item.id}">
+            Edit
+          </button>
+
+          <button class="delete-video-btn" data-id="${item.id}">
+            Delete
+          </button>
+
+          <div class="video-inline-editor" id="videoEdit-${item.id}"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.querySelectorAll(".edit-video-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openVideoInlineEditor(btn.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".delete-video-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ వీడియో డిలీట్ చేయాలా?")) return;
+
+      await deleteDoc(doc(db, "videos", btn.dataset.id));
+      loadAdminVideos();
+    });
+  });
+}
+
+async function openVideoInlineEditor(id) {
+  const snap = await getDoc(doc(db, "videos", id));
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+  const editor = document.getElementById(`videoEdit-${id}`);
+
+  editor.innerHTML = `
+    <div class="festival-edit-panel">
+
+      <input class="inline-video-title" value="${data.title || ""}" placeholder="Video Title">
+
+      <div class="festival-card-upload-box inline-video-card-image" data-image="${data.cardImage || ""}">
+        ${data.cardImage ? `<img src="${data.cardImage}">` : `<span>＋ Video Card Image</span>`}
+      </div>
+
+      <div class="festival-card-upload-box inline-video-file" data-video="${data.videoUrl || ""}">
+        ${data.videoUrl ? `<video src="${data.videoUrl}" style="width:100%;max-height:180px;" controls></video>` : `<span>＋ Select Video File</span>`}
+      </div>
+
+      <button class="save-inline-video-btn">
+        Save Changes
+      </button>
+
+    </div>
+  `;
+
+  editor.querySelector(".inline-video-card-image").addEventListener("click", async (e) => {
+    const url = await uploadImage();
+    if (!url) return;
+
+    e.currentTarget.dataset.image = url;
+    e.currentTarget.innerHTML = `<img src="${url}">`;
+  });
+
+  editor.querySelector(".inline-video-file").addEventListener("click", async (e) => {
+    const url = await uploadVideoFile();
+    if (!url) return;
+
+    e.currentTarget.dataset.video = url;
+    e.currentTarget.innerHTML = `<video src="${url}" style="width:100%;max-height:180px;" controls></video>`;
+  });
+
+  editor.querySelector(".save-inline-video-btn").addEventListener("click", async () => {
+    await updateDoc(doc(db, "videos", id), {
+      title: editor.querySelector(".inline-video-title").value.trim(),
+      cardImage: editor.querySelector(".inline-video-card-image").dataset.image || "",
+      videoUrl: editor.querySelector(".inline-video-file").dataset.video || "",
+      updatedAt: serverTimestamp()
+    });
+
+    alert("✅ Video updated");
+    loadAdminVideos();
+  });
+}
+
+loadAdminVideos();
+// QUIZ QUESTIONS CMS
 
 const saveQuizQuestionBtn = document.getElementById("saveQuizQuestionBtn");
 
@@ -2381,8 +2627,6 @@ if (saveSocialLinksBtn) {
 }
 
 loadSocialLinksAdmin();
-// HOME CARDS CMS
-
 // HOME CARDS CMS
 
 const homeCardBoxes = {
