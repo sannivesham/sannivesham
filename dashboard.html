@@ -26,6 +26,7 @@
   <button class="dash-btn" data-section="festivalsSection">Festivals</button>
   <button class="dash-btn" data-section="templesSection">Temples</button>
   <button class="dash-btn" data-section="librarySection">Library</button>
+  <button class="dash-btn" data-section="videosSection">Videos</button>
   <button class="dash-btn" data-section="slokasSection">Slokas</button>
   <button class="dash-btn" data-section="quizSection">Quiz</button>
 
@@ -237,7 +238,38 @@
   <div id="adminLibContentList"></div>
 
 </div>
-      
+
+<!-- VIDEOS SECTION -->
+<div id="videosSection" class="dash-section">
+
+  <div class="add-event-box">
+
+    <h2>కొత్త వీడియో జోడించండి</h2>
+
+    <input type="text" id="videoTitle" placeholder="వీడియో పేరు">
+
+    <div id="videoCardImageGrid" class="festival-card-upload-box">
+      <span>＋ Video Card Image</span>
+    </div>
+
+    <div id="videoFileBox" class="festival-card-upload-box">
+      <span>＋ Select Video File</span>
+    </div>
+
+    <button id="saveVideoBtn">
+      వీడియో సేవ్ చేయండి
+    </button>
+
+    <p id="videoMessage"></p>
+
+  </div>
+
+  <h2 class="admin-section-title">అన్ని వీడియోలు</h2>
+
+  <div id="adminVideosList"></div>
+
+</div>
+
       <!-- SLOKAS SECTION -->
       <div id="slokasSection" class="dash-section">
 
@@ -529,184 +561,6 @@
   </div>
 
 </div>
-dashboard.js — Home Cards section changes
-Find this block:
-js// HOME CARDS CMS
-
-const homeCardBoxes = {
-  eventsCard: document.getElementById("eventsCardBox"),
-  festivalsCard: document.getElementById("festivalsCardBox"),
-  templesCard: document.getElementById("templesCardBox"),
-  storiesCard: document.getElementById("storiesCardBox"),
-  slokasCard: document.getElementById("slokasCardBox"),
-  quizCard: document.getElementById("quizCardBox")
-};
-
-Object.keys(homeCardBoxes).forEach((key) => {
-  const box = homeCardBoxes[key];
-
-  if (!box) return;
-
-  box.addEventListener("click", async () => {
-    const url = await uploadImage();
-
-    if (!url) return;
-
-    box.dataset.image = url;
-    box.innerHTML = `<img src="${url}">`;
-  });
-});
-
-const saveHomeCardsBtn =
-document.getElementById("saveHomeCardsBtn");
-
-if (saveHomeCardsBtn) {
-  saveHomeCardsBtn.addEventListener("click", async () => {
-    await setDoc(
-      doc(db, "settings", "homeCards"),
-      {
-        eventsCard: homeCardBoxes.eventsCard.dataset.image || "",
-        festivalsCard: homeCardBoxes.festivalsCard.dataset.image || "",
-        templesCard: homeCardBoxes.templesCard.dataset.image || "",
-        storiesCard: homeCardBoxes.storiesCard.dataset.image || "",
-        slokasCard: homeCardBoxes.slokasCard.dataset.image || "",
-        quizCard: homeCardBoxes.quizCard.dataset.image || "",
-        updatedAt: serverTimestamp()
-      },
-      { merge: true }
-    );
-
-    document.getElementById("homeCardsMessage").innerText =
-      "✅ Home cards saved";
-  });
-}
-Replace with:
-js// HOME CARDS CMS
-
-const homeCardBoxes = {
-  eventsCard: document.getElementById("eventsCardBox"),
-  festivalsCard: document.getElementById("festivalsCardBox"),
-  templesCard: document.getElementById("templesCardBox"),
-  storiesCard: document.getElementById("storiesCardBox"),
-  slokasCard: document.getElementById("slokasCardBox"),
-  quizCard: document.getElementById("quizCardBox"),
-  itihasaluCard: document.getElementById("itihasaluCardBox"),
-  videosCard: document.getElementById("videosCardBox"),
-  calendarCard: document.getElementById("calendarCardBox"),
-  chantCounterCard: document.getElementById("chantCounterCardBox"),
-  poojaRoomCard: document.getElementById("poojaRoomCardBox"),
-  storeCard: document.getElementById("storeCardBox")
-};
-
-Object.keys(homeCardBoxes).forEach((key) => {
-  const box = homeCardBoxes[key];
-
-  if (!box) return;
-
-  box.addEventListener("click", async () => {
-    const url = await uploadImage();
-
-    if (!url) return;
-
-    box.dataset.image = url;
-    box.innerHTML = `<img src="${url}">`;
-  });
-});
-
-async function loadHomeCardsAdmin() {
-  const snap = await getDoc(doc(db, "settings", "homeCards"));
-  if (!snap.exists()) return;
-
-  const data = snap.data();
-
-  Object.keys(homeCardBoxes).forEach((key) => {
-    const box = homeCardBoxes[key];
-    if (!box) return;
-    if (data[key]) {
-      box.dataset.image = data[key];
-      box.innerHTML = `<img src="${data[key]}">`;
-    }
-  });
-}
-
-loadHomeCardsAdmin();
-
-const saveHomeCardsBtn =
-document.getElementById("saveHomeCardsBtn");
-
-if (saveHomeCardsBtn) {
-  saveHomeCardsBtn.addEventListener("click", async () => {
-    await setDoc(
-      doc(db, "settings", "homeCards"),
-      {
-        eventsCard: homeCardBoxes.eventsCard.dataset.image || "",
-        festivalsCard: homeCardBoxes.festivalsCard.dataset.image || "",
-        templesCard: homeCardBoxes.templesCard.dataset.image || "",
-        storiesCard: homeCardBoxes.storiesCard.dataset.image || "",
-        slokasCard: homeCardBoxes.slokasCard.dataset.image || "",
-        quizCard: homeCardBoxes.quizCard.dataset.image || "",
-        itihasaluCard: homeCardBoxes.itihasaluCard.dataset.image || "",
-        videosCard: homeCardBoxes.videosCard.dataset.image || "",
-        calendarCard: homeCardBoxes.calendarCard.dataset.image || "",
-        chantCounterCard: homeCardBoxes.chantCounterCard.dataset.image || "",
-        poojaRoomCard: homeCardBoxes.poojaRoomCard.dataset.image || "",
-        storeCard: homeCardBoxes.storeCard.dataset.image || "",
-        updatedAt: serverTimestamp()
-      },
-      { merge: true }
-    );
-
-    document.getElementById("homeCardsMessage").innerText =
-      "✅ Home cards saved";
-  });
-}
-I also added loadHomeCardsAdmin() so previously uploaded images now show up already filled in when you reopen the dashboard — your original code didn't have that for Home Cards, so every visit looked blank even after saving. Small bonus fix, didn't change anything else.
-index.html — one small change to actually use these uploads
-Find:
-js    // Home cards
-    async function loadHomeCards() {
-      const snap = await getDoc(doc(db, "settings", "homeCards"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.eventsCard) document.getElementById("eventsCardImg").src = data.eventsCard;
-      if (data.festivalsCard) document.getElementById("festivalsCardImg").src = data.festivalsCard;
-      if (data.templesCard) document.getElementById("templesCardImg").src = data.templesCard;
-      if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
-      if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
-      if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
-    }
-    loadHomeCards();
-Replace with:
-js    // Home cards
-    async function loadHomeCards() {
-      const snap = await getDoc(doc(db, "settings", "homeCards"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.eventsCard) document.getElementById("eventsCardImg").src = data.eventsCard;
-      if (data.festivalsCard) document.getElementById("festivalsCardImg").src = data.festivalsCard;
-      if (data.templesCard) document.getElementById("templesCardImg").src = data.templesCard;
-      if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
-      if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
-      if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
-      if (data.itihasaluCard) document.getElementById("itihasaluCardImg").src = data.itihasaluCard;
-      if (data.videosCard) document.getElementById("videosCardImg").src = data.videosCard;
-      if (data.calendarCard) document.getElementById("calendarCardImg").src = data.calendarCard;
-      if (data.chantCounterCard) document.getElementById("chantCounterCardImg").src = data.chantCounterCard;
-      if (data.poojaRoomCard) document.getElementById("poojaRoomCardImg").src = data.poojaRoomCard;
-      if (data.storeCard) document.getElementById("storeCardImg").src = data.storeCard;
-    }
-    loadHomeCards();
-Now: go to the dashboard's Home Cards tab, upload an image for each of the 6 new sections, hit Save — and the broken images on the home page will be replaced with your uploaded ones immediately (no code redeploy needed, since it's all pulled from Firestore).
-
-    <button id="saveHomeCardsBtn">
-      Save Home Cards
-    </button>
-
-    <p id="homeCardsMessage"></p>
-
-  </div>
-
-</div>
 <div id="sponsorSection" class="dash-section">
 
   <h2 class="admin-section-title">
@@ -869,6 +723,16 @@ Now: go to the dashboard's Home Cards tab, upload an image for each of the 6 new
           <div class="bg-row">
             <h3>Quiz Mobile Background</h3>
             <button class="bg-upload-btn" data-key="quizMobile">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Videos PC Background</h3>
+            <button class="bg-upload-btn" data-key="videosPc">Upload</button>
+          </div>
+
+          <div class="bg-row">
+            <h3>Videos Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="videosMobile">Upload</button>
           </div>
         </div>
 
