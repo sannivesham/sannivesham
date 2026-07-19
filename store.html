@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>స్టోర్ - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .store-coming-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .diya-wrap {
+      position: relative;
+      width: 140px;
+      height: 180px;
+      margin-bottom: 34px;
+    }
+
+    .diya-base {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 46px;
+      background: linear-gradient(180deg, #C9A24B 0%, #8a6a26 100%);
+      border-radius: 0 0 60px 60px / 0 0 40px 40px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+
+    .diya-base::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 8px;
+      right: 8px;
+      height: 16px;
+      background: linear-gradient(180deg, #E9C878 0%, #C9A24B 100%);
+      border-radius: 50%;
+    }
+
+    .diya-flame {
+      position: absolute;
+      bottom: 46px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 22px;
+      height: 40px;
+      background: radial-gradient(circle at 50% 70%, #fff6d0 0%, #ffd166 35%, #ff9a3c 65%, transparent 80%);
+      border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+      filter: blur(0.3px);
+      animation: flicker 1.6s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .diya-glow {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, rgba(255,180,80,0.35) 0%, transparent 70%);
+      animation: glow-pulse 1.6s ease-in-out infinite;
+    }
+
+    .smoke {
+      position: absolute;
+      bottom: 84px;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(230, 220, 200, 0.35);
+      animation: rise 3.5s ease-in infinite;
+    }
+    .smoke:nth-child(1) { animation-delay: 0s; margin-left: -6px; }
+    .smoke:nth-child(2) { animation-delay: 1.2s; margin-left: 2px; }
+    .smoke:nth-child(3) { animation-delay: 2.4s; margin-left: -2px; }
+
+    @keyframes flicker {
+      0%, 100% { transform: translateX(-50%) scaleY(1) rotate(-1deg); }
+      25% { transform: translateX(-50%) scaleY(1.08) rotate(1.5deg); }
+      50% { transform: translateX(-50%) scaleY(0.94) rotate(-2deg); }
+      75% { transform: translateX(-50%) scaleY(1.05) rotate(1deg); }
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.85; transform: translateX(-50%) scale(1.15); }
+    }
+
+    @keyframes rise {
+      0% { transform: translate(0, 0) scale(1); opacity: 0; }
+      15% { opacity: 0.5; }
+      100% { transform: translate(14px, -110px) scale(2.2); opacity: 0; }
+    }
+
+    .store-eyebrow {
+      letter-spacing: 3px;
+      font-size: 0.8rem;
+      color: #C9A24B;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      opacity: 0.85;
+    }
+
+    .store-heading {
+      font-size: 2.4rem;
+      color: #ffd166;
+      margin: 0 0 18px;
+      line-height: 1.3;
+      text-shadow: 0 0 18px rgba(255, 190, 90, 0.25);
+    }
+
+    .store-sub {
+      max-width: 480px;
+      color: #EDE3C8;
+      opacity: 0.85;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin: 0 auto 34px;
+    }
+
+    .store-divider {
+      width: 70px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #C9A24B, transparent);
+      margin: 0 auto 34px;
+    }
+
+    .store-notify-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border: 1px solid rgba(201, 162, 75, 0.4);
+      border-radius: 999px;
+      color: #ffd166;
+      font-size: 0.95rem;
+      background: rgba(237, 227, 200, 0.04);
+    }
+
+    @media (max-width: 500px) {
+      .store-heading { font-size: 1.7rem; }
+      .store-sub { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body class="stories-body">
+  <div class="stories-bg"></div>
+  <nav class="glass-navbar">
+    <a href="index.html#categories">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="store.html">స్టోర్</a>
+  </nav>
+
+  <div class="store-coming-page">
+
+    <div class="diya-wrap">
+      <div class="diya-glow"></div>
+      <span class="smoke"></span>
+      <span class="smoke"></span>
+      <span class="smoke"></span>
+      <div class="diya-flame"></div>
+      <div class="diya-base"></div>
+    </div>
+
+    <p class="store-eyebrow">సన్నివేశం స్టోర్</p>
+    <h1 class="store-heading">త్వరలో ప్రారంభమవుతుంది</h1>
+    <div class="store-divider"></div>
+    <p class="store-sub">
+      పూజా సామాగ్రి, ఆధ్యాత్మిక వస్తువులు మరియు సాంప్రదాయ కళాకృతులతో
+      మా స్టోర్ మిమ్మల్ని త్వరలో చేరుకోబోతోంది. దీపం వెలుగులా,
+      మంచి రోజులు రాబోతున్నాయి.
+    </p>
+
+    <div class="store-notify-box">
+      🔔 సిద్ధమైనప్పుడు మీకు తెలియజేస్తాము
+    </div>
+
+  </div>
+
+  <script src="script.js?v=2"></script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <script src="music.js?v=2"></script>
+</body>
+</html>
