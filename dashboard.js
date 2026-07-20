@@ -1596,3 +1596,178 @@ async function loadIthiShlokas(filterSubId = "") {
 }
 
 loadIthiCats(); loadIthiSubs(); loadIthiShlokas();
+
+/* ══════════════════════════════════════
+   POOJA MANDIR CMS
+══════════════════════════════════════ */
+
+function uploadAudioFile() {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "audio/*";
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return resolve(null);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
+      try {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok || !data.secure_url) throw new Error("Audio upload failed");
+        resolve(data.secure_url);
+      } catch (error) {
+        alert("Audio upload failed: " + error.message);
+        resolve(null);
+      }
+    };
+    input.click();
+  });
+}
+
+const poojaGodImageBox = document.getElementById("poojaGodImageBox");
+if (poojaGodImageBox) {
+  poojaGodImageBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    poojaGodImageBox.dataset.image = url;
+    poojaGodImageBox.innerHTML = `<img src="${url}">`;
+  });
+}
+
+const savePoojaGodBtn = document.getElementById("savePoojaGodBtn");
+if (savePoojaGodBtn) {
+  savePoojaGodBtn.addEventListener("click", async () => {
+    const name = document.getElementById("poojaGodName").value.trim();
+    const image = poojaGodImageBox?.dataset.image || "";
+    const orderValue = document.getElementById("poojaGodOrder").value.trim();
+    if (!name || !image) {
+      document.getElementById("poojaGodMessage").innerText = "God name and image required";
+      return;
+    }
+    await addDoc(collection(db, "poojaGods"), {
+      name, image, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp()
+    });
+    document.getElementById("poojaGodName").value = "";
+    document.getElementById("poojaGodOrder").value = "";
+    poojaGodImageBox.dataset.image = "";
+    poojaGodImageBox.innerHTML = `<span>＋ God Image</span>`;
+    document.getElementById("poojaGodMessage").innerText = "✅ God saved";
+    loadPoojaGodsAdmin();
+    loadPoojaGodOptions();
+  });
+}
+
+async function loadPoojaGodsAdmin() {
+  const list = document.getElementById("adminPoojaGodsList");
+  if (!list) return;
+  const snapshot = await getDocs(collection(db, "poojaGods"));
+  let gods = [];
+  snapshot.forEach(item => gods.push({ id: item.id, ...item.data() }));
+  gods.sort((a, b) => (a.order || 0) - (b.order || 0));
+  list.innerHTML = "";
+  gods.forEach(data => {
+    list.innerHTML += `
+      <div class="admin-event-card">
+        <img src="${data.image}" alt="${data.name}">
+        <div>
+          <h3>${data.name}</h3>
+          <button class="delete-pooja-god-btn" data-id="${data.id}">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+  list.querySelectorAll(".delete-pooja-god-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this god? Its rituals will remain orphaned.")) return;
+      await deleteDoc(doc(db, "poojaGods", btn.dataset.id));
+      loadPoojaGodsAdmin();
+      loadPoojaGodOptions();
+    });
+  });
+}
+
+async function loadPoojaGodOptions() {
+  const select = document.getElementById("poojaRitualGodSelect");
+  if (!select) return;
+  const snapshot = await getDocs(collection(db, "poojaGods"));
+  let gods = [];
+  snapshot.forEach(item => gods.push({ id: item.id, ...item.data() }));
+  gods.sort((a, b) => (a.order || 0) - (b.order || 0));
+  select.innerHTML = `<option value="">Select God</option>`;
+  gods.forEach(data => {
+    select.innerHTML += `<option value="${data.id}">${data.name}</option>`;
+  });
+}
+
+loadPoojaGodsAdmin();
+loadPoojaGodOptions();
+
+const poojaRitualAudioBox = document.getElementById("poojaRitualAudioBox");
+if (poojaRitualAudioBox) {
+  poojaRitualAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile();
+    if (!url) return;
+    poojaRitualAudioBox.dataset.audio = url;
+    poojaRitualAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;"></audio>`;
+  });
+}
+
+const savePoojaRitualBtn = document.getElementById("savePoojaRitualBtn");
+if (savePoojaRitualBtn) {
+  savePoojaRitualBtn.addEventListener("click", async () => {
+    const godId = document.getElementById("poojaRitualGodSelect").value;
+    const name = document.getElementById("poojaRitualName").value.trim();
+    const mantraText = document.getElementById("poojaRitualMantra").value.trim();
+    const audioUrl = poojaRitualAudioBox?.dataset.audio || "";
+    const orderValue = document.getElementById("poojaRitualOrder").value.trim();
+    if (!godId || !name || !mantraText) {
+      document.getElementById("poojaRitualMessage").innerText = "God, ritual name and mantra text required";
+      return;
+    }
+    await addDoc(collection(db, "poojaRituals"), {
+      godId, name, mantraText, audioUrl, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp()
+    });
+    document.getElementById("poojaRitualName").value = "";
+    document.getElementById("poojaRitualMantra").value = "";
+    document.getElementById("poojaRitualOrder").value = "";
+    poojaRitualAudioBox.dataset.audio = "";
+    poojaRitualAudioBox.innerHTML = `<span>＋ Mantra Audio (mp3)</span>`;
+    document.getElementById("poojaRitualMessage").innerText = "✅ Ritual saved";
+    loadPoojaRitualsAdmin();
+  });
+}
+
+async function loadPoojaRitualsAdmin() {
+  const list = document.getElementById("adminPoojaRitualsList");
+  if (!list) return;
+  const godSnap = await getDocs(collection(db, "poojaGods"));
+  const godMap = {};
+  godSnap.forEach(item => { godMap[item.id] = item.data().name; });
+  const snapshot = await getDocs(collection(db, "poojaRituals"));
+  let rituals = [];
+  snapshot.forEach(item => rituals.push({ id: item.id, ...item.data() }));
+  rituals.sort((a, b) => (a.order || 0) - (b.order || 0));
+  list.innerHTML = "";
+  rituals.forEach(data => {
+    list.innerHTML += `
+      <div class="admin-event-card">
+        <div>
+          <h3>${data.name}</h3>
+          <p>God: ${godMap[data.godId] || "Unknown"}</p>
+          ${data.audioUrl ? `<p>🔊 Audio linked</p>` : `<p>⚠️ No audio</p>`}
+          <button class="delete-pooja-ritual-btn" data-id="${data.id}">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+  list.querySelectorAll(".delete-pooja-ritual-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this ritual?")) return;
+      await deleteDoc(doc(db, "poojaRituals", btn.dataset.id));
+      loadPoojaRitualsAdmin();
+    });
+  });
+}
+loadPoojaRitualsAdmin();
