@@ -5853,3 +5853,20 @@ button[class*="delete"] {
   font-size: 30px;
   margin: 35px 0 20px;
 }
+
+
+.pooja-god-card { position: relative; }
+.pooja-done-badge {
+  display: none;
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(0, 100, 0, 0.75);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+.pooja-god-card.pooja-done-today .pooja-done-badge { display: block; }
