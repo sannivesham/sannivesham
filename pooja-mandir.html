@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>పూజ మందిరం - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="stories-body">
+  <div class="stories-bg"></div>
+  <div id="loader">
+    <div class="loader-content">
+      <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
+      <h1>సన్నివేశం</h1>
+      <div class="loader-line"></div>
+    </div>
+  </div>
+  <nav class="glass-navbar">
+    <a href="index.html#categories">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="pooja-mandir.html">పూజ మందిరం</a>
+  </nav>
+  <section class="stories-page">
+    <div class="stories-title-box">
+      <h1>పూజ మందిరం</h1>
+      <p>మీ ఇష్ట దేవుడిని ఎంచుకుని పూజ చేయండి</p>
+    </div>
+    <div class="stories-grid" id="poojaGodsGrid"></div>
+  </section>
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ భక్తితో చేసే పూజ ఫలిస్తుంది ✨</p>
+<script type="module" src="social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
+  </footer>
+  <script src="script.js"></script>
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    async function loadPoojaBackground() {
+      const snap = await getDoc(doc(db, "settings", "backgrounds"));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      const bg = document.querySelector(".stories-bg");
+      if (!bg) return;
+      if (window.innerWidth <= 700 && data.poojaMobile) {
+        bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)), url("${data.poojaMobile}")`;
+      } else if (data.poojaPc) {
+        bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)), url("${data.poojaPc}")`;
+      }
+    }
+    loadPoojaBackground();
+  </script>
+  <script type="module" src="pooja-mandir.js"></script>
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <script src="music.js"></script>
+</body>
+</html>
