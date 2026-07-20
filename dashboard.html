@@ -24,6 +24,7 @@
         <button class="dash-btn" data-section="videosSection">Videos</button>
         <button class="dash-btn" data-section="slokasSection">Slokas</button>
         <button class="dash-btn" data-section="quizSection">Quiz</button>
+        <button class="dash-btn" data-section="poojaSection">పూజ మందిరం</button>
         <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
         <button class="dash-btn" data-section="aboutSection">About</button>
         <button class="dash-btn" data-section="backgroundsSection">Backgrounds</button>
@@ -53,6 +54,49 @@
         <div id="adminEventsList"></div>
       </div>
 
+
+
+      <!-- ═══════════════════════════════════
+     POOJA MANDIR SECTION
+═══════════════════════════════════ -->
+<div id="poojaSection" class="dash-section">
+
+  <div class="add-event-box">
+    <h2>కొత్త దేవుడు జోడించండి</h2>
+    <input type="text" id="poojaGodName" placeholder="దేవుడి పేరు (e.g. గణేశుడు)">
+    <div id="poojaGodImageBox" class="festival-card-upload-box">
+      <span>＋ God Image</span>
+    </div>
+    <input type="number" id="poojaGodOrder" placeholder="Order (optional)">
+    <button id="savePoojaGodBtn">Save God</button>
+    <p id="poojaGodMessage"></p>
+  </div>
+
+  <h2 class="admin-section-title">Gods</h2>
+  <div id="adminPoojaGodsList"></div>
+
+  <hr>
+
+  <div class="add-event-box">
+    <h2>కొత్త ఆచారం (Ritual) జోడించండి</h2>
+    <select id="poojaRitualGodSelect">
+      <option value="">Select God</option>
+    </select>
+    <input type="text" id="poojaRitualName" placeholder="Ritual Name (e.g. అభిషేకం)">
+    <textarea id="poojaRitualMantra" placeholder="Mantra Text"></textarea>
+    <div id="poojaRitualAudioBox" class="festival-card-upload-box">
+      <span>＋ Mantra Audio (mp3)</span>
+    </div>
+    <input type="number" id="poojaRitualOrder" placeholder="Order (optional)">
+    <button id="savePoojaRitualBtn">Save Ritual</button>
+    <p id="poojaRitualMessage"></p>
+  </div>
+
+  <h2 class="admin-section-title">Rituals</h2>
+  <div id="adminPoojaRitualsList"></div>
+
+</div>
+      
       <!-- ═══════════════════════════════════
            FESTIVALS SECTION
       ═══════════════════════════════════ -->
