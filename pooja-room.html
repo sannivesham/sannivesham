@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>పూజ గది - సన్నివేశం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .pooja-room-section {
+      min-height: 100vh;
+      padding: 100px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      position: relative;
+    }
+    .pooja-god-name {
+      font-size: 26px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .pooja-stage {
+      position: relative;
+      width: min(320px, 80vw);
+      height: min(320px, 80vw);
+      border-radius: 50%;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(255,209,102,0.15), transparent 70%);
+    }
+    .pooja-idol-img {
+      width: 78%;
+      height: 78%;
+      object-fit: contain;
+      border-radius: 50%;
+      z-index: 2;
+      position: relative;
+      transition: filter 0.4s ease;
+    }
+    .pooja-mantra-box {
+      margin-top: 24px;
+      max-width: 480px;
+      min-height: 40px;
+      text-align: center;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,209,102,0.3);
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 16px;
+      line-height: 1.7;
+      display: none;
+    }
+    .pooja-mantra-box.show { display: block; }
+    .pooja-ritual-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+      max-width: 600px;
+    }
+    .pooja-ritual-btn {
+      background: rgba(255,209,102,0.15);
+      border: 1px solid rgba(255,209,102,0.4);
+      color: #ffd166;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .pooja-ritual-btn:hover { background: rgba(255,209,102,0.3); }
+    .pooja-ritual-btn.ritual-done {
+      background: rgba(60,180,60,0.25);
+      border-color: rgba(60,180,60,0.6);
+      color: #b6ffb6;
+    }
+    .pooja-completion-msg {
+      margin-top: 26px;
+      font-size: 20px;
+      color: #ffd166;
+      text-align: center;
+      display: none;
+    }
+    .pooja-completion-msg.show { display: block; }
+
+    /* ---- Ritual animations ---- */
+    .anim-water-drop {
+      position: absolute;
+      top: -10px;
+      width: 6px;
+      height: 18px;
+      background: linear-gradient(180deg, rgba(120,190,255,0.9), rgba(120,190,255,0.1));
+      border-radius: 4px;
+      z-index: 3;
+      animation: waterFall 1s linear forwards;
+    }
+    @keyframes waterFall {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(260px); opacity: 0; }
+    }
+
+    .anim-flower {
+      position: absolute;
+      top: -10px;
+      font-size: 20px;
+      z-index: 3;
+      animation: flowerFall 1.6s ease-in forwards;
+    }
+    @keyframes flowerFall {
+      from { transform: translateY(0) rotate(0deg); opacity: 1; }
+      to { transform: translateY(260px) rotate(220deg); opacity: 0; }
+    }
+
+    .anim-lamp-glow {
+      animation: lampPulse 1.4s ease-in-out 2;
+    }
+    @keyframes lampPulse {
+      0%, 100% { filter: drop-shadow(0 0 0px #ffd166); }
+      50% { filter: drop-shadow(0 0 30px #ffd166) brightness(1.3); }
+    }
+
+    .anim-food-plate {
+      position: absolute;
+      bottom: -6px;
+      font-size: 34px;
+      z-index: 3;
+      animation: foodPop 1.2s ease-in-out forwards;
+    }
+    @keyframes foodPop {
+      0% { transform: translateY(20px) scale(0.4); opacity: 0; }
+      40% { transform: translateY(0) scale(1); opacity: 1; }
+      80% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(10px) scale(0.9); opacity: 0; }
+    }
+
+    .anim-aarti-ring {
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      border-radius: 50%;
+      border: 3px dashed rgba(255,180,60,0.8);
+      z-index: 1;
+      animation: aartiSpin 1.6s linear 2;
+    }
+    @keyframes aartiSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .anim-generic-sparkle {
+      animation: genericPulse 1s ease-in-out 2;
+    }
+    @keyframes genericPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.5) saturate(1.4); }
+    }
+  </style>
+</head>
+<body class="stories-body">
+  <div class="stories-bg"></div>
+  <nav class="glass-navbar">
+    <a href="pooja-mandir.html">← పూజ మందిరం</a>
+    <a href="index.html">ప్రారంభం</a>
+  </nav>
+
+  <section class="pooja-room-section">
+    <h1 class="pooja-god-name" id="poojaGodName">Loading...</h1>
+
+    <div class="pooja-stage" id="poojaStage">
+      <img id="poojaIdolImg" class="pooja-idol-img" src="" alt="">
+    </div>
+
+    <div class="pooja-mantra-box" id="poojaMantraBox"></div>
+
+    <div class="pooja-ritual-buttons" id="poojaRitualButtons"></div>
+
+    <div class="pooja-completion-msg" id="poojaCompletionMsg">పూజ పూర్తయింది 🙏</div>
+  </section>
+
+  <audio id="poojaBell" src="sounds/bell.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+  <script type="module" src="pooja-room.js"></script>
+  <script src="music.js"></script>
+</body>
+</html>
