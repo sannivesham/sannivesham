@@ -650,7 +650,9 @@
               }
             }
           }, { merge: true });
-        } catch (e) {}
+        } catch (e) {
+          console.error("Personal japa progress write failed:", e);
+        }
 
         // Community total: all-time, never resets, counted only for logged-in users
         try {
@@ -660,7 +662,9 @@
 
           if (!communityTotals[id]) communityTotals[id] = { totalScore: 0 };
           communityTotals[id].totalScore += targetCount;
-        } catch (e) {}
+        } catch (e) {
+          console.error("Community score write failed:", e);
+        }
       } else {
         // Guests: save today's score/rounds to localStorage only, no community credit
         saveLocalProgress(personalProgress);
