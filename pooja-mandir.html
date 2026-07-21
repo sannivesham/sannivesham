@@ -3,11 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>పూజ మందిరం - సన్నివేశం</title>
+  <title>పూజా మందిర్ - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .pooja-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 20px 80px;
+    }
+    .pooja-title-box {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .pooja-title-box h1 {
+      color: #ffd166;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+    .pooja-title-box p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+    }
+    .gods-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .god-card {
+      background: rgba(20,12,5,0.70);
+      border: 1px solid rgba(255,209,102,0.3);
+      border-radius: 22px;
+      overflow: hidden;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+      position: relative;
+    }
+    .god-card:hover {
+      transform: translateY(-6px);
+      border-color: #ffd166;
+      box-shadow: 0 12px 40px rgba(255,209,102,0.2);
+    }
+    .god-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.9);
+      transition: 0.4s;
+    }
+    .god-card:hover img { filter: brightness(1.05); transform: scale(1.04); }
+    .god-card-body {
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .god-card-name {
+      color: #ffd166;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .god-card-done {
+      color: #2ecc71;
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+    .god-card-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 24px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #C9A24B, #8a6a26);
+      color: #1a1206;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      .gods-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .god-card img { height: 140px; }
+      .god-card-name { font-size: 1rem; }
+    }
+  </style>
 </head>
 <body class="stories-body">
-  <div class="stories-bg"></div>
+
+  <div class="stories-bg" id="poojaMainBg"></div>
+
   <div id="loader">
     <div class="loader-content">
       <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
@@ -15,45 +96,103 @@
       <div class="loader-line"></div>
     </div>
   </div>
+
   <nav class="glass-navbar">
     <a href="index.html#categories">← వెనుకకు</a>
     <a href="index.html">ప్రారంభం</a>
-    <a href="pooja-mandir.html">పూజ మందిరం</a>
+    <a href="pooja-mandir.html">పూజా మందిర్</a>
   </nav>
-  <section class="stories-page">
-    <div class="stories-title-box">
-      <h1>పూజ మందిరం</h1>
-      <p>మీ ఇష్ట దేవుడిని ఎంచుకుని పూజ చేయండి</p>
+
+  <div class="pooja-page">
+    <div class="pooja-title-box">
+      <h1>🛕 పూజా మందిర్</h1>
+      <p>మీ ఇష్ట దేవుణ్ణి ఎంచుకుని పూజ చేయండి</p>
     </div>
-    <div class="stories-grid" id="poojaGodsGrid"></div>
-  </section>
+    <div class="gods-grid" id="godsGrid">
+      <p style="color:rgba(255,255,255,0.5);text-align:center;grid-column:1/-1">లోడ్ అవుతోంది...</p>
+    </div>
+  </div>
+
   <footer class="simple-footer">
-    <p class="footer-quote">✨ భక్తితో చేసే పూజ ఫలిస్తుంది ✨</p>
-<script type="module" src="social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
+    <p class="footer-quote">✨ భక్తి మన శక్తి • పూజ మన ప్రేమ ✨</p>
+    <script type="module" src="social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
   </footer>
+
   <script src="script.js"></script>
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-    async function loadPoojaBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const bg = document.querySelector(".stories-bg");
-      if (!bg) return;
-      if (window.innerWidth <= 700 && data.poojaMobile) {
-        bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)), url("${data.poojaMobile}")`;
-      } else if (data.poojaPc) {
-        bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)), url("${data.poojaPc}")`;
-      }
-    }
-    loadPoojaBackground();
-  </script>
-  <script type="module" src="pooja-mandir.js"></script>
-  <audio id="bgMusic" loop>
-    <source src="music/traditional.mp3" type="audio/mpeg">
-  </audio>
+  <audio id="bgMusic" loop><source src="music/traditional.mp3" type="audio/mpeg"></audio>
   <button id="musicBtn" class="music-btn">🔊</button>
   <script src="music.js"></script>
+
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+      collection, getDocs, doc, getDoc, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    const TODAY = new Date().toISOString().slice(0, 10);
+    let doneTodaySet = new Set();
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) {
+            const poojaData = snap.data().poojaProgress || {};
+            Object.keys(poojaData).forEach(godId => {
+              if (poojaData[godId]?.lastDate === TODAY) doneTodaySet.add(godId);
+            });
+          }
+        } catch(e) {}
+      }
+      loadGods();
+    });
+
+    async function loadGods() {
+      const grid = document.getElementById("godsGrid");
+      try {
+        const q = query(collection(db, "poojaGods"), orderBy("order", "asc"));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          grid.innerHTML = "<p style='color:rgba(255,255,255,0.5);text-align:center;grid-column:1/-1'>ఇంకా దేవుళ్ళు జోడించలేదు</p>";
+          return;
+        }
+        grid.innerHTML = "";
+        snap.forEach(d => {
+          const god = d.data();
+          const done = doneTodaySet.has(d.id);
+          grid.innerHTML += `
+            <a href="pooja-room.html?god=${d.id}" class="god-card">
+              ${god.image ? `<img src="${god.image}" alt="${god.name}">` : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem;">${god.emoji || "🛕"}</div>`}
+              <div class="god-card-body">
+                <div class="god-card-name">${god.name}</div>
+                ${done ? `<div class="god-card-done">✅ నేడు పూజ పూర్తయింది</div>` : ""}
+                <span class="god-card-btn">పూజ చేయండి 🙏</span>
+              </div>
+            </a>
+          `;
+        });
+      } catch(e) {
+        grid.innerHTML = "<p style='color:rgba(255,255,255,0.5);text-align:center;grid-column:1/-1'>లోడ్ చేయడం విఫలమైంది</p>";
+      }
+    }
+
+    async function loadBg() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.getElementById("poojaMainBg");
+        if (!bg) return;
+        const url = window.innerWidth <= 700 ? (data.poojaMandir Mobile || "") : (data.poojaMandir Pc || "");
+        if (url) bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)),url("${url}")`;
+      } catch(e) {}
+    }
+    loadBg();
+  </script>
+
 </body>
 </html>
