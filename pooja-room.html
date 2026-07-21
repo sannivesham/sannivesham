@@ -3,188 +3,546 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>పూజ గది - సన్నివేశం</title>
+  <title>పూజా గది - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .pooja-room-section {
+    * { box-sizing: border-box; }
+    body { overflow-x: hidden; }
+
+    .pooja-room-bg {
+      position: fixed; inset: 0; z-index: -1;
+      background: linear-gradient(rgba(8,4,0,0.82),rgba(8,4,0,0.88)),
+                  url("images/temples.png") center/cover no-repeat;
+    }
+
+    .pooja-room-page {
       min-height: 100vh;
-      padding: 100px 16px 40px;
+      padding: 80px 16px 120px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: white;
-      position: relative;
+      gap: 24px;
     }
-    .pooja-god-name {
-      font-size: 26px;
-      margin-bottom: 20px;
+
+    .god-title {
+      color: #ffd166;
+      font-size: 1.8rem;
       text-align: center;
+      font-weight: bold;
+      text-shadow: 0 0 20px rgba(255,209,102,0.4);
     }
-    .pooja-stage {
+
+    .idol-stage {
       position: relative;
-      width: min(320px, 80vw);
-      height: min(320px, 80vw);
-      border-radius: 50%;
-      overflow: visible;
+      width: 260px;
+      height: 320px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle, rgba(255,209,102,0.15), transparent 70%);
     }
-    .pooja-idol-img {
-      width: 78%;
-      height: 78%;
-      object-fit: contain;
-      border-radius: 50%;
+    .idol-img {
+      width: 220px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 50% 50% 40% 40%;
+      border: 3px solid rgba(255,209,102,0.5);
+      box-shadow: 0 0 40px rgba(255,209,102,0.3);
       z-index: 2;
       position: relative;
-      transition: filter 0.4s ease;
+      transition: 0.3s;
     }
-    .pooja-mantra-box {
-      margin-top: 24px;
-      max-width: 480px;
-      min-height: 40px;
-      text-align: center;
-      background: rgba(0,0,0,0.4);
+
+    #particleCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .aarti-glow {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,180,0,0.35) 0%, transparent 70%);
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .aarti-glow.active {
+      opacity: 1;
+      animation: aartiPulse 1s ease-in-out infinite alternate;
+    }
+    @keyframes aartiPulse {
+      from { transform: scale(0.95); opacity: 0.5; }
+      to { transform: scale(1.05); opacity: 1; }
+    }
+
+    .mantra-display {
+      background: rgba(20,12,5,0.80);
       border: 1px solid rgba(255,209,102,0.3);
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 16px;
-      line-height: 1.7;
-      display: none;
-    }
-    .pooja-mantra-box.show { display: block; }
-    .pooja-ritual-buttons {
+      border-radius: 18px;
+      padding: 18px 22px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      min-height: 80px;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .mantra-ritual-name {
+      color: rgba(255,209,102,0.7);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .mantra-text {
+      color: #ffd166;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+    .mantra-placeholder {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.9rem;
+    }
+
+    .rituals-row {
+      display: flex;
+      gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
-      margin-top: 30px;
-      max-width: 600px;
+      max-width: 560px;
+      width: 100%;
     }
-    .pooja-ritual-btn {
-      background: rgba(255,209,102,0.15);
-      border: 1px solid rgba(255,209,102,0.4);
-      color: #ffd166;
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-size: 15px;
+    .ritual-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,209,102,0.3);
+      background: rgba(20,12,5,0.70);
+      color: white;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.2s ease;
+      min-width: 80px;
+      backdrop-filter: blur(8px);
     }
-    .pooja-ritual-btn:hover { background: rgba(255,209,102,0.3); }
-    .pooja-ritual-btn.ritual-done {
-      background: rgba(60,180,60,0.25);
-      border-color: rgba(60,180,60,0.6);
-      color: #b6ffb6;
+    .ritual-btn:hover { border-color: #ffd166; background: rgba(255,209,102,0.1); transform: translateY(-3px); }
+    .ritual-btn.done { border-color: #2ecc71; background: rgba(46,204,113,0.1); }
+    .ritual-btn.active { border-color: #ffd166; background: rgba(255,209,102,0.18); }
+    .ritual-icon { font-size: 2rem; }
+    .ritual-label { font-size: 0.75rem; color: rgba(255,255,255,0.8); }
+    .ritual-done-tick { font-size: 0.7rem; color: #2ecc71; }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .pooja-completion-msg {
-      margin-top: 26px;
-      font-size: 20px;
+    .audio-play-btn {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,209,102,0.4);
+      background: rgba(255,209,102,0.12);
       color: #ffd166;
-      text-align: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .audio-play-btn:hover { background: rgba(255,209,102,0.22); }
+
+    .completion-box {
       display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: rgba(20,12,5,0.85);
+      border: 1px solid rgba(255,209,102,0.4);
+      border-radius: 22px;
+      padding: 28px 24px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: fadeIn 0.5s ease;
     }
-    .pooja-completion-msg.show { display: block; }
+    .completion-box.show { display: flex; }
+    .completion-icon { font-size: 3rem; }
+    .completion-title { color: #ffd166; font-size: 1.4rem; font-weight: bold; }
+    .completion-sub { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
 
-    /* ---- Ritual animations ---- */
-    .anim-water-drop {
-      position: absolute;
-      top: -10px;
-      width: 6px;
-      height: 18px;
-      background: linear-gradient(180deg, rgba(120,190,255,0.9), rgba(120,190,255,0.1));
-      border-radius: 4px;
-      z-index: 3;
-      animation: waterFall 1s linear forwards;
-    }
-    @keyframes waterFall {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(260px); opacity: 0; }
-    }
-
-    .anim-flower {
-      position: absolute;
-      top: -10px;
-      font-size: 20px;
-      z-index: 3;
-      animation: flowerFall 1.6s ease-in forwards;
-    }
-    @keyframes flowerFall {
-      from { transform: translateY(0) rotate(0deg); opacity: 1; }
-      to { transform: translateY(260px) rotate(220deg); opacity: 0; }
+    .back-btn {
+      padding: 12px 28px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,209,102,0.4);
+      background: rgba(20,12,5,0.7);
+      color: #ffd166;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
     }
 
-    .anim-lamp-glow {
-      animation: lampPulse 1.4s ease-in-out 2;
-    }
-    @keyframes lampPulse {
-      0%, 100% { filter: drop-shadow(0 0 0px #ffd166); }
-      50% { filter: drop-shadow(0 0 30px #ffd166) brightness(1.3); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .anim-food-plate {
-      position: absolute;
-      bottom: -6px;
-      font-size: 34px;
-      z-index: 3;
-      animation: foodPop 1.2s ease-in-out forwards;
-    }
-    @keyframes foodPop {
-      0% { transform: translateY(20px) scale(0.4); opacity: 0; }
-      40% { transform: translateY(0) scale(1); opacity: 1; }
-      80% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(10px) scale(0.9); opacity: 0; }
-    }
-
-    .anim-aarti-ring {
-      position: absolute;
-      width: 90%;
-      height: 90%;
-      border-radius: 50%;
-      border: 3px dashed rgba(255,180,60,0.8);
-      z-index: 1;
-      animation: aartiSpin 1.6s linear 2;
-    }
-    @keyframes aartiSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .anim-generic-sparkle {
-      animation: genericPulse 1s ease-in-out 2;
-    }
-    @keyframes genericPulse {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.5) saturate(1.4); }
+    @media (max-width: 480px) {
+      .idol-stage { width: 200px; height: 260px; }
+      .idol-img { width: 170px; height: 220px; }
+      .ritual-btn { min-width: 68px; padding: 12px 10px; }
+      .ritual-icon { font-size: 1.6rem; }
+      .god-title { font-size: 1.4rem; }
     }
   </style>
 </head>
-<body class="stories-body">
-  <div class="stories-bg"></div>
+<body>
+
+  <div class="pooja-room-bg" id="poojaRoomBg"></div>
+
   <nav class="glass-navbar">
-    <a href="pooja-mandir.html">← పూజ మందిరం</a>
+    <a href="pooja-mandir.html">← వెనుకకు</a>
     <a href="index.html">ప్రారంభం</a>
+    <a href="pooja-mandir.html">పూజా మందిర్</a>
   </nav>
 
-  <section class="pooja-room-section">
-    <h1 class="pooja-god-name" id="poojaGodName">Loading...</h1>
+  <div class="pooja-room-page">
 
-    <div class="pooja-stage" id="poojaStage">
-      <img id="poojaIdolImg" class="pooja-idol-img" src="" alt="">
+    <div class="god-title" id="godTitle">లోడ్ అవుతోంది...</div>
+
+    <div class="idol-stage">
+      <div class="aarti-glow" id="aartiGlow"></div>
+      <img id="idolImg" class="idol-img" src="" alt="God">
+      <canvas id="particleCanvas"></canvas>
     </div>
 
-    <div class="pooja-mantra-box" id="poojaMantraBox"></div>
+    <div class="mantra-display" id="mantraDisplay">
+      <div class="mantra-placeholder">పూజ విధి ఎంచుకోండి 🙏</div>
+    </div>
 
-    <div class="pooja-ritual-buttons" id="poojaRitualButtons"></div>
+    <div class="audio-controls" id="audioControls" style="display:none;">
+      <button class="audio-play-btn" id="audioPlayBtn">▶ మంత్రం వినండి</button>
+      <button class="audio-play-btn" id="audioStopBtn" style="background:rgba(200,50,50,0.15);border-color:rgba(200,50,50,0.4);color:#ff9999;">⏹ ఆపండి</button>
+    </div>
 
-    <div class="pooja-completion-msg" id="poojaCompletionMsg">పూజ పూర్తయింది 🙏</div>
-  </section>
+    <div class="rituals-row" id="ritualsRow"></div>
 
-  <audio id="poojaBell" src="sounds/bell.mp3" preload="auto"></audio>
+    <div class="completion-box" id="completionBox">
+      <div class="completion-icon">🙏</div>
+      <div class="completion-title">పూజ పూర్తయింది!</div>
+      <div class="completion-sub" id="completionSub">మీ భక్తి భగవంతుడికి చేరుకుంది</div>
+      <a href="pooja-mandir.html" class="back-btn">← పూజా మందిర్ కి వెళ్ళండి</a>
+    </div>
 
+  </div>
+
+  <audio id="mantraAudio" preload="none"></audio>
+  <audio id="bellAudio" preload="auto">
+    <source src="music/bell.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="bgMusic" loop><source src="music/traditional.mp3" type="audio/mpeg"></audio>
+  <button id="musicBtn" class="music-btn">🔊</button>
   <script src="script.js"></script>
-  <script type="module" src="pooja-room.js"></script>
   <script src="music.js"></script>
+
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import {
+      doc, getDoc, setDoc, collection, getDocs, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const godId = params.get("god");
+    const TODAY = new Date().toISOString().slice(0, 10);
+
+    let currentUser = null;
+    let rituals = [];
+    let doneSet = new Set();
+    let particles = [];
+    let animFrameId = null;
+
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+    const mantraAudio = document.getElementById("mantraAudio");
+    const bellAudio = document.getElementById("bellAudio");
+
+    onAuthStateChanged(auth, (user) => { currentUser = user; });
+
+    function resizeCanvas() {
+      const stage = canvas.parentElement;
+      canvas.width = stage.offsetWidth;
+      canvas.height = stage.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    async function loadGod() {
+      if (!godId) { document.getElementById("godTitle").innerText = "Not Found"; return; }
+      try {
+        const snap = await getDoc(doc(db, "poojaGods", godId));
+        if (!snap.exists()) { document.getElementById("godTitle").innerText = "Not Found"; return; }
+        const god = snap.data();
+        document.getElementById("godTitle").innerText = god.name || "";
+        if (god.image) document.getElementById("idolImg").src = god.image;
+
+        try { bellAudio.play().catch(() => {}); } catch(e) {}
+
+        const ritualSnap = await getDocs(
+          query(collection(db, "poojaGods", godId, "rituals"), orderBy("order", "asc"))
+        );
+        rituals = [];
+        ritualSnap.forEach(d => rituals.push({ id: d.id, ...d.data() }));
+        renderRituals();
+        loadBg();
+      } catch(e) { console.log(e); }
+    }
+
+    function renderRituals() {
+      const row = document.getElementById("ritualsRow");
+      row.innerHTML = "";
+      rituals.forEach(ritual => {
+        const btn = document.createElement("button");
+        btn.className = "ritual-btn" + (doneSet.has(ritual.id) ? " done" : "");
+        btn.dataset.id = ritual.id;
+        btn.innerHTML = `
+          <span class="ritual-icon">${ritual.emoji || "🙏"}</span>
+          <span class="ritual-label">${ritual.name}</span>
+          ${doneSet.has(ritual.id) ? `<span class="ritual-done-tick">✅</span>` : ""}
+        `;
+        btn.addEventListener("click", () => selectRitual(ritual, btn));
+        row.appendChild(btn);
+      });
+    }
+
+    function selectRitual(ritual, btn) {
+      document.querySelectorAll(".ritual-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.getElementById("mantraDisplay").innerHTML = `
+        <div class="mantra-ritual-name">${ritual.name}</div>
+        <div class="mantra-text">${ritual.mantraText || ""}</div>
+      `;
+
+      const audioControls = document.getElementById("audioControls");
+      if (ritual.audioUrl) {
+        mantraAudio.src = ritual.audioUrl;
+        mantraAudio.load();
+        audioControls.style.display = "flex";
+        mantraAudio.play().catch(() => {});
+      } else {
+        audioControls.style.display = "none";
+      }
+
+      triggerAnimation(ritual.animationType || ritual.name);
+
+      setTimeout(() => markDone(ritual.id), 3000);
+    }
+
+    function markDone(ritualId) {
+      doneSet.add(ritualId);
+      renderRituals();
+      if (doneSet.size === rituals.length && rituals.length > 0) {
+        showCompletion();
+        saveProgress();
+      }
+    }
+
+    async function saveProgress() {
+      try {
+        const local = JSON.parse(localStorage.getItem("sannivesham_pooja") || "{}");
+        local[godId] = { lastDate: TODAY };
+        localStorage.setItem("sannivesham_pooja", JSON.stringify(local));
+      } catch(e) {}
+
+      if (currentUser) {
+        try {
+          await setDoc(doc(db, "users", currentUser.uid), {
+            poojaProgress: { [godId]: { lastDate: TODAY } }
+          }, { merge: true });
+        } catch(e) {}
+      }
+    }
+
+    function showCompletion() {
+      document.getElementById("completionBox").classList.add("show");
+      try { bellAudio.currentTime = 0; bellAudio.play().catch(() => {}); } catch(e) {}
+    }
+
+    document.getElementById("audioPlayBtn").addEventListener("click", () => {
+      mantraAudio.play().catch(() => {});
+    });
+    document.getElementById("audioStopBtn").addEventListener("click", () => {
+      mantraAudio.pause(); mantraAudio.currentTime = 0;
+    });
+
+    /* ── ANIMATIONS ── */
+
+    function triggerAnimation(type) {
+      cancelAnimationFrame(animFrameId);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = [];
+      document.getElementById("aartiGlow").classList.remove("active");
+
+      const t = (type || "").toLowerCase();
+
+      if (t.includes("అభిషేకం") || t.includes("water") || t.includes("abhishekam")) {
+        spawnWater();
+      } else if (t.includes("పుష్పాలు") || t.includes("flower") || t.includes("పూలు")) {
+        spawnFlowers();
+      } else if (t.includes("దీప") || t.includes("lamp") || t.includes("deep")) {
+        spawnDiyas();
+      } else if (t.includes("ఆరతి") || t.includes("aarti")) {
+        document.getElementById("aartiGlow").classList.add("active");
+        spawnAarti();
+      } else if (t.includes("నైవేద్యం") || t.includes("food") || t.includes("prasad")) {
+        spawnPrasad();
+      } else {
+        spawnFlowers();
+      }
+
+      animateParticles();
+    }
+
+    function spawnWater() {
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 60,
+          y: 0,
+          vx: (Math.random() - 0.5) * 2,
+          vy: Math.random() * 4 + 3,
+          alpha: 0.7 + Math.random() * 0.3,
+          size: Math.random() * 4 + 2,
+          color: "rgba(100,180,255,",
+          life: 1
+        });
+      }
+    }
+
+    function spawnFlowers() {
+      const emojis = ["🌸","🌺","🌼","🌻","🪷","🌹"];
+      for (let i = 0; i < 30; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -20,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: Math.random() * 2 + 1,
+          alpha: 1,
+          emoji: emojis[Math.floor(Math.random() * emojis.length)],
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.1,
+          size: Math.random() * 10 + 14,
+          life: 1
+        });
+      }
+    }
+
+    function spawnDiyas() {
+      for (let i = 0; i < 20; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height - Math.random() * 60,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: -(Math.random() * 1.5 + 0.5),
+          alpha: 0.9,
+          size: Math.random() * 6 + 4,
+          color: `rgba(255,${Math.floor(Math.random()*80+120)},0,`,
+          life: 1
+        });
+      }
+    }
+
+    function spawnAarti() {
+      for (let i = 0; i < 40; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 2 + 1;
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          size: Math.random() * 5 + 3,
+          color: `rgba(255,${Math.floor(Math.random()*80+160)},0,`,
+          life: 1
+        });
+      }
+    }
+
+    function spawnPrasad() {
+      const emojis = ["🍛","🍚","🍮","🥛","🍯","🧆","🍬"];
+      for (let i = 0; i < 15; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -20,
+          vx: (Math.random() - 0.5),
+          vy: Math.random() * 1.5 + 0.8,
+          alpha: 1,
+          emoji: emojis[Math.floor(Math.random() * emojis.length)],
+          size: Math.random() * 8 + 16,
+          life: 1
+        });
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.life > 0);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.008;
+        p.alpha = Math.max(0, p.life * 1.2);
+
+        if (p.emoji) {
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.font = `${p.size}px serif`;
+          if (p.rotation !== undefined) {
+            ctx.translate(p.x, p.y);
+            p.rotation += p.rotSpeed || 0;
+            ctx.rotate(p.rotation);
+            ctx.fillText(p.emoji, -p.size/2, p.size/2);
+          } else {
+            ctx.fillText(p.emoji, p.x, p.y);
+          }
+          ctx.restore();
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = (p.color || "rgba(255,255,255,") + p.alpha + ")";
+          ctx.fill();
+        }
+      });
+
+      if (particles.length > 0) {
+        animFrameId = requestAnimationFrame(animateParticles);
+      } else {
+        document.getElementById("aartiGlow").classList.remove("active");
+      }
+    }
+
+    async function loadBg() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.getElementById("poojaRoomBg");
+        const key = window.innerWidth <= 700 ? "poojaRoomMobile" : "poojaRoomPc";
+        const url = data[key] || "";
+        if (url && bg) bg.style.backgroundImage = `linear-gradient(rgba(8,4,0,0.82),rgba(8,4,0,0.88)),url("${url}")`;
+      } catch(e) {}
+    }
+
+    loadGod();
+  </script>
+
 </body>
 </html>
