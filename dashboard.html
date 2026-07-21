@@ -24,7 +24,7 @@
         <button class="dash-btn" data-section="videosSection">Videos</button>
         <button class="dash-btn" data-section="slokasSection">Slokas</button>
         <button class="dash-btn" data-section="quizSection">Quiz</button>
-        <button class="dash-btn" data-section="poojaSection">పూజ మందిరం</button>
+        <button class="dash-btn" data-section="poojaMandir Section">పూజా మందిర్</button>
         <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
         <button class="dash-btn" data-section="aboutSection">About</button>
         <button class="dash-btn" data-section="backgroundsSection">Backgrounds</button>
@@ -56,44 +56,60 @@
 
 
 
-      <!-- ═══════════════════════════════════
-     POOJA MANDIR SECTION
-═══════════════════════════════════ -->
-<div id="poojaSection" class="dash-section">
+    <div id="poojaMandir Section" class="dash-section">
 
+  <h2 class="admin-section-title">🛕 పూజా మందిర్ CMS</h2>
+
+  <!-- ADD GOD -->
   <div class="add-event-box">
-    <h2>కొత్త దేవుడు జోడించండి</h2>
-    <input type="text" id="poojaGodName" placeholder="దేవుడి పేరు (e.g. గణేశుడు)">
+    <h2>దేవుడు జోడించండి</h2>
+    <input type="text" id="poojaGodName" placeholder="దేవుడి పేరు (గణేశుడు)">
+    <input type="text" id="poojaGodEmoji" placeholder="Emoji (🐘) - optional">
+    <input type="number" id="poojaGodOrder" placeholder="Order (1, 2, 3...)">
     <div id="poojaGodImageBox" class="festival-card-upload-box">
-      <span>＋ God Image</span>
+      <span>＋ దేవుడి ఫోటో</span>
     </div>
-    <input type="number" id="poojaGodOrder" placeholder="Order (optional)">
-    <button id="savePoojaGodBtn">Save God</button>
-    <p id="poojaGodMessage"></p>
+    <button id="savePoojaGodBtn">Save దేవుడు</button>
+    <p id="poojaGodMsg"></p>
   </div>
 
-  <h2 class="admin-section-title">Gods</h2>
-  <div id="adminPoojaGodsList"></div>
+  <h2 class="admin-section-title">దేవుళ్ళు జాబితా</h2>
+  <div id="poojaGodsList" class="cms-list"></div>
 
-  <hr>
+  <hr style="border-color:rgba(255,209,102,0.2);margin:30px 0;">
 
+  <!-- ADD RITUAL -->
   <div class="add-event-box">
-    <h2>కొత్త ఆచారం (Ritual) జోడించండి</h2>
+    <h2>పూజా విధి జోడించండి</h2>
+
     <select id="poojaRitualGodSelect">
-      <option value="">Select God</option>
+      <option value="">దేవుడిని ఎంచుకోండి</option>
     </select>
-    <input type="text" id="poojaRitualName" placeholder="Ritual Name (e.g. అభిషేకం)">
-    <textarea id="poojaRitualMantra" placeholder="Mantra Text"></textarea>
-    <div id="poojaRitualAudioBox" class="festival-card-upload-box">
-      <span>＋ Mantra Audio (mp3)</span>
-    </div>
-    <input type="number" id="poojaRitualOrder" placeholder="Order (optional)">
-    <button id="savePoojaRitualBtn">Save Ritual</button>
-    <p id="poojaRitualMessage"></p>
+
+    <input type="text" id="poojaRitualName" placeholder="విధి పేరు (అభిషేకం)">
+    <input type="text" id="poojaRitualEmoji" placeholder="Emoji (🫧)">
+    <textarea id="poojaRitualMantra" placeholder="మంత్రం / శ్లోకం (Telugu text)"></textarea>
+    <input type="text" id="poojaRitualAudio" placeholder="Audio URL (optional - mantra audio link)">
+
+    <select id="poojaRitualAnimation">
+      <option value="water">🫧 అభిషేకం (Water)</option>
+      <option value="flower">🌸 పుష్పాలు (Flowers)</option>
+      <option value="lamp">🪔 దీపారాధన (Lamp)</option>
+      <option value="aarti">🌀 ఆరతి (Aarti)</option>
+      <option value="prasad">🍛 నైవేద్యం (Prasad)</option>
+    </select>
+
+    <input type="number" id="poojaRitualOrder" placeholder="Order (1, 2, 3...)">
+
+    <button id="savePoojaRitualBtn">Save విధి</button>
+    <p id="poojaRitualMsg"></p>
   </div>
 
-  <h2 class="admin-section-title">Rituals</h2>
-  <div id="adminPoojaRitualsList"></div>
+  <h2 class="admin-section-title">పూజా విధులు జాబితా</h2>
+  <select id="poojaRitualFilterGod" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:16px;">
+    <option value="">Filter by God</option>
+  </select>
+  <div id="poojaRitualsList" class="cms-list"></div>
 
 </div>
       
