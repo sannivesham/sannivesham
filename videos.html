@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>వీడియోలు - సన్నివేశం</title>
-
 <style>
 *{
 margin:0;
@@ -13,12 +11,21 @@ padding:0;
 box-sizing:border-box;
 font-family:Segoe UI,sans-serif;
 }
-
 body{
 background:#090603;
 color:#fff;
+position:relative;
+min-height:100vh;
 }
-
+.videos-bg{
+position:fixed;
+inset:0;
+z-index:-10;
+background:#090603;
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
 .header{
 padding:25px;
 text-align:center;
@@ -26,7 +33,6 @@ font-size:40px;
 font-weight:bold;
 color:#d4af37;
 }
-
 .back-btn{
 position:fixed;
 top:20px;
@@ -38,8 +44,8 @@ background:#17120d;
 color:#ffd166;
 text-decoration:none;
 font-weight:bold;
+z-index:5;
 }
-
 .videos-grid{
 width:95%;
 max-width:1300px;
@@ -48,7 +54,6 @@ display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:25px;
 }
-
 .video-card{
 background:#18130d;
 border-radius:18px;
@@ -57,19 +62,16 @@ border:1px solid rgba(212,175,55,.4);
 transition:.3s;
 text-decoration:none;
 }
-
 .video-card:hover{
 transform:translateY(-6px);
 box-shadow:0 0 20px rgba(212,175,55,.35);
 }
-
 .video-card img{
 width:100%;
 height:180px;
 object-fit:cover;
 display:block;
 }
-
 .video-name{
 padding:15px;
 font-size:18px;
@@ -77,7 +79,6 @@ font-weight:600;
 color:#ffd166;
 text-align:center;
 }
-
 .empty{
 text-align:center;
 margin-top:100px;
@@ -86,91 +87,85 @@ color:#ccc;
 }
 </style>
 </head>
-
 <body>
-
+<div class="videos-bg"></div>
 <a href="index.html" class="back-btn">← వెనుకకు</a>
-
 <div class="header">
 వీడియోలు
 </div>
-
 <div class="videos-grid" id="videosGrid"></div>
-
 <script type="module">
-
 import { db } from "./firebase-config.js";
-
 import {
 collection,
 getDocs,
+doc,
+getDoc,
 query,
 orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
+async function loadVideosBackground() {
+  try {
+    const snap = await getDoc(doc(db, "settings", "backgrounds"));
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const bg = document.querySelector(".videos-bg");
+    if (!bg) return;
+
+    if (window.innerWidth <= 700 && data.videosMobile) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(9,6,3,0.75), rgba(9,6,3,0.82)), url("${data.videosMobile}")`;
+    } else if (data.videosPc) {
+      bg.style.backgroundImage =
+        `linear-gradient(rgba(9,6,3,0.75), rgba(9,6,3,0.82)), url("${data.videosPc}")`;
+    }
+  } catch (e) {
+    console.log("Videos background load error:", e);
+  }
+}
+
+loadVideosBackground();
+
 const videosGrid=document.getElementById("videosGrid");
-
 async function loadVideos(){
-
 try{
-
 const q=query(
 collection(db,"videos"),
 orderBy("createdAt","desc")
 );
-
 const snapshot=await getDocs(q);
-
 videosGrid.innerHTML="";
-
 if(snapshot.empty){
 videosGrid.innerHTML="<div class='empty'>ఇంకా వీడియోలు లేవు.</div>";
 return;
 }
-
 snapshot.forEach(docItem=>{
-
 const data=docItem.data();
-
 const title=
 data.title||
 data.videoTitle||
 "Untitled";
-
 const image=
 data.cardImage||
 data.thumbnail||
 data.image||
 "https://dummyimage.com/600x350/222/ffffff&text=No+Thumbnail";
-
 videosGrid.innerHTML+=`
-
 <a class="video-card" href="video-player.html?id=${docItem.id}">
-
 <img src="${image}">
-
 <div class="video-name">${title}</div>
-
 </a>
-
 `;
-
 });
-
 }
 catch(err){
-
 console.error(err);
-
 videosGrid.innerHTML="<div class='empty'>వీడియోలను లోడ్ చేయలేకపోయాము.</div>";
-
 }
-
 }
-
 loadVideos();
-
 </script>
-
 </body>
 </html>
