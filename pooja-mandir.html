@@ -187,7 +187,8 @@
         const data = snap.data();
         const bg = document.getElementById("poojaMainBg");
         if (!bg) return;
-        const url = window.innerWidth <= 700 ? (data.poojaMandir Mobile || "") : (data.poojaMandir Pc || "");
+        const key = window.innerWidth <= 700 ? "poojaMandirMobile" : "poojaMandirPc";
+        const url = data[key] || "";
         if (url) bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)),url("${url}")`;
       } catch(e) {}
     }
