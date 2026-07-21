@@ -1416,215 +1416,8 @@ if (logoutBtn) {
 }
 
 /* ══════════════════════════════════════
-   ITHIHASALU CMS
-══════════════════════════════════════ */
-
-const ithiCatImageBox = document.getElementById("ithiCatImageBox");
-if (ithiCatImageBox) {
-  ithiCatImageBox.addEventListener("click", async () => {
-    const url = await uploadImage(); if (!url) return;
-    ithiCatImageBox.dataset.image = url;
-    ithiCatImageBox.innerHTML = `<img src="${url}">`;
-  });
-}
-
-const saveIthiCatBtn = document.getElementById("saveIthiCatBtn");
-if (saveIthiCatBtn) {
-  saveIthiCatBtn.addEventListener("click", async () => {
-    const title = document.getElementById("ithiCatTitle").value.trim();
-    const order = Number(document.getElementById("ithiCatOrder").value) || 0;
-    const image = ithiCatImageBox?.dataset.image || "";
-    if (!title) { document.getElementById("ithiCatMsg").innerText = "Title required"; return; }
-    await addDoc(collection(db, "ithihasaluCategories"), { title, image, order, createdAt: serverTimestamp() });
-    document.getElementById("ithiCatMsg").innerText = "✅ Category saved";
-    document.getElementById("ithiCatTitle").value = "";
-    document.getElementById("ithiCatOrder").value = "";
-    if (ithiCatImageBox) { ithiCatImageBox.dataset.image = ""; ithiCatImageBox.innerHTML = "<span>＋ Category Image</span>"; }
-    loadIthiCats();
-  });
-}
-
-async function loadIthiCats() {
-  const list = document.getElementById("ithiCatList");
-  const subSelect = document.getElementById("ithiSubCatSelect");
-  if (!list) return;
-  const snap = await getDocs(query(collection(db, "ithihasaluCategories"), orderBy("order", "asc")));
-  list.innerHTML = "";
-  if (subSelect) subSelect.innerHTML = `<option value="">Select Category</option>`;
-  snap.forEach(d => {
-    const data = d.data();
-    if (subSelect) subSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
-    const row = document.createElement("div");
-    row.className = "cms-list-item";
-    row.innerHTML = `
-      <div class="cms-list-item-text">
-        ${data.image ? `<img src="${data.image}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;margin-right:10px;">` : ""}
-        <span>${data.title}</span>
-      </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
-    `;
-    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
-      if (!confirm("Delete?")) return;
-      await deleteDoc(doc(db, "ithihasaluCategories", d.id)); loadIthiCats();
-    });
-    list.appendChild(row);
-  });
-}
-
-const saveIthiSubBtn = document.getElementById("saveIthiSubBtn");
-if (saveIthiSubBtn) {
-  saveIthiSubBtn.addEventListener("click", async () => {
-    const categoryId = document.getElementById("ithiSubCatSelect").value;
-    const title = document.getElementById("ithiSubTitle").value.trim();
-    const order = Number(document.getElementById("ithiSubOrder").value) || 0;
-    if (!categoryId || !title) { document.getElementById("ithiSubMsg").innerText = "Category and title required"; return; }
-    await addDoc(collection(db, "ithihasaluSubCategories"), { categoryId, title, order, createdAt: serverTimestamp() });
-    document.getElementById("ithiSubMsg").innerText = "✅ Sub category saved";
-    document.getElementById("ithiSubTitle").value = "";
-    document.getElementById("ithiSubOrder").value = "";
-    loadIthiSubs();
-  });
-}
-
-async function loadIthiSubs() {
-  const list = document.getElementById("ithiSubList");
-  const shlokaSubSelect = document.getElementById("ithiShlokaSubSelect");
-  const filterSub = document.getElementById("ithiShlokaFilterSub");
-  if (!list) return;
-  const snap = await getDocs(query(collection(db, "ithihasaluSubCategories"), orderBy("order", "asc")));
-  const catSnap = await getDocs(collection(db, "ithihasaluCategories"));
-  const catMap = {};
-  catSnap.forEach(d => { catMap[d.id] = d.data().title; });
-  list.innerHTML = "";
-  if (shlokaSubSelect) shlokaSubSelect.innerHTML = `<option value="">Select Sub Category</option>`;
-  if (filterSub) filterSub.innerHTML = `<option value="">All Sub Categories</option>`;
-  snap.forEach(d => {
-    const data = d.data();
-    if (shlokaSubSelect) shlokaSubSelect.innerHTML += `<option value="${d.id}">${catMap[data.categoryId] || ""} → ${data.title}</option>`;
-    if (filterSub) filterSub.innerHTML += `<option value="${d.id}">${catMap[data.categoryId] || ""} → ${data.title}</option>`;
-    const row = document.createElement("div");
-    row.className = "cms-list-item";
-    row.innerHTML = `
-      <div class="cms-list-item-text">
-        <span class="cms-list-item-date">${catMap[data.categoryId] || ""}</span> ${data.title}
-      </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
-    `;
-    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
-      if (!confirm("Delete?")) return;
-      await deleteDoc(doc(db, "ithihasaluSubCategories", d.id)); loadIthiSubs();
-    });
-    list.appendChild(row);
-  });
-}
-
-const saveIthiShlokaBtn = document.getElementById("saveIthiShlokaBtn");
-if (saveIthiShlokaBtn) {
-  saveIthiShlokaBtn.addEventListener("click", async () => {
-    const subCategoryId = document.getElementById("ithiShlokaSubSelect").value;
-    const number = document.getElementById("ithiShlokaNumber").value.trim();
-    const shloka = document.getElementById("ithiShlokaText").value.trim();
-    const explanation = document.getElementById("ithiShlokaExplanation").value.trim();
-    const audioUrl = document.getElementById("ithiShlokaAudio").value.trim();
-    const order = Number(document.getElementById("ithiShlokaOrder").value) || 0;
-    if (!subCategoryId || !number || !shloka) { document.getElementById("ithiShlokaMsg").innerText = "Sub category, number and shloka required"; return; }
-    await addDoc(collection(db, "ithihasaluShlokas"), { subCategoryId, number, shloka, explanation, audioUrl, order, createdAt: serverTimestamp() });
-    document.getElementById("ithiShlokaMsg").innerText = "✅ శ్లోకం saved";
-    document.getElementById("ithiShlokaNumber").value = "";
-    document.getElementById("ithiShlokaText").value = "";
-    document.getElementById("ithiShlokaExplanation").value = "";
-    document.getElementById("ithiShlokaAudio").value = "";
-    document.getElementById("ithiShlokaOrder").value = "";
-    loadIthiShlokas();
-  });
-}
-
-const ithiFilterSub = document.getElementById("ithiShlokaFilterSub");
-if (ithiFilterSub) { ithiFilterSub.addEventListener("change", () => loadIthiShlokas(ithiFilterSub.value)); }
-
-async function loadIthiShlokas(filterSubId = "") {
-  const list = document.getElementById("ithiShlokaList");
-  if (!list) return;
-  list.innerHTML = "<p style='color:rgba(255,255,255,0.5)'>లోడ్ అవుతోంది...</p>";
-  const snap = await getDocs(query(collection(db, "ithihasaluShlokas"), orderBy("order", "asc")));
-  list.innerHTML = "";
-  const items = [];
-  snap.forEach(d => { const data = d.data(); if (!filterSubId || data.subCategoryId === filterSubId) items.push({ id: d.id, ...data }); });
-  if (items.length === 0) { list.innerHTML = "<p style='color:rgba(255,255,255,0.5);text-align:center'>శ్లోకాలు లేవు</p>"; return; }
-  items.forEach(item => {
-    const row = document.createElement("div");
-    row.className = "cms-list-item";
-    row.style.flexDirection = "column"; row.style.alignItems = "flex-start"; row.style.gap = "12px";
-    row.innerHTML = `
-      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-        <span style="color:#ffd166;font-weight:bold;">శ్లోకం ${item.number || ""}</span>
-        <div style="display:flex;gap:8px;">
-          <button class="ithi-edit-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
-          <button class="ithi-delete-btn cms-list-delete-btn" data-id="${item.id}">Delete</button>
-        </div>
-      </div>
-      <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:0;">${(item.shloka || "").substring(0, 80)}...</p>
-      <div class="ithi-edit-box" id="ithiEdit-${item.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
-        <input class="ithi-edit-number" value="${item.number || ""}" placeholder="Number" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
-        <textarea class="ithi-edit-shloka" placeholder="Shloka" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:100px;">${item.shloka || ""}</textarea>
-        <textarea class="ithi-edit-explanation" placeholder="Explanation" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:100px;">${item.explanation || ""}</textarea>
-        <input class="ithi-edit-audio" value="${item.audioUrl || ""}" placeholder="Audio URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
-        <button class="ithi-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
-      </div>
-    `;
-    row.querySelector(".ithi-edit-btn").addEventListener("click", () => {
-      const box = document.getElementById(`ithiEdit-${item.id}`);
-      box.style.display = box.style.display === "none" ? "flex" : "none";
-    });
-    row.querySelector(".ithi-delete-btn").addEventListener("click", async () => {
-      if (!confirm("Delete this shloka?")) return;
-      await deleteDoc(doc(db, "ithihasaluShlokas", item.id)); loadIthiShlokas(filterSubId);
-    });
-    row.querySelector(".ithi-save-edit-btn").addEventListener("click", async () => {
-      const box = document.getElementById(`ithiEdit-${item.id}`);
-      await updateDoc(doc(db, "ithihasaluShlokas", item.id), {
-        number: box.querySelector(".ithi-edit-number").value.trim(),
-        shloka: box.querySelector(".ithi-edit-shloka").value.trim(),
-        explanation: box.querySelector(".ithi-edit-explanation").value.trim(),
-        audioUrl: box.querySelector(".ithi-edit-audio").value.trim(),
-        updatedAt: serverTimestamp()
-      });
-      alert("✅ Updated"); loadIthiShlokas(filterSubId);
-    });
-    list.appendChild(row);
-  });
-}
-
-loadIthiCats(); loadIthiSubs(); loadIthiShlokas();
-
-/* ══════════════════════════════════════
    POOJA MANDIR CMS
 ══════════════════════════════════════ */
-
-function uploadAudioFile() {
-  return new Promise((resolve) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "audio/*";
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (!file) return resolve(null);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", UPLOAD_PRESET);
-      try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, { method: "POST", body: formData });
-        const data = await res.json();
-        if (!res.ok || !data.secure_url) throw new Error("Audio upload failed");
-        resolve(data.secure_url);
-      } catch (error) {
-        alert("Audio upload failed: " + error.message);
-        resolve(null);
-      }
-    };
-    input.click();
-  });
-}
 
 const poojaGodImageBox = document.getElementById("poojaGodImageBox");
 if (poojaGodImageBox) {
@@ -1640,77 +1433,51 @@ const savePoojaGodBtn = document.getElementById("savePoojaGodBtn");
 if (savePoojaGodBtn) {
   savePoojaGodBtn.addEventListener("click", async () => {
     const name = document.getElementById("poojaGodName").value.trim();
+    const emoji = document.getElementById("poojaGodEmoji").value.trim();
+    const order = Number(document.getElementById("poojaGodOrder").value) || 0;
     const image = poojaGodImageBox?.dataset.image || "";
-    const orderValue = document.getElementById("poojaGodOrder").value.trim();
-    if (!name || !image) {
-      document.getElementById("poojaGodMessage").innerText = "God name and image required";
-      return;
-    }
-    await addDoc(collection(db, "poojaGods"), {
-      name, image, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp()
-    });
+    if (!name) { document.getElementById("poojaGodMsg").innerText = "దేవుడి పేరు required"; return; }
+    await addDoc(collection(db, "poojaGods"), { name, emoji, image, order, createdAt: serverTimestamp() });
+    document.getElementById("poojaGodMsg").innerText = "✅ దేవుడు saved";
     document.getElementById("poojaGodName").value = "";
+    document.getElementById("poojaGodEmoji").value = "";
     document.getElementById("poojaGodOrder").value = "";
-    poojaGodImageBox.dataset.image = "";
-    poojaGodImageBox.innerHTML = `<span>＋ God Image</span>`;
-    document.getElementById("poojaGodMessage").innerText = "✅ God saved";
-    loadPoojaGodsAdmin();
-    loadPoojaGodOptions();
+    if (poojaGodImageBox) { poojaGodImageBox.dataset.image = ""; poojaGodImageBox.innerHTML = "<span>＋ దేవుడి ఫోటో</span>"; }
+    loadPoojaGods();
   });
 }
 
-async function loadPoojaGodsAdmin() {
-  const list = document.getElementById("adminPoojaGodsList");
+async function loadPoojaGods() {
+  const list = document.getElementById("poojaGodsList");
+  const ritualSelect = document.getElementById("poojaRitualGodSelect");
+  const filterSelect = document.getElementById("poojaRitualFilterGod");
   if (!list) return;
-  const snapshot = await getDocs(collection(db, "poojaGods"));
-  let gods = [];
-  snapshot.forEach(item => gods.push({ id: item.id, ...item.data() }));
-  gods.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const snap = await getDocs(query(collection(db, "poojaGods"), orderBy("order", "asc")));
   list.innerHTML = "";
-  gods.forEach(data => {
-    list.innerHTML += `
-      <div class="admin-event-card">
-        <img src="${data.image}" alt="${data.name}">
-        <div>
-          <h3>${data.name}</h3>
-          <button class="delete-pooja-god-btn" data-id="${data.id}">Delete</button>
-        </div>
+  if (ritualSelect) ritualSelect.innerHTML = `<option value="">దేవుడిని ఎంచుకోండి</option>`;
+  if (filterSelect) filterSelect.innerHTML = `<option value="">Filter by God</option>`;
+
+  snap.forEach(d => {
+    const data = d.data();
+    if (ritualSelect) ritualSelect.innerHTML += `<option value="${d.id}">${data.name}</option>`;
+    if (filterSelect) filterSelect.innerHTML += `<option value="${d.id}">${data.name}</option>`;
+
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
+        ${data.image ? `<img src="${data.image}" style="width:50px;height:50px;object-fit:cover;border-radius:50%;border:1px solid rgba(255,209,102,0.4);">` : `<span style="font-size:2rem;">${data.emoji || "🛕"}</span>`}
+        <span style="color:#ffd166;font-weight:bold;">${data.name}</span>
       </div>
+      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
     `;
-  });
-  list.querySelectorAll(".delete-pooja-god-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (!confirm("Delete this god? Its rituals will remain orphaned.")) return;
-      await deleteDoc(doc(db, "poojaGods", btn.dataset.id));
-      loadPoojaGodsAdmin();
-      loadPoojaGodOptions();
+    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete this god?")) return;
+      await deleteDoc(doc(db, "poojaGods", d.id));
+      loadPoojaGods();
     });
-  });
-}
-
-async function loadPoojaGodOptions() {
-  const select = document.getElementById("poojaRitualGodSelect");
-  if (!select) return;
-  const snapshot = await getDocs(collection(db, "poojaGods"));
-  let gods = [];
-  snapshot.forEach(item => gods.push({ id: item.id, ...item.data() }));
-  gods.sort((a, b) => (a.order || 0) - (b.order || 0));
-  select.innerHTML = `<option value="">Select God</option>`;
-  gods.forEach(data => {
-    select.innerHTML += `<option value="${data.id}">${data.name}</option>`;
-  });
-}
-
-loadPoojaGodsAdmin();
-loadPoojaGodOptions();
-
-const poojaRitualAudioBox = document.getElementById("poojaRitualAudioBox");
-if (poojaRitualAudioBox) {
-  poojaRitualAudioBox.addEventListener("click", async () => {
-    const url = await uploadAudioFile();
-    if (!url) return;
-    poojaRitualAudioBox.dataset.audio = url;
-    poojaRitualAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;"></audio>`;
+    list.appendChild(row);
   });
 }
 
@@ -1719,55 +1486,135 @@ if (savePoojaRitualBtn) {
   savePoojaRitualBtn.addEventListener("click", async () => {
     const godId = document.getElementById("poojaRitualGodSelect").value;
     const name = document.getElementById("poojaRitualName").value.trim();
+    const emoji = document.getElementById("poojaRitualEmoji").value.trim();
     const mantraText = document.getElementById("poojaRitualMantra").value.trim();
-    const audioUrl = poojaRitualAudioBox?.dataset.audio || "";
-    const orderValue = document.getElementById("poojaRitualOrder").value.trim();
-    if (!godId || !name || !mantraText) {
-      document.getElementById("poojaRitualMessage").innerText = "God, ritual name and mantra text required";
+    const audioUrl = document.getElementById("poojaRitualAudio").value.trim();
+    const animationType = document.getElementById("poojaRitualAnimation").value;
+    const order = Number(document.getElementById("poojaRitualOrder").value) || 0;
+
+    if (!godId || !name) {
+      document.getElementById("poojaRitualMsg").innerText = "God and ritual name required";
       return;
     }
-    await addDoc(collection(db, "poojaRituals"), {
-      godId, name, mantraText, audioUrl, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp()
+
+    await addDoc(collection(db, "poojaGods", godId, "rituals"), {
+      name, emoji, mantraText, audioUrl, animationType, order, createdAt: serverTimestamp()
     });
+
+    document.getElementById("poojaRitualMsg").innerText = "✅ విధి saved";
     document.getElementById("poojaRitualName").value = "";
+    document.getElementById("poojaRitualEmoji").value = "";
     document.getElementById("poojaRitualMantra").value = "";
+    document.getElementById("poojaRitualAudio").value = "";
     document.getElementById("poojaRitualOrder").value = "";
-    poojaRitualAudioBox.dataset.audio = "";
-    poojaRitualAudioBox.innerHTML = `<span>＋ Mantra Audio (mp3)</span>`;
-    document.getElementById("poojaRitualMessage").innerText = "✅ Ritual saved";
-    loadPoojaRitualsAdmin();
+    loadPoojaRituals();
   });
 }
 
-async function loadPoojaRitualsAdmin() {
-  const list = document.getElementById("adminPoojaRitualsList");
-  if (!list) return;
-  const godSnap = await getDocs(collection(db, "poojaGods"));
-  const godMap = {};
-  godSnap.forEach(item => { godMap[item.id] = item.data().name; });
-  const snapshot = await getDocs(collection(db, "poojaRituals"));
-  let rituals = [];
-  snapshot.forEach(item => rituals.push({ id: item.id, ...item.data() }));
-  rituals.sort((a, b) => (a.order || 0) - (b.order || 0));
-  list.innerHTML = "";
-  rituals.forEach(data => {
-    list.innerHTML += `
-      <div class="admin-event-card">
-        <div>
-          <h3>${data.name}</h3>
-          <p>God: ${godMap[data.godId] || "Unknown"}</p>
-          ${data.audioUrl ? `<p>🔊 Audio linked</p>` : `<p>⚠️ No audio</p>`}
-          <button class="delete-pooja-ritual-btn" data-id="${data.id}">Delete</button>
-        </div>
-      </div>
-    `;
-  });
-  list.querySelectorAll(".delete-pooja-ritual-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (!confirm("Delete this ritual?")) return;
-      await deleteDoc(doc(db, "poojaRituals", btn.dataset.id));
-      loadPoojaRitualsAdmin();
-    });
-  });
+const poojaRitualFilterGod = document.getElementById("poojaRitualFilterGod");
+if (poojaRitualFilterGod) {
+  poojaRitualFilterGod.addEventListener("change", () => loadPoojaRituals(poojaRitualFilterGod.value));
 }
-loadPoojaRitualsAdmin();
+
+async function loadPoojaRituals(filterGodId = "") {
+  const list = document.getElementById("poojaRitualsList");
+  if (!list) return;
+
+  list.innerHTML = "<p style='color:rgba(255,255,255,0.5)'>లోడ్ అవుతోంది...</p>";
+
+  const godSnap = await getDocs(query(collection(db, "poojaGods"), orderBy("order", "asc")));
+  const gods = [];
+  godSnap.forEach(d => gods.push({ id: d.id, ...d.data() }));
+
+  const filtered = filterGodId ? gods.filter(g => g.id === filterGodId) : gods;
+
+  list.innerHTML = "";
+
+  if (filtered.length === 0) {
+    list.innerHTML = "<p style='color:rgba(255,255,255,0.5);text-align:center'>విధులు లేవు</p>";
+    return;
+  }
+
+  for (const god of filtered) {
+    const ritualSnap = await getDocs(
+      query(collection(db, "poojaGods", god.id, "rituals"), orderBy("order", "asc"))
+    );
+
+    const rituals = [];
+    ritualSnap.forEach(d => rituals.push({ id: d.id, ...d.data() }));
+
+    if (rituals.length === 0 && filterGodId) {
+      list.innerHTML += `<p style='color:rgba(255,255,255,0.5);text-align:center'>${god.name} కు విధులు లేవు</p>`;
+      continue;
+    }
+
+    if (rituals.length === 0) continue;
+
+    const section = document.createElement("div");
+    section.style.marginBottom = "20px";
+    section.innerHTML = `<h3 style="color:#ffd166;margin-bottom:12px;">${god.emoji || "🛕"} ${god.name}</h3>`;
+
+    rituals.forEach(ritual => {
+      const row = document.createElement("div");
+      row.className = "cms-list-item";
+      row.style.flexDirection = "column";
+      row.style.alignItems = "flex-start";
+      row.style.gap = "10px";
+
+      row.innerHTML = `
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <span>${ritual.emoji || "🙏"} <strong style="color:#ffd166;">${ritual.name}</strong></span>
+          <div style="display:flex;gap:8px;">
+            <button class="pooja-edit-btn cms-list-delete-btn" data-godid="${god.id}" data-id="${ritual.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
+            <button class="pooja-delete-btn cms-list-delete-btn" data-godid="${god.id}" data-id="${ritual.id}">Delete</button>
+          </div>
+        </div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);">${ritual.mantraText ? ritual.mantraText.substring(0, 60) + "..." : "No mantra"}</div>
+
+        <div class="pooja-edit-box" id="poojaEdit-${ritual.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
+          <input class="p-edit-name" value="${ritual.name || ""}" placeholder="Name" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <input class="p-edit-emoji" value="${ritual.emoji || ""}" placeholder="Emoji" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <textarea class="p-edit-mantra" placeholder="Mantra Text" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${ritual.mantraText || ""}</textarea>
+          <input class="p-edit-audio" value="${ritual.audioUrl || ""}" placeholder="Audio URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <button class="pooja-save-edit-btn" data-godid="${god.id}" data-id="${ritual.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+        </div>
+      `;
+
+      row.querySelector(".pooja-edit-btn").addEventListener("click", () => {
+        const box = document.getElementById(`poojaEdit-${ritual.id}`);
+        box.style.display = box.style.display === "none" ? "flex" : "none";
+      });
+
+      row.querySelector(".pooja-delete-btn").addEventListener("click", async (e) => {
+        if (!confirm("Delete this ritual?")) return;
+        const btn = e.currentTarget;
+        await deleteDoc(doc(db, "poojaGods", btn.dataset.godid, "rituals", btn.dataset.id));
+        loadPoojaRituals(filterGodId);
+      });
+
+      row.querySelector(".pooja-save-edit-btn").addEventListener("click", async (e) => {
+        const btn = e.currentTarget;
+        const box = document.getElementById(`poojaEdit-${btn.dataset.id}`);
+        await updateDoc(doc(db, "poojaGods", btn.dataset.godid, "rituals", btn.dataset.id), {
+          name: box.querySelector(".p-edit-name").value.trim(),
+          emoji: box.querySelector(".p-edit-emoji").value.trim(),
+          mantraText: box.querySelector(".p-edit-mantra").value.trim(),
+          audioUrl: box.querySelector(".p-edit-audio").value.trim(),
+          updatedAt: serverTimestamp()
+        });
+        alert("✅ Updated");
+        loadPoojaRituals(filterGodId);
+      });
+
+      section.appendChild(row);
+    });
+
+    list.appendChild(section);
+  }
+}
+
+// Add pooja backgrounds to background manager in dashboard.html too
+// Keys: poojaMandir Pc, poojaMandir Mobile, poojaRoomPc, poojaRoomMobile
+
+loadPoojaGods();
+loadPoojaRituals();
