@@ -19,7 +19,7 @@
       align-items: center;
     }
 
-    .japa-step { display: none; width: 100%; max-width: 700px; }
+    .japa-step { display: none; width: 100%; max-width: 520px; }
     .japa-step.active { display: block; animation: fadeIn 0.35s ease; }
 
     @keyframes fadeIn {
@@ -49,17 +49,17 @@
       opacity: 0.9;
     }
 
+    /* STEP 1: deity grid */
     .deity-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 14px;
     }
-
     .deity-card {
       background: rgba(237,227,200,0.05);
       border: 1px solid rgba(201,162,75,0.3);
-      border-radius: 18px;
-      padding: 28px 12px 20px;
+      border-radius: 14px;
+      padding: 16px 6px 12px;
       text-align: center;
       cursor: pointer;
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
@@ -69,26 +69,27 @@
       border-color: #ffd166;
       background: rgba(255,209,102,0.08);
     }
-    .deity-icon { font-size: 3rem; margin-bottom: 12px; }
-    .deity-name { color: #EDE3C8; font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
+    .deity-icon { font-size: 2.1rem; margin-bottom: 8px; }
+    .deity-name { color: #EDE3C8; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; }
     .deity-stats {
       border-top: 1px solid rgba(201,162,75,0.2);
-      padding-top: 8px;
-      margin-top: 6px;
+      padding-top: 6px;
+      margin-top: 4px;
     }
     .deity-community {
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       color: #C9A24B;
       opacity: 0.9;
-      line-height: 1.6;
+      line-height: 1.5;
     }
     .deity-my-rounds {
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       color: #EDE3C8;
       opacity: 0.65;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
+    /* STEP 2: count selection */
     .count-options {
       display: flex;
       flex-direction: column;
@@ -152,7 +153,10 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    .japa-next-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .japa-next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
     .japa-back-link {
       display: block;
       text-align: center;
@@ -163,6 +167,7 @@
       text-decoration: underline;
     }
 
+    /* STEP 3: mantra + counter */
     .mantra-box {
       background: rgba(237,227,200,0.05);
       border: 1px solid rgba(201,162,75,0.35);
@@ -273,18 +278,24 @@
     }
     .login-note a { color: #ffd166; text-decoration: underline; cursor: pointer; }
 
-    .completed-box { display: none; text-align: center; margin-top: 10px; }
+    .completed-box {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+    }
     .completed-box.show { display: block; animation: fadeIn 0.4s ease; }
     .completed-icon { font-size: 3rem; margin-bottom: 10px; }
-    .completed-title { color: #ffd166; font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
-    .completed-sub { color: #EDE3C8; opacity: 0.8; font-size: 0.9rem; margin-bottom: 20px; }
-
-    @media (max-width: 600px) {
-      .deity-grid { gap: 12px; }
-      .deity-card { padding: 16px 6px 12px; }
-      .deity-icon { font-size: 2.1rem; }
-      .deity-name { font-size: 0.88rem; }
-      .deity-community, .deity-my-rounds { font-size: 0.7rem; }
+    .completed-title {
+      color: #ffd166;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .completed-sub {
+      color: #EDE3C8;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -298,39 +309,46 @@
 
   <div class="japa-page">
 
-    <!-- STEP 1 -->
+    <!-- STEP 1: choose deity -->
     <div class="japa-step active" id="stepDeity">
       <h1 class="japa-title">ఎవరిని జపించాలనుకుంటున్నారు?</h1>
       <p class="japa-subtitle">మీ ఇష్ట దైవాన్ని ఎంచుకోండి</p>
       <p class="japa-my-total" id="myTotalLabel"></p>
+
       <div class="deity-grid" id="deityGrid"></div>
+
       <p class="login-note" id="loginNote" style="display:none;">
         లాగిన్ చేస్తే మీ జపం సేవ్ అవుతుంది మరియు కమ్యూనిటీ లెక్కలో కలుస్తుంది —
         <a id="loginNoteBtn">లాగిన్ చేయండి</a>
       </p>
     </div>
 
-    <!-- STEP 2 -->
+    <!-- STEP 2: choose count -->
     <div class="japa-step" id="stepCount">
       <h1 class="japa-title">ఎన్ని సార్లు జపించాలి?</h1>
       <p class="japa-subtitle" id="countSubtitle"></p>
+
       <div class="count-options">
         <div class="count-option-btn" data-count="108">
-          108 <span>ఒక మాల</span>
+          108
+          <span>ఒక మాల</span>
         </div>
         <div class="count-option-btn" data-count="1000">
-          1000 <span>సంపూర్ణ జపం</span>
+          1000
+          <span>సంపూర్ణ జపం</span>
         </div>
         <div class="custom-count-box">
           <input type="number" id="customCountInput" placeholder="మీ స్వంత సంఖ్య నమోదు చేయండి" min="1">
         </div>
       </div>
+
       <button class="japa-next-btn" id="countNextBtn" disabled>జపం ప్రారంభించండి</button>
       <span class="japa-back-link" id="backToDeityBtn">← దైవాన్ని మార్చండి</span>
     </div>
 
-    <!-- STEP 3 -->
+    <!-- STEP 3: mantra + counter -->
     <div class="japa-step" id="stepCounter">
+
       <div class="mantra-box">
         <div class="mantra-deity-label" id="mantraDeityLabel"></div>
         <div class="mantra-text" id="mantraText"></div>
@@ -338,6 +356,7 @@
       </div>
 
       <div class="counter-wrap">
+
         <div class="counter-ring-box">
           <svg width="220" height="220" viewBox="0 0 220 220">
             <defs>
@@ -369,41 +388,46 @@
           <div class="completed-sub" id="completedSub"></div>
           <span class="japa-small-btn" id="startAgainBtn">మళ్ళీ ప్రారంభించండి</span>
         </div>
+
       </div>
+
     </div>
 
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
   </audio>
   <button id="musicBtn" class="music-btn">🔊</button>
-  <script src="music.js"></script>
+  <script src="music.js?v=2"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
     import {
-      doc, getDoc, setDoc, updateDoc, increment,
+      doc, getDoc, setDoc, increment,
       collection, getDocs
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     const deities = [
-      { id: "ganesha",   icon: "🐘", name: "గణేశుడు",     mantra: "ఓం గం గణపతయే నమః" },
-      { id: "shiva",     icon: "🔱", name: "శివుడు",       mantra: "ఓం నమః శివాయ" },
-      { id: "vishnu",    icon: "🪷", name: "విష్ణువు",     mantra: "ఓం నమో నారాయణాయ" },
-      { id: "lakshmi",   icon: "🌸", name: "లక్ష్మీదేవి",  mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
-      { id: "durga",     icon: "🗡️", name: "దుర్గాదేవి",   mantra: "ఓం దుం దుర్గాయై నమః" },
-      { id: "rama",      icon: "🏹", name: "శ్రీరాముడు",   mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
-      { id: "krishna",   icon: "🪈", name: "కృష్ణుడు",     mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
-      { id: "hanuman",   icon: "🐒", name: "హనుమంతుడు",   mantra: "ఓం హనుమతే నమః" },
+      { id: "ganesha", icon: "🐘", name: "గణేశుడు", mantra: "ఓం గం గణపతయే నమః" },
+      { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
+      { id: "vishnu", icon: "🪷", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
+      { id: "lakshmi", icon: "🌸", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
+      { id: "durga", icon: "🗡️", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
+      { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
+      { id: "krishna", icon: "🪈", name: "కృష్ణుడు", mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
+      { id: "hanuman", icon: "🐒", name: "హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
       { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
     ];
 
     let currentUser = null;
-    let personalProgress = {};
-    let communityTotals = {};
+    let personalProgress = {};  // { ganesha: { date: "2026-07-19", rounds: N }, ... } - resets daily
+    let communityTotals = {};   // { ganesha: { rounds: N }, ... } - all-time, never resets
+
     let selectedDeity = null;
     let targetCount = 108;
     let currentCount = 0;
@@ -420,21 +444,27 @@
     const todayKey = getTodayKey();
 
     function loadLocalProgress() {
-      try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}"); }
-      catch (e) { return {}; }
+      try {
+        const raw = localStorage.getItem(LOCAL_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) { return {}; }
     }
     function saveLocalProgress(data) {
       try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
     }
+
+    // Returns today's rounds for a deity - if the stored date isn't today, it's effectively 0
     function getTodayRounds(deityId) {
-      const r = personalProgress[deityId];
-      if (!r || r.date !== todayKey) return 0;
-      return r.rounds || 0;
+      const record = personalProgress[deityId];
+      if (!record || record.date !== todayKey) return 0;
+      return record.rounds || 0;
     }
-    function getMyTotalToday() {
+
+    function getMyTotalRoundsToday() {
       return deities.reduce((sum, d) => sum + getTodayRounds(d.id), 0);
     }
 
+    // ---- DOM refs ----
     const stepDeity = document.getElementById("stepDeity");
     const stepCount = document.getElementById("stepCount");
     const stepCounter = document.getElementById("stepCounter");
@@ -453,16 +483,17 @@
     function renderDeityGrid() {
       deityGrid.innerHTML = "";
       deities.forEach(d => {
-        const community = communityTotals[d.id]?.rounds || 0;
-        const myToday = getTodayRounds(d.id);
+        const communityRounds = communityTotals[d.id]?.rounds || 0;
+        const myRoundsToday = getTodayRounds(d.id);
         const card = document.createElement("div");
         card.className = "deity-card";
+        card.dataset.id = d.id;
         card.innerHTML = `
           <div class="deity-icon">${d.icon}</div>
           <div class="deity-name">${d.name}</div>
           <div class="deity-stats">
-            <div class="deity-community">🌐 కమ్యూనిటీ: ${community.toLocaleString("en-IN")}</div>
-            <div class="deity-my-rounds">🙏 నా జపం (నేడు): ${myToday}</div>
+            <div class="deity-community">🌐 కమ్యూనిటీ: ${communityRounds.toLocaleString("en-IN")}</div>
+            <div class="deity-my-rounds">🙏 రౌండ్లు (నేడు): ${myRoundsToday}</div>
           </div>
         `;
         card.addEventListener("click", () => {
@@ -475,14 +506,17 @@
     }
 
     function renderMyTotal() {
-      const total = getMyTotalToday();
+      const total = getMyTotalRoundsToday();
       myTotalLabel.innerText = total > 0
-        ? `మీరు నేడు మొత్తం ${total} జపాలు పూర్తి చేశారు 🙏`
+        ? `మీరు నేడు మొత్తం ${total} రౌండ్లు పూర్తి చేశారు 🙏`
         : "";
     }
 
-    document.getElementById("backToDeityBtn").addEventListener("click", () => showStep(stepDeity));
+    document.getElementById("backToDeityBtn").addEventListener("click", () => {
+      showStep(stepDeity);
+    });
 
+    // Count selection
     document.querySelectorAll(".count-option-btn[data-count]").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".count-option-btn[data-count]").forEach(b => b.classList.remove("selected"));
@@ -496,8 +530,12 @@
     customCountInput.addEventListener("input", () => {
       document.querySelectorAll(".count-option-btn[data-count]").forEach(b => b.classList.remove("selected"));
       const val = parseInt(customCountInput.value);
-      if (val && val > 0) { targetCount = val; countNextBtn.disabled = false; }
-      else countNextBtn.disabled = true;
+      if (val && val > 0) {
+        targetCount = val;
+        countNextBtn.disabled = false;
+      } else {
+        countNextBtn.disabled = true;
+      }
     });
 
     countNextBtn.addEventListener("click", () => {
@@ -506,6 +544,7 @@
       startJapaSession();
     });
 
+    // Counter setup
     const CIRCUMFERENCE = 615.75;
     const counterCurrent = document.getElementById("counterCurrent");
     const counterTargetLabel = document.getElementById("counterTargetLabel");
@@ -521,10 +560,12 @@
       mantraDeityLabel.innerText = selectedDeity.name;
       mantraText.innerText = selectedDeity.mantra;
       counterTargetLabel.innerText = `/ ${targetCount}`;
+
       const todayRounds = getTodayRounds(selectedDeity.id);
       mantraMyProgress.innerText = todayRounds > 0
-        ? `మీరు నేడు ${selectedDeity.name} కోసం ${todayRounds} జపాలు పూర్తి చేశారు`
+        ? `మీరు నేడు ${selectedDeity.name} కోసం ${todayRounds} రౌండ్లు పూర్తి చేశారు`
         : "";
+
       completedBox.classList.remove("show");
       tapBtn.style.display = "block";
       updateCounterUI();
@@ -534,48 +575,49 @@
     function updateCounterUI() {
       counterCurrent.innerText = currentCount;
       const progress = Math.min(currentCount / targetCount, 1);
-      counterRingProgress.setAttribute("stroke-dashoffset", CIRCUMFERENCE - progress * CIRCUMFERENCE);
+      counterRingProgress.setAttribute(
+        "stroke-dashoffset",
+        CIRCUMFERENCE - progress * CIRCUMFERENCE
+      );
     }
 
     async function saveCompletedRound() {
       const id = selectedDeity.id;
 
-      // Update personal progress
+      // Update / reset today's personal round count
       const existing = personalProgress[id];
-      const currentToday = (existing && existing.date === todayKey) ? existing.rounds : 0;
+      const currentTodayRounds = (existing && existing.date === todayKey) ? existing.rounds : 0;
       personalProgress[id] = {
         date: todayKey,
-        rounds: currentToday + targetCount
+        rounds: currentTodayRounds + 1
       };
 
       if (currentUser) {
-        // Save personal to Firestore
+        // Save today's rounds to Firestore (overwritten daily, not incremented forever)
         try {
           await setDoc(doc(db, "users", currentUser.uid), {
             japaProgress: {
               deities: {
-                [id]: { date: todayKey, rounds: personalProgress[id].rounds }
+                [id]: {
+                  date: todayKey,
+                  rounds: personalProgress[id].rounds
+                }
               }
             }
           }, { merge: true });
-        } catch (e) { console.log("Personal save error:", e); }
+        } catch (e) {}
 
-        // Community total — add actual targetCount not just 1
+        // Community total: all-time, never resets, counted only for logged-in users
         try {
-          await updateDoc(doc(db, "japaCommunity", id), {
-            rounds: increment(targetCount)
-          });
-        } catch (e) {
-          try {
-            await setDoc(doc(db, "japaCommunity", id), { rounds: targetCount });
-          } catch (e2) { console.log("Community save error:", e2); }
-        }
+          await setDoc(doc(db, "japaCommunity", id), {
+            rounds: increment(1)
+          }, { merge: true });
 
-        // Update local UI immediately
-        if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
-        communityTotals[id].rounds += targetCount;
-
+          if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
+          communityTotals[id].rounds += 1;
+        } catch (e) {}
       } else {
+        // Guests: save today's rounds to localStorage only, no community credit
         saveLocalProgress(personalProgress);
       }
 
@@ -587,7 +629,9 @@
       if (currentCount >= targetCount) return;
       currentCount++;
       updateCounterUI();
+
       if (navigator.vibrate) navigator.vibrate(15);
+
       if (currentCount >= targetCount) {
         saveCompletedRound().then(() => {
           completedSub.innerText = `${selectedDeity.name} - ${targetCount} జపం పూర్తయింది 🙏`;
@@ -604,7 +648,9 @@
       updateCounterUI();
     });
 
-    document.getElementById("changeDeityBtn").addEventListener("click", () => showStep(stepDeity));
+    document.getElementById("changeDeityBtn").addEventListener("click", () => {
+      showStep(stepDeity);
+    });
 
     document.getElementById("startAgainBtn").addEventListener("click", () => {
       currentCount = 0;
@@ -617,16 +663,21 @@
       window.location.href = "index.html";
     });
 
+    // ---- Load community totals (all-time, visible to everyone) ----
     async function loadCommunityTotals() {
       try {
         const snap = await getDocs(collection(db, "japaCommunity"));
-        snap.forEach(d => { communityTotals[d.id] = d.data(); });
-      } catch (e) { console.log("Community load error:", e); }
+        snap.forEach(d => {
+          communityTotals[d.id] = d.data();
+        });
+      } catch (e) {}
       renderDeityGrid();
     }
 
+    // ---- Load personal progress (Firestore if logged in, else localStorage) ----
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
+
       if (user) {
         loginNote.style.display = "none";
         try {
@@ -640,12 +691,12 @@
         loginNote.style.display = "block";
         personalProgress = loadLocalProgress();
       }
+
       renderDeityGrid();
       renderMyTotal();
     });
 
     loadCommunityTotals();
   </script>
-
 </body>
 </html>
