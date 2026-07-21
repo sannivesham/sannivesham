@@ -409,6 +409,32 @@
   <script src="music.js?v=2"></script>
 
   <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      doc as bgDoc,
+      getDoc as bgGetDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadChantCounterBackground() {
+      try {
+        const snap = await bgGetDoc(bgDoc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".stories-bg");
+        if (!bg) return;
+        if (window.innerWidth <= 700 && data.chantCounterMobile) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.chantCounterMobile}")`;
+        } else if (data.chantCounterPc) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)),url("${data.chantCounterPc}")`;
+        }
+      } catch (e) {}
+    }
+    loadChantCounterBackground();
+  </script>
+
+  <script type="module">
     import { db, auth } from "./firebase-config.js";
     import {
       doc, getDoc, setDoc, increment,
@@ -491,6 +517,7 @@
     function showStep(step) {
       [stepDeity, stepCount, stepCounter].forEach(s => s.classList.remove("active"));
       step.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderDeityGrid() {
