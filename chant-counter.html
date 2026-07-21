@@ -80,13 +80,19 @@
       font-size: 0.7rem;
       color: #C9A24B;
       opacity: 0.9;
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+    .deity-my-score {
+      font-size: 0.7rem;
+      color: #EDE3C8;
+      opacity: 0.7;
+      line-height: 1.6;
     }
     .deity-my-rounds {
       font-size: 0.7rem;
       color: #EDE3C8;
-      opacity: 0.65;
-      line-height: 1.5;
+      opacity: 0.55;
+      line-height: 1.6;
     }
 
     /* STEP 2: count selection */
@@ -425,14 +431,16 @@
     ];
 
     let currentUser = null;
-    let personalProgress = {};  // { ganesha: { date: "2026-07-19", rounds: N }, ... } - resets daily
-    let communityTotals = {};   // { ganesha: { rounds: N }, ... } - all-time, never resets
+    // { ganesha: { date: "2026-07-21", score: N, rounds: N }, ... } - resets daily
+    let personalProgress = {};
+    // { ganesha: { totalScore: N }, ... } - all-time, never resets
+    let communityTotals = {};
 
     let selectedDeity = null;
     let targetCount = 108;
     let currentCount = 0;
 
-    const LOCAL_KEY = "sannivesham_japa_progress";
+    const LOCAL_KEY = "sannivesham_japa_progress_v2";
 
     function getTodayKey() {
       const now = new Date();
@@ -453,7 +461,12 @@
       try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
     }
 
-    // Returns today's rounds for a deity - if the stored date isn't today, it's effectively 0
+    // If the stored date isn't today, today's values are effectively 0
+    function getTodayScore(deityId) {
+      const record = personalProgress[deityId];
+      if (!record || record.date !== todayKey) return 0;
+      return record.score || 0;
+    }
     function getTodayRounds(deityId) {
       const record = personalProgress[deityId];
       if (!record || record.date !== todayKey) return 0;
@@ -483,7 +496,8 @@
     function renderDeityGrid() {
       deityGrid.innerHTML = "";
       deities.forEach(d => {
-        const communityRounds = communityTotals[d.id]?.rounds || 0;
+        const communityScore = communityTotals[d.id]?.totalScore || 0;
+        const myScoreToday = getTodayScore(d.id);
         const myRoundsToday = getTodayRounds(d.id);
         const card = document.createElement("div");
         card.className = "deity-card";
@@ -492,8 +506,9 @@
           <div class="deity-icon">${d.icon}</div>
           <div class="deity-name">${d.name}</div>
           <div class="deity-stats">
-            <div class="deity-community">🌐 కమ్యూనిటీ: ${communityRounds.toLocaleString("en-IN")}</div>
-            <div class="deity-my-rounds">🙏 రౌండ్లు (నేడు): ${myRoundsToday}</div>
+            <div class="deity-community">🌐 కమ్యూనిటీ స్కోర్: ${communityScore.toLocaleString("en-IN")}</div>
+            <div class="deity-my-score">🔥 నా నేటి స్కోర్: ${myScoreToday.toLocaleString("en-IN")}</div>
+            <div class="deity-my-rounds">🙏 నా రౌండ్లు (నేడు): ${myRoundsToday}</div>
           </div>
         `;
         card.addEventListener("click", () => {
@@ -584,22 +599,25 @@
     async function saveCompletedRound() {
       const id = selectedDeity.id;
 
-      // Update / reset today's personal round count
-      const existing = personalProgress[id];
-      const currentTodayRounds = (existing && existing.date === todayKey) ? existing.rounds : 0;
+      // Compute today's fresh score/rounds (0 if stored date isn't today)
+      const currentTodayScore = getTodayScore(id);
+      const currentTodayRounds = getTodayRounds(id);
+
       personalProgress[id] = {
         date: todayKey,
+        score: currentTodayScore + targetCount,
         rounds: currentTodayRounds + 1
       };
 
       if (currentUser) {
-        // Save today's rounds to Firestore (overwritten daily, not incremented forever)
+        // Save today's score/rounds to Firestore (overwritten daily, not incremented forever)
         try {
           await setDoc(doc(db, "users", currentUser.uid), {
             japaProgress: {
               deities: {
                 [id]: {
                   date: todayKey,
+                  score: personalProgress[id].score,
                   rounds: personalProgress[id].rounds
                 }
               }
@@ -610,14 +628,14 @@
         // Community total: all-time, never resets, counted only for logged-in users
         try {
           await setDoc(doc(db, "japaCommunity", id), {
-            rounds: increment(1)
+            totalScore: increment(targetCount)
           }, { merge: true });
 
-          if (!communityTotals[id]) communityTotals[id] = { rounds: 0 };
-          communityTotals[id].rounds += 1;
+          if (!communityTotals[id]) communityTotals[id] = { totalScore: 0 };
+          communityTotals[id].totalScore += targetCount;
         } catch (e) {}
       } else {
-        // Guests: save today's rounds to localStorage only, no community credit
+        // Guests: save today's score/rounds to localStorage only, no community credit
         saveLocalProgress(personalProgress);
       }
 
