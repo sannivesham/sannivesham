@@ -1,5 +1,4 @@
 import { db } from "./firebase-config.js";
-
 import {
   collection,
   getDocs,
@@ -7,38 +6,46 @@ import {
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-const templesGrid = document.querySelector(".temples-grid");
+const templeCategoriesGrid = document.getElementById("templeCategoriesGrid");
 
-async function loadTemples() {
+async function loadTempleCategories() {
   try {
     const q = query(
-      collection(db, "temples"),
-      orderBy("createdAt", "desc")
+      collection(db, "templeCategories"),
+      orderBy("order", "asc")
     );
 
     const snapshot = await getDocs(q);
 
-    templesGrid.innerHTML = "";
+    templeCategoriesGrid.innerHTML = "";
+
+    if (snapshot.empty) {
+      templeCategoriesGrid.innerHTML =
+        "<p style='color:white;text-align:center;'>ఇంకా విభాగాలు జోడించలేదు.</p>";
+      return;
+    }
 
     snapshot.forEach((docItem) => {
-      const temple = docItem.data();
+      const category = docItem.data();
 
-      if (!temple.title || !temple.cardImage) {
-        console.log("Skipped broken temple:", temple);
+      if (!category.title || !category.cardImage) {
+        console.log("Skipped broken category:", category);
         return;
       }
 
-      templesGrid.innerHTML += `
-        <a href="temple-detail.html?id=${docItem.id}" class="temple-card">
-          <img src="${temple.cardImage}" alt="${temple.title}">
-          <div class="temple-name">${temple.title}</div>
+      templeCategoriesGrid.innerHTML += `
+        <a href="temple-list.html?cat=${docItem.id}" class="temple-card">
+          <img src="${category.cardImage}" alt="${category.title}">
+          <div class="temple-name">${category.title}</div>
         </a>
       `;
     });
 
   } catch (error) {
-    console.log("Temple loading error:", error);
+    console.log("Temple categories loading error:", error);
+    templeCategoriesGrid.innerHTML =
+      "<p style='color:white;text-align:center;'>విభాగాలను లోడ్ చేయలేకపోయాము.</p>";
   }
 }
 
-loadTemples();
+loadTempleCategories();
