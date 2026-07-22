@@ -719,6 +719,95 @@ loadIthiShlokas();
 
 
 /* ══════════════════════════════════════
+   TEMPLE CATEGORIES CMS
+══════════════════════════════════════ */
+
+const templeCatImageBox = document.getElementById("templeCatImageBox");
+if (templeCatImageBox) {
+  templeCatImageBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    templeCatImageBox.dataset.image = url;
+    templeCatImageBox.innerHTML = `<img src="${url}">`;
+  });
+}
+
+const saveTempleCatBtn = document.getElementById("saveTempleCatBtn");
+if (saveTempleCatBtn) {
+  saveTempleCatBtn.addEventListener("click", async () => {
+    const title = document.getElementById("templeCatTitle").value.trim();
+    const order = Number(document.getElementById("templeCatOrder").value) || 0;
+    const cardImage = templeCatImageBox?.dataset.image || "";
+
+    if (!title || !cardImage) {
+      document.getElementById("templeCatMsg").innerText = "విభాగం పేరు మరియు image required";
+      return;
+    }
+
+    await addDoc(collection(db, "templeCategories"), {
+      title, order, cardImage, createdAt: serverTimestamp()
+    });
+
+    document.getElementById("templeCatMsg").innerText = "✅ Category saved";
+    document.getElementById("templeCatTitle").value = "";
+    document.getElementById("templeCatOrder").value = "";
+    if (templeCatImageBox) {
+      templeCatImageBox.dataset.image = "";
+      templeCatImageBox.innerHTML = `<span>＋ Category Image</span>`;
+    }
+
+    loadTempleCategories();
+  });
+}
+
+async function loadTempleCategories() {
+  const list = document.getElementById("templeCatList");
+  const addSelect = document.getElementById("templeCategorySelect");
+  const filterSelect = document.getElementById("templeFilterCategorySelect");
+  if (!list) return;
+
+  const q = query(collection(db, "templeCategories"), orderBy("order", "asc"));
+  const snap = await getDocs(q);
+
+  list.innerHTML = "";
+  if (addSelect) addSelect.innerHTML = `<option value="">విభాగం ఎంచుకోండి</option>`;
+  if (filterSelect) filterSelect.innerHTML = `<option value="">Filter by Category</option>`;
+
+  snap.forEach(d => {
+    const data = d.data();
+
+    if (addSelect) addSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
+    if (filterSelect) filterSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
+
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
+        ${data.cardImage ? `<img src="${data.cardImage}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : ""}
+        <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+      </div>
+      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+    `;
+    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete this category? Temples inside it will remain but become uncategorized.")) return;
+      await deleteDoc(doc(db, "templeCategories", d.id));
+      loadTempleCategories();
+    });
+    list.appendChild(row);
+  });
+}
+loadTempleCategories();
+
+const templeFilterCategorySelect = document.getElementById("templeFilterCategorySelect");
+if (templeFilterCategorySelect) {
+  templeFilterCategorySelect.addEventListener("change", () => {
+    loadAdminTemples(templeFilterCategorySelect.value);
+  });
+}
+
+
+
+/* ══════════════════════════════════════
    TEMPLES CMS
 ══════════════════════════════════════ */
 
@@ -758,6 +847,7 @@ if (addTempleSectionBtn && templeSectionsContainer) {
 const saveTempleBtn = document.getElementById("saveTempleBtn");
 if (saveTempleBtn) {
   saveTempleBtn.addEventListener("click", async () => {
+    const categoryId = document.getElementById("templeCategorySelect").value;
     const title = document.getElementById("templeTitle").value.trim();
     const footerQuote = document.getElementById("templeFooterQuote").value.trim();
     const cardBox = document.getElementById("templeCardImageGrid");
@@ -772,29 +862,51 @@ if (saveTempleBtn) {
         imgWidth: 75, imgHeight: 420, imgBrightness: 100, imgPosition: "center"
       });
     });
+
+    if (!categoryId) {
+      document.getElementById("templeMessage").innerText = "దయచేసి విభాగం ఎంచుకోండి";
+      return;
+    }
     if (!title || !cardImage || sections.length === 0) {
       document.getElementById("templeMessage").innerText = "దయచేసి దేవాలయం పేరు, కార్డ్ ఇమేజ్ మరియు కనీసం ఒక section జోడించండి";
       return;
     }
-    await addDoc(collection(db, "temples"), { title, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
+    await addDoc(collection(db, "temples"), { categoryId, title, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
     document.getElementById("templeMessage").innerText = "✅ దేవాలయం సేవ్ అయింది";
+
+    document.getElementById("templeTitle").value = "";
+    document.getElementById("templeFooterQuote").value = "";
+    templeSectionsContainer.innerHTML = "";
+    cardBox.dataset.image = "";
+    cardBox.innerHTML = `<span>＋ Temple Card Image</span>`;
+
     loadAdminTemples();
   });
 }
 
-async function loadAdminTemples() {
+async function loadAdminTemples(filterCatId = "") {
   const list = document.getElementById("adminTemplesList");
   if (!list) return;
+
+  const catSnap = await getDocs(collection(db, "templeCategories"));
+  const catMap = {};
+  catSnap.forEach(d => { catMap[d.id] = d.data().title; });
+
   const q = query(collection(db, "temples"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
   list.innerHTML = "";
+
   snapshot.forEach((item) => {
     const temple = item.data();
+
+    if (filterCatId && temple.categoryId !== filterCatId) return;
+
     list.innerHTML += `
       <div class="admin-event-card">
         <img src="${temple.cardImage}" alt="${temple.title}">
         <div>
           <h3>${temple.title}</h3>
+          <p>విభాగం: ${catMap[temple.categoryId] || "Uncategorized"}</p>
           <p>Sections: ${temple.sections ? temple.sections.length : 0}</p>
           <button class="edit-temple-btn" data-id="${item.id}">Edit</button>
           <button class="delete-temple-btn" data-id="${item.id}">Delete</button>
@@ -804,21 +916,28 @@ async function loadAdminTemples() {
     `;
   });
   document.querySelectorAll(".edit-temple-btn").forEach(btn => {
-    btn.addEventListener("click", async () => openTempleInlineEditor(btn.dataset.id));
+    btn.addEventListener("click", async () => openTempleInlineEditor(btn.dataset.id, filterCatId));
   });
   document.querySelectorAll(".delete-temple-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("ఈ దేవాలయం డిలీట్ చేయాలా?")) return;
-      await deleteDoc(doc(db, "temples", btn.dataset.id)); loadAdminTemples();
+      await deleteDoc(doc(db, "temples", btn.dataset.id)); loadAdminTemples(filterCatId);
     });
   });
 }
 
-async function openTempleInlineEditor(id) {
+async function openTempleInlineEditor(id, filterCatId = "") {
   const snap = await getDoc(doc(db, "temples", id));
   if (!snap.exists()) return;
   const temple = snap.data();
   const editor = document.getElementById(`templeEdit-${id}`);
+
+  const catSnap = await getDocs(query(collection(db, "templeCategories"), orderBy("order", "asc")));
+  let categoryOptionsHTML = `<option value="">విభాగం ఎంచుకోండి</option>`;
+  catSnap.forEach(d => {
+    const selected = d.id === temple.categoryId ? "selected" : "";
+    categoryOptionsHTML += `<option value="${d.id}" ${selected}>${d.data().title}</option>`;
+  });
 
   function sectionHTML(section = {}, index = "New") {
     return `
@@ -850,6 +969,7 @@ async function openTempleInlineEditor(id) {
 
   editor.innerHTML = `
     <div class="festival-edit-panel">
+      <select class="inline-temple-category-select">${categoryOptionsHTML}</select>
       <input class="inline-temple-title" value="${temple.title || ""}" placeholder="Temple Title">
       <div class="festival-card-upload-box inline-temple-card-image" data-image="${temple.cardImage || ""}">
         ${temple.cardImage ? `<img src="${temple.cardImage}">` : `<span>＋ Temple Card Image</span>`}
@@ -899,15 +1019,17 @@ async function openTempleInlineEditor(id) {
       });
     });
     await updateDoc(doc(db, "temples", id), {
+      categoryId: editor.querySelector(".inline-temple-category-select").value,
       title: editor.querySelector(".inline-temple-title").value.trim(),
       cardImage: editor.querySelector(".inline-temple-card-image").dataset.image || "",
       footerQuote: editor.querySelector(".inline-temple-footer-quote").value.trim(),
       sections, updatedAt: serverTimestamp()
     });
-    alert("✅ Temple updated"); loadAdminTemples();
+    alert("✅ Temple updated"); loadAdminTemples(filterCatId);
   });
 }
 loadAdminTemples();
+
 
 /* ══════════════════════════════════════
    LIBRARY CMS
