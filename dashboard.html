@@ -134,26 +134,56 @@
         <div id="adminFestivalsList"></div>
       </div>
 
-      <!-- ═══════════════════════════════════
-           TEMPLES SECTION
-      ═══════════════════════════════════ -->
-      <div id="templesSection" class="dash-section">
-        <div class="add-event-box">
-          <h2>కొత్త దేవాలయం జోడించండి</h2>
-          <input type="text" id="templeTitle" placeholder="దేవాలయం పేరు">
-          <div id="templeCardImageGrid" class="festival-card-upload-box">
-            <span>＋ Temple Card Image</span>
-          </div>
-          <input type="text" id="templeFooterQuote" placeholder="Footer Quote">
-          <h3>Sections</h3>
-          <div id="templeSectionsContainer"></div>
-          <button id="addTempleSectionBtn">+ Section Add</button>
-          <button id="saveTempleBtn">Temple Save</button>
-          <p id="templeMessage"></p>
-        </div>
-        <h2 class="admin-section-title">అన్ని దేవాలయాలు</h2>
-        <div id="adminTemplesList"></div>
-      </div>
+    <!-- ═══════════════════════════════════
+     TEMPLES SECTION
+═══════════════════════════════════ -->
+<div id="templesSection" class="dash-section">
+
+  <h2 class="admin-section-title">🛕 దేవాలయ విభాగాలు (Categories)</h2>
+
+  <div class="add-event-box">
+    <h2>కొత్త విభాగం జోడించండి</h2>
+    <input type="text" id="templeCatTitle" placeholder="విభాగం పేరు (శక్తి పీఠాలు)">
+    <input type="number" id="templeCatOrder" placeholder="Order (1, 2, 3...)">
+    <div id="templeCatImageBox" class="festival-card-upload-box">
+      <span>＋ Category Image</span>
+    </div>
+    <button id="saveTempleCatBtn">Save Category</button>
+    <p id="templeCatMsg"></p>
+  </div>
+
+  <h2 class="admin-section-title">విభాగాలు జాబితా</h2>
+  <div id="templeCatList" class="cms-list"></div>
+
+  <hr style="border-color:rgba(255,209,102,0.2);margin:30px 0;">
+
+  <div class="add-event-box">
+    <h2>కొత్త దేవాలయం జోడించండి</h2>
+
+    <select id="templeCategorySelect">
+      <option value="">విభాగం ఎంచుకోండి</option>
+    </select>
+
+    <input type="text" id="templeTitle" placeholder="దేవాలయం పేరు">
+    <div id="templeCardImageGrid" class="festival-card-upload-box">
+      <span>＋ Temple Card Image</span>
+    </div>
+    <input type="text" id="templeFooterQuote" placeholder="Footer Quote">
+    <h3>Sections</h3>
+    <div id="templeSectionsContainer"></div>
+    <button id="addTempleSectionBtn">+ Section Add</button>
+    <button id="saveTempleBtn">Temple Save</button>
+    <p id="templeMessage"></p>
+  </div>
+
+  <h2 class="admin-section-title">అన్ని దేవాలయాలు</h2>
+
+  <select id="templeFilterCategorySelect" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:16px;">
+    <option value="">Filter by Category</option>
+  </select>
+
+  <div id="adminTemplesList"></div>
+</div>
 
       <!-- ═══════════════════════════════════
            LIBRARY SECTION
