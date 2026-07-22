@@ -1,11 +1,22 @@
 window.addEventListener("load", () => {
+
+  // Show loader ONLY on the Home page
+  const isHome =
+    window.location.pathname.endsWith("/") ||
+    window.location.pathname.endsWith("index.html") ||
+    window.location.pathname === "";
+
   const loader = document.getElementById("loader");
 
-  // Show loader only once per browser/app session
+  // If not Home page, don't show loader
+  if (!isHome) {
+    if (loader) loader.style.display = "none";
+    return;
+  }
+
+  // Show only once
   if (sessionStorage.getItem("loaderShown")) {
-    if (loader) {
-      loader.style.display = "none";
-    }
+    if (loader) loader.style.display = "none";
     return;
   }
 
@@ -14,12 +25,12 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     if (loader) {
       loader.style.opacity = "0";
-
       setTimeout(() => {
         loader.style.display = "none";
       }, 700);
     }
   }, 1000);
+
 });
 const galleryImages = [
   "images/school1.jpg",
