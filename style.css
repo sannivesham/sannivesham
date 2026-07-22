@@ -1646,7 +1646,7 @@ body {
   width: 100vw;
   height: 100lvh;
 
-  z-index: -999;
+  z-index: -1;
   pointer-events: none;
 
   background:
