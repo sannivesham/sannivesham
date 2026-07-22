@@ -1,7 +1,17 @@
 window.addEventListener("load", () => {
-  setTimeout(() => {
-    const loader = document.getElementById("loader");
+  const loader = document.getElementById("loader");
 
+  // Show loader only once per browser/app session
+  if (sessionStorage.getItem("loaderShown")) {
+    if (loader) {
+      loader.style.display = "none";
+    }
+    return;
+  }
+
+  sessionStorage.setItem("loaderShown", "true");
+
+  setTimeout(() => {
     if (loader) {
       loader.style.opacity = "0";
 
@@ -11,7 +21,6 @@ window.addEventListener("load", () => {
     }
   }, 1000);
 });
-
 const galleryImages = [
   "images/school1.jpg",
   "images/school2.jpg",
