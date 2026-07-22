@@ -1,5 +1,4 @@
 import { db } from "./firebase-config.js";
-
 import {
   doc,
   getDoc
@@ -7,6 +6,7 @@ import {
 
 const params = new URLSearchParams(window.location.search);
 const templeId = params.get("id");
+const catId = params.get("cat");
 
 const detailBox =
 document.getElementById("templeDetailBox");
@@ -14,8 +14,14 @@ document.getElementById("templeDetailBox");
 const footerQuote =
 document.getElementById("templeFooterQuote");
 
-async function loadTemple() {
+const backToListLink =
+document.getElementById("backToListLink");
 
+if (catId) {
+  backToListLink.href = `temple-list.html?cat=${catId}`;
+}
+
+async function loadTemple() {
   if (!templeId) {
     detailBox.innerHTML =
       "<h2>Temple Not Found</h2>";
@@ -35,18 +41,18 @@ async function loadTemple() {
 
   const temple = snap.data();
 
+  if (!catId && temple.categoryId) {
+    backToListLink.href = `temple-list.html?cat=${temple.categoryId}`;
+  }
+
   let sectionsHTML = "";
 
   (temple.sections || []).forEach(section => {
-
     sectionsHTML += `
-
       <div class="festival-section">
-
         <h2>
           ${section.title}
         </h2>
-
         ${
           section.image
           ?
@@ -70,15 +76,11 @@ async function loadTemple() {
           :
           ""
         }
-
         <p>
           ${section.content.replace(/\n/g,"<br>")}
         </p>
-
       </div>
-
     `;
-
   });
 
   detailBox.innerHTML = `
@@ -90,7 +92,6 @@ async function loadTemple() {
     footerQuote.innerText =
       temple.footerQuote;
   }
-
 }
 
 loadTemple();
