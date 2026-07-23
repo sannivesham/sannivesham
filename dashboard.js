@@ -1554,18 +1554,23 @@ if (memberImageBox) memberImageBox.addEventListener("click", async () => { const
 
 const saveAboutSettingsBtn = document.getElementById("saveAboutSettingsBtn");
 if (saveAboutSettingsBtn) {
-  saveAboutSettingsBtn.addEventListener("click", async () => {
-    await setDoc(doc(db, "aboutSettings", "main"), {
-      title: document.getElementById("aboutTitle").value.trim(),
-      description: document.getElementById("aboutDescription").value.trim(),
-      mission: document.getElementById("aboutMission").value.trim(),
-      vision: document.getElementById("aboutVision").value.trim(),
-      pcBg: document.getElementById("aboutPcBgBox").dataset.image || "",
-      mobileBg: document.getElementById("aboutMobileBgBox").dataset.image || "",
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-    document.getElementById("aboutSettingsMessage").innerText = "✅ About settings saved";
-  });
+ saveAboutSettingsBtn.addEventListener("click", async () => {
+
+  alert("Button Clicked");
+
+  await setDoc(doc(db, "aboutSettings", "main"), {
+    title: document.getElementById("aboutTitle").value.trim(),
+    description: document.getElementById("aboutDescription").value.trim(),
+    mission: document.getElementById("aboutMission").value.trim(),
+    vision: document.getElementById("aboutVision").value.trim(),
+    pcBg: document.getElementById("aboutPcBgBox").dataset.image || "",
+    mobileBg: document.getElementById("aboutMobileBgBox").dataset.image || "",
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+
+  alert("Saved");
+
+});
 }
 
 const saveMemberBtn = document.getElementById("saveMemberBtn");
