@@ -206,7 +206,7 @@ body {
 
   gap: 28px;
 
-  margin-bottom: 55px;
+  margin-bottom: 15px;
 
   padding: 25px;
 }
@@ -5678,7 +5678,7 @@ button[class*="delete"] {
     justify-content: center;
     align-items: center;
     gap: 16px;
-    margin: 30px auto;
+    margin: 10px auto;
     width: fit-content;
     padding: 20px 30px;
     background: rgba(255,255,255,0.05);
