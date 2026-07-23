@@ -805,8 +805,6 @@ if (templeFilterCategorySelect) {
   });
 }
 
-
-
 /* ══════════════════════════════════════
    TEMPLES CMS
 ══════════════════════════════════════ */
@@ -1029,7 +1027,6 @@ async function openTempleInlineEditor(id, filterCatId = "") {
   });
 }
 loadAdminTemples();
-
 
 /* ══════════════════════════════════════
    LIBRARY CMS
