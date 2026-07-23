@@ -319,6 +319,7 @@
     <div class="japa-step active" id="stepDeity">
       <h1 class="japa-title">ఎవరిని జపించాలనుకుంటున్నారు?</h1>
       <p class="japa-subtitle">మీ ఇష్ట దైవాన్ని ఎంచుకోండి</p>
+      <p class="japa-subtitle">గురు ఉపదేశం లేని కొన్ని మంత్రాలలో "ఓం" పదాన్ని తొలగించి జపించవచ్చు</p>
       <p class="japa-my-total" id="myTotalLabel"></p>
 
       <div class="deity-grid" id="deityGrid"></div>
@@ -349,7 +350,7 @@
       </div>
 
       <button class="japa-next-btn" id="countNextBtn" disabled>జపం ప్రారంభించండి</button>
-      <span class="japa-back-link" id="backToDeityBtn">← దైవాన్ని మార్చండి</span>
+      <span class="japa-back-link" id="backToDeityBtn">← మంత్రం మార్చండి</span>
     </div>
 
     <!-- STEP 3: mantra + counter -->
@@ -444,18 +445,26 @@
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    const deities = [
-      { id: "ganesha", icon: "🐘", name: "గణేశుడు", mantra: "ఓం గం గణపతయే నమః" },
-      { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
-      { id: "vishnu", icon: "🪷", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
-      { id: "lakshmi", icon: "🌸", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీ మహాలక్ష్మ్యై నమః" },
-      { id: "durga", icon: "🗡️", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
-      { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
-      { id: "krishna", icon: "🪈", name: "కృష్ణుడు", mantra: "ఓం నమో భగవతే వాసుదేవాయ" },
-      { id: "hanuman", icon: "🐒", name: "హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
-      { id: "saraswati", icon: "🎋", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
-    ];
+  const deities = [
+  { id: "ganesha", icon: "🐘", name: "గణపతి", mantra: "ఓం గం గణపతయే నమః" },
 
+  { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
+
+  { id: "vishnu", icon: "🕉️", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
+
+  { id: "lakshmi", icon: "🪷", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీం మహాలక్ష్మ్యై నమః" },
+
+  { id: "durga", icon: "🦁", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
+
+  { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
+
+  { id: "krishna", icon: "🪈", name: "శ్రీకృష్ణుడు", mantra: "హరే కృష్ణ హరే కృష్ణ కృష్ణ కృష్ణ హరే హరే హరే రామ హరే రామ రామ రామ హరే హరే" },
+
+  { id: "hanuman", icon: "🚩", name: "శ్రీ హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
+
+  { id: "saraswati", icon: "📚", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" }
+];
+    
     let currentUser = null;
     // { ganesha: { date: "2026-07-21", score: N, rounds: N }, ... } - resets daily
     let personalProgress = {};
