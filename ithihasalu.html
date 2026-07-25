@@ -47,6 +47,27 @@
     <p>© 2026 సన్నివేశం</p>
   </footer>
 
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    async function loadStoriesBackground() {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".stories-bg");
+        if (window.innerWidth <= 700 && data.storiesMobile) {
+            bg.style.backgroundImage =
+                `linear-gradient(rgba(15,8,3,0.50), rgba(15,8,3,0.50)), url("${data.storiesMobile}")`;
+        } else if (data.storiesPc) {
+            bg.style.backgroundImage =
+                `linear-gradient(rgba(15,8,3,0.60), rgba(15,8,3,0.60)), url("${data.storiesPc}")`;
+        }
+    }
+    loadStoriesBackground();
+</script>
+
+  
   <script src="script.js"></script>
   <script type="module" src="ithihasalu.js"></script>
   <audio id="bgMusic" loop>
