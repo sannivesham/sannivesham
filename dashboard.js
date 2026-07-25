@@ -1540,120 +1540,36 @@ async function openVideoInlineEditor(id) {
 }
 loadAdminVideos();
 
-/* ══════════════════════════════════════
-   ABOUT CMS
-══════════════════════════════════════ */
-
-const aboutPcBgBox = document.getElementById("aboutPcBgBox");
-const aboutMobileBgBox = document.getElementById("aboutMobileBgBox");
-const memberImageBox = document.getElementById("memberImageBox");
-
-if (aboutPcBgBox) aboutPcBgBox.addEventListener("click", async () => { const url = await uploadImage(); if (!url) return; aboutPcBgBox.dataset.image = url; aboutPcBgBox.innerHTML = `<img src="${url}">`; });
-if (aboutMobileBgBox) aboutMobileBgBox.addEventListener("click", async () => { const url = await uploadImage(); if (!url) return; aboutMobileBgBox.dataset.image = url; aboutMobileBgBox.innerHTML = `<img src="${url}">`; });
-if (memberImageBox) memberImageBox.addEventListener("click", async () => { const url = await uploadImage(); if (!url) return; memberImageBox.dataset.image = url; memberImageBox.innerHTML = `<img src="${url}">`; });
-
 const saveAboutSettingsBtn = document.getElementById("saveAboutSettingsBtn");
 if (saveAboutSettingsBtn) {
- saveAboutSettingsBtn.addEventListener("click", async () => {
+  saveAboutSettingsBtn.addEventListener("click", async () => {
+    const msg = document.getElementById("aboutSettingsMessage");
 
-  alert("Button Clicked");
+    saveAboutSettingsBtn.disabled = true;
+    saveAboutSettingsBtn.innerText = "Saving...";
+    msg.innerText = "";
 
-  await setDoc(doc(db, "aboutSettings", "main"), {
-    title: document.getElementById("aboutTitle").value.trim(),
-    description: document.getElementById("aboutDescription").value.trim(),
-    mission: document.getElementById("aboutMission").value.trim(),
-    vision: document.getElementById("aboutVision").value.trim(),
-    pcBg: document.getElementById("aboutPcBgBox").dataset.image || "",
-    mobileBg: document.getElementById("aboutMobileBgBox").dataset.image || "",
-    updatedAt: serverTimestamp()
-  }, { merge: true });
+    try {
+      await setDoc(doc(db, "aboutSettings", "main"), {
+        title: document.getElementById("aboutTitle").value.trim(),
+        description: document.getElementById("aboutDescription").value.trim(),
+        mission: document.getElementById("aboutMission").value.trim(),
+        vision: document.getElementById("aboutVision").value.trim(),
+        pcBg: document.getElementById("aboutPcBgBox").dataset.image || "",
+        mobileBg: document.getElementById("aboutMobileBgBox").dataset.image || "",
+        updatedAt: serverTimestamp()
+      }, { merge: true });
 
-  alert("Saved");
-
-});
-}
-
-const saveMemberBtn = document.getElementById("saveMemberBtn");
-if (saveMemberBtn) {
-  saveMemberBtn.addEventListener("click", async () => {
-    const name = document.getElementById("memberName").value.trim();
-    const position = document.getElementById("memberPosition").value.trim();
-    const description = document.getElementById("memberDescription").value.trim();
-    const image = document.getElementById("memberImageBox").dataset.image || "";
-    if (!name || !position || !description || !image) { document.getElementById("memberMessage").innerText = "Please fill all member details"; return; }
-    await addDoc(collection(db, "aboutMembers"), { name, position, description, image, createdAt: serverTimestamp() });
-    document.getElementById("memberMessage").innerText = "✅ Member saved";
-    loadAboutMembersAdmin();
+      msg.innerText = "✅ About settings saved";
+    } catch (error) {
+      console.error("About settings save failed:", error);
+      msg.innerText = "❌ Error: " + error.message;
+    } finally {
+      saveAboutSettingsBtn.disabled = false;
+      saveAboutSettingsBtn.innerText = "Save About Settings";
+    }
   });
 }
-
-async function loadAboutMembersAdmin() {
-  const list = document.getElementById("adminMembersList");
-  if (!list) return;
-  const snapshot = await getDocs(collection(db, "aboutMembers"));
-  let members = [];
-  snapshot.forEach(item => members.push({ id: item.id, ...item.data() }));
-  members.sort((a, b) => { const aO = a.order ?? a.createdAt?.seconds ?? 0; const bO = b.order ?? b.createdAt?.seconds ?? 0; return aO - bO; });
-  list.innerHTML = "";
-  members.forEach((member, index) => {
-    list.innerHTML += `
-      <div class="admin-event-card">
-        <img src="${member.image}" alt="${member.name}">
-        <div>
-          <h3>${member.name}</h3><h4>${member.position}</h4><p>${member.description}</p>
-          <button class="edit-about-member-btn" data-id="${member.id}">Edit</button>
-          <button class="move-member-up-btn" data-index="${index}">↑ Up</button>
-          <button class="move-member-down-btn" data-index="${index}">↓ Down</button>
-          <button class="delete-about-member-btn" data-id="${member.id}">Delete</button>
-          <div id="memberEdit-${member.id}" class="member-inline-editor"></div>
-        </div>
-      </div>
-    `;
-  });
-  document.querySelectorAll(".edit-about-member-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const member = members.find(m => m.id === btn.dataset.id);
-      const editor = document.getElementById(`memberEdit-${btn.dataset.id}`);
-      editor.innerHTML = `
-        <div class="festival-edit-panel">
-          <input class="edit-member-name" value="${member.name || ""}" placeholder="Name">
-          <input class="edit-member-position" value="${member.position || ""}" placeholder="Position">
-          <textarea class="edit-member-description" placeholder="Description">${member.description || ""}</textarea>
-          <div class="festival-card-upload-box edit-member-image" data-image="${member.image || ""}">
-            ${member.image ? `<img src="${member.image}">` : `<span>＋ Member Image</span>`}
-          </div>
-          <button class="save-member-edit-btn">Save Changes</button>
-        </div>
-      `;
-      const imgBox = editor.querySelector(".edit-member-image");
-      imgBox.addEventListener("click", async () => { const url = await uploadImage(); if (!url) return; imgBox.dataset.image = url; imgBox.innerHTML = `<img src="${url}">`; });
-      editor.querySelector(".save-member-edit-btn").addEventListener("click", async () => {
-        await updateDoc(doc(db, "aboutMembers", member.id), { name: editor.querySelector(".edit-member-name").value.trim(), position: editor.querySelector(".edit-member-position").value.trim(), description: editor.querySelector(".edit-member-description").value.trim(), image: imgBox.dataset.image || "", updatedAt: serverTimestamp() });
-        alert("✅ Member updated"); loadAboutMembersAdmin();
-      });
-    });
-  });
-  document.querySelectorAll(".move-member-up-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const index = Number(btn.dataset.index); if (index === 0) return;
-      await updateDoc(doc(db, "aboutMembers", members[index].id), { order: index - 1 });
-      await updateDoc(doc(db, "aboutMembers", members[index - 1].id), { order: index });
-      loadAboutMembersAdmin();
-    });
-  });
-  document.querySelectorAll(".move-member-down-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const index = Number(btn.dataset.index); if (index === members.length - 1) return;
-      await updateDoc(doc(db, "aboutMembers", members[index].id), { order: index + 1 });
-      await updateDoc(doc(db, "aboutMembers", members[index + 1].id), { order: index });
-      loadAboutMembersAdmin();
-    });
-  });
-  document.querySelectorAll(".delete-about-member-btn").forEach(btn => {
-    btn.addEventListener("click", async () => { if (!confirm("Delete this member?")) return; await deleteDoc(doc(db, "aboutMembers", btn.dataset.id)); loadAboutMembersAdmin(); });
-  });
-}
-loadAboutMembersAdmin();
 
 /* ══════════════════════════════════════
    SOCIAL LINKS CMS
