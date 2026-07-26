@@ -582,7 +582,6 @@
             alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
           }
         }
-        qotdAlreadyAnsweredToday = alreadyAnswered;
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
@@ -610,10 +609,6 @@
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
-      // Guard 1: block instantly if already answered in this render
-      if (qotdAlreadyAnsweredToday) return;
-      qotdAlreadyAnsweredToday = true;
-
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
       allBtns.forEach((b, i) => {
@@ -621,23 +616,9 @@
         if (i === correctIndex) b.classList.add("correct-option");
       });
       if (selectedIndex !== correctIndex) allBtns[selectedIndex].classList.add("wrong-option");
-
       if (currentUser) {
-        const userRef = doc(db, "users", currentUser.uid);
-
-        // Guard 2: re-check against the server right before writing,
-        // so logout/login, multiple tabs, or slow network can never double-score.
-        const freshSnap = await getDoc(userRef);
-        const freshData = freshSnap.exists() ? freshSnap.data() : {};
-        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
-
-        if (alreadyOnServer) {
-          document.getElementById("profileScore").innerText = freshData.score || 0;
-          updateQotdScoreRow(freshData);
-          return;
-        }
-
         const isCorrect = selectedIndex === correctIndex;
+        const userRef = doc(db, "users", currentUser.uid);
         const updateData = { answeredDates: arrayUnion(todayKey) };
         if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
         await updateDoc(userRef, updateData);
@@ -653,7 +634,7 @@
     function updateQotdScoreRow(userData) {
       document.getElementById("qotdScoreRow").style.display = "flex";
       document.getElementById("qotdLoginHint").style.display = "none";
-      document.getElementById("qotdScoreDisplay").innerText = `⭐ సాధించిన అంకాలు: ${userData.score || 0}`;
+      document.getElementById("qotdScoreDisplay").innerText = `⭐ స్కోర్: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -665,7 +646,6 @@
       showModal("loginModal"); showStep("loginStep1");
     });
 
-    
     // Leaderboard
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
@@ -693,7 +673,7 @@
       }).join("");
     });
 
-       // Word of day
+    // Word of day
     async function loadWordOfDay() {
       try {
         const snap = await getDoc(doc(db, "wordOfDay", todayKey));
@@ -705,6 +685,9 @@
         document.getElementById("qotdWordSection").style.display = "flex";
       } catch (e) {}
     }
+
+    loadQuestionOfDay();
+    loadWordOfDay();
   </script>
 
   <script type="module" src="social-links.js"></script>
@@ -716,7 +699,7 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <button id="profileBtn" class="profile-btn">👤</button>
 
-  <script src="music.js?v=2"></script>
+  <script src="music.js"></script>
 
   <script>
     function animateCounter(id, target) {
@@ -746,5 +729,6 @@
       }, 1500);
     });
   </script>
+
 </body>
 </html>
