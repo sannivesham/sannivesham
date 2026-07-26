@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -34,6 +37,81 @@
     .game-sub-title {
       font-size: 1rem;
       font-weight: 500;
+    }
+
+    /* Force all auth-style modals (login, profile, leaderboard, games)
+       to cover the full screen in the app WebView */
+    .auth-modal {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: rgba(0, 0, 0, 0.75) !important;
+      z-index: 9999 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow-y: auto !important;
+    }
+    .auth-modal-box {
+      max-height: 85vh !important;
+      overflow-y: auto !important;
+      width: 90% !important;
+      max-width: 480px !important;
+      margin: auto !important;
+    }
+
+    /* Music & profile buttons: stay near the top only, scroll away with content
+       instead of floating fixed on screen at all times */
+    .music-btn,
+    .profile-btn {
+      position: absolute !important;
+      top: 130px !important;
+      right: 20px !important;
+    }
+    .profile-btn {
+      top: 190px !important;
+    }
+
+/* Category boxes: vertical rectangles, image fills full box, no gap */
+    @media (max-width: 700px) {
+      .category-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+      .category-card {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        aspect-ratio: 3 / 4 !important;
+        overflow: hidden !important;
+        height: auto !important;
+      }
+      .category-card img {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        display: block !important;
+      }
+      .category-card .category-title {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        background: rgba(0,0,0,0.55) !important;
+        text-align: center !important;
+      }
     }
   </style>
 </head>
@@ -72,7 +150,7 @@
         <div class="auth-divider">లేదా</div>
         <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
         <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
+        <button id="sendOtpBtn" class="auth-btn">ప్రస్తుతం మొబైల్ లాగిన్ అందుబాటులో లేద</button>
         <p id="loginMsg" class="auth-msg"></p>
       </div>
 
@@ -99,30 +177,10 @@
       <h2 id="profileName"></h2>
       
       <div class="profile-score-badge" style="margin-bottom: 20px;">
-        ⭐ క్విజ్ స్కోర్: <span id="profileScore">0</span>
+        ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
       </div>
 
-      <div class="profile-games-panel" style="text-align: left; background: rgba(237, 227, 200, 0.03); border: 1px solid rgba(201, 162, 75, 0.2); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
-        <h3 style="font-family: 'Cinzel', serif; color: var(--gold); margin: 0 0 12px 0; font-size: 1.1rem; text-align: center; border-bottom: 1px solid rgba(201, 162, 75, 0.2); padding-bottom: 6px;">🎮 ఆటల ప్రగతి (Game Stats)</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.95rem;">
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🔍 పద శోధన (Word Search):</span>
-            <strong id="statsWordSearch" style="color: var(--gold);">0 చాప్టర్లు</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🧩 చిత్ర గడులు (Sliding Puzzle):</span>
-            <strong id="statsSlidingPuzzle" style="color: var(--gold);">0 చాప్టర్లు</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(237,227,200,0.1); padding-bottom: 4px;">
-            <span>🔢 సుడోకు (Sudoku):</span>
-            <strong id="statsSudoku" style="color: var(--gold);">0 లెవెల్స్</strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding-bottom: 2px;">
-            <span>📍 జతపరుచు (Connect Dots):</span>
-            <strong id="statsConnectDots" style="color: var(--gold);">0 లెవెల్స్</strong>
-          </div>
-        </div>
-      </div>
+  
 
       <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
     </div>
@@ -132,7 +190,7 @@
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2>🏆 లీడర్‌బోర్డ్</h2>
+      <h2>🏆 అగ్రస్థాన పట్టిక</h2>
       <div id="leaderboardList" class="leaderboard-list"></div>
     </div>
   </div>
@@ -207,8 +265,8 @@
         <p id="qotdQuestionText" class="qotd-question-text"></p>
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ స్కోర్: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 లీడర్‌బోర్డ్</button>
+          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
           <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
@@ -216,7 +274,7 @@
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
-        <h3>నేటి పదం</h3>
+        <h3>నేటి అంశం</h3>
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
     </div>
@@ -244,7 +302,7 @@
         <!-- STORIES FIRST -->
         <a href="stories.html" class="category-card">
           <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
-          <div class="category-title">కథలు</div>
+          <div class="category-title">గ్రంథాలయం</div>
         </a>
 
         <a href="festivals.html" class="category-card">
@@ -274,6 +332,37 @@
           <div class="category-title">ప్రశ్నావళి</div>
         </a>
 
+        <!-- NEW CARDS: pages to be built one by one -->
+        <a href="ithihasalu.html" class="category-card">
+          <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
+          <div class="category-title">ఇతిహాసాలు</div>
+        </a>
+
+        <a href="videos.html" class="category-card">
+          <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు">
+          <div class="category-title">దృశ్యచిత్రాలు</div>
+        </a>
+
+        <a href="https://sannivesham.github.io/calender/" class="category-card">
+          <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్">
+          <div class="category-title">పంచాంగం</div>
+        </a>
+
+        <a href="chant-counter.html" class="category-card">
+          <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్">
+          <div class="category-title">జప గణకం</div>
+        </a>
+
+        <a href="pooja-mandir.html" class="category-card">
+          <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది">
+          <div class="category-title">మీ మందిరం</div>
+        </a>
+
+        <a href="https://sannivesham.github.io/store/" class="category-card">
+          <img id="storeCardImg" src="images/store.png" alt="స్టోర్">
+          <div class="category-title">విక్రయశాల</div>
+        </a>
+
       </div>
     </section>
 
@@ -282,7 +371,7 @@
       <div class="about-content">
         <h2>మా గురించి</h2>
         <p>
-          మా గురించి, మా టీమ్ సభ్యులు,
+          మా గురించి, మా బృందం సభ్యులు,
           మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
         </p>
       </div>
@@ -339,13 +428,13 @@
     <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, getDocFromServer, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
@@ -356,6 +445,8 @@
     let currentUser = null;
     let confirmationResult = null;
     let todayKey = getTodayKey();
+    let authInitialized = false;
+    let qotdAlreadyAnsweredToday = false;
 
     function getTodayKey() {
       const now = new Date();
@@ -397,6 +488,14 @@
       } else {
         document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
+      }
+
+      // Only load QOTD / Word of Day AFTER we know the real auth state,
+      // so "already answered" is checked correctly on first render.
+      if (!authInitialized) {
+        authInitialized = true;
+        loadQuestionOfDay();
+        loadWordOfDay();
       }
     });
 
@@ -516,7 +615,12 @@
     // Background
     async function loadHomeBackground() {
       try {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        let snap;
+        try {
+          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
+        } catch (e) {
+          snap = await getDoc(doc(db, "settings", "backgrounds"));
+        }
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.querySelector(".home-bg");
@@ -541,6 +645,12 @@
       if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
       if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
       if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
+      if (data.itihasaluCard) document.getElementById("itihasaluCardImg").src = data.itihasaluCard;
+      if (data.videosCard) document.getElementById("videosCardImg").src = data.videosCard;
+      if (data.calendarCard) document.getElementById("calendarCardImg").src = data.calendarCard;
+      if (data.chantCounterCard) document.getElementById("chantCounterCardImg").src = data.chantCounterCard;
+      if (data.poojaRoomCard) document.getElementById("poojaRoomCardImg").src = data.poojaRoomCard;
+      if (data.storeCard) document.getElementById("storeCardImg").src = data.storeCard;
     }
     loadHomeCards();
 
@@ -582,6 +692,7 @@
             alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
           }
         }
+        qotdAlreadyAnsweredToday = alreadyAnswered;
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
@@ -609,6 +720,10 @@
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
+      // Guard 1: block instantly if already answered in this render
+      if (qotdAlreadyAnsweredToday) return;
+      qotdAlreadyAnsweredToday = true;
+
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
       allBtns.forEach((b, i) => {
@@ -616,9 +731,23 @@
         if (i === correctIndex) b.classList.add("correct-option");
       });
       if (selectedIndex !== correctIndex) allBtns[selectedIndex].classList.add("wrong-option");
+
       if (currentUser) {
-        const isCorrect = selectedIndex === correctIndex;
         const userRef = doc(db, "users", currentUser.uid);
+
+        // Guard 2: re-check against the server right before writing,
+        // so logout/login, multiple tabs, or slow network can never double-score.
+        const freshSnap = await getDoc(userRef);
+        const freshData = freshSnap.exists() ? freshSnap.data() : {};
+        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
+
+        if (alreadyOnServer) {
+          document.getElementById("profileScore").innerText = freshData.score || 0;
+          updateQotdScoreRow(freshData);
+          return;
+        }
+
+        const isCorrect = selectedIndex === correctIndex;
         const updateData = { answeredDates: arrayUnion(todayKey) };
         if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
         await updateDoc(userRef, updateData);
@@ -634,7 +763,7 @@
     function updateQotdScoreRow(userData) {
       document.getElementById("qotdScoreRow").style.display = "flex";
       document.getElementById("qotdLoginHint").style.display = "none";
-      document.getElementById("qotdScoreDisplay").innerText = `⭐ స్కోర్: ${userData.score || 0}`;
+      document.getElementById("qotdScoreDisplay").innerText = `⭐ సాధించిన అంకాలు: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -685,9 +814,6 @@
         document.getElementById("qotdWordSection").style.display = "flex";
       } catch (e) {}
     }
-
-    loadQuestionOfDay();
-    loadWordOfDay();
   </script>
 
   <script type="module" src="social-links.js"></script>
@@ -699,7 +825,7 @@
   <button id="musicBtn" class="music-btn">🔊</button>
   <button id="profileBtn" class="profile-btn">👤</button>
 
-  <script src="music.js"></script>
+  <script src="music.js?v=2"></script>
 
   <script>
     function animateCounter(id, target) {
