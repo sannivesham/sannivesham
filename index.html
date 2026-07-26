@@ -480,10 +480,18 @@
           const spCount = progress.slidingPuzzle?.completedLevels?.length || 0;
           const sdCount = progress.sudoku?.completedLevels?.length || 0;
           const cdCount = progress.connectDots?.completedLevels?.length || 0;
-          document.getElementById("statsWordSearch").innerText = `${wsCount} చాప్టర్లు`;
-          document.getElementById("statsSlidingPuzzle").innerText = `${spCount} చాప్టర్లు`;
-          document.getElementById("statsSudoku").innerText = `${sdCount} లెవెల్స్`;
-          document.getElementById("statsConnectDots").innerText = `${cdCount} లెవెల్స్`;
+
+          const statsWordSearchEl = document.getElementById("statsWordSearch");
+          if (statsWordSearchEl) statsWordSearchEl.innerText = `${wsCount} చాప్టర్లు`;
+
+          const statsSlidingPuzzleEl = document.getElementById("statsSlidingPuzzle");
+          if (statsSlidingPuzzleEl) statsSlidingPuzzleEl.innerText = `${spCount} చాప్టర్లు`;
+
+          const statsSudokuEl = document.getElementById("statsSudoku");
+          if (statsSudokuEl) statsSudokuEl.innerText = `${sdCount} లెవెల్స్`;
+
+          const statsConnectDotsEl = document.getElementById("statsConnectDots");
+          if (statsConnectDotsEl) statsConnectDotsEl.innerText = `${cdCount} లెవెల్స్`;
         }
       } else {
         document.getElementById("profileBtn").innerText = "👤";
