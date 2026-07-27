@@ -5900,3 +5900,28 @@ button[class*="delete"] {
     grid-template-columns: 1fr;
   }
 }
+.qotd-options {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin: 16px 0 !important;
+}
+
+.qotd-option-btn {
+  display: block !important;
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(201, 162, 75, 0.3) !important;
+  background: rgba(237, 227, 200, 0.05) !important;
+  color: #fff !important;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .qotd-options {
+    grid-template-columns: 1fr !important;
+  }
+}
