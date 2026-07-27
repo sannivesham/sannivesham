@@ -39,6 +39,8 @@
       font-weight: 500;
     }
 
+    /* Force all auth-style modals (login, profile, leaderboard, games)
+       to cover the full screen in the app WebView */
     .auth-modal {
       position: fixed !important;
       top: 0 !important;
@@ -63,6 +65,8 @@
       margin: auto !important;
     }
 
+    /* Music & profile buttons: stay near the top only, scroll away with content
+       instead of floating fixed on screen at all times */
     .music-btn,
     .profile-btn {
       position: absolute !important;
@@ -73,6 +77,7 @@
       top: 190px !important;
     }
 
+/* Category boxes: vertical rectangles, image fills full box, no gap */
     @media (max-width: 700px) {
       .category-grid {
         display: grid !important;
@@ -294,6 +299,7 @@
 
       <div class="category-grid">
 
+        <!-- STORIES FIRST -->
         <a href="stories.html" class="category-card">
           <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
           <div class="category-title">గ్రంథాలయం</div>
@@ -309,11 +315,13 @@
           <div class="category-title">దేవాలయాలు</div>
         </a>
 
+        <!-- EVENTS WHERE STORIES WAS -->
         <a href="events.html" class="category-card">
           <img id="eventsCardImg" src="images/events.png">
           <div class="category-title">కార్యక్రమాలు</div>
         </a>
 
+        <!-- GAMES CARD -->
         <div id="gamesCardTrigger" class="category-card" style="cursor: pointer;">
           <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు">
           <div class="category-title">ఆటలు</div>
@@ -324,6 +332,7 @@
           <div class="category-title">ప్రశ్నావళి</div>
         </a>
 
+        <!-- NEW CARDS: pages to be built one by one -->
         <a href="ithihasalu.html" class="category-card">
           <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
           <div class="category-title">ఇతిహాసాలు</div>
@@ -447,9 +456,11 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
+    // Games modal
     document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
     document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
 
+    // Auth state
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       if (user) {
@@ -469,24 +480,18 @@
           const spCount = progress.slidingPuzzle?.completedLevels?.length || 0;
           const sdCount = progress.sudoku?.completedLevels?.length || 0;
           const cdCount = progress.connectDots?.completedLevels?.length || 0;
-
-          const statsWordSearchEl = document.getElementById("statsWordSearch");
-          if (statsWordSearchEl) statsWordSearchEl.innerText = `${wsCount} చాప్టర్లు`;
-
-          const statsSlidingPuzzleEl = document.getElementById("statsSlidingPuzzle");
-          if (statsSlidingPuzzleEl) statsSlidingPuzzleEl.innerText = `${spCount} చాప్టర్లు`;
-
-          const statsSudokuEl = document.getElementById("statsSudoku");
-          if (statsSudokuEl) statsSudokuEl.innerText = `${sdCount} లెవెల్స్`;
-
-          const statsConnectDotsEl = document.getElementById("statsConnectDots");
-          if (statsConnectDotsEl) statsConnectDotsEl.innerText = `${cdCount} లెవెల్స్`;
+          document.getElementById("statsWordSearch").innerText = `${wsCount} చాప్టర్లు`;
+          document.getElementById("statsSlidingPuzzle").innerText = `${spCount} చాప్టర్లు`;
+          document.getElementById("statsSudoku").innerText = `${sdCount} లెవెల్స్`;
+          document.getElementById("statsConnectDots").innerText = `${cdCount} లెవెల్స్`;
         }
       } else {
         document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
       }
 
+      // Only load QOTD / Word of Day AFTER we know the real auth state,
+      // so "already answered" is checked correctly on first render.
       if (!authInitialized) {
         authInitialized = true;
         loadQuestionOfDay();
@@ -521,6 +526,7 @@
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
+    // Google login
     document.getElementById("googleLoginBtn").addEventListener("click", async () => {
       if (window.AndroidBridge) {
         window.AndroidBridge.triggerGoogleSignIn();
@@ -550,6 +556,7 @@
       document.getElementById("loginMsg").innerText = "Google లాగిన్ రద్దు చేయబడింది";
     };
 
+    // Phone login
     document.getElementById("sendOtpBtn").addEventListener("click", async () => {
       const phone = document.getElementById("phoneInput").value.trim();
       if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
@@ -605,6 +612,7 @@
       hideModal("profileModal");
     });
 
+    // Background
     async function loadHomeBackground() {
       try {
         let snap;
@@ -626,6 +634,7 @@
     }
     loadHomeBackground();
 
+    // Home cards
     async function loadHomeCards() {
       const snap = await getDoc(doc(db, "settings", "homeCards"));
       if (!snap.exists()) return;
@@ -645,6 +654,7 @@
     }
     loadHomeCards();
 
+    // Sponsor popup
     async function loadSponsorPopup() {
       try {
         const snap = await getDoc(doc(db, "settings", "sponsor"));
@@ -662,6 +672,7 @@
       document.getElementById("sponsorModal").style.display = "none";
     });
 
+    // QOTD
     async function loadQuestionOfDay() {
       try {
         const snap = await getDoc(doc(db, "qotd", todayKey));
@@ -709,6 +720,7 @@
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
+      // Guard 1: block instantly if already answered in this render
       if (qotdAlreadyAnsweredToday) return;
       qotdAlreadyAnsweredToday = true;
 
@@ -723,6 +735,8 @@
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
 
+        // Guard 2: re-check against the server right before writing,
+        // so logout/login, multiple tabs, or slow network can never double-score.
         const freshSnap = await getDoc(userRef);
         const freshData = freshSnap.exists() ? freshSnap.data() : {};
         const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
@@ -761,6 +775,7 @@
       showModal("loginModal"); showStep("loginStep1");
     });
 
+    // Leaderboard
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
       const listBox = document.getElementById("leaderboardList");
@@ -787,6 +802,7 @@
       }).join("");
     });
 
+    // Word of day
     async function loadWordOfDay() {
       try {
         const snap = await getDoc(doc(db, "wordOfDay", todayKey));
