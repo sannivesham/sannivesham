@@ -6,6 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>కార్యక్రమాలు - సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Fix for music button - stays pinned to screen on scroll, including mobile */
+    .music-btn {
+      position: fixed !important;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (max-width: 700px) {
+      .music-btn {
+        bottom: max(16px, env(safe-area-inset-bottom));
+        right: 16px;
+      }
+    }
+  </style>
 </head>
 
 <body class="events-body">
@@ -29,51 +57,7 @@
     <h1>మా కార్యక్రమాలు</h1>
 
     <div class="events-list">
-
-      <div class="event-box">
-
-        <div class="event-text">
-
-          <h2>ప్రాథమిక ఉన్నత పాఠశాల కార్యక్రమం 🪔</h2>
-
-          <p>
-            సన్నివేశం బృందంగా మేము ప్రాథమిక ఉన్నత పాఠశాలలో
-            ప్రతిభా వేదిక కార్యక్రమాన్ని నిర్వహించాము.
-            ఈ కార్యక్రమంలో భాగంగా మేము అందమైన అక్షరరచన,
-            చిత్రలేఖనం, ఆటలు, పఠనం, రచన, కథ చెప్పడం వంటి
-            అనేక ఆసక్తికర కార్యక్రమాలను నిర్వహించాము.
-          </p>
-
-          <p>
-            ఈ కార్యక్రమానికి పాఠశాల ప్రధానోపాధ్యాయురాలు గారూ,
-            ఉపాధ్యాయులు అందించిన సహకారం ఎంతో అమూల్యమైనది.
-            వారు అందరూ ఎంతో ఆదరణతో మమ్మల్ని ప్రోత్సహించారు.
-          </p>
-
-          <p>
-            అలాగే మేము విద్యార్థులకు తెలుగు భాష మహత్త్వం
-            మరియు మన సంస్కృతి గొప్పతనం గురించి తెలియజేశాము.
-          </p>
-
-          <p>
-            ఈ కార్యక్రమం ద్వారా మాకు మంచి అనుభవం లభించింది.
-            ఈ అవకాశాన్ని కల్పించిన ప్రధానోపాధ్యాయురాలు గారికి,
-            ఉపాధ్యాయులకు మరియు అందరికీ మా హృదయపూర్వక కృతజ్ఞతలు.
-          </p>
-
-        </div>
-
-        <div class="event-gallery">
-          <img src="images/school1.jpg" onclick="openImage(0)" alt="School Event Photo 1">
-          <img src="images/school2.jpg" onclick="openImage(1)" alt="School Event Photo 2">
-          <img src="images/school3.jpg" onclick="openImage(2)" alt="School Event Photo 3">
-          <img src="images/school4.jpg" onclick="openImage(3)" alt="School Event Photo 4">
-          <img src="images/school5.jpg" onclick="openImage(4)" alt="School Event Photo 5">
-          <img src="images/school6.jpg" onclick="openImage(5)" alt="School Event Photo 6">
-        </div>
-
-      </div>
-
+      <!-- Events are loaded dynamically here by events.js -->
     </div>
 
   </section>
@@ -126,15 +110,16 @@
 
     loadEventsBackground();
   </script>
+
   <audio id="bgMusic" loop>
-  <source src="music/traditional.mp3" type="audio/mpeg">
-</audio>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
 
-<button id="musicBtn" class="music-btn">
-  🔊
-</button>
+  <button id="musicBtn" class="music-btn">
+    🔊
+  </button>
 
-<script src="music.js"></script>
+  <script src="music.js"></script>
 </body>
 
 </html>
