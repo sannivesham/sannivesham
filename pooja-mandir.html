@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="te">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>పండుగల కౌంట్‌డౌన్ | సన్నివేశం</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>పండుగల పంచాంగం | సన్నివేశం</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Telugu Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
 
     <style>
+
+        /* =========================================
+           BASIC RESET
+        ========================================= */
 
         * {
             margin: 0;
@@ -19,171 +34,364 @@
             box-sizing: border-box;
         }
 
-        body {
-            min-height: 100vh;
-            font-family: "Noto Serif Telugu", serif;
 
-            background:
-                radial-gradient(
-                    circle at 50% 10%,
-                    rgba(190, 143, 59, 0.15),
-                    transparent 35%
-                ),
-                linear-gradient(
-                    135deg,
-                    #120d09,
-                    #21150d 50%,
-                    #0d0906
-                );
+        /* =========================================
+           BODY
+        ========================================= */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Noto Serif Telugu",
+                serif;
 
             color: #f8ead0;
+
             padding: 50px 20px;
+
+            background:
+
+                radial-gradient(
+                    circle at 50% 5%,
+                    rgba(205, 165, 75, 0.16),
+                    transparent 34%
+                ),
+
+                radial-gradient(
+                    circle at 0% 100%,
+                    rgba(143, 93, 32, 0.08),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #110c08,
+                    #21150d 50%,
+                    #0c0805
+                );
+
+            overflow-x: hidden;
+
         }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
 
         .container {
+
             width: 100%;
-            max-width: 1050px;
+
+            max-width: 1100px;
+
             margin: auto;
+
         }
 
-        /* HEADER */
+
+        /* =========================================
+           HEADER
+        ========================================= */
 
         .header {
+
             text-align: center;
-            margin-bottom: 45px;
+
+            margin-bottom: 50px;
+
         }
+
 
         .brand {
-            font-size: clamp(40px, 7vw, 70px);
+
+            font-size:
+                clamp(42px, 8vw, 72px);
+
             font-weight: 800;
+
             color: #e8c878;
+
             letter-spacing: 3px;
-            margin-bottom: 5px;
+
+            text-shadow:
+                0 0 30px
+                rgba(232, 200, 120, 0.12);
+
         }
+
 
         .subtitle {
+
+            margin-top: 5px;
+
             color: #c8b493;
-            font-size: 17px;
+
+            font-size:
+                clamp(14px, 2vw, 18px);
+
             letter-spacing: 1px;
+
         }
+
 
         .gold-line {
+
             width: 90px;
+
             height: 2px;
-            background: #cda957;
+
             margin: 20px auto 0;
-            opacity: 0.7;
+
+            background: #cda957;
+
+            opacity: 0.75;
+
         }
 
-        /* TITLE */
+
+        /* =========================================
+           SECTION TITLE
+        ========================================= */
 
         .section-title {
+
             text-align: center;
-            font-size: clamp(25px, 4vw, 36px);
+
+            font-size:
+                clamp(26px, 4vw, 38px);
+
+            font-weight: 700;
+
             color: #fff0cf;
-            margin-bottom: 35px;
+
+            margin-bottom: 10px;
+
         }
 
-        /* FESTIVAL LIST */
+
+        .section-description {
+
+            text-align: center;
+
+            color: #a99a82;
+
+            font-size: 14px;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        /* =========================================
+           FESTIVAL LIST
+        ========================================= */
 
         .festival-list {
+
             display: flex;
+
             flex-direction: column;
-            gap: 18px;
+
+            gap: 17px;
+
         }
 
-        /* FESTIVAL CARD */
+
+        /* =========================================
+           FESTIVAL CARD
+        ========================================= */
 
         .festival-card {
+
+            position: relative;
+
             display: grid;
 
             grid-template-columns:
-                1fr
+                minmax(0, 1fr)
                 auto;
+
+            align-items: center;
 
             gap: 25px;
 
-            align-items: center;
+            padding: 23px 27px;
 
-            padding: 25px 28px;
+            background:
+                rgba(35, 24, 16, 0.78);
 
-            background: rgba(35, 24, 16, 0.78);
-
-            border: 1px solid rgba(221, 181, 102, 0.22);
+            border:
+                1px solid
+                rgba(221, 181, 102, 0.20);
 
             border-radius: 20px;
 
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
 
             box-shadow:
-                0 12px 35px rgba(0,0,0,0.25);
+                0 12px 40px
+                rgba(0, 0, 0, 0.25),
 
-            transition: all 0.3s ease;
+                inset 0 0 25px
+                rgba(226, 184, 93, 0.025);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+
         }
 
+
         .festival-card:hover {
+
             transform: translateY(-3px);
 
             border-color:
-                rgba(221, 181, 102, 0.5);
+                rgba(221, 181, 102, 0.45);
 
             box-shadow:
-                0 15px 45px rgba(0,0,0,0.35);
+                0 18px 50px
+                rgba(0, 0, 0, 0.35);
+
         }
 
-        /* FESTIVAL INFORMATION */
+
+        /* =========================================
+           LEFT INFORMATION
+        ========================================= */
 
         .festival-info {
+
             display: flex;
+
             align-items: center;
-            gap: 20px;
+
+            gap: 18px;
+
+            min-width: 0;
+
         }
 
+
+        /* =========================================
+           ICON
+        ========================================= */
+
         .festival-icon {
+
             width: 58px;
+
             height: 58px;
 
             min-width: 58px;
 
-            border-radius: 50%;
-
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
+            border-radius: 50%;
 
             font-size: 27px;
 
             background:
-                rgba(221, 181, 102, 0.08);
+                rgba(221, 181, 102, 0.07);
 
             border:
-                1px solid rgba(221, 181, 102, 0.3);
+                1px solid
+                rgba(221, 181, 102, 0.28);
+
+            box-shadow:
+                inset 0 0 15px
+                rgba(221, 181, 102, 0.04);
+
         }
+
+
+        /* =========================================
+           FESTIVAL NAME
+        ========================================= */
 
         .festival-name {
-            font-size: 22px;
+
+            font-size:
+                clamp(18px, 2.4vw, 23px);
+
             font-weight: 700;
+
             color: #f5ddb0;
-            margin-bottom: 4px;
+
+            line-height: 1.5;
+
         }
+
+
+        /* =========================================
+           TITHI
+        ========================================= */
+
+        .festival-tithi {
+
+            margin-top: 3px;
+
+            color: #b8a587;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =========================================
+           DATE
+        ========================================= */
 
         .festival-date {
-            color: #ad9b7f;
-            font-size: 14px;
+
+            margin-top: 2px;
+
+            color: #d1b76e;
+
+            font-size: 13px;
+
         }
 
-        /* COUNTDOWN */
+
+        /* =========================================
+           COUNTDOWN
+        ========================================= */
 
         .countdown {
+
             display: flex;
-            gap: 8px;
+
             align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            flex-shrink: 0;
+
         }
 
-        .time-box {
-            min-width: 55px;
 
-            padding: 10px 7px;
+        /* =========================================
+           TIME BOX
+        ========================================= */
+
+        .time-box {
+
+            min-width: 62px;
+
+            padding:
+                11px 7px;
 
             text-align: center;
 
@@ -193,68 +401,129 @@
                 rgba(255, 239, 203, 0.045);
 
             border:
-                1px solid rgba(222, 185, 105, 0.15);
+                1px solid
+                rgba(222, 185, 105, 0.16);
+
         }
 
-        .number {
-            font-family: Arial, sans-serif;
 
-            font-size: 22px;
+        .number {
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            font-size: 23px;
 
             font-weight: 700;
 
             color: #e9c873;
 
             line-height: 1;
+
         }
 
+
         .label {
-            margin-top: 5px;
+
+            margin-top: 6px;
 
             font-size: 10px;
 
             color: #a99a82;
+
+            white-space: nowrap;
+
         }
 
-        /* TODAY */
+
+        /* =========================================
+           TODAY
+        ========================================= */
 
         .today {
-            padding: 15px 22px;
 
-            border-radius: 12px;
+            min-width: 240px;
+
+            padding:
+                16px 20px;
+
+            text-align: center;
+
+            border-radius: 13px;
 
             background:
-                rgba(211, 169, 83, 0.12);
+                rgba(211, 169, 83, 0.10);
 
             border:
-                1px solid rgba(221, 181, 102, 0.4);
+                1px solid
+                rgba(221, 181, 102, 0.40);
 
             color: #f0ce7d;
 
-            font-weight: 700;
-
             font-size: 17px;
 
-            white-space: nowrap;
+            font-weight: 700;
+
+            box-shadow:
+                0 0 25px
+                rgba(221, 181, 102, 0.04);
+
         }
 
-        /* EMPTY */
 
-        .empty {
+        /* =========================================
+           TODAY CARD HIGHLIGHT
+        ========================================= */
+
+        .festival-card.today-card {
+
+            border-color:
+                rgba(221, 181, 102, 0.50);
+
+            background:
+                rgba(56, 39, 21, 0.82);
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+
             text-align: center;
 
-            padding: 40px;
+            margin-top: 45px;
 
-            color: #a99a82;
+            color: #82745f;
+
+            font-size: 13px;
+
         }
 
-        /* MOBILE */
 
-        @media (max-width: 700px) {
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 760px) {
 
             body {
-                padding: 30px 14px;
+
+                padding:
+                    30px 14px;
+
             }
+
+
+            .header {
+
+                margin-bottom: 35px;
+
+            }
+
 
             .festival-card {
 
@@ -262,64 +531,118 @@
 
                 gap: 20px;
 
-                padding: 22px 18px;
+                padding:
+                    21px 18px;
+
             }
+
 
             .festival-info {
+
                 gap: 14px;
+
             }
+
 
             .festival-icon {
-                width: 50px;
-                height: 50px;
-                min-width: 50px;
-                font-size: 23px;
+
+                width: 52px;
+
+                height: 52px;
+
+                min-width: 52px;
+
+                font-size: 24px;
+
             }
 
-            .festival-name {
-                font-size: 19px;
-            }
 
             .countdown {
+
                 width: 100%;
-                justify-content: center;
+
             }
 
+
             .time-box {
+
                 flex: 1;
-                max-width: 75px;
+
+                min-width: 0;
+
+                max-width: 90px;
+
             }
+
 
             .today {
-                text-align: center;
+
                 width: 100%;
+
+                min-width: 0;
+
             }
+
         }
 
-        @media (max-width: 380px) {
+
+        /* =========================================
+           SMALL MOBILE
+        ========================================= */
+
+        @media (max-width: 400px) {
 
             .time-box {
-                min-width: 0;
-                padding: 9px 4px;
+
+                padding:
+                    9px 4px;
+
             }
+
 
             .number {
-                font-size: 18px;
+
+                font-size: 19px;
+
             }
 
+
             .label {
-                font-size: 9px;
+
+                font-size: 8px;
+
             }
+
+
+            .festival-name {
+
+                font-size: 17px;
+
+            }
+
+
+            .festival-tithi {
+
+                font-size: 12px;
+
+            }
+
         }
 
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-    <!-- HEADER -->
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
 
     <header class="header">
 
@@ -328,7 +651,7 @@
         </div>
 
         <div class="subtitle">
-            మన పండుగలు • మన సంస్కృతి • మన సంప్రదాయం
+            తెలుగు సంస్కృతి • సనాతన ధర్మం • మన సంప్రదాయం
         </div>
 
         <div class="gold-line"></div>
@@ -336,303 +659,386 @@
     </header>
 
 
+    <!-- =========================================
+         SECTION
+    ========================================== -->
+
     <h1 class="section-title">
-        🪔 రాబోయే పండుగలు
+        🪔 పండుగల పంచాంగం
     </h1>
 
+    <p class="section-description">
+        రాబోయే పర్వదినాలను తెలుసుకోండి
+    </p>
 
-    <div id="festivalList" class="festival-list"></div>
+
+    <!-- FESTIVALS WILL APPEAR HERE -->
+
+    <div
+        id="festivalList"
+        class="festival-list">
+    </div>
+
+
+    <div class="footer">
+        మన పండుగలు • మన సంస్కృతి • మన బాధ్యత
+    </div>
+
 
 </div>
 
 
+
 <script>
 
+
+/* =====================================================
+   FESTIVAL DATA
+===================================================== */
+
+
+const festivals = [
+
+    {
+        name: "గజానన సంకష్టహర చతుర్థి",
+        tithi: "ఆషాఢ బహుళ చవితి",
+        date: "2026-08-02",
+        icon: "🐘"
+    },
+
+
+    {
+        name: "కామిక ఏకాదశి",
+        tithi: "ఆషాఢ బహుళ ఏకాదశి",
+        date: "2026-08-09",
+        icon: "🪷"
+    },
+
+
+    {
+        name: "శ్రావణ పుత్రద ఏకాదశి",
+        tithi: "శ్రావణ శుద్ధ ఏకాదశి",
+        date: "2026-08-23",
+        icon: "🙏"
+    },
+
+
+    {
+        name: "దామోదర ద్వాదశి",
+        tithi: "శ్రావణ శుద్ధ ద్వాదశి",
+        date: "2026-08-24",
+        icon: "🪔"
+    },
+
+
+    {
+        name: "జంధ్యాల పౌర్ణమి",
+        tithi: "శ్రావణ పౌర్ణమి",
+        date: "2026-08-27",
+        icon: "🌕"
+    },
+
+
+    {
+        name: "వరలక్ష్మీ వ్రతం",
+        tithi: "శ్రావణ పౌర్ణమికి ముందు శుక్రవారం",
+        date: "2026-08-28",
+        icon: "🌺"
+    },
+
+
+    {
+        name: "రక్షాబంధన్",
+        tithi: "శ్రావణ శుద్ధ పౌర్ణమి",
+        date: "2026-08-28",
+        icon: "🪢"
+    },
+
+
+    {
+        name: "హేరంబ సంకష్టహర చతుర్థి",
+        tithi: "శ్రావణ బహుళ చవితి",
+        date: "2026-08-31",
+        icon: "🐘"
+    },
+
+
+    {
+        name: "శ్రీకృష్ణ జన్మాష్టమి",
+        tithi: "శ్రావణ బహుళ అష్టమి",
+        date: "2026-09-04",
+        icon: "🦚"
+    },
+
+
+    {
+        name: "అజ ఏకాదశి",
+        tithi: "శ్రావణ బహుళ ఏకాదశి",
+        date: "2026-09-07",
+        icon: "🪷"
+    },
+
+
+    {
+        name: "భౌమ ప్రదోష వ్రతం",
+        tithi: "శ్రావణ బహుళ త్రయోదశి",
+        date: "2026-09-08",
+        icon: "🔱"
+    },
+
+
+    {
+        name: "వినాయక చవితి",
+        tithi: "భాద్రపద శుద్ధ చవితి",
+        date: "2026-09-14",
+        icon: "🐘"
+    },
+
+
+    {
+        name: "పరివర్తిని ఏకాదశి",
+        tithi: "భాద్రపద శుద్ధ ఏకాదశి",
+        date: "2026-09-22",
+        icon: "🪷"
+    },
+
+
+    {
+        name: "గణేశ నిమజ్జనం",
+        tithi: "భాద్రపద శుద్ధ చతుర్దశి",
+        date: "2026-09-25",
+        icon: "🐘"
+    },
+
+
+    {
+        name: "విఘ్నరాజ సంకష్టహర చతుర్థి",
+        tithi: "భాద్రపద బహుళ చవితి",
+        date: "2026-09-29",
+        icon: "🐘"
+    }
+
+];
+
+
+
+/* =====================================================
+   TELUGU MONTHS
+===================================================== */
+
+
+const teluguMonths = [
+
+    "జనవరి",
+    "ఫిబ్రవరి",
+    "మార్చి",
+    "ఏప్రిల్",
+    "మే",
+    "జూన్",
+    "జూలై",
+    "ఆగస్టు",
+    "సెప్టెంబర్",
+    "అక్టోబర్",
+    "నవంబర్",
+    "డిసెంబర్"
+
+];
+
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+
+function formatDate(dateString) {
+
+    const date =
+        new Date(
+            dateString +
+            "T00:00:00+05:30"
+        );
+
+
+    return (
+
+        date.getDate()
+        + " "
+        + teluguMonths[date.getMonth()]
+        + " "
+        + date.getFullYear()
+
+    );
+
+}
+
+
+
+/* =====================================================
+   CREATE COUNTDOWN
+===================================================== */
+
+
+function createCountdown(difference) {
+
+
     /*
-    ==========================================
-    FESTIVAL DATA
-    ==========================================
-
-    Date format:
-    YYYY-MM-DD
-
-    Time:
-    00:00 IST
-
-    Add more festivals here later.
+       Festival day starts at 12:00 AM IST.
     */
 
-    const festivals = [
 
-        {
-            name: "వరలక్ష్మీ వ్రతం",
-            date: "2026-07-31",
-            icon: "🪷"
-        },
+    if (difference <= 0) {
 
-        {
-            name: "రక్షా బంధన్",
-            date: "2026-08-28",
-            icon: "🪢"
-        },
+        return `
 
-        {
-            name: "శ్రీకృష్ణ జన్మాష్టమి",
-            date: "2026-09-04",
-            icon: "🦚"
-        },
+            <div class="today">
 
-        {
-            name: "వినాయక చవితి",
-            date: "2026-09-14",
-            icon: "🐘"
-        },
-
-        {
-            name: "నవరాత్రులు ప్రారంభం",
-            date: "2026-10-11",
-            icon: "🌺"
-        },
-
-        {
-            name: "దసరా",
-            date: "2026-10-20",
-            icon: "🏹"
-        },
-
-        {
-            name: "దీపావళి",
-            date: "2026-11-08",
-            icon: "🪔"
-        },
-
-        {
-            name: "కార్తీక పౌర్ణమి",
-            date: "2026-11-24",
-            icon: "🌕"
-        },
-
-        {
-            name: "ధనుర్మాసం ప్రారంభం",
-            date: "2026-12-16",
-            icon: "🙏"
-        },
-
-        {
-            name: "వైకుంఠ ఏకాదశి",
-            date: "2026-12-20",
-            icon: "🛕"
-        }
-
-    ];
-
-
-    /*
-    ==========================================
-    CREATE FESTIVAL CARD
-    ==========================================
-    */
-
-    function createFestivalCard(festival, difference) {
-
-        const card = document.createElement("div");
-
-        card.className = "festival-card";
-
-        card.dataset.date = festival.date;
-
-
-        const left = document.createElement("div");
-
-        left.className = "festival-info";
-
-
-        left.innerHTML = `
-
-            <div class="festival-icon">
-                ${festival.icon}
-            </div>
-
-            <div>
-
-                <div class="festival-name">
-                    ${festival.name}
-                </div>
-
-                <div class="festival-date">
-                    ${formatDate(festival.date)}
-                </div>
+                🎉 ఈరోజు పండుగ
 
             </div>
 
         `;
 
-
-        const right = document.createElement("div");
-
-        right.className = "countdown";
-
-
-        if (difference <= 0) {
-
-            right.innerHTML = `
-
-                <div class="today">
-                    🎉 ఈరోజు పండుగ
-                </div>
-
-            `;
-
-        } else {
-
-            const days =
-                Math.floor(
-                    difference /
-                    (1000 * 60 * 60 * 24)
-                );
-
-            const hours =
-                Math.floor(
-                    (difference %
-                    (1000 * 60 * 60 * 24)) /
-                    (1000 * 60 * 60)
-                );
-
-            const minutes =
-                Math.floor(
-                    (difference %
-                    (1000 * 60 * 60)) /
-                    (1000 * 60)
-                );
-
-            const seconds =
-                Math.floor(
-                    (difference %
-                    (1000 * 60)) /
-                    1000
-                );
-
-
-            right.innerHTML = `
-
-                <div class="time-box">
-
-                    <div class="number">
-                        ${String(days).padStart(2,"0")}
-                    </div>
-
-                    <div class="label">
-                        రోజులు
-                    </div>
-
-                </div>
-
-
-                <div class="time-box">
-
-                    <div class="number">
-                        ${String(hours).padStart(2,"0")}
-                    </div>
-
-                    <div class="label">
-                        గంటలు
-                    </div>
-
-                </div>
-
-
-                <div class="time-box">
-
-                    <div class="number">
-                        ${String(minutes).padStart(2,"0")}
-                    </div>
-
-                    <div class="label">
-                        నిమిషాలు
-                    </div>
-
-                </div>
-
-
-                <div class="time-box">
-
-                    <div class="number">
-                        ${String(seconds).padStart(2,"0")}
-                    </div>
-
-                    <div class="label">
-                        సెకన్లు
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-        card.appendChild(left);
-        card.appendChild(right);
-
-
-        return card;
-
     }
 
 
+    const days = Math.floor(
+
+        difference /
+        (1000 * 60 * 60 * 24)
+
+    );
+
+
+    const hours = Math.floor(
+
+        (
+            difference %
+            (1000 * 60 * 60 * 24)
+        )
+        /
+        (1000 * 60 * 60)
+
+    );
+
+
+    const minutes = Math.floor(
+
+        (
+            difference %
+            (1000 * 60 * 60)
+        )
+        /
+        (1000 * 60)
+
+    );
+
+
+    const seconds = Math.floor(
+
+        (
+            difference %
+            (1000 * 60)
+        )
+        /
+        1000
+
+    );
+
+
+    return `
+
+        <div class="time-box">
+
+            <div class="number">
+                ${String(days).padStart(2, "0")}
+            </div>
+
+            <div class="label">
+                రోజులు
+            </div>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <div class="number">
+                ${String(hours).padStart(2, "0")}
+            </div>
+
+            <div class="label">
+                గంటలు
+            </div>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <div class="number">
+                ${String(minutes).padStart(2, "0")}
+            </div>
+
+            <div class="label">
+                నిమిషాలు
+            </div>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <div class="number">
+                ${String(seconds).padStart(2, "0")}
+            </div>
+
+            <div class="label">
+                సెకన్లు
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   UPDATE FESTIVALS
+===================================================== */
+
+
+function updateFestivals() {
+
+
     /*
-    ==========================================
-    FORMAT DATE IN TELUGU
-    ==========================================
+       Current time.
+       Browser's current time is converted
+       into the same instant as IST.
     */
 
-    function formatDate(dateString) {
-
-        const date = new Date(
-            dateString + "T00:00:00+05:30"
-        );
-
-
-        const months = [
-
-            "జనవరి",
-            "ఫిబ్రవరి",
-            "మార్చి",
-            "ఏప్రిల్",
-            "మే",
-            "జూన్",
-            "జూలై",
-            "ఆగస్టు",
-            "సెప్టెంబర్",
-            "అక్టోబర్",
-            "నవంబర్",
-            "డిసెంబర్"
-
-        ];
-
-
-        return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-
-    }
+    const now =
+        new Date().getTime();
 
 
     /*
-    ==========================================
-    UPDATE FESTIVALS
-    ==========================================
+       Calculate remaining time
+       for every festival.
     */
 
-    function updateFestivals() {
+    const festivalData =
+        festivals.map(festival => {
 
-        const now = new Date().getTime();
-
-
-        const festivalData = festivals.map(festival => {
 
             const festivalTime =
+
                 new Date(
+
                     festival.date +
                     "T00:00:00+05:30"
+
                 ).getTime();
 
 
@@ -640,7 +1046,7 @@
 
                 ...festival,
 
-                time: festivalTime,
+                festivalTime,
 
                 difference:
                     festivalTime - now
@@ -650,60 +1056,199 @@
         });
 
 
-        /*
-        Sort:
-        Upcoming festivals first
-        */
 
-        festivalData.sort(
-            (a, b) => a.time - b.time
+    /*
+       Sort festivals by upcoming date.
+    */
+
+    festivalData.sort(
+
+        (a, b) =>
+            a.festivalTime -
+            b.festivalTime
+
+    );
+
+
+
+    /*
+       Find container.
+    */
+
+    const list =
+        document.getElementById(
+            "festivalList"
         );
 
 
-        const list =
-            document.getElementById(
-                "festivalList"
-            );
+    /*
+       Clear old cards.
+    */
+
+    list.innerHTML = "";
 
 
-        list.innerHTML = "";
 
+    /*
+       Create cards.
+    */
 
-        festivalData.forEach(festival => {
+    festivalData.forEach(
+        festival => {
+
 
             const card =
-                createFestivalCard(
-                    festival,
+                document.createElement(
+                    "div"
+                );
+
+
+            /*
+               Highlight today's festival.
+            */
+
+            if (
+                festival.difference <= 0 &&
+                festival.difference >
+                -86400000
+            ) {
+
+                card.className =
+                    "festival-card today-card";
+
+            } else {
+
+                card.className =
+                    "festival-card";
+
+            }
+
+
+
+            /*
+               Festival information.
+            */
+
+            const information =
+                document.createElement(
+                    "div"
+                );
+
+
+            information.className =
+                "festival-info";
+
+
+            information.innerHTML = `
+
+                <div class="festival-icon">
+
+                    ${festival.icon}
+
+                </div>
+
+
+                <div>
+
+                    <div class="festival-name">
+
+                        ${festival.name}
+
+                    </div>
+
+
+                    <div class="festival-tithi">
+
+                        ${festival.tithi}
+
+                    </div>
+
+
+                    <div class="festival-date">
+
+                        ${formatDate(
+                            festival.date
+                        )}
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+
+            /*
+               Countdown container.
+            */
+
+            const countdown =
+                document.createElement(
+                    "div"
+                );
+
+
+            countdown.className =
+                "countdown";
+
+
+            countdown.innerHTML =
+                createCountdown(
                     festival.difference
                 );
 
 
-            list.appendChild(card);
 
-        });
+            /*
+               Add everything.
+            */
 
-    }
-
-
-    /*
-    ==========================================
-    START
-    ==========================================
-    */
-
-    updateFestivals();
+            card.appendChild(
+                information
+            );
 
 
-    /*
-    Update every second
-    */
+            card.appendChild(
+                countdown
+            );
 
-    setInterval(
-        updateFestivals,
-        1000
+
+            list.appendChild(
+                card
+            );
+
+        }
+
     );
+
+}
+
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+updateFestivals();
+
+
+
+/* =====================================================
+   LIVE UPDATE
+===================================================== */
+
+setInterval(
+
+    updateFestivals,
+
+    1000
+
+);
+
 
 </script>
 
+
 </body>
+
 </html>
