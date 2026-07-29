@@ -566,30 +566,33 @@
         document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
       }
     };
-
-    document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      if (isInsideApp()) {
-        window.AndroidBridge.triggerGoogleSignIn();
-        return;
-      }
-      if (window.google && google.accounts && google.accounts.id) {
-        google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleGoogleCredentialResponse
-        });
-        google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            document.getElementById("googleBtnHolder").innerHTML = "";
-            google.accounts.id.renderButton(
-              document.getElementById("googleBtnHolder"),
-              { theme: "outline", size: "large", width: 260 }
-            );
-          }
-        });
-      } else {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-      }
-    });
+document.getElementById("googleLoginBtn").addEventListener("click", () => {
+  if (isInsideApp()) {
+    window.AndroidBridge.triggerGoogleSignIn();
+    return;
+  }
+  try {
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredentialResponse
+      });
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          document.getElementById("googleBtnHolder").innerHTML = "";
+          google.accounts.id.renderButton(
+            document.getElementById("googleBtnHolder"),
+            { theme: "outline", size: "large", width: 260 }
+          );
+        }
+      });
+    } else {
+      document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+    }
+  } catch (e) {
+    document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+  }
+});
 
     // Called by your Android app after native Google Sign-In succeeds
     window.onNativeGoogleSignIn = async function(idToken) {
