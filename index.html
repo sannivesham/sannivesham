@@ -82,7 +82,6 @@
       transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
 
-    /* Answer feedback colors — correct = green, wrong = red */
     .qotd-option-btn.correct-option {
       background: #2ecc71 !important;
       border-color: #2ecc71 !important;
@@ -458,12 +457,8 @@
       signInWithPhoneNumber, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    // Only used as a fallback for people opening the site in a REAL browser
-    // (not your app). Replace with your real Web Client ID from
-    // Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs
-    // -> the one of TYPE "Web application" (not Android, not iOS).
-    // Also add your exact site domain under that client's "Authorized JavaScript origins".
-    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID.apps.googleusercontent.com";
+    // Real Web client ID from Google Cloud Console (Credentials -> OAuth 2.0 Client IDs)
+    const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
 
     let currentUser = null;
     let confirmationResult = null;
@@ -477,15 +472,10 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    // Detects your app's WebView. window.AndroidBridge is injected by your
-    // Android app. If you also have an iOS app, it should inject a similar
-    // object (e.g. window.webkit.messageHandlers.googleSignIn) — add that
-    // check here too once the iOS side is ready.
     function isInsideApp() {
       return !!window.AndroidBridge;
     }
 
-    // Games modal
     document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
     document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
 
@@ -554,9 +544,6 @@
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
-    // Google login: ALWAYS use the native in-app bridge when running inside
-    // your app's WebView. Google blocks its own sign-in flow inside WebViews,
-    // so the GIS branch below must only ever run in a real standalone browser.
     window.handleGoogleCredentialResponse = async function(response) {
       try {
         const credential = GoogleAuthProvider.credential(response.credential);
@@ -566,35 +553,35 @@
         document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
       }
     };
-document.getElementById("googleLoginBtn").addEventListener("click", () => {
-  if (isInsideApp()) {
-    window.AndroidBridge.triggerGoogleSignIn();
-    return;
-  }
-  try {
-    if (window.google && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleCredentialResponse
-      });
-      google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          document.getElementById("googleBtnHolder").innerHTML = "";
-          google.accounts.id.renderButton(
-            document.getElementById("googleBtnHolder"),
-            { theme: "outline", size: "large", width: 260 }
-          );
-        }
-      });
-    } else {
-      document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-    }
-  } catch (e) {
-    document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-  }
-});
 
-    // Called by your Android app after native Google Sign-In succeeds
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
+      if (isInsideApp()) {
+        window.AndroidBridge.triggerGoogleSignIn();
+        return;
+      }
+      try {
+        if (window.google && google.accounts && google.accounts.id) {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleCredentialResponse
+          });
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              document.getElementById("googleBtnHolder").innerHTML = "";
+              google.accounts.id.renderButton(
+                document.getElementById("googleBtnHolder"),
+                { theme: "outline", size: "large", width: 260 }
+              );
+            }
+          });
+        } else {
+          document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+        }
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+      }
+    });
+
     window.onNativeGoogleSignIn = async function(idToken) {
       try {
         const credential = GoogleAuthProvider.credential(idToken);
@@ -773,9 +760,6 @@ document.getElementById("googleLoginBtn").addEventListener("click", () => {
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
-      // Lock immediately so a double-tap can't fire twice, then show colors:
-      // the option you picked turns green if correct / red if wrong,
-      // and if you picked wrong, the actual correct option also turns green.
       allBtns.forEach((b) => { b.disabled = true; b.classList.add("disabled-option"); });
       if (selectedIndex === correctIndex) {
         allBtns[selectedIndex].classList.add("correct-option");
