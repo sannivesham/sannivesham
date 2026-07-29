@@ -9,8 +9,6 @@ import {
 const eventsList = document.querySelector(".events-list");
 
 async function loadEvents() {
-  eventsList.innerHTML = "<p style='color:white;'>Loading events...</p>";
-
   try {
     const q = query(
       collection(db, "events"),
@@ -18,10 +16,8 @@ async function loadEvents() {
     );
     const snapshot = await getDocs(q);
 
-    eventsList.innerHTML = `<p style='color:yellow;'>Docs found: ${snapshot.size}</p>`;
-
     if (snapshot.empty) {
-      eventsList.innerHTML += "<p style='color:white;'>No events in database.</p>";
+      eventsList.innerHTML = "<p style='color:white;'>No events found.</p>";
       return;
     }
 
@@ -48,10 +44,10 @@ async function loadEvents() {
         </div>
       `;
     });
-    eventsList.innerHTML += html;
+    eventsList.innerHTML = html;
 
   } catch (error) {
-    eventsList.innerHTML = `<p style='color:red;'>ERROR: ${error.message}</p>`;
+    eventsList.innerHTML = "<p style='color:white;'>Events loading error</p>";
     console.log(error);
   }
 }
