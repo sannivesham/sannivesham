@@ -5,28 +5,40 @@ import {
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
 const eventsList = document.querySelector(".events-list");
+
 async function loadEvents() {
+  eventsList.innerHTML = "<p style='color:white;'>Loading events...</p>";
+
   try {
     const q = query(
       collection(db, "events"),
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(q);
-    eventsList.innerHTML = "";
+
+    eventsList.innerHTML = `<p style='color:yellow;'>Docs found: ${snapshot.size}</p>`;
+
+    if (snapshot.empty) {
+      eventsList.innerHTML += "<p style='color:white;'>No events in database.</p>";
+      return;
+    }
+
+    let html = "";
     snapshot.forEach((doc) => {
       const event = doc.data();
       const images = event.images || (event.image ? [event.image] : []);
-      const galleryHTML = images.map((img) => 
+      const galleryHTML = images.map((img) => `
         <img src="${img}" alt="${event.title}">
-      ).join("");
-      eventsList.innerHTML += 
+      `).join("");
+      html += `
         <div class="event-box">
           <div class="event-text">
             <h2>${event.title}</h2>
             <div class="event-meta">
-              ${event.location ? <p>📍 ${event.location}</p> : ""}
-              ${event.time ? <p>🕒 ${event.time}</p> : ""}
+              ${event.location ? `<p>📍 ${event.location}</p>` : ""}
+              ${event.time ? `<p>🕒 ${event.time}</p>` : ""}
             </div>
             <p>${(event.description || "").replace(/\n/g, "<br>")}</p>
           </div>
@@ -34,11 +46,14 @@ async function loadEvents() {
             ${galleryHTML}
           </div>
         </div>
-      ;
+      `;
     });
+    eventsList.innerHTML += html;
+
   } catch (error) {
+    eventsList.innerHTML = `<p style='color:red;'>ERROR: ${error.message}</p>`;
     console.log(error);
-    eventsList.innerHTML = "<p style='color:white;'>Events loading error</p>";
   }
 }
+
 loadEvents();
