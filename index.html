@@ -40,8 +40,6 @@
       font-weight: 500;
     }
 
-    /* Force all auth-style modals (login, profile, leaderboard, games)
-       to cover the full screen in the app WebView */
     .auth-modal {
       position: fixed !important;
       top: 0 !important;
@@ -66,8 +64,6 @@
       margin: auto !important;
     }
 
-    /* Music & profile buttons: stay near the top only, scroll away with content
-       instead of floating fixed on screen at all times */
     .music-btn,
     .profile-btn {
       position: absolute !important;
@@ -78,15 +74,31 @@
       top: 190px !important;
     }
 
-    /* QOTD option buttons: ensure taps register reliably on mobile */
     .qotd-option-btn {
       position: relative;
       z-index: 2;
       touch-action: manipulation;
       -webkit-tap-highlight-color: rgba(255,255,255,0.15);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
 
-/* Category boxes: vertical rectangles, image fills full box, no gap */
+    /* Answer feedback colors — correct = green, wrong = red */
+    .qotd-option-btn.correct-option {
+      background: #2ecc71 !important;
+      border-color: #2ecc71 !important;
+      color: #fff !important;
+    }
+    .qotd-option-btn.wrong-option {
+      background: #e74c3c !important;
+      border-color: #e74c3c !important;
+      color: #fff !important;
+    }
+    .qotd-option-btn.disabled-option {
+      opacity: 0.95;
+      cursor: default;
+      pointer-events: none;
+    }
+
     @media (max-width: 700px) {
       .category-grid {
         display: grid !important;
@@ -446,8 +458,11 @@
       signInWithPhoneNumber, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    // IMPORTANT: replace with your actual Google OAuth Web Client ID
-    // (Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs -> Web client)
+    // Only used as a fallback for people opening the site in a REAL browser
+    // (not your app). Replace with your real Web Client ID from
+    // Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs
+    // -> the one of TYPE "Web application" (not Android, not iOS).
+    // Also add your exact site domain under that client's "Authorized JavaScript origins".
     const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID.apps.googleusercontent.com";
 
     let currentUser = null;
@@ -462,17 +477,21 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
+    // Detects your app's WebView. window.AndroidBridge is injected by your
+    // Android app. If you also have an iOS app, it should inject a similar
+    // object (e.g. window.webkit.messageHandlers.googleSignIn) — add that
+    // check here too once the iOS side is ready.
+    function isInsideApp() {
+      return !!window.AndroidBridge;
+    }
+
     // Games modal
     document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
     document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
 
-    // Load QOTD / Word of Day immediately — do not wait on auth,
-    // so a slow/blocked auth check (common on desktop with extensions)
-    // never prevents these from showing.
     loadQuestionOfDay();
     loadWordOfDay();
 
-    // Auth state
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       if (user) {
@@ -505,8 +524,6 @@
         document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
       }
-
-      // Re-render QOTD now that the real logged-in / already-answered state is known
       loadQuestionOfDay();
     });
 
@@ -537,7 +554,9 @@
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
-    // Google login — inline account chooser, no page redirect
+    // Google login: ALWAYS use the native in-app bridge when running inside
+    // your app's WebView. Google blocks its own sign-in flow inside WebViews,
+    // so the GIS branch below must only ever run in a real standalone browser.
     window.handleGoogleCredentialResponse = async function(response) {
       try {
         const credential = GoogleAuthProvider.credential(response.credential);
@@ -549,7 +568,7 @@
     };
 
     document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      if (window.AndroidBridge) {
+      if (isInsideApp()) {
         window.AndroidBridge.triggerGoogleSignIn();
         return;
       }
@@ -560,7 +579,6 @@
         });
         google.accounts.id.prompt((notification) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback: render an inline Google button if the one-tap prompt can't show
             document.getElementById("googleBtnHolder").innerHTML = "";
             google.accounts.id.renderButton(
               document.getElementById("googleBtnHolder"),
@@ -573,6 +591,7 @@
       }
     });
 
+    // Called by your Android app after native Google Sign-In succeeds
     window.onNativeGoogleSignIn = async function(idToken) {
       try {
         const credential = GoogleAuthProvider.credential(idToken);
@@ -587,7 +606,6 @@
       document.getElementById("loginMsg").innerText = "Google లాగిన్ రద్దు చేయబడింది";
     };
 
-    // Phone login
     document.getElementById("sendOtpBtn").addEventListener("click", async () => {
       const phone = document.getElementById("phoneInput").value.trim();
       if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
@@ -643,7 +661,6 @@
       hideModal("profileModal");
     });
 
-    // Background
     async function loadHomeBackground() {
       try {
         let snap;
@@ -665,7 +682,6 @@
     }
     loadHomeBackground();
 
-    // Home cards
     async function loadHomeCards() {
       const snap = await getDoc(doc(db, "settings", "homeCards"));
       if (!snap.exists()) return;
@@ -685,9 +701,6 @@
     }
     loadHomeCards();
 
-    // Sponsor popup — only on the very first load of a brand-new session
-    // (stays hidden when navigating between sections and back to index;
-    // shows again only after the site/app is fully closed and reopened)
     async function loadSponsorPopup() {
       try {
         if (sessionStorage.getItem("sponsorShown")) return;
@@ -707,7 +720,6 @@
       document.getElementById("sponsorModal").style.display = "none";
     });
 
-    // QOTD
     async function loadQuestionOfDay() {
       try {
         const snap = await getDoc(doc(db, "qotd", todayKey));
@@ -758,16 +770,19 @@
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
-      // Guard: lock the UI immediately so a double-tap can't fire twice
+      // Lock immediately so a double-tap can't fire twice, then show colors:
+      // the option you picked turns green if correct / red if wrong,
+      // and if you picked wrong, the actual correct option also turns green.
       allBtns.forEach((b) => { b.disabled = true; b.classList.add("disabled-option"); });
-      allBtns[selectedIndex].classList.add(selectedIndex === correctIndex ? "correct-option" : "wrong-option");
-      if (selectedIndex !== correctIndex) allBtns[correctIndex]?.classList.add("correct-option");
+      if (selectedIndex === correctIndex) {
+        allBtns[selectedIndex].classList.add("correct-option");
+      } else {
+        allBtns[selectedIndex].classList.add("wrong-option");
+        allBtns[correctIndex]?.classList.add("correct-option");
+      }
 
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
-
-        // Re-check against the server right before writing, so multiple
-        // tabs / slow network can never double-score.
         const freshSnap = await getDoc(userRef);
         const freshData = freshSnap.exists() ? freshSnap.data() : {};
         const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
@@ -806,7 +821,6 @@
       showModal("loginModal"); showStep("loginStep1");
     });
 
-    // Leaderboard
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
       const listBox = document.getElementById("leaderboardList");
@@ -833,7 +847,6 @@
       }).join("");
     });
 
-    // Word of day
     async function loadWordOfDay() {
       try {
         const snap = await getDoc(doc(db, "wordOfDay", todayKey));
@@ -899,9 +912,6 @@
       }, 1500);
     });
 
-    // If the page is restored from cache (common with mobile back-navigation),
-    // the load event above won't re-fire — force correct final numbers instead
-    // of leaving the counters at 0.
     window.addEventListener("pageshow", (event) => {
       if (event.persisted) {
         setFinalCounters();
