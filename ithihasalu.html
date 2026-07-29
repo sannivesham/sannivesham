@@ -1,80 +1,345 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ఇతిహాసాలు - సన్నివేశం</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-  .stories-title-box {
-    margin-bottom: 20px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  #ithihasaluGrid {
-    margin-top: 0;
-  }
-</style>
-</head>
-<body class="stories-body">
+    <title>సన్నివేశం | త్వరలో ప్రారంభం</title>
 
-  <div class="stories-bg"></div>
+    <!-- Telugu Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <div id="loader">
-    <div class="loader-content">
-      <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
-      <h1>సన్నివేశం</h1>
-      <div class="loader-line"></div>
-    </div>
-  </div>
-
-  <nav class="glass-navbar">
-    <a href="index.html#categories">← వెనుకకు</a>
-    <a href="index.html">ప్రారంభం</a>
-    <a href="ithihasalu.html">ఇతిహాసాలు</a>
-  </nav>
-
-  <section class="stories-page">
-    <div class="stories-title-box">
-      <h1>📜 ఇతిహాసాలు</h1>
-      <p>రామాయణం, మహాభారతం మరియు ఇతర పవిత్ర గ్రంథాలు</p>
-    </div>
-    <div class="stories-grid" id="ithihasaluGrid"></div>
-  </section>
-
-  <footer class="simple-footer">
-    <p class="footer-quote">✨ ఇతిహాసాలు మన జాతి గర్వం ✨</p>
-    <script type="module" src="social-links.js"></script>
-    <p>© 2026 సన్నివేశం</p>
-  </footer>
-
-
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-    async function loadStoriesBackground() {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        const bg = document.querySelector(".stories-bg");
-        if (window.innerWidth <= 700 && data.storiesMobile) {
-            bg.style.backgroundImage =
-                `linear-gradient(rgba(15,8,3,0.50), rgba(15,8,3,0.50)), url("${data.storiesMobile}")`;
-        } else if (data.storiesPc) {
-            bg.style.backgroundImage =
-                `linear-gradient(rgba(15,8,3,0.60), rgba(15,8,3,0.60)), url("${data.storiesPc}")`;
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
-    loadStoriesBackground();
-</script>
 
-  
-  <script src="script.js"></script>
-  <script type="module" src="ithihasalu.js"></script>
-  <audio id="bgMusic" loop>
-    <source src="music/traditional.mp3" type="audio/mpeg">
-  </audio>
-  <button id="musicBtn" class="music-btn">🔊</button>
-  <script src="music.js"></script>
+        body {
+            min-height: 100vh;
+            font-family: "Noto Serif Telugu", serif;
+            background:
+                radial-gradient(circle at 50% 20%, rgba(181, 132, 48, 0.16), transparent 35%),
+                linear-gradient(135deg, #120d09, #21150d 45%, #0e0a07);
+            color: #f8ead0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Decorative glow */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(212, 165, 76, 0.08);
+            filter: blur(80px);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Brand */
+        .brand {
+            font-size: clamp(42px, 8vw, 78px);
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #e8c878;
+            margin-bottom: 5px;
+            text-shadow: 0 0 30px rgba(232, 200, 120, 0.15);
+        }
+
+        .tagline {
+            font-size: clamp(14px, 2vw, 19px);
+            color: #cbb99a;
+            letter-spacing: 2px;
+            margin-bottom: 45px;
+        }
+
+        /* Main Card */
+        .card {
+            position: relative;
+            padding: 55px 35px 50px;
+            border-radius: 28px;
+            background: rgba(35, 24, 16, 0.78);
+            border: 1px solid rgba(221, 181, 102, 0.35);
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.45),
+                inset 0 0 40px rgba(226, 184, 93, 0.035);
+            backdrop-filter: blur(14px);
+        }
+
+        /* Decorative corners */
+        .card::before,
+        .card::after {
+            content: "✦";
+            position: absolute;
+            color: #d8b45f;
+            font-size: 20px;
+        }
+
+        .card::before {
+            top: 20px;
+            left: 25px;
+        }
+
+        .card::after {
+            bottom: 20px;
+            right: 25px;
+        }
+
+        .small-title {
+            font-size: 15px;
+            color: #d4b36c;
+            letter-spacing: 3px;
+            margin-bottom: 18px;
+        }
+
+        .main-title {
+            font-size: clamp(24px, 4vw, 38px);
+            line-height: 1.6;
+            font-weight: 700;
+            color: #fff1d2;
+            margin-bottom: 10px;
+        }
+
+        .date {
+            font-size: clamp(18px, 3vw, 25px);
+            color: #dcb968;
+            font-weight: 600;
+            margin-bottom: 42px;
+        }
+
+        /* Countdown */
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .time-box {
+            padding: 22px 10px;
+            border-radius: 18px;
+            background: rgba(255, 239, 203, 0.045);
+            border: 1px solid rgba(222, 185, 105, 0.18);
+            transition: 0.3s ease;
+        }
+
+        .time-box:hover {
+            transform: translateY(-4px);
+            border-color: rgba(222, 185, 105, 0.45);
+            background: rgba(255, 239, 203, 0.07);
+        }
+
+        .number {
+            font-family: Arial, sans-serif;
+            font-size: clamp(30px, 6vw, 52px);
+            font-weight: 700;
+            color: #f0d28b;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-size: 14px;
+            color: #bba98d;
+        }
+
+        .bottom-text {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #8f806c;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+
+            body {
+                overflow-y: auto;
+            }
+
+            .container {
+                width: 90%;
+                padding: 30px 0;
+            }
+
+            .tagline {
+                margin-bottom: 30px;
+            }
+
+            .card {
+                padding: 42px 18px 38px;
+                border-radius: 22px;
+            }
+
+            .countdown {
+                gap: 8px;
+            }
+
+            .time-box {
+                padding: 18px 5px;
+                border-radius: 14px;
+            }
+
+            .number {
+                font-size: 28px;
+            }
+
+            .label {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .countdown {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .time-box {
+                padding: 18px;
+            }
+
+            .number {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="brand">సన్నివేశం</div>
+
+        <div class="tagline">
+            తెలుగు సంస్కృతి • సనాతన ధర్మం • మన సంప్రదాయం
+        </div>
+
+        <section class="card">
+
+            <div class="small-title">
+                త్వరలో ప్రారంభం
+            </div>
+
+            <h1 class="main-title">
+                శ్రావణ శుక్ల పంచమి నుండి<br>
+                సన్నివేశం కార్యక్రమం ప్రారంభం
+            </h1>
+
+            <div class="date">
+                ఆగస్టు 17, 2026
+            </div>
+
+            <div class="countdown">
+
+                <div class="time-box">
+                    <div class="number" id="days">00</div>
+                    <div class="label">రోజులు</div>
+                </div>
+
+                <div class="time-box">
+                    <div class="number" id="hours">00</div>
+                    <div class="label">గంటలు</div>
+                </div>
+
+                <div class="time-box">
+                    <div class="number" id="minutes">00</div>
+                    <div class="label">నిమిషాలు</div>
+                </div>
+
+                <div class="time-box">
+                    <div class="number" id="seconds">00</div>
+                    <div class="label">సెకన్లు</div>
+                </div>
+
+            </div>
+
+            <div class="bottom-text">
+                మన సంస్కృతి • మన బాధ్యత • మన భవిష్యత్తు
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        // Countdown target:
+        // August 17, 2026 at 12:00 AM IST
+        const targetDate = new Date("2026-08-17T00:00:00+05:30").getTime();
+
+        function updateCountdown() {
+
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+
+                document.getElementById("days").textContent = "00";
+                document.getElementById("hours").textContent = "00";
+                document.getElementById("minutes").textContent = "00";
+                document.getElementById("seconds").textContent = "00";
+
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+            const hours = Math.floor(
+                (difference % (1000 * 60 * 60 * 24)) /
+                (1000 * 60 * 60)
+            );
+
+            const minutes = Math.floor(
+                (difference % (1000 * 60 * 60)) /
+                (1000 * 60)
+            );
+
+            const seconds = Math.floor(
+                (difference % (1000 * 60)) /
+                1000
+            );
+
+            document.getElementById("days").textContent =
+                String(days).padStart(2, "0");
+
+            document.getElementById("hours").textContent =
+                String(hours).padStart(2, "0");
+
+            document.getElementById("minutes").textContent =
+                String(minutes).padStart(2, "0");
+
+            document.getElementById("seconds").textContent =
+                String(seconds).padStart(2, "0");
+        }
+
+        // Run immediately
+        updateCountdown();
+
+        // Update every second
+        setInterval(updateCountdown, 1000);
+
+    </script>
 
 </body>
 </html>
