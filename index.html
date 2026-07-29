@@ -9,6 +9,7 @@
   <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     .games-grid {
       display: grid;
@@ -75,6 +76,14 @@
     }
     .profile-btn {
       top: 190px !important;
+    }
+
+    /* QOTD option buttons: ensure taps register reliably on mobile */
+    .qotd-option-btn {
+      position: relative;
+      z-index: 2;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.15);
     }
 
 /* Category boxes: vertical rectangles, image fills full box, no gap */
@@ -147,6 +156,7 @@
         <button id="googleLoginBtn" class="auth-google-btn">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
         </button>
+        <div id="googleBtnHolder" style="margin-top:10px;"></div>
         <div class="auth-divider">లేదా</div>
         <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
         <div id="recaptcha-container"></div>
@@ -175,12 +185,10 @@
       <button class="auth-close-btn" id="profileCloseBtn">×</button>
       <div class="profile-avatar">👤</div>
       <h2 id="profileName"></h2>
-      
+
       <div class="profile-score-badge" style="margin-bottom: 20px;">
         ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
       </div>
-
-  
 
       <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
     </div>
@@ -299,7 +307,6 @@
 
       <div class="category-grid">
 
-        <!-- STORIES FIRST -->
         <a href="stories.html" class="category-card">
           <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
           <div class="category-title">గ్రంథాలయం</div>
@@ -315,13 +322,11 @@
           <div class="category-title">దేవాలయాలు</div>
         </a>
 
-        <!-- EVENTS WHERE STORIES WAS -->
         <a href="events.html" class="category-card">
           <img id="eventsCardImg" src="images/events.png">
           <div class="category-title">కార్యక్రమాలు</div>
         </a>
 
-        <!-- GAMES CARD -->
         <div id="gamesCardTrigger" class="category-card" style="cursor: pointer;">
           <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు">
           <div class="category-title">ఆటలు</div>
@@ -332,7 +337,6 @@
           <div class="category-title">ప్రశ్నావళి</div>
         </a>
 
-        <!-- NEW CARDS: pages to be built one by one -->
         <a href="ithihasalu.html" class="category-card">
           <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
           <div class="category-title">ఇతిహాసాలు</div>
@@ -438,15 +442,17 @@
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
-      GoogleAuthProvider, signInWithPopup, RecaptchaVerifier,
+      GoogleAuthProvider, signInWithCredential, RecaptchaVerifier,
       signInWithPhoneNumber, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    // IMPORTANT: replace with your actual Google OAuth Web Client ID
+    // (Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs -> Web client)
+    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID.apps.googleusercontent.com";
 
     let currentUser = null;
     let confirmationResult = null;
     let todayKey = getTodayKey();
-    let authInitialized = false;
-    let qotdAlreadyAnsweredToday = false;
 
     function getTodayKey() {
       const now = new Date();
@@ -459,6 +465,12 @@
     // Games modal
     document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
     document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
+
+    // Load QOTD / Word of Day immediately — do not wait on auth,
+    // so a slow/blocked auth check (common on desktop with extensions)
+    // never prevents these from showing.
+    loadQuestionOfDay();
+    loadWordOfDay();
 
     // Auth state
     onAuthStateChanged(auth, async (user) => {
@@ -480,23 +492,22 @@
           const spCount = progress.slidingPuzzle?.completedLevels?.length || 0;
           const sdCount = progress.sudoku?.completedLevels?.length || 0;
           const cdCount = progress.connectDots?.completedLevels?.length || 0;
-          document.getElementById("statsWordSearch").innerText = `${wsCount} చాప్టర్లు`;
-          document.getElementById("statsSlidingPuzzle").innerText = `${spCount} చాప్టర్లు`;
-          document.getElementById("statsSudoku").innerText = `${sdCount} లెవెల్స్`;
-          document.getElementById("statsConnectDots").innerText = `${cdCount} లెవెల్స్`;
+          const wsEl = document.getElementById("statsWordSearch");
+          const spEl = document.getElementById("statsSlidingPuzzle");
+          const sdEl = document.getElementById("statsSudoku");
+          const cdEl = document.getElementById("statsConnectDots");
+          if (wsEl) wsEl.innerText = `${wsCount} చాప్టర్లు`;
+          if (spEl) spEl.innerText = `${spCount} చాప్టర్లు`;
+          if (sdEl) sdEl.innerText = `${sdCount} లెవెల్స్`;
+          if (cdEl) cdEl.innerText = `${cdCount} లెవెల్స్`;
         }
       } else {
         document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
       }
 
-      // Only load QOTD / Word of Day AFTER we know the real auth state,
-      // so "already answered" is checked correctly on first render.
-      if (!authInitialized) {
-        authInitialized = true;
-        loadQuestionOfDay();
-        loadWordOfDay();
-      }
+      // Re-render QOTD now that the real logged-in / already-answered state is known
+      loadQuestionOfDay();
     });
 
     document.getElementById("profileBtn").addEventListener("click", () => {
@@ -526,24 +537,44 @@
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
-    // Google login
-    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+    // Google login — inline account chooser, no page redirect
+    window.handleGoogleCredentialResponse = async function(response) {
+      try {
+        const credential = GoogleAuthProvider.credential(response.credential);
+        const result = await signInWithCredential(auth, credential);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
+      }
+    };
+
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
       if (window.AndroidBridge) {
         window.AndroidBridge.triggerGoogleSignIn();
+        return;
+      }
+      if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCredentialResponse
+        });
+        google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: render an inline Google button if the one-tap prompt can't show
+            document.getElementById("googleBtnHolder").innerHTML = "";
+            google.accounts.id.renderButton(
+              document.getElementById("googleBtnHolder"),
+              { theme: "outline", size: "large", width: 260 }
+            );
+          }
+        });
       } else {
-        try {
-          const provider = new GoogleAuthProvider();
-          const result = await signInWithPopup(auth, provider);
-          await checkAndSetName(result.user);
-        } catch (e) {
-          document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-        }
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
       }
     });
 
     window.onNativeGoogleSignIn = async function(idToken) {
       try {
-        const { GoogleAuthProvider, signInWithCredential } = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js");
         const credential = GoogleAuthProvider.credential(idToken);
         const result = await signInWithCredential(auth, credential);
         await checkAndSetName(result.user);
@@ -654,9 +685,12 @@
     }
     loadHomeCards();
 
-    // Sponsor popup
+    // Sponsor popup — only on the very first load of a brand-new session
+    // (stays hidden when navigating between sections and back to index;
+    // shows again only after the site/app is fully closed and reopened)
     async function loadSponsorPopup() {
       try {
+        if (sessionStorage.getItem("sponsorShown")) return;
         const snap = await getDoc(doc(db, "settings", "sponsor"));
         if (!snap.exists()) return;
         const data = snap.data();
@@ -665,6 +699,7 @@
         document.getElementById("sponsorLink").href = data.link || "#";
         document.getElementById("sponsorModal").style.display = "flex";
         window._sponsorShowing = true;
+        sessionStorage.setItem("sponsorShown", "true");
       } catch (e) {}
     }
     loadSponsorPopup();
@@ -692,11 +727,11 @@
             alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
           }
         }
-        qotdAlreadyAnsweredToday = alreadyAnswered;
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
           btn.className = "qotd-option-btn";
+          btn.type = "button";
           btn.innerText = optionText;
           if (alreadyAnswered) {
             btn.classList.add("disabled-option");
@@ -720,23 +755,19 @@
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
-      // Guard 1: block instantly if already answered in this render
-      if (qotdAlreadyAnsweredToday) return;
-      qotdAlreadyAnsweredToday = true;
-
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
-      allBtns.forEach((b, i) => {
-        b.classList.add("disabled-option");
-        if (i === correctIndex) b.classList.add("correct-option");
-      });
-      if (selectedIndex !== correctIndex) allBtns[selectedIndex].classList.add("wrong-option");
+
+      // Guard: lock the UI immediately so a double-tap can't fire twice
+      allBtns.forEach((b) => { b.disabled = true; b.classList.add("disabled-option"); });
+      allBtns[selectedIndex].classList.add(selectedIndex === correctIndex ? "correct-option" : "wrong-option");
+      if (selectedIndex !== correctIndex) allBtns[correctIndex]?.classList.add("correct-option");
 
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
 
-        // Guard 2: re-check against the server right before writing,
-        // so logout/login, multiple tabs, or slow network can never double-score.
+        // Re-check against the server right before writing, so multiple
+        // tabs / slow network can never double-score.
         const freshSnap = await getDoc(userRef);
         const freshData = freshSnap.exists() ? freshSnap.data() : {};
         const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
@@ -831,16 +862,29 @@
     function animateCounter(id, target) {
       let count = 0;
       const increment = Math.ceil(target / 100);
+      const el = document.getElementById(id);
       const timer = setInterval(() => {
         count += increment;
         if (count >= target) { count = target; clearInterval(timer); }
-        document.getElementById(id).innerText = id === "studentCount" ? count + "+" : count;
+        el.innerText = id === "studentCount" ? count + "+" : count;
       }, 20);
     }
 
+    function setFinalCounters() {
+      const schoolEl = document.getElementById("schoolCount");
+      const studentEl = document.getElementById("studentCount");
+      if (schoolEl) schoolEl.innerText = 10;
+      if (studentEl) studentEl.innerText = "2000+";
+    }
+
     function startCounters() {
+      if (sessionStorage.getItem("countersShown")) {
+        setFinalCounters();
+        return;
+      }
       animateCounter("schoolCount", 10);
       animateCounter("studentCount", 2000);
+      sessionStorage.setItem("countersShown", "true");
     }
 
     window.addEventListener("load", () => {
@@ -853,6 +897,15 @@
           startCounters();
         }
       }, 1500);
+    });
+
+    // If the page is restored from cache (common with mobile back-navigation),
+    // the load event above won't re-fire — force correct final numbers instead
+    // of leaving the counters at 0.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) {
+        setFinalCounters();
+      }
     });
   </script>
 
