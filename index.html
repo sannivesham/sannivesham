@@ -101,6 +101,40 @@
       pointer-events: none;
     }
 
+    /* Spinning logo (coin-flip style, front + mirrored back face) */
+    .logo-flip-wrap {
+      perspective: 1000px;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+    .logo-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: logoSpin 6s linear infinite;
+    }
+    .logo-flip-face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 50%;
+    }
+    .logo-flip-front {
+      transform: rotateY(0deg);
+    }
+    .logo-flip-back {
+      transform: rotateY(180deg) scaleX(-1);
+    }
+    @keyframes logoSpin {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
+    }
+
     @media (max-width: 700px) {
       .category-grid {
         display: grid !important;
@@ -215,7 +249,12 @@
   <section id="home" class="home-page">
 
     <div class="top-brand">
-      <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
+      <div class="logo-flip-wrap">
+        <div class="logo-flip-inner">
+          <img src="images/logo.png" alt="Sannivesham Logo" class="logo-flip-face logo-flip-front">
+          <img src="images/logo.png" alt="Sannivesham Logo Back" class="logo-flip-face logo-flip-back">
+        </div>
+      </div>
       <div class="brand-text">
         <h1>సన్నివేశం</h1>
         <p>సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
@@ -225,11 +264,11 @@
     <div class="impact-box">
       <div class="impact-card">
         <span id="schoolCount">0</span>
-       <p>📚సందర్శించిన<br>పాఠశాలలు</p>
+        <p>📚సందర్శించిన<br>పాఠశాలలు</p>
       </div>
       <div class="impact-card">
         <span id="studentCount">0</span>
-       <p>👨‍🎓కలిసిన<br>విద్యార్థులు</p>
+        <p>👨‍🎓కలిసిన<br>విద్యార్థులు</p>
       </div>
     </div>
 
@@ -325,7 +364,7 @@
 
         <a href="pooja-mandir.html" class="category-card">
           <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది">
-          <div class="category-title">ఉత్సవగణన</div>
+          <div class="category-title">రాబోయే పండుగలు</div>
         </a>
 
         <a href="https://sannivesham.github.io/store/" class="category-card">
@@ -426,8 +465,6 @@
     loadQuestionOfDay();
     loadWordOfDay();
 
-    // Just reflects login state on the profile icon — actual login/profile
-    // UI now lives entirely on profile.html
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       const profileBtn = document.getElementById("profileBtn");
