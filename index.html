@@ -9,7 +9,6 @@
   <meta http-equiv="Expires" content="0">
   <title>సన్నివేశం</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     .games-grid {
       display: grid;
@@ -69,6 +68,10 @@
       position: absolute !important;
       top: 130px !important;
       right: 20px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-decoration: none !important;
     }
     .profile-btn {
       top: 190px !important;
@@ -157,54 +160,6 @@
     </div>
   </div>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginModal" class="auth-modal">
-    <div class="auth-modal-box">
-      <button class="auth-close-btn" id="loginCloseBtn">×</button>
-      <h2>లాగిన్ చేయండి</h2>
-
-      <div id="loginStep1">
-        <button id="googleLoginBtn" class="auth-google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
-        </button>
-        <div id="googleBtnHolder" style="margin-top:10px;"></div>
-        <div class="auth-divider">లేదా</div>
-        <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్(ప్రస్తుతం అందుబాటులో లేదు)" class="auth-input">
-        <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn" class="auth-btn">ప్రస్తుతం మొబైల్ లాగిన్ అందుబాటులో లేద</button>
-        <p id="loginMsg" class="auth-msg"></p>
-      </div>
-
-      <div id="loginStep2" style="display:none;">
-        <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
-        <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
-        <p id="otpMsg" class="auth-msg"></p>
-      </div>
-
-      <div id="loginStep3" style="display:none;">
-        <p>మీ పేరు నమోదు చేయండి</p>
-        <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
-        <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
-        <p id="nameMsg" class="auth-msg"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFILE MODAL -->
-  <div id="profileModal" class="auth-modal">
-    <div class="auth-modal-box">
-      <button class="auth-close-btn" id="profileCloseBtn">×</button>
-      <div class="profile-avatar">👤</div>
-      <h2 id="profileName"></h2>
-
-      <div class="profile-score-badge" style="margin-bottom: 20px;">
-        ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
-      </div>
-
-      <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
-    </div>
-  </div>
-
   <!-- LEADERBOARD MODAL -->
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
@@ -288,7 +243,7 @@
           <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
-          <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
+          <a id="qotdLoginBtn" href="profile.html" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</a>
         </p>
       </div>
 
@@ -449,19 +404,12 @@
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, setDoc, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, getDocFromServer, getDocs, collection, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-    import {
-      GoogleAuthProvider, signInWithCredential, RecaptchaVerifier,
-      signInWithPhoneNumber, onAuthStateChanged, signOut
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-
-    // Real Web client ID from Google Cloud Console (Credentials -> OAuth 2.0 Client IDs)
-    const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     let currentUser = null;
-    let confirmationResult = null;
     let todayKey = getTodayKey();
 
     function getTodayKey() {
@@ -472,54 +420,26 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    function isInsideApp() {
-      return !!window.AndroidBridge;
-    }
-
     document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
     document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
 
     loadQuestionOfDay();
     loadWordOfDay();
 
+    // Just reflects login state on the profile icon — actual login/profile
+    // UI now lives entirely on profile.html
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
+      const profileBtn = document.getElementById("profileBtn");
       if (user) {
+        profileBtn.innerText = "😊";
         const userSnap = await getDoc(doc(db, "users", user.uid));
-        if (!userSnap.exists()) {
-          showModal("loginModal");
-          showStep("loginStep3");
-        } else {
-          const data = userSnap.data();
-          document.getElementById("profileName").innerText = data.name || "User";
-          document.getElementById("profileScore").innerText = data.score || 0;
-          document.getElementById("profileBtn").innerText = "😊";
-          updateQotdScoreRow(data);
-
-          const progress = data.gameProgress || {};
-          const wsCount = progress.wordSearch?.completedLevels?.length || 0;
-          const spCount = progress.slidingPuzzle?.completedLevels?.length || 0;
-          const sdCount = progress.sudoku?.completedLevels?.length || 0;
-          const cdCount = progress.connectDots?.completedLevels?.length || 0;
-          const wsEl = document.getElementById("statsWordSearch");
-          const spEl = document.getElementById("statsSlidingPuzzle");
-          const sdEl = document.getElementById("statsSudoku");
-          const cdEl = document.getElementById("statsConnectDots");
-          if (wsEl) wsEl.innerText = `${wsCount} చాప్టర్లు`;
-          if (spEl) spEl.innerText = `${spCount} చాప్టర్లు`;
-          if (sdEl) sdEl.innerText = `${sdCount} లెవెల్స్`;
-          if (cdEl) cdEl.innerText = `${cdCount} లెవెల్స్`;
-        }
+        if (userSnap.exists()) updateQotdScoreRow(userSnap.data());
       } else {
-        document.getElementById("profileBtn").innerText = "👤";
+        profileBtn.innerText = "👤";
         showQotdLoginHint();
       }
       loadQuestionOfDay();
-    });
-
-    document.getElementById("profileBtn").addEventListener("click", () => {
-      if (currentUser) { showModal("profileModal"); }
-      else { showModal("loginModal"); showStep("loginStep1"); }
     });
 
     function showModal(id) {
@@ -527,128 +447,11 @@
       document.getElementById(id).style.display = "flex";
     }
     function hideModal(id) { document.getElementById(id).style.display = "none"; }
-    function showStep(id) {
-      ["loginStep1","loginStep2","loginStep3"].forEach(s => {
-        const el = document.getElementById(s);
-        if (el) el.style.display = "none";
-      });
-      const target = document.getElementById(id);
-      if (target) target.style.display = "block";
-    }
 
-    document.getElementById("loginCloseBtn").addEventListener("click", () => hideModal("loginModal"));
-    document.getElementById("profileCloseBtn").addEventListener("click", () => hideModal("profileModal"));
     document.getElementById("leaderboardCloseBtn").addEventListener("click", () => hideModal("leaderboardModal"));
 
     document.querySelectorAll(".auth-modal").forEach(modal => {
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
-    });
-
-    window.handleGoogleCredentialResponse = async function(response) {
-      try {
-        const credential = GoogleAuthProvider.credential(response.credential);
-        const result = await signInWithCredential(auth, credential);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-      }
-    };
-
-    document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      if (isInsideApp()) {
-        window.AndroidBridge.triggerGoogleSignIn();
-        return;
-      }
-      try {
-        if (window.google && google.accounts && google.accounts.id) {
-          google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleCredentialResponse
-          });
-          google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              document.getElementById("googleBtnHolder").innerHTML = "";
-              google.accounts.id.renderButton(
-                document.getElementById("googleBtnHolder"),
-                { theme: "outline", size: "large", width: 260 }
-              );
-            }
-          });
-        } else {
-          document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-        }
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-      }
-    });
-
-    window.onNativeGoogleSignIn = async function(idToken) {
-      try {
-        const credential = GoogleAuthProvider.credential(idToken);
-        const result = await signInWithCredential(auth, credential);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-      }
-    };
-
-    window.onNativeGoogleSignInError = function() {
-      document.getElementById("loginMsg").innerText = "Google లాగిన్ రద్దు చేయబడింది";
-    };
-
-    document.getElementById("sendOtpBtn").addEventListener("click", async () => {
-      const phone = document.getElementById("phoneInput").value.trim();
-      if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
-      try {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
-        }
-        let formattedPhone = phone.replace(/\s+/g, "");
-        if (!formattedPhone.startsWith("+")) formattedPhone = "+91" + formattedPhone;
-        confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
-        showStep("loginStep2");
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
-      }
-    });
-
-    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
-      const otp = document.getElementById("otpInput").value.trim();
-      try {
-        const result = await confirmationResult.confirm(otp);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("otpMsg").innerText = "OTP తప్పుగా ఉంది";
-      }
-    });
-
-    async function checkAndSetName(user) {
-      const userSnap = await getDoc(doc(db, "users", user.uid));
-      if (!userSnap.exists()) { showStep("loginStep3"); }
-      else { hideModal("loginModal"); }
-    }
-
-    document.getElementById("saveNameBtn").addEventListener("click", async () => {
-      const name = document.getElementById("nameInput").value.trim();
-      if (!name) { document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి"; return; }
-      await setDoc(doc(db, "users", currentUser.uid), {
-        name, score: 0, answeredDates: [],
-        gameProgress: {
-          wordSearch: { completedLevels: [], metrics: {} },
-          slidingPuzzle: { completedLevels: [], metrics: {} },
-          sudoku: { completedLevels: [], metrics: {} },
-          connectDots: { completedLevels: [], metrics: {} }
-        }
-      });
-      document.getElementById("profileName").innerText = name;
-      document.getElementById("profileScore").innerText = 0;
-      document.getElementById("profileBtn").innerText = "😊";
-      hideModal("loginModal");
-    });
-
-    document.getElementById("logoutUserBtn").addEventListener("click", async () => {
-      await signOut(auth);
-      hideModal("profileModal");
     });
 
     async function loadHomeBackground() {
@@ -775,7 +578,6 @@
         const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
 
         if (alreadyOnServer) {
-          document.getElementById("profileScore").innerText = freshData.score || 0;
           updateQotdScoreRow(freshData);
           return;
         }
@@ -786,9 +588,7 @@
         await updateDoc(userRef, updateData);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          const ud = userSnap.data();
-          document.getElementById("profileScore").innerText = ud.score || 0;
-          updateQotdScoreRow(ud);
+          updateQotdScoreRow(userSnap.data());
         }
       }
     }
@@ -803,10 +603,6 @@
       document.getElementById("qotdLoginHint").style.display = "block";
       document.getElementById("qotdScoreRow").style.display = "none";
     }
-
-    document.getElementById("qotdLoginBtn")?.addEventListener("click", () => {
-      showModal("loginModal"); showStep("loginStep1");
-    });
 
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
@@ -854,7 +650,7 @@
   </audio>
 
   <button id="musicBtn" class="music-btn">🔊</button>
-  <button id="profileBtn" class="profile-btn">👤</button>
+  <a id="profileBtn" href="profile.html" class="profile-btn">👤</a>
 
   <script src="music.js?v=2"></script>
 
