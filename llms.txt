@@ -1,0 +1,9 @@
+# Sannivesham
+> Telugu culture and tradition platform covering festivals, temples, stories, itihasas, and quizzes.
+
+- Homepage: https://sannivesham.com/
+- About: https://sannivesham.com/about.html
+- Festivals: https://sannivesham.com/festivals.html
+- Temples: https://sannivesham.com/temples.html
+- Stories: https://sannivesham.com/stories.html
+- Quiz: https://sannivesham.com/quiz.html
