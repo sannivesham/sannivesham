@@ -155,11 +155,18 @@ function showQuestion() {
   progressBar.style.width =
     `${((currentQuestion + 1) / questions.length) * 100}%`;
 
+  // Fade the question in for a smoother transition between questions
+  questionEl.classList.remove("quiz-fade-in");
+  void questionEl.offsetWidth; // restart animation
   questionEl.innerText = q.question || "";
+  questionEl.classList.add("quiz-fade-in");
 
   optionButtons.forEach((btn, index) => {
     btn.innerText = options[index] || "";
     btn.classList.remove("option-selected", "option-correct", "option-wrong");
+    btn.classList.remove("quiz-fade-in");
+    void btn.offsetWidth;
+    btn.classList.add("quiz-fade-in");
     btn.disabled = false;
   });
 
@@ -181,10 +188,15 @@ function startTimer() {
 
   timeLeft = 30;
   timer.innerText = timeLeft;
+  timer.classList.remove("timer-warning");
 
   timerInterval = setInterval(() => {
     timeLeft--;
     timer.innerText = timeLeft;
+
+    if (timeLeft <= 10) {
+      timer.classList.add("timer-warning");
+    }
 
     if (timeLeft <= 0) {
       checkAnswer();
@@ -296,20 +308,11 @@ async function finishQuiz() {
       console.error("User score save failed:", error);
     }
 
+    // NOTE: this block previously ran twice (a duplicate copy existed here),
+    // which double-counted every category quiz's score in sectionScores.
+    // Now it runs exactly once.
     if (type === "category" && category) {
       const secRef = doc(db, "sectionScores", category);
-
-      const secSnap = await getDoc(secRef);
-
-if (secSnap.exists()) {
-    await updateDoc(secRef, {
-        total: increment(score)
-    });
-} else {
-    await setDoc(secRef, {
-        total: score
-    });
-}
 
       try {
         const secSnap = await getDoc(secRef);
