@@ -87,6 +87,8 @@
 
     outline:none;
 
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
 }
 
 .cms-field textarea{
@@ -131,7 +133,7 @@
 
     font-weight:bold;
 
-    transition:.3s;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
 
 }
 
@@ -153,10 +155,14 @@
 
 .cms-buttons button:hover{
 
-    transform:translateY(-3px);
+    transform:translateY(-3px) scale(1.03);
 
     box-shadow:0 0 20px rgba(255,209,102,.25);
 
+}
+
+.cms-buttons button:active {
+  transform: translateY(-1px) scale(0.97);
 }
 
 #searchQuestion{
@@ -177,6 +183,13 @@
 
     margin-bottom:30px;
 
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+#searchQuestion:focus {
+  border-color: #FFD166;
+  box-shadow: 0 0 15px rgba(255,209,102,.30);
 }
 
 #questionList{
@@ -201,6 +214,15 @@
 
     padding:22px;
 
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    animation: cmsCardRise 0.4s ease both;
+
+}
+
+.question-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,209,102,.12);
 }
 
 .question-card h3{
@@ -241,6 +263,13 @@
 
     font-weight:bold;
 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.question-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
 }
 
 .edit-btn{
@@ -257,6 +286,11 @@
 
     color:white;
 
+}
+
+@keyframes cmsCardRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* MOBILE */
