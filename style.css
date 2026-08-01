@@ -1,3 +1,6 @@
+style.css
+
+
 /* =========================
    RESET + GLOBAL
 ========================= */
@@ -71,9 +74,7 @@ body {
     drop-shadow(0 0 20px rgba(255, 209, 102, 0.8));
 }
 
-/* Renamed from an <h1> to a <p class="loader-title"> in the HTML so the
-   page only has one real <h1> (SEO fix) — selector updated to match. */
-.loader-content .loader-title {
+.loader-content h1 {
   color: #ffd166;
 
   font-size: 48px;
@@ -461,10 +462,32 @@ body {
   transform: scale(1.03);
 }
 
-/* NOTE: the music button's actual visual style (gold circular icon) is
-   defined once, in its own "MUSIC BUTTON" section further down this file.
-   An older bottom-right/black version used to be duplicated here and was
-   silently overridden by that later rule — removed to avoid confusion. */
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 700px) {
+  .music-btn {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    right: 16px;
+    z-index: 10000;
+  }
+}
 
 /* =========================
    PROFILE BUTTON
@@ -788,66 +811,58 @@ body {
   text-align: center;
 }
 
-.word-of-day-text {
-  font-size: 18px;
-  line-height: 1.8;
-
-  text-align: center;
-}
-
-/* =========================
-   QOTD OPTION BUTTONS
-   (This used to be defined three times across the file with slightly
-   different, conflicting values — consolidated into one place.)
-========================= */
-
 .qotd-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin: 16px 0;
 }
 
 .qotd-option-btn {
-  display: block;
   width: 100%;
+
   padding: 14px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(201, 162, 75, 0.3);
-  background: rgba(237, 227, 200, 0.05);
-  color: #fff;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 209, 102, 0.4);
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: white;
+
+  font-size: 15px;
+
   cursor: pointer;
+
   text-align: left;
-  font-size: 1rem;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+
+  transition: 0.2s ease;
 }
 
-.qotd-option-btn:hover:not(.disabled-option) {
-  transform: translateY(-2px);
-  border-color: #C9A24B;
+.qotd-option-btn:hover {
+  background: rgba(255, 209, 102, 0.15);
 }
 
 .qotd-option-btn.correct-option {
-  border-color: #4caf50;
-  background: rgba(76, 175, 80, 0.15);
+  background: rgba(46, 204, 113, 0.35);
+  border-color: #2ecc71;
 }
 
 .qotd-option-btn.wrong-option {
-  border-color: #e53935;
-  background: rgba(229, 57, 53, 0.15);
+  background: rgba(231, 76, 60, 0.35);
+  border-color: #e74c3c;
 }
 
 .qotd-option-btn.disabled-option {
   cursor: default;
   pointer-events: none;
-  opacity: 0.85;
 }
 
-/* Mobile: stack options one above another instead of 2 columns */
-@media (max-width: 700px) {
-  .qotd-options {
-    grid-template-columns: 1fr;
-  }
+.word-of-day-text {
+  font-size: 18px;
+  line-height: 1.8;
+
+  text-align: center;
 }
 
 /* =========================
@@ -990,8 +1005,6 @@ body {
 
 /* =========================
    FOOTER
-   (.footer-links used to be defined twice with clashing colors —
-   merged into a single definition below.)
 ========================= */
 
 .simple-footer {
@@ -1013,20 +1026,15 @@ body {
 
   gap: 28px;
 
-  margin: 15px 0 18px;
+  margin-bottom: 18px;
 
   flex-wrap: wrap;
 }
 
 .footer-links a {
-  color: #d4af37;
+  color: #ffd166;
 
   text-decoration: none;
-  font-weight: 600;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
 }
 
 .simple-footer p {
@@ -1234,7 +1242,7 @@ body {
     height: 110px;
   }
 
-  .loader-content .loader-title {
+  .loader-content h1 {
     font-size: 34px;
   }
 
@@ -1802,8 +1810,6 @@ body.festivals-body {
   font-weight: bold;
 
   background: rgba(15, 10, 5, 0.58);
-
-  text-shadow: 0 0 12px rgba(255, 209, 102, 0.55);
 }
 
 .festival-card:hover {
@@ -1852,10 +1858,6 @@ body.festivals-body {
     font-size: 16px;
     padding: 9px;
   }
-
-  .festivals-body .glass-navbar {
-    justify-content: center;
-  }
 }
 
 .festivals-title-box {
@@ -1888,11 +1890,39 @@ body.festivals-body {
   margin-bottom: 10px;
 }
 
+.festivals-subtitle {
+  color: white;
+  font-size: 21px;
+}
+
+.festival-card {
+  box-shadow:
+    0 0 18px rgba(255, 209, 102, 0.45),
+    0 0 38px rgba(255, 183, 3, 0.25),
+    0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+.festival-name {
+  color: #ffd166 !important;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(255, 209, 102, 0.55);
+}
+
+@media (max-width: 700px) {
+  .festivals-body .glass-navbar {
+    justify-content: center;
+  }
+}
+
+.festivals-page {
+  min-height: 100vh;
+}
+
 .festivals-grid {
   margin-bottom: 120px;
 }
 
-/* INDIVIDUAL FESTIVAL PAGE (e.g. Diwali) */
+/* INDIVIDUAL FESTIVAL PAGE */
 
 body.diwali-body {
   background: transparent !important;
@@ -2191,11 +2221,17 @@ body.about-body {
   background-repeat: no-repeat;
 }
 
+/* PAGE */
+
 .about-page {
   min-height: 100vh;
 
   padding: 130px 20px 70px;
 }
+
+/* TITLE + GOAL BOX */
+
+/* MAIN ABOUT BOX */
 
 .about-main-box {
   max-width: 980px;
@@ -2248,12 +2284,6 @@ body.about-body {
   font-size: 20px;
 
   line-height: 2;
-}
-
-.about-main-box ul,
-.about-main-box ol {
-    list-style: none;
-    padding-left: 0;
 }
 
 /* TEAM */
@@ -2493,11 +2523,15 @@ body.temples-body {
   background-repeat: no-repeat;
 }
 
+/* PAGE */
+
 .temples-page {
   min-height: 100vh;
 
   padding: 130px 20px 70px;
 }
+
+/* TITLE BOX */
 
 .temples-title-box {
   max-width: 950px;
@@ -2542,6 +2576,8 @@ body.temples-body {
   line-height: 1.9;
 }
 
+/* GRID */
+
 .temples-grid {
   width: 100%;
 
@@ -2558,6 +2594,8 @@ body.temples-body {
   place-items: center;
   justify-content: center;
 }
+
+/* CARD */
 
 .temple-card {
   width: 100%;
@@ -2595,6 +2633,8 @@ body.temples-body {
     0 20px 45px rgba(0, 0, 0, 0.38);
 }
 
+/* IMAGE */
+
 .temple-card img {
   width: 100%;
   height: 100%;
@@ -2602,9 +2642,6 @@ body.temples-body {
   object-fit: cover;
 
   transition: 0.45s ease;
-
-  filter:
-    brightness(0.92) contrast(1.10);
 }
 
 .temple-card:hover img {
@@ -2624,6 +2661,13 @@ body.temples-body {
 
   z-index: 1;
 }
+
+.temple-card img {
+  filter:
+    brightness(0.92) contrast(1.10);
+}
+
+/* NAME */
 
 .temple-name {
   position: absolute;
@@ -2710,11 +2754,14 @@ body.temples-body {
     line-height: 1.8;
   }
 
+
+
   .temples-grid {
     grid-template-columns: repeat(3, 1fr);
 
     gap: 14px;
   }
+
 
   .temple-card {
     max-width: 210px;
@@ -2834,6 +2881,8 @@ body.tirumala-body {
     0 18px 45px rgba(0, 0, 0, 0.45);
 }
 
+/* TITLE */
+
 .temple-detail-box h1 {
   color: #ffd166;
 
@@ -2847,6 +2896,8 @@ body.tirumala-body {
     0 0 14px rgba(255, 209, 102, 0.35);
 }
 
+/* SUBTITLE */
+
 .temple-subtitle {
   color: white;
 
@@ -2856,6 +2907,8 @@ body.tirumala-body {
 
   margin-bottom: 10px;
 }
+
+/* LOCATION */
 
 .temple-location {
   color: rgba(255, 255, 255, 0.82);
@@ -2867,6 +2920,8 @@ body.tirumala-body {
   margin-bottom: 40px;
 }
 
+/* HEADINGS */
+
 .temple-detail-box h2 {
   color: #ffd166;
 
@@ -2875,6 +2930,8 @@ body.tirumala-body {
   margin:
     40px 0 18px;
 }
+
+/* PARAGRAPHS */
 
 .temple-detail-box p {
   color: white;
@@ -2887,6 +2944,8 @@ body.tirumala-body {
 
   text-align: justify;
 }
+
+/* IMAGES */
 
 .temple-inline-img {
   width: 70%;
@@ -2955,6 +3014,10 @@ body.tirumala-body {
     border-radius: 18px;
   }
 
+}
+
+@media (max-width: 700px) {
+
   .cow-img {
     width: 85%;
   }
@@ -2982,11 +3045,15 @@ body.stories-body {
   background-repeat: no-repeat;
 }
 
+/* PAGE */
+
 .stories-page {
   min-height: 100vh;
 
   padding: 130px 20px 70px;
 }
+
+/* TITLE BOX */
 
 .stories-title-box {
   max-width: 950px;
@@ -3031,6 +3098,8 @@ body.stories-body {
   line-height: 1.9;
 }
 
+/* GRID */
+
 .stories-grid {
   width: 75%;
 
@@ -3048,6 +3117,8 @@ body.stories-body {
 
   place-items: center;
 }
+
+/* CARD */
 
 .story-card {
   width: 100%;
@@ -3088,6 +3159,8 @@ body.stories-body {
     0 20px 45px rgba(0, 0, 0, 0.38);
 }
 
+/* IMAGE */
+
 .story-card img {
   width: 100%;
   height: 100%;
@@ -3106,6 +3179,8 @@ body.stories-body {
   transform: scale(1.06);
 }
 
+/* DARK OVERLAY */
+
 .story-card::after {
   content: "";
 
@@ -3119,6 +3194,8 @@ body.stories-body {
 
   z-index: 1;
 }
+
+/* NAME */
 
 .story-name {
   position: absolute;
@@ -3419,11 +3496,15 @@ body.slokas-body {
   background-repeat: no-repeat;
 }
 
+/* PAGE */
+
 .slokas-page {
   min-height: 100vh;
 
   padding: 130px 20px 70px;
 }
+
+/* TITLE BOX */
 
 .slokas-title-box {
   max-width: 950px;
@@ -3468,6 +3549,8 @@ body.slokas-body {
   line-height: 1.9;
 }
 
+/* GRID */
+
 .slokas-grid {
   width: 100%;
 
@@ -3483,6 +3566,8 @@ body.slokas-body {
 
   place-items: center;
 }
+
+/* CARD */
 
 .sloka-card {
   width: 100%;
@@ -3533,6 +3618,8 @@ body.slokas-body {
   transform: scale(1.06);
 }
 
+/* OVERLAY */
+
 .sloka-card::after {
   content: "";
 
@@ -3546,6 +3633,8 @@ body.slokas-body {
 
   z-index: 1;
 }
+
+/* NAME */
 
 .sloka-name {
   position: absolute;
@@ -3711,8 +3800,62 @@ body.gita-body {
   margin-bottom: 25px;
 }
 
-/* Speak-aloud button (used to be defined twice with different padding
-   and shadow values — kept the fuller, more-styled final version). */
+.speak-btn {
+  display: block;
+  margin: 10px auto 0;
+  padding: 13px 28px;
+
+  border: 1px solid rgba(255, 209, 102, 0.55);
+  border-radius: 30px;
+
+  background: rgba(255, 209, 102, 0.16);
+  color: #ffd166;
+
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.speak-btn:hover {
+  background: rgba(255, 209, 102, 0.28);
+}
+
+@media (max-width: 700px) {
+  .gita-bg {
+    background:
+      linear-gradient(rgba(10, 5, 0, 0.62), rgba(10, 5, 0, 0.68)),
+      url("images/gita-mobile.jpg");
+
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
+  .gita-page {
+    padding: 110px 15px 35px;
+  }
+
+  .gita-title-box,
+  .gita-sloka-card {
+    padding: 26px 20px;
+    border-radius: 24px;
+  }
+
+  .gita-title-box h1 {
+    font-size: 34px;
+  }
+
+  .gita-title-box p,
+  .meaning-text {
+    font-size: 17px;
+  }
+
+  .sloka-text {
+    font-size: 19px;
+    line-height: 1.9;
+  }
+}
+
 .speak-btn {
   display: block;
 
@@ -3753,42 +3896,6 @@ body.gita-body {
 
 .speak-btn:active {
   transform: scale(0.96);
-}
-
-@media (max-width: 700px) {
-  .gita-bg {
-    background:
-      linear-gradient(rgba(10, 5, 0, 0.62), rgba(10, 5, 0, 0.68)),
-      url("images/gita-mobile.jpg");
-
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-  }
-
-  .gita-page {
-    padding: 110px 15px 35px;
-  }
-
-  .gita-title-box,
-  .gita-sloka-card {
-    padding: 26px 20px;
-    border-radius: 24px;
-  }
-
-  .gita-title-box h1 {
-    font-size: 34px;
-  }
-
-  .gita-title-box p,
-  .meaning-text {
-    font-size: 17px;
-  }
-
-  .sloka-text {
-    font-size: 19px;
-    line-height: 1.9;
-  }
 }
 
 /* QUIZ PAGE */
@@ -4196,9 +4303,6 @@ body.dashboard-body {
   border: 1px solid rgba(255, 209, 102, 0.3);
   border-radius: 22px;
   text-align: left;
-
-  width: 100%;
-  max-width: 1400px;
 }
 
 .admin-event-card img {
@@ -4217,10 +4321,6 @@ body.dashboard-body {
   color: white;
   font-size: 14px;
   line-height: 1.6;
-
-  max-width: none;
-  width: 100%;
-  white-space: normal;
 }
 
 .edit-event-btn,
@@ -4327,16 +4427,6 @@ body.dashboard-body {
 
 .editable-event {
   flex-direction: column;
-
-  width: 100% !important;
-  max-width: 1400px !important;
-}
-
-.editable-event .edit-desc {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
-  box-sizing: border-box;
 }
 
 .edit-title,
@@ -4409,14 +4499,6 @@ body.dashboard-body {
   color: white;
 }
 
-.add-event-box textarea {
-  min-height: 180px;
-
-  resize: vertical;
-
-  line-height: 1.7;
-}
-
 .cms-list {
   margin-top: 20px;
 
@@ -4467,6 +4549,14 @@ body.dashboard-body {
 
   cursor: pointer;
   font-size: 14px;
+}
+
+.add-event-box textarea {
+  min-height: 180px;
+
+  resize: vertical;
+
+  line-height: 1.7;
 }
 
 .edit-title,
@@ -4650,6 +4740,13 @@ body.dashboard-body {
   margin-bottom: 15px;
 }
 
+#addFestivalSectionBtn {
+
+  margin-top: 20px;
+
+  margin-right: 10px;
+}
+
 #addFestivalSectionBtn,
 #saveFestivalBtn {
   margin: 20px 8px 0;
@@ -4756,10 +4853,6 @@ body.dashboard-body {
   object-fit: cover;
 }
 
-/* Note: this second, editable-CMS version of the festival detail page
-   intentionally overrides the earlier "INDIVIDUAL FESTIVAL PAGE" block
-   above (last rule wins) — kept both since removing either risks
-   breaking whichever page currently relies on it. */
 .festival-detail-page {
   padding: 120px 20px 60px;
 }
@@ -4816,7 +4909,6 @@ body.dashboard-body {
 
 .festival-inline-editor {
   margin-top: 20px;
-  width: 100%;
 }
 
 .festival-edit-panel {
@@ -4825,11 +4917,11 @@ body.dashboard-body {
 
   max-width: 1300px;
 
-  margin: 0 auto;
+  margin-top: 20px;
 
-  padding: 35px;
+  padding: 30px;
 
-  border-radius: 30px;
+  border-radius: 25px;
 
   background: rgba(255, 255, 255, 0.06);
 
@@ -4866,15 +4958,17 @@ body.dashboard-body {
   cursor: pointer;
 }
 
-.editable-festival-card {
+.festival-inline-editor {
   width: 100%;
+}
+
+.editable-festival-card {
   display: block !important;
 }
 
-.editable-festival-card > div {
+.editable-festival-card>div {
   width: 100%;
 }
-
 .edit-festival-btn,
 .open-festival-edit-btn {
 
@@ -4898,7 +4992,6 @@ body.dashboard-body {
 
   color: #1b0d00;
 }
-
 .delete-festival-btn {
 
   padding: 10px 20px;
@@ -4916,16 +5009,52 @@ body.dashboard-body {
   margin-right: 10px;
 
   margin-top: 10px;
+}
+
+.edit-festival-btn {
+
+  background: #ffd166;
+
+  color: #1b0d00;
+}
+
+.delete-festival-btn {
 
   background: #c0392b;
 
   color: white;
 }
 
-.edit-festival-btn:hover,
+.edit-festival-btn:hover {
+
+  transform: translateY(-2px);
+}
+
 .delete-festival-btn:hover {
 
   transform: translateY(-2px);
+}
+.editable-festival-card {
+  width: 100%;
+  display: block !important;
+}
+
+.editable-festival-card > div {
+  width: 100%;
+}
+
+.festival-inline-editor {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.festival-edit-panel {
+  width: 100%;
+  max-width: 100%;
+  padding: 30px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,209,102,0.35);
 }
 
 .festival-edit-panel .festival-card-upload-box {
@@ -4933,7 +5062,6 @@ body.dashboard-body {
   max-width: 1300px;
   height: 360px;
 }
-
 .add-inline-section-btn,
 .save-inline-festival-btn {
 
@@ -4952,35 +5080,33 @@ body.dashboard-body {
   margin-right: 10px;
 }
 
-.add-inline-section-btn {
-  background: #ffd166;
-  color: #1b0d00;
+.add-inline-section-btn{
+  background:#ffd166;
+  color:#1b0d00;
 }
 
-.remove-inline-section-btn {
+.remove-inline-section-btn{
 
-  margin-top: 15px;
+  margin-top:15px;
 
-  padding: 10px 18px;
+  padding:10px 18px;
 
-  border: none;
+  border:none;
 
-  border-radius: 20px;
+  border-radius:20px;
 
-  background: #c0392b;
+  background:#c0392b;
 
-  color: white;
+  color:white;
 
-  cursor: pointer;
+  cursor:pointer;
 }
-
 .festival-card-main-img {
   width: 100%;
   max-width: 520px;
   height: 260px;
   margin: 25px auto;
 }
-
 #festivalCardImageGrid {
   display: flex !important;
   grid-template-columns: none !important;
@@ -4994,7 +5120,6 @@ body.dashboard-body {
   padding: 0 !important;
   gap: 0 !important;
 }
-
 .image-control-box {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -5016,9 +5141,6 @@ body.dashboard-body {
   background: rgba(255,255,255,0.08);
   color: white;
 }
-
-/* TEMPLE CMS EDITOR */
-
 .edit-temple-btn,
 .delete-temple-btn,
 .add-inline-temple-section-btn,
@@ -5067,7 +5189,6 @@ body.dashboard-body {
 
   transform: translateY(-2px);
 }
-
 .inline-temple-title,
 .inline-temple-footer-quote,
 .inline-temple-section-title,
@@ -5096,19 +5217,37 @@ body.dashboard-body {
 
   resize: vertical;
 }
-
 .temple-inline-editor {
 
-  width: 100% !important;
+  width: 100%;
+
+  margin-top: 25px;
+}
+.temple-inline-editor {
+
+  width: 100%;
 
   margin-top: 25px;
 }
 
+.festival-edit-panel {
+
+  width: 100%;
+
+  max-width: 1300px;
+
+  margin: 0 auto;
+
+  padding: 35px;
+
+  border-radius: 30px;
+}
+
 .inline-temple-section-edit {
 
-  width: 100% !important;
+  width: 100%;
 
-  max-width: 100% !important;
+  max-width: 1200px;
 
   margin: 25px auto;
 
@@ -5120,10 +5259,18 @@ body.dashboard-body {
 
   border: 1px solid rgba(255,209,102,0.25);
 }
-
 /* FORCE TEMPLE EDITOR FULL WIDTH */
 
+.admin-event-card {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .admin-event-card > div {
+  width: 100% !important;
+}
+
+.temple-inline-editor {
   width: 100% !important;
 }
 
@@ -5132,8 +5279,10 @@ body.dashboard-body {
   max-width: 100% !important;
 }
 
-/* STORY CMS EDITOR */
-
+.inline-temple-section-edit {
+  width: 100% !important;
+  max-width: 100% !important;
+}
 #storyCategorySelect,
 #storyPartTitle {
   width: 100%;
@@ -5169,7 +5318,6 @@ body.dashboard-body {
   background: #c0392b;
   color: white;
 }
-
 .story-parts-grid {
   margin-top: 50px;
   display: grid;
@@ -5177,7 +5325,6 @@ body.dashboard-body {
   gap: 30px;
   padding: 20px;
 }
-
 .edit-story-part-btn,
 .delete-story-part-btn,
 .add-inline-story-section-btn,
@@ -5242,7 +5389,6 @@ body.dashboard-body {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,209,102,0.25);
 }
-
 .delete-score-btn {
   margin-left: 12px;
   padding: 6px 12px;
@@ -5253,7 +5399,6 @@ body.dashboard-body {
   cursor: pointer;
   font-size: 13px;
 }
-
 .gold-btn {
   display: inline-block;
   padding: 14px 34px;
@@ -5293,13 +5438,6 @@ body.dashboard-body {
 .gold-btn:active {
   transform: scale(0.97);
 }
-
-/* =========================
-   GLOBAL BUTTON RESET
-   (This used to be repeated three times back-to-back with near-identical
-   values — merged into one rule, plus the "delete" variant kept.)
-========================= */
-
 button {
   padding: 10px 20px;
   border: 1px solid rgba(255, 200, 80, 0.4);
@@ -5336,7 +5474,25 @@ button:hover {
 button:active {
   transform: scale(0.96);
 }
+button {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 80, 0.4);
 
+  background: linear-gradient(
+    135deg,
+    rgba(255,210,100,0.18),
+    rgba(255,170,50,0.08)
+  );
+
+  color: #ffd36b;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
 button[class*="delete"] {
   background: linear-gradient(
     135deg,
@@ -5347,7 +5503,6 @@ button[class*="delete"] {
   color: #ffb3b3;
   border-color: rgba(255,100,100,0.3);
 }
-
 .dashboard-box input,
 .dashboard-box textarea,
 .dashboard-box select {
@@ -5385,7 +5540,6 @@ button[class*="delete"] {
   background: #1b1208;
   color: white;
 }
-
 .member-inline-editor {
   width: 100%;
   margin-top: 20px;
@@ -5409,7 +5563,6 @@ button[class*="delete"] {
   min-height: 120px;
   resize: vertical;
 }
-
 .sloka-category-list {
   margin-top: 25px;
   width: 100%;
@@ -5440,14 +5593,32 @@ button[class*="delete"] {
   min-height: 120px;
   resize: vertical;
 }
+.admin-event-card p {
+    max-width: none;
+    width: 100%;
+    white-space: normal;
+}
+.admin-event-card p {
+    max-width: none;
+    width: 100%;
+    white-space: normal;
+}
+.admin-event-card {
+    width: 100%;
+    max-width: 1400px;
+}
+.editable-event {
+  width: 100% !important;
+  max-width: 1400px !important;
+}
 
-/* =========================
-   MUSIC BUTTON
-   (Single source of truth — an older, visually-overridden bottom-right
-   version that lived in the EVENTS PAGE section was removed.)
-========================= */
-
-.music-btn {
+.editable-event .edit-desc {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box;
+}
+.music-btn{
   position: fixed;
 
   top: 20px;
@@ -5473,9 +5644,8 @@ button[class*="delete"] {
   display: flex;
   box-shadow: 0 0 15px rgba(255,215,0,0.25);
 }
-
-@media(max-width: 500px) {
-  .music-btn {
+@media(max-width: 500px){
+  .music-btn{
     width: 50px;
     height: 50px;
     font-size: 20px;
@@ -5483,42 +5653,55 @@ button[class*="delete"] {
     right: 15px;
   }
 }
-
-.privacy-btn {
-  display: inline-block;
-
-  margin: 15px 0;
-
-  padding: 10px 20px;
-
-  border-radius: 30px;
-
-  text-decoration: none;
-
-  background: rgba(255,215,0,0.12);
-
-  border: 1px solid rgba(255,215,0,0.35);
-
-  color: #ffd76a;
-
-  font-weight: 600;
-
-  transition: 0.3s;
+.footer-links{
+  margin:15px 0;
+  text-align:center;
 }
 
-.privacy-btn:hover {
-  transform: translateY(-2px);
-
-  background: rgba(255,215,0,0.2);
-
-  box-shadow: 0 0 15px rgba(255,215,0,0.25);
+.footer-links a{
+  color:#d4af37;
+  text-decoration:none;
+  font-weight:600;
 }
 
-/* =========================
-   IMPACT / STATS BOXES (school + student counters on the home page)
-========================= */
+.footer-links a:hover{
+  text-decoration:underline;
+}
+.privacy-btn{
+  display:inline-block;
 
-.impact-box {
+  margin:15px 0;
+
+  padding:10px 20px;
+
+  border-radius:30px;
+
+  text-decoration:none;
+
+  background:rgba(255,215,0,0.12);
+
+  border:1px solid rgba(255,215,0,0.35);
+
+  color:#ffd76a;
+
+  font-weight:600;
+
+  transition:0.3s;
+}
+
+.privacy-btn:hover{
+  transform:translateY(-2px);
+
+  background:rgba(255,215,0,0.2);
+
+  box-shadow:0 0 15px rgba(255,215,0,0.25);
+}
+.about-main-box ul,
+.about-main-box ol {
+    list-style: none;
+    padding-left: 0;
+}
+.impact-box{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -5535,7 +5718,7 @@ button[class*="delete"] {
     box-shadow: 0 0 20px rgba(212,175,55,0.15);
 }
 
-.impact-card {
+.impact-card{
     width: 200px;
     padding: 20px 10px;
     text-align: center;
@@ -5546,115 +5729,229 @@ button[class*="delete"] {
     box-shadow: 0 0 20px rgba(212,175,55,0.15);
 }
 
-.impact-card span {
+.impact-card span{
     display: block;
     font-size: 2.5rem;
     font-weight: bold;
     color: #ffd76a;
 }
 
-.impact-card p {
+.impact-card p{
     margin-top: 10px;
     color: #fff;
     font-size: 1rem;
 }
 
-/* Alternate impact layout (divider-style) — kept for any page that
-   uses .impact-item / .impact-divider instead of .impact-card */
-.impact-item {
-    text-align: center;
+
+.impact-item{
+    text-align:center;
 }
 
-.impact-item span {
-    display: block;
-    font-size: 2.8rem;
-    font-weight: bold;
-    color: #ffd76a;
+.impact-item span{
+    display:block;
+    font-size:2.8rem;
+    font-weight:bold;
+    color:#ffd76a;
 }
 
-.impact-item p {
-    margin-top: 5px;
-    color: white;
-    font-size: 1rem;
+.impact-item p{
+    margin-top:5px;
+    color:white;
+    font-size:1rem;
 }
 
-.impact-divider {
-    width: 1px;
-    height: 70px;
-    background: rgba(212,175,55,0.4);
+.impact-divider{
+    width:1px;
+    height:70px;
+    background:rgba(212,175,55,0.4);
+}
+.quiz-category-card{
+  width:100%;
+  min-width:0;
 }
 
-/* QUIZ CATEGORY CARD (index-page style, separate from quiz.css) */
-
-.quiz-category-card {
-  width: 100%;
-  min-width: 0;
+.quiz-category-card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  display:block;
 }
 
-.quiz-category-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
+.quiz-card-buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:20px;
+  flex-wrap:wrap;
 }
 
-.quiz-card-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin: 20px;
-  flex-wrap: wrap;
+.quiz-card-buttons button{
+  flex:1;
+  min-width:120px;
+  max-width:180px;
 }
 
-.quiz-card-buttons button {
-  flex: 1;
-  min-width: 120px;
-  max-width: 180px;
-}
-
-@media(max-width: 700px) {
-  .quiz-category-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+@media(max-width:700px){
+  .quiz-category-grid{
+    grid-template-columns:repeat(2, 1fr);
+    gap:15px;
   }
 
-  .quiz-category-card img {
-    height: 110px;
+  .quiz-category-card img{
+    height:110px;
   }
 
-  .quiz-card-buttons button {
-    min-width: 100%;
+  .quiz-card-buttons button{
+    min-width:100%;
   }
 }
+
 
 /* =========================
-   MOBILE RESPONSIVE (general safety net)
+   MOBILE RESPONSIVE
 ========================= */
 @media (max-width: 768px) {
 
-    html, body {
-        width: 100%;
-        overflow-x: hidden;
+    html, body{
+        width:100%;
+        overflow-x:hidden;
     }
 
-    * {
-        max-width: 100%;
-        box-sizing: border-box;
+    *{
+        max-width:100%;
+        box-sizing:border-box;
     }
 
-    img {
-        max-width: 100%;
-        height: auto;
+    .navbar{
+        flex-wrap:wrap;
+        justify-content:center;
+        padding:10px;
+    }
+
+    .nav-links{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:12px;
+    }
+
+    .hero{
+        padding:30px 15px;
+        text-align:center;
+    }
+
+    .hero h1{
+        font-size:2.5rem;
+    }
+
+    .hero p{
+        font-size:1rem;
+    }
+
+    .stats{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+        align-items:center;
+    }
+
+    .stat-box{
+        width:90%;
+    }
+
+    section,
+    .container,
+    .glass-card{
+        width:95%;
+        margin:auto;
+    }
+
+    img{
+        max-width:100%;
+        height:auto;
+    }
+
+    .floating-buttons{
+        right:10px;
+        bottom:20px;
     }
 }
-
-/* =========================
-   ADMIN SECTION TITLE
-========================= */
 
 .admin-section-title {
   color: #FFD166;
   text-align: center;
   font-size: 30px;
   margin: 35px 0 20px;
+}
+
+.qotd-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.qotd-option-btn {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 162, 75, 0.3);
+  background: rgba(237, 227, 200, 0.05);
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.qotd-option-btn:hover:not(.disabled-option) {
+  transform: translateY(-2px);
+  border-color: #C9A24B;
+}
+
+.qotd-option-btn.correct-option {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.15);
+}
+
+.qotd-option-btn.wrong-option {
+  border-color: #e53935;
+  background: rgba(229, 57, 53, 0.15);
+}
+
+.qotd-option-btn.disabled-option {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Mobile: stack one above another */
+@media (max-width: 700px) {
+  .qotd-options {
+    grid-template-columns: 1fr;
+  }
+}
+.qotd-options {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin: 16px 0 !important;
+}
+
+.qotd-option-btn {
+  display: block !important;
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(201, 162, 75, 0.3) !important;
+  background: rgba(237, 227, 200, 0.05) !important;
+  color: #fff !important;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .qotd-options {
+    grid-template-columns: 1fr !important;
+  }
 }
