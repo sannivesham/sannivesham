@@ -33,9 +33,79 @@
         <button class="dash-btn" data-section="sponsorSection">Sponsor</button>
         <button class="dash-btn" data-section="qotdSection">Question of the Day</button>
         <button class="dash-btn" data-section="wordOfDaySection">Word of the Day</button>
+        <button class="dash-btn" data-section="streamSection">🎬 Stream CMS</button>
         <button id="logoutBtn">Logout</button>
       </div>
 
+
+
+      <!-- ═══════════════════════════════════
+           drushyam app
+      ═══════════════════════════════════ -->
+
+
+      <div id="streamSection" class="dash-section">
+  <h2 class="admin-section-title">🎬 Stream CMS</h2>
+
+  <!-- FEATURED VIDEO -->
+  <div class="add-event-box">
+    <h2>Hero (Featured) Video</h2>
+    <input type="text" id="heroVideoId" placeholder="Video ID (Firestore doc ID)">
+    <button id="saveHeroBtn">Set as Featured</button>
+    <p id="heroMsg"></p>
+  </div>
+
+  <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+  <!-- ADD CATEGORY -->
+  <div class="add-event-box">
+    <h2>Category జోడించండి</h2>
+    <input type="text" id="streamCatName" placeholder="Category Name (e.g. భక్తి)">
+    <input type="text" id="streamCatEmoji" placeholder="Emoji (🙏)">
+    <input type="number" id="streamCatOrder" placeholder="Order (1,2,3...)">
+    <button id="saveStreamCatBtn">Save Category</button>
+    <p id="streamCatMsg"></p>
+  </div>
+  <div id="streamCatList" class="cms-list"></div>
+
+  <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+  <!-- ADD VIDEO -->
+  <div class="add-event-box">
+    <h2>Video జోడించండి</h2>
+    <select id="streamVideoCatSelect"><option value="">Category ఎంచుకోండి</option></select>
+    <input type="text" id="streamVideoTitle" placeholder="Title">
+    <textarea id="streamVideoDesc" placeholder="Description"></textarea>
+    <input type="text" id="streamVideoYtId" placeholder="YouTube Video ID (e.g. dQw4w9WgXcQ)">
+    <input type="text" id="streamVideoThumb" placeholder="Thumbnail URL">
+    <input type="text" id="streamVideoDuration" placeholder="Duration (e.g. 45 min)">
+    <input type="text" id="streamVideoYear" placeholder="Year (2026)">
+    <select id="streamVideoAccess">
+      <option value="free">Free</option>
+      <option value="paid">Paid (Premium)</option>
+    </select>
+    <div id="streamVideoThumbBox" class="festival-card-upload-box"><span>＋ Thumbnail Upload</span></div>
+    <button id="saveStreamVideoBtn">Save Video</button>
+    <p id="streamVideoMsg"></p>
+  </div>
+
+  <h2 class="admin-section-title">Videos జాబితా</h2>
+  <select id="streamVideoFilter" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:16px;">
+    <option value="">All Videos</option>
+  </select>
+  <div id="streamVideoList" class="cms-list"></div>
+
+  <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+  <!-- SUBSCRIBERS -->
+  <h2 class="admin-section-title">Subscribers</h2>
+  <div id="subscribersList" class="cms-list"></div>
+</div>
+
+
+
+
+      
       <!-- ═══════════════════════════════════
            EVENTS SECTION
       ═══════════════════════════════════ -->
