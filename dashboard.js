@@ -1782,6 +1782,263 @@ async function loadWordList() {
 }
 loadWordList();
 
+
+/* ══════════════════════════════════════
+   STREAM CMS
+══════════════════════════════════════ */
+
+// Hero
+const saveHeroBtn = document.getElementById("saveHeroBtn");
+if (saveHeroBtn) {
+  saveHeroBtn.addEventListener("click", async () => {
+    const videoId = document.getElementById("heroVideoId").value.trim();
+    if (!videoId) return;
+    await setDoc(doc(db, "streamSettings", "hero"), { videoId, updatedAt: serverTimestamp() });
+    document.getElementById("heroMsg").innerText = "✅ Featured video set";
+  });
+}
+
+// Stream Categories
+const saveStreamCatBtn = document.getElementById("saveStreamCatBtn");
+if (saveStreamCatBtn) {
+  saveStreamCatBtn.addEventListener("click", async () => {
+    const name = document.getElementById("streamCatName").value.trim();
+    const emoji = document.getElementById("streamCatEmoji").value.trim();
+    const order = Number(document.getElementById("streamCatOrder").value) || 0;
+    if (!name) return;
+    await addDoc(collection(db, "streamCategories"), { name, emoji, order, createdAt: serverTimestamp() });
+    document.getElementById("streamCatMsg").innerText = "✅ Category saved";
+    document.getElementById("streamCatName").value = "";
+    document.getElementById("streamCatEmoji").value = "";
+    loadStreamCats();
+  });
+}
+
+async function loadStreamCats() {
+  const list = document.getElementById("streamCatList");
+  const select = document.getElementById("streamVideoCatSelect");
+  const filter = document.getElementById("streamVideoFilter");
+  if (!list) return;
+
+  const snap = await getDocs(query(collection(db, "streamCategories"), orderBy("order", "asc")));
+  list.innerHTML = "";
+  if (select) select.innerHTML = `<option value="">Category ఎంచుకోండి</option>`;
+  if (filter) filter.innerHTML = `<option value="">All Videos</option>`;
+
+  snap.forEach(d => {
+    const data = d.data();
+    if (select) select.innerHTML += `<option value="${d.id}">${data.emoji || ""} ${data.name}</option>`;
+    if (filter) filter.innerHTML += `<option value="${d.id}">${data.emoji || ""} ${data.name}</option>`;
+
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text">${data.emoji || ""} ${data.name}</div>
+      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+    `;
+    row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete?")) return;
+      await deleteDoc(doc(db, "streamCategories", d.id));
+      loadStreamCats();
+    });
+    list.appendChild(row);
+  });
+}
+
+// Stream Videos
+const streamVideoThumbBox = document.getElementById("streamVideoThumbBox");
+if (streamVideoThumbBox) {
+  streamVideoThumbBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    streamVideoThumbBox.dataset.image = url;
+    streamVideoThumbBox.innerHTML = `<img src="${url}">`;
+    document.getElementById("streamVideoThumb").value = url;
+  });
+}
+
+const saveStreamVideoBtn = document.getElementById("saveStreamVideoBtn");
+if (saveStreamVideoBtn) {
+  saveStreamVideoBtn.addEventListener("click", async () => {
+    const categoryId = document.getElementById("streamVideoCatSelect").value;
+    const title = document.getElementById("streamVideoTitle").value.trim();
+    const description = document.getElementById("streamVideoDesc").value.trim();
+    const youtubeId = document.getElementById("streamVideoYtId").value.trim();
+    const thumbnail = document.getElementById("streamVideoThumb").value.trim() ||
+      (streamVideoThumbBox?.dataset.image || "");
+    const duration = document.getElementById("streamVideoDuration").value.trim();
+    const year = document.getElementById("streamVideoYear").value.trim();
+    const access = document.getElementById("streamVideoAccess").value;
+
+    if (!title || !youtubeId || !categoryId) {
+      document.getElementById("streamVideoMsg").innerText = "Title, YouTube ID and Category required";
+      return;
+    }
+
+    // Get category name
+    const catSnap = await getDoc(doc(db, "streamCategories", categoryId));
+    const category = catSnap.exists() ? catSnap.data().name : "";
+
+    await addDoc(collection(db, "streamVideos"), {
+      categoryId, category, title, description, youtubeId,
+      thumbnail: thumbnail || `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
+      duration, year, access, createdAt: serverTimestamp()
+    });
+
+    document.getElementById("streamVideoMsg").innerText = "✅ Video saved";
+    document.getElementById("streamVideoTitle").value = "";
+    document.getElementById("streamVideoDesc").value = "";
+    document.getElementById("streamVideoYtId").value = "";
+    document.getElementById("streamVideoThumb").value = "";
+    document.getElementById("streamVideoDuration").value = "";
+    document.getElementById("streamVideoYear").value = "";
+    if (streamVideoThumbBox) {
+      streamVideoThumbBox.dataset.image = "";
+      streamVideoThumbBox.innerHTML = "<span>＋ Thumbnail Upload</span>";
+    }
+    loadStreamVideos();
+  });
+}
+
+const streamVideoFilter = document.getElementById("streamVideoFilter");
+if (streamVideoFilter) {
+  streamVideoFilter.addEventListener("change", () => loadStreamVideos(streamVideoFilter.value));
+}
+
+async function loadStreamVideos(filterCatId = "") {
+  const list = document.getElementById("streamVideoList");
+  if (!list) return;
+  list.innerHTML = "<p style='color:rgba(255,255,255,0.4)'>లోడ్ అవుతోంది...</p>";
+
+  const snap = await getDocs(collection(db, "streamVideos"));
+  list.innerHTML = "";
+  const items = [];
+  snap.forEach(d => {
+    const data = d.data();
+    if (!filterCatId || data.categoryId === filterCatId) {
+      items.push({ id: d.id, ...data });
+    }
+  });
+
+  if (items.length === 0) {
+    list.innerHTML = "<p style='color:rgba(255,255,255,0.4);text-align:center'>Videos లేవు</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "flex-start";
+    row.style.gap = "12px";
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <img src="${item.thumbnail}" style="width:80px;height:45px;object-fit:cover;border-radius:6px;">
+          <div>
+            <div style="font-weight:bold;color:#ffd166;">${item.title}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">${item.category || ""} • ${item.access === "free" ? "🟢 Free" : "⭐ Premium"} • ${item.duration || ""}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="stream-edit-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
+          <button class="stream-delete-btn cms-list-delete-btn" data-id="${item.id}">Delete</button>
+        </div>
+      </div>
+      <div class="stream-edit-box" id="streamEdit-${item.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
+        <input class="se-title" value="${item.title || ""}" placeholder="Title" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        <textarea class="se-desc" placeholder="Description" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${item.description || ""}</textarea>
+        <input class="se-ytid" value="${item.youtubeId || ""}" placeholder="YouTube ID" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        <input class="se-thumb" value="${item.thumbnail || ""}" placeholder="Thumbnail URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        <select class="se-access" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(30,20,10,0.9);color:white;">
+          <option value="free" ${item.access === "free" ? "selected" : ""}>Free</option>
+          <option value="paid" ${item.access === "paid" ? "selected" : ""}>Paid (Premium)</option>
+        </select>
+        <button class="stream-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+      </div>
+    `;
+
+    row.querySelector(".stream-edit-btn").addEventListener("click", () => {
+      const box = document.getElementById(`streamEdit-${item.id}`);
+      box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+
+    row.querySelector(".stream-delete-btn").addEventListener("click", async () => {
+      if (!confirm("Delete this video?")) return;
+      await deleteDoc(doc(db, "streamVideos", item.id));
+      loadStreamVideos(filterCatId);
+    });
+
+    row.querySelector(".stream-save-edit-btn").addEventListener("click", async () => {
+      const box = document.getElementById(`streamEdit-${item.id}`);
+      await updateDoc(doc(db, "streamVideos", item.id), {
+        title: box.querySelector(".se-title").value.trim(),
+        description: box.querySelector(".se-desc").value.trim(),
+        youtubeId: box.querySelector(".se-ytid").value.trim(),
+        thumbnail: box.querySelector(".se-thumb").value.trim(),
+        access: box.querySelector(".se-access").value,
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ Updated");
+      loadStreamVideos(filterCatId);
+    });
+
+    list.appendChild(row);
+  });
+}
+
+// Subscribers list
+async function loadSubscribers() {
+  const list = document.getElementById("subscribersList");
+  if (!list) return;
+
+  const snap = await getDocs(collection(db, "subscribers"));
+  list.innerHTML = "";
+
+  if (snap.empty) {
+    list.innerHTML = "<p style='color:rgba(255,255,255,0.4);text-align:center'>ఇంకా Subscribers లేరు</p>";
+    return;
+  }
+
+  snap.forEach(d => {
+    const data = d.data();
+    const row = document.createElement("div");
+    row.className = "cms-list-item";
+    row.innerHTML = `
+      <div class="cms-list-item-text">
+        <div style="font-weight:bold;">${data.name || "Unknown"}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);">${data.email || ""} • ${data.plan || ""} • ₹${data.amount || 0}</div>
+        <div style="font-size:12px;color:${data.active ? "#2ed573" : "#ff6b6b"};">${data.active ? "✅ Active" : "❌ Inactive"}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="sub-toggle-btn cms-list-delete-btn" data-id="${d.id}" data-active="${data.active}" style="background:rgba(255,209,102,0.2);color:#ffd166;">
+          ${data.active ? "Deactivate" : "Activate"}
+        </button>
+      </div>
+    `;
+
+    row.querySelector(".sub-toggle-btn").addEventListener("click", async (e) => {
+      const btn = e.currentTarget;
+      const isActive = btn.dataset.active === "true";
+      await updateDoc(doc(db, "subscribers", btn.dataset.id), {
+        active: !isActive, updatedAt: serverTimestamp()
+      });
+      loadSubscribers();
+    });
+
+    list.appendChild(row);
+  });
+}
+
+// Init
+loadStreamCats();
+loadStreamVideos();
+loadSubscribers();
+
+
+
+
+
 /* ══════════════════════════════════════
    LOGOUT
 ══════════════════════════════════════ */
