@@ -800,7 +800,11 @@ loadIthiShlokas();
 /* ══════════════════════════════════════
    TEMPLE CATEGORIES CMS
 ══════════════════════════════════════ */
-
+ 
+/* ══════════════════════════════════════
+   TEMPLE CATEGORIES CMS
+══════════════════════════════════════ */
+ 
 const templeCatImageBox = document.getElementById("templeCatImageBox");
 if (templeCatImageBox) {
   templeCatImageBox.addEventListener("click", async () => {
@@ -810,23 +814,23 @@ if (templeCatImageBox) {
     templeCatImageBox.innerHTML = `<img src="${url}">`;
   });
 }
-
+ 
 const saveTempleCatBtn = document.getElementById("saveTempleCatBtn");
 if (saveTempleCatBtn) {
   saveTempleCatBtn.addEventListener("click", async () => {
     const title = document.getElementById("templeCatTitle").value.trim();
     const order = Number(document.getElementById("templeCatOrder").value) || 0;
     const cardImage = templeCatImageBox?.dataset.image || "";
-
+ 
     if (!title || !cardImage) {
       document.getElementById("templeCatMsg").innerText = "విభాగం పేరు మరియు image required";
       return;
     }
-
+ 
     await addDoc(collection(db, "templeCategories"), {
       title, order, cardImage, createdAt: serverTimestamp()
     });
-
+ 
     document.getElementById("templeCatMsg").innerText = "✅ Category saved";
     document.getElementById("templeCatTitle").value = "";
     document.getElementById("templeCatOrder").value = "";
@@ -834,30 +838,30 @@ if (saveTempleCatBtn) {
       templeCatImageBox.dataset.image = "";
       templeCatImageBox.innerHTML = `<span>＋ Category Image</span>`;
     }
-
+ 
     loadTempleCategories();
   });
 }
-
+ 
 async function loadTempleCategories() {
   const list = document.getElementById("templeCatList");
   const addSelect = document.getElementById("templeCategorySelect");
   const filterSelect = document.getElementById("templeFilterCategorySelect");
   if (!list) return;
-
+ 
   const q = query(collection(db, "templeCategories"), orderBy("order", "asc"));
   const snap = await getDocs(q);
-
+ 
   list.innerHTML = "";
   if (addSelect) addSelect.innerHTML = `<option value="">విభాగం ఎంచుకోండి</option>`;
   if (filterSelect) filterSelect.innerHTML = `<option value="">Filter by Category</option>`;
-
+ 
   snap.forEach(d => {
     const data = d.data();
-
+ 
     if (addSelect) addSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
     if (filterSelect) filterSelect.innerHTML += `<option value="${d.id}">${data.title}</option>`;
-
+ 
     const row = document.createElement("div");
     row.className = "cms-list-item";
     row.innerHTML = `
@@ -876,18 +880,18 @@ async function loadTempleCategories() {
   });
 }
 loadTempleCategories();
-
+ 
 const templeFilterCategorySelect = document.getElementById("templeFilterCategorySelect");
 if (templeFilterCategorySelect) {
   templeFilterCategorySelect.addEventListener("change", () => {
     loadAdminTemples(templeFilterCategorySelect.value);
   });
 }
-
+ 
 /* ══════════════════════════════════════
    TEMPLES CMS
 ══════════════════════════════════════ */
-
+ 
 const templeCardBox = document.getElementById("templeCardImageGrid");
 if (templeCardBox) {
   templeCardBox.addEventListener("click", async () => {
@@ -896,31 +900,57 @@ if (templeCardBox) {
     templeCardBox.innerHTML = `<img src="${url}">`;
   });
 }
-
+ 
 const addTempleSectionBtn = document.getElementById("addTempleSectionBtn");
 const templeSectionsContainer = document.getElementById("templeSectionsContainer");
-
+ 
+// Mirrors createFestivalSectionBox — used by both the manual "+ Section Add"
+// button and the bulk-paste parser below.
+function createTempleSectionBox(container, prefillTitle = "", prefillContent = "") {
+  const box = document.createElement("div");
+  box.className = "festival-section-box";
+  box.innerHTML = `
+    <h4>Temple Section</h4>
+    <input type="text" placeholder="Section Title" class="temple-section-title" value="${prefillTitle.replace(/"/g, "&quot;")}">
+    <textarea placeholder="Section Content" class="temple-section-content">${prefillContent}</textarea>
+    <div class="section-image-slot temple-section-image"><span>＋ Temple Image</span></div>
+    <button class="remove-temple-section-btn" type="button">Delete Section</button>
+  `;
+  container.appendChild(box);
+  const imageSlot = box.querySelector(".temple-section-image");
+  imageSlot.addEventListener("click", async () => {
+    const url = await uploadImage(); if (!url) return;
+    imageSlot.dataset.image = url; imageSlot.innerHTML = `<img src="${url}">`;
+  });
+  box.querySelector(".remove-temple-section-btn").addEventListener("click", () => box.remove());
+  return box;
+}
+ 
 if (addTempleSectionBtn && templeSectionsContainer) {
   addTempleSectionBtn.addEventListener("click", () => {
-    const box = document.createElement("div");
-    box.className = "festival-section-box";
-    box.innerHTML = `
-      <h4>Temple Section</h4>
-      <input type="text" placeholder="Section Title" class="temple-section-title">
-      <textarea placeholder="Section Content" class="temple-section-content"></textarea>
-      <div class="section-image-slot temple-section-image"><span>＋ Temple Image</span></div>
-      <button class="remove-temple-section-btn">Delete Section</button>
-    `;
-    templeSectionsContainer.appendChild(box);
-    const imageSlot = box.querySelector(".temple-section-image");
-    imageSlot.addEventListener("click", async () => {
-      const url = await uploadImage(); if (!url) return;
-      imageSlot.dataset.image = url; imageSlot.innerHTML = `<img src="${url}">`;
-    });
-    box.querySelector(".remove-temple-section-btn").addEventListener("click", () => box.remove());
+    createTempleSectionBox(templeSectionsContainer);
   });
 }
-
+ 
+// Reuses parseBulkFestivalText (defined in the Festivals CMS section above) —
+// the "## heading" parsing logic is identical for both content types.
+const parseTempleBulkBtn = document.getElementById("parseTempleBulkBtn");
+const templeBulkPaste = document.getElementById("templeBulkPaste");
+if (parseTempleBulkBtn && templeBulkPaste) {
+  parseTempleBulkBtn.addEventListener("click", () => {
+    const raw = templeBulkPaste.value;
+    const sections = parseBulkFestivalText(raw);
+    const msgEl = document.getElementById("templeMessage");
+    if (sections.length === 0) {
+      msgEl.innerText = "పార్స్ చేయడానికి ఏమీ దొరకలేదు — ## తో heading పెట్టారో చూడండి";
+      return;
+    }
+    sections.forEach(s => createTempleSectionBox(templeSectionsContainer, s.title, s.content));
+    templeBulkPaste.value = "";
+    msgEl.innerText = `✅ ${sections.length} sections జోడించబడ్డాయి — ఇప్పుడు కావాలంటే ప్రతి section కి image పెట్టండి, తర్వాత Temple Save నొక్కండి`;
+  });
+}
+ 
 const saveTempleBtn = document.getElementById("saveTempleBtn");
 if (saveTempleBtn) {
   saveTempleBtn.addEventListener("click", async () => {
@@ -939,7 +969,7 @@ if (saveTempleBtn) {
         imgWidth: 75, imgHeight: 420, imgBrightness: 100, imgPosition: "center"
       });
     });
-
+ 
     if (!categoryId) {
       document.getElementById("templeMessage").innerText = "దయచేసి విభాగం ఎంచుకోండి";
       return;
@@ -950,34 +980,34 @@ if (saveTempleBtn) {
     }
     await addDoc(collection(db, "temples"), { categoryId, title, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
     document.getElementById("templeMessage").innerText = "✅ దేవాలయం సేవ్ అయింది";
-
+ 
     document.getElementById("templeTitle").value = "";
     document.getElementById("templeFooterQuote").value = "";
     templeSectionsContainer.innerHTML = "";
     cardBox.dataset.image = "";
     cardBox.innerHTML = `<span>＋ Temple Card Image</span>`;
-
+ 
     loadAdminTemples();
   });
 }
-
+ 
 async function loadAdminTemples(filterCatId = "") {
   const list = document.getElementById("adminTemplesList");
   if (!list) return;
-
+ 
   const catSnap = await getDocs(collection(db, "templeCategories"));
   const catMap = {};
   catSnap.forEach(d => { catMap[d.id] = d.data().title; });
-
+ 
   const q = query(collection(db, "temples"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
   list.innerHTML = "";
-
+ 
   snapshot.forEach((item) => {
     const temple = item.data();
-
+ 
     if (filterCatId && temple.categoryId !== filterCatId) return;
-
+ 
     list.innerHTML += `
       <div class="admin-event-card">
         <img src="${temple.cardImage}" alt="${temple.title}">
@@ -1002,20 +1032,20 @@ async function loadAdminTemples(filterCatId = "") {
     });
   });
 }
-
+ 
 async function openTempleInlineEditor(id, filterCatId = "") {
   const snap = await getDoc(doc(db, "temples", id));
   if (!snap.exists()) return;
   const temple = snap.data();
   const editor = document.getElementById(`templeEdit-${id}`);
-
+ 
   const catSnap = await getDocs(query(collection(db, "templeCategories"), orderBy("order", "asc")));
   let categoryOptionsHTML = `<option value="">విభాగం ఎంచుకోండి</option>`;
   catSnap.forEach(d => {
     const selected = d.id === temple.categoryId ? "selected" : "";
     categoryOptionsHTML += `<option value="${d.id}" ${selected}>${d.data().title}</option>`;
   });
-
+ 
   function sectionHTML(section = {}, index = "New") {
     return `
       <div class="festival-section-box inline-temple-section-edit">
@@ -1040,10 +1070,10 @@ async function openTempleInlineEditor(id, filterCatId = "") {
       </div>
     `;
   }
-
+ 
   let sectionsHTML = "";
   (temple.sections || []).forEach((section, index) => { sectionsHTML += sectionHTML(section, index + 1); });
-
+ 
   editor.innerHTML = `
     <div class="festival-edit-panel">
       <select class="inline-temple-category-select">${categoryOptionsHTML}</select>
@@ -1052,13 +1082,19 @@ async function openTempleInlineEditor(id, filterCatId = "") {
         ${temple.cardImage ? `<img src="${temple.cardImage}">` : `<span>＋ Temple Card Image</span>`}
       </div>
       <input class="inline-temple-footer-quote" value="${temple.footerQuote || ""}" placeholder="Footer Quote">
+ 
+      <h3>మొత్తం Matter పేస్ట్ చేయండి</h3>
+      <p class="bulk-paste-hint">ప్రతి heading ముందు <code>##</code> పెట్టండి.</p>
+      <textarea class="inline-temple-bulk-paste" placeholder="## Heading&#10;matter...&#10;&#10;## Heading 2&#10;matter..." rows="8"></textarea>
+      <button class="parse-inline-temple-bulk-btn" type="button">Sections గా మార్చండి ⬇</button>
+ 
       <h3>Sections</h3>
       <div class="inline-temple-sections-list">${sectionsHTML}</div>
       <button class="add-inline-temple-section-btn">+ Add Section</button>
       <button class="save-inline-temple-btn">Save Changes</button>
     </div>
   `;
-
+ 
   function attachTempleEditorEvents() {
     editor.querySelector(".inline-temple-card-image").onclick = async (e) => {
       const url = await uploadImage(); if (!url) return;
@@ -1075,12 +1111,27 @@ async function openTempleInlineEditor(id, filterCatId = "") {
     });
   }
   attachTempleEditorEvents();
-
+ 
   editor.querySelector(".add-inline-temple-section-btn").addEventListener("click", () => {
     editor.querySelector(".inline-temple-sections-list").insertAdjacentHTML("beforeend", sectionHTML({}, "New"));
     attachTempleEditorEvents();
   });
-
+ 
+  editor.querySelector(".parse-inline-temple-bulk-btn").addEventListener("click", () => {
+    const raw = editor.querySelector(".inline-temple-bulk-paste").value;
+    const sections = parseBulkFestivalText(raw);
+    if (sections.length === 0) {
+      alert("పార్స్ చేయడానికి ఏమీ దొరకలేదు — ## తో heading పెట్టారో చూడండి");
+      return;
+    }
+    const list = editor.querySelector(".inline-temple-sections-list");
+    sections.forEach(s => {
+      list.insertAdjacentHTML("beforeend", sectionHTML({ title: s.title, content: s.content }, "New"));
+    });
+    attachTempleEditorEvents();
+    editor.querySelector(".inline-temple-bulk-paste").value = "";
+  });
+ 
   editor.querySelector(".save-inline-temple-btn").addEventListener("click", async () => {
     const sectionBoxes = editor.querySelectorAll(".inline-temple-section-edit");
     const sections = [];
@@ -1106,6 +1157,7 @@ async function openTempleInlineEditor(id, filterCatId = "") {
   });
 }
 loadAdminTemples();
+ 
 
 /* ══════════════════════════════════════
    LIBRARY CMS
