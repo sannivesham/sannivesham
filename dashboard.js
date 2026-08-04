@@ -192,29 +192,87 @@ document.querySelectorAll(".bg-upload-btn").forEach((btn) => {
    FESTIVALS CMS
 ══════════════════════════════════════ */
 
+/* ══════════════════════════════════════
+   FESTIVALS CMS
+══════════════════════════════════════ */
+
 const addFestivalSectionBtn = document.getElementById("addFestivalSectionBtn");
 const festivalSectionsContainer = document.getElementById("festivalSectionsContainer");
 
+// Creates one section box (title + content + image slot + remove button) —
+// used by both the manual "+ Section Add" button and the bulk-paste parser,
+// so parsed sections behave identically to hand-added ones (image can still
+// be attached to each one afterward, same as today).
+function createFestivalSectionBox(container, prefillTitle = "", prefillContent = "") {
+  const box = document.createElement("div");
+  box.className = "festival-section-box";
+  box.innerHTML = `
+    <h4>Festival Section</h4>
+    <input type="text" placeholder="Section Title" class="festival-section-title" value="${prefillTitle.replace(/"/g, "&quot;")}">
+    <textarea placeholder="Section Content" class="festival-section-content">${prefillContent}</textarea>
+    <div class="section-image-slot"><span>＋ Add Section Image</span></div>
+    <button class="remove-section-btn" type="button">Remove Section</button>
+  `;
+  container.appendChild(box);
+  const imageSlot = box.querySelector(".section-image-slot");
+  imageSlot.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    imageSlot.innerHTML = `<img src="${url}">`;
+    imageSlot.dataset.image = url;
+  });
+  box.querySelector(".remove-section-btn").addEventListener("click", () => box.remove());
+  return box;
+}
+
 if (addFestivalSectionBtn && festivalSectionsContainer) {
   addFestivalSectionBtn.addEventListener("click", () => {
-    const box = document.createElement("div");
-    box.className = "festival-section-box";
-    box.innerHTML = `
-      <h4>Festival Section</h4>
-      <input type="text" placeholder="Section Title" class="festival-section-title">
-      <textarea placeholder="Section Content" class="festival-section-content"></textarea>
-      <div class="section-image-slot"><span>＋ Add Section Image</span></div>
-      <button class="remove-section-btn">Remove Section</button>
-    `;
-    festivalSectionsContainer.appendChild(box);
-    const imageSlot = box.querySelector(".section-image-slot");
-    imageSlot.addEventListener("click", async () => {
-      const url = await uploadImage();
-      if (!url) return;
-      imageSlot.innerHTML = `<img src="${url}">`;
-      imageSlot.dataset.image = url;
-    });
-    box.querySelector(".remove-section-btn").addEventListener("click", () => box.remove());
+    createFestivalSectionBox(festivalSectionsContainer);
+  });
+}
+
+// Splits pasted text on lines starting with "##" into { title, content }
+// pairs. Everything between one "##" line and the next belongs to that
+// section's content, with blank lines preserved as authored.
+function parseBulkFestivalText(raw) {
+  const lines = raw.replace(/\r\n/g, "\n").split("\n");
+  const parsed = [];
+  let current = null;
+
+  lines.forEach((line) => {
+    const headingMatch = line.match(/^\s*##\s*(.*)$/);
+    if (headingMatch) {
+      if (current) parsed.push(current);
+      current = { title: headingMatch[1].trim(), contentLines: [] };
+    } else if (current) {
+      current.contentLines.push(line);
+    } else if (line.trim()) {
+      // Text appears before the first "##" heading — keep it instead of
+      // silently dropping it, just with no title.
+      current = { title: "", contentLines: [line] };
+    }
+  });
+  if (current) parsed.push(current);
+
+  return parsed
+    .map(s => ({ title: s.title, content: s.contentLines.join("\n").trim() }))
+    .filter(s => s.title || s.content);
+}
+
+const parseFestivalBulkBtn = document.getElementById("parseFestivalBulkBtn");
+const festivalBulkPaste = document.getElementById("festivalBulkPaste");
+if (parseFestivalBulkBtn && festivalBulkPaste) {
+  parseFestivalBulkBtn.addEventListener("click", () => {
+    const raw = festivalBulkPaste.value;
+    const sections = parseBulkFestivalText(raw);
+    const msgEl = document.getElementById("festivalMessage");
+    if (sections.length === 0) {
+      msgEl.innerText = "పార్స్ చేయడానికి ఏమీ దొరకలేదు — ## తో heading పెట్టారో చూడండి";
+      return;
+    }
+    sections.forEach(s => createFestivalSectionBox(festivalSectionsContainer, s.title, s.content));
+    festivalBulkPaste.value = "";
+    msgEl.innerText = `✅ ${sections.length} sections జోడించబడ్డాయి — ఇప్పుడు కావాలంటే ప్రతి section కి image పెట్టండి, తర్వాత Festival Save నొక్కండి`;
   });
 }
 
@@ -330,6 +388,12 @@ async function openFestivalInlineEditor(id) {
         ${festival.cardImage ? `<img src="${festival.cardImage}">` : `<span>＋ Festival Card Image</span>`}
       </div>
       <input class="inline-footer-quote" value="${festival.footerQuote || ""}" placeholder="Footer Quote">
+
+      <h3>మొత్తం Matter పేస్ట్ చేయండి</h3>
+      <p class="bulk-paste-hint">ప్రతి heading ముందు <code>##</code> పెట్టండి.</p>
+      <textarea class="inline-bulk-paste" placeholder="## Heading&#10;matter...&#10;&#10;## Heading 2&#10;matter..." rows="8"></textarea>
+      <button class="parse-inline-bulk-btn" type="button">Sections గా మార్చండి ⬇</button>
+
       <h3>Sections</h3>
       <div class="inline-sections-list">${sectionsHTML}</div>
       <button class="add-inline-section-btn">+ Add Section</button>
@@ -357,6 +421,21 @@ async function openFestivalInlineEditor(id) {
   editor.querySelector(".add-inline-section-btn").addEventListener("click", () => {
     editor.querySelector(".inline-sections-list").insertAdjacentHTML("beforeend", sectionHTML({}, "New"));
     attachEditorEvents();
+  });
+
+  editor.querySelector(".parse-inline-bulk-btn").addEventListener("click", () => {
+    const raw = editor.querySelector(".inline-bulk-paste").value;
+    const sections = parseBulkFestivalText(raw);
+    if (sections.length === 0) {
+      alert("పార్స్ చేయడానికి ఏమీ దొరకలేదు — ## తో heading పెట్టారో చూడండి");
+      return;
+    }
+    const list = editor.querySelector(".inline-sections-list");
+    sections.forEach(s => {
+      list.insertAdjacentHTML("beforeend", sectionHTML({ title: s.title, content: s.content }, "New"));
+    });
+    attachEditorEvents();
+    editor.querySelector(".inline-bulk-paste").value = "";
   });
 
   editor.querySelector(".save-inline-festival-btn").addEventListener("click", async () => {
