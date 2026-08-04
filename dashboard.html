@@ -186,23 +186,29 @@
       <!-- ═══════════════════════════════════
            FESTIVALS SECTION
       ═══════════════════════════════════ -->
-      <div id="festivalsSection" class="dash-section">
-        <div class="add-event-box">
-          <h2>కొత్త పండుగ జోడించండి</h2>
-          <input type="text" id="festivalTitle" placeholder="పండుగ పేరు">
-          <div id="festivalCardImageGrid" class="festival-card-upload-box">
-            <span>＋ Festival Card Image</span>
-          </div>
-          <input type="text" id="festivalFooterQuote" placeholder="Footer Quote">
-          <h3>Sections</h3>
-          <div id="festivalSectionsContainer"></div>
-          <button id="addFestivalSectionBtn">+ Section Add</button>
-          <button id="saveFestivalBtn">Festival Save</button>
-          <p id="festivalMessage"></p>
-        </div>
-        <h2 class="admin-section-title">అన్ని పండుగలు</h2>
-        <div id="adminFestivalsList"></div>
-      </div>
+     <div id="festivalsSection" class="dash-section">
+  <div class="add-event-box">
+    <h2>కొత్త పండుగ జోడించండి</h2>
+    <input type="text" id="festivalTitle" placeholder="పండుగ పేరు">
+    <div id="festivalCardImageGrid" class="festival-card-upload-box">
+      <span>＋ Festival Card Image</span>
+    </div>
+    <input type="text" id="festivalFooterQuote" placeholder="Footer Quote">
+
+    <h3>మొత్తం Matter పేస్ట్ చేయండి</h3>
+    <p class="bulk-paste-hint">ప్రతి heading ముందు <code>##</code> పెట్టండి. ఉదాహరణ:<br>## దసరా చరిత్ర<br>ఇక్కడ matter...<br>## జరుపుకునే విధానం<br>ఇక్కడ matter...</p>
+    <textarea id="festivalBulkPaste" placeholder="## మొదటి Heading&#10;మొదటి section matter ఇక్కడ పేస్ట్ చేయండి...&#10;&#10;## రెండవ Heading&#10;రెండవ section matter..." rows="8"></textarea>
+    <button id="parseFestivalBulkBtn" type="button">Sections గా మార్చండి ⬇</button>
+
+    <h3>Sections</h3>
+    <div id="festivalSectionsContainer"></div>
+    <button id="addFestivalSectionBtn">+ Section Add</button>
+    <button id="saveFestivalBtn">Festival Save</button>
+    <p id="festivalMessage"></p>
+  </div>
+  <h2 class="admin-section-title">అన్ని పండుగలు</h2>
+  <div id="adminFestivalsList"></div>
+</div>
 
 <!-- ═══════════════════════════════════
      TEMPLES SECTION
