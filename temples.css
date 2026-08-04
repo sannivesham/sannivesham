@@ -11,11 +11,9 @@ body.temple-detail-body {
   position: fixed;
   inset: 0;
   z-index: -1;
-
   background:
     linear-gradient(rgba(10, 5, 0, 0.68), rgba(10, 5, 0, 0.72)),
     url("images/temples-bg.jpg");
-
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -26,21 +24,23 @@ body.temple-detail-body {
     background:
       linear-gradient(rgba(10, 5, 0, 0.62), rgba(10, 5, 0, 0.68)),
       url("images/temples-mobile.jpg");
-
     background-size: cover;
     background-position: center top;
   }
 }
 
 /* =========================
-   TEMPLES / TEMPLE-LIST PAGES
-   (temples.html = categories grid, temple-list.html = temples inside a category)
+   PAGE WRAPPER
 ========================= */
 
 .temples-page {
   min-height: 100vh;
-  padding: 40px 20px 70px;
+  padding: 40px 20px 80px;
 }
+
+/* =========================
+   TITLE BOX
+========================= */
 
 .temples-title-box {
   max-width: 950px;
@@ -58,6 +58,13 @@ body.temple-detail-body {
   box-shadow:
     0 0 25px rgba(255, 209, 102, 0.25),
     0 18px 45px rgba(0, 0, 0, 0.45);
+
+  animation: titleFadeIn 0.7s ease both;
+}
+
+@keyframes titleFadeIn {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .temples-title-box h1 {
@@ -65,6 +72,12 @@ body.temple-detail-body {
   font-size: 54px;
   margin-bottom: 18px;
   text-shadow: 0 0 14px rgba(255, 209, 102, 0.35);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 14px rgba(255, 209, 102, 0.35); }
+  50%       { text-shadow: 0 0 28px rgba(255, 209, 102, 0.60), 0 0 50px rgba(255, 209, 102, 0.20); }
 }
 
 .temples-title-box p {
@@ -73,22 +86,23 @@ body.temple-detail-body {
   line-height: 1.9;
 }
 
-/* GRID — used for both category cards (temples.html) and temple cards (temple-list.html) */
+/* =========================
+   GRID
+========================= */
 
 .temples-grid {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 22px;
-
   max-width: 1700px;
   margin: 0 auto;
-
   place-items: center;
-  justify-content: center;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 
 .temple-card {
   width: 100%;
@@ -98,6 +112,7 @@ body.temple-detail-body {
   position: relative;
   overflow: hidden;
   border-radius: 26px;
+  cursor: pointer;
 
   background: rgba(8, 5, 2, 0.72);
   backdrop-filter: blur(12px);
@@ -108,16 +123,56 @@ body.temple-detail-body {
     0 0 40px rgba(255, 209, 102, 0.18),
     0 15px 35px rgba(0, 0, 0, 0.32);
 
-  transition: 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s ease;
+
+  animation: cardRise 0.6s ease both;
+}
+
+/* Staggered entrance for each card */
+.temple-card:nth-child(1)  { animation-delay: 0.05s; }
+.temple-card:nth-child(2)  { animation-delay: 0.10s; }
+.temple-card:nth-child(3)  { animation-delay: 0.15s; }
+.temple-card:nth-child(4)  { animation-delay: 0.20s; }
+.temple-card:nth-child(5)  { animation-delay: 0.25s; }
+.temple-card:nth-child(6)  { animation-delay: 0.30s; }
+.temple-card:nth-child(7)  { animation-delay: 0.35s; }
+.temple-card:nth-child(8)  { animation-delay: 0.40s; }
+.temple-card:nth-child(9)  { animation-delay: 0.45s; }
+.temple-card:nth-child(10) { animation-delay: 0.50s; }
+.temple-card:nth-child(11) { animation-delay: 0.55s; }
+.temple-card:nth-child(12) { animation-delay: 0.60s; }
+
+@keyframes cardRise {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 
 .temple-card:hover {
-  transform: translateY(-8px);
-
+  transform: translateY(-10px) scale(1.04);
   box-shadow:
-    0 0 34px rgba(255, 209, 102, 0.50),
-    0 0 55px rgba(255, 209, 102, 0.24),
-    0 20px 45px rgba(0, 0, 0, 0.38);
+    0 0 38px rgba(255, 209, 102, 0.55),
+    0 0 60px rgba(255, 209, 102, 0.24),
+    0 24px 50px rgba(0, 0, 0, 0.42);
+}
+
+/* Golden shimmer sweep on hover */
+.temple-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 209, 102, 0.18) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+}
+.temple-card:hover::before {
+  transform: translateX(100%);
 }
 
 .temple-card img {
@@ -125,91 +180,132 @@ body.temple-detail-body {
   height: 100%;
   object-fit: cover;
   filter: brightness(0.92) contrast(1.10);
-  transition: 0.45s ease;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+              filter 0.4s ease;
 }
 
 .temple-card:hover img {
-  transform: scale(1.06);
+  transform: scale(1.08);
+  filter: brightness(1.0) contrast(1.12);
 }
 
+/* Gradient overlay */
 .temple-card::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.32));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.04) 40%,
+    rgba(0, 0, 0, 0.70) 100%
+  );
+  transition: background 0.4s ease;
 }
 
+.temple-card:hover::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.02) 30%,
+    rgba(0, 0, 0, 0.80) 100%
+  );
+}
+
+/* Card name label */
 .temple-name {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
+  z-index: 3;
 
   padding: 18px 15px;
   text-align: center;
 
   color: #ffd166;
-  font-size: 28px;
+  font-size: 18px;
   font-weight: bold;
   text-shadow: 0 0 12px rgba(255, 209, 102, 0.45);
 
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.92));
+  transform: translateY(4px);
+  transition: transform 0.35s ease, color 0.3s ease;
 }
 
-/* TABLET */
+.temple-card:hover .temple-name {
+  transform: translateY(0px);
+  color: #ffe599;
+  text-shadow: 0 0 18px rgba(255, 209, 102, 0.70);
+}
+
+/* =========================
+   TABLET
+========================= */
 
 @media (max-width: 1100px) {
   .temples-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .temple-card {
+    max-width: 100%;
   }
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 700px) {
   .temples-page {
-    padding: 25px 15px 55px;
+    padding: 25px 15px 60px;
   }
 
   .temples-title-box {
     padding: 28px 22px;
     border-radius: 24px;
+    margin-bottom: 28px;
   }
 
   .temples-title-box h1 {
-    font-size: 38px;
+    font-size: 36px;
+    margin-bottom: 12px;
   }
 
   .temples-title-box p {
-    font-size: 17px;
-    line-height: 1.8;
+    font-size: 16px;
+    line-height: 1.7;
   }
 
   .temples-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
+    max-width: 100%;
   }
 
   .temple-card {
-    max-width: 210px;
-    height: 250px;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 18px;
   }
 
   .temple-name {
-    font-size: 20px;
-    padding: 14px 10px;
+    font-size: 15px;
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .temples-grid {
+    gap: 10px;
+  }
+  .temple-name {
+    font-size: 13px;
+    padding: 10px 6px;
   }
 }
 
 /* =========================
    TEMPLE DETAIL PAGE
-   Note: temple-detail.js renders each section using the shared
-   .festival-section / .festival-section-image classes (same component
-   festival-detail.js uses) — those live in festivals.css, so
-   temple-detail.html links both festivals.css and temples.css.
 ========================= */
 
 .temple-detail-page {
@@ -231,6 +327,13 @@ body.temple-detail-body {
   box-shadow:
     0 0 25px rgba(255, 209, 102, 0.25),
     0 18px 45px rgba(0, 0, 0, 0.45);
+
+  animation: detailFadeIn 0.6s ease both;
+}
+
+@keyframes detailFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .temple-detail-box h1 {
@@ -239,6 +342,7 @@ body.temple-detail-body {
   text-align: center;
   margin-bottom: 12px;
   text-shadow: 0 0 14px rgba(255, 209, 102, 0.35);
+  animation: glowPulse 3s ease-in-out infinite;
 }
 
 .temple-subtitle {
@@ -280,11 +384,24 @@ body.temple-detail-body {
   box-shadow:
     0 0 20px rgba(255, 209, 102, 0.28),
     0 15px 35px rgba(0, 0, 0, 0.38);
+
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.temple-inline-img:hover {
+  transform: scale(1.02);
+  box-shadow:
+    0 0 32px rgba(255, 209, 102, 0.42),
+    0 20px 48px rgba(0, 0, 0, 0.48);
 }
 
 .cow-img {
   width: 48%;
 }
+
+/* =========================
+   TEMPLE DETAIL MOBILE
+========================= */
 
 @media (max-width: 700px) {
   .temple-detail-page {
@@ -292,36 +409,38 @@ body.temple-detail-body {
   }
 
   .temple-detail-box {
-    padding: 28px 22px;
-    border-radius: 24px;
+    padding: 24px 18px;
+    border-radius: 20px;
   }
 
   .temple-detail-box h1 {
-    font-size: 40px;
+    font-size: 36px;
   }
 
   .temple-subtitle {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .temple-location {
-    font-size: 15px;
-    margin-bottom: 28px;
+    font-size: 14px;
+    margin-bottom: 24px;
   }
 
   .temple-detail-box h2 {
-    font-size: 28px;
+    font-size: 24px;
+    margin: 28px 0 12px;
   }
 
   .temple-detail-box p {
-    font-size: 17px;
-    line-height: 1.9;
+    font-size: 16px;
+    line-height: 1.85;
     text-align: left;
   }
 
   .temple-inline-img {
     width: 100%;
-    border-radius: 18px;
+    border-radius: 16px;
+    margin: 24px auto;
   }
 
   .cow-img {
