@@ -40,24 +40,108 @@
 
         </div>
 
-        <div class="test-announce-box" id="testAnnounceBox">
+        <div id="testAnnounceBox" style="
+          background: rgba(20, 12, 5, 0.62);
+          border: 1px solid rgba(255, 209, 102, 0.38);
+          border-radius: 26px;
+          backdrop-filter: blur(12px);
+          box-shadow: 0 0 28px rgba(255, 209, 102, 0.13);
+          text-align: center;
+          padding: 35px 25px;
+          margin-bottom: 30px;
+        ">
 
-            <h2>🕉️ ప్రత్యేక పరీక్ష</h2>
+          <h2 style="color:#ffd166; font-size:32px; margin-bottom:10px;">🕉️ ప్రత్యేక పరీక్ష</h2>
 
-            <p>శ్రీకృష్ణాష్టమి సందర్భంగా ప్రత్యేక పరీక్ష — సెప్టెంబర్ 4, 2026</p>
+          <p style="color:white; font-size:16px; margin-bottom:24px;">
+            శ్రీకృష్ణాష్టమి సందర్భంగా ప్రత్యేక పరీక్ష — సెప్టెంబర్ 4, 2026, రాత్రి 12:00 గంటలకు
+          </p>
 
-            <div class="test-countdown" id="testCountdown">
-                <div class="countdown-unit"><span id="cdDays">00</span><label>రోజులు</label></div>
-                <div class="countdown-unit"><span id="cdHours">00</span><label>గంటలు</label></div>
-                <div class="countdown-unit"><span id="cdMins">00</span><label>నిమిషాలు</label></div>
-                <div class="countdown-unit"><span id="cdSecs">00</span><label>సెకన్లు</label></div>
+          <div id="testCountdown" style="
+            display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+            margin-bottom:26px;
+          ">
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdDays" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">రోజులు</label>
             </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdHours" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">గంటలు</label>
+            </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdMins" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">నిమిషాలు</label>
+            </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdSecs" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">సెకన్లు</label>
+            </div>
+          </div>
 
-            <a href="test.html" class="test-start-btn" id="testStartBtn">
-                పరీక్ష ప్రారంభించండి ▶
-            </a>
+          <a href="test.html" id="testStartBtn" style="
+            display:inline-block; border:1px solid rgba(255,209,102,0.4); border-radius:35px;
+            padding:14px 32px; font-weight:bold; font-size:16px;
+            background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5);
+            text-decoration:none; pointer-events:none; cursor:default;
+          ">
+            ఇంకా ప్రారంభం కాలేదు
+          </a>
 
         </div>
+
+        <script>
+        (function () {
+          // Countdown target: Sep 4, 2026, 12:00 AM (midnight) IST — the start of
+          // Krishna Ashtami day.
+          var TEST_DATE = new Date("2026-09-04T00:00:00+05:30");
+
+          var daysEl = document.getElementById("cdDays");
+          var hoursEl = document.getElementById("cdHours");
+          var minsEl = document.getElementById("cdMins");
+          var secsEl = document.getElementById("cdSecs");
+          var startBtn = document.getElementById("testStartBtn");
+          var countdownBox = document.getElementById("testCountdown");
+
+          function pad(n) { return String(n).padStart(2, "0"); }
+
+          function unlockTest() {
+            clearInterval(timerId);
+            if (countdownBox) countdownBox.style.display = "none";
+            if (startBtn) {
+              startBtn.style.pointerEvents = "auto";
+              startBtn.style.cursor = "pointer";
+              startBtn.style.background = "#d4af37";
+              startBtn.style.color = "#111";
+              startBtn.textContent = "పరీక్ష ప్రారంభించండి ▶";
+              startBtn.setAttribute("href", "test.html");
+            }
+          }
+
+          function tick() {
+            var diff = TEST_DATE - new Date();
+            if (diff <= 0) { unlockTest(); return; }
+
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            var mins = Math.floor((diff / (1000 * 60)) % 60);
+            var secs = Math.floor((diff / 1000) % 60);
+
+            if (daysEl) daysEl.textContent = pad(days);
+            if (hoursEl) hoursEl.textContent = pad(hours);
+            if (minsEl) minsEl.textContent = pad(mins);
+            if (secsEl) secsEl.textContent = pad(secs);
+          }
+
+          var timerId = null;
+          if (TEST_DATE - new Date() <= 0) {
+            unlockTest();
+          } else {
+            tick();
+            timerId = setInterval(tick, 1000);
+          }
+        })();
+        </script>
 
         <div class="general-quiz-box">
 
@@ -248,8 +332,6 @@
     <script src="script.js"></script>
 
     <script type="module" src="quiz.js"></script>
-
-    <script src="test-countdown.js"></script>
 
     <script type="module">
       import { db } from "./firebase-config.js";
