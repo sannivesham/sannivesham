@@ -40,6 +40,25 @@
 
         </div>
 
+        <div class="test-announce-box" id="testAnnounceBox">
+
+            <h2>🕉️ ప్రత్యేక పరీక్ష</h2>
+
+            <p>శ్రీకృష్ణాష్టమి సందర్భంగా ప్రత్యేక పరీక్ష — సెప్టెంబర్ 4, 2026</p>
+
+            <div class="test-countdown" id="testCountdown">
+                <div class="countdown-unit"><span id="cdDays">00</span><label>రోజులు</label></div>
+                <div class="countdown-unit"><span id="cdHours">00</span><label>గంటలు</label></div>
+                <div class="countdown-unit"><span id="cdMins">00</span><label>నిమిషాలు</label></div>
+                <div class="countdown-unit"><span id="cdSecs">00</span><label>సెకన్లు</label></div>
+            </div>
+
+            <a href="test.html" class="test-start-btn" id="testStartBtn">
+                పరీక్ష ప్రారంభించండి ▶
+            </a>
+
+        </div>
+
         <div class="general-quiz-box">
 
             <h2>సాధారణ ప్రశ్నావళి</h2>
@@ -229,6 +248,8 @@
     <script src="script.js"></script>
 
     <script type="module" src="quiz.js"></script>
+
+    <script src="test-countdown.js"></script>
 
     <script type="module">
       import { db } from "./firebase-config.js";
