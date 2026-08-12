@@ -5934,3 +5934,8 @@ body { top: 0 !important; }
     right: 12px;
   }
 }
+
+/* Remove loader from all pages */
+#loader {
+  display: none !important;
+}
