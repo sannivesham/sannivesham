@@ -4,181 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <title>సన్నివేశం - తెలుగు సంస్కృతి, సంప్రదాయం, పండుగలు మరియు దేవాలయాలు</title>
-  <meta name="description" content="సన్నివేశం అనేది తెలుగు భాష, సంస్కృతి మరియు భారతీయ సంప్రదాయాలను ప్రోత్సహించే వేదిక — పండుగలు, దేవాలయాలు, కథలు, ఇతిహాసాలు మరియు క్విజ్‌లతో.">
-  <link rel="canonical" href="https://sannivesham.com/">
-  <link rel="icon" type="image/png" href="images/logo.png">
-
-  <!-- Open Graph tags — controls the preview card on WhatsApp/Facebook/etc -->
-  <meta property="og:title" content="సన్నివేశం - తెలుగు సంస్కృతి మరియు సంప్రదాయం">
-  <meta property="og:description" content="తెలుగు భాష, సంస్కృతి మరియు భారతీయ సంప్రదాయాలను ప్రోత్సహించే వేదిక.">
-  <meta property="og:image" content="https://sannivesham.com/images/logo.png">
-  <meta property="og:url" content="https://sannivesham.com/">
-  <meta property="og:type" content="website">
-
-  <!-- Organization Schema — helps Google/AI engines identify who you are -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "సన్నివేశం",
-    "alternateName": "Sannivesham",
-    "url": "https://sannivesham.com",
-    "logo": "https://sannivesham.com/images/logo.png",
-    "sameAs": [
-      "https://instagram.com/sannivesham",
-      "https://youtube.com/channel/UCcuQvVqqfsIrv19xpJV0juA",
-      "https://facebook.com/people"
-    ]
-  }
-  </script>
-
+  <title>సన్నివేశం - తెలుగు సంస్కృతి</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-    .game-sub-card {
-      background: rgba(237, 227, 200, 0.05);
-      border: 1px solid rgba(201, 162, 75, 0.3);
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .game-sub-card:hover {
-      transform: translateY(-3px);
-      border-color: #C9A24B;
-    }
-    .game-sub-icon {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-    .game-sub-title {
-      font-size: 1rem;
-      font-weight: 500;
-    }
-
-    .auth-modal {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: rgba(0, 0, 0, 0.75) !important;
-      z-index: 9999 !important;
-      align-items: center !important;
-      justify-content: center !important;
-      overflow-y: auto !important;
-    }
-    .auth-modal-box {
-      max-height: 85vh !important;
-      overflow-y: auto !important;
-      width: 90% !important;
-      max-width: 480px !important;
-      margin: auto !important;
-    }
-
-    .music-btn,
-    .profile-btn,
-    .lang-btn {
-      position: absolute !important;
-      top: 130px !important;
-      right: 20px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-decoration: none !important;
-    }
-    .profile-btn {
-      top: 190px !important;
-    }
-    .lang-btn {
-      top: 250px !important;
-      font-weight: bold !important;
-      font-size: 0.95rem !important;
-      border: none !important;
-      cursor: pointer !important;
-    }
-
-    .qotd-option-btn {
-      position: relative;
-      z-index: 2;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: rgba(255,255,255,0.15);
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-    }
-
-    .qotd-option-btn.correct-option {
-      background: #2ecc71 !important;
-      border-color: #2ecc71 !important;
-      color: #fff !important;
-    }
-    .qotd-option-btn.wrong-option {
-      background: #e74c3c !important;
-      border-color: #e74c3c !important;
-      color: #fff !important;
-    }
-    .qotd-option-btn.disabled-option {
-      opacity: 0.95;
-      cursor: default;
-      pointer-events: none;
-    }
-
-    @media (max-width: 700px) {
-      .category-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 14px !important;
-      }
-      .category-card {
-        position: relative !important;
-        display: block !important;
-        width: 100% !important;
-        aspect-ratio: 3 / 4 !important;
-        overflow: hidden !important;
-        height: auto !important;
-      }
-      .category-card img {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        object-position: center !important;
-        display: block !important;
-      }
-      .category-card .category-title {
-        position: absolute !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        margin: 0 !important;
-        padding: 10px !important;
-        background: rgba(0,0,0,0.55) !important;
-        text-align: center !important;
-      }
-    }
-  </style>
 </head>
 
-<body data-en-title="Sannivesham - Telugu Culture, Tradition, Festivals and Temples">
+<body>
 
   <div class="home-bg"></div>
+  </div>
 
   <div id="sponsorModal" class="sponsor-modal">
     <div class="sponsor-modal-box">
@@ -189,108 +22,126 @@
     </div>
   </div>
 
-  <!-- LEADERBOARD MODAL -->
-  <div id="leaderboardModal" class="auth-modal">
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="auth-modal">
     <div class="auth-modal-box">
-      <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2 data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</h2>
-      <div id="leaderboardList" class="leaderboard-list"></div>
-    </div>
-  </div>
+      <button class="auth-close-btn" id="loginCloseBtn">×</button>
+      <h2>లాగిన్ చేయండి</h2>
 
-  <!-- GAMES MODAL -->
-  <div id="gamesModal" class="auth-modal">
-    <div class="auth-modal-box">
-      <button class="auth-close-btn" id="gamesCloseBtn">×</button>
-      <h2 data-en="🎮 Games">🎮 ఆటల విభాగం</h2>
-      <p style="font-size: 0.9rem; color: var(--parchment-dim); margin-top: 4px;" data-en="Choose a game and track your progress.">ఆటను ఎంచుకుని మీ ప్రగతిని నమోదు చేయండి.</p>
-      <div class="games-grid">
-        <a href="https://sannivesham.github.io/word-search/" class="game-sub-card">
-          <div class="game-sub-icon">🔍</div>
-          <div class="game-sub-title" data-en="Word Search">పద శోధన</div>
-        </a>
-        <a href="https://sannivesham.github.io/Sliding-Puzzle/" class="game-sub-card">
-          <div class="game-sub-icon">🧩</div>
-          <div class="game-sub-title" data-en="Sliding Puzzle">చిత్ర గడులు</div>
-        </a>
-        <a href="https://sannivesham.github.io/sudoko/" class="game-sub-card">
-          <div class="game-sub-icon">🔢</div>
-          <div class="game-sub-title" data-en="Sudoku">సుడోకు</div>
-        </a>
-        <a href="https://sannivesham.github.io/connect-dots/" class="game-sub-card">
-          <div class="game-sub-icon">📍</div>
-          <div class="game-sub-title" data-en="Connect the Dots">జతపరుచు</div>
-        </a>
-        <a href="https://sannivesham.github.io/maze/" class="game-sub-card">
-          <div class="game-sub-icon">🌀</div>
-          <div class="game-sub-title" data-en="Maze">చిట్టడవి</div>
-        </a>
-        <a href="https://sannivesham.github.io/fisheye/" class="game-sub-card">
-          <div class="game-sub-icon">🏹</div>
-          <div class="game-sub-title" data-en="Fish-Eye Test">మత్స్యవేధం</div>
-        </a>
+      <div id="loginStep1">
+        <button id="googleLoginBtn" class="auth-google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
+        </button>
+        <div class="auth-divider">లేదా</div>
+        <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్" class="auth-input">
+        <div id="recaptcha-container"></div>
+        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
+        <p id="loginMsg" class="auth-msg"></p>
+      </div>
+
+      <div id="loginStep2" style="display:none;">
+        <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
+        <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
+        <p id="otpMsg" class="auth-msg"></p>
+      </div>
+
+      <div id="loginStep3" style="display:none;">
+        <p>మీ పేరు నమోదు చేయండి</p>
+        <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
+        <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
+        <p id="nameMsg" class="auth-msg"></p>
       </div>
     </div>
   </div>
 
+  <!-- PROFILE MODAL -->
+  <div id="profileModal" class="auth-modal">
+    <div class="auth-modal-box">
+      <button class="auth-close-btn" id="profileCloseBtn">×</button>
+      <div class="profile-avatar">👤</div>
+      <h2 id="profileName"></h2>
+      <div class="profile-score-badge">
+        ⭐ మీ స్కోర్: <span id="profileScore">0</span>
+      </div>
+      <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD MODAL -->
+  <div id="leaderboardModal" class="auth-modal">
+    <div class="auth-modal-box">
+      <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
+      <h2>🏆 లీడర్‌బోర్డ్</h2>
+      <div id="leaderboardList" class="leaderboard-list"></div>
+    </div>
+  </div>
+
   <nav class="glass-navbar">
-    <a href="#home" data-en="Home">ప్రారంభం</a>
-    <a href="#intro" data-en="Intro">పరిచయం</a>
-    <a href="#categories" data-en="Categories">విభాగాలు</a>
-    <a href="#about" data-en="About Us">మా గురించి</a>
-    <a href="#contact" data-en="Contact">సంప్రదించండి</a>
+    <a href="#home">ప్రారంభం</a>
+    <a href="#intro">పరిచయం</a>
+    <a href="#categories">విభాగాలు</a>
+    <a href="#about">మా గురించి</a>
+    <a href="#contact">సంప్రదించండి</a>
   </nav>
 
   <section id="home" class="home-page">
 
     <div class="top-brand">
       <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
+
       <div class="brand-text">
         <h1>సన్నివేశం</h1>
-        <p data-en="Culture • Tradition • Conversation">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+        <p>సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
       </div>
     </div>
-
     <div class="impact-box">
-      <div class="impact-card">
-        <span id="schoolCount">0</span>
-        <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
-      </div>
-      <div class="impact-card">
-        <span id="studentCount">0</span>
-        <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
-      </div>
-    </div>
+
+  <div class="impact-card">
+    <span id="schoolCount">0</span>
+    <p>📚 సందర్శించిన పాఠశాలలు</p>
+  </div>
+
+  <div class="impact-card">
+    <span id="studentCount">0</span>
+    <p>👨‍🎓 కలిసిన విద్యార్థులు</p>
+  </div>
+
+</div>
 
     <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
+
       <div id="qotdCard" class="qotd-card" style="display:none;">
-        <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
+        <h3>నేటి ప్రశ్న</h3>
         <p id="qotdQuestionText" class="qotd-question-text"></p>
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</button>
+          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ స్కోర్: 0</span>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 లీడర్‌బోర్డ్</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
-          <a id="qotdLoginBtn" href="profile.html" class="qotd-login-link" data-en="Log in to save your score">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</a>
+          <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
         </p>
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
-        <h3 data-en="Word of the Day">నేటి అంశం</h3>
+        <h3>నేటి పదం</h3>
+
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
+
     </div>
 
     <section id="intro" class="intro-box">
-      <h2 data-en="About Sannivesham">సన్నివేశం గురించి</h2>
-      <p data-en="Sannivesham is a cultural platform dedicated to promoting the Telugu language, Telugu culture, and Indian traditions. Our primary goal is to pass on the wisdom of our ancestors, spirituality, epics, temple history, and the significance of festivals to the younger generation.">
+      <h2>సన్నివేశం గురించి</h2>
+
+      <p>
         సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
         ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
         ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
         మా ప్రధాన లక్ష్యం.
       </p>
-      <p data-en="Through this platform, our aim is to cultivate respect for Indian culture, love for the Telugu language, and awareness of our traditions among students and young people.">
+
+      <p>
         ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
         తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
         మా ఆశయం.
@@ -298,68 +149,38 @@
     </section>
 
     <section id="categories" class="category-section">
-      <h2 class="category-heading" data-en="Categories">విభాగాలు</h2>
+      <h2 class="category-heading">విభాగాలు</h2>
 
       <div class="category-grid">
 
-        <a href="stories.html" class="category-card">
-          <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
-          <div class="category-title" data-en="Library">గ్రంథాలయం</div>
+        <a href="events.html" class="category-card">
+          <img id="eventsCardImg" src="images/events.png">
+          <div class="category-title">కార్యక్రమాలు</div>
         </a>
 
         <a href="festivals.html" class="category-card">
           <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు">
-          <div class="category-title" data-en="Festivals">పండుగలు</div>
+          <div class="category-title">పండుగలు</div>
         </a>
 
         <a href="temples.html" class="category-card">
           <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు">
-          <div class="category-title" data-en="Temples">దేవాలయాలు</div>
+          <div class="category-title">దేవాలయాలు</div>
         </a>
 
-        <a href="events.html" class="category-card">
-          <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు">
-          <div class="category-title" data-en="Events">కార్యక్రమాలు</div>
+        <a href="stories.html" class="category-card">
+          <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
+          <div class="category-title">కథలు</div>
         </a>
 
-        <div id="gamesCardTrigger" class="category-card" style="cursor: pointer;">
-          <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు">
-          <div class="category-title" data-en="Games">ఆటలు</div>
-        </div>
+        <a href="gita-slokas.html" class="category-card">
+          <img id="slokasCardImg" src="images/gita.png" alt="శ్లోకాలు">
+          <div class="category-title">శ్లోకాలు</div>
+        </a>
 
         <a href="quiz.html" class="category-card">
           <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్">
-          <div class="category-title" data-en="Quiz">ప్రశ్నావళి</div>
-        </a>
-
-        <a href="ithihasalu.html" class="category-card">
-          <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
-          <div class="category-title" data-en="Epics">ఇతిహాసాలు</div>
-        </a>
-
-        <a href="videos.html" class="category-card">
-          <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు">
-          <div class="category-title" data-en="Videos">దృశ్యచిత్రాలు</div>
-        </a>
-
-        <a href="https://sannivesham.github.io/calender/" class="category-card">
-          <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్">
-          <div class="category-title" data-en="Calendar">పంచాంగం</div>
-        </a>
-
-        <a href="chant-counter.html" class="category-card">
-          <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్">
-          <div class="category-title" data-en="Chant Counter">జప గణకం</div>
-        </a>
-
-        <a href="pooja-mandir.html" class="category-card">
-          <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది">
-          <div class="category-title" data-en="Pooja Room">ఉత్సవగణను</div>
-        </a>
-
-        <a href="https://sannivesham.github.io/store/" class="category-card">
-          <img id="storeCardImg" src="images/store.png" alt="స్టోర్">
-          <div class="category-title" data-en="Store">విక్రయశాల</div>
+          <div class="category-title">క్విజ్</div>
         </a>
 
       </div>
@@ -367,79 +188,121 @@
 
     <a href="about.html" id="about" class="about-card">
       <div class="about-overlay"></div>
+
       <div class="about-content">
-        <h2 data-en="About Us">మా గురించి</h2>
-        <p data-en="Learn about us, our team members, our goals, and the Sannivesham journey.">
-          మా గురించి, మా బృందం సభ్యులు,
+        <h2>మా గురించి</h2>
+        <p>
+          మా గురించి, మా టీమ్ సభ్యులు,
           మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
         </p>
       </div>
+
       <span class="about-arrow">➜</span>
     </a>
 
   </section>
 
   <section id="contact" class="contact-section">
-    <h2 data-en="Contact">సంప్రదించండి</h2>
+
+    <h2>సంప్రదించండి</h2>
+
     <div class="contact-container">
+
       <a id="homeInstagram" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/instagram.png" alt="Instagram">
         <span>Sannivesham</span>
       </a>
-      <a id="homeFacebook" href="javascript:void(0)" target="_blank" class="contact-box">
+
+      <a id="homeFacebook" href="#" target="_blank" class="contact-box">
         <img src="images/facebook.png" alt="Facebook">
         <span>Sannivesham</span>
       </a>
+
       <a id="homeYoutube" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/youtube.png" alt="YouTube">
         <span>Sannivesham</span>
       </a>
+
       <a id="homeWhatsapp" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/whatsapp.png" alt="WhatsApp">
         <span>WhatsApp</span>
       </a>
+
       <a id="homePhone" href="javascript:void(0)" class="contact-box">
         <img src="images/phone.png" alt="Phone">
         <span>Phone</span>
       </a>
+
       <a id="homeEmail" href="javascript:void(0)" class="contact-box">
         <img src="images/email.png" alt="Email">
         <span>Email</span>
       </a>
+
       <a id="homeWhatsappChannel" href="javascript:void(0)" target="_blank" class="whatsapp-channel-box">
+
         <div class="channel-text">
-          <h3 data-en="WhatsApp Channel">వాట్సాప్ ఛానల్</h3>
-          <p data-en="Join our WhatsApp channel for our events, updates, and cultural content.">
+          <h3>వాట్సాప్ ఛానల్</h3>
+
+          <p>
             మా కార్యక్రమాలు, అప్డేట్స్ మరియు
             సాంస్కృతిక విషయాల కోసం మా వాట్సాప్
             ఛానల్‌లో చేరండి.
           </p>
         </div>
-        <div class="join-btn" data-en="Join Channel">ఛానెల్‌లో చేరండి</div>
+
+        <div class="join-btn">
+          ఛానెల్‌లో చేరండి
+        </div>
+
       </a>
+
     </div>
+
   </section>
 
   <footer class="home-footer">
-    <p class="home-footer-quote" data-en="✨Culture is our soul • Tradition is our legacy • Telugu is our pride✨">
+
+    <p class="home-footer-quote">
       ✨సంస్కృతి మన ప్రాణం • సంప్రదాయం మన పరంపర • తెలుగు మన గౌరవం ✨
     </p>
-    <p class="home-footer-copy">© 2026 సన్నివేశం</p>
+
+    
+
+    <p class="home-footer-copy">
+      © 2026 సన్నివేశం
+    </p>
+
   </footer>
 
-  <script src="script.js?v=2"></script>
-  <script src="i18n.js"></script>
+  <script src="script.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, getDocs, collection, updateDoc, arrayUnion, increment
+      doc,
+      getDoc,
+      setDoc,
+      getDocs,
+      collection,
+      updateDoc,
+      arrayUnion,
+      increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import {
+      GoogleAuthProvider,
+      signInWithPopup,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
+    // ─── STATE ───────────────────────────────────────────
     let currentUser = null;
+    let qotdCorrectIndex = null;
+    let confirmationResult = null;
     let todayKey = getTodayKey();
 
     function getTodayKey() {
@@ -450,48 +313,148 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    document.getElementById("gamesCardTrigger").addEventListener("click", () => showModal("gamesModal"));
-    document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
-
-    loadQuestionOfDay();
-    loadWordOfDay();
-
-    // Just reflects login state on the profile icon — actual login/profile
-    // UI now lives entirely on profile.html
+    // ─── AUTH STATE ──────────────────────────────────────
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
-      const profileBtn = document.getElementById("profileBtn");
+
       if (user) {
-        profileBtn.innerText = "😊";
         const userSnap = await getDoc(doc(db, "users", user.uid));
-        if (userSnap.exists()) updateQotdScoreRow(userSnap.data());
+        if (!userSnap.exists()) {
+          showModal("loginModal");
+          showStep("loginStep3");
+        } else {
+          const data = userSnap.data();
+          document.getElementById("profileName").innerText = data.name || "User";
+          document.getElementById("profileScore").innerText = data.score || 0;
+          document.getElementById("profileBtn").innerText = "😊";
+          updateQotdScoreRow(data);
+        }
       } else {
-        profileBtn.innerText = "👤";
+        document.getElementById("profileBtn").innerText = "👤";
         showQotdLoginHint();
       }
-      loadQuestionOfDay();
     });
 
+    // ─── PROFILE BUTTON ──────────────────────────────────
+    document.getElementById("profileBtn").addEventListener("click", () => {
+      if (currentUser) {
+        showModal("profileModal");
+      } else {
+        showModal("loginModal");
+        showStep("loginStep1");
+      }
+    });
+
+    // ─── MODAL HELPERS ───────────────────────────────────
     function showModal(id) {
       document.querySelectorAll(".auth-modal").forEach(m => m.style.display = "none");
       document.getElementById(id).style.display = "flex";
     }
-    function hideModal(id) { document.getElementById(id).style.display = "none"; }
 
+    function hideModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function showStep(id) {
+      ["loginStep1","loginStep2","loginStep3"].forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = "none";
+      });
+      const target = document.getElementById(id);
+      if (target) target.style.display = "block";
+    }
+
+    document.getElementById("loginCloseBtn").addEventListener("click", () => hideModal("loginModal"));
+    document.getElementById("profileCloseBtn").addEventListener("click", () => hideModal("profileModal"));
     document.getElementById("leaderboardCloseBtn").addEventListener("click", () => hideModal("leaderboardModal"));
 
+    // Close on backdrop click
     document.querySelectorAll(".auth-modal").forEach(modal => {
-      modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
     });
 
+    // ─── GOOGLE LOGIN ─────────────────────────────────────
+    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
+      }
+    });
+
+    // ─── PHONE LOGIN ──────────────────────────────────────
+    document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+      const phone = document.getElementById("phoneInput").value.trim();
+      if (!phone) {
+        document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి";
+        return;
+      }
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+        }
+let formattedPhone = phone.replace(/\s+/g, "");
+if (!formattedPhone.startsWith("+")) {
+  formattedPhone = "+91" + formattedPhone;
+}
+confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
+        showStep("loginStep2");
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
+      }
+    });
+
+    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+      const otp = document.getElementById("otpInput").value.trim();
+      try {
+        const result = await confirmationResult.confirm(otp);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("otpMsg").innerText = "OTP తప్పుగా ఉంది";
+      }
+    });
+
+    async function checkAndSetName(user) {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (!userSnap.exists()) {
+        showStep("loginStep3");
+      } else {
+        hideModal("loginModal");
+      }
+    }
+
+    // ─── SAVE NAME ────────────────────────────────────────
+    document.getElementById("saveNameBtn").addEventListener("click", async () => {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) {
+        document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి";
+        return;
+      }
+      await setDoc(doc(db, "users", currentUser.uid), {
+        name,
+        score: 0,
+        answeredDates: []
+      });
+      document.getElementById("profileName").innerText = name;
+      document.getElementById("profileScore").innerText = 0;
+      document.getElementById("profileBtn").innerText = "😊";
+      hideModal("loginModal");
+    });
+
+    // ─── LOGOUT ───────────────────────────────────────────
+    document.getElementById("logoutUserBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      hideModal("profileModal");
+    });
+
+    // ─── BACKGROUND ──────────────────────────────────────
     async function loadHomeBackground() {
       try {
-        let snap;
-        try {
-          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
-        } catch (e) {
-          snap = await getDoc(doc(db, "settings", "backgrounds"));
-        }
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.querySelector(".home-bg");
@@ -501,10 +464,11 @@
         } else if (data.homePc) {
           bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
         }
-      } catch (e) {}
+      } catch (e) { console.log("Background Load Error:", e); }
     }
     loadHomeBackground();
 
+    // ─── HOME CARDS ──────────────────────────────────────
     async function loadHomeCards() {
       const snap = await getDoc(doc(db, "settings", "homeCards"));
       if (!snap.exists()) return;
@@ -515,18 +479,12 @@
       if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
       if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
       if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
-      if (data.itihasaluCard) document.getElementById("itihasaluCardImg").src = data.itihasaluCard;
-      if (data.videosCard) document.getElementById("videosCardImg").src = data.videosCard;
-      if (data.calendarCard) document.getElementById("calendarCardImg").src = data.calendarCard;
-      if (data.chantCounterCard) document.getElementById("chantCounterCardImg").src = data.chantCounterCard;
-      if (data.poojaRoomCard) document.getElementById("poojaRoomCardImg").src = data.poojaRoomCard;
-      if (data.storeCard) document.getElementById("storeCardImg").src = data.storeCard;
     }
     loadHomeCards();
 
+    // ─── SPONSOR POPUP ───────────────────────────────────
     async function loadSponsorPopup() {
       try {
-        if (sessionStorage.getItem("sponsorShown")) return;
         const snap = await getDoc(doc(db, "settings", "sponsor"));
         if (!snap.exists()) return;
         const data = snap.data();
@@ -534,15 +492,16 @@
         document.getElementById("sponsorImage").src = data.image;
         document.getElementById("sponsorLink").href = data.link || "#";
         document.getElementById("sponsorModal").style.display = "flex";
-        window._sponsorShowing = true;
-        sessionStorage.setItem("sponsorShown", "true");
-      } catch (e) {}
+        document.getElementById("sponsorModal").style.display = "flex";
+window._sponsorShowing = true;
+      } catch (e) { console.log("Sponsor Popup Load Error:", e); }
     }
     loadSponsorPopup();
     document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
       document.getElementById("sponsorModal").style.display = "none";
     });
 
+    // ─── QOTD ────────────────────────────────────────────
     async function loadQuestionOfDay() {
       try {
         const snap = await getDoc(doc(db, "qotd", todayKey));
@@ -550,30 +509,36 @@
         const data = snap.data();
         if (!data.question || !Array.isArray(data.options)) return;
 
+        qotdCorrectIndex = data.correct;
         document.getElementById("qotdQuestionText").innerText = data.question;
 
         const optionsBox = document.getElementById("qotdOptions");
         optionsBox.innerHTML = "";
 
+        // Check if already answered today
         let alreadyAnswered = false;
+        let alreadyCorrect = false;
         if (currentUser) {
           const userSnap = await getDoc(doc(db, "users", currentUser.uid));
           if (userSnap.exists()) {
-            alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
+            const ud = userSnap.data();
+            alreadyAnswered = (ud.answeredDates || []).includes(todayKey);
+            if (alreadyAnswered) alreadyCorrect = (ud.correctDates || []).includes(todayKey);
           }
         }
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
           btn.className = "qotd-option-btn";
-          btn.type = "button";
           btn.innerText = optionText;
+
           if (alreadyAnswered) {
             btn.classList.add("disabled-option");
             if (index === data.correct) btn.classList.add("correct-option");
           } else {
             btn.addEventListener("click", () => handleQotdAnswer(index, data.correct));
           }
+
           optionsBox.appendChild(btn);
         });
 
@@ -586,50 +551,54 @@
         } else {
           showQotdLoginHint();
         }
-      } catch (e) { console.log("QOTD Error:", e); }
+
+      } catch (e) { console.log("Question Of Day Load Error:", e); }
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
-      allBtns.forEach((b) => { b.disabled = true; b.classList.add("disabled-option"); });
-      if (selectedIndex === correctIndex) {
-        allBtns[selectedIndex].classList.add("correct-option");
-      } else {
+      allBtns.forEach((b, i) => {
+        b.classList.add("disabled-option");
+        if (i === correctIndex) b.classList.add("correct-option");
+      });
+
+      if (selectedIndex !== correctIndex) {
         allBtns[selectedIndex].classList.add("wrong-option");
-        allBtns[correctIndex]?.classList.add("correct-option");
       }
 
       if (currentUser) {
+        const isCorrect = selectedIndex === correctIndex;
         const userRef = doc(db, "users", currentUser.uid);
-        const freshSnap = await getDoc(userRef);
-        const freshData = freshSnap.exists() ? freshSnap.data() : {};
-        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
 
-        if (alreadyOnServer) {
-          updateQotdScoreRow(freshData);
-          return;
+        const updateData = {
+          answeredDates: arrayUnion(todayKey)
+        };
+
+        if (isCorrect) {
+          updateData.score = increment(1);
+          updateData.correctDates = arrayUnion(todayKey);
         }
 
-        const isCorrect = selectedIndex === correctIndex;
-        const updateData = { answeredDates: arrayUnion(todayKey) };
-        if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
         await updateDoc(userRef, updateData);
+
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          updateQotdScoreRow(userSnap.data());
+          const ud = userSnap.data();
+          document.getElementById("profileScore").innerText = ud.score || 0;
+          updateQotdScoreRow(ud);
         }
       }
     }
 
     function updateQotdScoreRow(userData) {
-      document.getElementById("qotdScoreRow").style.display = "flex";
-      document.getElementById("qotdLoginHint").style.display = "none";
-      const label = window.Sannivesham18n
-        ? window.Sannivesham18n.t("⭐ సాధించిన అంకాలు", "⭐ Score earned")
-        : "⭐ సాధించిన అంకాలు";
-      document.getElementById("qotdScoreDisplay").innerText = `${label}: ${userData.score || 0}`;
+      const scoreRow = document.getElementById("qotdScoreRow");
+      const scoreDisplay = document.getElementById("qotdScoreDisplay");
+      const loginHint = document.getElementById("qotdLoginHint");
+      scoreRow.style.display = "flex";
+      loginHint.style.display = "none";
+      scoreDisplay.innerText = `⭐ స్కోర్: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -637,34 +606,46 @@
       document.getElementById("qotdScoreRow").style.display = "none";
     }
 
+    document.getElementById("qotdLoginBtn")?.addEventListener("click", () => {
+      showModal("loginModal");
+      showStep("loginStep1");
+    });
+
+    // ─── LEADERBOARD ─────────────────────────────────────
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
       const listBox = document.getElementById("leaderboardList");
-      const t = window.Sannivesham18n ? window.Sannivesham18n.t : (te) => te;
-      listBox.innerHTML = `<p style='text-align:center;color:#ffd166'>${t("లోడ్ అవుతోంది...", "Loading...")}</p>`;
+      listBox.innerHTML = "<p style='text-align:center;color:#ffd166'>లోడ్ అవుతోంది...</p>";
+
       const snap = await getDocs(collection(db, "users"));
       const users = [];
       snap.forEach(d => {
         const ud = d.data();
-        if (ud.name && (ud.score || 0) > 0) users.push({ uid: d.id, name: ud.name, score: ud.score || 0 });
+        if (ud.name && (ud.score || 0) > 0) {
+          users.push({ uid: d.id, name: ud.name, score: ud.score || 0 });
+        }
       });
+
       users.sort((a, b) => b.score - a.score);
+
       if (users.length === 0) {
-        listBox.innerHTML = `<p style='text-align:center;color:white'>${t("ఇంకా స్కోర్లు లేవు", "No scores yet")}</p>`;
+        listBox.innerHTML = "<p style='text-align:center;color:white'>ఇంకా స్కోర్లు లేవు</p>";
         return;
       }
+
       const medals = ["🥇", "🥈", "🥉"];
       listBox.innerHTML = users.map((u, i) => {
         const isMe = currentUser && u.uid === currentUser.uid;
-        const youLabel = isMe ? ` ${t("(మీరు)", "(You)")}` : "";
+        const rank = medals[i] || `${i + 1}.`;
         return `<div class="lb-row${isMe ? " lb-row-me" : ""}">
-          <span class="lb-rank">${medals[i] || `${i + 1}.`}</span>
-          <span class="lb-name">${u.name}${youLabel}</span>
+          <span class="lb-rank">${rank}</span>
+          <span class="lb-name">${u.name}${isMe ? " (మీరు)" : ""}</span>
           <span class="lb-score">⭐ ${u.score}</span>
         </div>`;
       }).join("");
     });
 
+    // ─── WORD OF DAY ─────────────────────────────────────
     async function loadWordOfDay() {
       try {
         const snap = await getDoc(doc(db, "wordOfDay", todayKey));
@@ -674,69 +655,130 @@
         document.getElementById("wordOfDayText").innerText = data.text;
         document.getElementById("wordCard").style.display = "block";
         document.getElementById("qotdWordSection").style.display = "flex";
-      } catch (e) {}
+      } catch (e) { console.log("Word Of Day Load Error:", e); }
     }
+
+    loadQuestionOfDay();
+    loadWordOfDay();
   </script>
-
-  <script type="module" src="social-links.js"></script>
-
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="musicBtn" class="music-btn">🔊</button>
-  <a id="profileBtn" href="profile.html" class="profile-btn">👤</a>
-  <button id="langToggleBtn" class="music-btn lang-btn" title="View in English">EN</button>
+  <button id="musicBtn" class="music-btn">
+    🔊
+  </button>
 
-  <script src="music.js?v=2"></script>
+  <button id="profileBtn" class="profile-btn">
+    👤
+  </button>
 
-  <script>
-    function animateCounter(id, target) {
-      let count = 0;
-      const increment = Math.ceil(target / 100);
-      const el = document.getElementById(id);
-      const timer = setInterval(() => {
-        count += increment;
-        if (count >= target) { count = target; clearInterval(timer); }
-        el.innerText = id === "studentCount" ? count + "+" : count;
-      }, 20);
+  <!-- Language Toggle -->
+  <button id="langToggleBtn" class="lang-toggle-btn" title="Switch Language">
+    అ
+  </button>
+
+  <!-- Language Menu -->
+  <div id="langMenu" class="lang-menu" style="display:none;">
+    <button class="lang-menu-item active-lang" id="langTe" onclick="setLang('te')">తెలుగు</button>
+    <button class="lang-menu-item" id="langEn" onclick="setLang('en')">English</button>
+  </div>
+
+  <!-- Hidden Google Translate -->
+  <div id="google_translate_element" style="display:none;visibility:hidden;"></div>
+
+  <script src="music.js"></script>
+
+<script src="script.js"></script>
+
+<script>
+function animateCounter(id, target){
+
+  let count = 0;
+  const increment = Math.ceil(target / 100);
+
+  const timer = setInterval(() => {
+
+    count += increment;
+
+    if(count >= target){
+      count = target;
+      clearInterval(timer);
     }
 
-    function setFinalCounters() {
-      const schoolEl = document.getElementById("schoolCount");
-      const studentEl = document.getElementById("studentCount");
-      if (schoolEl) schoolEl.innerText = 10;
-      if (studentEl) studentEl.innerText = "2000+";
+    document.getElementById(id).innerText =
+    id === "studentCount" ? count + "+" : count;
+
+
+  },20);
+}
+
+function startCounters() {
+  animateCounter("schoolCount", 10);
+  animateCounter("studentCount", 2000);
+}
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (window._sponsorShowing) {
+      document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
+        startCounters();
+      }, { once: true });
+    } else {
+      startCounters();
+    }
+  }, 1500);
+});
+</script>
+
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'te',
+        includedLanguages: 'en,te',
+        autoDisplay: false
+      }, 'google_translate_element');
     }
 
-    function startCounters() {
-      if (sessionStorage.getItem("countersShown")) {
-        setFinalCounters();
-        return;
+    function setLang(lang) {
+      const menu = document.getElementById('langMenu');
+      const btn = document.getElementById('langToggleBtn');
+      menu.style.display = 'none';
+
+      document.getElementById('langTe').classList.toggle('active-lang', lang === 'te');
+      document.getElementById('langEn').classList.toggle('active-lang', lang === 'en');
+
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = lang === 'en' ? 'en' : 'te';
+        select.dispatchEvent(new Event('change'));
       }
-      animateCounter("schoolCount", 10);
-      animateCounter("studentCount", 2000);
-      sessionStorage.setItem("countersShown", "true");
+
+      btn.innerText = lang === 'en' ? 'En' : 'అ';
+      localStorage.setItem('sannivesham_lang', lang);
     }
 
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        if (window._sponsorShowing) {
-          document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
-            startCounters();
-          }, { once: true });
-        } else {
-          startCounters();
-        }
-      }, 1500);
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('langToggleBtn');
+      const menu = document.getElementById('langMenu');
 
-    window.addEventListener("pageshow", (event) => {
-      if (event.persisted) {
-        setFinalCounters();
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.addEventListener('click', () => {
+        menu.style.display = 'none';
+      });
+
+      // Restore saved lang
+      const saved = localStorage.getItem('sannivesham_lang');
+      if (saved === 'en') {
+        setTimeout(() => setLang('en'), 1500);
       }
     });
   </script>
-
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
