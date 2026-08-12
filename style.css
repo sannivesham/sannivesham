@@ -130,7 +130,6 @@ body {
 /* =========================
    NAVBAR
 ========================= */
-
 .glass-navbar {
   position: sticky;
   top: 48px;
@@ -182,7 +181,6 @@ body {
 
   transform: translateY(-2px);
 }
-
 /* =========================
    HOME PAGE
 ========================= */
@@ -206,7 +204,7 @@ body {
 
   gap: 28px;
 
-  margin-bottom: 55px;
+  margin-bottom: 15px;
 
   padding: 25px;
 }
@@ -293,7 +291,7 @@ body {
   width: 100%;
   max-width: 900px;
 
-  margin: 60px auto;
+  margin: 15px auto;
 
   padding: 40px;
 
@@ -373,7 +371,7 @@ body {
 
   width: 100%;
 
-  padding: 130px 20px 70px;
+  padding: 20px 20px 70px;
 }
 
 .events-page h1 {
@@ -457,6 +455,33 @@ body {
 
 .event-gallery img:hover {
   transform: scale(1.03);
+}
+
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 700px) {
+  .music-btn {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    right: 16px;
+    z-index: 10000;
+  }
 }
 
 /* =========================
@@ -1032,11 +1057,11 @@ body {
 
   .glass-navbar {
 
-    width: 88%;
+    width: 94%;
 
-    margin: 52px auto 0;
+    margin: 12px auto 0;
 
-    padding: 10px 14px;
+    padding: 12px 18px;
 
     display: flex;
 
@@ -1044,7 +1069,7 @@ body {
 
     justify-content: flex-start;
 
-    gap: 6px;
+    gap: 18px;
 
     overflow-x: auto;
 
@@ -1069,9 +1094,9 @@ body {
 
     white-space: nowrap;
 
-    font-size: 14px;
+    font-size: 15px;
 
-    padding: 7px 9px;
+    padding: 8px 10px;
   }
 
 
@@ -1644,7 +1669,7 @@ body {
   left: 0;
 
   width: 100vw;
-  height: 100lvh;
+  height: 100vh;
 
   z-index: -999;
   pointer-events: none;
@@ -1661,7 +1686,7 @@ body {
 
 @media (max-width: 700px) {
   .home-bg {
-    height: 100lvh;
+    height: 100vh;
 
     background:
       linear-gradient(rgba(10, 5, 0, 0.45),
@@ -1674,406 +1699,7 @@ body {
   }
 }
 
-/* FESTIVALS PAGE */
 
-body.festivals-body {
-  background: transparent !important;
-}
-
-.festivals-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
-  background:
-    linear-gradient(rgba(15, 8, 3, 0.80), rgba(15, 8, 3, 0.80)),
-    url("images/festivals-bg.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.festivals-page {
-  min-height: 100vh;
-  padding: 130px 25px 70px;
-}
-
-.festivals-page h1 {
-  text-align: center;
-  color: #ffd166;
-  font-size: 56px;
-  margin-bottom: 10px;
-}
-
-.festivals-subtitle {
-  text-align: center;
-  color: white;
-  font-size: 21px;
-  margin-bottom: 45px;
-}
-
-.festivals-grid {
-  max-width: 1300px;
-  margin: auto;
-  justify-content: center;
-
-  place-items: center;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 22px;
-}
-
-.festival-card {
-  height: 210px;
-
-  position: relative;
-
-  overflow: hidden;
-
-  border-radius: 24px;
-
-  background: rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 18px rgba(255, 209, 102, 0.45),
-    0 0 38px rgba(255, 183, 3, 0.25),
-    0 15px 35px rgba(0, 0, 0, 0.35);
-
-  text-decoration: none;
-
-  transition: 0.35s ease;
-}
-
-.festival-card img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: 80%;
-
-  object-position: center;
-
-  transition: 0.45s ease;
-}
-
-.festival-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.15));
-}
-
-.festival-name {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  padding: 14px;
-  text-align: center;
-
-  color: #ffd166;
-  font-size: 22px;
-  font-weight: bold;
-
-  background: rgba(15, 10, 5, 0.58);
-}
-
-.festival-card:hover {
-  transform: translateY(-8px) scale(1.03);
-}
-
-.festival-card:hover img {
-  transform: scale(1.1);
-}
-
-.footer-quote {
-  color: #ffd166;
-  font-size: 20px;
-  margin-bottom: 18px;
-}
-
-@media (max-width: 700px) {
-  .festivals-bg {
-    background:
-      linear-gradient(rgba(15, 8, 3, 0.60), rgba(15, 8, 3, 0.60)),
-      url("images/festivals-mobile.jpg");
-
-    background-size: contain;
-    background-position: center top;
-  }
-
-  .festivals-page h1 {
-    font-size: 40px;
-  }
-
-  .festivals-subtitle {
-    font-size: 17px;
-  }
-
-  .festivals-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-
-  .festival-card {
-    height: 145px;
-    border-radius: 18px;
-  }
-
-  .festival-name {
-    font-size: 16px;
-    padding: 9px;
-  }
-}
-
-.festivals-title-box {
-  max-width: 900px;
-
-  margin: 0 auto 50px;
-
-  padding: 35px 25px;
-
-  text-align: center;
-
-  background: rgba(10, 8, 5, 0.62);
-
-  backdrop-filter: blur(14px);
-
-  -webkit-backdrop-filter: blur(14px);
-
-  border-radius: 32px;
-
-  border: 1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 25px rgba(255, 209, 102, 0.25),
-    0 18px 45px rgba(0, 0, 0, 0.45);
-}
-
-.festivals-title-box h1 {
-  color: #ffd166;
-  font-size: 56px;
-  margin-bottom: 10px;
-}
-
-.festivals-subtitle {
-  color: white;
-  font-size: 21px;
-}
-
-.festival-card {
-  box-shadow:
-    0 0 18px rgba(255, 209, 102, 0.45),
-    0 0 38px rgba(255, 183, 3, 0.25),
-    0 15px 35px rgba(0, 0, 0, 0.35);
-}
-
-.festival-name {
-  color: #ffd166 !important;
-  text-align: center;
-  text-shadow: 0 0 12px rgba(255, 209, 102, 0.55);
-}
-
-@media (max-width: 700px) {
-  .festivals-body .glass-navbar {
-    justify-content: center;
-  }
-}
-
-.festivals-page {
-  min-height: 100vh;
-}
-
-.festivals-grid {
-  margin-bottom: 120px;
-}
-
-/* INDIVIDUAL FESTIVAL PAGE */
-
-body.diwali-body {
-  background: transparent !important;
-}
-
-.diwali-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
-  background:
-    linear-gradient(rgba(15, 8, 3, 0.68), rgba(15, 8, 3, 0.68)),
-    url("images/diwali-bg.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.festival-detail-page {
-  min-height: 100vh;
-  padding: 130px 20px 70px;
-}
-
-.festival-detail-box {
-  max-width: 950px;
-  margin: auto;
-  padding: 45px;
-
-  background: rgba(10, 8, 5, 0.62);
-  backdrop-filter: blur(14px);
-
-  border-radius: 32px;
-  border: 1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 25px rgba(255, 209, 102, 0.25),
-    0 18px 45px rgba(0, 0, 0, 0.45);
-}
-
-.festival-detail-box h1 {
-  color: #ffd166;
-  font-size: 56px;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.festival-detail-box h2 {
-  color: #ffd166;
-  font-size: 34px;
-  margin: 30px 0 15px;
-}
-
-.festival-detail-box p {
-  color: white;
-  font-size: 20px;
-  line-height: 2;
-  margin-bottom: 22px;
-  text-align: justify;
-}
-
-.festival-inline-img {
-  width: 70%;
-  display: block;
-  margin: 30px auto;
-
-  border-radius: 24px;
-  border: 1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 18px rgba(255, 209, 102, 0.30),
-    0 15px 35px rgba(0, 0, 0, 0.35);
-}
-
-@media (max-width: 700px) {
-
-  .diwali-bg {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    z-index: -1;
-
-    background:
-      linear-gradient(rgba(15, 8, 3, 0.62),
-        rgba(15, 8, 3, 0.62)),
-      url("images/diwali-mobile.jpg");
-
-    background-size: cover;
-
-    background-position: center top;
-
-    background-repeat: no-repeat;
-
-    transform: translateZ(0);
-  }
-
-  .festival-detail-page {
-    padding: 110px 15px 50px;
-  }
-
-  .festival-detail-box {
-    padding: 25px;
-    border-radius: 24px;
-  }
-
-  .festival-detail-box h1 {
-    font-size: 38px;
-  }
-
-  .festival-detail-box h2 {
-    font-size: 27px;
-  }
-
-  .festival-detail-box p {
-    font-size: 17px;
-    line-height: 1.9;
-    text-align: left;
-  }
-
-  .festival-inline-img {
-    width: 100%;
-    border-radius: 18px;
-  }
-}
-
-body.ugadi-body {
-  background: transparent !important;
-}
-
-.ugadi-bg {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: -1;
-
-  background:
-    linear-gradient(rgba(15, 8, 3, 0.62),
-      rgba(15, 8, 3, 0.62)),
-    url("images/ugadi-bg.jpg");
-
-  background-size: cover;
-
-  background-position: center;
-
-  background-repeat: no-repeat;
-}
-
-@media (max-width: 700px) {
-
-  .ugadi-bg {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    z-index: -1;
-
-    background:
-      linear-gradient(rgba(15, 8, 3, 0.62),
-        rgba(15, 8, 3, 0.62)),
-      url("images/ugadi-mobile.jpg");
-
-    background-size: cover;
-
-    background-position: center top;
-
-    background-repeat: no-repeat;
-
-    transform: translateZ(0);
-  }
-
-}
 
 /* HOME FOOTER */
 
@@ -2472,527 +2098,7 @@ body.about-body {
 
 }
 
-/* TEMPLES PAGE */
 
-body.temples-body {
-  background: transparent !important;
-}
-
-.temples-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
-  background:
-    linear-gradient(rgba(10, 5, 0, 0.68),
-      rgba(10, 5, 0, 0.72)),
-    url("images/temples-bg.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* PAGE */
-
-.temples-page {
-  min-height: 100vh;
-
-  padding: 130px 20px 70px;
-}
-
-/* TITLE BOX */
-
-.temples-title-box {
-  max-width: 950px;
-
-  margin: 0 auto 55px;
-
-  padding: 38px 32px;
-
-  text-align: center;
-
-  background: rgba(10, 8, 5, 0.62);
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border-radius: 32px;
-
-  border:
-    1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 25px rgba(255, 209, 102, 0.25),
-    0 18px 45px rgba(0, 0, 0, 0.45);
-}
-
-.temples-title-box h1 {
-  color: #ffd166;
-
-  font-size: 54px;
-
-  margin-bottom: 18px;
-
-  text-shadow:
-    0 0 14px rgba(255, 209, 102, 0.35);
-}
-
-.temples-title-box p {
-  color: white;
-
-  font-size: 20px;
-
-  line-height: 1.9;
-}
-
-/* GRID */
-
-.temples-grid {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns: repeat(6, 1fr);
-
-  gap: 22px;
-
-  max-width: 1700px;
-
-  margin: 0 auto;
-
-  place-items: center;
-  justify-content: center;
-}
-
-/* CARD */
-
-.temple-card {
-  width: 100%;
-
-  max-width: 210px;
-
-  aspect-ratio: 1 / 1;
-
-  position: relative;
-
-  overflow: hidden;
-
-  border-radius: 26px;
-
-  background: rgba(8, 5, 2, 0.72);
-  backdrop-filter: blur(12px);
-
-  border:
-    1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 24px rgba(255, 209, 102, 0.38),
-    0 0 40px rgba(255, 209, 102, 0.18),
-    0 15px 35px rgba(0, 0, 0, 0.32);
-
-  transition: 0.4s ease;
-}
-
-.temple-card:hover {
-  transform: translateY(-8px);
-
-  box-shadow:
-    0 0 34px rgba(255, 209, 102, 0.50),
-    0 0 55px rgba(255, 209, 102, 0.24),
-    0 20px 45px rgba(0, 0, 0, 0.38);
-}
-
-/* IMAGE */
-
-.temple-card img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  transition: 0.45s ease;
-}
-
-.temple-card:hover img {
-  transform: scale(1.06);
-}
-
-.temple-card::after {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.08),
-      rgba(0, 0, 0, 0.32));
-
-  z-index: 1;
-}
-
-.temple-card img {
-  filter:
-    brightness(0.92) contrast(1.10);
-}
-
-/* NAME */
-
-.temple-name {
-  position: absolute;
-
-  left: 0;
-  bottom: 0;
-
-  width: 100%;
-
-  padding: 18px 15px;
-
-  text-align: center;
-
-  color: #ffd166;
-
-  font-size: 28px;
-
-  font-weight: bold;
-
-  background:
-    linear-gradient(transparent,
-      rgba(0, 0, 0, 0.92));
-
-  text-shadow:
-    0 0 12px rgba(255, 209, 102, 0.45);
-}
-
-/* TABLET */
-
-@media (max-width: 1100px) {
-
-  .temples-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-}
-
-/* MOBILE */
-
-@media (max-width: 700px) {
-
-  .temples-bg {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    z-index: -1;
-
-    background:
-      linear-gradient(rgba(10, 5, 0, 0.62),
-        rgba(10, 5, 0, 0.68)),
-      url("images/temples-mobile.jpg");
-
-    background-size: cover;
-
-    background-position: center top;
-
-    background-repeat: no-repeat;
-
-    transform: translateZ(0);
-  }
-
-  .temples-page {
-    padding: 110px 15px 55px;
-  }
-
-  .temples-title-box {
-    padding: 28px 22px;
-
-    border-radius: 24px;
-  }
-
-  .temples-title-box h1 {
-    font-size: 38px;
-  }
-
-  .temples-title-box p {
-    font-size: 17px;
-
-    line-height: 1.8;
-  }
-
-
-
-  .temples-grid {
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 14px;
-  }
-
-
-  .temple-card {
-    max-width: 210px;
-
-    height: 250px;
-  }
-
-  .temple-name {
-    font-size: 20px;
-
-    padding: 14px 10px;
-  }
-
-}
-
-/* FINAL MOBILE NAVBAR FIX - KEEP THIS AT VERY BOTTOM */
-
-@media screen and (max-width: 700px) {
-
-  body .glass-navbar {
-    width: calc(100vw - 24px) !important;
-    max-width: calc(100vw - 24px) !important;
-
-    margin-left: 12px !important;
-    margin-right: 12px !important;
-    margin-top: 12px !important;
-
-    padding-left: 14px !important;
-    padding-right: 18px !important;
-
-    justify-content: flex-start !important;
-    align-items: center !important;
-
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-
-    white-space: nowrap !important;
-
-    transform: none !important;
-    left: auto !important;
-    right: auto !important;
-  }
-
-  body .glass-navbar::before {
-    display: none !important;
-    content: none !important;
-  }
-
-  body .glass-navbar a {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-  }
-}
-
-/* TIRUMALA PAGE */
-
-body.tirumala-body {
-  background: transparent !important;
-}
-
-.tirumala-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
-  background:
-    linear-gradient(rgba(10, 5, 0, 0.68), rgba(10, 5, 0, 0.68)),
-    url("images/tirumala-bg.jpg");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-@media (max-width: 700px) {
-  .tirumala-bg {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-
-    background:
-      linear-gradient(rgba(10, 5, 0, 0.62), rgba(10, 5, 0, 0.62)),
-      url("images/tirumala-mobile.jpg");
-
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-  }
-}
-
-/* TEMPLE DETAIL PAGE */
-
-.temple-detail-page {
-  min-height: 100vh;
-
-  padding: 130px 20px 70px;
-}
-
-.temple-detail-box {
-  max-width: 980px;
-
-  margin: auto;
-
-  padding: 45px;
-
-  background: rgba(10, 8, 5, 0.42);
-
-  backdrop-filter: blur(10px);
-
-  border-radius: 32px;
-
-  border:
-    1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 25px rgba(255, 209, 102, 0.25),
-    0 18px 45px rgba(0, 0, 0, 0.45);
-}
-
-/* TITLE */
-
-.temple-detail-box h1 {
-  color: #ffd166;
-
-  font-size: 58px;
-
-  text-align: center;
-
-  margin-bottom: 12px;
-
-  text-shadow:
-    0 0 14px rgba(255, 209, 102, 0.35);
-}
-
-/* SUBTITLE */
-
-.temple-subtitle {
-  color: white;
-
-  text-align: center;
-
-  font-size: 28px;
-
-  margin-bottom: 10px;
-}
-
-/* LOCATION */
-
-.temple-location {
-  color: rgba(255, 255, 255, 0.82);
-
-  text-align: center;
-
-  font-size: 18px;
-
-  margin-bottom: 40px;
-}
-
-/* HEADINGS */
-
-.temple-detail-box h2 {
-  color: #ffd166;
-
-  font-size: 36px;
-
-  margin:
-    40px 0 18px;
-}
-
-/* PARAGRAPHS */
-
-.temple-detail-box p {
-  color: white;
-
-  font-size: 20px;
-
-  line-height: 2;
-
-  margin-bottom: 22px;
-
-  text-align: justify;
-}
-
-/* IMAGES */
-
-.temple-inline-img {
-  width: 70%;
-
-  display: block;
-
-  margin: 35px auto;
-
-  border-radius: 26px;
-
-  border:
-    1px solid rgba(255, 209, 102, 0.45);
-
-  box-shadow:
-    0 0 20px rgba(255, 209, 102, 0.28),
-    0 15px 35px rgba(0, 0, 0, 0.38);
-}
-
-.cow-img {
-  width: 48%;
-}
-
-/* MOBILE */
-
-@media (max-width: 700px) {
-
-  .temple-detail-page {
-    padding: 110px 15px 55px;
-  }
-
-  .temple-detail-box {
-    padding: 28px 22px;
-
-    border-radius: 24px;
-  }
-
-  .temple-detail-box h1 {
-    font-size: 40px;
-  }
-
-  .temple-subtitle {
-    font-size: 22px;
-  }
-
-  .temple-location {
-    font-size: 15px;
-
-    margin-bottom: 28px;
-  }
-
-  .temple-detail-box h2 {
-    font-size: 28px;
-  }
-
-  .temple-detail-box p {
-    font-size: 17px;
-
-    line-height: 1.9;
-
-    text-align: left;
-  }
-
-  .temple-inline-img {
-    width: 100%;
-
-    border-radius: 18px;
-  }
-
-}
-
-@media (max-width: 700px) {
-
-  .cow-img {
-    width: 85%;
-  }
-
-}
 
 /* STORIES PAGE */
 
@@ -5678,7 +4784,7 @@ button[class*="delete"] {
     justify-content: center;
     align-items: center;
     gap: 16px;
-    margin: 30px auto;
+    margin: 10px auto;
     width: fit-content;
     padding: 20px 30px;
     background: rgba(255,255,255,0.05);
@@ -5847,95 +4953,81 @@ button[class*="delete"] {
     }
 }
 
-/* =========================
-   LANGUAGE TOGGLE BUTTON
-========================= */
-
-.lang-toggle-btn {
-  position: fixed;
-  top: 155px;
-  right: 25px;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,215,0,0.4);
-  background: rgba(30,20,10,0.9);
-  color: #ffd76a;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 99999;
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 15px rgba(255,215,0,0.25);
-  transition: 0.2s ease;
+.admin-section-title {
+  color: #FFD166;
+  text-align: center;
+  font-size: 30px;
+  margin: 35px 0 20px;
 }
 
-.lang-toggle-btn:hover {
-  background: rgba(255,209,102,0.15);
-  transform: scale(1.05);
+.qotd-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
 }
 
-.lang-menu {
-  position: fixed;
-  top: 218px;
-  right: 20px;
-  z-index: 99998;
-  background: rgba(20,12,5,0.97);
-  border: 1px solid rgba(255,209,102,0.4);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
-  min-width: 110px;
-  animation: langMenuIn 0.18s ease;
-}
-
-@keyframes langMenuIn {
-  from { opacity:0; transform: scale(0.92) translateY(-6px); }
-  to   { opacity:1; transform: scale(1) translateY(0); }
-}
-
-.lang-menu-item {
+.qotd-option-btn {
   width: 100%;
-  padding: 12px 18px;
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  font-size: 14px;
-  font-weight: 600;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 162, 75, 0.3);
+  background: rgba(237, 227, 200, 0.05);
+  color: #fff;
   cursor: pointer;
   text-align: left;
-  transition: 0.15s;
-  border-bottom: 1px solid rgba(255,209,102,0.1);
+  font-size: 1rem;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
 }
 
-.lang-menu-item:last-child { border-bottom: none; }
-.lang-menu-item:hover { background: rgba(255,209,102,0.1); color: #ffd166; }
-.lang-menu-item.active-lang { color: #ffd166; }
-
-/* Hide Google Translate bar */
-.goog-te-banner-frame { display: none !important; }
-body { top: 0 !important; }
-.skiptranslate { display: none !important; }
-#google_translate_element { display: none !important; }
-
-@media (max-width: 500px) {
-  .lang-toggle-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 16px;
-    top: 210px;
-    right: 15px;
-  }
-  .lang-menu {
-    top: 268px;
-    right: 12px;
-  }
+.qotd-option-btn:hover:not(.disabled-option) {
+  transform: translateY(-2px);
+  border-color: #C9A24B;
 }
 
-/* Remove loader from all pages */
-#loader {
-  display: none !important;
+.qotd-option-btn.correct-option {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.15);
+}
+
+.qotd-option-btn.wrong-option {
+  border-color: #e53935;
+  background: rgba(229, 57, 53, 0.15);
+}
+
+.qotd-option-btn.disabled-option {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Mobile: stack one above another */
+@media (max-width: 700px) {
+  .qotd-options {
+    grid-template-columns: 1fr;
+  }
+}
+.qotd-options {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin: 16px 0 !important;
+}
+
+.qotd-option-btn {
+  display: block !important;
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(201, 162, 75, 0.3) !important;
+  background: rgba(237, 227, 200, 0.05) !important;
+  color: #fff !important;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .qotd-options {
+    grid-template-columns: 1fr !important;
+  }
 }
