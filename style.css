@@ -133,6 +133,8 @@ body {
 
 /* FINAL MOBILE NAVBAR FIX - KEEP THIS AT VERY BOTTOM */
 
+/* FINAL MOBILE NAVBAR FIX - KEEP THIS AT VERY BOTTOM */
+
 @media screen and (max-width: 700px) {
 
   body .glass-navbar {
@@ -141,12 +143,10 @@ body {
 
     margin-left: 12px !important;
     margin-right: 12px !important;
-    margin-top: 32px !important;
+    margin-top: 12px !important;
 
     padding-left: 14px !important;
     padding-right: 18px !important;
-
-    gap: 12px !important;
 
     justify-content: flex-start !important;
     align-items: center !important;
