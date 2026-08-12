@@ -93,7 +93,8 @@
     }
 
     .music-btn,
-    .profile-btn {
+    .profile-btn,
+    .lang-btn {
       position: absolute !important;
       top: 130px !important;
       right: 20px !important;
@@ -104,6 +105,13 @@
     }
     .profile-btn {
       top: 190px !important;
+    }
+    .lang-btn {
+      top: 250px !important;
+      font-weight: bold !important;
+      font-size: 0.95rem !important;
+      border: none !important;
+      cursor: pointer !important;
     }
 
     .qotd-option-btn {
@@ -168,17 +176,9 @@
   </style>
 </head>
 
-<body>
+<body data-en-title="Sannivesham - Telugu Culture, Tradition, Festivals and Temples">
 
   <div class="home-bg"></div>
-
-  <div id="loader">
-    <div class="loader-content">
-      <img src="images/logo.png" class="loader-logo" alt="Sannivesham Logo">
-      <p class="loader-title">సన్నివేశం</p>
-      <div class="loader-line"></div>
-    </div>
-  </div>
 
   <div id="sponsorModal" class="sponsor-modal">
     <div class="sponsor-modal-box">
@@ -193,7 +193,7 @@
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2>🏆 అగ్రస్థాన పట్టిక</h2>
+      <h2 data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</h2>
       <div id="leaderboardList" class="leaderboard-list"></div>
     </div>
   </div>
@@ -202,43 +202,43 @@
   <div id="gamesModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="gamesCloseBtn">×</button>
-      <h2>🎮 ఆటల విభాగం</h2>
-      <p style="font-size: 0.9rem; color: var(--parchment-dim); margin-top: 4px;">ఆటను ఎంచుకుని మీ ప్రగతిని నమోదు చేయండి.</p>
+      <h2 data-en="🎮 Games">🎮 ఆటల విభాగం</h2>
+      <p style="font-size: 0.9rem; color: var(--parchment-dim); margin-top: 4px;" data-en="Choose a game and track your progress.">ఆటను ఎంచుకుని మీ ప్రగతిని నమోదు చేయండి.</p>
       <div class="games-grid">
         <a href="https://sannivesham.github.io/word-search/" class="game-sub-card">
           <div class="game-sub-icon">🔍</div>
-          <div class="game-sub-title">పద శోధన</div>
+          <div class="game-sub-title" data-en="Word Search">పద శోధన</div>
         </a>
         <a href="https://sannivesham.github.io/Sliding-Puzzle/" class="game-sub-card">
           <div class="game-sub-icon">🧩</div>
-          <div class="game-sub-title">చిత్ర గడులు</div>
+          <div class="game-sub-title" data-en="Sliding Puzzle">చిత్ర గడులు</div>
         </a>
         <a href="https://sannivesham.github.io/sudoko/" class="game-sub-card">
           <div class="game-sub-icon">🔢</div>
-          <div class="game-sub-title">సుడోకు</div>
+          <div class="game-sub-title" data-en="Sudoku">సుడోకు</div>
         </a>
         <a href="https://sannivesham.github.io/connect-dots/" class="game-sub-card">
           <div class="game-sub-icon">📍</div>
-          <div class="game-sub-title">జతపరుచు</div>
+          <div class="game-sub-title" data-en="Connect the Dots">జతపరుచు</div>
         </a>
         <a href="https://sannivesham.github.io/maze/" class="game-sub-card">
           <div class="game-sub-icon">🌀</div>
-          <div class="game-sub-title">చిట్టడవి</div>
+          <div class="game-sub-title" data-en="Maze">చిట్టడవి</div>
         </a>
         <a href="https://sannivesham.github.io/fisheye/" class="game-sub-card">
           <div class="game-sub-icon">🏹</div>
-          <div class="game-sub-title">మత్స్యవేధం</div>
+          <div class="game-sub-title" data-en="Fish-Eye Test">మత్స్యవేధం</div>
         </a>
       </div>
     </div>
   </div>
 
   <nav class="glass-navbar">
-    <a href="#home">ప్రారంభం</a>
-    <a href="#intro">పరిచయం</a>
-    <a href="#categories">విభాగాలు</a>
-    <a href="#about">మా గురించి</a>
-    <a href="#contact">సంప్రదించండి</a>
+    <a href="#home" data-en="Home">ప్రారంభం</a>
+    <a href="#intro" data-en="Intro">పరిచయం</a>
+    <a href="#categories" data-en="Categories">విభాగాలు</a>
+    <a href="#about" data-en="About Us">మా గురించి</a>
+    <a href="#contact" data-en="Contact">సంప్రదించండి</a>
   </nav>
 
   <section id="home" class="home-page">
@@ -247,50 +247,50 @@
       <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
       <div class="brand-text">
         <h1>సన్నివేశం</h1>
-        <p>సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+        <p data-en="Culture • Tradition • Conversation">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
       </div>
     </div>
 
     <div class="impact-box">
       <div class="impact-card">
         <span id="schoolCount">0</span>
-        <p>📚సందర్శించిన<br>పాఠశాలలు</p>
+        <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
       </div>
       <div class="impact-card">
         <span id="studentCount">0</span>
-        <p>👨‍🎓కలిసిన<br>విద్యార్థులు</p>
+        <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
       </div>
     </div>
 
     <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
       <div id="qotdCard" class="qotd-card" style="display:none;">
-        <h3>నేటి ప్రశ్న</h3>
+        <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
         <p id="qotdQuestionText" class="qotd-question-text"></p>
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
           <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
-          <a id="qotdLoginBtn" href="profile.html" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</a>
+          <a id="qotdLoginBtn" href="profile.html" class="qotd-login-link" data-en="Log in to save your score">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</a>
         </p>
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
-        <h3>నేటి అంశం</h3>
+        <h3 data-en="Word of the Day">నేటి అంశం</h3>
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
     </div>
 
     <section id="intro" class="intro-box">
-      <h2>సన్నివేశం గురించి</h2>
-      <p>
+      <h2 data-en="About Sannivesham">సన్నివేశం గురించి</h2>
+      <p data-en="Sannivesham is a cultural platform dedicated to promoting the Telugu language, Telugu culture, and Indian traditions. Our primary goal is to pass on the wisdom of our ancestors, spirituality, epics, temple history, and the significance of festivals to the younger generation.">
         సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
         ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
         ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
         మా ప్రధాన లక్ష్యం.
       </p>
-      <p>
+      <p data-en="Through this platform, our aim is to cultivate respect for Indian culture, love for the Telugu language, and awareness of our traditions among students and young people.">
         ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
         తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
         మా ఆశయం.
@@ -298,68 +298,68 @@
     </section>
 
     <section id="categories" class="category-section">
-      <h2 class="category-heading">విభాగాలు</h2>
+      <h2 class="category-heading" data-en="Categories">విభాగాలు</h2>
 
       <div class="category-grid">
 
         <a href="stories.html" class="category-card">
           <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
-          <div class="category-title">గ్రంథాలయం</div>
+          <div class="category-title" data-en="Library">గ్రంథాలయం</div>
         </a>
 
         <a href="festivals.html" class="category-card">
           <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు">
-          <div class="category-title">పండుగలు</div>
+          <div class="category-title" data-en="Festivals">పండుగలు</div>
         </a>
 
         <a href="temples.html" class="category-card">
           <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు">
-          <div class="category-title">దేవాలయాలు</div>
+          <div class="category-title" data-en="Temples">దేవాలయాలు</div>
         </a>
 
         <a href="events.html" class="category-card">
           <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు">
-          <div class="category-title">కార్యక్రమాలు</div>
+          <div class="category-title" data-en="Events">కార్యక్రమాలు</div>
         </a>
 
         <div id="gamesCardTrigger" class="category-card" style="cursor: pointer;">
           <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు">
-          <div class="category-title">ఆటలు</div>
+          <div class="category-title" data-en="Games">ఆటలు</div>
         </div>
 
         <a href="quiz.html" class="category-card">
           <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్">
-          <div class="category-title">ప్రశ్నావళి</div>
+          <div class="category-title" data-en="Quiz">ప్రశ్నావళి</div>
         </a>
 
         <a href="ithihasalu.html" class="category-card">
           <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు">
-          <div class="category-title">ఇతిహాసాలు</div>
+          <div class="category-title" data-en="Epics">ఇతిహాసాలు</div>
         </a>
 
         <a href="videos.html" class="category-card">
           <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు">
-          <div class="category-title">దృశ్యచిత్రాలు</div>
+          <div class="category-title" data-en="Videos">దృశ్యచిత్రాలు</div>
         </a>
 
         <a href="https://sannivesham.github.io/calender/" class="category-card">
           <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్">
-          <div class="category-title">పంచాంగం</div>
+          <div class="category-title" data-en="Calendar">పంచాంగం</div>
         </a>
 
         <a href="chant-counter.html" class="category-card">
           <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్">
-          <div class="category-title">జప గణకం</div>
+          <div class="category-title" data-en="Chant Counter">జప గణకం</div>
         </a>
 
         <a href="pooja-mandir.html" class="category-card">
           <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది">
-          <div class="category-title">ఉత్సవగణను</div>
+          <div class="category-title" data-en="Pooja Room">ఉత్సవగణను</div>
         </a>
 
         <a href="https://sannivesham.github.io/store/" class="category-card">
           <img id="storeCardImg" src="images/store.png" alt="స్టోర్">
-          <div class="category-title">విక్రయశాల</div>
+          <div class="category-title" data-en="Store">విక్రయశాల</div>
         </a>
 
       </div>
@@ -368,8 +368,8 @@
     <a href="about.html" id="about" class="about-card">
       <div class="about-overlay"></div>
       <div class="about-content">
-        <h2>మా గురించి</h2>
-        <p>
+        <h2 data-en="About Us">మా గురించి</h2>
+        <p data-en="Learn about us, our team members, our goals, and the Sannivesham journey.">
           మా గురించి, మా బృందం సభ్యులు,
           మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
         </p>
@@ -380,7 +380,7 @@
   </section>
 
   <section id="contact" class="contact-section">
-    <h2>సంప్రదించండి</h2>
+    <h2 data-en="Contact">సంప్రదించండి</h2>
     <div class="contact-container">
       <a id="homeInstagram" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/instagram.png" alt="Instagram">
@@ -408,26 +408,27 @@
       </a>
       <a id="homeWhatsappChannel" href="javascript:void(0)" target="_blank" class="whatsapp-channel-box">
         <div class="channel-text">
-          <h3>వాట్సాప్ ఛానల్</h3>
-          <p>
+          <h3 data-en="WhatsApp Channel">వాట్సాప్ ఛానల్</h3>
+          <p data-en="Join our WhatsApp channel for our events, updates, and cultural content.">
             మా కార్యక్రమాలు, అప్డేట్స్ మరియు
             సాంస్కృతిక విషయాల కోసం మా వాట్సాప్
             ఛానల్‌లో చేరండి.
           </p>
         </div>
-        <div class="join-btn">ఛానెల్‌లో చేరండి</div>
+        <div class="join-btn" data-en="Join Channel">ఛానెల్‌లో చేరండి</div>
       </a>
     </div>
   </section>
 
   <footer class="home-footer">
-    <p class="home-footer-quote">
+    <p class="home-footer-quote" data-en="✨Culture is our soul • Tradition is our legacy • Telugu is our pride✨">
       ✨సంస్కృతి మన ప్రాణం • సంప్రదాయం మన పరంపర • తెలుగు మన గౌరవం ✨
     </p>
     <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
   <script src="script.js?v=2"></script>
+  <script src="i18n.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
@@ -625,7 +626,10 @@
     function updateQotdScoreRow(userData) {
       document.getElementById("qotdScoreRow").style.display = "flex";
       document.getElementById("qotdLoginHint").style.display = "none";
-      document.getElementById("qotdScoreDisplay").innerText = `⭐ సాధించిన అంకాలు: ${userData.score || 0}`;
+      const label = window.Sannivesham18n
+        ? window.Sannivesham18n.t("⭐ సాధించిన అంకాలు", "⭐ Score earned")
+        : "⭐ సాధించిన అంకాలు";
+      document.getElementById("qotdScoreDisplay").innerText = `${label}: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -636,7 +640,8 @@
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
       const listBox = document.getElementById("leaderboardList");
-      listBox.innerHTML = "<p style='text-align:center;color:#ffd166'>లోడ్ అవుతోంది...</p>";
+      const t = window.Sannivesham18n ? window.Sannivesham18n.t : (te) => te;
+      listBox.innerHTML = `<p style='text-align:center;color:#ffd166'>${t("లోడ్ అవుతోంది...", "Loading...")}</p>`;
       const snap = await getDocs(collection(db, "users"));
       const users = [];
       snap.forEach(d => {
@@ -645,15 +650,16 @@
       });
       users.sort((a, b) => b.score - a.score);
       if (users.length === 0) {
-        listBox.innerHTML = "<p style='text-align:center;color:white'>ఇంకా స్కోర్లు లేవు</p>";
+        listBox.innerHTML = `<p style='text-align:center;color:white'>${t("ఇంకా స్కోర్లు లేవు", "No scores yet")}</p>`;
         return;
       }
       const medals = ["🥇", "🥈", "🥉"];
       listBox.innerHTML = users.map((u, i) => {
         const isMe = currentUser && u.uid === currentUser.uid;
+        const youLabel = isMe ? ` ${t("(మీరు)", "(You)")}` : "";
         return `<div class="lb-row${isMe ? " lb-row-me" : ""}">
           <span class="lb-rank">${medals[i] || `${i + 1}.`}</span>
-          <span class="lb-name">${u.name}${isMe ? " (మీరు)" : ""}</span>
+          <span class="lb-name">${u.name}${youLabel}</span>
           <span class="lb-score">⭐ ${u.score}</span>
         </div>`;
       }).join("");
@@ -680,6 +686,7 @@
 
   <button id="musicBtn" class="music-btn">🔊</button>
   <a id="profileBtn" href="profile.html" class="profile-btn">👤</a>
+  <button id="langToggleBtn" class="music-btn lang-btn" title="View in English">EN</button>
 
   <script src="music.js?v=2"></script>
 
