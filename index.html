@@ -11,7 +11,6 @@
 <body>
 
   <div class="home-bg"></div>
-  </div>
 
   <div id="sponsorModal" class="sponsor-modal">
     <div class="sponsor-modal-box">
@@ -26,29 +25,30 @@
   <div id="loginModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="loginCloseBtn">×</button>
-      <h2>లాగిన్ చేయండి</h2>
+      <h2 data-en="Login">లాగిన్ చేయండి</h2>
 
       <div id="loginStep1">
         <button id="googleLoginBtn" class="auth-google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+          <span data-en="Login with Google">Google తో లాగిన్</span>
         </button>
-        <div class="auth-divider">లేదా</div>
+        <div class="auth-divider" data-en="or">లేదా</div>
         <input type="tel" id="phoneInput" placeholder="+91 మొబైల్ నంబర్" class="auth-input">
         <div id="recaptcha-container"></div>
-        <button id="sendOtpBtn" class="auth-btn">OTP పంపండి</button>
+        <button id="sendOtpBtn" class="auth-btn" data-en="Send OTP">OTP పంపండి</button>
         <p id="loginMsg" class="auth-msg"></p>
       </div>
 
       <div id="loginStep2" style="display:none;">
         <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
-        <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
+        <button id="verifyOtpBtn" class="auth-btn" data-en="Verify">Verify చేయండి</button>
         <p id="otpMsg" class="auth-msg"></p>
       </div>
 
       <div id="loginStep3" style="display:none;">
-        <p>మీ పేరు నమోదు చేయండి</p>
+        <p data-en="Enter your name">మీ పేరు నమోదు చేయండి</p>
         <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
-        <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
+        <button id="saveNameBtn" class="auth-btn" data-en="Save">సేవ్ చేయండి</button>
         <p id="nameMsg" class="auth-msg"></p>
       </div>
     </div>
@@ -61,9 +61,9 @@
       <div class="profile-avatar">👤</div>
       <h2 id="profileName"></h2>
       <div class="profile-score-badge">
-        ⭐ మీ స్కోర్: <span id="profileScore">0</span>
+        ⭐ <span data-en="Your Score:">మీ స్కోర్:</span> <span id="profileScore">0</span>
       </div>
-      <button id="logoutUserBtn" class="auth-logout-btn">లాగ్అవుట్</button>
+      <button id="logoutUserBtn" class="auth-logout-btn" data-en="Logout">లాగ్అవుట్</button>
     </div>
   </div>
 
@@ -71,77 +71,71 @@
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
       <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2>🏆 లీడర్‌బోర్డ్</h2>
+      <h2>🏆 <span data-en="Leaderboard">లీడర్‌బోర్డ్</span></h2>
       <div id="leaderboardList" class="leaderboard-list"></div>
     </div>
   </div>
 
   <nav class="glass-navbar">
-    <a href="#home">ప్రారంభం</a>
-    <a href="#intro">పరిచయం</a>
-    <a href="#categories">విభాగాలు</a>
-    <a href="#about">మా గురించి</a>
-    <a href="#contact">సంప్రదించండి</a>
+    <a href="#home" data-en="Home">ప్రారంభం</a>
+    <a href="#intro" data-en="About">పరిచయం</a>
+    <a href="#categories" data-en="Sections">విభాగాలు</a>
+    <a href="#about" data-en="About Us">మా గురించి</a>
+    <a href="#contact" data-en="Contact">సంప్రదించండి</a>
   </nav>
 
   <section id="home" class="home-page">
 
     <div class="top-brand">
       <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
-
       <div class="brand-text">
         <h1>సన్నివేశం</h1>
-        <p>సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+        <p data-en="Culture • Tradition • Conversation">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
       </div>
     </div>
+
     <div class="impact-box">
-
-  <div class="impact-card">
-    <span id="schoolCount">0</span>
-    <p>📚 సందర్శించిన పాఠశాలలు</p>
-  </div>
-
-  <div class="impact-card">
-    <span id="studentCount">0</span>
-    <p>👨‍🎓 కలిసిన విద్యార్థులు</p>
-  </div>
-
-</div>
+      <div class="impact-card">
+        <span id="schoolCount">0</span>
+        <p data-en="📚 Schools Visited">📚 సందర్శించిన పాఠశాలలు</p>
+      </div>
+      <div class="impact-card">
+        <span id="studentCount">0</span>
+        <p data-en="👨‍🎓 Students Reached">👨‍🎓 కలిసిన విద్యార్థులు</p>
+      </div>
+    </div>
 
     <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
 
       <div id="qotdCard" class="qotd-card" style="display:none;">
-        <h3>నేటి ప్రశ్న</h3>
+        <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
         <p id="qotdQuestionText" class="qotd-question-text"></p>
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
           <span id="qotdScoreDisplay" class="qotd-score-display">⭐ స్కోర్: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 లీడర్‌బోర్డ్</button>
+          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn">🏆 <span data-en="Leaderboard">లీడర్‌బోర్డ్</span></button>
         </div>
         <p id="qotdLoginHint" class="qotd-login-hint" style="display:none;">
-          <button id="qotdLoginBtn" class="qotd-login-link">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
+          <button id="qotdLoginBtn" class="qotd-login-link" data-en="Login to save your score">లాగిన్ చేస్తే స్కోర్ సేవ్ అవుతుంది</button>
         </p>
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
-        <h3>నేటి పదం</h3>
-
+        <h3 data-en="Word of the Day">నేటి పదం</h3>
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
 
     </div>
 
     <section id="intro" class="intro-box">
-      <h2>సన్నివేశం గురించి</h2>
-
-      <p>
+      <h2 data-en="About Sannivesham">సన్నివేశం గురించి</h2>
+      <p data-en="Sannivesham is a cultural platform that promotes Telugu language, Telugu culture and Indian traditions. Our main goal is to bring the knowledge, spirituality, epics, temple history and importance of festivals of our ancestors to the youth.">
         సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
         ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
         ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
         మా ప్రధాన లక్ష్యం.
       </p>
-
-      <p>
+      <p data-en="Through this platform, it is our aim to develop respect for Indian culture, love for Telugu language and understanding of our traditions among students and youth.">
         ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
         తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
         మా ఆశయం.
@@ -149,54 +143,52 @@
     </section>
 
     <section id="categories" class="category-section">
-      <h2 class="category-heading">విభాగాలు</h2>
+      <h2 class="category-heading" data-en="Sections">విభాగాలు</h2>
 
       <div class="category-grid">
 
-        <a href="events.html" class="category-card">
-          <img id="eventsCardImg" src="images/events.png">
-          <div class="category-title">కార్యక్రమాలు</div>
+        <a href="stories.html" class="category-card">
+          <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
+          <div class="category-title" data-en="Library">గ్రంథాలయం</div>
         </a>
 
         <a href="festivals.html" class="category-card">
           <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు">
-          <div class="category-title">పండుగలు</div>
+          <div class="category-title" data-en="Festivals">పండుగలు</div>
         </a>
 
         <a href="temples.html" class="category-card">
           <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు">
-          <div class="category-title">దేవాలయాలు</div>
+          <div class="category-title" data-en="Temples">దేవాలయాలు</div>
         </a>
 
-        <a href="stories.html" class="category-card">
-          <img id="storiesCardImg" src="images/stories.png" alt="కథలు">
-          <div class="category-title">కథలు</div>
-        </a>
-
-        <a href="gita-slokas.html" class="category-card">
-          <img id="slokasCardImg" src="images/gita.png" alt="శ్లోకాలు">
-          <div class="category-title">శ్లోకాలు</div>
+        <a href="events.html" class="category-card">
+          <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు">
+          <div class="category-title" data-en="Events">కార్యక్రమాలు</div>
         </a>
 
         <a href="quiz.html" class="category-card">
           <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్">
-          <div class="category-title">క్విజ్</div>
+          <div class="category-title" data-en="Quiz">ప్రశ్నావళి</div>
         </a>
+
+        <div id="gamesCardTrigger" class="category-card" style="cursor:pointer;">
+          <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు">
+          <div class="category-title" data-en="Games">ఆటలు</div>
+        </div>
 
       </div>
     </section>
 
     <a href="about.html" id="about" class="about-card">
       <div class="about-overlay"></div>
-
       <div class="about-content">
-        <h2>మా గురించి</h2>
-        <p>
+        <h2 data-en="About Us">మా గురించి</h2>
+        <p data-en="Learn about us, our team members, our goals and the Sannivesham journey.">
           మా గురించి, మా టీమ్ సభ్యులు,
           మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
         </p>
       </div>
-
       <span class="about-arrow">➜</span>
     </a>
 
@@ -204,7 +196,7 @@
 
   <section id="contact" class="contact-section">
 
-    <h2>సంప్రదించండి</h2>
+    <h2 data-en="Contact Us">సంప్రదించండి</h2>
 
     <div class="contact-container">
 
@@ -213,7 +205,7 @@
         <span>Sannivesham</span>
       </a>
 
-      <a id="homeFacebook" href="#" target="_blank" class="contact-box">
+      <a id="homeFacebook" href="javascript:void(0)" target="_blank" class="contact-box">
         <img src="images/facebook.png" alt="Facebook">
         <span>Sannivesham</span>
       </a>
@@ -239,21 +231,15 @@
       </a>
 
       <a id="homeWhatsappChannel" href="javascript:void(0)" target="_blank" class="whatsapp-channel-box">
-
         <div class="channel-text">
-          <h3>వాట్సాప్ ఛానల్</h3>
-
-          <p>
+          <h3 data-en="WhatsApp Channel">వాట్సాప్ ఛానల్</h3>
+          <p data-en="Join our WhatsApp channel for events, updates and cultural content.">
             మా కార్యక్రమాలు, అప్డేట్స్ మరియు
             సాంస్కృతిక విషయాల కోసం మా వాట్సాప్
             ఛానల్‌లో చేరండి.
           </p>
         </div>
-
-        <div class="join-btn">
-          ఛానెల్‌లో చేరండి
-        </div>
-
+        <div class="join-btn" data-en="Join Channel">ఛానెల్‌లో చేరండి</div>
       </a>
 
     </div>
@@ -261,69 +247,85 @@
   </section>
 
   <footer class="home-footer">
-
-    <p class="home-footer-quote">
+    <p class="home-footer-quote" data-en="✨ Culture is our life • Tradition is our heritage • Telugu is our pride ✨">
       ✨సంస్కృతి మన ప్రాణం • సంప్రదాయం మన పరంపర • తెలుగు మన గౌరవం ✨
     </p>
-
-    
-
-    <p class="home-footer-copy">
-      © 2026 సన్నివేశం
-    </p>
-
+    <p class="home-footer-copy">© 2026 సన్నివేశం</p>
   </footer>
 
+  <audio id="bgMusic" loop>
+    <source src="music/traditional.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicBtn" class="music-btn">🔊</button>
+  <button id="profileBtn" class="profile-btn">👤</button>
+  <button id="langToggleBtn" class="lang-toggle-btn" title="Switch Language">EN</button>
+
+  <script src="i18n.js"></script>
+  <script src="music.js"></script>
   <script src="script.js"></script>
+
+  <script>
+    function animateCounter(id, target) {
+      let count = 0;
+      const inc = Math.ceil(target / 100);
+      const timer = setInterval(() => {
+        count += inc;
+        if (count >= target) { count = target; clearInterval(timer); }
+        document.getElementById(id).innerText = id === "studentCount" ? count + "+" : count;
+      }, 20);
+    }
+
+    function startCounters() {
+      animateCounter("schoolCount", 10);
+      animateCounter("studentCount", 2000);
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        if (window._sponsorShowing) {
+          document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
+            startCounters();
+          }, { once: true });
+        } else {
+          startCounters();
+        }
+      }, 1500);
+    });
+  </script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc,
-      getDoc,
-      setDoc,
-      getDocs,
-      collection,
-      updateDoc,
-      arrayUnion,
-      increment
+      doc, getDoc, setDoc, getDocs, collection,
+      updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import {
-      GoogleAuthProvider,
-      signInWithPopup,
-      RecaptchaVerifier,
-      signInWithPhoneNumber,
-      onAuthStateChanged,
-      signOut
+      GoogleAuthProvider, signInWithPopup, RecaptchaVerifier,
+      signInWithPhoneNumber, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    // ─── STATE ───────────────────────────────────────────
     let currentUser = null;
-    let qotdCorrectIndex = null;
     let confirmationResult = null;
-    let todayKey = getTodayKey();
-
-    function getTodayKey() {
+    const todayKey = (() => {
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, "0");
       const dd = String(now.getDate()).padStart(2, "0");
       return `${yyyy}-${mm}-${dd}`;
-    }
+    })();
 
-    // ─── AUTH STATE ──────────────────────────────────────
+    // AUTH STATE
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
-
       if (user) {
-        const userSnap = await getDoc(doc(db, "users", user.uid));
-        if (!userSnap.exists()) {
-          showModal("loginModal");
-          showStep("loginStep3");
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (!snap.exists()) {
+          showModal("loginModal"); showStep("loginStep3");
         } else {
-          const data = userSnap.data();
+          const data = snap.data();
           document.getElementById("profileName").innerText = data.name || "User";
           document.getElementById("profileScore").innerText = data.score || 0;
           document.getElementById("profileBtn").innerText = "😊";
@@ -335,73 +337,56 @@
       }
     });
 
-    // ─── PROFILE BUTTON ──────────────────────────────────
+    // PROFILE BUTTON
     document.getElementById("profileBtn").addEventListener("click", () => {
-      if (currentUser) {
-        showModal("profileModal");
-      } else {
-        showModal("loginModal");
-        showStep("loginStep1");
-      }
+      if (currentUser) { showModal("profileModal"); }
+      else { showModal("loginModal"); showStep("loginStep1"); }
     });
 
-    // ─── MODAL HELPERS ───────────────────────────────────
+    // MODAL HELPERS
     function showModal(id) {
       document.querySelectorAll(".auth-modal").forEach(m => m.style.display = "none");
       document.getElementById(id).style.display = "flex";
     }
-
-    function hideModal(id) {
-      document.getElementById(id).style.display = "none";
-    }
-
+    function hideModal(id) { document.getElementById(id).style.display = "none"; }
     function showStep(id) {
       ["loginStep1","loginStep2","loginStep3"].forEach(s => {
         const el = document.getElementById(s);
         if (el) el.style.display = "none";
       });
-      const target = document.getElementById(id);
-      if (target) target.style.display = "block";
+      const t = document.getElementById(id);
+      if (t) t.style.display = "block";
     }
 
     document.getElementById("loginCloseBtn").addEventListener("click", () => hideModal("loginModal"));
     document.getElementById("profileCloseBtn").addEventListener("click", () => hideModal("profileModal"));
     document.getElementById("leaderboardCloseBtn").addEventListener("click", () => hideModal("leaderboardModal"));
 
-    // Close on backdrop click
     document.querySelectorAll(".auth-modal").forEach(modal => {
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) modal.style.display = "none";
-      });
+      modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
-    // ─── GOOGLE LOGIN ─────────────────────────────────────
+    // GOOGLE LOGIN
     document.getElementById("googleLoginBtn").addEventListener("click", async () => {
       try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
         await checkAndSetName(result.user);
       } catch (e) {
         document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
       }
     });
 
-    // ─── PHONE LOGIN ──────────────────────────────────────
+    // PHONE LOGIN
     document.getElementById("sendOtpBtn").addEventListener("click", async () => {
       const phone = document.getElementById("phoneInput").value.trim();
-      if (!phone) {
-        document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి";
-        return;
-      }
+      if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
       try {
         if (!window.recaptchaVerifier) {
           window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
         }
-let formattedPhone = phone.replace(/\s+/g, "");
-if (!formattedPhone.startsWith("+")) {
-  formattedPhone = "+91" + formattedPhone;
-}
-confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
+        let fp = phone.replace(/\s+/g, "");
+        if (!fp.startsWith("+")) fp = "+91" + fp;
+        confirmationResult = await signInWithPhoneNumber(auth, fp, window.recaptchaVerifier);
         showStep("loginStep2");
       } catch (e) {
         document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
@@ -419,39 +404,25 @@ confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.re
     });
 
     async function checkAndSetName(user) {
-      const userSnap = await getDoc(doc(db, "users", user.uid));
-      if (!userSnap.exists()) {
-        showStep("loginStep3");
-      } else {
-        hideModal("loginModal");
-      }
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (!snap.exists()) { showStep("loginStep3"); } else { hideModal("loginModal"); }
     }
 
-    // ─── SAVE NAME ────────────────────────────────────────
     document.getElementById("saveNameBtn").addEventListener("click", async () => {
       const name = document.getElementById("nameInput").value.trim();
-      if (!name) {
-        document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి";
-        return;
-      }
-      await setDoc(doc(db, "users", currentUser.uid), {
-        name,
-        score: 0,
-        answeredDates: []
-      });
+      if (!name) { document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి"; return; }
+      await setDoc(doc(db, "users", currentUser.uid), { name, score: 0, answeredDates: [] });
       document.getElementById("profileName").innerText = name;
       document.getElementById("profileScore").innerText = 0;
       document.getElementById("profileBtn").innerText = "😊";
       hideModal("loginModal");
     });
 
-    // ─── LOGOUT ───────────────────────────────────────────
     document.getElementById("logoutUserBtn").addEventListener("click", async () => {
-      await signOut(auth);
-      hideModal("profileModal");
+      await signOut(auth); hideModal("profileModal");
     });
 
-    // ─── BACKGROUND ──────────────────────────────────────
+    // BACKGROUND
     async function loadHomeBackground() {
       try {
         const snap = await getDoc(doc(db, "settings", "backgrounds"));
@@ -464,11 +435,11 @@ confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.re
         } else if (data.homePc) {
           bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
         }
-      } catch (e) { console.log("Background Load Error:", e); }
+      } catch (e) {}
     }
     loadHomeBackground();
 
-    // ─── HOME CARDS ──────────────────────────────────────
+    // HOME CARDS
     async function loadHomeCards() {
       const snap = await getDoc(doc(db, "settings", "homeCards"));
       if (!snap.exists()) return;
@@ -482,7 +453,7 @@ confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.re
     }
     loadHomeCards();
 
-    // ─── SPONSOR POPUP ───────────────────────────────────
+    // SPONSOR POPUP
     async function loadSponsorPopup() {
       try {
         const snap = await getDoc(doc(db, "settings", "sponsor"));
@@ -492,16 +463,15 @@ confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.re
         document.getElementById("sponsorImage").src = data.image;
         document.getElementById("sponsorLink").href = data.link || "#";
         document.getElementById("sponsorModal").style.display = "flex";
-        document.getElementById("sponsorModal").style.display = "flex";
-window._sponsorShowing = true;
-      } catch (e) { console.log("Sponsor Popup Load Error:", e); }
+        window._sponsorShowing = true;
+      } catch (e) {}
     }
     loadSponsorPopup();
     document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
       document.getElementById("sponsorModal").style.display = "none";
     });
 
-    // ─── QOTD ────────────────────────────────────────────
+    // QOTD
     async function loadQuestionOfDay() {
       try {
         const snap = await getDoc(doc(db, "qotd", todayKey));
@@ -509,36 +479,26 @@ window._sponsorShowing = true;
         const data = snap.data();
         if (!data.question || !Array.isArray(data.options)) return;
 
-        qotdCorrectIndex = data.correct;
         document.getElementById("qotdQuestionText").innerText = data.question;
-
         const optionsBox = document.getElementById("qotdOptions");
         optionsBox.innerHTML = "";
 
-        // Check if already answered today
         let alreadyAnswered = false;
-        let alreadyCorrect = false;
         if (currentUser) {
-          const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-          if (userSnap.exists()) {
-            const ud = userSnap.data();
-            alreadyAnswered = (ud.answeredDates || []).includes(todayKey);
-            if (alreadyAnswered) alreadyCorrect = (ud.correctDates || []).includes(todayKey);
-          }
+          const us = await getDoc(doc(db, "users", currentUser.uid));
+          if (us.exists()) alreadyAnswered = (us.data().answeredDates || []).includes(todayKey);
         }
 
         data.options.forEach((optionText, index) => {
           const btn = document.createElement("button");
           btn.className = "qotd-option-btn";
           btn.innerText = optionText;
-
           if (alreadyAnswered) {
             btn.classList.add("disabled-option");
             if (index === data.correct) btn.classList.add("correct-option");
           } else {
             btn.addEventListener("click", () => handleQotdAnswer(index, data.correct));
           }
-
           optionsBox.appendChild(btn);
         });
 
@@ -546,59 +506,39 @@ window._sponsorShowing = true;
         document.getElementById("qotdWordSection").style.display = "flex";
 
         if (currentUser) {
-          const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-          if (userSnap.exists()) updateQotdScoreRow(userSnap.data());
-        } else {
-          showQotdLoginHint();
-        }
+          const us = await getDoc(doc(db, "users", currentUser.uid));
+          if (us.exists()) updateQotdScoreRow(us.data());
+        } else { showQotdLoginHint(); }
 
-      } catch (e) { console.log("Question Of Day Load Error:", e); }
+      } catch (e) { console.log("QOTD Error:", e); }
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex) {
-      const optionsBox = document.getElementById("qotdOptions");
-      const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
-
+      const allBtns = document.querySelectorAll(".qotd-option-btn");
       allBtns.forEach((b, i) => {
         b.classList.add("disabled-option");
         if (i === correctIndex) b.classList.add("correct-option");
       });
-
-      if (selectedIndex !== correctIndex) {
-        allBtns[selectedIndex].classList.add("wrong-option");
-      }
+      if (selectedIndex !== correctIndex) allBtns[selectedIndex].classList.add("wrong-option");
 
       if (currentUser) {
         const isCorrect = selectedIndex === correctIndex;
         const userRef = doc(db, "users", currentUser.uid);
-
-        const updateData = {
-          answeredDates: arrayUnion(todayKey)
-        };
-
-        if (isCorrect) {
-          updateData.score = increment(1);
-          updateData.correctDates = arrayUnion(todayKey);
-        }
-
+        const updateData = { answeredDates: arrayUnion(todayKey) };
+        if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
         await updateDoc(userRef, updateData);
-
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const ud = userSnap.data();
-          document.getElementById("profileScore").innerText = ud.score || 0;
-          updateQotdScoreRow(ud);
+        const us = await getDoc(userRef);
+        if (us.exists()) {
+          document.getElementById("profileScore").innerText = us.data().score || 0;
+          updateQotdScoreRow(us.data());
         }
       }
     }
 
     function updateQotdScoreRow(userData) {
-      const scoreRow = document.getElementById("qotdScoreRow");
-      const scoreDisplay = document.getElementById("qotdScoreDisplay");
-      const loginHint = document.getElementById("qotdLoginHint");
-      scoreRow.style.display = "flex";
-      loginHint.style.display = "none";
-      scoreDisplay.innerText = `⭐ స్కోర్: ${userData.score || 0}`;
+      document.getElementById("qotdScoreRow").style.display = "flex";
+      document.getElementById("qotdLoginHint").style.display = "none";
+      document.getElementById("qotdScoreDisplay").innerText = `⭐ స్కోర్: ${userData.score || 0}`;
     }
 
     function showQotdLoginHint() {
@@ -607,45 +547,37 @@ window._sponsorShowing = true;
     }
 
     document.getElementById("qotdLoginBtn")?.addEventListener("click", () => {
-      showModal("loginModal");
-      showStep("loginStep1");
+      showModal("loginModal"); showStep("loginStep1");
     });
 
-    // ─── LEADERBOARD ─────────────────────────────────────
+    // LEADERBOARD
     document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
       showModal("leaderboardModal");
       const listBox = document.getElementById("leaderboardList");
       listBox.innerHTML = "<p style='text-align:center;color:#ffd166'>లోడ్ అవుతోంది...</p>";
-
       const snap = await getDocs(collection(db, "users"));
       const users = [];
       snap.forEach(d => {
         const ud = d.data();
-        if (ud.name && (ud.score || 0) > 0) {
-          users.push({ uid: d.id, name: ud.name, score: ud.score || 0 });
-        }
+        if (ud.name && (ud.score || 0) > 0) users.push({ uid: d.id, name: ud.name, score: ud.score || 0 });
       });
-
       users.sort((a, b) => b.score - a.score);
-
       if (users.length === 0) {
         listBox.innerHTML = "<p style='text-align:center;color:white'>ఇంకా స్కోర్లు లేవు</p>";
         return;
       }
-
-      const medals = ["🥇", "🥈", "🥉"];
+      const medals = ["🥇","🥈","🥉"];
       listBox.innerHTML = users.map((u, i) => {
         const isMe = currentUser && u.uid === currentUser.uid;
-        const rank = medals[i] || `${i + 1}.`;
         return `<div class="lb-row${isMe ? " lb-row-me" : ""}">
-          <span class="lb-rank">${rank}</span>
+          <span class="lb-rank">${medals[i] || `${i+1}.`}</span>
           <span class="lb-name">${u.name}${isMe ? " (మీరు)" : ""}</span>
           <span class="lb-score">⭐ ${u.score}</span>
         </div>`;
       }).join("");
     });
 
-    // ─── WORD OF DAY ─────────────────────────────────────
+    // WORD OF DAY
     async function loadWordOfDay() {
       try {
         const snap = await getDoc(doc(db, "wordOfDay", todayKey));
@@ -655,130 +587,12 @@ window._sponsorShowing = true;
         document.getElementById("wordOfDayText").innerText = data.text;
         document.getElementById("wordCard").style.display = "block";
         document.getElementById("qotdWordSection").style.display = "flex";
-      } catch (e) { console.log("Word Of Day Load Error:", e); }
+      } catch (e) {}
     }
 
     loadQuestionOfDay();
     loadWordOfDay();
   </script>
-  <audio id="bgMusic" loop>
-    <source src="music/traditional.mp3" type="audio/mpeg">
-  </audio>
 
-  <button id="musicBtn" class="music-btn">
-    🔊
-  </button>
-
-  <button id="profileBtn" class="profile-btn">
-    👤
-  </button>
-
-  <!-- Language Toggle -->
-  <button id="langToggleBtn" class="lang-toggle-btn" title="Switch Language">
-    అ
-  </button>
-
-  <!-- Language Menu -->
-  <div id="langMenu" class="lang-menu" style="display:none;">
-    <button class="lang-menu-item active-lang" id="langTe" onclick="setLang('te')">తెలుగు</button>
-    <button class="lang-menu-item" id="langEn" onclick="setLang('en')">English</button>
-  </div>
-
-  <!-- Hidden Google Translate -->
-  <div id="google_translate_element" style="display:none;visibility:hidden;"></div>
-
-  <script src="music.js"></script>
-
-<script src="script.js"></script>
-
-<script>
-function animateCounter(id, target){
-
-  let count = 0;
-  const increment = Math.ceil(target / 100);
-
-  const timer = setInterval(() => {
-
-    count += increment;
-
-    if(count >= target){
-      count = target;
-      clearInterval(timer);
-    }
-
-    document.getElementById(id).innerText =
-    id === "studentCount" ? count + "+" : count;
-
-
-  },20);
-}
-
-function startCounters() {
-  animateCounter("schoolCount", 10);
-  animateCounter("studentCount", 2000);
-}
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    if (window._sponsorShowing) {
-      document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
-        startCounters();
-      }, { once: true });
-    } else {
-      startCounters();
-    }
-  }, 1500);
-});
-</script>
-
-
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'te',
-        includedLanguages: 'en,te',
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-
-    function setLang(lang) {
-      const menu = document.getElementById('langMenu');
-      const btn = document.getElementById('langToggleBtn');
-      menu.style.display = 'none';
-
-      document.getElementById('langTe').classList.toggle('active-lang', lang === 'te');
-      document.getElementById('langEn').classList.toggle('active-lang', lang === 'en');
-
-      const select = document.querySelector('.goog-te-combo');
-      if (select) {
-        select.value = lang === 'en' ? 'en' : 'te';
-        select.dispatchEvent(new Event('change'));
-      }
-
-      btn.innerText = lang === 'en' ? 'En' : 'అ';
-      localStorage.setItem('sannivesham_lang', lang);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('langToggleBtn');
-      const menu = document.getElementById('langMenu');
-
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-      });
-
-      document.addEventListener('click', () => {
-        menu.style.display = 'none';
-      });
-
-      // Restore saved lang
-      const saved = localStorage.getItem('sannivesham_lang');
-      if (saved === 'en') {
-        setTimeout(() => setLang('en'), 1500);
-      }
-    });
-  </script>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
