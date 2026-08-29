@@ -228,6 +228,13 @@ button:active { transform: scale(0.97); }
 .timer-circle {
   width: 46px; height: 46px; border-radius: 50%; background: var(--accent-2);
   display: flex; align-items: center; justify-content: center; font-weight: 800;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.timer-circle.urgent { background: var(--danger); color: #fff; animation: timer-pulse 0.6s infinite; }
+.timer-circle.time-up { background: var(--danger); color: #fff; animation: none; }
+@keyframes timer-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
 }
 .word-hint { font-size: 1.3rem; font-weight: 700; letter-spacing: 4px; text-align: center; flex: 1; }
 .round-label { font-size: 0.8rem; color: var(--text-light); white-space: nowrap; }
