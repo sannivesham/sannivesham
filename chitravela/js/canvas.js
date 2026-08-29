@@ -1,13 +1,14 @@
-import { db, ref, push, remove, onChildAdded, onChildRemoved, get } from "./firebase-config.js";
+import { db, ref, push, remove, set, onValue, onChildAdded, onChildRemoved, get } from "./firebase-config.js";
 
 const COLORS = [
   "#000000","#ffffff","#ff6b6b","#ff922b","#ffe66d","#51cf66",
   "#4ecdc4","#339af0","#845ef7","#f06595","#8d6e63","#adb5bd"
 ];
 
-export function initCanvas({ canvasEl, roomId, isDrawer }) {
+export function initCanvas({ canvasEl, roomId, isDrawer, uid }) {
   const ctx = canvasEl.getContext("2d");
   const strokesRef = ref(db, `rooms/${roomId}/strokes`);
+  const liveRef = ref(db, `rooms/${roomId}/liveStroke`);
   const locallyPushedKeys = new Set();
 
   let currentColor = "#000000";
@@ -15,6 +16,57 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
   let currentSize = 6;
   let drawing = false;
   let currentPoints = [];
+  let currentStrokeId = null;
+  let rafPending = false;
+
+  // ---- Live (in-progress) stroke sync, so other players see the line
+  // being drawn point-by-point in real time instead of only after the
+  // drawer lifts their pen. ----
+  let liveSeenStrokeId = null;
+  let liveDrawnCount = 0;
+
+  function scheduleLiveFlush() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => {
+      rafPending = false;
+      if (!drawing || !currentStrokeId) return;
+      set(liveRef, {
+        uid: uid || null, tool: currentTool, color: currentColor, size: currentSize,
+        strokeId: currentStrokeId,
+        points: currentPoints.map(p => ({ x: Math.round(p.x), y: Math.round(p.y) })),
+        t: Date.now()
+      }).catch(() => {});
+    });
+  }
+
+  function drawLiveSegment(val) {
+    const pts = val.points || [];
+    if (!pts.length) return;
+    if (val.strokeId !== liveSeenStrokeId) { liveSeenStrokeId = val.strokeId; liveDrawnCount = 0; }
+    if (pts.length <= liveDrawnCount) return;
+    ctx.strokeStyle = val.tool === "eraser" ? "#ffffff" : val.color;
+    ctx.lineWidth = val.size;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    if (liveDrawnCount === 0) {
+      ctx.moveTo(pts[0].x, pts[0].y);
+      if (pts.length === 1) ctx.lineTo(pts[0].x + 0.1, pts[0].y + 0.1);
+    } else {
+      ctx.moveTo(pts[liveDrawnCount - 1].x, pts[liveDrawnCount - 1].y);
+    }
+    for (let i = Math.max(liveDrawnCount, 1); i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+    liveDrawnCount = pts.length;
+  }
+
+  onValue(liveRef, (snap) => {
+    if (isDrawer()) return; // the drawer already renders their own strokes locally
+    const val = snap.val();
+    if (!val) return;
+    drawLiveSegment(val);
+  });
 
   function resizeCanvas() {
     // Keep internal resolution fixed (800x600), CSS handles responsive scaling.
@@ -111,6 +163,7 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
       return;
     }
     drawing = true;
+    currentStrokeId = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const pos = getPos(e);
     currentPoints = [pos];
     ctx.strokeStyle = currentTool === "eraser" ? "#ffffff" : currentColor;
@@ -118,6 +171,7 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
     ctx.lineCap = "round";
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
+    scheduleLiveFlush();
   }
   function pointerMove(e) {
     if (!drawing || !isDrawer()) return;
@@ -126,18 +180,21 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
     currentPoints.push(pos);
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
+    scheduleLiveFlush();
   }
   function pointerUp() {
     if (!drawing || !isDrawer()) return;
     drawing = false;
-    if (currentPoints.length < 1) return;
+    set(liveRef, null).catch(() => {});
+    if (currentPoints.length < 1) { currentStrokeId = null; return; }
     const strokeObj = {
-      tool: currentTool, color: currentColor, size: currentSize,
+      tool: currentTool, color: currentColor, size: currentSize, strokeId: currentStrokeId,
       points: currentPoints.map(p => ({ x: Math.round(p.x), y: Math.round(p.y) })), t: Date.now()
     };
     const newRef = push(strokesRef, strokeObj);
     locallyPushedKeys.add(newRef.key);
     currentPoints = [];
+    currentStrokeId = null;
   }
 
   canvasEl.addEventListener("mousedown", pointerDown);
@@ -151,7 +208,7 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
     setColor: (c) => currentColor = c,
     setTool: (t) => currentTool = t,
     setSize: (s) => currentSize = s,
-    clearAll: async () => { await remove(strokesRef); clearCanvasVisual(); },
+    clearAll: async () => { await remove(strokesRef); await set(liveRef, null); clearCanvasVisual(); },
     undoLast: async () => {
       const snap = await get(strokesRef);
       if (!snap.exists()) return;
@@ -159,7 +216,7 @@ export function initCanvas({ canvasEl, roomId, isDrawer }) {
       snap.forEach(child => { lastKey = child.key; });
       if (lastKey) await remove(ref(db, `rooms/${roomId}/strokes/${lastKey}`));
     },
-    resetLocalCanvas: () => clearCanvasVisual(),
+    resetLocalCanvas: () => { clearCanvasVisual(); liveSeenStrokeId = null; liveDrawnCount = 0; },
     COLORS
   };
 }
