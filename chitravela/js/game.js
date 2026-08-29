@@ -231,7 +231,7 @@ export async function hostStartGame(roomIdArg, hostUid, settings) {
     drawTime: Number(settings.drawTime), hints: settings.hints,
     turnOrder: order, turnIndex: 0, currentRoundNum: 1,
     status: "choosing", currentDrawerId: order[0], wordChoices: choices,
-    currentWord: null, chooseDeadline: Date.now() + 15000
+    currentWord: null, chooseDeadline: Date.now() + 10000
   });
 }
 
@@ -264,7 +264,7 @@ async function advanceTurn(metaRef, playersRef) {
   await update(metaRef, {
     status: "choosing", turnIndex: nextIndex, currentRoundNum: roundNum,
     currentDrawerId: drawerId, wordChoices: choices, currentWord: null,
-    chooseDeadline: Date.now() + 15000, turnOrder: order
+    chooseDeadline: Date.now() + 10000, turnOrder: order
   });
 }
 
@@ -391,6 +391,10 @@ function renderTopbar(els) {
     const secsLeft = Math.max(0, Math.ceil(((m.chooseDeadline || Date.now()) - Date.now()) / 1000));
     els.wordHint.textContent = amDrawer ? "Pick a word to draw!" : `${drawerName} is choosing a word...`;
     els.timerCircle.textContent = secsLeft > 0 ? secsLeft : "⏳";
+    if (els.wordChoiceTimer) {
+      els.wordChoiceTimer.textContent = secsLeft;
+      els.wordChoiceTimer.classList.toggle("urgent", secsLeft <= 4);
+    }
   } else {
     els.wordHint.textContent = "";
     els.timerCircle.textContent = "-";
