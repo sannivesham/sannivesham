@@ -281,6 +281,12 @@ canvas#drawCanvas { width: 100%; aspect-ratio: 4/3; background: #fff; border-rad
   display: flex; align-items: center; justify-content: center; flex-direction: column;
 }
 .word-choice-overlay h2 { color: #fff; }
+.word-choice-timer {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--accent-2);
+  display: flex; align-items: center; justify-content: center; font-weight: 800;
+  font-size: 1.4rem; margin: 4px 0 16px; transition: background 0.2s ease, color 0.2s ease;
+}
+.word-choice-timer.urgent { background: var(--danger); color: #fff; animation: timer-pulse 0.6s infinite; }
 .word-choice-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .word-choice-btns button { width: auto; padding: 16px 22px; font-size: 1.1rem; }
 
