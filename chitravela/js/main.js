@@ -106,15 +106,39 @@ async function createRoom(isPublic) {
   enterLobby(roomId);
 }
 
+async function addToTurnOrderIfMissing(roomId, playerUid) {
+  // Player joined mid-game: fold them into the draw rotation so they get
+  // a turn once the current lap of players finishes, instead of being
+  // stuck as a spectator forever.
+  const metaRef = ref(db, `rooms/${roomId}/meta`);
+  await runTransaction(metaRef, (meta) => {
+    if (!meta) return meta;
+    const order = meta.turnOrder || [];
+    if (!order.includes(playerUid)) {
+      meta.turnOrder = [...order, playerUid];
+    }
+    return meta;
+  });
+}
+
 async function joinRoomByCode(code) {
   await authReady;
   const roomId = code.trim().toUpperCase();
   const metaSnap = await get(ref(db, `rooms/${roomId}/meta`));
   if (!metaSnap.exists()) { showHomeError("Room not found. Check the code."); return; }
-  if (metaSnap.val().status !== "lobby") { showHomeError("That game already started."); return; }
+  const meta = metaSnap.val();
   await joinRoomAsPlayer(roomId, getName());
-  isRoomHost = metaSnap.val().hostId === uid;
-  enterLobby(roomId);
+  isRoomHost = meta.hostId === uid;
+  if (meta.status && meta.status !== "lobby") {
+    // Game already in progress — jump straight into it instead of
+    // blocking the join. New player joins as a spectator for the
+    // current round and gets folded into the next drawing rotation.
+    await addToTurnOrderIfMissing(roomId, uid);
+    currentRoomId = roomId;
+    enterGame(roomId);
+  } else {
+    enterLobby(roomId);
+  }
 }
 
 async function playPublicMatch() {
@@ -127,7 +151,15 @@ async function playPublicMatch() {
     await joinRoomAsPlayer(openRoomId, name);
     await runTransaction(ref(db, `publicRooms/${openRoomId}/playerCount`), (c) => (c || 0) + 1);
     isRoomHost = false;
-    enterLobby(openRoomId);
+    const metaSnap = await get(ref(db, `rooms/${openRoomId}/meta`));
+    const meta = metaSnap.val() || {};
+    if (meta.status && meta.status !== "lobby") {
+      await addToTurnOrderIfMissing(openRoomId, uid);
+      currentRoomId = openRoomId;
+      enterGame(openRoomId);
+    } else {
+      enterLobby(openRoomId);
+    }
   } else {
     await createRoom(true);
     // Nobody else was around to match into — quietly fill the room with
@@ -231,6 +263,7 @@ function enterGame(roomId) {
     canvasPanel: document.querySelector(".canvas-panel"),
     wordChoiceOverlay: document.getElementById("wordChoiceOverlay"),
     wordChoiceBtns: document.getElementById("wordChoiceBtns"),
+    wordChoiceTimer: document.getElementById("wordChoiceTimer"),
     brushSize: document.getElementById("brushSize"),
     toolButtons: {
       toolPen: document.getElementById("toolPen"),
