@@ -203,7 +203,69 @@ navButtons.forEach((button) => {
 });
 
 /* ══════════════════════════════════════
-   BACKGROUND UPLOAD MANAGER
+   THEME-WISE BACKGROUND MANAGER
+══════════════════════════════════════ */
+
+const themeSelector = document.getElementById("themeSelectorDashboard");
+const themePcLabel = document.getElementById("currentThemePcLabel");
+const themeMobileLabel = document.getElementById("currentThemeMobileLabel");
+const themePcStatus = document.getElementById("themePcStatus");
+const themeMobileStatus = document.getElementById("themeMobileStatus");
+
+async function loadThemeBackgroundsAdmin() {
+  if (!themeSelector) return;
+  const currentTheme = themeSelector.value;
+  const themeName = themeSelector.options[themeSelector.selectedIndex].text;
+
+  if (themePcLabel) themePcLabel.innerText = `${themeName} - PC Background`;
+  if (themeMobileLabel) themeMobileLabel.innerText = `${themeName} - Mobile Background`;
+
+  try {
+    const snap = await getDoc(doc(db, "settings", "backgrounds"));
+    if (snap.exists()) {
+      const data = snap.data();
+      const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme] || {};
+      if (themePcStatus) themePcStatus.innerText = themeConfig.pc ? "✅ Uploaded" : "Default / Not set";
+      if (themeMobileStatus) themeMobileStatus.innerText = themeConfig.mobile ? "✅ Uploaded" : "Default / Not set";
+    }
+  } catch (e) {
+    console.log("Error loading theme backgrounds:", e);
+  }
+}
+
+if (themeSelector) {
+  themeSelector.addEventListener("change", loadThemeBackgroundsAdmin);
+  loadThemeBackgroundsAdmin();
+}
+
+document.querySelectorAll(".theme-bg-upload-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    if (!themeSelector) return;
+    const currentTheme = themeSelector.value;
+    const device = btn.dataset.device; // 'pc' or 'mobile'
+    const url = await uploadImage();
+    if (!url) return;
+
+    await setDoc(
+      doc(db, "settings", "backgrounds"),
+      {
+        themes: {
+          [currentTheme]: {
+            [device]: url
+          }
+        },
+        updatedAt: serverTimestamp()
+      },
+      { merge: true }
+    );
+
+    alert(`✅ ${currentTheme} ${device.toUpperCase()} background saved successfully!`);
+    loadThemeBackgroundsAdmin();
+  });
+});
+
+/* ══════════════════════════════════════
+   STANDARD BACKGROUND UPLOAD MANAGER
 ══════════════════════════════════════ */
 
 document.querySelectorAll(".bg-upload-btn").forEach((btn) => {

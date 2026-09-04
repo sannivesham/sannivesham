@@ -5031,3 +5031,238 @@ button[class*="delete"] {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* =========================================
+   SANNIVESHAM MULTI-THEME ENGINE STYLES
+   (Ramayanam, Mahabharatam, Light, Dark)
+========================================= */
+
+:root,
+[data-theme="dark"] {
+  --theme-bg-gradient: linear-gradient(rgba(20, 9, 4, 0.72), rgba(12, 5, 2, 0.78));
+  --theme-bg-color: #120603;
+  --theme-text-primary: #FFFFFF;
+  --theme-text-secondary: #EDE3C8;
+  --theme-accent: #ffd166;
+  --theme-accent-glow: rgba(255, 209, 102, 0.35);
+  --theme-card-bg: rgba(25, 12, 6, 0.65);
+  --theme-card-border: rgba(255, 209, 102, 0.35);
+  --theme-navbar-bg: rgba(20, 9, 4, 0.88);
+  --theme-navbar-border: rgba(255, 209, 102, 0.35);
+  --theme-modal-bg: rgba(15, 6, 2, 0.95);
+}
+
+[data-theme="ramayanam"] {
+  --theme-bg-gradient: linear-gradient(rgba(45, 16, 4, 0.70), rgba(28, 9, 2, 0.80));
+  --theme-bg-color: #240b03;
+  --theme-text-primary: #FFF9F0;
+  --theme-text-secondary: #FDE8CF;
+  --theme-accent: #FF9E2C;
+  --theme-accent-glow: rgba(255, 158, 44, 0.40);
+  --theme-card-bg: rgba(46, 17, 5, 0.70);
+  --theme-card-border: rgba(255, 165, 52, 0.45);
+  --theme-navbar-bg: rgba(38, 14, 4, 0.90);
+  --theme-navbar-border: rgba(255, 158, 44, 0.45);
+  --theme-modal-bg: rgba(32, 11, 3, 0.96);
+}
+
+[data-theme="mahabharatam"] {
+  --theme-bg-gradient: linear-gradient(rgba(6, 18, 38, 0.72), rgba(3, 10, 24, 0.82));
+  --theme-bg-color: #040e1f;
+  --theme-text-primary: #FFFFFF;
+  --theme-text-secondary: #D4E4FF;
+  --theme-accent: #5AC8FA;
+  --theme-accent-glow: rgba(90, 200, 250, 0.35);
+  --theme-card-bg: rgba(8, 24, 52, 0.72);
+  --theme-card-border: rgba(90, 200, 250, 0.40);
+  --theme-navbar-bg: rgba(6, 18, 38, 0.92);
+  --theme-navbar-border: rgba(90, 200, 250, 0.40);
+  --theme-modal-bg: rgba(4, 14, 30, 0.96);
+}
+
+[data-theme="light"] {
+  --theme-bg-gradient: linear-gradient(rgba(255, 248, 238, 0.88), rgba(252, 242, 227, 0.92));
+  --theme-bg-color: #F8EFE0;
+  --theme-text-primary: #2C1810;
+  --theme-text-secondary: #5C3A21;
+  --theme-accent: #B87310;
+  --theme-accent-glow: rgba(184, 115, 16, 0.25);
+  --theme-card-bg: rgba(255, 255, 255, 0.85);
+  --theme-card-border: rgba(184, 115, 16, 0.35);
+  --theme-navbar-bg: rgba(255, 250, 242, 0.94);
+  --theme-navbar-border: rgba(184, 115, 16, 0.35);
+  --theme-modal-bg: rgba(255, 252, 247, 0.98);
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] body {
+  color: #2C1810 !important;
+}
+[data-theme="light"] .brand-text h1 {
+  color: #5B2B05 !important;
+  text-shadow: 0 0 16px rgba(184, 115, 16, 0.2) !important;
+}
+[data-theme="light"] .brand-text p {
+  color: #7A4215 !important;
+}
+[data-theme="light"] .intro-box,
+[data-theme="light"] .impact-card,
+[data-theme="light"] .qotd-card,
+[data-theme="light"] .word-card,
+[data-theme="light"] .contact-box,
+[data-theme="light"] .whatsapp-channel-box {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(184, 115, 16, 0.3) !important;
+  color: #2C1810 !important;
+  box-shadow: 0 4px 16px rgba(100, 60, 20, 0.08) !important;
+}
+[data-theme="light"] .intro-box p,
+[data-theme="light"] .intro-box h2,
+[data-theme="light"] .contact-section h2,
+[data-theme="light"] .category-heading,
+[data-theme="light"] .contact-box span,
+[data-theme="light"] .whatsapp-channel-box h3,
+[data-theme="light"] .whatsapp-channel-box p {
+  color: #2C1810 !important;
+}
+[data-theme="light"] .category-card .category-title {
+  background: rgba(255, 248, 235, 0.88) !important;
+  color: #3C1E0A !important;
+}
+[data-theme="light"] .glass-navbar {
+  background: rgba(255, 250, 242, 0.94) !important;
+  border-color: rgba(184, 115, 16, 0.35) !important;
+}
+[data-theme="light"] .nav-links a {
+  color: #4A2711 !important;
+}
+[data-theme="light"] .nav-links a:hover {
+  background: rgba(184, 115, 16, 0.15) !important;
+  color: #8C4E05 !important;
+}
+[data-theme="light"] .nav-action-btn {
+  background: rgba(184, 115, 16, 0.12) !important;
+  color: #8C4E05 !important;
+  border-color: rgba(184, 115, 16, 0.4) !important;
+}
+[data-theme="light"] .music-btn {
+  background: rgba(255, 250, 242, 0.95) !important;
+  border-color: #B87310 !important;
+  color: #8C4E05 !important;
+}
+
+/* THEME PICKER MODAL STYLING */
+.theme-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.82) !important;
+  z-index: 10000 !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  backdrop-filter: blur(8px) !important;
+}
+.theme-modal-box {
+  width: 94% !important;
+  max-width: 560px !important;
+  background: rgba(20, 10, 5, 0.96) !important;
+  border: 1.5px solid #ffd166 !important;
+  border-radius: 20px !important;
+  padding: 26px 20px !important;
+  box-shadow: 0 10px 36px rgba(0,0,0,0.8), 0 0 30px rgba(255,209,102,0.2) !important;
+  position: relative !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+.theme-modal-title {
+  text-align: center !important;
+  color: #ffd166 !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 6px !important;
+}
+.theme-modal-sub {
+  text-align: center !important;
+  color: #EDE3C8 !important;
+  opacity: 0.85 !important;
+  font-size: 0.92rem !important;
+  margin-bottom: 22px !important;
+}
+.theme-options-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px !important;
+}
+.theme-card-option {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1.5px solid rgba(255, 209, 102, 0.25) !important;
+  border-radius: 14px !important;
+  padding: 16px 12px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  position: relative !important;
+}
+.theme-card-option:hover {
+  transform: translateY(-3px) !important;
+  border-color: #ffd166 !important;
+  box-shadow: 0 6px 20px rgba(255, 209, 102, 0.25) !important;
+}
+.theme-card-option.active-theme {
+  border-color: #2ecc71 !important;
+  box-shadow: 0 0 16px rgba(46, 204, 113, 0.4) !important;
+  background: rgba(46, 204, 113, 0.12) !important;
+}
+.theme-card-option.active-theme::after {
+  content: "✓" !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  background: #2ecc71 !important;
+  color: white !important;
+  font-size: 0.75rem !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.theme-card-icon {
+  font-size: 2.2rem !important;
+  margin-bottom: 8px !important;
+}
+.theme-card-name {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #ffd166 !important;
+  margin-bottom: 4px !important;
+}
+.theme-card-desc {
+  font-size: 0.8rem !important;
+  color: #EDE3C8 !important;
+  opacity: 0.8 !important;
+}
+.theme-preview-dots {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+.theme-dot {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255,255,255,0.4) !important;
+}
+@media (max-width: 520px) {
+  .theme-options-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}

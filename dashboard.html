@@ -589,7 +589,37 @@
       ═══════════════════════════════════ -->
       <div id="backgroundsSection" class="dash-section">
         <h2>Background Manager</h2>
+
+        <!-- THEME-WISE HOME BACKGROUNDS -->
+        <div style="background: rgba(255,209,102,0.08); border: 1.5px solid #ffd166; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+          <h3 style="color: #ffd166; margin-bottom: 8px;">🎨 Theme-Wise Home Backgrounds</h3>
+          <p style="font-size: 0.9rem; color: #EDE3C8; margin-bottom: 14px;">Select a theme to upload and preview its custom background images:</p>
+
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+            <label style="font-weight: bold; color: #ffd166;">Select Theme:</label>
+            <select id="themeSelectorDashboard" style="padding: 8px 14px; border-radius: 8px; background: #260e04; color: #fff; border: 1px solid #ffd166; font-size: 1rem; cursor: pointer;">
+              <option value="ramayanam">🏹 రామాయణం (Ramayanam)</option>
+              <option value="mahabharatam">🦚 మహాభారతం (Mahabharatam)</option>
+              <option value="light">☀️ సాత్విక / వెలుగు (Light)</option>
+              <option value="dark">🌙 సాంప్రదాయ / చీకటి (Dark)</option>
+            </select>
+          </div>
+
+          <div class="bg-row" style="margin-bottom: 10px;">
+            <h3 id="currentThemePcLabel">Ramayanam PC Background</h3>
+            <button class="theme-bg-upload-btn" data-device="pc">Upload PC Image</button>
+            <span id="themePcStatus" style="font-size: 0.85rem; color: #EDE3C8; margin-left: 10px;"></span>
+          </div>
+
+          <div class="bg-row">
+            <h3 id="currentThemeMobileLabel">Ramayanam Mobile Background</h3>
+            <button class="theme-bg-upload-btn" data-device="mobile">Upload Mobile Image</button>
+            <span id="themeMobileStatus" style="font-size: 0.85rem; color: #EDE3C8; margin-left: 10px;"></span>
+          </div>
+        </div>
+
         <div class="bg-manager-box">
+          <h3 style="margin-bottom: 12px; color: #ffd166;">📄 Section Backgrounds</h3>
 
           <div class="bg-row">
             <h3>Home PC Background</h3>

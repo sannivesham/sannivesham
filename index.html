@@ -42,6 +42,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="style.css">
   <style>
     .games-grid {
@@ -300,6 +301,61 @@
     </div>
   </div>
 
+  <!-- THEME SELECTION MODAL -->
+  <div id="themeModal" class="theme-modal">
+    <div class="theme-modal-box">
+      <button class="auth-close-btn" id="themeCloseBtn">×</button>
+      <h2 class="theme-modal-title" data-en="Choose Your Theme">రంగు శైలిని ఎంచుకోండి</h2>
+      <p class="theme-modal-sub" data-en="Select a cultural theme for your Sannivesham experience">సన్నివేశం అనుభూతి కోసం మీకు నచ్చిన శైలిని ఎంచుకోండి</p>
+
+      <div class="theme-options-grid">
+        <div class="theme-card-option" data-theme-choice="ramayanam">
+          <div class="theme-card-icon">🏹</div>
+          <div class="theme-card-name" data-en="Ramayanam">రామాయణం</div>
+          <div class="theme-card-desc" data-en="Ayodhya Saffron & Royal Gold">అయోధ్య కాషాయం & రాజ సువర్ణం</div>
+          <div class="theme-preview-dots">
+            <span class="theme-dot" style="background: #FF9E2C;"></span>
+            <span class="theme-dot" style="background: #240b03;"></span>
+            <span class="theme-dot" style="background: #FDE8CF;"></span>
+          </div>
+        </div>
+
+        <div class="theme-card-option" data-theme-choice="mahabharatam">
+          <div class="theme-card-icon">🦚</div>
+          <div class="theme-card-name" data-en="Mahabharatam">మహాభారతం</div>
+          <div class="theme-card-desc" data-en="Krishna Peacock Blue & Gold">కృష్ణ మయూర నీలం & స్వర్ణం</div>
+          <div class="theme-preview-dots">
+            <span class="theme-dot" style="background: #5AC8FA;"></span>
+            <span class="theme-dot" style="background: #040e1f;"></span>
+            <span class="theme-dot" style="background: #D4E4FF;"></span>
+          </div>
+        </div>
+
+        <div class="theme-card-option" data-theme-choice="light">
+          <div class="theme-card-icon">☀️</div>
+          <div class="theme-card-name" data-en="Light Theme">సాత్విక / వెలుగు</div>
+          <div class="theme-card-desc" data-en="Sandalwood & Temple Parchment">చందనం & దేవాలయ ప్రకాశం</div>
+          <div class="theme-preview-dots">
+            <span class="theme-dot" style="background: #F8EFE0;"></span>
+            <span class="theme-dot" style="background: #B87310;"></span>
+            <span class="theme-dot" style="background: #2C1810;"></span>
+          </div>
+        </div>
+
+        <div class="theme-card-option" data-theme-choice="dark">
+          <div class="theme-card-icon">🌙</div>
+          <div class="theme-card-name" data-en="Dark Theme">సాంప్రదాయ / చీకటి</div>
+          <div class="theme-card-desc" data-en="Midnight Obsidian & Amber Glow">రాత్రి అంబర్ & స్వర్ణ కాంతి</div>
+          <div class="theme-preview-dots">
+            <span class="theme-dot" style="background: #120603;"></span>
+            <span class="theme-dot" style="background: #ffd166;"></span>
+            <span class="theme-dot" style="background: #EDE3C8;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- LEADERBOARD MODAL -->
   <div id="leaderboardModal" class="auth-modal">
     <div class="auth-modal-box">
@@ -353,6 +409,7 @@
       <a href="#contact" data-en="Contact">సంప్రదించండి</a>
     </div>
     <div class="nav-actions">
+      <button id="themeToggleBtn" class="nav-action-btn theme-btn" title="రంగు శైలిని ఎంచుకోండి (Choose Theme)" aria-label="Choose Theme">🎨</button>
       <button id="langToggleBtn" class="nav-action-btn lang-btn" title="View in English" aria-label="Toggle language">EN</button>
       <a id="profileBtn" href="profile.html" class="nav-action-btn profile-btn" title="Profile" aria-label="Profile">👤</a>
     </div>
@@ -609,18 +666,58 @@
         } catch (e) {
           snap = await getDoc(doc(db, "settings", "backgrounds"));
         }
-        if (!snap.exists()) return;
-        const data = snap.data();
+        const currentTheme = window.SanniveshamTheme ? window.SanniveshamTheme.getTheme() : "ramayanam";
         const bg = document.querySelector(".home-bg");
         if (!bg) return;
-        if (window.innerWidth <= 700 && data.homeMobile) {
-          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.55),rgba(10,5,0,0.60)),url("${data.homeMobile}")`;
-        } else if (data.homePc) {
-          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
+
+        let themePc = "";
+        let themeMobile = "";
+
+        if (snap && snap.exists()) {
+          const data = snap.data();
+          const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme];
+          if (themeConfig) {
+            themePc = themeConfig.pc || "";
+            themeMobile = themeConfig.mobile || "";
+          }
+          if (!themePc) themePc = data.homePc || "";
+          if (!themeMobile) themeMobile = data.homeMobile || "";
         }
-      } catch (e) {}
+
+        // Local fallback defaults per theme
+        if (!themePc) {
+          if (currentTheme === "ramayanam") themePc = "images/ramayanam-bg.jpg";
+          else if (currentTheme === "mahabharatam") themePc = "images/homebg.jpg";
+          else if (currentTheme === "light") themePc = "images/homebg.jpg";
+          else themePc = "images/homebg.jpg";
+        }
+        if (!themeMobile) {
+          if (currentTheme === "ramayanam") themeMobile = "images/ramayanam-mobile.jpg";
+          else themeMobile = "images/homebg-mobile.jpg";
+        }
+
+        const isMobile = window.innerWidth <= 700;
+        const chosenUrl = isMobile && themeMobile ? themeMobile : themePc;
+
+        if (chosenUrl) {
+          if (currentTheme === "light") {
+            bg.style.backgroundImage = `linear-gradient(rgba(255,250,242,0.85),rgba(255,248,235,0.88)),url("${chosenUrl}")`;
+          } else if (currentTheme === "ramayanam") {
+            bg.style.backgroundImage = `linear-gradient(rgba(38,14,4,0.65),rgba(22,7,2,0.72)),url("${chosenUrl}")`;
+          } else if (currentTheme === "mahabharatam") {
+            bg.style.backgroundImage = `linear-gradient(rgba(4,14,32,0.68),rgba(2,8,20,0.75)),url("${chosenUrl}")`;
+          } else {
+            bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.68)),url("${chosenUrl}")`;
+          }
+        }
+      } catch (e) {
+        console.log("Background load error:", e);
+      }
     }
     loadHomeBackground();
+    window.addEventListener("sannivesham_theme_changed", () => {
+      loadHomeBackground();
+    });
 
     async function loadHomeCards() {
       const snap = await getDoc(doc(db, "settings", "homeCards"));
