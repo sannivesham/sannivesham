@@ -1,235 +1,270 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="te">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>సన్నివేశం స్టోర్ - త్వరలో ప్రారంభమవుతుంది</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>విక్రయశాల (Store) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="సన్నివేశం విక్రయశాల — సాంస్కృతిక మరియు ఆధ్యాత్మిక గ్రంథాలు, పూజా సామగ్రి, సంప్రదాయ వస్తువులు మరియు పవిత్ర సామగ్రి.">
+  <link rel="canonical" href="https://sannivesham.com/store.html">
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  <meta property="og:title" content="విక్రయశాల (Store) - సన్నివేశం">
+  <meta property="og:description" content="సాంస్కృతిక గ్రంథాలు, పూజా ద్రవ్యాలు మరియు సంప్రదాయ వస్తువుల సమాహారం.">
+  <meta property="og:image" content="https://sannivesham.com/images/store.png">
+  <meta property="og:url" content="https://sannivesham.com/store.html">
+  <meta property="og:type" content="website">
+
+  <!-- Breadcrumb & WebPage Schema for Google Sitelinks -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://sannivesham.com/store.html#webpage",
+        "url": "https://sannivesham.com/store.html",
+        "name": "విక్రయశాల (Store) - సన్నివేశం",
+        "description": "సాంస్కృతిక మరియు ఆధ్యాత్మిక గ్రంథాలు, పూజా వస్తువులు",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://sannivesham.com/#website",
+          "name": "సన్నివేశం",
+          "url": "https://sannivesham.com/"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ప్రారంభం",
+            "item": "https://sannivesham.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "విక్రయశాల",
+            "item": "https://sannivesham.com/store.html"
+          }
+        ]
+      }
+    ]
   }
+  </script>
 
-  html, body {
-    height: 100%;
-    width: 100%;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
-  body {
-    font-family: 'Noto Sans Telugu', sans-serif;
-    background: radial-gradient(circle at 50% 30%, #1a1006 0%, #0d0803 55%, #050302 100%);
-    color: #EDE3C8;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 60px 24px;
-    position: relative;
-    overflow: hidden;
-  }
+  <script src="../theme.js?v=20260904b"></script>
+  <link rel="stylesheet" href="../style.css?v=20260904b">
 
-  .top-brand {
-    position: fixed;
-    top: 26px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: #ffd166;
-    opacity: 0.9;
-  }
-
-  .diya-wrap {
-    position: relative;
-    width: 140px;
-    height: 180px;
-    margin-bottom: 34px;
-  }
-
-  .diya-base {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 46px;
-    background: linear-gradient(180deg, #C9A24B 0%, #8a6a26 100%);
-    border-radius: 0 0 60px 60px / 0 0 40px 40px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-  }
-
-  .diya-base::before {
-    content: "";
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    right: 8px;
-    height: 16px;
-    background: linear-gradient(180deg, #E9C878 0%, #C9A24B 100%);
-    border-radius: 50%;
-  }
-
-  .diya-flame {
-    position: absolute;
-    bottom: 46px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 40px;
-    background: radial-gradient(circle at 50% 70%, #fff6d0 0%, #ffd166 35%, #ff9a3c 65%, transparent 80%);
-    border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
-    filter: blur(0.3px);
-    animation: flicker 1.6s ease-in-out infinite;
-    transform-origin: bottom center;
-  }
-
-  .diya-glow {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90px;
-    height: 90px;
-    background: radial-gradient(circle, rgba(255,180,80,0.35) 0%, transparent 70%);
-    animation: glow-pulse 1.6s ease-in-out infinite;
-  }
-
-  .smoke {
-    position: absolute;
-    bottom: 84px;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(230, 220, 200, 0.35);
-    animation: rise 3.5s ease-in infinite;
-  }
-  .smoke:nth-child(1) { animation-delay: 0s; margin-left: -6px; }
-  .smoke:nth-child(2) { animation-delay: 1.2s; margin-left: 2px; }
-  .smoke:nth-child(3) { animation-delay: 2.4s; margin-left: -2px; }
-
-  @keyframes flicker {
-    0%, 100% { transform: translateX(-50%) scaleY(1) rotate(-1deg); }
-    25% { transform: translateX(-50%) scaleY(1.08) rotate(1.5deg); }
-    50% { transform: translateX(-50%) scaleY(0.94) rotate(-2deg); }
-    75% { transform: translateX(-50%) scaleY(1.05) rotate(1deg); }
-  }
-
-  @keyframes glow-pulse {
-    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-    50% { opacity: 0.85; transform: translateX(-50%) scale(1.15); }
-  }
-
-  @keyframes rise {
-    0% { transform: translate(0, 0) scale(1); opacity: 0; }
-    15% { opacity: 0.5; }
-    100% { transform: translate(14px, -110px) scale(2.2); opacity: 0; }
-  }
-
-  .store-eyebrow {
-    letter-spacing: 3px;
-    font-size: 0.8rem;
-    color: #C9A24B;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    opacity: 0.85;
-  }
-
-  .store-heading {
-    font-size: 2.4rem;
-    color: #ffd166;
-    margin: 0 0 18px;
-    line-height: 1.3;
-    text-shadow: 0 0 18px rgba(255, 190, 90, 0.25);
-  }
-
-  .store-sub {
-    max-width: 480px;
-    color: #EDE3C8;
-    opacity: 0.85;
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin: 0 auto 34px;
-  }
-
-  .store-divider {
-    width: 70px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #C9A24B, transparent);
-    margin: 0 auto 34px;
-  }
-
-  .store-notify-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 22px;
-    border: 1px solid rgba(201, 162, 75, 0.4);
-    border-radius: 999px;
-    color: #ffd166;
-    font-size: 0.95rem;
-    background: rgba(237, 227, 200, 0.04);
-    margin-bottom: 26px;
-  }
-
-  .back-link {
-    color: #C9A24B;
-    text-decoration: none;
-    font-size: 0.9rem;
-    opacity: 0.75;
-    border-bottom: 1px solid rgba(201, 162, 75, 0.4);
-    padding-bottom: 2px;
-    transition: 0.3s ease;
-  }
-
-  .back-link:hover {
-    opacity: 1;
-    color: #ffd166;
-  }
-
-  @media (max-width: 500px) {
-    .store-heading { font-size: 1.7rem; }
-    .store-sub { font-size: 0.95rem; }
-    .top-brand { font-size: 1.05rem; top: 20px; }
-  }
-</style>
+  <style>
+    .store-page {
+      min-height: 100vh;
+      padding: 30px 20px 80px;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .store-hero {
+      text-align: center;
+      margin: 20px auto 40px;
+    }
+    .store-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 2.8rem);
+      color: #ffd166;
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-shadow: 0 2px 14px rgba(255, 209, 102, 0.3);
+    }
+    .store-hero p {
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      color: #EDE3C8;
+      opacity: 0.9;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .store-categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .store-item-card {
+      background: rgba(22, 10, 5, 0.78);
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .store-item-card:hover {
+      transform: translateY(-5px);
+      border-color: #ffd166;
+    }
+    .store-item-icon {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+    }
+    .store-item-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffd166;
+      margin-bottom: 6px;
+    }
+    .store-item-sub {
+      font-size: 0.9rem;
+      color: #EDE3C8;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+    .store-action-box {
+      background: rgba(255, 209, 102, 0.06);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 20px;
+      padding: 30px 24px;
+      text-align: center;
+      margin-top: 40px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .store-action-box h2 {
+      font-size: 1.35rem;
+      color: #ffd166;
+      margin-bottom: 10px;
+    }
+    .store-action-box p {
+      font-size: 0.98rem;
+      color: #EDE3C8;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .store-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 18px rgba(255, 209, 102, 0.45);
+    }
+  </style>
 </head>
 <body>
 
-  <div class="top-brand">సన్నివేశం</div>
+  <div class="home-bg"></div>
 
-  <div class="diya-wrap">
-    <div class="diya-glow"></div>
-    <span class="smoke"></span>
-    <span class="smoke"></span>
-    <span class="smoke"></span>
-    <div class="diya-flame"></div>
-    <div class="diya-base"></div>
+  <!-- CREATIVE DIVINE PRELOADER -->
+  <div id="loader" class="creative-loader">
+    <div class="loader-mandala-container">
+      <div class="mandala-ring outer-ring"></div>
+      <div class="mandala-ring inner-ring"></div>
+      <div class="loader-emblem-wrap">
+        <img src="../images/logo.png" class="loader-emblem" alt="Sannivesham Logo">
+        <div class="divine-diya">
+          <div class="diya-flame"></div>
+          <div class="diya-base"></div>
+        </div>
+      </div>
+    </div>
+    <h1 class="loader-title">&#3128;&#3112;&#3149;&#3112;&#3135;&#3125;&#3143;&#3126;&#3074;</h1>
+    <p class="loader-tagline">&#10024; &#3128;&#3074;&#3128;&#3149;&#3093;&#3139;&#3108;&#3135; &bull; &#3128;&#3074;&#3114;&#3149;&#3120;&#3110;&#3134;&#3119;&#3074; &bull; &#3128;&#3074;&#3117;&#3134;&#3127;&#3107; &#10024;</p>
+    <div class="loader-pearls">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
+  <script>
+    (function() {
+      function dismiss() {
+        var el = document.getElementById('loader');
+        if (el && !el.dataset.dismissed) {
+          el.dataset.dismissed = 'true';
+          el.classList.add('loader-hidden');
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+        }
+      }
+      if (document.readyState === 'complete') {
+        setTimeout(dismiss, 250);
+      } else {
+        window.addEventListener('load', function() { setTimeout(dismiss, 250); });
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(dismiss, 400); });
+      }
+      setTimeout(dismiss, 700);
+    })();
+  </script>
 
-  <p class="store-eyebrow">సన్నివేశం స్టోర్</p>
-  <h1 class="store-heading">త్వరలో ప్రారంభమవుతుంది</h1>
-  <div class="store-divider"></div>
-  <p class="store-sub">
-    పూజా సామాగ్రి, ఆధ్యాత్మిక వస్తువులు మరియు సాంప్రదాయ కళాకృతులతో
-    మా స్టోర్ మిమ్మల్ని త్వరలో చేరుకోబోతోంది. దీపం వెలుగులా,
-    మంచి రోజులు రాబోతున్నాయి.
-  </p>
+  <nav class="glass-navbar">
+    <a href="../index.html#categories">← వెనుకకు</a>
+    <a href="../index.html">ప్రారంభం</a>
+    <a href="./">విక్రయశాల</a>
+  </nav>
 
-  <div class="store-notify-box">
-    🔔 సిద్ధమైనప్పుడు మీకు తెలియజేస్తాము
-  </div>
+  <main class="store-page">
+    <header class="store-hero">
+      <h1>🛍️ సన్నివేశం విక్రయశాల</h1>
+      <p>భారతీయ సనాతన సంప్రదాయం, ఆధ్యాత్మిక గ్రంథాలు, పూజా సామగ్రి మరియు సంస్కృతి పరిమళాలను మీ గృహానికి చేర్చే పవిత్ర వేదిక.</p>
+    </header>
 
-  <a href="https://sannivesham.com" class="back-link">
-    ← సన్నివేశం.com కి తిరిగి వెళ్ళండి
-  </a>
+    <div class="store-categories-grid">
+      <div class="store-item-card">
+        <div class="store-item-icon">📖</div>
+        <h2 class="store-item-title">ఆధ్యాత్మిక గ్రంథాలు</h2>
+        <p class="store-item-sub">రామాయణం, భగవద్గీత, పురాణాలు మరియు తెలుగు సాహిత్య ప్రతులు.</p>
+      </div>
 
+      <div class="store-item-card">
+        <div class="store-item-icon">🪔</div>
+        <h2 class="store-item-title">పూజా సామగ్రి</h2>
+        <p class="store-item-sub">ఇత్తడి దీపాలు, గంటలు, దూప దీప పాత్రలు మరియు పూజా ద్రవ్యాలు.</p>
+      </div>
+
+      <div class="store-item-card">
+        <div class="store-item-icon">📿</div>
+        <h2 class="store-item-title">జపమాలలు & రుద్రాక్షలు</h2>
+        <p class="store-item-sub">తులసి, స్పటిక, చందన మరియు రుద్రాక్ష జపమాలలు.</p>
+      </div>
+
+      <div class="store-item-card">
+        <div class="store-item-icon">🖼️</div>
+        <h2 class="store-item-title">దైవిక చిత్రపటాలు</h2>
+        <p class="store-item-sub">ఆలయ చిత్రాలు మరియు సాంప్రదాయ కళారూపాల ఫ్రేమ్‌లు.</p>
+      </div>
+    </div>
+
+    <div class="store-action-box">
+      <h2>ఆన్‌లైన్ స్టోర్ కేటలాగ్</h2>
+      <p>మా ప్రత్యేక ఉత్పత్తులను వీక్షించడానికి లేదా ఆర్డర్ చేయడానికి క్రింది లింక్ ద్వారా ఆన్‌లైన్ స్టోర్‌ను సందర్శించండి.</p>
+      <a href="store/" class="store-btn">
+        స్టోర్ కేటలాగ్ వీక్షించండి ➜
+      </a>
+    </div>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ సనాతన ధర్మం • సంప్రదాయ జీవన విధానం ✨</p>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="../script.js?v=2"></script>
 </body>
 </html>

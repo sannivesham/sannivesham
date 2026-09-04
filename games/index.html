@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>ఆటలు (Cultural Games) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="తెలుగు సంస్కృతి, పద శోధన, చిత్ర గడులు, సుడోకు, జతపరుచు, చిట్టడవి మరియు మత్స్యవేధం సాంప్రదాయ ఆటలు — సన్నివేశం.">
+  <link rel="canonical" href="https://sannivesham.com/games.html">
+
+  <meta property="og:title" content="ఆటలు (Cultural Games) - సన్నివేశం">
+  <meta property="og:description" content="తెలుగు సంస్కృతి, పద శోధన, చిత్ర గడులు, సుడోకు, చిట్టడవి మరియు మత్స్యవేధం సాంప్రదాయ ఆటలను ఆడండి.">
+  <meta property="og:image" content="https://sannivesham.com/images/gita.png">
+  <meta property="og:url" content="https://sannivesham.com/games.html">
+  <meta property="og:type" content="website">
+
+  <!-- Breadcrumb & WebPage Schema for Google Sitelinks -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://sannivesham.com/games.html#webpage",
+        "url": "https://sannivesham.com/games.html",
+        "name": "ఆటలు (Cultural Games) - సన్నివేశం",
+        "description": "తెలుగు సంస్కృతి, సాంప్రదాయ జ్ఞాన ఆటలు మరియు పజిల్స్",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://sannivesham.com/#website",
+          "name": "సన్నివేశం",
+          "url": "https://sannivesham.com/"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ప్రారంభం",
+            "item": "https://sannivesham.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "ఆటలు",
+            "item": "https://sannivesham.com/games.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="../theme.js?v=20260904b"></script>
+  <link rel="stylesheet" href="../style.css?v=20260904b">
+
+  <style>
+    .games-page {
+      min-height: 100vh;
+      padding: 30px 20px 80px;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .games-hero {
+      text-align: center;
+      margin: 20px auto 40px;
+    }
+    .games-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 2.8rem);
+      color: #ffd166;
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-shadow: 0 2px 14px rgba(255, 209, 102, 0.3);
+    }
+    .games-hero p {
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      color: #EDE3C8;
+      opacity: 0.9;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .games-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .game-card-large {
+      background: rgba(22, 10, 5, 0.78);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .game-card-large::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #ffd166, transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .game-card-large:hover {
+      transform: translateY(-6px);
+      border-color: #ffd166;
+      box-shadow: 0 12px 30px rgba(255, 209, 102, 0.18);
+    }
+    .game-card-large:hover::before {
+      opacity: 1;
+    }
+    .game-card-icon {
+      font-size: 3.2rem;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 4px 10px rgba(255, 209, 102, 0.3));
+    }
+    .game-card-name {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffd166;
+      margin-bottom: 8px;
+    }
+    .game-card-en {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .game-card-desc {
+      font-size: 0.95rem;
+      color: #EDE3C8;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .game-play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      padding: 10px 22px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .game-card-large:hover .game-play-btn {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255, 209, 102, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="home-bg"></div>
+
+  <!-- CREATIVE DIVINE PRELOADER -->
+  <div id="loader" class="creative-loader">
+    <div class="loader-mandala-container">
+      <div class="mandala-ring outer-ring"></div>
+      <div class="mandala-ring inner-ring"></div>
+      <div class="loader-emblem-wrap">
+        <img src="../images/logo.png" class="loader-emblem" alt="Sannivesham Logo">
+        <div class="divine-diya">
+          <div class="diya-flame"></div>
+          <div class="diya-base"></div>
+        </div>
+      </div>
+    </div>
+    <h1 class="loader-title">&#3128;&#3112;&#3149;&#3112;&#3135;&#3125;&#3143;&#3126;&#3074;</h1>
+    <p class="loader-tagline">&#10024; &#3128;&#3074;&#3128;&#3149;&#3093;&#3139;&#3108;&#3135; &bull; &#3128;&#3074;&#3114;&#3149;&#3120;&#3110;&#3134;&#3119;&#3074; &bull; &#3128;&#3074;&#3117;&#3134;&#3127;&#3107; &#10024;</p>
+    <div class="loader-pearls">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <script>
+    (function() {
+      function dismiss() {
+        var el = document.getElementById('loader');
+        if (el && !el.dataset.dismissed) {
+          el.dataset.dismissed = 'true';
+          el.classList.add('loader-hidden');
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+        }
+      }
+      if (document.readyState === 'complete') {
+        setTimeout(dismiss, 250);
+      } else {
+        window.addEventListener('load', function() { setTimeout(dismiss, 250); });
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(dismiss, 400); });
+      }
+      setTimeout(dismiss, 700);
+    })();
+  </script>
+
+  <nav class="glass-navbar">
+    <a href="../index.html#categories">← వెనుకకు</a>
+    <a href="../index.html">ప్రారంభం</a>
+    <a href="./">ఆటలు</a>
+  </nav>
+
+  <main class="games-page">
+    <header class="games-hero">
+      <h1>🎮 ఆటల విభాగం</h1>
+      <p>తెలుగు సంస్కృతి, పద సంపద మరియు ఏకాగ్రతను పెంపొందించే సాంప్రదాయ ఆటలు. మీకిష్టమైన ఆటను ఎంచుకుని ఆనందించండి!</p>
+    </header>
+
+    <section class="games-hub-grid">
+      <a href="word-search/" class="game-card-large">
+        <div class="game-card-icon">🔍</div>
+        <h2 class="game-card-name">పద శోధన</h2>
+        <div class="game-card-en">Word Search</div>
+        <p class="game-card-desc">అక్షరాల గడులలో దాగిన తెలుగు పదాలను వెతికి మీ పదసంపదను పెంచుకోండి.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="Sliding-Puzzle/" class="game-card-large">
+        <div class="game-card-icon">🧩</div>
+        <h2 class="game-card-name">చిత్ర గడులు</h2>
+        <div class="game-card-en">Sliding Puzzle</div>
+        <p class="game-card-desc">దైవిక మరియు సాంస్కృతిక చిత్రాల ముక్కలను సరిచేసి పూర్తి చిత్రాన్ని ఆవిష్కరించండి.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="sudoko/" class="game-card-large">
+        <div class="game-card-icon">🔢</div>
+        <h2 class="game-card-name">సుడోకు</h2>
+        <div class="game-card-en">Sudoku</div>
+        <p class="game-card-desc">సంఖ్యల పజిల్ ద్వారా మీ మెదడుకు పదును పెట్టే లాజిక్ ఆట.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="connect-dots/" class="game-card-large">
+        <div class="game-card-icon">📍</div>
+        <h2 class="game-card-name">జతపరుచు</h2>
+        <div class="game-card-en">Connect the Dots</div>
+        <p class="game-card-desc">క్రమ సంఖ్యల చుక్కలను కలిపి అద్భుతమైన సాంస్కృతిక రూపాలను రూపొందించండి.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="maze/" class="game-card-large">
+        <div class="game-card-icon">🌀</div>
+        <h2 class="game-card-name">చిట్టడవి</h2>
+        <div class="game-card-en">Maze Challenge</div>
+        <p class="game-card-desc">చిక్కుముడుల దారుల్లో నుంచి సరైన మార్గాన్ని వెతికి గమ్యాన్ని చేరుకోండి.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="fisheye/" class="game-card-large">
+        <div class="game-card-icon">🏹</div>
+        <h2 class="game-card-name">మత్స్యవేధం</h2>
+        <div class="game-card-en">Fish-Eye Test</div>
+        <p class="game-card-desc">అర్జునుడి ఏకాగ్రతను ప్రతిబింబించే గురి పరీక్ష — మీ దృష్టిని కేంద్రీకరించండి.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+
+      <a href="chitravela/" class="game-card-large">
+        <div class="game-card-icon">🎨</div>
+        <h2 class="game-card-name">చిత్రవేల</h2>
+        <div class="game-card-en">Chitravela</div>
+        <p class="game-card-desc">సాంస్కృతిక మరియు పౌరాణిక చిత్రాల ద్వారా విశేషాలను గుర్తించే రసవత్తరమైన ఆట.</p>
+        <span class="game-play-btn">ఆడండి ➜</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ ఆటలలోనూ భారతీయ సంస్కృతి • వినోదంతో కూడిన విజ్ఞానం ✨</p>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="../script.js?v=2"></script>
+</body>
+</html>

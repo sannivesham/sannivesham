@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ప్రశ్నావళి (Quiz) - సన్నివేశం | Sannivesham</title>
+    <meta name="description" content="భారతీయ సంస్కృతి, ఇతిహాసాలు, పురాణాలు మరియు తెలుగు భాషపై రోజువారీ ఆన్‌లైన్ క్విజ్ మరియు లీడర్‌బోర్డ్ — సన్నివేశం.">
+    <link rel="canonical" href="https://sannivesham.com/quiz.html">
+    <meta property="og:title" content="ప్రశ్నావళి (Quiz) - సన్నివేశం">
+    <meta property="og:description" content="భారతీయ సంస్కృతి, ఇతిహాసాలు మరియు జ్ఞాన క్విజ్.">
+    <meta property="og:image" content="https://sannivesham.com/images/quiz.png">
+    <meta property="og:url" content="https://sannivesham.com/quiz.html">
+    <meta property="og:type" content="website">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "ప్రశ్నావళి (Quiz) - సన్నివేశం",
+      "description": "భారతీయ సంస్కృతి మరియు జ్ఞాన క్విజ్",
+      "url": "https://sannivesham.com/quiz.html"
+    }
+    </script>
+    <script src="../theme.js?v=20260904b"></script>
+    <link rel="stylesheet" href="../style.css?v=20260904b">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div class="quiz-bg"></div>
+
+    <nav class="glass-navbar">
+
+        <a href="../index.html#categories">← వెనుకకు</a>
+
+        <a href="../index.html">ప్రారంభం</a>
+
+        <a href="./">ప్రశ్నావళి</a>
+
+    </nav>
+
+    <section class="quiz-page">
+
+        <div class="quiz-title-box">
+
+            <h1>సన్నివేశం ప్రశ్నావళి</h1>
+
+            <p>
+                తెలుగు సంస్కృతి, భారతీయ సంప్రదాయాలు, దేవాలయాలు,
+                పండుగలు మరియు గ్రంథాల గురించి మీ జ్ఞానాన్ని పరీక్షించుకోండి.
+            </p>
+
+        </div>
+
+        <div id="testAnnounceBox" style="
+          background: rgba(20, 12, 5, 0.62);
+          border: 1px solid rgba(255, 209, 102, 0.38);
+          border-radius: 26px;
+          backdrop-filter: blur(12px);
+          box-shadow: 0 0 28px rgba(255, 209, 102, 0.13);
+          text-align: center;
+          padding: 35px 25px;
+          margin-bottom: 30px;
+        ">
+
+          <h2 style="color:#ffd166; font-size:32px; margin-bottom:10px;">🕉️ ప్రత్యేక పరీక్ష</h2>
+
+          <p style="color:white; font-size:16px; margin-bottom:24px;">
+            శ్రీకృష్ణాష్టమి సందర్భంగా ప్రత్యేక పరీక్ష — శ్రావణ కృష్ణ అష్టమి (సెప్టెంబర్ 4, 2026)
+          </p>
+
+          <div id="testCountdown" style="
+            display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+            margin-bottom:26px;
+          ">
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdDays" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">రోజులు</label>
+            </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdHours" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">గంటలు</label>
+            </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdMins" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">నిమిషాలు</label>
+            </div>
+            <div style="min-width:78px; padding:14px 10px; border-radius:16px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,209,102,0.3);">
+              <span id="cdSecs" style="display:block; font-size:30px; font-weight:bold; color:#ffd166;">00</span>
+              <label style="display:block; font-size:12px; color:white; opacity:0.85; margin-top:4px;">సెకన్లు</label>
+            </div>
+          </div>
+
+          <a href="test.html" id="testStartBtn" style="
+            display:inline-block; border:1px solid rgba(255,209,102,0.4); border-radius:35px;
+            padding:14px 32px; font-weight:bold; font-size:16px;
+            background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5);
+            text-decoration:none; pointer-events:none; cursor:default;
+          ">
+            ఇంకా ప్రారంభం కాలేదు
+          </a>
+
+        </div>
+
+        <script>
+        (function () {
+          // Countdown target: Sep 4, 2026, 12:00 AM (midnight) IST — the start of
+          // Krishna Ashtami day.
+          var TEST_DATE = new Date("2026-09-04T00:00:00+05:30");
+
+          var daysEl = document.getElementById("cdDays");
+          var hoursEl = document.getElementById("cdHours");
+          var minsEl = document.getElementById("cdMins");
+          var secsEl = document.getElementById("cdSecs");
+          var startBtn = document.getElementById("testStartBtn");
+          var countdownBox = document.getElementById("testCountdown");
+
+          function pad(n) { return String(n).padStart(2, "0"); }
+
+          function unlockTest() {
+            clearInterval(timerId);
+            if (countdownBox) countdownBox.style.display = "none";
+            if (startBtn) {
+              startBtn.style.pointerEvents = "auto";
+              startBtn.style.cursor = "pointer";
+              startBtn.style.background = "#d4af37";
+              startBtn.style.color = "#111";
+              startBtn.textContent = "పరీక్ష ప్రారంభించండి ▶";
+              startBtn.setAttribute("href", "test.html");
+            }
+          }
+
+          function tick() {
+            var diff = TEST_DATE - new Date();
+            if (diff <= 0) { unlockTest(); return; }
+
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            var mins = Math.floor((diff / (1000 * 60)) % 60);
+            var secs = Math.floor((diff / 1000) % 60);
+
+            if (daysEl) daysEl.textContent = pad(days);
+            if (hoursEl) hoursEl.textContent = pad(hours);
+            if (minsEl) minsEl.textContent = pad(mins);
+            if (secsEl) secsEl.textContent = pad(secs);
+          }
+
+          var timerId = null;
+          if (TEST_DATE - new Date() <= 0) {
+            unlockTest();
+          } else {
+            tick();
+            timerId = setInterval(tick, 1000);
+          }
+        })();
+        </script>
+
+        <div class="general-quiz-box">
+
+            <h2>సాధారణ ప్రశ్నావళి</h2>
+
+            <div class="difficulty-buttons">
+
+                <button id="easyQuizBtn">🟢 సులభం</button>
+
+                <button id="mediumQuizBtn">🟡 మధ్యమం</button>
+
+                <button id="hardQuizBtn">🔴 కష్టం</button>
+
+            </div>
+
+            <button
+                class="start-quiz-btn"
+                id="startGeneralQuiz">
+
+                ▶ ప్రశ్నావళి ప్రారంభించండి
+
+            </button>
+
+            <button
+                class="leaderboard-btn"
+                id="generalLeaderboardBtn">
+
+                🏆 అగ్రస్థాన పట్టిక
+
+            </button>
+
+        </div>
+
+        <h2 class="quiz-section-title">
+
+            విభాగాల ప్రశ్నావళి
+
+        </h2>
+
+        <div class="quiz-category-grid">
+
+            <!-- ================= Hari ================= -->
+
+            <div class="quiz-category-card" data-category="hari">
+
+                <img src="../images/hari.png" alt="Hari">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>హరి</h2>
+
+                    <p class="community-score">
+                        సమూహ ఫలితం
+                    </p>
+
+                    <span id="hariScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+
+                            ▶ ప్రశ్నావళి ప్రారంభించండి
+
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+
+                            🏆 అగ్రస్థాన పట్టిక
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+                <!-- ================= Hara ================= -->
+
+            <div class="quiz-category-card" data-category="hara">
+
+                <img src="../images/hara.png" alt="Hara">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>హర</h2>
+
+                    <p class="community-score">
+                        సమూహ ఫలితం
+                    </p>
+
+                    <span id="haraScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ ప్రశ్నావళి ప్రారంభించండి
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 అగ్రస్థాన పట్టిక
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= Devi ================= -->
+
+            <div class="quiz-category-card" data-category="devi">
+
+                <img src="../images/devi.png" alt="Devi">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>దేవి</h2>
+
+                    <p class="community-score">
+                        సమూహ ఫలితం
+                    </p>
+
+                    <span id="deviScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ ప్రశ్నావళి ప్రారంభించండి
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 అగ్రస్థాన పట్టిక
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= Telugu ================= -->
+
+            <div class="quiz-category-card" data-category="telugu">
+
+                <img src="../images/telugu.png" alt="Telugu">
+
+                <div class="quiz-card-overlay">
+
+                    <h2>తెలుగు</h2>
+
+                    <p class="community-score">
+                        సమూహ ఫలితం
+                    </p>
+
+                    <span id="teluguScore">0</span>
+
+                    <div class="quiz-card-buttons">
+
+                        <button class="quiz-start-btn">
+                            ▶ ప్రశ్నావళి ప్రారంభించండి
+                        </button>
+
+                        <button class="quiz-leaderboard-btn">
+                            🏆 అగ్రస్థాన పట్టిక
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="simple-footer">
+
+        <script type="module" src="../social-links.js"></script>
+        <p>
+            © 2026 సన్నివేశం
+        </p>
+
+    </footer>
+
+    <script src="../script.js"></script>
+
+    <script type="module" src="quiz.js"></script>
+
+    <script type="module">
+      import { db } from "../firebase-config.js";
+
+      import {
+        doc,
+        getDoc
+      } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+      async function loadQuizBackground() {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+        const bg = document.querySelector(".quiz-bg");
+        if (!bg) return;
+
+        if (window.innerWidth <= 700 && data.quizMobile) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
+        } else if (data.quizPc) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+        }
+      }
+
+      loadQuizBackground();
+    </script>
+
+</body>
+
+</html>
+

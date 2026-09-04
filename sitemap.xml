@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
@@ -10,73 +10,73 @@
 
   <!-- 12 Core Primary Sections for Google Sitelinks (6 and 6) -->
   <url>
-    <loc>https://sannivesham.com/stories.html</loc>
+    <loc>https://sannivesham.com/stories/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/festivals.html</loc>
+    <loc>https://sannivesham.com/festivals/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/temples.html</loc>
+    <loc>https://sannivesham.com/temples/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/events.html</loc>
+    <loc>https://sannivesham.com/events/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/games.html</loc>
+    <loc>https://sannivesham.com/games/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/quiz.html</loc>
+    <loc>https://sannivesham.com/quiz/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/ithihasalu.html</loc>
+    <loc>https://sannivesham.com/ithihasalu/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/videos.html</loc>
+    <loc>https://sannivesham.com/videos/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/calendar.html</loc>
+    <loc>https://sannivesham.com/calendar/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/chant-counter.html</loc>
+    <loc>https://sannivesham.com/chant-counter/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/pooja-mandir.html</loc>
+    <loc>https://sannivesham.com/pooja-mandir/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/store.html</loc>
+    <loc>https://sannivesham.com/store/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -84,55 +84,49 @@
 
   <!-- Dedicated Sub-Apps & Games -->
   <url>
-    <loc>https://sannivesham.com/store/</loc>
+    <loc>https://sannivesham.com/calendar/calender/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/calender/</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sannivesham.com/word-search/</loc>
+    <loc>https://sannivesham.com/games/word-search/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/Sliding-Puzzle/</loc>
+    <loc>https://sannivesham.com/games/Sliding-Puzzle/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/sudoko/</loc>
+    <loc>https://sannivesham.com/games/sudoko/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/connect-dots/</loc>
+    <loc>https://sannivesham.com/games/connect-dots/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/maze/</loc>
+    <loc>https://sannivesham.com/games/maze/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/fisheye/</loc>
+    <loc>https://sannivesham.com/games/fisheye/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/chitravela/</loc>
+    <loc>https://sannivesham.com/games/chitravela/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -140,13 +134,13 @@
 
   <!-- Secondary Pages -->
   <url>
-    <loc>https://sannivesham.com/about.html</loc>
+    <loc>https://sannivesham.com/about/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/pooja-room.html</loc>
+    <loc>https://sannivesham.com/pooja-mandir/pooja-room.html</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

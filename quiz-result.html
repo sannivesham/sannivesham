@@ -1,87 +1,20 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html lang="te">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ప్రశ్నావళి | Sannivesham</title>
-
-  <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="quiz.css">
-</head>
-
-<body>
-
-  <div class="quiz-bg"></div>
-
-  <section class="play-quiz-page">
-
-    <div class="play-quiz-card result-card">
-
-      <h1>🎉 ప్రశ్నావళి పూర్తయింది/h1>
-
-      <p id="resultType">Quiz</p>
-
-      <h2 id="finalScore">0 / 10</h2>
-
-      <p id="accuracyText">Accuracy: 0%</p>
-
-      <p id="pointsText">+0 Points</p>
-
-    <p id="lifetimeScore">⭐ Lifetime Score : 0</p>
-
-<p id="communityScore">🌍 Community Score : 0</p>
-
-      <div class="quiz-bottom-buttons">
-
-        <button onclick="window.location.href='quiz.html'">
-          Play Again
-        </button>
-
-        <button onclick="window.location.href='leaderboard.html'">
-          Leaderboard
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <script src="script.js"></script>
-  <script type="module" src="quiz-result.js"></script>
-
-  <script type="module">
-    import { db } from "./firebase-config.js";
-
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-    async function loadQuizBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
-
-      const data = snap.data();
-      const bg = document.querySelector(".quiz-bg");
-      if (!bg) return;
-
-      if (window.innerWidth <= 700 && data.quizMobile) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
-      } else if (data.quizPc) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
-      }
-    }
-
-    loadQuizBackground();
+  <meta http-equiv="refresh" content="0; url=/quiz/quiz-result.html">
+  <link rel="canonical" href="https://sannivesham.com/quiz/quiz-result.html">
+  <title>Sannivesham - Redirecting...</title>
+  <script>
+    (function() {
+      var target = "/quiz/quiz-result.html" + window.location.search + window.location.hash;
+      window.location.replace(target);
+    })();
   </script>
-
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 60px 20px; background: #0c0603; color: #ede3c8;">
+  <h2>Sannivesham</h2>
+  <p>Redirecting to /quiz/quiz-result.html...</p>
+  <p><a href="/quiz/quiz-result.html" style="color: #ffd166; font-weight: bold; text-decoration: underline;">Click here if you are not redirected automatically &rarr;</a></p>
 </body>
-
 </html>
-

@@ -2,61 +2,19 @@
 <html lang="te">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>దేవాలయం - సన్నివేశం</title>
-  <script src="theme.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="temple-detail-body">
-  <div class="temples-bg"></div>
-  <nav class="glass-navbar">
-    <a id="backToListLink" href="temples.html">← వెనుకకు</a>
-    <a href="index.html">ప్రారంభం</a>
-    <a href="temples.html">దేవాలయాలు</a>
-  </nav>
-  <section class="festival-detail-page">
-    <article class="festival-detail-box" id="templeDetailBox">
-      <h1>Loading...</h1>
-    </article>
-  </section>
-  <footer class="simple-footer">
-    <p class="footer-quote" id="templeFooterQuote">
-      ✨ దేవాలయాలు భారతీయ సంస్కృతికి ప్రతీకలు ✨
-    </p>
-<script type="module" src="social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
-  </footer>
-  <script type="module" src="temple-detail.js"></script>
-  <script src="script.js"></script>
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-    async function loadTempleDetailBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const bg = document.querySelector(".temples-bg");
-      if (!bg) return;
-      if (window.innerWidth <= 700 && data.templesMobile) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.templesMobile}")`;
-      } else if (data.templesPc) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.templesPc}")`;
-      }
-    }
-    loadTempleDetailBackground();
+  <meta http-equiv="refresh" content="0; url=/temples/temple-detail.html">
+  <link rel="canonical" href="https://sannivesham.com/temples/temple-detail.html">
+  <title>Sannivesham - Redirecting...</title>
+  <script>
+    (function() {
+      var target = "/temples/temple-detail.html" + window.location.search + window.location.hash;
+      window.location.replace(target);
+    })();
   </script>
-<audio id="bgMusic" loop>
-  <source src="music/traditional.mp3" type="audio/mpeg">
-</audio>
-<button id="musicBtn" class="music-btn">
-  🔊
-</button>
-<script src="music.js"></script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 60px 20px; background: #0c0603; color: #ede3c8;">
+  <h2>Sannivesham</h2>
+  <p>Redirecting to /temples/temple-detail.html...</p>
+  <p><a href="/temples/temple-detail.html" style="color: #ffd166; font-weight: bold; text-decoration: underline;">Click here if you are not redirected automatically &rarr;</a></p>
 </body>
 </html>
-

@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>ప్రొఫైల్ - సన్నివేశం</title>
+  <script src="../theme.js"></script>
+    <link rel="stylesheet" href="../style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    .profile-page-body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 90px 20px 40px;
+    }
+    .profile-page-box {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(15, 10, 5, 0.55);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 20px;
+      padding: 30px 26px;
+      backdrop-filter: blur(10px);
+    }
+    .profile-page-box h2 {
+      text-align: center;
+      color: #ffd166;
+      margin-bottom: 20px;
+    }
+    .profile-back-link {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 20;
+      color: #ffd166;
+      text-decoration: none;
+      font-size: 1rem;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 14px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="home-bg"></div>
+
+  <a href="../index.html" class="profile-back-link">← వెనుకకు</a>
+
+  <div class="profile-page-body">
+    <div class="profile-page-box">
+
+      <!-- LOGIN VIEW -->
+      <div id="loginView">
+        <h2>లాగిన్ చేయండి</h2>
+
+        <div id="loginStep1">
+          <button id="googleLoginBtn" class="auth-google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
+          </button>
+          <div id="googleBtnHolder" style="margin-top:10px;"></div>
+          <div class="auth-divider" style="margin: 20px 0 16px;">లేదా</div>
+          <div style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.3); border-radius: 10px; padding: 12px; text-align: center; color: #EDE3C8; font-size: 0.9rem;">
+            📱 మొబైల్ OTP లాగిన్ త్వరలో అందుబాటులోకి రానుంది
+          </div>
+          <div id="recaptcha-container"></div>
+          <p id="loginMsg" class="auth-msg"></p>
+        </div>
+
+        <div id="loginStep2" style="display:none;">
+          <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
+          <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
+          <p id="otpMsg" class="auth-msg"></p>
+        </div>
+
+        <div id="loginStep3" style="display:none;">
+          <p>మీ పేరు నమోదు చేయండి</p>
+          <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
+          <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
+          <p id="nameMsg" class="auth-msg"></p>
+        </div>
+      </div>
+
+      <!-- PROFILE VIEW -->
+      <div id="profileView" style="display:none;">
+        <div class="profile-avatar" style="text-align:center; font-size:3rem;">👤</div>
+        <h2 id="profileName" style="text-align:center;"></h2>
+
+        <div class="profile-score-badge" style="text-align:center; margin: 16px 0 24px;">
+          ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
+        </div>
+
+        <button id="logoutUserBtn" class="auth-logout-btn" style="width:100%;">లాగ్అవుట్</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { db, auth } from "../firebase-config.js";
+
+    import {
+      doc, getDoc, setDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    import {
+      GoogleAuthProvider, signInWithCredential, RecaptchaVerifier,
+      signInWithPhoneNumber, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    // Real Web client ID from Google Cloud Console (Credentials -> OAuth 2.0 Client IDs)
+    // Only used as a fallback for a real browser — never used inside the app,
+    // since the app always uses its native AndroidBridge sign-in below.
+    const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
+
+    let currentUser = null;
+    let confirmationResult = null;
+
+    function isInsideApp() {
+      return !!window.AndroidBridge;
+    }
+
+    function showStep(id) {
+      ["loginStep1", "loginStep2", "loginStep3"].forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = "none";
+      });
+      const target = document.getElementById(id);
+      if (target) target.style.display = "block";
+    }
+
+    function showLoginView() {
+      document.getElementById("loginView").style.display = "block";
+      document.getElementById("profileView").style.display = "none";
+    }
+
+    function showProfileView() {
+      document.getElementById("loginView").style.display = "none";
+      document.getElementById("profileView").style.display = "block";
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (user) {
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        if (!userSnap.exists()) {
+          showLoginView();
+          showStep("loginStep3");
+        } else {
+          const data = userSnap.data();
+          document.getElementById("profileName").innerText = data.name || "User";
+          document.getElementById("profileScore").innerText = data.score || 0;
+          showProfileView();
+        }
+      } else {
+        showLoginView();
+        showStep("loginStep1");
+      }
+    });
+
+    // Google login — native app bridge takes priority when inside the app
+    window.handleGoogleCredentialResponse = async function(response) {
+      try {
+        const credential = GoogleAuthProvider.credential(response.credential);
+        const result = await signInWithCredential(auth, credential);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
+      }
+    };
+
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
+      if (isInsideApp()) {
+        window.AndroidBridge.triggerGoogleSignIn();
+        return;
+      }
+      try {
+        if (window.google && google.accounts && google.accounts.id) {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleCredentialResponse
+          });
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              document.getElementById("googleBtnHolder").innerHTML = "";
+              google.accounts.id.renderButton(
+                document.getElementById("googleBtnHolder"),
+                { theme: "outline", size: "large", width: 260 }
+              );
+            }
+          });
+        } else {
+          document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+        }
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
+      }
+    });
+
+    // Called by your Android app after native Google Sign-In succeeds
+    window.onNativeGoogleSignIn = async function(idToken) {
+      try {
+        const credential = GoogleAuthProvider.credential(idToken);
+        const result = await signInWithCredential(auth, credential);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
+      }
+    };
+
+    window.onNativeGoogleSignInError = function() {
+      document.getElementById("loginMsg").innerText = "Google లాగిన్ రద్దు చేయబడింది";
+    };
+
+    document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+      const phone = document.getElementById("phoneInput").value.trim();
+      if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+        }
+        let formattedPhone = phone.replace(/\s+/g, "");
+        if (!formattedPhone.startsWith("+")) formattedPhone = "+91" + formattedPhone;
+        confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
+        showStep("loginStep2");
+      } catch (e) {
+        document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
+      }
+    });
+
+    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+      const otp = document.getElementById("otpInput").value.trim();
+      try {
+        const result = await confirmationResult.confirm(otp);
+        await checkAndSetName(result.user);
+      } catch (e) {
+        document.getElementById("otpMsg").innerText = "OTP తప్పుగా ఉంది";
+      }
+    });
+
+    async function checkAndSetName(user) {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (!userSnap.exists()) {
+        showLoginView();
+        showStep("loginStep3");
+      }
+      // If it exists, onAuthStateChanged will fire and switch to profile view
+    }
+
+    document.getElementById("saveNameBtn").addEventListener("click", async () => {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) { document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి"; return; }
+      await setDoc(doc(db, "users", currentUser.uid), {
+        name, score: 0, answeredDates: [],
+        gameProgress: {
+          wordSearch: { completedLevels: [], metrics: {} },
+          slidingPuzzle: { completedLevels: [], metrics: {} },
+          sudoku: { completedLevels: [], metrics: {} },
+          connectDots: { completedLevels: [], metrics: {} }
+        }
+      });
+      document.getElementById("profileName").innerText = name;
+      document.getElementById("profileScore").innerText = 0;
+      showProfileView();
+    });
+
+    document.getElementById("logoutUserBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      showLoginView();
+      showStep("loginStep1");
+    });
+
+    async function loadHomeBackground() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".home-bg");
+        if (!bg) return;
+        if (window.innerWidth <= 700 && data.homeMobile) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.55),rgba(10,5,0,0.60)),url("${data.homeMobile}")`;
+        } else if (data.homePc) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
+        }
+      } catch (e) {}
+    }
+    loadHomeBackground();
+  </script>
+
+</body>
+</html>
+
