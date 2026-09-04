@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>సన్నివేశం — జతపరుచు</title>
+  <style>
+    :root {
+      --bg-dark: #120c08;
+      --card-bg: rgba(237, 227, 200, 0.05);
+      --gold: #C9A24B;
+      --gold-dim: rgba(201, 162, 75, 0.2);
+      --parchment: #EDE3C8;
+      --cyan: #4CB5C9;
+    }
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--parchment);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .wrap { max-width: 800px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+    .sannivesham-hero { text-align: center; margin-bottom: 10px; }
+    .main-brand-title { font-size: 2.2rem; color: var(--parchment); margin: 0; }
+    .site-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(201, 162, 75, 0.1); padding-bottom: 15px; }
+    .game-container {
+      position: relative; width: 100%; max-width: 600px; margin: 20px auto;
+      display: flex; justify-content: space-between; padding: 0 10px; box-sizing: border-box; min-height: 300px;
+    }
+    .column { display: flex; flex-direction: column; gap: 20px; width: 44%; z-index: 10; }
+    .dot-node {
+      background: var(--card-bg); border: 1px solid var(--gold-dim); padding: 16px 12px;
+      border-radius: 8px; color: var(--parchment); text-align: center; font-size: 1.1rem;
+      font-weight: bold; cursor: pointer; position: relative; box-sizing: border-box;
+    }
+    .dot-node.active { border-color: var(--cyan) !important; background: rgba(76, 181, 201, 0.15) !important; }
+    .dot-node.matched { border-color: var(--gold) !important; background: rgba(201, 162, 75, 0.15) !important; color: var(--gold) !important; cursor: default; }
+    svg#svgLines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+    line { stroke: var(--gold); stroke-width: 3; stroke-linecap: round; opacity: 0.85; }
+    .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 12, 8, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+    .overlay.hidden { display: none !important; }
+    .overlay-content { text-align: center; background: rgba(25, 20, 15, 0.9); padding: 30px; border: 1px solid var(--gold); border-radius: 12px; width: 80%; max-width: 400px; }
+    .gold-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px 24px; font-size: 1rem; cursor: pointer; margin-top: 20px; border-radius: 4px; }
+    .gold-btn:hover { background: var(--gold); color: #110c08; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="sannivesham-hero"><h1 class="main-brand-title">సన్నివేశం</h1></div>
+    <header class="site-header">
+      <h2 id="levelTitle" style="font-size: 1.6rem; color: #EDE3C8; margin: 0;">లెవెల్</h2>
+      <p id="levelSubtitle" style="color: var(--gold); font-size: 1rem; margin: 4px 0 0 0;"></p>
+      <div style="margin-top: 12px;"><a href="index.html" style="color: var(--cyan); text-decoration: none; font-size: 0.95rem;">← అన్ని లెవెల్స్</a></div>
+    </header>
+    <div class="game-container" id="gameContainer">
+      <svg id="svgLines"></svg>
+      <div class="column" id="leftColumn"></div>
+      <div class="column" id="rightColumn"></div>
+    </div>
+  </div>
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-content">
+      <h2 style="color: var(--gold); font-family: 'Cinzel', serif; margin-bottom: 10px;">అద్భుతం!</h2>
+      <p style="color: #EDE3C8;">అన్ని జతలు విజయవంతంగా కలపబడ్డాయి.</p>
+      <button id="nextLevelBtn" class="gold-btn">తదుపరి లెవెల్ →</button>
+    </div>
+  </div>
+  <script src="dots-data.js?v=3"></script>
+  <script type="module" src="progress.js?v=3"></script>
+  <script src="game.js?v=3"></script>
+</body>
+</html>

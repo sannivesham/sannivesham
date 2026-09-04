@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>సన్నివేశం — సుడోకు (Sudoku)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <!-- Cinematic Branded Hero Section -->
+    <div class="sannivesham-hero">
+      <div class="hero-logo-wrapper">
+        <div class="hero-emblem">
+          <!-- Pulls the logo directly from your main asset framework -->
+          <img src="https://sannivesham.com/images/logo.png" alt="Sannivesham Logo" class="emblem-img">
+        </div>
+      </div>
+
+      <h1 class="main-brand-title">సన్నివేశం</h1>
+      <p class="main-brand-tagline">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+    </div>
+    <!-- Game Section Header -->
+    <header class="site-header">
+      <div class="site-header-titles">
+        <h2>సుడోకు (Sudoku)</h2>
+        <p class="subtitle">గడులను పూరించండి. ఇతిహాసాలను ఆవిష్కరించండి.</p>
+      </div>
+      <!-- Fixed link back to your core home platform -->
+      <a href="https://sannivesham.com" class="back-link">← Back to main site</a>
+    </header>
+    <!-- Dynamic Level Selection Grid Container -->
+    <div id="levelGrid" class="level-grid"></div>
+  </div>
+  <!-- Game Scripts Layer -->
+  <script type="module" src="progress.js"></script>
+  <script type="module" src="level-select.js"></script>
+</body>
+</html>

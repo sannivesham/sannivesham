@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>సన్నివేశం — వ్యూహ రంగం</title>
+  <style>
+    :root {
+      --bg-dark: #120c08;
+      --card-bg: rgba(237, 227, 200, 0.05);
+      --gold: #C9A24B;
+      --gold-dim: rgba(201, 162, 75, 0.2);
+      --parchment: #EDE3C8;
+      --cyan: #4CB5C9;
+    }
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--parchment);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .wrap { max-width: 600px; margin: 0 auto; padding: 15px; box-sizing: border-box; text-align: center; }
+    .site-header h2 { font-size: 1.4rem; margin: 5px 0; color: #fff; }
+    .site-header p { color: var(--gold); margin: 2px 0 10px 0; font-size: 0.95rem; }
+    .canvas-container {
+      width: 100%; max-width: 400px; margin: 10px auto;
+      background: rgba(201, 162, 75, 0.03);
+      border: 2px solid var(--gold-dim); border-radius: 12px;
+      padding: 8px; box-sizing: border-box;
+    }
+    canvas#gameCanvas {
+      display: block; width: 100%; aspect-ratio: 1;
+      background-color: #17110a; border-radius: 6px;
+      cursor: pointer;
+    }
+    .stats-bar { display: flex; justify-content: space-between; margin: 10px auto; max-width: 400px; font-weight: bold; }
+    .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 12, 8, 0.96); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+    .overlay.hidden { display: none !important; }
+    .overlay-content { text-align: center; background: rgba(25, 20, 15, 0.95); padding: 30px; border: 1px solid var(--gold); border-radius: 12px; width: 85%; max-width: 380px; }
+    .gold-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px 24px; font-size: 1rem; cursor: pointer; margin-top: 15px; border-radius: 4px; display: block; width: 100%; box-sizing: border-box; }
+    .gold-btn:hover { background: var(--gold); color: #120c08; }
+    .opt-btn { background: rgba(237,227,200,0.06); border: 1px solid var(--gold-dim); color: #fff; padding: 12px; margin: 8px 0; border-radius: 6px; text-align: left; cursor: pointer; font-size: 1rem; width: 100%; display: block; }
+    .opt-btn:hover { border-color: var(--gold); background: rgba(201,162,75,0.1); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <h2 id="levelTitle">లెవెల్</h2>
+      <p id="levelSubtitle"></p>
+      <a href="index.html" style="color: var(--cyan); text-decoration: none; font-size: 0.9rem;">← అన్ని లెవెల్స్</a>
+    </header>
+    <div class="stats-bar">
+      <div>🎯 హిట్స్: <span id="hitDisplay">0</span>/<span id="targetDisplay">0</span></div>
+      <div>❤️ ప్రాణాలు: <span id="livesDisplay">3</span></div>
+    </div>
+    <div class="canvas-container"><canvas id="gameCanvas" width="400" height="400"></canvas></div>
+    <div style="margin-top: 10px; font-size: 0.9rem; color: #8a8271;">స్క్రీన్ పై ఎక్కడైనా ట్యాప్ చేసి బాణాన్ని వదలండి</div>
+  </div>
+
+  <!-- Focus Mode Overlay -->
+  <div id="focusOverlay" class="overlay">
+    <div class="overlay-content">
+      <h3 style="color: var(--gold); margin-top: 0;">గురు ద్రోణాచార్యుల ప్రశ్న:</h3>
+      <p style="font-size: 1.1rem; font-weight: bold; margin-bottom: 20px;">"వృక్షంపై నీకు ఏమి కనిపిస్తోంది?"</p>
+      <button class="opt-btn" onclick="checkFocus(false)">🌳 వృక్షం (Tree)</button>
+      <button class="opt-btn" onclick="checkFocus(false)">🐦 పక్షి (Bird)</button>
+      <button class="opt-btn" onclick="checkFocus(false)">🐟 చేప (Fish)</button>
+      <button class="opt-btn" onclick="checkFocus(true)">👁️ చేప కన్ను (Fish's Eye)</button>
+    </div>
+  </div>
+
+  <!-- Win Overlay -->
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-content">
+      <h2 style="color: var(--gold);">అద్భుత గురి!</h2>
+      <p id="comboBadge" style="color: #fff; font-weight: bold; font-size: 1.2rem;"></p>
+      <p style="color: #EDE3C8;">మీరు ఈ వ్యూహాన్ని విజయవంతంగా ఛేదించారు.</p>
+      <button id="nextLevelBtn" class="gold-btn">తదుపరి లెవెల్ →</button>
+    </div>
+  </div>
+
+  <!-- Game Over Overlay -->
+  <div id="gameOverOverlay" class="overlay hidden">
+    <div class="overlay-content">
+      <h2 style="color: #ff4d4d;">లక్ష్యం తప్పింది!</h2>
+      <p style="color: #EDE3C8;">మీ ప్రాణాలు ముగిశాయి. ఏకాగ్రతతో మళ్లీ ప్రయత్నించండి.</p>
+      <button class="gold-btn" onclick="window.location.reload()">మళ్లీ ఆడండి ↻</button>
+    </div>
+  </div>
+
+  <script src="fish-data.js?v=1"></script>
+  <script type="module" src="progress.js?v=1"></script>
+  <script src="game.js?v=1"></script>
+</body>
+</html>

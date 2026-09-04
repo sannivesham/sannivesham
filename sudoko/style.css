@@ -1,0 +1,382 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Mukta:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #161225;
+  --bg-deep: #0f0c1c;
+  --parchment: #EDE3C8;
+  --parchment-dim: #d9cca3;
+  --teal: #1F7A6C;
+  --gold: #C9A24B;
+  --sindoor: #A8322D;
+  --ink: #241c33;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(201,162,75,0.15), transparent 50%),
+    radial-gradient(circle at 20% 30%, rgba(201,162,75,0.06), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(31,122,108,0.10), transparent 45%),
+    var(--bg);
+  color: var(--parchment);
+  font-family: 'Mukta', sans-serif;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.03em;
+}
+
+a { color: inherit; }
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* ---------- Sannivesham Hero Branding ---------- */
+
+.sannivesham-hero {
+  text-align: center;
+  padding: 24px 0 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-logo-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.hero-emblem {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 25px rgba(201,162,75,0.4), inset 0 0 15px rgba(201,162,75,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Keeps the logo image cleanly bound to the circle */
+  transition: transform 0.3s ease;
+}
+
+.hero-emblem:hover {
+  transform: scale(1.02);
+}
+
+.emblem-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Centers and uniformly fills the container */
+  display: block;
+}
+
+.main-brand-title {
+  font-family: 'Mukta', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6), 0 0 20px rgba(201,162,75,0.2);
+}
+
+.main-brand-tagline {
+  margin: 6px 0 0;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  letter-spacing: 0.05em;
+  color: var(--parchment-dim);
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* ---------- Section Header Separator ---------- */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 20px;
+  margin-bottom: 36px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(201,162,75,0.25);
+}
+
+.site-header-titles {
+  min-width: 200px;
+  flex: 1 1 auto;
+}
+
+.site-header h2 {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  color: var(--gold);
+  margin: 0;
+}
+
+.site-header .subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--parchment-dim);
+}
+
+.back-link {
+  text-decoration: none;
+  color: var(--teal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.back-link:hover {
+  color: var(--gold);
+}
+
+/* ---------- Level select ---------- */
+
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+.level-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 1px solid rgba(201,162,75,0.3);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  text-decoration: none;
+  color: var(--parchment);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+.level-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 90% -10%, rgba(201,162,75,0.15), transparent 55%);
+  pointer-events: none;
+}
+
+.level-card:hover:not(.locked) {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.level-card.locked {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.level-number {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.level-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  margin: 6px 0 10px;
+}
+
+.level-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+}
+
+.level-stars {
+  margin-top: 14px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.level-lock-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 1.2rem;
+  color: var(--sindoor);
+}
+
+/* ---------- Game screen ---------- */
+
+.game-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.game-stats {
+  display: flex;
+  gap: 18px;
+  font-size: 0.95rem;
+  color: var(--parchment-dim);
+}
+
+.game-stats span strong {
+  color: var(--gold);
+}
+
+.board-frame {
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: 0 0 0 6px rgba(201,162,75,0.08), 0 20px 40px rgba(0,0,0,0.4);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.sudoku-grid {
+  display: grid;
+  gap: 2px;
+  background: rgba(201,162,75,0.35);
+  border: 3px solid var(--gold);
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.cell {
+  background: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.12s ease;
+}
+
+.cell:hover { background: #fff8e6; }
+
+.cell.given { cursor: default; background: #e4d7ae; }
+.cell.given:hover { background: #e4d7ae; }
+
+.cell.selected { background: #cdeee6; }
+.cell.conflict { background: #f3c9c4; }
+.cell.same-value { background: #ddf0ea; }
+
+.cell .symbol-icon {
+  width: 62%;
+  height: 62%;
+  color: var(--ink);
+}
+
+.cell.given .symbol-icon { color: #4a3a1f; }
+.cell.conflict .symbol-icon { color: var(--sindoor); }
+
+.cell.box-edge-right { border-right: 2px solid var(--ink); }
+.cell.box-edge-bottom { border-bottom: 2px solid var(--ink); }
+
+.symbol-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.palette-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--ink);
+  color: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.palette-btn:hover { transform: scale(1.08); background: var(--teal); }
+.palette-btn.erase { color: var(--sindoor); font-family: 'Cinzel', serif; font-size: 0.8rem; }
+
+.palette-btn .symbol-icon {
+  width: 78%;
+  height: 78%;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.btn {
+  font-family: 'Mukta', sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-primary { background: var(--teal); color: #fff; }
+.btn-secondary { background: transparent; color: var(--parchment); border: 1px solid rgba(237,227,200,0.4); }
+
+/* ---------- Win overlay ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,12,28,0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.overlay.hidden { display: none; }
+
+.overlay-card {
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  text-align: center;
+  max-width: 380px;
+}
+
+.overlay-card h2 {
+  color: var(--gold);
+  margin-top: 0;
+}
+
+.overlay-stars {
+  font-size: 2rem;
+  color: var(--gold);
+  margin: 14px 0;
+  letter-spacing: 6px;
+}
+
+@media (max-width: 480px) {
+  .palette-btn { width: 46px; height: 46px; }
+  .board-frame { padding: 8px; }
+  .sannivesham-hero { padding: 12px 0 20px; }
+  .hero-emblem { width: 110px; height: 110px; } /* Clean layout adjustments for mobile */
+}

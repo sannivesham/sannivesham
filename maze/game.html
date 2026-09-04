@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>సన్నివేశం — వ్యూహ రంగం</title>
+  <style>
+    :root {
+      --bg-dark: #120c08;
+      --card-bg: rgba(237, 227, 200, 0.05);
+      --gold: #C9A24B;
+      --gold-dim: rgba(201, 162, 75, 0.2);
+      --parchment: #EDE3C8;
+      --cyan: #4CB5C9;
+    }
+
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--parchment);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .wrap {
+      max-width: 600px; margin: 0 auto; padding: 15px;
+      box-sizing: border-box; text-align: center;
+    }
+
+    .site-header h2 { font-size: 1.4rem; margin: 5px 0; color: #fff; }
+    .site-header p { color: var(--gold); margin: 2px 0 10px 0; font-size: 0.95rem; }
+
+    .canvas-container {
+      width: 100%; max-width: 400px; margin: 10px auto;
+      background: rgba(201, 162, 75, 0.03);
+      border: 2px solid var(--gold-dim); border-radius: 12px;
+      padding: 8px; box-sizing: border-box;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    canvas#mazeCanvas {
+      display: block; width: 100%; aspect-ratio: 1;
+      background-color: #1a120c; border-radius: 6px;
+    }
+
+    .dpad-controller {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      width: 160px; margin: 20px auto 10px auto; gap: 8px;
+    }
+
+    .dpad-btn {
+      background: rgba(237, 227, 200, 0.07);
+      border: 1px solid var(--gold-dim); border-radius: 8px;
+      color: var(--parchment); font-size: 1.4rem; font-weight: bold;
+      height: 48px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.1s;
+      touch-action: none;
+    }
+    .dpad-btn:active { background: rgba(201, 162, 75, 0.25); border-color: var(--gold); }
+
+    .overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 12, 8, 0.95);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    .overlay.hidden { display: none !important; }
+    .overlay-content {
+      text-align: center; background: rgba(25, 20, 15, 0.9);
+      padding: 30px; border: 1px solid var(--gold); border-radius: 12px;
+      width: 80%; max-width: 380px;
+    }
+
+    .gold-btn {
+      background: transparent; border: 1px solid var(--gold); color: var(--gold);
+      padding: 10px 24px; font-size: 1rem; cursor: pointer;
+      margin-top: 20px; border-radius: 4px;
+    }
+    .gold-btn:hover { background: var(--gold); color: #120c08; }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header class="site-header">
+      <h2 id="levelTitle">లెవెల్</h2>
+      <p id="levelSubtitle"></p>
+      <a href="index.html" style="color: var(--cyan); text-decoration: none; font-size: 0.9rem;">← అన్ని లెవెల్స్</a>
+    </header>
+
+    <div class="canvas-container">
+      <canvas id="mazeCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <!-- Controller Matrix -->
+    <div class="dpad-controller">
+      <div></div>
+      <div class="dpad-btn" id="btnUp">▲</div>
+      <div></div>
+      <div class="dpad-btn" id="btnLeft">◀</div>
+      <div style="background: transparent; border: none; cursor: default;" class="dpad-btn"></div>
+      <div class="dpad-btn" id="btnRight">▶</div>
+      <div></div>
+      <div class="dpad-btn" id="btnDown">▼</div>
+      <div></div>
+    </div>
+  </div>
+
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-content">
+      <h2 style="color: var(--gold); font-family: 'Cinzel', serif; margin-bottom: 10px;">విజయం!</h2>
+      <p style="color: #EDE3C8;">హనుమంతుడు విజయవంతంగా సీతాదేవిని చేరుకున్నాడు.</p>
+      <button id="nextLevelBtn" class="gold-btn">తదుపరి లెవెల్ →</button>
+    </div>
+  </div>
+
+  <script src="maze-data.js?v=3"></script>
+  <script type="module" src="progress.js?v=3"></script>
+  <script src="game.js?v=3"></script>
+</body>
+</html>

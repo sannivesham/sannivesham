@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Mukta:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #161225;
+  --bg-deep: #0f0c1c;
+  --parchment: #EDE3C8;
+  --parchment-dim: #d9cca3;
+  --teal: #1F7A6C;
+  --gold: #C9A24B;
+  --sindoor: #A8322D;
+  --ink: #241c33;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(201,162,75,0.15), transparent 50%),
+    radial-gradient(circle at 20% 30%, rgba(201,162,75,0.06), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(31,122,108,0.10), transparent 45%),
+    var(--bg);
+  color: var(--parchment);
+  font-family: 'Mukta', sans-serif;
+}
+
+h1, h2, h3, .display {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.03em;
+}
+
+a { color: inherit; }
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* ---------- Sannivesham Hero Branding ---------- */
+.sannivesham-hero {
+  text-align: center;
+  padding: 24px 0 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-logo-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.hero-emblem {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 25px rgba(201,162,75,0.4), inset 0 0 15px rgba(201,162,75,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.hero-emblem:hover {
+  transform: scale(1.02);
+}
+
+.emblem-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.main-brand-title {
+  font-family: 'Mukta', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6), 0 0 20px rgba(201,162,75,0.2);
+}
+
+.main-brand-tagline {
+  margin: 6px 0 0;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  letter-spacing: 0.05em;
+  color: var(--parchment-dim);
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* ---------- Section Header Separator ---------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 36px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(201,162,75,0.25);
+}
+
+.site-header h2 {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  color: var(--gold);
+  margin: 0;
+}
+
+.site-header .subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--parchment-dim);
+}
+
+/* ---------- Level Dashboard UI ---------- */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.level-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 1px solid rgba(201,162,75,0.3);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-decoration: none;
+  color: var(--parchment);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+  display: block;
+}
+
+.level-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 90% -10%, rgba(201,162,75,0.15), transparent 55%);
+  pointer-events: none;
+}
+
+.level-card:hover:not(.locked) {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.level-card.locked {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.level-number {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.level-title {
+  font-family: 'Mukta', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 4px 0 8px;
+  color: #fff;
+}
+
+.level-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--parchment-dim);
+}
+
+.level-lock-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2rem;
+  color: var(--sindoor);
+}
+
+/* ---------- Fixed Overlays & Global Elements ---------- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 12, 28, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.overlay.hidden {
+  display: none !important;
+}
+
+.overlay-card {
+  background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.overlay-card h2 {
+  color: var(--gold);
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.btn {
+  font-family: 'Mukta', sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary { background: var(--teal); color: #fff; }
+.btn-secondary { background: transparent; color: var(--parchment); border: 1px solid rgba(237,227,200,0.4); }
+
+@media (max-width: 480px) {
+  .wrap { padding: 20px 14px; }
+  .sannivesham-hero { padding: 12px 0 20px; }
+  .hero-emblem { width: 110px; height: 110px; }
+  .site-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+}

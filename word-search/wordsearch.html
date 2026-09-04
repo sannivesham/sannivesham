@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>పద శోధన — ఆట స్థలం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .word-list-panel {
+      background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+    }
+    
+    .word-list-panel h3 {
+      margin-top: 0;
+      color: var(--gold);
+      border-bottom: 1px solid rgba(201,162,75,0.2);
+      padding-bottom: 8px;
+    }
+    
+    .word-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .word-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(237,227,200,0.04);
+      font-size: 1.1rem;
+      transition: background 0.2s;
+    }
+    
+    .word-item.found {
+      background: rgba(31,122,108,0.2);
+      color: var(--parchment-dim);
+      text-decoration: line-through;
+      border-left: 3px solid var(--teal);
+    }
+    
+    .word-item .en-hint {
+      font-size: 0.85rem;
+      color: var(--gold);
+      opacity: 0.7;
+      font-family: 'Cinzel', serif;
+    }
+
+    .ws-grid {
+      display: grid;
+      background: rgba(201,162,75,0.2);
+      border: 3px solid var(--gold);
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    .ws-cell {
+      background: var(--parchment);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.1s;
+    }
+
+    .ws-cell.selected {
+      background: #cdeee6;
+    }
+
+    .ws-cell.permanent-found {
+      background: #c9a24b;
+      color: var(--bg-deep);
+    }
+
+    /* ---------- Fixed Win Overlay Styles ---------- */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 12, 28, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999; /* Forces modal over grid, text, and header backgrounds */
+    }
+
+    .overlay.hidden {
+      display: none !important;
+    }
+
+    .overlay-card {
+      background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .overlay-card h2 {
+      color: var(--gold);
+      margin-top: 0;
+      font-size: 2rem;
+    }
+
+    .overlay-card p {
+      color: var(--parchment);
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      font-family: 'Mukta', sans-serif;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary { 
+      background: var(--teal); 
+      color: #fff; 
+    }
+    
+    .btn-secondary { 
+      background: transparent; 
+      color: var(--parchment); 
+      border: 1px solid rgba(237,227,200,0.4); 
+    }
+
+    @media (max-width: 768px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- Cinematic Branded Hero Section -->
+    <div class="sannivesham-hero">
+      <div class="hero-logo-wrapper">
+        <div class="hero-emblem">
+          <img src="logo.png" alt="Sannivesham Logo" class="emblem-img">
+        </div>
+      </div>
+      <h1 class="main-brand-title">సన్నివేశం</h1>
+      <p class="main-brand-tagline">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+    </div>
+
+    <!-- Active Puzzle Breadcrumbs Stats Frame -->
+    <div class="game-header">
+      <div>
+        <h2 id="gameTitle">చాప్టర్</h2>
+        <p id="gameSubtitle" class="subtitle">లోడింగ్...</p>
+      </div>
+      <div class="game-stats">
+        <span>సమయం: <strong id="timer">00:00</strong></span>
+        <span>కనుగొన్నవి: <strong id="matchCount">0/0</strong></span>
+      </div>
+    </div>
+
+    <!-- Core Main Workspace Arena Split Panel -->
+    <div class="game-layout">
+      
+      <!-- Interactive Grid Workspace Panel -->
+      <div class="board-frame">
+        <div id="wordsearchGrid" class="ws-grid"></div>
+      </div>
+
+      <!-- Target Checklist Words Sidebar Tracking HUD -->
+      <div class="word-list-panel">
+        <h3>వెతకవలసిన పదాలు</h3>
+        <div id="wordItems" class="word-items"></div>
+        
+        <div class="controls-row" style="margin-top: 24px;">
+          <button id="backBtn" class="btn btn-secondary" onclick="window.location.href='index.html'">వెనుకకు</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- End Game Celebration Overlay Modal Layer -->
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h2>అభినందనలు!</h2>
+      <p>మీరు విజయవంతంగా అన్ని పదాలను కనుగొన్నారు!</p>
+      <div id="winTime" style="margin: 18px 0; color: var(--gold); font-size: 1.1rem; font-weight: bold;"></div>
+      <div class="controls-row">
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">హోమ్ పేజీ</button>
+        <button id="nextLevelBtn" class="btn btn-primary">తదుపరి చాప్టర్</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="levels.js"></script>
+  <script src="progress.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

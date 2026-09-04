@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>సుడోకు ఆట — సన్నివేశం</title>
+  <style>
+    :root {
+      --gold: #C9A24B;
+      --parchment: #EDE3C8;
+      --bg-dark: #0A0500;
+      --card-bg: rgba(237, 227, 200, 0.03);
+      --border-color: rgba(201, 162, 75, 0.2);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--parchment);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .game-header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .home-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .home-btn:hover {
+      background: var(--gold);
+      color: var(--bg-dark);
+    }
+    .game-container {
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 10px 0 5px 0; font-size: 1.8rem; }
+    h2 { margin: 0 0 20px 0; font-size: 1.1rem; opacity: 0.8; font-weight: 400; }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      background: var(--card-bg);
+      padding: 10px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+    }
+    .grid {
+      display: grid;
+      gap: 2px;
+      background-color: var(--border-color);
+      border: 3px solid var(--gold);
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      margin-bottom: 25px;
+    }
+    .cell {
+      background-color: #120B02;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--parchment);
+      cursor: pointer;
+      user-select: none;
+    }
+    .cell.given { background-color: #1A1105; color: var(--gold); }
+    .cell.selected { background-color: #2D1F0C; }
+    .cell.same-value { background-color: #221607; }
+    .cell.conflict { background-color: #5C1A1A; color: #FFD1D1; }
+    .box-edge-right { border-right: 2px solid var(--gold); }
+    .box-edge-bottom { border-bottom: 2px solid var(--gold); }
+    .palette {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .palette-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--gold);
+      color: var(--parchment);
+      width: 50px;
+      height: 50px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .palette-btn:hover { background: var(--gold); color: var(--bg-dark); }
+    .palette-btn.erase { border-color: #5C1A1A; color: #FF8888; }
+    .control-actions { display: flex; justify-content: center; gap: 15px; }
+    .action-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--parchment);
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .action-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 5, 0, 0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+    }
+    .overlay.hidden { display: none; }
+    .modal-box {
+      background: #140D05;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      max-width: 350px;
+      width: 90%;
+    }
+    .modal-box h3 { color: var(--gold); margin: 0 0 15px 0; font-size: 1.6rem; }
+    .modal-box p { margin: 0 0 25px 0; opacity: 0.9; }
+    .modal-btn {
+      background: var(--gold); color: var(--bg-dark);
+      border: none; padding: 12px 24px; font-weight: bold;
+      border-radius: 6px; cursor: pointer; font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-header">
+    <a href="https://sannivesham.com" class="home-btn">← హోమ్ పేజీ</a>
+    <a href="index.html" class="home-btn">అన్ని లెవెల్స్</a>
+  </div>
+
+  <div class="game-container">
+    <h1 id="levelTitle">లోడ్ అవుతోంది...</h1>
+    <h2 id="levelSubtitle"></h2>
+
+    <div class="status-bar">
+      <div>సమయం: <span id="timer">00:00</span></div>
+      <div>తప్పులు: <span id="mistakeCount">0</span></div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    <div id="palette" class="palette"></div>
+
+    <div class="control-actions">
+      <button id="hintBtn" class="action-btn">సహాయం (Hint)</button>
+      <button id="resetBtn" class="action-btn">రిసెట్</button>
+    </div>
+  </div>
+
+  <div id="winOverlay" class="overlay hidden">
+    <div class="modal-box">
+      <h3>🎉 విజయం!</h3>
+      <p id="winTime"></p>
+      <button id="nextLevelBtn" class="modal-btn">తదుపరి లెవెల్</button>
+    </div>
+  </div>
+
+  <script type="module" src="progress.js"></script>
+  <script type="module" src="game.js"></script>
+
+</body>
+</html>

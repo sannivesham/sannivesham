@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>చిత్ర గడులు — ఆట స్థలం</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .board-frame {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(237,227,200,0.02);
+      border: 1px solid rgba(201,162,75,0.2);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    /* Core Sliding Box Board Element */
+    .sliding-board {
+      position: relative;
+      background: rgba(15, 12, 28, 0.6);
+      border: 4px solid var(--gold);
+      border-radius: 8px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: grid;
+      /* Dimensions will match background scaling square aspect metrics */
+      width: 100%;
+      max-width: 450px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .tile {
+      background-repeat: no-repeat;
+      border: 1px solid rgba(15, 12, 28, 0.45);
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.08);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Subtle subtle number overlay for optional player hint guidance */
+    .tile-number {
+      font-size: 0.85rem;
+      background: rgba(15, 12, 28, 0.65);
+      color: var(--gold);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      pointer-events: none;
+      font-family: 'Cinzel', serif;
+    }
+
+    .tile.empty {
+      background: var(--bg-deep) !important;
+      border: none;
+      box-shadow: inset 0 6px 18px rgba(0,0,0,0.9);
+      cursor: default;
+    }
+
+    /* Right Sidebar HUD Components */
+    .preview-panel {
+      background: linear-gradient(160deg, var(--ink), var(--bg-deep));
+      border: 1px solid rgba(201,162,75,0.3);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-panel h3 {
+      margin: 0;
+      color: var(--gold);
+      border-bottom: 1px solid rgba(201,162,75,0.2);
+      padding-bottom: 8px;
+    }
+
+    .reference-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 2px solid rgba(237,227,200,0.2);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .reference-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(237,227,200,0.03);
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid rgba(201,162,75,0.1);
+    }
+
+    .game-stats span {
+      font-size: 0.95rem;
+      color: var(--parchment-dim);
+    }
+
+    .game-stats strong {
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+      .preview-panel {
+        order: -1; /* Puts dashboard statistics on top for mobile screens */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- Branded Cinematic Hero Layer -->
+    <div class="sannivesham-hero">
+      <div class="hero-logo-wrapper">
+        <div class="hero-emblem">
+          <img src="logo.png" alt="Sannivesham Logo" class="emblem-img">
+        </div>
+      </div>
+      <h1 class="main-brand-title">సన్నివేశం</h1>
+      <p class="main-brand-tagline">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
+    </div>
+
+    <!-- Active Level Header Card -->
+    <div class="site-header" style="margin-bottom: 20px;">
+      <div>
+        <h2 id="puzzleTitle">చాప్టర్</h2>
+        <p id="puzzleSubtitle" class="subtitle">లోడింగ్...</p>
+      </div>
+    </div>
+
+    <!-- Main Dynamic Split Platform Arena -->
+    <div class="game-layout">
+      
+      <!-- Interactive Dynamic Sliding Workspace Grid Grid Box -->
+      <div class="board-frame">
+        <div id="slidingBoard" class="sliding-board"></div>
+      </div>
+
+      <!-- Right Tracking Dashboard Dashboard Panel HUD -->
+      <div class="preview-panel">
+        <h3>లక్ష్య చిత్రం (Reference)</h3>
+        
+        <div class="reference-box">
+          <img id="referenceImg" src="" alt="Reference Preview" class="reference-img">
+        </div>
+
+        <div class="game-stats">
+          <span>మూవ్స్: <strong id="moveCount">0</strong></span>
+        </div>
+
+        <div class="controls-row" style="margin-top: 8px;">
+          <button class="btn btn-secondary" style="width: 100%;" onclick="window.location.href='index.html'">వెనుకకు</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- End Game Celebration Modal Layer -->
+  <div id="winOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h2>అద్భుతం!</h2>
+      <p>మీరు చిత్రాన్ని విజయవంతంగా పూర్తి చేశారు!</p>
+      <div id="finalMoves" style="margin: 18px 0; color: var(--gold); font-size: 1.1rem; font-weight: bold;"></div>
+      <div class="controls-row">
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">హోమ్ పేజీ</button>
+        <button id="nextLevelBtn" class="btn btn-primary">తదుపరి చాప్టర్</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Component Modules Injection Pipeline -->
+  <script src="levels.js"></script>
+  <script src="progress.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
