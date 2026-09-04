@@ -1,4 +1,4 @@
-﻿// Sannivesham Multi-Theme Engine
+// Sannivesham Multi-Theme Engine
 // Supported Themes: 'ramayanam', 'mahabharatam', 'light', 'dark'
 
 (function () {
@@ -109,6 +109,27 @@
   } else {
     init();
   }
+
+  // Auto-dismiss creative preloader gracefully
+  function dismissLoader() {
+    const loader = document.getElementById("loader") || document.querySelector(".creative-loader");
+    if (loader && !loader.classList.contains("loader-hidden")) {
+      loader.classList.add("loader-hidden");
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 650);
+    }
+  }
+
+  if (document.readyState === "complete") {
+    setTimeout(dismissLoader, 350);
+  } else {
+    window.addEventListener("load", () => {
+      setTimeout(dismissLoader, 350);
+    });
+  }
+  // Safety timeout: never trap the visitor longer than 1200ms
+  setTimeout(dismissLoader, 1200);
 
   window.SanniveshamTheme = {
     getTheme,

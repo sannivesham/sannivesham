@@ -98,17 +98,18 @@
       margin: auto !important;
     }
 
-    /* MODERN INTEGRATED NAVBAR */
+    /* MODERN INTEGRATED NAVBAR - SNUG BALANCED PILL */
     .glass-navbar {
       position: sticky !important;
       top: 14px !important;
       z-index: 1000 !important;
-      width: min(94%, 1050px) !important;
+      width: fit-content !important;
+      max-width: min(95%, 860px) !important;
       margin: 14px auto 0 !important;
-      padding: 8px 18px !important;
+      padding: 7px 16px !important;
       display: flex !important;
       align-items: center !important;
-      justify-content: space-between !important;
+      justify-content: center !important;
       gap: 12px !important;
       background: rgba(22, 10, 5, 0.88) !important;
       backdrop-filter: blur(14px) !important;
@@ -123,11 +124,8 @@
     .nav-links {
       display: flex !important;
       align-items: center !important;
-      gap: 6px !important;
-      overflow-x: auto !important;
-      scrollbar-width: none !important;
-      -webkit-overflow-scrolling: touch !important;
-      flex: 1 !important;
+      gap: 8px !important;
+      flex: 0 0 auto !important;
     }
     .nav-links::-webkit-scrollbar { display: none !important; }
     .nav-links a {
@@ -136,7 +134,7 @@
       color: #EDE3C8 !important;
       font-size: 0.95rem !important;
       font-weight: bold !important;
-      padding: 7px 12px !important;
+      padding: 7px 14px !important;
       border-radius: 20px !important;
       transition: all 0.25s ease !important;
       white-space: nowrap !important;
@@ -145,6 +143,14 @@
       background: rgba(255, 209, 102, 0.2) !important;
       color: #ffd166 !important;
       transform: translateY(-1px) !important;
+    }
+    .nav-divider {
+      display: block !important;
+      width: 1px !important;
+      height: 22px !important;
+      background: rgba(255, 209, 102, 0.35) !important;
+      flex-shrink: 0 !important;
+      margin: 0 2px !important;
     }
     /* NAVBAR ACTION BUTTONS (Music, Theme, Lang, Profile) */
     .nav-actions {
@@ -193,19 +199,32 @@
       box-shadow: 0 0 12px rgba(255, 209, 102, 0.35) !important;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 780px) {
       .glass-navbar {
         width: calc(100% - 20px) !important;
         margin: 10px auto 0 !important;
         padding: 6px 12px !important;
         border-radius: 30px !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+      }
+      .nav-links {
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch !important;
+        flex: 1 !important;
+        gap: 4px !important;
       }
       .nav-links a {
-        font-size: 0.88rem !important;
-        padding: 6px 9px !important;
+        font-size: 0.86rem !important;
+        padding: 5px 8px !important;
+      }
+      .nav-divider {
+        height: 18px !important;
+        margin: 0 1px !important;
       }
       .nav-actions {
-        gap: 6px !important;
+        gap: 5px !important;
       }
       .nav-actions .nav-action-btn,
       .nav-actions .music-btn,
@@ -400,6 +419,7 @@
       <a href="#about" data-en="About Us">మా గురించి</a>
       <a href="#contact" data-en="Contact">సంప్రదించండి</a>
     </div>
+    <span class="nav-divider"></span>
     <div class="nav-actions">
       <button id="musicBtn" class="nav-action-btn music-btn" title="సంగీతం ప్లే / పాజ్" aria-label="Play or pause background music">🔊</button>
       <button id="themeToggleBtn" class="nav-action-btn theme-btn" title="రంగు శైలిని ఎంచుకోండి (Choose Theme)" aria-label="Choose Theme">🎨</button>
