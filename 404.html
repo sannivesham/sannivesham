@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>సన్నివేశం - మళ్లించబడుతోంది...</title>
+  <script>
+    (function() {
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+
+      // Normalization map for legacy root URLs to modular section folders
+      var redirects = {
+        "/stories.html": "/stories/",
+        "/story-parts.html": "/stories/story-parts.html",
+        "/story-detail.html": "/stories/story-detail.html",
+        "/festivals.html": "/festivals/",
+        "/festival-detail.html": "/festivals/festival-detail.html",
+        "/temples.html": "/temples/",
+        "/temple-list.html": "/temples/temple-list.html",
+        "/temple-detail.html": "/temples/temple-detail.html",
+        "/events.html": "/events/",
+        "/games.html": "/games/",
+        "/quiz.html": "/quiz/",
+        "/play-quiz.html": "/quiz/play-quiz.html",
+        "/quiz-result.html": "/quiz/quiz-result.html",
+        "/quiz-cms.html": "/quiz/quiz-cms.html",
+        "/leaderboard.html": "/quiz/leaderboard.html",
+        "/ithihasalu.html": "/ithihasalu/",
+        "/ithihasalu-list.html": "/ithihasalu/ithihasalu-list.html",
+        "/ithihasalu-chapters.html": "/ithihasalu/ithihasalu-chapters.html",
+        "/ithihasalu-detail.html": "/ithihasalu/ithihasalu-detail.html",
+        "/gita-slokas.html": "/ithihasalu/gita-slokas.html",
+        "/sloka-chapters.html": "/ithihasalu/sloka-chapters.html",
+        "/sloka-detail.html": "/ithihasalu/sloka-detail.html",
+        "/videos.html": "/videos/",
+        "/video-player.html": "/videos/video-player.html",
+        "/calendar.html": "/calendar/",
+        "/chant-counter.html": "/chant-counter/",
+        "/pooja-mandir.html": "/pooja-mandir/",
+        "/pooja-room.html": "/pooja-mandir/pooja-room.html",
+        "/store.html": "/store/",
+        "/about.html": "/about/",
+        "/privacy-policy.html": "/about/privacy-policy.html",
+        "/admin.html": "/admin/",
+        "/dashboard.html": "/admin/dashboard.html",
+        "/profile.html": "/profile/",
+        "/word-search": "/games/word-search/",
+        "/word-search/": "/games/word-search/",
+        "/Sliding-Puzzle": "/games/Sliding-Puzzle/",
+        "/Sliding-Puzzle/": "/games/Sliding-Puzzle/",
+        "/sudoko": "/games/sudoko/",
+        "/sudoko/": "/games/sudoko/",
+        "/connect-dots": "/games/connect-dots/",
+        "/connect-dots/": "/games/connect-dots/",
+        "/maze": "/games/maze/",
+        "/maze/": "/games/maze/",
+        "/fisheye": "/games/fisheye/",
+        "/fisheye/": "/games/fisheye/",
+        "/chitravela": "/games/chitravela/",
+        "/chitravela/": "/games/chitravela/",
+        "/calender": "/calendar/calender/",
+        "/calender/": "/calendar/calender/"
+      };
+
+      var cleanPath = path.toLowerCase();
+      // Also match case-insensitively
+      for (var key in redirects) {
+        if (key.toLowerCase() === cleanPath) {
+          window.location.replace(redirects[key] + search + hash);
+          return;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var el = document.getElementById("notFoundWrap");
+        if (el) el.style.display = "block";
+      });
+    })();
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at center, #261206 0%, #120703 60%, #080301 100%);
+      color: #EDE3C8;
+      font-family: 'Noto Sans Telugu', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .box {
+      background: rgba(30, 14, 8, 0.7);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 { color: #ffd166; font-size: 2.2rem; margin-bottom: 12px; }
+    p { margin-bottom: 24px; line-height: 1.6; opacity: 0.9; }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="notFoundWrap" class="box" style="display: none;">
+    <h1>404</h1>
+    <p>మీరు వెతుకుతున్న పేజీ అందుబాటులో లేదు లేదా వేరే ప్రదేశానికి మార్చబడింది.</p>
+    <a href="/" class="btn">← ప్రారంభ పేజీకి వెళ్ళండి</a>
+  </div>
+</body>
+</html>
