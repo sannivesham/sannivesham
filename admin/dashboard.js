@@ -1,4 +1,4 @@
-﻿import { auth, db } from "../firebase-config.js";
+import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   collection, addDoc, getDocs, getDoc, updateDoc,
@@ -2473,3 +2473,602 @@ async function loadPoojaRituals(filterGodId = "") {
 
 loadPoojaGods();
 loadPoojaRituals();
+
+/* ══════════════════════════════════════
+   🛍️ STORE CMS (విక్రయశాల)
+══════════════════════════════════════ */
+
+// 1. STORE CATEGORIES
+const saveStoreCatBtn = document.getElementById("saveStoreCatBtn");
+if (saveStoreCatBtn) {
+  saveStoreCatBtn.addEventListener("click", async () => {
+    const name = document.getElementById("storeCatName").value.trim();
+    const emoji = document.getElementById("storeCatEmoji").value.trim();
+    const order = Number(document.getElementById("storeCatOrder").value) || 0;
+    const msg = document.getElementById("storeCatMsg");
+
+    if (!name) {
+      if (msg) { msg.style.color = "#ff6b6b"; msg.innerText = "⚠️ దయచేసి విభాగం పేరును నమోదు చేయండి."; }
+      return;
+    }
+
+    try {
+      if (msg) { msg.style.color = "#ffd166"; msg.innerText = "సేవ్ అవుతోంది..."; }
+      await addDoc(collection(db, "storeCategories"), {
+        name,
+        emoji: emoji || "🛍️",
+        order,
+        createdAt: serverTimestamp()
+      });
+      if (msg) { msg.style.color = "#2ed573"; msg.innerText = "✅ విభాగం విజయవంతంగా సేవ్ చేయబడింది!"; }
+      document.getElementById("storeCatName").value = "";
+      document.getElementById("storeCatEmoji").value = "";
+      document.getElementById("storeCatOrder").value = "";
+      await loadStoreCategories();
+    } catch (err) {
+      console.error("Error saving category:", err);
+      if (msg) { msg.style.color = "#ff6b6b"; msg.innerText = "❌ ఎర్రర్: " + err.message; }
+    }
+  });
+}
+
+let cachedCategories = [];
+
+async function loadStoreCategories() {
+  const list = document.getElementById("storeCatList");
+  const prodCatSelect = document.getElementById("storeProductCatSelect");
+  const filterSelect = document.getElementById("storeProductFilter");
+
+  if (!list && !prodCatSelect) return;
+
+  try {
+    const snap = await getDocs(query(collection(db, "storeCategories"), orderBy("order", "asc")));
+    cachedCategories = [];
+    snap.forEach(d => cachedCategories.push({ id: d.id, ...d.data() }));
+
+    // Update Product Form Select
+    if (prodCatSelect) {
+      const curVal = prodCatSelect.value;
+      prodCatSelect.innerHTML = `<option value="">విభాగం ఎంచుకోండి (Select Category)</option>`;
+      cachedCategories.forEach(cat => {
+        prodCatSelect.innerHTML += `<option value="${cat.id}">${cat.emoji || ""} ${cat.name}</option>`;
+      });
+      if (curVal) prodCatSelect.value = curVal;
+    }
+
+    // Update Filter Select
+    if (filterSelect) {
+      const curFilter = filterSelect.value;
+      filterSelect.innerHTML = `<option value="">అన్ని విభాగాలు (All Products)</option>`;
+      cachedCategories.forEach(cat => {
+        filterSelect.innerHTML += `<option value="${cat.id}">${cat.emoji || ""} ${cat.name}</option>`;
+      });
+      if (curFilter) filterSelect.value = curFilter;
+    }
+
+    // Update Categories List in Admin
+    if (list) {
+      if (cachedCategories.length === 0) {
+        list.innerHTML = `<p style="color:rgba(255,255,255,0.5);text-align:center;padding:12px;">ఇంకా విభాగాలు జోడించబడలేదు.</p>`;
+      } else {
+        list.innerHTML = "";
+        cachedCategories.forEach(cat => {
+          const row = document.createElement("div");
+          row.className = "cms-list-item";
+          row.innerHTML = `
+            <div class="cms-list-item-text">
+              <span style="font-size:1.2rem;margin-right:6px;">${cat.emoji || "🛍️"}</span>
+              <strong style="color:#ffd166;">${cat.name}</strong>
+              <span style="font-size:12px;color:rgba(255,255,255,0.4);margin-left:8px;">(క్రమం: ${cat.order || 0})</span>
+            </div>
+            <button class="cms-list-delete-btn" data-id="${cat.id}">Delete</button>
+          `;
+          row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
+            if (!confirm(`'${cat.name}' విభాగాన్ని తొలగించాలనుకుంటున్నారా?`)) return;
+            try {
+              await deleteDoc(doc(db, "storeCategories", cat.id));
+              await loadStoreCategories();
+              await loadStoreProducts();
+            } catch (e) {
+              alert("Error deleting category: " + e.message);
+            }
+          });
+          list.appendChild(row);
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Error loading categories:", err);
+  }
+}
+
+// 2. PRODUCT IMAGE UPLOAD
+const storeProductImageBox = document.getElementById("storeProductImageBox");
+if (storeProductImageBox) {
+  storeProductImageBox.addEventListener("click", async () => {
+    const url = await uploadImage();
+    if (!url) return;
+    storeProductImageBox.dataset.image = url;
+    storeProductImageBox.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
+    const urlInput = document.getElementById("storeProductImageUrl");
+    if (urlInput) urlInput.value = url;
+  });
+}
+
+// 3. PRODUCT SAVE
+const saveStoreProductBtn = document.getElementById("saveStoreProductBtn");
+if (saveStoreProductBtn) {
+  saveStoreProductBtn.addEventListener("click", async () => {
+    const catSelect = document.getElementById("storeProductCatSelect");
+    const categoryId = catSelect ? catSelect.value : "";
+    const name = document.getElementById("storeProductName").value.trim();
+    const price = Number(document.getElementById("storeProductPrice").value) || 0;
+    const origPriceVal = document.getElementById("storeProductOriginalPrice").value.trim();
+    const originalPrice = origPriceVal ? Number(origPriceVal) : null;
+    const badge = document.getElementById("storeProductBadge").value.trim();
+    const description = document.getElementById("storeProductDesc").value.trim();
+    const imgUrlInput = document.getElementById("storeProductImageUrl");
+    const imageUrl = imgUrlInput?.value.trim() || storeProductImageBox?.dataset.image || "";
+    const inStock = document.getElementById("storeProductInStock")?.checked ?? true;
+    const isFeatured = document.getElementById("storeProductIsFeatured")?.checked ?? false;
+    const whatsapp = document.getElementById("storeProductWhatsapp")?.value.trim() || "919876543210";
+    const msg = document.getElementById("storeProductMsg");
+
+    if (!name || price <= 0) {
+      if (msg) {
+        msg.style.color = "#ff6b6b";
+        msg.innerText = "⚠️ దయచేసి ఉత్పత్తి పేరు మరియు సరైన ధరను నమోదు చేయండి.";
+      }
+      return;
+    }
+
+    const matchedCat = cachedCategories.find(c => c.id === categoryId);
+    const categoryName = matchedCat ? matchedCat.name : "సాధారణం";
+
+    try {
+      if (msg) { msg.style.color = "#ffd166"; msg.innerText = "ఉత్పత్తి సేవ్ అవుతోంది..."; }
+
+      const newDocRef = await addDoc(collection(db, "storeProducts"), {
+        name,
+        categoryId: categoryId || "general",
+        categoryName,
+        price,
+        originalPrice: originalPrice || null,
+        badge: badge || "",
+        description: description || "",
+        imageUrl: imageUrl || "https://images.unsplash.com/photo-1608755728617-aefab37d2edd?w=500&auto=format&fit=crop&q=60",
+        inStock: !!inStock,
+        isFeatured: !!isFeatured,
+        whatsappNumber: whatsapp,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      // If featured, set as the main featured item
+      if (isFeatured) {
+        await setDoc(doc(db, "storeSettings", "main"), {
+          featuredProductId: newDocRef.id,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+
+      if (msg) { msg.style.color = "#2ed573"; msg.innerText = "✅ ఉత్పత్తి విజయవంతంగా సేవ్ చేయబడింది!"; }
+
+      // Reset form
+      document.getElementById("storeProductName").value = "";
+      document.getElementById("storeProductPrice").value = "";
+      document.getElementById("storeProductOriginalPrice").value = "";
+      document.getElementById("storeProductBadge").value = "";
+      document.getElementById("storeProductDesc").value = "";
+      if (imgUrlInput) imgUrlInput.value = "";
+      if (storeProductImageBox) {
+        storeProductImageBox.dataset.image = "";
+        storeProductImageBox.innerHTML = `<span>＋ ఉత్పత్తి ఫోటో అప్‌లోడ్ (Upload Product Photo)</span>`;
+      }
+      if (document.getElementById("storeProductIsFeatured")) {
+        document.getElementById("storeProductIsFeatured").checked = false;
+      }
+
+      await loadStoreProducts();
+    } catch (err) {
+      console.error("Error saving product:", err);
+      if (msg) { msg.style.color = "#ff6b6b"; msg.innerText = "❌ ఎర్రర్: " + err.message; }
+    }
+  });
+}
+
+// 4. FEATURED PRODUCT SELECTOR BUTTON
+const setFeaturedBtn = document.getElementById("setFeaturedBtn");
+if (setFeaturedBtn) {
+  setFeaturedBtn.addEventListener("click", async () => {
+    const select = document.getElementById("storeFeaturedSelect");
+    const productId = select ? select.value : "";
+    const msg = document.getElementById("storeFeaturedMsg");
+
+    if (!productId) {
+      if (msg) { msg.style.color = "#ff6b6b"; msg.innerText = "⚠️ దయచేసి ఒక ఉత్పత్తిని ఎంచుకోండి."; }
+      return;
+    }
+
+    try {
+      if (msg) { msg.style.color = "#ffd166"; msg.innerText = "సెట్ అవుతోంది..."; }
+      await setFeaturedProduct(productId);
+      if (msg) { msg.style.color = "#2ed573"; msg.innerText = "✅ ప్రధాన ఉత్పత్తిగా సెట్ చేయబడింది!"; }
+      await loadStoreProducts();
+    } catch (err) {
+      console.error("Error setting featured:", err);
+      if (msg) { msg.style.color = "#ff6b6b"; msg.innerText = "❌ ఎర్రర్: " + err.message; }
+    }
+  });
+}
+
+async function setFeaturedProduct(productId) {
+  await setDoc(doc(db, "storeSettings", "main"), {
+    featuredProductId: productId,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+
+  // Update products collection so that isFeatured is synchronized
+  try {
+    const snap = await getDocs(collection(db, "storeProducts"));
+    const updates = [];
+    snap.forEach(d => {
+      const isThis = (d.id === productId);
+      if (d.data().isFeatured !== isThis) {
+        updates.push(updateDoc(doc(db, "storeProducts", d.id), { isFeatured: isThis }));
+      }
+    });
+    await Promise.all(updates);
+  } catch (e) {
+    console.warn("Could not sync isFeatured flags across products:", e);
+  }
+}
+
+// 5. FILTER PRODUCTS
+const storeProductFilter = document.getElementById("storeProductFilter");
+if (storeProductFilter) {
+  storeProductFilter.addEventListener("change", () => {
+    loadStoreProducts(storeProductFilter.value);
+  });
+}
+
+// 6. LOAD PRODUCTS & POPULATE INVENTORY
+async function loadStoreProducts(filterCatId = "") {
+  const list = document.getElementById("storeProductList");
+  const featuredSelect = document.getElementById("storeFeaturedSelect");
+  const currentFeaturedBox = document.getElementById("currentFeaturedBox");
+  const currentFeaturedText = document.getElementById("currentFeaturedText");
+  const currentFeaturedThumb = document.getElementById("currentFeaturedThumb");
+
+  if (!list) return;
+  list.innerHTML = `<p style="color:rgba(255,255,255,0.4);text-align:center;padding:12px;">ఉత్పత్తులు లోడ్ అవుతున్నాయి...</p>`;
+
+  try {
+    // Get currently featured ID from settings
+    let featuredId = null;
+    try {
+      const settingsSnap = await getDoc(doc(db, "storeSettings", "main"));
+      if (settingsSnap.exists()) {
+        featuredId = settingsSnap.data().featuredProductId;
+      }
+    } catch (e) {
+      console.warn("Could not fetch storeSettings:", e);
+    }
+
+    const snap = await getDocs(collection(db, "storeProducts"));
+    const allProducts = [];
+    snap.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+
+    // Fallback featured if not explicitly set
+    if (!featuredId && allProducts.length > 0) {
+      const explicitlyFeatured = allProducts.find(p => p.isFeatured);
+      featuredId = explicitlyFeatured ? explicitlyFeatured.id : allProducts[0].id;
+    }
+
+    // Populate Featured Select dropdown
+    if (featuredSelect) {
+      featuredSelect.innerHTML = `<option value="">ఉత్పత్తిని ఎంచుకోండి...</option>`;
+      allProducts.forEach(p => {
+        const isCur = (p.id === featuredId);
+        featuredSelect.innerHTML += `<option value="${p.id}" ${isCur ? "selected" : ""}>${p.name} (₹${p.price}) ${isCur ? "★ [Current Featured]" : ""}</option>`;
+      });
+    }
+
+    // Update Featured Hero preview in admin
+    const featuredProduct = allProducts.find(p => p.id === featuredId);
+    if (featuredProduct && currentFeaturedText) {
+      currentFeaturedText.innerHTML = `
+        <strong style="font-size:1.1rem;color:#ffd166;">${featuredProduct.name}</strong>
+        <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);margin-top:2px;">
+          విభాగం: ${featuredProduct.categoryName || "సాధారణం"} • ధర: ₹${featuredProduct.price} • ${featuredProduct.inStock ? "🟢 In Stock" : "🔴 Out of Stock"}
+        </div>
+      `;
+      if (currentFeaturedThumb) {
+        currentFeaturedThumb.innerHTML = `<img src="${featuredProduct.imageUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+      }
+    } else if (currentFeaturedText) {
+      currentFeaturedText.innerText = "ప్రస్తుతం ప్రధాన ఉత్పత్తి సెట్ చేయబడలేదు. క్రింది డ్రాప్‌డౌన్ నుండి ఎంచుకోండి.";
+      if (currentFeaturedThumb) currentFeaturedThumb.innerHTML = "★";
+    }
+
+    // Filter products for the list
+    const filteredProducts = filterCatId
+      ? allProducts.filter(p => p.categoryId === filterCatId)
+      : allProducts;
+
+    list.innerHTML = "";
+    if (filteredProducts.length === 0) {
+      list.innerHTML = `<p style="color:rgba(255,255,255,0.4);text-align:center;padding:20px;">ఈ విభాగంలో ఉత్పత్తులు లేవు.</p>`;
+      return;
+    }
+
+    filteredProducts.forEach(item => {
+      const isCurFeatured = (item.id === featuredId || item.isFeatured);
+      const row = document.createElement("div");
+      row.className = "cms-list-item";
+      row.style.flexDirection = "column";
+      row.style.alignItems = "stretch";
+      row.style.gap = "12px";
+      row.style.border = isCurFeatured ? "1px solid rgba(255,209,102,0.6)" : "1px solid rgba(255,209,102,0.15)";
+      row.style.background = isCurFeatured ? "rgba(255,209,102,0.06)" : "rgba(255,255,255,0.03)";
+
+      row.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div style="display:flex;gap:14px;align-items:center;min-width:240px;flex:1;">
+            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?w=500&auto=format&fit=crop&q=60'}" 
+                 style="width:70px;height:70px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,209,102,0.3);flex-shrink:0;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <strong style="color:#ffd166;font-size:1.05rem;">${item.name}</strong>
+                ${isCurFeatured ? '<span style="background:#ffd166;color:#120703;padding:2px 8px;border-radius:12px;font-size:0.75rem;font-weight:bold;">★ FEATURED</span>' : ''}
+                ${item.badge ? `<span style="background:rgba(255,209,102,0.2);color:#ffd166;padding:2px 8px;border-radius:12px;font-size:0.75rem;">${item.badge}</span>` : ''}
+              </div>
+              <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:4px;">
+                విభాగం: <span style="color:#EDE3C8;">${item.categoryName || 'సాధారణం'}</span> • 
+                ధర: <strong style="color:#ffd166;">₹${item.price}</strong> ${item.originalPrice ? `<span style="text-decoration:line-through;color:rgba(255,255,255,0.4);font-size:0.8rem;">₹${item.originalPrice}</span>` : ''} • 
+                <span style="color:${item.inStock ? '#2ed573' : '#ff6b6b'};font-weight:600;">${item.inStock ? '🟢 In Stock' : '🔴 Out of Stock'}</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            ${!isCurFeatured ? `<button class="store-make-featured-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,209,102,0.25);color:#ffd166;border:1px solid #ffd166;">★ Make Featured</button>` : `<span style="color:#ffd166;font-size:0.85rem;padding:6px 10px;background:rgba(255,209,102,0.15);border-radius:8px;">★ Currently Featured</span>`}
+            <button class="store-edit-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,255,255,0.1);color:#fff;">Edit</button>
+            <button class="store-delete-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,107,107,0.2);color:#ff6b6b;">Delete</button>
+          </div>
+        </div>
+
+        <!-- Inline Edit Box -->
+        <div class="store-edit-box" id="storeEditBox-${item.id}" style="display:none;width:100%;flex-direction:column;gap:10px;padding-top:10px;border-top:1px dashed rgba(255,209,102,0.2);">
+          <input class="se-name" value="${item.name || ''}" placeholder="Product Title" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <div style="display:flex;gap:10px;">
+            <input class="se-price" type="number" value="${item.price || ''}" placeholder="Price (₹)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+            <input class="se-origprice" type="number" value="${item.originalPrice || ''}" placeholder="Original Price (₹)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          </div>
+          <input class="se-badge" value="${item.badge || ''}" placeholder="Badge (ఉదా: బెస్ట్ సెల్లర్)" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <textarea class="se-desc" placeholder="Description" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:70px;">${item.description || ''}</textarea>
+          <input class="se-image" value="${item.imageUrl || ''}" placeholder="Image URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <label style="display:flex;align-items:center;gap:8px;color:#EDE3C8;cursor:pointer;">
+            <input class="se-instock" type="checkbox" ${item.inStock ? 'checked' : ''} style="width:18px;height:18px;">
+            అందుబాటులో ఉంది (In Stock)
+          </label>
+          <div style="display:flex;gap:10px;">
+            <button class="store-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+            <button class="store-cancel-edit-btn" data-id="${item.id}" style="padding:10px 16px;border-radius:12px;background:rgba(255,255,255,0.1);color:#fff;border:none;cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+      `;
+
+      // Event Listeners for Row Actions
+      const makeFeatBtn = row.querySelector(".store-make-featured-btn");
+      if (makeFeatBtn) {
+        makeFeatBtn.addEventListener("click", async () => {
+          await setFeaturedProduct(item.id);
+          alert(`✅ '${item.name}' ప్రధాన విశిష్ట ఉత్పత్తిగా సెట్ చేయబడింది!`);
+          await loadStoreProducts(filterCatId);
+        });
+      }
+
+      const editBtn = row.querySelector(".store-edit-btn");
+      const editBox = row.querySelector(`#storeEditBox-${item.id}`);
+      const cancelBtn = row.querySelector(".store-cancel-edit-btn");
+      if (editBtn && editBox) {
+        editBtn.addEventListener("click", () => {
+          editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+        });
+      }
+      if (cancelBtn && editBox) {
+        cancelBtn.addEventListener("click", () => {
+          editBox.style.display = "none";
+        });
+      }
+
+      const saveEditBtn = row.querySelector(".store-save-edit-btn");
+      if (saveEditBtn && editBox) {
+        saveEditBtn.addEventListener("click", async () => {
+          const newName = editBox.querySelector(".se-name").value.trim();
+          const newPrice = Number(editBox.querySelector(".se-price").value) || 0;
+          const newOrigPrice = Number(editBox.querySelector(".se-origprice").value) || null;
+          const newBadge = editBox.querySelector(".se-badge").value.trim();
+          const newDesc = editBox.querySelector(".se-desc").value.trim();
+          const newImage = editBox.querySelector(".se-image").value.trim();
+          const newInStock = editBox.querySelector(".se-instock").checked;
+
+          if (!newName || newPrice <= 0) {
+            alert("దయచేసి పేరు మరియు సరైన ధరను నమోదు చేయండి.");
+            return;
+          }
+
+          try {
+            saveEditBtn.innerText = "Updating...";
+            await updateDoc(doc(db, "storeProducts", item.id), {
+              name: newName,
+              price: newPrice,
+              originalPrice: newOrigPrice,
+              badge: newBadge,
+              description: newDesc,
+              imageUrl: newImage,
+              inStock: newInStock,
+              updatedAt: serverTimestamp()
+            });
+            alert("✅ ఉత్పత్తి వివరాలు విజయవంతంగా అప్‌డేట్ చేయబడ్డాయి!");
+            await loadStoreProducts(filterCatId);
+          } catch (err) {
+            alert("Error updating product: " + err.message);
+            saveEditBtn.innerText = "Save Changes";
+          }
+        });
+      }
+
+      const delBtn = row.querySelector(".store-delete-btn");
+      if (delBtn) {
+        delBtn.addEventListener("click", async () => {
+          if (!confirm(`'${item.name}' ఉత్పత్తిని నిజంగా తొలగించాలనుకుంటున్నారా?`)) return;
+          try {
+            await deleteDoc(doc(db, "storeProducts", item.id));
+            await loadStoreProducts(filterCatId);
+          } catch (err) {
+            alert("Error deleting: " + err.message);
+          }
+        });
+      }
+
+      list.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error("Error loading products:", err);
+    list.innerHTML = `<p style="color:#ff6b6b;text-align:center;padding:12px;">ఎర్రర్: ${err.message}</p>`;
+  }
+}
+
+// 7. SAMPLE STORE DATA SEEDER
+const seedSampleStoreBtn = document.getElementById("seedSampleStoreBtn");
+if (seedSampleStoreBtn) {
+  seedSampleStoreBtn.addEventListener("click", async () => {
+    if (!confirm("నమూనా ఆధ్యాత్మిక ఉత్పత్తులు మరియు విభాగాలను లోడ్ చేయాలనుకుంటున్నారా?")) return;
+
+    try {
+      seedSampleStoreBtn.innerText = "లోడ్ అవుతోంది...";
+      seedSampleStoreBtn.disabled = true;
+
+      const sampleCategories = [
+        { name: "ఆధ్యాత్మిక గ్రంథాలు", emoji: "📖", order: 1 },
+        { name: "పూజా సామగ్రి", emoji: "🪔", order: 2 },
+        { name: "జపమాలలు & రుద్రాక్షలు", emoji: "📿", order: 3 },
+        { name: "దైవిక చిత్రపటాలు", emoji: "🖼️", order: 4 },
+        { name: "సుగంధ ద్రవ్యాలు", emoji: "🌺", order: 5 }
+      ];
+
+      const catDocIds = {};
+      for (const cat of sampleCategories) {
+        const catRef = await addDoc(collection(db, "storeCategories"), {
+          ...cat,
+          createdAt: serverTimestamp()
+        });
+        catDocIds[cat.name] = catRef.id;
+      }
+
+      const sampleProducts = [
+        {
+          name: "శ్రీమద్భగవద్గీత యథాతథం (తెలుగు తాత్పర్య సహితం)",
+          categoryName: "ఆధ్యాత్మిక గ్రంథాలు",
+          categoryId: catDocIds["ఆధ్యాత్మిక గ్రంథాలు"] || "cat_books",
+          price: 350,
+          originalPrice: 450,
+          badge: "బెస్ట్ సెల్లర్",
+          description: "పూర్తి శ్లోకాలు, సరళమైన తాత్పర్యం మరియు అనువాదంతో కూడిన అత్యద్భుత పవిత్ర గ్రంథం. ఆధ్యాత్మిక సాధకులకు నిత్య మార్గదర్శి.",
+          imageUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80",
+          inStock: true,
+          isFeatured: true,
+          whatsappNumber: "919876543210"
+        },
+        {
+          name: "ఇత్తడి పంచముఖ హారతి దీపం (Five-Face Brass Diya)",
+          categoryName: "పూజా సామగ్రి",
+          categoryId: catDocIds["పూజా సామగ్రి"] || "cat_pooja",
+          price: 599,
+          originalPrice: 799,
+          badge: "ప్రత్యేక ఎంపిక",
+          description: "స్వచ్ఛమైన ఇత్తడితో తయారుచేసిన సాంప్రదాయ పంచముఖ దీపం. పూజలు, సంధ్యా హారతులకు అత్యంత శుభప్రదమైనది.",
+          imageUrl: "https://images.unsplash.com/photo-1608755728617-aefab37d2edd?w=600&auto=format&fit=crop&q=80",
+          inStock: true,
+          isFeatured: false,
+          whatsappNumber: "919876543210"
+        },
+        {
+          name: "స్వచ్ఛమైన తులసి జపమాల (108 పూసలు + గురు పూస)",
+          categoryName: "జపమాలలు & రుద్రాక్షలు",
+          categoryId: catDocIds["జపమాలలు & రుద్రాక్షలు"] || "cat_malas",
+          price: 249,
+          originalPrice: 349,
+          badge: "పవిత్రమైనది",
+          description: "పవిత్ర బృందావన తులసి కొయ్యలతో తయారుచేసిన 108 పూసల సహజ జపమాల. నిత్య మంత్ర జపానికి మరియు ధారణకు ప్రశస్తమైనది.",
+          imageUrl: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600&auto=format&fit=crop&q=80",
+          inStock: true,
+          isFeatured: false,
+          whatsappNumber: "919876543210"
+        },
+        {
+          name: "శ్రీ వేంకటేశ్వర స్వామి గోల్డ్ ఫాయిల్ దేవతా ఫ్రేమ్",
+          categoryName: "దైవిక చిత్రపటాలు",
+          categoryId: catDocIds["దైవిక చిత్రపటాలు"] || "cat_frames",
+          price: 899,
+          originalPrice: 1200,
+          badge: "గోల్డ్ ఫినిష్",
+          description: "తిరుమల శ్రీ వేంకటేశ్వర స్వామి దివ్య స్వరూపం కలిగిన హై-క్వాలిటీ గోల్డ్ ఫాయిల్ ఫోటో ఫ్రేమ్. పూజా గదికి శోభస్కరం.",
+          imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&auto=format&fit=crop&q=80",
+          inStock: true,
+          isFeatured: false,
+          whatsappNumber: "919876543210"
+        },
+        {
+          name: "ప్రీమియం గంధం & సాంబ్రాణి కప్పులు (Dhoop Cups)",
+          categoryName: "సుగంధ ద్రవ్యాలు",
+          categoryId: catDocIds["సుగంధ ద్రవ్యాలు"] || "cat_dhoop",
+          price: 180,
+          originalPrice: 240,
+          badge: "100% సహజం",
+          description: "స్వచ్ఛమైన ఆవు నెయ్యి, గుగ్గిలం మరియు సహజ సుగంధ ద్రవ్యాల సమ్మేళనం. ఇల్లంతా సాత్విక ఆధ్యాత్మిక పరిమళాన్ని నింపుతుంది.",
+          imageUrl: "https://images.unsplash.com/photo-1602928321679-560bb453f190?w=600&auto=format&fit=crop&q=80",
+          inStock: true,
+          isFeatured: false,
+          whatsappNumber: "919876543210"
+        }
+      ];
+
+      let firstProdId = null;
+      for (const prod of sampleProducts) {
+        const pRef = await addDoc(collection(db, "storeProducts"), {
+          ...prod,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+        if (prod.isFeatured && !firstProdId) {
+          firstProdId = pRef.id;
+        }
+      }
+
+      if (firstProdId) {
+        await setDoc(doc(db, "storeSettings", "main"), {
+          featuredProductId: firstProdId,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      }
+
+      alert("🎉 నమూనా ఉత్పత్తులు విజయవంతంగా లోడ్ చేయబడ్డాయి!");
+      await loadStoreCategories();
+      await loadStoreProducts();
+    } catch (err) {
+      console.error("Error seeding store:", err);
+      alert("Error seeding: " + err.message);
+    } finally {
+      seedSampleStoreBtn.innerText = "✨ నమూనా ఉత్పత్తులు లోడ్ చేయండి (Load Samples)";
+      seedSampleStoreBtn.disabled = false;
+    }
+  });
+}
+
+// Initialize Store CMS
+loadStoreCategories();
+loadStoreProducts();
+

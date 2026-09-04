@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -34,6 +34,7 @@
         <button class="dash-btn" data-section="qotdSection">Question of the Day</button>
         <button class="dash-btn" data-section="wordOfDaySection">Word of the Day</button>
         <button class="dash-btn" data-section="streamSection">🎬 Stream CMS</button>
+        <button class="dash-btn" data-section="storeSection">🛍️ Store</button>
         <button id="logoutBtn">Logout</button>
       </div>
 
@@ -101,6 +102,89 @@
   <h2 class="admin-section-title">Subscribers</h2>
   <div id="subscribersList" class="cms-list"></div>
 </div>
+
+      <!-- ═══════════════════════════════════
+           🛍️ STORE CMS
+      ═══════════════════════════════════ -->
+      <div id="storeSection" class="dash-section">
+        <h2 class="admin-section-title">🛍️ విక్రయశాల (Store) CMS</h2>
+
+        <!-- FEATURED PRODUCT SECTION -->
+        <div class="add-event-box">
+          <h2>★ ప్రధాన విశిష్ట ఉత్పత్తి (Featured / Hero Product)</h2>
+          <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:12px;">స్టోర్ పేజీ పైన కనిపించే ప్రధాన విశిష్ట ఉత్పత్తిని (Featured Product) ఇక్కడ ఎంచుకోండి.</p>
+          <div id="currentFeaturedBox" style="padding:14px;border-radius:14px;background:rgba(255,209,102,0.1);border:1px dashed #ffd166;margin-bottom:14px;color:#ffd166;display:flex;align-items:center;gap:14px;">
+            <div id="currentFeaturedThumb" style="width:50px;height:50px;border-radius:8px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;flex-shrink:0;">★</div>
+            <div id="currentFeaturedText" style="flex:1;">ప్రస్తుతం ప్రధాన ఉత్పత్తి సెట్ చేయబడలేదు. క్రింది డ్రాప్‌డౌన్ నుండి ఎంచుకోండి లేదా ఉత్పత్తుల జాబితాలో '★ Set Featured' క్లిక్ చేయండి.</div>
+          </div>
+          <select id="storeFeaturedSelect" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:12px;">
+            <option value="">ఉత్పత్తిని ఎంచుకోండి...</option>
+          </select>
+          <button id="setFeaturedBtn">★ ప్రధాన ఉత్పత్తిగా సెట్ చేయండి (Set as Featured)</button>
+          <p id="storeFeaturedMsg" style="margin-top:8px;font-weight:600;"></p>
+        </div>
+
+        <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+        <!-- CATEGORIES SECTION -->
+        <div class="add-event-box">
+          <h2>విభాగం (Category) జోడించండి</h2>
+          <input type="text" id="storeCatName" placeholder="విభాగం పేరు (Category Name - ఉదా: ఆధ్యాత్మిక గ్రంథాలు, పూజా సామగ్రి)">
+          <input type="text" id="storeCatEmoji" placeholder="Emoji / ఐకాన్ (ఉదా: 📖, 🪔, 📿, 🖼️)">
+          <input type="number" id="storeCatOrder" placeholder="క్రమ సంఖ్య (Order - 1, 2, 3...)">
+          <button id="saveStoreCatBtn">విభాగం సేవ్ చేయండి (Save Category)</button>
+          <p id="storeCatMsg" style="margin-top:8px;font-weight:600;"></p>
+        </div>
+        <h2 class="admin-section-title">విభాగాలు (Categories) జాబితా</h2>
+        <div id="storeCatList" class="cms-list"></div>
+
+        <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+        <!-- PRODUCTS SECTION -->
+        <div class="add-event-box">
+          <h2>కొత్త ఉత్పత్తి (Product) జోడించండి</h2>
+          <select id="storeProductCatSelect" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;margin-bottom:12px;">
+            <option value="">విభాగం ఎంచుకోండి (Select Category)</option>
+          </select>
+          <input type="text" id="storeProductName" placeholder="ఉత్పత్తి పేరు (Product Title - ఉదా: శ్రీమద్భగవద్గీత యథాతథం)">
+          <div style="display:flex;gap:12px;margin-bottom:0;">
+            <input type="number" id="storeProductPrice" placeholder="అమ్మకపు ధర (Price ₹)" style="flex:1;">
+            <input type="number" id="storeProductOriginalPrice" placeholder="అసలు ధర (Original Price ₹ - Optional)" style="flex:1;">
+          </div>
+          <input type="text" id="storeProductBadge" placeholder="ప్రత్యేక బ్యాడ్జ్ (Badge - ఉదా: బెస్ట్ సెల్లర్, పవిత్రమైనది, 100% సహజం)">
+          <textarea id="storeProductDesc" placeholder="ఉత్పత్తి పూర్తి వివరాలు (Description - ఉపయోగాలు, పరిమాణం, ప్రత్యేకతలు)..."></textarea>
+          
+          <div id="storeProductImageBox" class="festival-card-upload-box" style="cursor:pointer;">
+            <span>＋ ఉత్పత్తి ఫోటో అప్‌లోడ్ (Upload Product Photo)</span>
+          </div>
+          <input type="text" id="storeProductImageUrl" placeholder="లేదా ఫోటో URL నేరుగా ఇవ్వండి (Image URL)">
+
+          <div style="display:flex;gap:20px;align-items:center;margin:12px 0;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:8px;color:#EDE3C8;cursor:pointer;font-size:0.95rem;">
+              <input type="checkbox" id="storeProductInStock" checked style="width:18px;height:18px;">
+              అందుబాటులో ఉంది (In Stock)
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;color:#ffd166;cursor:pointer;font-size:0.95rem;">
+              <input type="checkbox" id="storeProductIsFeatured" style="width:18px;height:18px;">
+              ★ ప్రధాన విశిష్ట ఉత్పత్తిగా ఉంచు (Featured)
+            </label>
+          </div>
+
+          <input type="text" id="storeProductWhatsapp" placeholder="ఆర్డర్ కొరకు WhatsApp నంబర్ (ఉదా: 919876543210)">
+
+          <button id="saveStoreProductBtn">ఉత్పత్తి సేవ్ చేయండి (Save Product)</button>
+          <p id="storeProductMsg" style="margin-top:8px;font-weight:600;"></p>
+        </div>
+
+        <h2 class="admin-section-title">ఉత్పత్తుల జాబితా (Products Inventory)</h2>
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+          <select id="storeProductFilter" style="flex:1;min-width:200px;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+            <option value="">అన్ని విభాగాలు (All Products)</option>
+          </select>
+          <button id="seedSampleStoreBtn" style="padding:10px 18px;border-radius:12px;background:rgba(255,209,102,0.18);color:#ffd166;border:1px solid rgba(255,209,102,0.45);cursor:pointer;font-weight:600;">✨ నమూనా ఉత్పత్తులు లోడ్ చేయండి (Load Samples)</button>
+        </div>
+        <div id="storeProductList" class="cms-list"></div>
+      </div>
 
 
 
