@@ -176,7 +176,7 @@ body:has(#screen-game.active) .theme-toggle {
 }
 
 /* ==============================================================================
-   SKRIBBL-FORMAT GAME SCREEN: FIXED VIEWPORT, NO PAGE SCROLLING
+   GAME SCREEN: FIXED VIEWPORT, NO PAGE SCROLLING
 ============================================================================== */
 #screen-game {
   position: fixed;
@@ -185,38 +185,43 @@ body:has(#screen-game.active) .theme-toggle {
   height: var(--vvh, 100dvh);
   max-height: var(--vvh, 100dvh);
   overflow: hidden;
-  padding: 4px 6px 6px;
+  padding: 6px 10px;
   display: none;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   box-sizing: border-box;
 }
 #screen-game.active { display: flex; }
 
 .skribbl-game-wrap {
   width: 100%;
-  max-width: 920px;
+  max-width: 800px;
   height: 100%;
   max-height: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* 1. TOPBAR (Fixed header) */
+/* 1. TOPBAR */
 .skribbl-topbar {
   flex: 0 0 auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #ffffff;
   border: 2px solid #cbd5e1;
   border-radius: 10px;
-  padding: 4px 8px;
+  padding: 4px 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   margin-bottom: 4px;
   gap: 6px;
   color: #0f172a !important;
+  box-sizing: border-box;
 }
 
 .clock-col {
@@ -298,6 +303,8 @@ body:has(#screen-game.active) .theme-toggle {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-width: 0;
+  padding: 0 4px;
 }
 
 .guess-heading {
@@ -311,11 +318,15 @@ body:has(#screen-game.active) .theme-toggle {
 }
 
 .guess-word {
-  font-size: 1.25rem;
+  font-size: clamp(1.05rem, 4.2vw, 1.35rem);
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: clamp(1px, 1.6vw, 3px);
   color: #0f172a;
   line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .word-len-sup {
@@ -353,35 +364,36 @@ body:has(#screen-game.active) .theme-toggle {
 #thumbDownBtn { background: #fef2f2; border-color: #fca5a5; }
 #thumbDownBtn:hover { background: #fee2e2; border-color: #f87171; }
 
-/* 2. CANVAS CONTAINER (Scales smoothly to available height) */
+/* 2. CANVAS CONTAINER: ZERO DEAD SPACE, DRAWING REACHES ALL EDGES */
 .skribbl-canvas-container {
-  flex: 1 1 0;
-  min-height: 60px;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 100px;
+  max-height: calc(100% - 195px);
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   border: 2px solid #cbd5e1;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  box-sizing: border-box;
 }
 
+/* Canvas fills 100% of container so every edge is 100% drawable */
 canvas#drawCanvas {
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  aspect-ratio: 4/3;
-  object-fit: contain;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1 1 0;
+  min-height: 0;
   display: block;
   background: #ffffff;
   touch-action: none;
   cursor: crosshair;
 }
 
-/* DRAWER TOOLBAR */
+/* DRAWER TOOLBAR: Sits neatly at the bottom of canvas container */
 .skribbl-drawer-toolbar {
   flex: 0 0 auto;
   width: 100%;
@@ -389,9 +401,10 @@ canvas#drawCanvas {
   align-items: center;
   justify-content: space-between;
   gap: 4px;
-  padding: 4px 6px;
+  padding: 4px 8px;
   background: #f8fafc;
   border-top: 1.5px solid #e2e8f0;
+  box-sizing: border-box;
   flex-wrap: wrap;
 }
 
@@ -401,8 +414,8 @@ canvas#drawCanvas {
   gap: 3px;
 }
 .brush-dot-btn {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #ffffff;
   border: 2px solid #cbd5e1;
@@ -425,13 +438,13 @@ canvas#drawCanvas {
 
 .palette-wrapper {
   display: grid;
-  grid-template-columns: repeat(9, 20px);
+  grid-template-columns: repeat(9, 18px);
   gap: 2px;
 }
 .swatch {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
   border: 1px solid rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.1s ease;
@@ -439,7 +452,7 @@ canvas#drawCanvas {
 .swatch:hover { transform: scale(1.15); z-index: 2; }
 .swatch.active {
   border: 2px solid #2563eb;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 3px #2563eb;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px #2563eb;
   transform: scale(1.1);
   z-index: 3;
 }
@@ -449,12 +462,12 @@ canvas#drawCanvas {
   gap: 3px;
 }
 .tool-btn {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
-  font-size: 0.92rem;
+  font-size: 0.90rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,24 +481,17 @@ canvas#drawCanvas {
 
 /* 3. LOWER SPLIT VIEW (LEADERBOARD + CHAT SIDE-BY-SIDE) */
 .skribbl-lower-split {
-  flex: 0 0 130px;
-  height: 130px;
-  min-height: 85px;
-  max-height: 175px;
+  flex: 0 0 135px;
+  height: 135px;
+  min-height: 80px;
+  max-height: 160px;
   display: grid;
   grid-template-columns: 46% 54%;
   gap: 6px;
   margin-top: 4px;
   margin-bottom: 4px;
   overflow: hidden;
-}
-
-@media (min-width: 768px) {
-  .skribbl-lower-split {
-    flex: 0 0 165px;
-    height: 165px;
-    grid-template-columns: 44% 56%;
-  }
+  box-sizing: border-box;
 }
 
 /* PLAYERS COLUMN (LEFT) - Only this list scrolls */
@@ -511,7 +517,7 @@ canvas#drawCanvas {
   gap: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   transition: background 0.15s ease, border-color 0.15s ease;
-  min-height: 38px;
+  min-height: 36px;
   color: #0f172a !important;
 }
 
@@ -645,14 +651,16 @@ canvas#drawCanvas {
   color: #0f172a !important;
 }
 
-/* 4. PINNED INPUT BAR (Always fixed at bottom above keyboard) */
+/* 4. PINNED INPUT BAR (Always fixed at bottom) */
 .skribbl-input-bar {
   flex: 0 0 auto;
+  width: 100%;
   display: flex;
   gap: 6px;
   padding: 6px 8px;
   background: #e2e8f0;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .skribbl-input-bar input {
@@ -679,6 +687,87 @@ canvas#drawCanvas {
   background: #2563eb;
   color: #ffffff;
   font-weight: 700;
+}
+
+/* ==============================================================================
+   MOBILE KEYBOARD-OPEN ADAPTATION (PREVENTS SQUISHED CANVAS)
+============================================================================== */
+body.keyboard-open #screen-game {
+  padding: 2px 4px !important;
+}
+body.keyboard-open .skribbl-topbar {
+  padding: 2px 6px !important;
+  margin-bottom: 2px !important;
+}
+body.keyboard-open .skribbl-clock {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 0.90rem !important;
+}
+body.keyboard-open .skribbl-round-sub {
+  font-size: 0.58rem !important;
+}
+body.keyboard-open .guess-heading {
+  font-size: 0.58rem !important;
+}
+body.keyboard-open .guess-word {
+  font-size: 1.0rem !important;
+}
+body.keyboard-open .icon-btn-skribbl {
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 0.90rem !important;
+}
+
+/* Canvas stays large and clear when typing */
+body.keyboard-open .skribbl-canvas-container {
+  flex: 1 1 0 !important;
+  min-height: 140px !important;
+  max-height: none !important;
+}
+
+/* Lower split collapses to compact single-card strip matching Skribbl */
+body.keyboard-open .skribbl-lower-split {
+  flex: 0 0 48px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  margin: 2px 0 !important;
+}
+body.keyboard-open .skribbl-player-card {
+  min-height: 28px !important;
+  padding: 2px 4px !important;
+}
+body.keyboard-open .skribbl-player-card .player-name {
+  font-size: 0.70rem !important;
+}
+body.keyboard-open .skribbl-player-card .player-score {
+  font-size: 0.58rem !important;
+}
+body.keyboard-open .skribbl-player-card .player-avatar-box {
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 0.75rem !important;
+}
+body.keyboard-open .skribbl-chat-log {
+  font-size: 0.70rem !important;
+  padding: 2px 4px !important;
+}
+body.keyboard-open .chat-msg {
+  padding: 1px 3px !important;
+  font-size: 0.70rem !important;
+}
+body.keyboard-open .skribbl-input-bar {
+  padding: 3px 4px !important;
+}
+body.keyboard-open .skribbl-input-bar input {
+  padding: 5px 8px !important;
+  font-size: 0.85rem !important;
+}
+body.keyboard-open .skribbl-send-btn {
+  padding: 5px 10px !important;
+  font-size: 0.85rem !important;
+  min-width: 46px !important;
 }
 
 /* Floating reactions */

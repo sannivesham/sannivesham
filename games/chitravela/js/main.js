@@ -18,7 +18,6 @@ function showScreen(name) {
   Object.values(screens).forEach(s => s.classList.remove("active"));
   screens[name].classList.add("active");
 
-  // HIDE floating theme button on game screen so it NEVER overlaps the settings gear
   const themeToggle = document.querySelector(".theme-toggle");
   if (themeToggle) {
     themeToggle.style.display = (name === "game") ? "none" : "block";
@@ -32,9 +31,12 @@ function updateVisualViewport() {
   if (window.visualViewport) {
     const h = window.visualViewport.height;
     document.documentElement.style.setProperty("--vvh", `${h}px`);
+    const isKeyboardOpen = h < window.innerHeight * 0.78;
+    document.body.classList.toggle("keyboard-open", isKeyboardOpen);
     window.scrollTo(0, 0);
   } else {
     document.documentElement.style.setProperty("--vvh", `${window.innerHeight}px`);
+    document.body.classList.remove("keyboard-open");
   }
 }
 if (window.visualViewport) {
@@ -45,16 +47,18 @@ window.addEventListener("resize", updateVisualViewport);
 window.addEventListener("orientationchange", () => setTimeout(updateVisualViewport, 150));
 updateVisualViewport();
 
-// Prevent window scroll on input focus
 const chatInputEl = document.getElementById("chatInput");
 if (chatInputEl) {
   chatInputEl.addEventListener("focus", () => {
+    document.body.classList.add("keyboard-open");
     setTimeout(updateVisualViewport, 60);
     setTimeout(updateVisualViewport, 200);
   });
   chatInputEl.addEventListener("blur", () => {
-    setTimeout(updateVisualViewport, 60);
-    setTimeout(updateVisualViewport, 200);
+    setTimeout(() => {
+      document.body.classList.remove("keyboard-open");
+      updateVisualViewport();
+    }, 120);
   });
 }
 

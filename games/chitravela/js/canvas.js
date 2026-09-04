@@ -1,4 +1,4 @@
-﻿import { db, ref, push, remove, set, onValue, onChildAdded, onChildRemoved, get } from "./firebase-config.js";
+import { db, ref, push, remove, set, onValue, onChildAdded, onChildRemoved, get } from "./firebase-config.js";
 
 // Classic Skribbl 18-color palette (2 rows of 9)
 export const COLORS = [
@@ -196,9 +196,11 @@ export function initCanvas({ canvasEl, roomId, isDrawer, uid }) {
     const rect = canvasEl.getBoundingClientRect();
     const scaleX = canvasEl.width / rect.width;
     const scaleY = canvasEl.height / rect.height;
+    const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
     return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY
+      x: Math.max(0, Math.min(canvasEl.width, (clientX - rect.left) * scaleX)),
+      y: Math.max(0, Math.min(canvasEl.height, (clientY - rect.top) * scaleY))
     };
   }
 
