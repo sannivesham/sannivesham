@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>పంచాంగం (Panchangam / Calendar) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="నేటి తిథి, నక్షత్రం, వర్జ్యం, రాహుకాలం, దుర్ముహూర్తం, అమృత ఘడియలు మరియు శుభ ముహూర్తాలతో కూడిన తెలుగు పంచాంగం మరియు క్యాలెండర్.">
+  <link rel="canonical" href="https://sannivesham.com/calendar.html">
+
+  <meta property="og:title" content="పంచాంగం (Panchangam / Calendar) - సన్నివేశం">
+  <meta property="og:description" content="నేటి తిథి, నక్షత్రం, వర్జ్యం, రాహుకాలం, దుర్ముహూర్తం, అమృత ఘడియలతో కూడిన రోజువారీ తెలుగు పంచాంగం.">
+  <meta property="og:image" content="https://sannivesham.com/images/calendar.png">
+  <meta property="og:url" content="https://sannivesham.com/calendar.html">
+  <meta property="og:type" content="website">
+
+  <!-- Breadcrumb & WebPage Schema for Google Sitelinks -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://sannivesham.com/calendar.html#webpage",
+        "url": "https://sannivesham.com/calendar.html",
+        "name": "పంచాంగం (Panchangam / Calendar) - సన్నివేశం",
+        "description": "తెలుగు తిథులు, నక్షత్రాలు మరియు శుభ ముహూర్తాలు",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://sannivesham.com/#website",
+          "name": "సన్నివేశం",
+          "url": "https://sannivesham.com/"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ప్రారంభం",
+            "item": "https://sannivesham.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "పంచాంగం",
+            "item": "https://sannivesham.com/calendar.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="theme.js?v=20260904b"></script>
+  <link rel="stylesheet" href="style.css?v=20260904b">
+
+  <style>
+    .panchang-page {
+      min-height: 100vh;
+      padding: 30px 20px 80px;
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .panchang-hero {
+      text-align: center;
+      margin: 20px auto 35px;
+    }
+    .panchang-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 2.8rem);
+      color: #ffd166;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 0 2px 14px rgba(255, 209, 102, 0.3);
+    }
+    .panchang-hero p {
+      font-size: clamp(0.98rem, 2vw, 1.15rem);
+      color: #EDE3C8;
+      opacity: 0.9;
+    }
+    .panchang-card {
+      background: rgba(22, 10, 5, 0.82);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 24px;
+      padding: 32px 28px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+      margin-bottom: 30px;
+    }
+    .panchang-header {
+      border-bottom: 1px solid rgba(255, 209, 102, 0.25);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .panchang-year {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffd166;
+      margin-bottom: 6px;
+    }
+    .panchang-today-date {
+      font-size: 1.1rem;
+      color: #EDE3C8;
+      opacity: 0.92;
+    }
+    .panchang-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .panchang-item {
+      background: rgba(255, 209, 102, 0.05);
+      border: 1px solid rgba(255, 209, 102, 0.18);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .panchang-item.highlight-good {
+      border-color: rgba(46, 204, 113, 0.4);
+      background: rgba(46, 204, 113, 0.06);
+    }
+    .panchang-item.highlight-caution {
+      border-color: rgba(231, 76, 60, 0.4);
+      background: rgba(231, 76, 60, 0.06);
+    }
+    .panchang-label {
+      font-size: 0.88rem;
+      color: rgba(255, 209, 102, 0.85);
+      font-weight: 600;
+    }
+    .panchang-val {
+      font-size: 1.15rem;
+      color: #fff;
+      font-weight: 700;
+    }
+    .panchang-sub {
+      font-size: 0.85rem;
+      color: rgba(237, 227, 200, 0.7);
+    }
+    .panchang-links-box {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .panchang-full-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .panchang-full-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 209, 102, 0.45);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="home-bg"></div>
+
+  <!-- CREATIVE DIVINE PRELOADER -->
+  <div id="loader" class="creative-loader">
+    <div class="loader-mandala-container">
+      <div class="mandala-ring outer-ring"></div>
+      <div class="mandala-ring inner-ring"></div>
+      <div class="loader-emblem-wrap">
+        <img src="images/logo.png" class="loader-emblem" alt="Sannivesham Logo">
+        <div class="divine-diya">
+          <div class="diya-flame"></div>
+          <div class="diya-base"></div>
+        </div>
+      </div>
+    </div>
+    <h1 class="loader-title">&#3128;&#3112;&#3149;&#3112;&#3135;&#3125;&#3143;&#3126;&#3074;</h1>
+    <p class="loader-tagline">&#10024; &#3128;&#3074;&#3128;&#3149;&#3093;&#3139;&#3108;&#3135; &bull; &#3128;&#3074;&#3114;&#3149;&#3120;&#3110;&#3134;&#3119;&#3074; &bull; &#3128;&#3074;&#3117;&#3134;&#3127;&#3107; &#10024;</p>
+    <div class="loader-pearls">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <script>
+    (function() {
+      function dismiss() {
+        var el = document.getElementById('loader');
+        if (el && !el.dataset.dismissed) {
+          el.dataset.dismissed = 'true';
+          el.classList.add('loader-hidden');
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+        }
+      }
+      if (document.readyState === 'complete') {
+        setTimeout(dismiss, 250);
+      } else {
+        window.addEventListener('load', function() { setTimeout(dismiss, 250); });
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(dismiss, 400); });
+      }
+      setTimeout(dismiss, 700);
+    })();
+  </script>
+
+  <nav class="glass-navbar">
+    <a href="index.html#categories">← వెనుకకు</a>
+    <a href="index.html">ప్రారంభం</a>
+    <a href="calendar.html">పంచాంగం</a>
+  </nav>
+
+  <main class="panchang-page">
+    <header class="panchang-hero">
+      <h1>🗓️ నిత్య పంచాంగం</h1>
+      <p>తెలుగు కాలమానం ప్రకారం నేటి తిథి, వారం, నక్షత్రం మరియు శుభాశుభ ముహూర్త వివరాలు</p>
+    </header>
+
+    <div class="panchang-card">
+      <div class="panchang-header">
+        <div class="panchang-year" id="panchangYear">శ్రీ క్రోధి నామ సంవత్సరం</div>
+        <div class="panchang-today-date" id="panchangFullDate">ఉత్తరాయణం • శిశిర ఋతువు</div>
+      </div>
+
+      <div class="panchang-grid">
+        <div class="panchang-item">
+          <span class="panchang-label">📅 నేటి తిథి</span>
+          <span class="panchang-val" id="panchangTithi">బహుళ పక్షం</span>
+          <span class="panchang-sub">సూర్యోదయం నుండి మధ్యాహ్నం వరకు</span>
+        </div>
+
+        <div class="panchang-item">
+          <span class="panchang-label">⭐ నక్షత్రం</span>
+          <span class="panchang-val" id="panchangNakshatra">రోహిణి / మృగశిర</span>
+          <span class="panchang-sub">పవిత్ర నక్షత్ర సంచారం</span>
+        </div>
+
+        <div class="panchang-item">
+          <span class="panchang-label">☀️ సూర్యోదయం & సూర్యాస్తమయం</span>
+          <span class="panchang-val">ఉదయం 06:12 • సాయంత్రం 06:22</span>
+          <span class="panchang-sub">భారతీయ ప్రామాణిక సమయం (IST)</span>
+        </div>
+
+        <div class="panchang-item highlight-good">
+          <span class="panchang-label">✨ అమృత ఘడియలు</span>
+          <span class="panchang-val">ఉదయం 08:35 - 10:10</span>
+          <span class="panchang-sub">సర్వ కార్య సిద్ధి ప్రదం</span>
+        </div>
+
+        <div class="panchang-item highlight-good">
+          <span class="panchang-label">🪔 అభిజిత్ ముహూర్తం</span>
+          <span class="panchang-val">మధ్యాహ్నం 11:55 - 12:44</span>
+          <span class="panchang-sub">శుభ కార్యములకు ఉత్తమ సమయం</span>
+        </div>
+
+        <div class="panchang-item highlight-caution">
+          <span class="panchang-label">⚠️ రాహుకాలం</span>
+          <span class="panchang-val" id="panchangRahu">సాయంత్రం 04:30 - 06:00</span>
+          <span class="panchang-sub">వర్జ్య సమయం</span>
+        </div>
+
+        <div class="panchang-item highlight-caution">
+          <span class="panchang-label">⏳ యమగండం</span>
+          <span class="panchang-val">మధ్యాహ్నం 12:00 - 01:30</span>
+          <span class="panchang-sub">వర్జ్య సమయం</span>
+        </div>
+
+        <div class="panchang-item">
+          <span class="panchang-label">🕉️ కరణం & యోగం</span>
+          <span class="panchang-val">బాలవ • సిద్ధ యోగం</span>
+          <span class="panchang-sub">దైవ చింతనకు శ్రేష్టం</span>
+        </div>
+      </div>
+
+      <div class="panchang-links-box">
+        <a href="https://sannivesham.github.io/calender/" class="panchang-full-btn" target="_blank">
+          సంపూర్ణ పంచాంగ క్యాలెండర్ వీక్షించండి ➜
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ కాలాయ తస్మై నమః • కాలమే భగవత్ స్వరూపం ✨</p>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="script.js?v=2"></script>
+  <script>
+    (function() {
+      const now = new Date();
+      const days = ["ఆదివారం (భానువాసరే)", "సోమవారం (ఇందువాసరే)", "మంగళవారం (భౌమవాసరే)", "బుధవారం (సౌమ్యవాసరే)", "గురువారం (బృహస్పతివాసరే)", "శుక్రవారం (భృగువాసరే)", "శనివారం (స్థిరవాసరే)"];
+      const months = ["జనవరి", "ఫిబ్రవరి", "మార్చి", "ఏప్రిల్", "మే", "జూన్", "జూలై", "ఆగస్టు", "సెప్టెంబర్", "అక్టోబర్", "నవంబర్", "డిసెంబర్"];
+      
+      const dayName = days[now.getDay()];
+      const formatted = ${now.getDate()}   — ;
+      const el = document.getElementById("panchangFullDate");
+      if (el) el.innerText = formatted;
+
+      const rahuTimes = [
+        "సాయంత్రం 04:30 - 06:00", // Sun
+        "ఉదయం 07:30 - 09:00",     // Mon
+        "మధ్యాహ్నం 03:00 - 04:30", // Tue
+        "మధ్యాహ్నం 12:00 - 01:30", // Wed
+        "మధ్యాహ్నం 01:30 - 03:00", // Thu
+        "ఉదయం 10:30 - 12:00",     // Fri
+        "ఉదయం 09:00 - 10:30"      // Sat
+      ];
+      const rahuEl = document.getElementById("panchangRahu");
+      if (rahuEl) rahuEl.innerText = rahuTimes[now.getDay()];
+    })();
+  </script>
+</body>
+</html>
