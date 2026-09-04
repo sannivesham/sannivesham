@@ -13,6 +13,7 @@
   --danger: #ff5252;
   --radius: 14px;
   --shadow: 0 4px 12px rgba(0,0,0,0.12);
+  --vvh: 100vh;
 }
 
 [data-theme="dark"] {
@@ -24,17 +25,20 @@
   --text-light: #9aa0c3;
 }
 
-* { box-sizing: border-box; }
-
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   font-family: 'Nunito', system-ui, sans-serif;
   background: linear-gradient(160deg, var(--bg), var(--bg-2));
   color: var(--text);
-  min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
 }
+
+* { box-sizing: border-box; }
 
 /* Background effects */
 .bg-decor { position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
@@ -64,7 +68,9 @@ body {
 
 .screen {
   display: none;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
   flex-direction: column;
   align-items: center;
   padding: 16px 12px 32px;
@@ -163,34 +169,54 @@ button {
 .theme-toggle { position: fixed; top: 12px; right: 12px; z-index: 20; }
 .theme-toggle button { width: 40px; height: 40px; border-radius: 50%; padding: 0; font-size: 1.1rem; background: var(--panel); }
 
+/* Hide floating theme toggle completely when game is active */
+#screen-game.active ~ .theme-toggle,
+body:has(#screen-game.active) .theme-toggle {
+  display: none !important;
+}
+
 /* ==============================================================================
-   SKRIBBL-FORMAT GAME SCREEN
+   SKRIBBL-FORMAT GAME SCREEN: FIXED VIEWPORT, NO PAGE SCROLLING
 ============================================================================== */
 #screen-game {
-  padding: 6px 8px 10px;
-  justify-content: flex-start;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: var(--vvh, 100dvh);
+  max-height: var(--vvh, 100dvh);
+  overflow: hidden;
+  padding: 4px 6px 6px;
+  display: none;
+  flex-direction: column;
+  box-sizing: border-box;
 }
+#screen-game.active { display: flex; }
 
 .skribbl-game-wrap {
   width: 100%;
   max-width: 920px;
+  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  overflow: hidden;
 }
 
-/* 1. TOPBAR */
+/* 1. TOPBAR (Fixed header) */
 .skribbl-topbar {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #ffffff;
   border: 2px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 6px 12px;
+  border-radius: 10px;
+  padding: 4px 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  margin-bottom: 8px;
-  gap: 8px;
+  margin-bottom: 4px;
+  gap: 6px;
+  color: #0f172a !important;
 }
 
 .clock-col {
@@ -198,35 +224,35 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 58px;
+  min-width: 50px;
 }
 
 .clock-icon { display: none; }
 
 .skribbl-clock {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: #ffffff;
-  border: 3.5px solid #1e293b;
+  border: 3px solid #1e293b;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: #1e293b;
   box-shadow: 0 2px 4px rgba(0,0,0,0.12);
   transition: all 0.2s ease;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 .skribbl-clock::before {
   content: "";
   position: absolute;
   top: -5px;
-  left: 3px;
-  width: 9px;
-  height: 6px;
+  left: 2px;
+  width: 8px;
+  height: 5px;
   background: #1e293b;
   border-radius: 6px 6px 0 0;
   transform: rotate(-35deg);
@@ -235,9 +261,9 @@ button {
   content: "";
   position: absolute;
   top: -5px;
-  right: 3px;
-  width: 9px;
-  height: 6px;
+  right: 2px;
+  width: 8px;
+  height: 5px;
   background: #1e293b;
   border-radius: 6px 6px 0 0;
   transform: rotate(35deg);
@@ -258,10 +284,10 @@ button {
 }
 
 .skribbl-round-sub {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: #334155;
-  margin-top: 2px;
+  margin-top: 1px;
   white-space: nowrap;
 }
 
@@ -275,7 +301,7 @@ button {
 }
 
 .guess-heading {
-  font-size: 0.74rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -285,15 +311,15 @@ button {
 }
 
 .guess-word {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: 3px;
   color: #0f172a;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .word-len-sup {
-  font-size: 0.82rem;
+  font-size: 0.80rem;
   font-weight: 800;
   color: #64748b;
   margin-left: 2px;
@@ -303,16 +329,16 @@ button {
 .actions-col {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .icon-btn-skribbl {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 8px;
   background: #f1f5f9;
   border: 1.5px solid #cbd5e1;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   padding: 0;
   display: flex;
   align-items: center;
@@ -327,19 +353,28 @@ button {
 #thumbDownBtn { background: #fef2f2; border-color: #fca5a5; }
 #thumbDownBtn:hover { background: #fee2e2; border-color: #f87171; }
 
-/* 2. CANVAS CONTAINER */
+/* 2. CANVAS CONTAINER (Scales smoothly to available height) */
 .skribbl-canvas-container {
+  flex: 1 1 0;
+  min-height: 60px;
   background: #ffffff;
   border: 2px solid #cbd5e1;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 canvas#drawCanvas {
   width: 100%;
+  height: 100%;
+  max-height: 100%;
   aspect-ratio: 4/3;
+  object-fit: contain;
   display: block;
   background: #ffffff;
   touch-action: none;
@@ -348,11 +383,13 @@ canvas#drawCanvas {
 
 /* DRAWER TOOLBAR */
 .skribbl-drawer-toolbar {
+  flex: 0 0 auto;
+  width: 100%;
   display: none;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  padding: 6px 8px;
+  gap: 4px;
+  padding: 4px 6px;
   background: #f8fafc;
   border-top: 1.5px solid #e2e8f0;
   flex-wrap: wrap;
@@ -361,11 +398,11 @@ canvas#drawCanvas {
 .brush-size-picker {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 .brush-dot-btn {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #ffffff;
   border: 2px solid #cbd5e1;
@@ -388,12 +425,12 @@ canvas#drawCanvas {
 
 .palette-wrapper {
   display: grid;
-  grid-template-columns: repeat(9, 22px);
-  gap: 3px;
+  grid-template-columns: repeat(9, 20px);
+  gap: 2px;
 }
 .swatch {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   border: 1px solid rgba(0,0,0,0.2);
   cursor: pointer;
@@ -409,15 +446,15 @@ canvas#drawCanvas {
 
 .tool-actions {
   display: flex;
-  gap: 4px;
+  gap: 3px;
 }
 .tool-btn {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 6px;
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
-  font-size: 1rem;
+  font-size: 0.92rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -431,26 +468,36 @@ canvas#drawCanvas {
 
 /* 3. LOWER SPLIT VIEW (LEADERBOARD + CHAT SIDE-BY-SIDE) */
 .skribbl-lower-split {
+  flex: 0 0 130px;
+  height: 130px;
+  min-height: 85px;
+  max-height: 175px;
   display: grid;
   grid-template-columns: 46% 54%;
   gap: 6px;
-  margin-top: 8px;
-  height: 210px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
   .skribbl-lower-split {
+    flex: 0 0 165px;
+    height: 165px;
     grid-template-columns: 44% 56%;
-    height: 250px;
   }
 }
 
-/* PLAYERS COLUMN (LEFT) */
+/* PLAYERS COLUMN (LEFT) - Only this list scrolls */
 .skribbl-players-column {
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   padding-right: 2px;
 }
 
@@ -460,28 +507,19 @@ canvas#drawCanvas {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
   border-radius: 8px;
-  padding: 5px 8px;
+  padding: 4px 6px;
   gap: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   transition: background 0.15s ease, border-color 0.15s ease;
-  min-height: 40px;
-}
-
-/* Correct Guess Bright Green Card */
-.skribbl-player-card.guessed {
-  background: #55d955 !important;
-  border-color: #38b038 !important;
-  color: #052e05 !important;
-}
-.skribbl-player-card.guessed .player-score {
-  color: #0f510f !important;
+  min-height: 38px;
+  color: #0f172a !important;
 }
 
 .skribbl-player-card .player-rank {
   font-weight: 800;
-  font-size: 0.85rem;
-  min-width: 20px;
-  color: inherit;
+  font-size: 0.82rem;
+  min-width: 18px;
+  color: #1e293b !important;
 }
 .skribbl-player-card .player-details {
   flex: 1;
@@ -490,21 +528,18 @@ canvas#drawCanvas {
 }
 .skribbl-player-card .player-name {
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 0.80rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: inherit;
+  color: #0f172a !important;
 }
 .skribbl-player-card.is-me .player-name {
-  color: #1d4ed8;
-}
-.skribbl-player-card.guessed.is-me .player-name {
-  color: #052e05;
+  color: #1d4ed8 !important;
 }
 .skribbl-player-card .player-score {
-  font-size: 0.70rem;
-  color: #64748b;
+  font-size: 0.68rem;
+  color: #475569 !important;
   font-weight: 600;
 }
 .skribbl-player-card .player-pencil {
@@ -515,20 +550,34 @@ canvas#drawCanvas {
   0% { transform: rotate(-8deg); }
   100% { transform: rotate(8deg); }
 }
+
 .skribbl-player-card .player-avatar-box {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.95rem;
+  font-size: 0.90rem;
   flex-shrink: 0;
   border: 1px solid rgba(0,0,0,0.1);
 }
 
-/* CHAT COLUMN (RIGHT) */
+/* Correct Guess Bright Green Card */
+.skribbl-player-card.guessed {
+  background: #55d955 !important;
+  border-color: #38b038 !important;
+  color: #052e05 !important;
+}
+.skribbl-player-card.guessed .player-rank,
+.skribbl-player-card.guessed .player-name,
+.skribbl-player-card.guessed .player-score {
+  color: #052e05 !important;
+}
+
+/* CHAT COLUMN (RIGHT) - Only chat log scrolls */
 .skribbl-chat-column {
+  height: 100%;
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
   border-radius: 8px;
@@ -536,16 +585,21 @@ canvas#drawCanvas {
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  color: #0f172a !important;
 }
 
 .skribbl-chat-log {
   flex: 1;
   overflow-y: auto;
-  padding: 6px 8px;
-  font-size: 0.82rem;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 4px 6px;
+  font-size: 0.80rem;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  color: #0f172a !important;
 }
 
 .chat-msg {
@@ -553,49 +607,62 @@ canvas#drawCanvas {
   border-radius: 4px;
   line-height: 1.3;
   word-break: break-word;
+  color: #0f172a !important;
 }
-.chat-msg.draw { color: #2563eb; font-weight: 700; }
-.chat-msg.join { color: #16a34a; font-weight: 600; }
-.chat-msg.leave { color: #dc2626; font-weight: 600; }
+.chat-msg.draw { color: #2563eb !important; font-weight: 700; }
+.chat-msg.join { color: #16a34a !important; font-weight: 600; }
+.chat-msg.leave { color: #dc2626 !important; font-weight: 600; }
 .chat-msg.correct-banner {
-  background: #dcfce7;
-  color: #15803d;
+  background: #dcfce7 !important;
+  color: #15803d !important;
   font-weight: 700;
   border-radius: 4px;
-  padding: 3px 6px;
+  padding: 2px 6px;
   border-left: 3px solid #16a34a;
 }
 .chat-msg.close-alert {
-  background: #fef3c7;
-  color: #b45309;
+  background: #fef3c7 !important;
+  color: #b45309 !important;
   font-weight: 700;
   border-radius: 4px;
-  padding: 3px 6px;
+  padding: 2px 6px;
   border-left: 3px solid #f59e0b;
 }
-.chat-msg.system { color: #64748b; font-style: italic; }
-.chat-msg.guess { background: rgba(0,0,0,0.02); }
-.chat-msg.guess:nth-child(even) { background: rgba(0,0,0,0.05); }
-.chat-msg.guess .who { font-weight: 700; color: #1e293b; }
+.chat-msg.system { color: #64748b !important; font-style: italic; }
+.chat-msg.guess {
+  background: #f1f5f9;
+  color: #0f172a !important;
+}
+.chat-msg.guess:nth-child(even) {
+  background: #e2e8f0;
+}
+.chat-msg.guess .who {
+  font-weight: 700;
+  color: #1e293b !important;
+  margin-right: 4px;
+}
+.chat-msg.guess .text-body {
+  color: #0f172a !important;
+}
 
-/* 4. PINNED INPUT BAR */
+/* 4. PINNED INPUT BAR (Always fixed at bottom above keyboard) */
 .skribbl-input-bar {
+  flex: 0 0 auto;
   display: flex;
   gap: 6px;
-  padding: 8px 10px;
+  padding: 6px 8px;
   background: #e2e8f0;
   border-radius: 10px;
-  margin-top: 8px;
 }
 
 .skribbl-input-bar input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: 2px solid #cbd5e1;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   background: #ffffff;
-  color: #0f172a;
+  color: #0f172a !important;
   outline: none;
   margin-bottom: 0;
 }
@@ -606,8 +673,8 @@ canvas#drawCanvas {
 
 .skribbl-send-btn {
   width: auto;
-  min-width: 60px;
-  padding: 10px 16px;
+  min-width: 55px;
+  padding: 8px 14px;
   border-radius: 8px;
   background: #2563eb;
   color: #ffffff;

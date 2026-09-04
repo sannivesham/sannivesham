@@ -1,4 +1,4 @@
-﻿import {
+import {
   db, ref, set, get, update, remove, push, onValue,
   onDisconnect, serverTimestamp, runTransaction
 } from "./firebase-config.js";
@@ -8,8 +8,11 @@ import { sfx } from "./sfx.js";
 import { pickBotWord, getDoodleStrokes, botGuessPlan, maybeWrongGuessDelay, randomFillerGuess, isBotPlayer } from "./bots.js";
 
 const AVATAR_COLORS = ["#ff6b6b","#ffa94d","#ffd43b","#69db7c","#4ecdc4","#4dabf7","#845ef7","#f06595"];
-const AVATAR_EMOJIS = ["ðŸ˜€","ðŸ˜Ž","ðŸ¤–","ðŸ±","ðŸ¶","ðŸ¦Š","ðŸ¼","ðŸ‘½","ðŸ§™","ðŸ¦„","ðŸ¸","ðŸ¦–"];
-const SUPERSCRIPTS = ["â°","Â¹","Â²","Â³","â´","âµ","â¶","â·","â¸","â¹"];
+const AVATAR_EMOJIS = [
+  "\u{1F600}", "\u{1F60E}", "\u{1F916}", "\u{1F431}", "\u{1F436}", "\u{1F98A}",
+  "\u{1F43C}", "\u{1F47D}", "\u{1F9D9}", "\u{1F984}", "\u{1F438}", "\u{1F996}"
+];
+const SUPERSCRIPTS = ["\u2070","\u00B9","\u00B2","\u00B3","\u2074","\u2075","\u2076","\u2077","\u2078","\u2079"];
 
 let roomId, myUid, myName, isHost = false;
 let roomMetaCache = {}, playersCache = {};
@@ -142,13 +145,13 @@ export function initGame({ roomIdArg, uid, name, canvasEl, els, onGameEnd }) {
 
   if (els.thumbUpBtn) {
     els.thumbUpBtn.onclick = () => {
-      push(reactionsRef, { uid: myUid, emoji: "ðŸ‘", t: Date.now() });
+      push(reactionsRef, { uid: myUid, emoji: "\u{1F44D}", t: Date.now() });
       sfx.reaction();
     };
   }
   if (els.thumbDownBtn) {
     els.thumbDownBtn.onclick = () => {
-      push(reactionsRef, { uid: myUid, emoji: "ðŸ‘Ž", t: Date.now() });
+      push(reactionsRef, { uid: myUid, emoji: "\u{1F44E}", t: Date.now() });
       sfx.reaction();
     };
   }
@@ -402,13 +405,13 @@ async function sendGuess(els, chatRef, playersRef, metaRef) {
 
   // 1. Drawer typing the secret word -> suppress & warn
   if (isDrawing && amDrawer && targetWord && (guessLower === targetWord || guessLower.includes(targetWord))) {
-    appendLocalChatNotice(els, "âš ï¸ You cannot write the secret word in chat!");
+    appendLocalChatNotice(els, "\u26A0\uFE0F You cannot write the secret word in chat!");
     return;
   }
 
   // 2. Already-guessed player typing the secret word -> suppress & warn
   if (isDrawing && alreadyGuessed && targetWord && (guessLower === targetWord || guessLower.includes(targetWord))) {
-    appendLocalChatNotice(els, "âš ï¸ You already guessed the word! Don't spoil it.");
+    appendLocalChatNotice(els, "\u26A0\uFE0F You already guessed the word! Don't spoil it.");
     return;
   }
 
@@ -509,20 +512,20 @@ function renderTopbar(els) {
       els.guessHeading.textContent = "GUESS THIS";
       const hasGuessed = playersCache[myUid] && playersCache[myUid].guessedThisRound;
       if (hasGuessed) {
-        els.wordHint.innerHTML = `<span style="color:#51cf66; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
+        els.wordHint.innerHTML = `<span style="color:#16a34a; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
       } else {
         els.wordHint.innerHTML = formatMaskedWord(m.currentWord, ratio, m.hints !== "off");
       }
     }
   } else if (m.status === "roundEnd" && m.currentWord) {
     els.guessHeading.textContent = "THE WORD WAS";
-    els.wordHint.innerHTML = `<span style="color:#38bdf8; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
-    els.timerNum.textContent = "âœ“";
+    els.wordHint.innerHTML = `<span style="color:#2563eb; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
+    els.timerNum.textContent = "\u2713";
   } else if (m.status === "choosing") {
     const secsLeft = Math.max(0, Math.ceil(((m.chooseDeadline || Date.now()) - Date.now()) / 1000));
     els.guessHeading.textContent = amDrawer ? "PICK A WORD" : "CHOOSING";
     els.wordHint.textContent = amDrawer ? "Choose a word to draw!" : `${drawerName} is choosing...`;
-    els.timerNum.textContent = secsLeft > 0 ? secsLeft : "â³";
+    els.timerNum.textContent = secsLeft > 0 ? secsLeft : "\u23F3";
     if (els.wordChoiceTimer) {
       els.wordChoiceTimer.textContent = secsLeft;
       els.wordChoiceTimer.classList.toggle("urgent", secsLeft <= 4);
@@ -552,7 +555,7 @@ function renderPlayers(els) {
         <div class="player-name">${escapeHtml(p.name || "Player")}${isMe ? " (You)" : ""}</div>
         <div class="player-score">${p.score || 0} points</div>
       </div>
-      ${isDrawing ? '<span class="player-pencil" title="Drawing">âœï¸</span>' : ''}
+      ${isDrawing ? '<span class="player-pencil" title="Drawing">\u270F\uFE0F</span>' : ''}
       <div class="player-avatar-box" style="background:${av.color}">${av.emoji}</div>
     </div>`;
   }).join("");
@@ -572,7 +575,7 @@ function renderChat(els, chat) {
     if (m.type === "system") return `<div class="chat-msg system">${escapeHtml(m.text)}</div>`;
     if (m.type === "correct") return `<div class="chat-msg correct-banner"><b>${escapeHtml(m.name)}</b> guessed the word!</div>`;
     if (m.type === "close") return `<div class="chat-msg close-alert"><b>'${escapeHtml(m.text)}'</b> is close!</div>`;
-    return `<div class="chat-msg guess"><span class="who">${escapeHtml(m.name)}:</span> ${escapeHtml(m.text)}</div>`;
+    return `<div class="chat-msg guess"><span class="who">${escapeHtml(m.name)}:</span><span class="text-body">${escapeHtml(m.text)}</span></div>`;
   }).join("");
   els.chatLog.scrollTop = els.chatLog.scrollHeight;
 }
@@ -598,7 +601,7 @@ function setupToolbar(els) {
   els.palette.innerHTML = "";
   canvasApi.COLORS.forEach((c, i) => {
     const sw = document.createElement("div");
-    sw.className = "swatch" + (i === 9 ? " active" : ""); // default to black
+    sw.className = "swatch" + (i === 9 ? " active" : "");
     sw.style.background = c;
     sw.onclick = () => {
       canvasApi.setColor(c);
@@ -622,7 +625,6 @@ function setupToolbar(els) {
   if (els.toolButtons.toolUndo) els.toolButtons.toolUndo.onclick = () => canvasApi.undoLast();
   if (els.toolButtons.toolClear) els.toolButtons.toolClear.onclick = () => canvasApi.clearAll();
 
-  // 4 quick brush sizes
   document.querySelectorAll(".brush-dot-btn").forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll(".brush-dot-btn").forEach(b => b.classList.remove("active"));

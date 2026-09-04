@@ -1,4 +1,4 @@
-﻿import {
+import {
   db, auth, ref, set, get, update, remove, push, onValue,
   onDisconnect, serverTimestamp, runTransaction,
   signInAnonymously, onAuthStateChanged
@@ -13,9 +13,49 @@ const screens = {
   game: document.getElementById("screen-game"),
   results: document.getElementById("screen-results"),
 };
+
 function showScreen(name) {
   Object.values(screens).forEach(s => s.classList.remove("active"));
   screens[name].classList.add("active");
+
+  // HIDE floating theme button on game screen so it NEVER overlaps the settings gear
+  const themeToggle = document.querySelector(".theme-toggle");
+  if (themeToggle) {
+    themeToggle.style.display = (name === "game") ? "none" : "block";
+  }
+  window.scrollTo(0, 0);
+  updateVisualViewport();
+}
+
+// ---------- Mobile Viewport Lock (prevents page scrolling when keyboard opens) ----------
+function updateVisualViewport() {
+  if (window.visualViewport) {
+    const h = window.visualViewport.height;
+    document.documentElement.style.setProperty("--vvh", `${h}px`);
+    window.scrollTo(0, 0);
+  } else {
+    document.documentElement.style.setProperty("--vvh", `${window.innerHeight}px`);
+  }
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", updateVisualViewport);
+  window.visualViewport.addEventListener("scroll", () => window.scrollTo(0, 0));
+}
+window.addEventListener("resize", updateVisualViewport);
+window.addEventListener("orientationchange", () => setTimeout(updateVisualViewport, 150));
+updateVisualViewport();
+
+// Prevent window scroll on input focus
+const chatInputEl = document.getElementById("chatInput");
+if (chatInputEl) {
+  chatInputEl.addEventListener("focus", () => {
+    setTimeout(updateVisualViewport, 60);
+    setTimeout(updateVisualViewport, 200);
+  });
+  chatInputEl.addEventListener("blur", () => {
+    setTimeout(updateVisualViewport, 60);
+    setTimeout(updateVisualViewport, 200);
+  });
 }
 
 // ---------- Theme ----------
@@ -29,7 +69,7 @@ themeBtn.onclick = () => {
 };
 function applyTheme() {
   document.body.setAttribute("data-theme", theme);
-  themeBtn.textContent = theme === "dark" ? "â˜€ï¸" : "ðŸŒ™";
+  themeBtn.textContent = theme === "dark" ? "\u2600\uFE0F" : "\u{1F319}";
 }
 
 // ---------- Avatar + name ----------
@@ -220,7 +260,7 @@ document.getElementById("copyLinkBtn").onclick = () => {
   navigator.clipboard?.writeText(url);
   const btn = document.getElementById("copyLinkBtn");
   const old = btn.textContent;
-  btn.textContent = "âœ… Copied!";
+  btn.textContent = "\u2705 Copied!";
   setTimeout(() => btn.textContent = old, 1500);
 };
 
