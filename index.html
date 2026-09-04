@@ -146,13 +146,23 @@
       color: #ffd166 !important;
       transform: translateY(-1px) !important;
     }
+    /* NAVBAR ACTION BUTTONS (Music, Theme, Lang, Profile) */
     .nav-actions {
       display: flex !important;
       align-items: center !important;
       gap: 8px !important;
       flex-shrink: 0 !important;
     }
-    .nav-action-btn {
+    .nav-actions .nav-action-btn,
+    .nav-actions .music-btn,
+    .nav-actions .profile-btn,
+    .nav-actions .lang-btn,
+    .nav-actions .theme-btn {
+      position: static !important;
+      top: auto !important;
+      bottom: auto !important;
+      left: auto !important;
+      right: auto !important;
       width: 36px !important;
       height: 36px !important;
       border-radius: 50% !important;
@@ -160,45 +170,27 @@
       background: rgba(255, 209, 102, 0.14) !important;
       color: #ffd166 !important;
       font-weight: bold !important;
-      font-size: 0.88rem !important;
+      font-size: 0.95rem !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       cursor: pointer !important;
       text-decoration: none !important;
       transition: all 0.2s ease !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: 1 !important;
     }
-    .nav-action-btn:hover {
+    .nav-actions .nav-action-btn:hover,
+    .nav-actions .music-btn:hover,
+    .nav-actions .profile-btn:hover,
+    .nav-actions .lang-btn:hover,
+    .nav-actions .theme-btn:hover {
       background: rgba(255, 209, 102, 0.32) !important;
       border-color: #ffd166 !important;
       transform: scale(1.08) !important;
-    }
-
-    /* FLOATING MUSIC BUTTON */
-    .music-btn {
-      position: fixed !important;
-      bottom: 24px !important;
-      right: 20px !important;
-      top: auto !important;
-      left: auto !important;
-      width: 48px !important;
-      height: 48px !important;
-      border-radius: 50% !important;
-      background: rgba(26, 12, 6, 0.92) !important;
-      border: 1.5px solid #ffd166 !important;
-      color: #ffd166 !important;
-      font-size: 1.25rem !important;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55) !important;
-      z-index: 9999 !important;
-      cursor: pointer !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: transform 0.2s, box-shadow 0.2s !important;
-    }
-    .music-btn:hover {
-      transform: scale(1.1) !important;
-      box-shadow: 0 8px 24px rgba(255, 209, 102, 0.4) !important;
+      box-shadow: 0 0 12px rgba(255, 209, 102, 0.35) !important;
     }
 
     @media (max-width: 700px) {
@@ -212,17 +204,17 @@
         font-size: 0.88rem !important;
         padding: 6px 9px !important;
       }
-      .nav-action-btn {
+      .nav-actions {
+        gap: 6px !important;
+      }
+      .nav-actions .nav-action-btn,
+      .nav-actions .music-btn,
+      .nav-actions .profile-btn,
+      .nav-actions .lang-btn,
+      .nav-actions .theme-btn {
         width: 32px !important;
         height: 32px !important;
-        font-size: 0.8rem !important;
-      }
-      .music-btn {
-        bottom: 18px !important;
-        right: 16px !important;
-        width: 42px !important;
-        height: 42px !important;
-        font-size: 1.1rem !important;
+        font-size: 0.85rem !important;
       }
     }
 
@@ -409,6 +401,7 @@
       <a href="#contact" data-en="Contact">సంప్రదించండి</a>
     </div>
     <div class="nav-actions">
+      <button id="musicBtn" class="nav-action-btn music-btn" title="సంగీతం ప్లే / పాజ్" aria-label="Play or pause background music">🔊</button>
       <button id="themeToggleBtn" class="nav-action-btn theme-btn" title="రంగు శైలిని ఎంచుకోండి (Choose Theme)" aria-label="Choose Theme">🎨</button>
       <button id="langToggleBtn" class="nav-action-btn lang-btn" title="View in English" aria-label="Toggle language">EN</button>
       <a id="profileBtn" href="profile.html" class="nav-action-btn profile-btn" title="Profile" aria-label="Profile">👤</a>
@@ -897,8 +890,6 @@
   <audio id="bgMusic" loop>
     <source src="music/traditional.mp3" type="audio/mpeg">
   </audio>
-
-  <button id="musicBtn" class="music-btn" title="సంగీతం ప్లే / పాజ్" aria-label="Play or pause background music">🔊</button>
 
   <script src="music.js?v=2"></script>
 
