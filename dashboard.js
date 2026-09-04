@@ -1,15 +1,43 @@
-import { auth } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) { window.location.href = "admin.html"; }
-});
-
-import { db } from "./firebase-config.js";
 import {
   collection, addDoc, getDocs, getDoc, updateDoc,
   setDoc, deleteDoc, doc, serverTimestamp, query, orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.replace("admin.html");
+    return;
+  }
+
+  // Verify that the user logged in as an administrator (via email/password or admin whitelist)
+  const isPasswordUser = user.providerData && user.providerData.some(p => p.providerId === "password");
+  let isExplicitAdmin = false;
+  try {
+    const adminSnap = await getDoc(doc(db, "settings", "admin"));
+    if (adminSnap.exists()) {
+      const adminData = adminSnap.data();
+      if (adminData.emails && Array.isArray(adminData.emails)) {
+        isExplicitAdmin = adminData.emails.includes(user.email);
+      } else if (adminData.email) {
+        isExplicitAdmin = (adminData.email === user.email);
+      }
+    }
+  } catch (e) {
+    // If settings/admin collection is not configured yet, password-based admin login is accepted
+  }
+
+  // Deny regular phone/guest users who logged in for quizzes
+  if (!isPasswordUser && !isExplicitAdmin) {
+    alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.");
+    window.location.replace("admin.html");
+    return;
+  }
+
+  const dashBody = document.getElementById("dashboardBody") || document.body;
+  dashBody.style.display = "block";
+});
 
 const CLOUD_NAME = "du5em76za";
 const UPLOAD_PRESET = "sannivesham_upload";

@@ -4,6 +4,7 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
   updateDoc,
   deleteDoc,
   doc,
@@ -16,10 +17,34 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "admin.html";
+    window.location.replace("admin.html");
+    return;
   }
+
+  const isPasswordUser = user.providerData && user.providerData.some(p => p.providerId === "password");
+  let isExplicitAdmin = false;
+  try {
+    const adminSnap = await getDoc(doc(db, "settings", "admin"));
+    if (adminSnap.exists()) {
+      const adminData = adminSnap.data();
+      if (adminData.emails && Array.isArray(adminData.emails)) {
+        isExplicitAdmin = adminData.emails.includes(user.email);
+      } else if (adminData.email) {
+        isExplicitAdmin = (adminData.email === user.email);
+      }
+    }
+  } catch (e) {}
+
+  if (!isPasswordUser && !isExplicitAdmin) {
+    alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.");
+    window.location.replace("admin.html");
+    return;
+  }
+
+  const cmsBody = document.getElementById("quizCmsBody") || document.body;
+  cmsBody.style.display = "block";
 });
 
 const CLOUD_NAME = "du5em76za";
