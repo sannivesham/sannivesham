@@ -1,4 +1,4 @@
-import {
+﻿import {
   db, ref, set, get, update, remove, push, onValue,
   onDisconnect, serverTimestamp, runTransaction
 } from "./firebase-config.js";
@@ -8,33 +8,96 @@ import { sfx } from "./sfx.js";
 import { pickBotWord, getDoodleStrokes, botGuessPlan, maybeWrongGuessDelay, randomFillerGuess, isBotPlayer } from "./bots.js";
 
 const AVATAR_COLORS = ["#ff6b6b","#ffa94d","#ffd43b","#69db7c","#4ecdc4","#4dabf7","#845ef7","#f06595"];
-const AVATAR_EMOJIS = ["😀","😎","🤖","🐱","🐶","🦊","🐼","👽","🧙","🦄","🐸","🦖"];
+const AVATAR_EMOJIS = ["ðŸ˜€","ðŸ˜Ž","ðŸ¤–","ðŸ±","ðŸ¶","ðŸ¦Š","ðŸ¼","ðŸ‘½","ðŸ§™","ðŸ¦„","ðŸ¸","ðŸ¦–"];
+const SUPERSCRIPTS = ["â°","Â¹","Â²","Â³","â´","âµ","â¶","â·","â¸","â¹"];
 
 let roomId, myUid, myName, isHost = false;
 let roomMetaCache = {}, playersCache = {};
 let canvasApi = null;
-let localGuessedTimer = null;
 let hostTickInterval = null;
 let onGameEndCb = null;
 let botTimeouts = [];
 let lastBotPhaseKey = null;
 let clientTickInterval = null;
 let currentEls = null;
+let endingTurn = false;
 
 export function avatarFor(index) {
   return { emoji: AVATAR_EMOJIS[index % AVATAR_EMOJIS.length], color: AVATAR_COLORS[index % AVATAR_COLORS.length] };
 }
 export const AVATAR_COUNT = AVATAR_EMOJIS.length;
 
+function toSuperscript(num) {
+  return String(num).split("").map(d => SUPERSCRIPTS[Number(d)] ?? d).join("");
+}
+
+// Deterministic hint index calculation so hints NEVER re-randomize or flicker every tick!
+function getHintIndices(word) {
+  const indices = [];
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] !== " " && word[i] !== "-") indices.push(i);
+  }
+  if (indices.length <= 3) return [];
+  let hash = 0;
+  for (let i = 0; i < word.length; i++) hash = ((hash << 5) - hash + word.charCodeAt(i)) | 0;
+  hash = Math.abs(hash);
+
+  const firstIdx = indices[hash % indices.length];
+  if (indices.length <= 6) return [firstIdx];
+
+  const pool = indices.filter(idx => idx !== firstIdx && Math.abs(idx - firstIdx) > 1);
+  const secondIdx = pool.length > 0 ? pool[(hash >> 2) % pool.length] : null;
+  return secondIdx !== null ? [firstIdx, secondIdx] : [firstIdx];
+}
+
+function formatMaskedWord(word, ratio, hintsOn) {
+  const chars = word.split("");
+  const letterCount = chars.filter(c => c !== " " && c !== "-").length;
+  const hintIndices = hintsOn ? getHintIndices(word) : [];
+
+  // Progressive hints: 1st hint at <= 50% time left, 2nd hint at <= 25% time left
+  const activeHints = new Set();
+  if (ratio <= 0.50 && hintIndices.length >= 1) activeHints.add(hintIndices[0]);
+  if (ratio <= 0.25 && hintIndices.length >= 2) activeHints.add(hintIndices[1]);
+
+  const maskedStr = chars.map((c, i) => {
+    if (c === " ") return "&nbsp;&nbsp;";
+    if (c === "-") return "-";
+    if (activeHints.has(i)) return c.toUpperCase();
+    return "_";
+  }).join(" ");
+
+  return `${maskedStr} <span class="word-len-sup">${toSuperscript(letterCount)}</span>`;
+}
+
+function levenshteinDistance(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const row = [];
+  for (let i = 0; i <= b.length; i++) row[i] = i;
+  for (let i = 1; i <= a.length; i++) {
+    let prev = i;
+    for (let j = 1; j <= b.length; j++) {
+      const val = a[i - 1] === b[j - 1] ? row[j - 1] : Math.min(row[j - 1], prev, row[j]) + 1;
+      row[j - 1] = prev;
+      prev = val;
+    }
+    row[b.length] = prev;
+  }
+  return row[b.length];
+}
+
 export function initGame({ roomIdArg, uid, name, canvasEl, els, onGameEnd }) {
-  roomId = roomIdArg; myUid = uid; myName = name; onGameEndCb = onGameEnd; currentEls = els;
+  roomId = roomIdArg;
+  myUid = uid;
+  myName = name;
+  onGameEndCb = onGameEnd;
+  currentEls = els;
 
   canvasApi = initCanvas({ canvasEl, roomId, uid, isDrawer: () => roomMetaCache.currentDrawerId === myUid });
   setupToolbar(els);
 
-  // Ticks locally on every client (not just the host) so the countdown
-  // visibly moves every second instead of only updating when a Firebase
-  // write happens to arrive.
   clearInterval(clientTickInterval);
   clientTickInterval = setInterval(() => renderTopbar(currentEls), 250);
 
@@ -62,18 +125,33 @@ export function initGame({ roomIdArg, uid, name, canvasEl, els, onGameEnd }) {
 
   onValue(reactionsRef, (snap) => {
     const val = snap.val() || {};
-    Object.entries(val).forEach(([key, r]) => {
-      if (r._shown) return;
-      showFloatingEmoji(els, r.emoji);
-    });
+    const keys = Object.keys(val);
+    if (!keys.length) return;
+    const lastKey = keys[keys.length - 1];
+    const r = val[lastKey];
+    if (r && !r._shown && (Date.now() - r.t < 4000)) {
+      r._shown = true;
+      showFloatingReaction(els, r.emoji);
+    }
   });
 
   els.chatSendBtn.onclick = () => sendGuess(els, chatRef, playersRef, metaRef);
-  els.chatInput.onkeydown = (e) => { if (e.key === "Enter") sendGuess(els, chatRef, playersRef, metaRef); };
-  els.emojiButtons.forEach(b => b.onclick = () => {
-    push(reactionsRef, { uid: myUid, emoji: b.dataset.emoji, t: Date.now() });
-    sfx.reaction();
-  });
+  els.chatInput.onkeydown = (e) => {
+    if (e.key === "Enter") sendGuess(els, chatRef, playersRef, metaRef);
+  };
+
+  if (els.thumbUpBtn) {
+    els.thumbUpBtn.onclick = () => {
+      push(reactionsRef, { uid: myUid, emoji: "ðŸ‘", t: Date.now() });
+      sfx.reaction();
+    };
+  }
+  if (els.thumbDownBtn) {
+    els.thumbDownBtn.onclick = () => {
+      push(reactionsRef, { uid: myUid, emoji: "ðŸ‘Ž", t: Date.now() });
+      sfx.reaction();
+    };
+  }
 }
 
 // ---------- Host-driven state machine ----------
@@ -83,13 +161,15 @@ function driveHostLogic(metaRef, playersRef) {
   hostTick(metaRef, playersRef);
 }
 
-// Called right after a guess is scored so the round can end the instant
-// everyone has guessed, instead of waiting for the next tick.
 function checkRoundEndNow(metaRef, playersRef) {
   if (!isHost) return;
   const m = roomMetaCache;
   if (m.status === "drawing" && everyoneGuessed()) {
-    endTurn(metaRef, playersRef);
+    setTimeout(() => {
+      if (roomMetaCache.status === "drawing" && everyoneGuessed()) {
+        endTurn(metaRef, playersRef);
+      }
+    }, 1200);
   }
 }
 
@@ -99,8 +179,7 @@ function hostTick(metaRef, playersRef) {
   const now = Date.now();
 
   if (m.status === "choosing" && m.chooseDeadline && now > m.chooseDeadline) {
-    // Auto-pick first word if drawer stalls
-    beginDrawingPhase(metaRef, (m.wordChoices && m.wordChoices[0]) || "cat");
+    beginDrawingPhase(metaRef, (m.wordChoices && m.wordChoices[0]) || "star");
     return;
   }
 
@@ -117,9 +196,11 @@ function hostTick(metaRef, playersRef) {
 }
 
 function everyoneGuessed() {
-  const ids = Object.keys(playersCache).filter(id => id !== roomMetaCache.currentDrawerId && playersCache[id].connected !== false);
-  if (ids.length === 0) return false;
-  return ids.every(id => playersCache[id].guessedThisRound);
+  const guessers = Object.entries(playersCache).filter(
+    ([id, p]) => id !== roomMetaCache.currentDrawerId && p.connected !== false
+  );
+  if (guessers.length === 0) return false;
+  return guessers.every(([_, p]) => p.guessedThisRound);
 }
 
 // ---------- Bot orchestration (host-only) ----------
@@ -141,7 +222,7 @@ function handleBotOrchestration(metaRef, playersRef) {
 
   if (m.status === "choosing" && drawerIsBot) {
     const word = pickBotWord(m.wordChoices);
-    const delay = 1400 + Math.random() * 2200;
+    const delay = 1400 + Math.random() * 2000;
     botTimeouts.push(setTimeout(() => {
       if (roomMetaCache.status === "choosing" && roomMetaCache.currentDrawerId === m.currentDrawerId) {
         beginDrawingPhase(metaRef, word);
@@ -156,13 +237,13 @@ function handleBotOrchestration(metaRef, playersRef) {
 
     if (drawerIsBot) {
       const strokes = getDoodleStrokes(m.currentWord);
-      const perStroke = Math.max(350, Math.min(1400, (drawTimeMs * 0.7) / strokes.length));
+      const perStroke = Math.max(400, Math.min(1400, (drawTimeMs * 0.65) / strokes.length));
       strokes.forEach((pts, i) => {
-        const t = 700 + i * perStroke + Math.random() * 250;
+        const t = 800 + i * perStroke + Math.random() * 200;
         botTimeouts.push(setTimeout(() => {
           if (roomMetaCache.status !== "drawing" || roomMetaCache.currentWord !== m.currentWord) return;
           push(ref(db, `rooms/${roomId}/strokes`), {
-            tool: "pen", color: "#1c1c1c", size: 6,
+            tool: "pen", color: "#1c1c1c", size: 4,
             points: pts.map(p => ({ x: Math.round(p.x), y: Math.round(p.y) })), t: Date.now()
           });
         }, t));
@@ -181,7 +262,10 @@ function handleBotOrchestration(metaRef, playersRef) {
         if (wrongDelay) {
           botTimeouts.push(setTimeout(() => {
             if (roomMetaCache.status !== "drawing" || roomMetaCache.currentWord !== m.currentWord) return;
-            push(ref(db, `rooms/${roomId}/chat`), { uid: id, name: p.name, type: "guess", text: randomFillerGuess(m.currentWord), t: Date.now() });
+            push(ref(db, `rooms/${roomId}/chat`), {
+              uid: id, name: p.name, type: "guess",
+              text: randomFillerGuess(m.currentWord), t: Date.now()
+            });
           }, wrongDelay));
         }
         botTimeouts.push(setTimeout(() => botGuessCorrect(id, p, m), delayMs));
@@ -199,15 +283,13 @@ async function botGuessCorrect(botId, botPlayer, m) {
   const speedBonus = Math.round((timeLeftMs / totalMs) * 500);
   const points = 100 + speedBonus;
   await runTransaction(ref(db, `rooms/${roomId}/players/${botId}/score`), (cur) => (cur || 0) + points);
-  await runTransaction(ref(db, `rooms/${roomId}/players/${m.currentDrawerId}/score`), (cur) => (cur || 0) + 25);
-  await push(ref(db, `rooms/${roomId}/chat`), { uid: botId, name: botPlayer.name, type: "correct", text: "guessed the word!", t: Date.now() });
+  await runTransaction(ref(db, `rooms/${roomId}/players/${m.currentDrawerId}/score`), (cur) => (cur || 0) + 30);
+  await push(ref(db, `rooms/${roomId}/chat`), {
+    uid: botId, name: botPlayer.name, type: "correct", text: "guessed the word!", t: Date.now()
+  });
   checkRoundEndNow(ref(db, `rooms/${roomId}/meta`), ref(db, `rooms/${roomId}/players`));
 }
 
-// Self-contained on purpose: this runs from the lobby, BEFORE initGame()
-// has been called for this room, so it must not depend on the module-level
-// roomId / myUid / roomMetaCache (they're only set once the game screen
-// loads). Takes everything it needs as arguments instead.
 export async function hostStartGame(roomIdArg, hostUid, settings) {
   const metaRef = ref(db, `rooms/${roomIdArg}/meta`);
   const playersRef = ref(db, `rooms/${roomIdArg}/players`);
@@ -253,7 +335,6 @@ async function advanceTurn(metaRef, playersRef) {
   }
 
   const drawerId = order[nextIndex];
-  // reset guessed flags
   const resets = {};
   Object.keys(playersCache).forEach(id => resets[`${id}/guessedThisRound`] = false);
   if (Object.keys(resets).length) await update(playersRef, resets);
@@ -280,13 +361,17 @@ async function beginDrawingPhase(metaRef, word) {
     status: "drawing", currentWord: word,
     roundEndAt: Date.now() + (m.drawTime || 60) * 1000
   });
+  const drawerName = (playersCache[m.currentDrawerId] || {}).name || "Drawer";
+  await push(ref(db, `rooms/${roomId}/chat`), {
+    uid: "system", name: drawerName, type: "draw",
+    text: "is drawing now!", t: Date.now()
+  });
 }
 
-let endingTurn = false;
 async function endTurn(metaRef, playersRef) {
   if (endingTurn || roomMetaCache.status !== "drawing") return;
   endingTurn = true;
-  await update(metaRef, { status: "roundEnd", roundEndRevealUntil: Date.now() + 4000 });
+  await update(metaRef, { status: "roundEnd", roundEndRevealUntil: Date.now() + 4500 });
   await remove(ref(db, `rooms/${roomId}/liveStroke`));
   await push(ref(db, `rooms/${roomId}/chat`), {
     uid: "system", name: "System", type: "system",
@@ -294,20 +379,43 @@ async function endTurn(metaRef, playersRef) {
   });
 }
 
-// ---------- Guessing ----------
+// ---------- Guessing & Answer Protection ----------
+function appendLocalChatNotice(els, text, className = "system") {
+  const div = document.createElement("div");
+  div.className = `chat-msg ${className}`;
+  div.textContent = text;
+  els.chatLog.appendChild(div);
+  els.chatLog.scrollTop = els.chatLog.scrollHeight;
+}
+
 async function sendGuess(els, chatRef, playersRef, metaRef) {
   const text = els.chatInput.value.trim();
   if (!text) return;
   els.chatInput.value = "";
+
   const m = roomMetaCache;
   const isDrawing = m.status === "drawing";
   const alreadyGuessed = playersCache[myUid] && playersCache[myUid].guessedThisRound;
   const amDrawer = m.currentDrawerId === myUid;
+  const targetWord = (m.currentWord || "").trim().toLowerCase();
+  const guessLower = text.toLowerCase();
 
-  if (isDrawing && !amDrawer && !alreadyGuessed && m.currentWord &&
-      text.toLowerCase() === String(m.currentWord).toLowerCase()) {
+  // 1. Drawer typing the secret word -> suppress & warn
+  if (isDrawing && amDrawer && targetWord && (guessLower === targetWord || guessLower.includes(targetWord))) {
+    appendLocalChatNotice(els, "âš ï¸ You cannot write the secret word in chat!");
+    return;
+  }
+
+  // 2. Already-guessed player typing the secret word -> suppress & warn
+  if (isDrawing && alreadyGuessed && targetWord && (guessLower === targetWord || guessLower.includes(targetWord))) {
+    appendLocalChatNotice(els, "âš ï¸ You already guessed the word! Don't spoil it.");
+    return;
+  }
+
+  // 3. Active guesser guessing correctly
+  if (isDrawing && !amDrawer && !alreadyGuessed && targetWord && guessLower === targetWord) {
     const guessResult = await runTransaction(ref(db, `rooms/${roomId}/players/${myUid}/guessedThisRound`), (cur) => {
-      if (cur) return; // already guessed, abort
+      if (cur) return;
       return true;
     });
     if (guessResult.committed) {
@@ -316,13 +424,25 @@ async function sendGuess(els, chatRef, playersRef, metaRef) {
       const speedBonus = Math.round((timeLeftMs / totalMs) * 500);
       const points = 100 + speedBonus;
       await runTransaction(ref(db, `rooms/${roomId}/players/${myUid}/score`), (cur) => (cur || 0) + points);
-      await runTransaction(ref(db, `rooms/${roomId}/players/${m.currentDrawerId}/score`), (cur) => (cur || 0) + 25);
-      await push(chatRef, { uid: myUid, name: myName, type: "correct", text: "guessed the word!", t: Date.now() });
+      await runTransaction(ref(db, `rooms/${roomId}/players/${m.currentDrawerId}/score`), (cur) => (cur || 0) + 35);
+      await push(chatRef, {
+        uid: myUid, name: myName, type: "correct",
+        text: "guessed the word!", t: Date.now()
+      });
       sfx.correct();
       checkRoundEndNow(metaRef, playersRef);
     }
     return;
   }
+
+  // 4. Close guess detection
+  if (isDrawing && !amDrawer && !alreadyGuessed && targetWord && targetWord.length >= 3) {
+    if (levenshteinDistance(guessLower, targetWord) === 1) {
+      appendLocalChatNotice(els, `'${text}' is close!`, "close-alert");
+    }
+  }
+
+  // 5. Broadcast normal guess
   await push(chatRef, { uid: myUid, name: myName, type: "guess", text, t: Date.now() });
 }
 
@@ -354,79 +474,91 @@ function showWordChoice(els) {
     const b = document.createElement("button");
     b.className = "btn-accent";
     b.textContent = w;
-    b.onclick = () => { els.wordChoiceOverlay.classList.add("hidden"); drawerPickWord(w); };
+    b.onclick = () => {
+      els.wordChoiceOverlay.classList.add("hidden");
+      drawerPickWord(w);
+    };
     els.wordChoiceBtns.appendChild(b);
   });
 }
 
 function renderTopbar(els) {
   const m = roomMetaCache;
-  els.roundLabel.textContent = `Round ${Math.min(m.currentRoundNum || 1, m.rounds || 1)}/${m.rounds || "-"}`;
+  const currentRound = Math.min(m.currentRoundNum || 1, m.rounds || 1);
+  const totalRounds = m.rounds || 3;
+  els.roundLabel.textContent = `Round ${currentRound} of ${totalRounds}`;
+
   const amDrawer = m.currentDrawerId === myUid;
   const drawerName = (playersCache[m.currentDrawerId] || {}).name || "...";
 
   els.timerCircle.classList.remove("urgent", "time-up");
 
   if (m.status === "drawing" && m.currentWord) {
+    const msLeft = Math.max(0, (m.roundEndAt || Date.now()) - Date.now());
+    const secsLeft = Math.ceil(msLeft / 1000);
+    const totalSecs = m.drawTime || 60;
+    const ratio = msLeft / (totalSecs * 1000);
+
+    els.timerNum.textContent = secsLeft;
+    if (secsLeft <= 5) els.timerCircle.classList.add("urgent");
+
     if (amDrawer) {
-      els.wordHint.textContent = m.currentWord;
+      els.guessHeading.textContent = "DRAW THIS";
+      els.wordHint.textContent = m.currentWord.toUpperCase();
     } else {
-      const revealCount = m.hints === "on" ? Math.max(1, Math.floor(m.currentWord.length / 4)) : 0;
-      els.wordHint.textContent = maskWord(m.currentWord, revealCount);
-    }
-    const msLeft = (m.roundEndAt || Date.now()) - Date.now();
-    const secsLeft = Math.max(0, Math.ceil(msLeft / 1000));
-    if (msLeft <= 0) {
-      els.timerCircle.textContent = "0";
-      els.timerCircle.classList.add("time-up");
-      els.wordHint.textContent = amDrawer ? `Time's up! (${m.currentWord})` : "⏰ Time's up!";
-    } else {
-      els.timerCircle.textContent = secsLeft;
-      if (secsLeft <= 5) els.timerCircle.classList.add("urgent");
+      els.guessHeading.textContent = "GUESS THIS";
+      const hasGuessed = playersCache[myUid] && playersCache[myUid].guessedThisRound;
+      if (hasGuessed) {
+        els.wordHint.innerHTML = `<span style="color:#51cf66; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
+      } else {
+        els.wordHint.innerHTML = formatMaskedWord(m.currentWord, ratio, m.hints !== "off");
+      }
     }
   } else if (m.status === "roundEnd" && m.currentWord) {
-    els.wordHint.textContent = `${drawerName} was drawing: ${m.currentWord}`;
-    els.timerCircle.textContent = "✓";
+    els.guessHeading.textContent = "THE WORD WAS";
+    els.wordHint.innerHTML = `<span style="color:#38bdf8; font-weight:800;">${escapeHtml(m.currentWord.toUpperCase())}</span>`;
+    els.timerNum.textContent = "âœ“";
   } else if (m.status === "choosing") {
     const secsLeft = Math.max(0, Math.ceil(((m.chooseDeadline || Date.now()) - Date.now()) / 1000));
-    els.wordHint.textContent = amDrawer ? "Pick a word to draw!" : `${drawerName} is choosing a word...`;
-    els.timerCircle.textContent = secsLeft > 0 ? secsLeft : "⏳";
+    els.guessHeading.textContent = amDrawer ? "PICK A WORD" : "CHOOSING";
+    els.wordHint.textContent = amDrawer ? "Choose a word to draw!" : `${drawerName} is choosing...`;
+    els.timerNum.textContent = secsLeft > 0 ? secsLeft : "â³";
     if (els.wordChoiceTimer) {
       els.wordChoiceTimer.textContent = secsLeft;
       els.wordChoiceTimer.classList.toggle("urgent", secsLeft <= 4);
     }
   } else {
+    els.guessHeading.textContent = "GUESS THIS";
     els.wordHint.textContent = "";
-    els.timerCircle.textContent = "-";
+    els.timerNum.textContent = "-";
   }
 
   els.drawerToolbar.style.display = amDrawer && m.status === "drawing" ? "flex" : "none";
-  els.sizeRow.style.display = amDrawer && m.status === "drawing" ? "flex" : "none";
-}
-
-function maskWord(word, revealCount) {
-  const chars = word.split("");
-  const revealIdx = new Set();
-  while (revealIdx.size < revealCount && revealIdx.size < chars.length - 1) {
-    revealIdx.add(Math.floor(Math.random() * chars.length));
-  }
-  return chars.map((c, i) => (c === " " ? "  " : (revealIdx.has(i) ? c : "_") + " ")).join("").trim();
 }
 
 function renderPlayers(els) {
   const drawerId = roomMetaCache.currentDrawerId;
   const sorted = Object.entries(playersCache).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
-  const html = sorted.map(([id, p]) => {
+
+  const html = sorted.map(([id, p], i) => {
     const av = avatarFor(p.avatarIndex || 0);
     const isDrawing = id === drawerId;
     const guessed = p.guessedThisRound;
-    return `<div class="player-row ${isDrawing ? "drawing" : ""} ${guessed ? "correct" : ""}">
-      <div class="mini-avatar" style="background:${av.color}">${av.emoji}</div>
-      <div class="pname">${escapeHtml(p.name || "Player")}${isDrawing ? " ✏️" : ""}${guessed ? " ✅" : ""}</div>
-      <div class="pscore">${p.score || 0}</div>
+    const isMe = id === myUid;
+
+    return `<div class="skribbl-player-card ${isDrawing ? "drawing" : ""} ${guessed ? "guessed" : ""} ${isMe ? "is-me" : ""}">
+      <div class="player-rank">#${i + 1}</div>
+      <div class="player-details">
+        <div class="player-name">${escapeHtml(p.name || "Player")}${isMe ? " (You)" : ""}</div>
+        <div class="player-score">${p.score || 0} points</div>
+      </div>
+      ${isDrawing ? '<span class="player-pencil" title="Drawing">âœï¸</span>' : ''}
+      <div class="player-avatar-box" style="background:${av.color}">${av.emoji}</div>
     </div>`;
   }).join("");
+
   els.gamePlayers.innerHTML = html;
+
   els.lobbyPlayers.innerHTML = sorted.map(([id, p]) => {
     const av = avatarFor(p.avatarIndex || 0);
     return `<div class="player-row"><div class="mini-avatar" style="background:${av.color}">${av.emoji}</div><div class="pname">${escapeHtml(p.name || "Player")}</div></div>`;
@@ -436,23 +568,25 @@ function renderPlayers(els) {
 function renderChat(els, chat) {
   const entries = Object.values(chat).sort((a, b) => a.t - b.t).slice(-60);
   els.chatLog.innerHTML = entries.map(m => {
+    if (m.type === "draw") return `<div class="chat-msg draw"><b>${escapeHtml(m.name)}</b> ${escapeHtml(m.text)}</div>`;
     if (m.type === "system") return `<div class="chat-msg system">${escapeHtml(m.text)}</div>`;
-    if (m.type === "correct") return `<div class="chat-msg correct">${escapeHtml(m.name)} ${escapeHtml(m.text)}</div>`;
-    return `<div class="chat-msg"><span class="who">${escapeHtml(m.name)}:</span> ${escapeHtml(m.text)}</div>`;
+    if (m.type === "correct") return `<div class="chat-msg correct-banner"><b>${escapeHtml(m.name)}</b> guessed the word!</div>`;
+    if (m.type === "close") return `<div class="chat-msg close-alert"><b>'${escapeHtml(m.text)}'</b> is close!</div>`;
+    return `<div class="chat-msg guess"><span class="who">${escapeHtml(m.name)}:</span> ${escapeHtml(m.text)}</div>`;
   }).join("");
   els.chatLog.scrollTop = els.chatLog.scrollHeight;
 }
 
-function showFloatingEmoji(els, emoji) {
-  const wrap = els.canvasPanel;
+function showFloatingReaction(els, emoji) {
+  const container = document.querySelector(".skribbl-canvas-container");
+  if (!container) return;
   const div = document.createElement("div");
-  div.className = "floating-emoji";
+  div.className = "floating-reaction";
   div.textContent = emoji;
-  div.style.left = (30 + Math.random() * 60) + "%";
-  div.style.bottom = "10px";
-  wrap.style.position = "relative";
-  wrap.appendChild(div);
-  setTimeout(() => div.remove(), 1600);
+  div.style.left = (30 + Math.random() * 50) + "%";
+  div.style.bottom = "20px";
+  container.appendChild(div);
+  setTimeout(() => div.remove(), 1800);
 }
 
 function escapeHtml(s) {
@@ -461,9 +595,10 @@ function escapeHtml(s) {
 
 // ---------- Toolbar ----------
 function setupToolbar(els) {
+  els.palette.innerHTML = "";
   canvasApi.COLORS.forEach((c, i) => {
     const sw = document.createElement("div");
-    sw.className = "swatch" + (i === 0 ? " active" : "");
+    sw.className = "swatch" + (i === 9 ? " active" : ""); // default to black
     sw.style.background = c;
     sw.onclick = () => {
       canvasApi.setColor(c);
@@ -472,17 +607,34 @@ function setupToolbar(els) {
     };
     els.palette.appendChild(sw);
   });
+
   const tools = { toolPen: "pen", toolFill: "fill", toolEraser: "eraser" };
   Object.entries(tools).forEach(([id, tool]) => {
-    els.toolButtons[id].onclick = () => {
-      canvasApi.setTool(tool);
-      Object.values(els.toolButtons).forEach(b => b.classList.remove("active"));
-      els.toolButtons[id].classList.add("active");
+    if (els.toolButtons[id]) {
+      els.toolButtons[id].onclick = () => {
+        canvasApi.setTool(tool);
+        Object.values(els.toolButtons).forEach(b => b && b.classList.remove("active"));
+        els.toolButtons[id].classList.add("active");
+      };
+    }
+  });
+
+  if (els.toolButtons.toolUndo) els.toolButtons.toolUndo.onclick = () => canvasApi.undoLast();
+  if (els.toolButtons.toolClear) els.toolButtons.toolClear.onclick = () => canvasApi.clearAll();
+
+  // 4 quick brush sizes
+  document.querySelectorAll(".brush-dot-btn").forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll(".brush-dot-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const sz = Number(btn.dataset.size || 4);
+      canvasApi.setSize(sz);
     };
   });
-  els.toolButtons.toolUndo.onclick = () => canvasApi.undoLast();
-  els.toolButtons.toolClear.onclick = () => canvasApi.clearAll();
-  els.brushSize.oninput = (e) => canvasApi.setSize(Number(e.target.value));
 }
 
-export function stopHostLoop() { clearInterval(hostTickInterval); clearInterval(clientTickInterval); clearBotTimeouts(); }
+export function stopHostLoop() {
+  clearInterval(hostTickInterval);
+  clearInterval(clientTickInterval);
+  clearBotTimeouts();
+}

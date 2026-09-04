@@ -135,49 +135,98 @@
   <button class="btn-ghost btn-small" id="leaveLobbyBtn">Leave room</button>
 </section>
 
-<!-- GAME SCREEN -->
+<!-- GAME SCREEN (SKRIBBL FORMAT) -->
 <section id="screen-game" class="screen">
-  <div class="game-wrap">
-    <div class="topbar">
-      <div class="timer-circle" id="timerCircle">60</div>
-      <div class="word-hint" id="wordHint">_ _ _ _</div>
-      <div class="round-label" id="roundLabel">Round 1/3</div>
-    </div>
+  <div class="skribbl-game-wrap">
 
-    <div class="game-body">
-      <div class="canvas-panel">
-        <canvas id="drawCanvas" width="800" height="600"></canvas>
-        <div class="toolbar" id="drawerToolbar">
-          <div class="palette" id="palette"></div>
-          <button class="tool-btn active" id="toolPen" title="Pen">✏️</button>
-          <button class="tool-btn" id="toolFill" title="Fill">🪣</button>
+    <!-- TOPBAR: CLOCK | GUESS THIS | ACTIONS -->
+    <header class="skribbl-topbar">
+      <div class="clock-col">
+        <div class="skribbl-clock" id="timerCircle">
+          <span class="clock-icon">⏰</span>
+          <span class="clock-num" id="timerNum">60</span>
+        </div>
+        <div class="skribbl-round-sub" id="roundLabel">Round 1 of 3</div>
+      </div>
+
+      <div class="guess-col">
+        <div class="guess-heading" id="guessHeading">GUESS THIS</div>
+        <div class="guess-word" id="wordHint">_ _ _ _</div>
+      </div>
+
+      <div class="actions-col">
+        <button class="icon-btn-skribbl" id="thumbUpBtn" title="Like drawing">👍</button>
+        <button class="icon-btn-skribbl" id="thumbDownBtn" title="Dislike drawing">👎</button>
+        <button class="icon-btn-skribbl" id="gameSettingsBtn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- MAIN CANVAS AREA -->
+    <div class="skribbl-canvas-container">
+      <canvas id="drawCanvas" width="800" height="600"></canvas>
+
+      <!-- DRAWER TOOLBAR -->
+      <div class="skribbl-drawer-toolbar" id="drawerToolbar">
+        <!-- 4 Quick Brush Size Circles -->
+        <div class="brush-size-picker" id="brushSizePicker">
+          <button class="brush-dot-btn active" data-size="4" title="Small (4px)"><span style="width:5px;height:5px;"></span></button>
+          <button class="brush-dot-btn" data-size="9" title="Medium (9px)"><span style="width:9px;height:9px;"></span></button>
+          <button class="brush-dot-btn" data-size="16" title="Large (16px)"><span style="width:14px;height:14px;"></span></button>
+          <button class="brush-dot-btn" data-size="28" title="Huge (28px)"><span style="width:20px;height:20px;"></span></button>
+        </div>
+
+        <!-- 2-Row Color Palette -->
+        <div class="palette-wrapper" id="palette"></div>
+
+        <!-- Tool Actions -->
+        <div class="tool-actions">
+          <button class="tool-btn active" id="toolPen" title="Pen (Draw)">✏️</button>
+          <button class="tool-btn" id="toolFill" title="Bucket (Fill)">🪣</button>
           <button class="tool-btn" id="toolEraser" title="Eraser">🧽</button>
           <button class="tool-btn" id="toolUndo" title="Undo">↩️</button>
-          <button class="tool-btn" id="toolClear" title="Clear">🗑️</button>
-        </div>
-        <div class="row" id="sizeRow" style="margin-top:6px; align-items:center;">
-          <input type="range" id="brushSize" min="2" max="30" value="6" style="flex:1;">
+          <button class="tool-btn" id="toolClear" title="Clear Canvas">🗑️</button>
         </div>
       </div>
+      <!-- Hidden legacy input for backwards compatibility -->
+      <input type="range" id="brushSize" min="2" max="30" value="6" style="display:none;">
+    </div>
 
-      <div class="side-panel">
-        <div class="players-list" id="gamePlayers"></div>
-        <div class="chat-panel">
-          <div class="chat-log" id="chatLog"></div>
-          <div class="chat-input-row">
-            <input type="text" id="chatInput" placeholder="Type your guess...">
-            <button class="btn-primary" id="chatSendBtn">Go</button>
-          </div>
-          <div class="emoji-row">
-            <button data-emoji="😂">😂</button>
-            <button data-emoji="🔥">🔥</button>
-            <button data-emoji="👏">👏</button>
-            <button data-emoji="😮">😮</button>
-            <button data-emoji="❤️">❤️</button>
-          </div>
-        </div>
+    <!-- LOWER SPLIT VIEW (LEADERBOARD + CHAT SIDE-BY-SIDE) -->
+    <div class="skribbl-lower-split">
+      <!-- Players Leaderboard (Left column) -->
+      <div class="skribbl-players-column" id="gamePlayers"></div>
+
+      <!-- Live Chat & Activity (Right column) -->
+      <div class="skribbl-chat-column">
+        <div class="skribbl-chat-log" id="chatLog"></div>
       </div>
     </div>
+
+    <!-- BOTTOM INPUT BAR -->
+    <div class="skribbl-input-bar">
+      <input type="text" id="chatInput" placeholder="Type your guess here..." maxlength="40" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="skribbl-send-btn" id="chatSendBtn">Go</button>
+    </div>
+
+    <!-- IN-GAME SETTINGS MODAL -->
+    <div class="game-settings-modal hidden" id="gameSettingsModal">
+      <div class="settings-box">
+        <h3>Game Settings</h3>
+        <div class="setting-row">
+          <span>🔊 Sound Effects</span>
+          <button class="btn-small btn-accent" id="toggleSoundBtn">On</button>
+        </div>
+        <div class="setting-row">
+          <span>🎨 Theme</span>
+          <button class="btn-small btn-ghost" id="toggleThemeGameBtn">Toggle</button>
+        </div>
+        <div class="setting-row" style="margin-top:12px;">
+          <button class="btn-ghost btn-small" id="leaveGameMidBtn" style="color:#ff6b6b; border-color:#ff6b6b; width:100%;">Leave Game</button>
+        </div>
+        <button class="btn-primary btn-small" id="closeSettingsBtn" style="margin-top:10px; width:100%;">Close</button>
+      </div>
+    </div>
+
   </div>
 </section>
 

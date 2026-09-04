@@ -1,4 +1,4 @@
-import {
+﻿import {
   db, auth, ref, set, get, update, remove, push, onValue,
   onDisconnect, serverTimestamp, runTransaction,
   signInAnonymously, onAuthStateChanged
@@ -22,10 +22,14 @@ function showScreen(name) {
 const themeBtn = document.getElementById("themeBtn");
 let theme = localStorage.getItem("chitravela_theme") || "dark";
 applyTheme();
-themeBtn.onclick = () => { theme = theme === "dark" ? "light" : "dark"; localStorage.setItem("chitravela_theme", theme); applyTheme(); };
+themeBtn.onclick = () => {
+  theme = theme === "dark" ? "light" : "dark";
+  localStorage.setItem("chitravela_theme", theme);
+  applyTheme();
+};
 function applyTheme() {
   document.body.setAttribute("data-theme", theme);
-  themeBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+  themeBtn.textContent = theme === "dark" ? "â˜€ï¸" : "ðŸŒ™";
 }
 
 // ---------- Avatar + name ----------
@@ -34,8 +38,14 @@ const avatarCircle = document.getElementById("avatarCircle");
 const nameInput = document.getElementById("nameInput");
 nameInput.value = localStorage.getItem("chitravela_name") || "";
 renderAvatar();
-document.getElementById("avatarPrev").onclick = () => { avatarIndex = (avatarIndex - 1 + AVATAR_COUNT) % AVATAR_COUNT; renderAvatar(); };
-document.getElementById("avatarNext").onclick = () => { avatarIndex = (avatarIndex + 1) % AVATAR_COUNT; renderAvatar(); };
+document.getElementById("avatarPrev").onclick = () => {
+  avatarIndex = (avatarIndex - 1 + AVATAR_COUNT) % AVATAR_COUNT;
+  renderAvatar();
+};
+document.getElementById("avatarNext").onclick = () => {
+  avatarIndex = (avatarIndex + 1) % AVATAR_COUNT;
+  renderAvatar();
+};
 function renderAvatar() {
   const av = avatarFor(avatarIndex);
   avatarCircle.textContent = av.emoji;
@@ -107,9 +117,6 @@ async function createRoom(isPublic) {
 }
 
 async function addToTurnOrderIfMissing(roomId, playerUid) {
-  // Player joined mid-game: fold them into the draw rotation so they get
-  // a turn once the current lap of players finishes, instead of being
-  // stuck as a spectator forever.
   const metaRef = ref(db, `rooms/${roomId}/meta`);
   await runTransaction(metaRef, (meta) => {
     if (!meta) return meta;
@@ -130,9 +137,6 @@ async function joinRoomByCode(code) {
   await joinRoomAsPlayer(roomId, getName());
   isRoomHost = meta.hostId === uid;
   if (meta.status && meta.status !== "lobby") {
-    // Game already in progress — jump straight into it instead of
-    // blocking the join. New player joins as a spectator for the
-    // current round and gets folded into the next drawing rotation.
     await addToTurnOrderIfMissing(roomId, uid);
     currentRoomId = roomId;
     enterGame(roomId);
@@ -162,8 +166,6 @@ async function playPublicMatch() {
     }
   } else {
     await createRoom(true);
-    // Nobody else was around to match into — quietly fill the room with
-    // a couple of bot players so the lobby doesn't feel empty.
     ensureBots(currentRoomId);
   }
 }
@@ -218,7 +220,7 @@ document.getElementById("copyLinkBtn").onclick = () => {
   navigator.clipboard?.writeText(url);
   const btn = document.getElementById("copyLinkBtn");
   const old = btn.textContent;
-  btn.textContent = "✅ Copied!";
+  btn.textContent = "âœ… Copied!";
   setTimeout(() => btn.textContent = old, 1500);
 };
 
@@ -241,6 +243,47 @@ document.getElementById("leaveLobbyBtn").onclick = async () => {
   showScreen("home");
 };
 
+// ---------- In-game Settings Modal & Actions ----------
+const gameSettingsBtn = document.getElementById("gameSettingsBtn");
+const gameSettingsModal = document.getElementById("gameSettingsModal");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+const toggleSoundBtn = document.getElementById("toggleSoundBtn");
+const toggleThemeGameBtn = document.getElementById("toggleThemeGameBtn");
+const leaveGameMidBtn = document.getElementById("leaveGameMidBtn");
+
+if (gameSettingsBtn) {
+  gameSettingsBtn.onclick = () => gameSettingsModal.classList.toggle("hidden");
+}
+if (closeSettingsBtn) {
+  closeSettingsBtn.onclick = () => gameSettingsModal.classList.add("hidden");
+}
+if (toggleSoundBtn) {
+  let soundOn = true;
+  toggleSoundBtn.onclick = () => {
+    soundOn = !soundOn;
+    toggleSoundBtn.textContent = soundOn ? "On" : "Off";
+  };
+}
+if (toggleThemeGameBtn) {
+  toggleThemeGameBtn.onclick = () => {
+    theme = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("chitravela_theme", theme);
+    applyTheme();
+  };
+}
+if (leaveGameMidBtn) {
+  leaveGameMidBtn.onclick = async () => {
+    gameSettingsModal.classList.add("hidden");
+    if (currentRoomId && uid) {
+      await remove(ref(db, `rooms/${currentRoomId}/players/${uid}`));
+      await leavePublicCountIfNeeded(currentRoomId);
+    }
+    localStorage.removeItem("chitravela_room");
+    gameStarted = false;
+    showScreen("home");
+  };
+}
+
 // ---------- Game screen wiring ----------
 let gameStarted = false;
 function enterGame(roomId) {
@@ -249,22 +292,23 @@ function enterGame(roomId) {
   gameStarted = true;
   const els = {
     wordHint: document.getElementById("wordHint"),
+    guessHeading: document.getElementById("guessHeading"),
     timerCircle: document.getElementById("timerCircle"),
+    timerNum: document.getElementById("timerNum"),
     roundLabel: document.getElementById("roundLabel"),
     drawerToolbar: document.getElementById("drawerToolbar"),
-    sizeRow: document.getElementById("sizeRow"),
     gamePlayers: document.getElementById("gamePlayers"),
     lobbyPlayers: document.getElementById("lobbyPlayers"),
     chatLog: document.getElementById("chatLog"),
     chatInput: document.getElementById("chatInput"),
     chatSendBtn: document.getElementById("chatSendBtn"),
-    emojiButtons: Array.from(document.querySelectorAll(".emoji-row button")),
     palette: document.getElementById("palette"),
-    canvasPanel: document.querySelector(".canvas-panel"),
     wordChoiceOverlay: document.getElementById("wordChoiceOverlay"),
     wordChoiceBtns: document.getElementById("wordChoiceBtns"),
     wordChoiceTimer: document.getElementById("wordChoiceTimer"),
     brushSize: document.getElementById("brushSize"),
+    thumbUpBtn: document.getElementById("thumbUpBtn"),
+    thumbDownBtn: document.getElementById("thumbDownBtn"),
     toolButtons: {
       toolPen: document.getElementById("toolPen"),
       toolFill: document.getElementById("toolFill"),
@@ -339,8 +383,6 @@ document.getElementById("playAgainBtn").onclick = async () => {
   }
 })();
 
-// Instead of silently jumping away from the home screen, surface a small
-// dismissible banner so opening the site always shows the home page first.
 function offerReconnect(roomId, meta) {
   const banner = document.getElementById("reconnectBanner");
   const text = document.getElementById("reconnectText");
