@@ -390,23 +390,24 @@
     const masamTe = TELUGU_MONTHS[lunarMonthIndex];
     const masamEn = TELUGU_MONTHS_EN[lunarMonthIndex];
 
-    // 4. Telugu Samvatsaram
+    // 4. Telugu Samvatsaram (60-year Jovian Cycle)
+    const isPreUgadiMonth = (month <= 4) && (lunarMonthIndex >= 9);
+    const teluguYear = year - (isPreUgadiMonth ? 1 : 0);
     const baseYear = 2024;
     const baseSamvatsaraIdx = 37;
-    const yearOffset = year - baseYear;
-    const hasPassedUgadi = month > 4 || (month === 4 && dateNum >= 10);
-    const samvatsaraIdx = (baseSamvatsaraIdx + yearOffset - (hasPassedUgadi ? 0 : 1) + 60) % 60;
+    const samvatsaraIdx = ((baseSamvatsaraIdx + (teluguYear - baseYear)) % 60 + 60) % 60;
     const samvatsaramTe = `శ్రీ ${SAMVATSARAS_TE[samvatsaraIdx]} నామ సంవత్సరం`;
     const samvatsaramEn = `Sri ${SAMVATSARAS_TE[samvatsaraIdx]} Nama Samvatsaram`;
 
-    // 5. Ayanam
-    const isUttarayanam = (month > 1 || (month === 1 && dateNum >= 14)) && (month < 7 || (month === 7 && dateNum <= 15));
+    // 5. Ayanam (Based on Sidereal Solar Ingress: Makara to Mithuna = Uttarayanam, Karkataka to Dhanu = Dakshinayanam)
+    const currentSunRasi = Math.floor(pos.siderealSun / 30.0);
+    const isUttarayanam = (currentSunRasi >= 9 || currentSunRasi <= 2);
     const ayanamTe = isUttarayanam ? "ఉత్తరాయణం" : "దక్షిణాయణం";
     const ayanamEn = isUttarayanam ? "Uttarayanam" : "Dakshinayanam";
 
-    // 6. Ritu
+    // 6. Ritu (The 6 traditional Vedic seasons tied directly to the Telugu Lunar Months)
     const rutusTe = ["వసంత ఋతువు", "గ్రీష్మ ఋతువు", "వర్ష ఋతువు", "శరత్ ఋతువు", "హేమంత ఋతువు", "శిశిర ఋతువు"];
-    const rutuIndex = Math.floor((month - 1) / 2) % 6;
+    const rutuIndex = Math.floor(lunarMonthIndex / 2) % 6;
     const rutuTe = rutusTe[rutuIndex];
 
     // 7. Yoga
