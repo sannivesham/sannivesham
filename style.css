@@ -309,7 +309,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  gap: 28px;
+  gap: 52px;
 
   margin-bottom: 15px;
 
@@ -5455,15 +5455,16 @@ button[class*="delete"] {
 
 .mandala-3d-halo {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 250px;
-  height: 250px;
+  top: 50%;
+  left: 50%;
+  width: 232px;
+  height: 232px;
+  margin-top: -116px;
+  margin-left: -116px;
   border-radius: 50%;
   pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: spinMandalaHalo 36s linear infinite;
 }
 
 .mandala-3d-halo::before {
@@ -5474,26 +5475,24 @@ button[class*="delete"] {
   border: 2px dashed rgba(255, 209, 102, 0.45);
   background: radial-gradient(circle, rgba(255, 209, 102, 0.22) 0%, rgba(212, 175, 55, 0.08) 55%, transparent 75%);
   box-shadow: 0 0 35px rgba(255, 209, 102, 0.35);
-  animation: spinMandala3D 32s linear infinite;
 }
 
 .mandala-3d-halo::after {
   content: "";
   position: absolute;
-  inset: 14px;
+  inset: 12px;
   border-radius: 50%;
   border: 1.5px dotted rgba(255, 225, 140, 0.55);
-  animation: spinMandalaRev 20s linear infinite;
 }
 
 .halo-akshara {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 28px;
-  height: 28px;
-  margin-top: -14px;
-  margin-left: -14px;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  margin-left: -13px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5502,25 +5501,24 @@ button[class*="delete"] {
   font-weight: 800;
   color: #ffd166;
   text-shadow: 0 0 10px rgba(255, 209, 102, 0.95), 0 0 20px rgba(255, 183, 3, 0.7);
-  transform: rotate(calc(var(--pos) * 45deg)) translateY(-122px) rotate(calc(var(--pos) * -45deg));
+  --orbit-r: -115px;
+  animation: counterSpinAkshara 36s linear infinite;
   pointer-events: none;
   user-select: none;
-  animation: aksharaPulse 3s ease-in-out infinite alternate;
 }
 
-@keyframes aksharaPulse {
-  0% { opacity: 0.85; filter: drop-shadow(0 0 2px rgba(255, 209, 102, 0.5)); }
-  100% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.9)); }
-}
-
-@keyframes spinMandala3D {
+@keyframes spinMandalaHalo {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-@keyframes spinMandalaRev {
-  0% { transform: rotate(360deg); }
-  100% { transform: rotate(0deg); }
+@keyframes counterSpinAkshara {
+  0% {
+    transform: rotate(calc(var(--pos) * 45deg)) translateY(var(--orbit-r)) rotate(calc(var(--pos) * -45deg + 0deg));
+  }
+  100% {
+    transform: rotate(calc(var(--pos) * 45deg)) translateY(var(--orbit-r)) rotate(calc(var(--pos) * -45deg - 360deg));
+  }
 }
 
 /* 3. Interactive 3D Temple Diya (Hero Section) */
@@ -6019,32 +6017,35 @@ button[class*="delete"] {
     position: relative !important;
   }
   .mandala-3d-halo {
-    width: 190px !important;
-    height: 190px !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    margin: auto !important;
-    transform: none !important;
+    width: 164px !important;
+    height: 164px !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-top: -82px !important;
+    margin-left: -82px !important;
+    right: auto !important;
+    bottom: auto !important;
+    animation: spinMandalaHalo 36s linear infinite !important;
+    transform-origin: 50% 50% !important;
   }
   .mandala-3d-halo::before {
     inset: 0 !important;
   }
   .mandala-3d-halo::after {
-    inset: 12px !important;
+    inset: 10px !important;
   }
   .halo-akshara {
-    width: 24px !important;
-    height: 24px !important;
-    margin-top: -12px !important;
-    margin-left: -12px !important;
+    width: 22px !important;
+    height: 22px !important;
+    margin-top: -11px !important;
+    margin-left: -11px !important;
     font-size: 0.95rem !important;
-    transform: rotate(calc(var(--pos) * 45deg)) translateY(-94px) rotate(calc(var(--pos) * -45deg)) !important;
+    --orbit-r: -80px !important;
+    animation: counterSpinAkshara 36s linear infinite !important;
   }
   .logo-image {
-    width: 140px !important;
-    height: 140px !important;
+    width: 136px !important;
+    height: 136px !important;
     margin: 0 auto !important;
     display: block !important;
   }
