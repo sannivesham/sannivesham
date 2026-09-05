@@ -3,8 +3,8 @@
  * 100% Automated, Client-Side Vedic Astronomical Calculation Engine.
  * 
  * Accurately calculates:
- * - Tithi (తిథి), Paksham (పక్షం)
- * - Nakshatram (నక్షత్రం)
+ * - Tithi (తిథి), Paksham (పక్షం) + Exact End Time (వరకు) & Next Tithi Transition
+ * - Nakshatram (నక్షత్రం) + Exact End Time (వరకు) & Next Nakshatram Transition
  * - Telugu Samvatsaram (సంవత్సరం), Ayanam (ఆయనం), Rutuvu (ఋతువు), Telugu Masam (మాసం)
  * - Yoga (యోగం), Karanam (కరణం)
  * - Rahu Kalam (రాహుకాలం), Yamagandam (యమగండం), Gulika Kalam (గుళిక కాలం)
@@ -179,7 +179,7 @@
   function getJulianDay(year, month, day, hour = 12, minute = 0) {
     let y = year;
     let m = month;
-    const utcH = hour - 5.5 + minute / 60.0; // IST is UTC+5.5
+    const utcH = hour - 5.5 + minute / 60.0;
     if (m <= 2) {
       y -= 1;
       m += 12;
@@ -239,6 +239,69 @@
     };
   }
 
+  function findTithiEndTime(year, month, day, targetAngle) {
+    let lowH = 6.0;
+    let highH = 30.0;
+    for (let iter = 0; iter < 18; iter++) {
+      const midH = (lowH + highH) / 2.0;
+      const p = calculatePositions(year, month, day, midH);
+      let diff = normalize(p.moonTrue - p.sunTrue);
+      if (targetAngle === 360 && diff < 180) diff += 360;
+      if (diff < targetAngle) {
+        lowH = midH;
+      } else {
+        highH = midH;
+      }
+    }
+    return (lowH + highH) / 2.0;
+  }
+
+  function findNakshatraEndTime(year, month, day, targetAngle) {
+    let lowH = 6.0;
+    let highH = 30.0;
+    for (let iter = 0; iter < 18; iter++) {
+      const midH = (lowH + highH) / 2.0;
+      const p = calculatePositions(year, month, day, midH);
+      let mLong = p.siderealMoon;
+      if (targetAngle === 360 && mLong < 180) mLong += 360;
+      if (mLong < targetAngle) {
+        lowH = midH;
+      } else {
+        highH = midH;
+      }
+    }
+    return (lowH + highH) / 2.0;
+  }
+
+  function formatPeriodTime(h) {
+    const isNextDay = h >= 24.0;
+    const normalizedH = h % 24.0;
+    let hr = Math.floor(normalizedH);
+    let min = Math.round((normalizedH - hr) * 60);
+    if (min === 60) {
+      min = 0;
+      hr = (hr + 1) % 24;
+    }
+
+    const periodEn = hr >= 12 ? "PM" : "AM";
+    let periodTe = "";
+    if (hr >= 4 && hr < 12) periodTe = "ఉదయం";
+    else if (hr >= 12 && hr < 16) periodTe = "మధ్యాహ్నం";
+    else if (hr >= 16 && hr < 20) periodTe = "సాయంత్రం";
+    else periodTe = "రాత్రి";
+
+    let dispHr = hr % 12;
+    if (dispHr === 0) dispHr = 12;
+    const strMin = String(min).padStart(2, "0");
+    const nextDayTe = isNextDay ? " (మరుసటి రోజు)" : "";
+    const nextDayEn = isNextDay ? " (next day)" : "";
+
+    return {
+      timeTe: `${periodTe} ${String(dispHr).padStart(2, "0")}:${strMin}${nextDayTe}`,
+      timeEn: `${String(dispHr).padStart(2, "0")}:${strMin} ${periodEn}${nextDayEn}`
+    };
+  }
+
   function getPanchang(targetDate = new Date()) {
     const d = new Date(targetDate);
     const year = d.getFullYear();
@@ -248,7 +311,7 @@
 
     const pos = calculatePositions(year, month, dateNum, 6);
 
-    // 1. Tithi
+    // 1. Tithi (at Sunrise)
     const moonSunDiff = normalize(pos.moonTrue - pos.sunTrue);
     const tithiIndex = Math.floor(moonSunDiff / 12.0) + 1;
     const isShukla = tithiIndex <= 15;
@@ -273,10 +336,45 @@
     const tithiFullTe = `${isShukla ? "శుక్ల" : "బహుళ"} ${tithiNameTe}`;
     const tithiFullEn = `${isShukla ? "Shukla" : "Krishna"} ${tithiNameEn}`;
 
-    // 2. Nakshatram
+    // Exact Tithi End Time and Next Tithi transition
+    const targetTithiAngle = tithiIndex * 12.0;
+    const tithiEndHour = findTithiEndTime(year, month, dateNum, targetTithiAngle);
+    const tithiEndObj = formatPeriodTime(tithiEndHour);
+
+    const nextTithiIdx = (tithiIndex % 30) + 1;
+    const nextIsShukla = nextTithiIdx <= 15;
+    const nextTInPaksha = nextIsShukla ? nextTithiIdx : nextTithiIdx - 15;
+    let nextTithiNameTe = "";
+    let nextTithiNameEn = "";
+    if (nextTithiIdx === 15) {
+      nextTithiNameTe = "పౌర్ణమి";
+      nextTithiNameEn = "Purnima";
+    } else if (nextTithiIdx === 30) {
+      nextTithiNameTe = "అమావాస్య";
+      nextTithiNameEn = "Amavasya";
+    } else {
+      nextTithiNameTe = TITHI_NAMES_TE[nextTInPaksha - 1];
+      nextTithiNameEn = TITHI_NAMES_EN[nextTInPaksha - 1];
+    }
+
+    const tithiTimingTe = `${tithiFullTe} ${tithiEndObj.timeTe} వరకు, తదుపరి ${nextTithiNameTe}`;
+    const tithiTimingEn = `${tithiFullEn} up to ${tithiEndObj.timeEn}, thereafter ${nextTithiNameEn}`;
+
+    // 2. Nakshatram (at Sunrise)
     const nakshatraIndex = Math.floor(pos.siderealMoon / (360.0 / 27.0)) % 27;
     const nakshatraTe = NAKSHATRAS_TE[nakshatraIndex];
     const nakshatraEn = NAKSHATRAS_EN[nakshatraIndex];
+
+    // Exact Nakshatra End Time and Next Nakshatra transition
+    const targetNakAngle = (nakshatraIndex + 1) * (360.0 / 27.0);
+    const nakEndHour = findNakshatraEndTime(year, month, dateNum, targetNakAngle);
+    const nakEndObj = formatPeriodTime(nakEndHour);
+    const nextNakIdx = (nakshatraIndex + 1) % 27;
+    const nextNakNameTe = NAKSHATRAS_TE[nextNakIdx];
+    const nextNakNameEn = NAKSHATRAS_EN[nextNakIdx];
+
+    const nakshatraTimingTe = `${nakshatraTe} ${nakEndObj.timeTe} వరకు, తదుపరి ${nextNakNameTe}`;
+    const nakshatraTimingEn = `${nakshatraEn} up to ${nakEndObj.timeEn}, thereafter ${nextNakNameEn}`;
 
     // 3. Telugu Lunar Month
     const sunRasi = Math.floor(pos.siderealSun / 30.0);
@@ -375,9 +473,21 @@
       tithiNameEn,
       tithiFullTe,
       tithiFullEn,
+      tithiEndTimeTe: tithiEndObj.timeTe,
+      tithiEndTimeEn: tithiEndObj.timeEn,
+      nextTithiNameTe,
+      nextTithiNameEn,
+      tithiTimingTe,
+      tithiTimingEn,
       nakshatraIndex,
       nakshatraTe,
       nakshatraEn,
+      nakshatraEndTimeTe: nakEndObj.timeTe,
+      nakshatraEndTimeEn: nakEndObj.timeEn,
+      nextNakshatraNameTe,
+      nextNakshatraNameEn,
+      nakshatraTimingTe,
+      nakshatraTimingEn,
       yogaTe,
       karanaTe,
       sunrise,

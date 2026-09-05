@@ -728,8 +728,8 @@
         }
 
         const items = [
-          { label: "📅 నేటి తిథి", val: p.tithiFullTe, sub: "సూర్యోదయ తిథి ఆధారంగా" },
-          { label: "⭐ నక్షత్రం", val: p.nakshatraTe, sub: "చంద్ర నక్షత్ర సంచారం" },
+          { label: "📅 నేటి తిథి", val: isEn ? p.tithiTimingEn : p.tithiTimingTe, sub: "సూర్యోదయ తిథి & సమాప్తి సమయం" },
+          { label: "⭐ నక్షత్రం", val: isEn ? p.nakshatraTimingEn : p.nakshatraTimingTe, sub: "చంద్ర నక్షత్ర సంచారం & సమాప్తి సమయం" },
           { label: "🌕 తెలుగు మాసం & పక్షం", val: `${p.masamTe} మాసం • ${p.pakshamTe}`, sub: "అమాంత కాలమానం" },
           { label: "☀️ సూర్యోదయం & సూర్యాస్తమయం", val: `${p.sunrise} • ${p.sunset}`, sub: "భారతీయ ప్రామాణిక సమయం (IST)" },
           { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu, sub: "సర్వ కార్య సిద్ధి ప్రదం", good: true },
@@ -855,8 +855,8 @@
         }
 
         const items = [
-          { label: "📅 తిథి & పక్షం", val: `${p.pakshamTe} ${p.tithiNameTe}` },
-          { label: "⭐ నక్షత్రం", val: p.nakshatraTe },
+          { label: "📅 తిథి & సమయం", val: isEn ? p.tithiTimingEn : p.tithiTimingTe },
+          { label: "⭐ నక్షత్రం & సమయం", val: isEn ? p.nakshatraTimingEn : p.nakshatraTimingTe },
           { label: "☀️ సూర్యోదయం & అస్తమయం", val: `${p.sunrise} - ${p.sunset}` },
           { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham },
           { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu },
