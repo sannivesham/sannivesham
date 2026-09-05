@@ -5428,3 +5428,529 @@ button[class*="delete"] {
     gap: 10px;
   }
 }
+
+/* ============================================================
+   🌟 3D & HOMEPAGE VISUAL ELEVATION STYLES
+============================================================ */
+
+/* 1. Divine Background Particle Canvas */
+#divineParticleCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 2. Rotating 3D Sri Chakra / Mandala Halo Behind Logo */
+.brand-logo-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.mandala-3d-halo {
+  position: absolute;
+  inset: -22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.22) 0%, rgba(212, 175, 55, 0.08) 55%, transparent 75%);
+  border: 2px dashed rgba(255, 209, 102, 0.45);
+  animation: spinMandala3D 32s linear infinite;
+  pointer-events: none;
+  box-shadow: 0 0 35px rgba(255, 209, 102, 0.35);
+  transform-style: preserve-3d;
+}
+
+.mandala-3d-halo::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1.5px dotted rgba(255, 225, 140, 0.5);
+  animation: spinMandalaRev 20s linear infinite;
+}
+
+.mandala-3d-halo::after {
+  content: "🕉";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  color: #ffd166;
+  text-shadow: 0 0 10px #ffd166;
+}
+
+@keyframes spinMandala3D {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.03); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes spinMandalaRev {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* 3. Interactive 3D Temple Diya (Hero Section) */
+.hero-3d-diya-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  perspective: 800px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+  position: relative;
+  z-index: 5;
+  padding: 10px;
+}
+
+.hero-3d-diya-wrapper:hover {
+  transform: scale(1.06);
+}
+
+.diya-3d-lamp {
+  position: relative;
+  width: 90px;
+  height: 95px;
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.diya-3d-base {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 32px;
+  background: linear-gradient(180deg, #ffd166 0%, #d4af37 45%, #8c6218 100%);
+  border-radius: 0 0 45px 45px / 0 0 32px 32px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65), 0 0 18px rgba(255, 209, 102, 0.45);
+  border-top: 2px solid #fff5d0;
+}
+
+.diya-3d-base::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 8px;
+  background: #66440c;
+  border-radius: 50%;
+}
+
+.diya-3d-flame-wrap {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 48px;
+}
+
+.diya-3d-flame {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at 50% 80%, #ffffff 0%, #fff2a3 25%, #ffb703 60%, #e85d04 85%, transparent 100%);
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  filter: drop-shadow(0 0 12px #ffd166) drop-shadow(0 0 24px #ff9e00);
+  animation: diyaFlameFlicker 1.8s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+.diya-3d-aura {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.35) 0%, rgba(255, 154, 60, 0.15) 45%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: diyaAuraPulse 3s ease-in-out infinite;
+}
+
+.diya-touch-hint {
+  font-size: 0.8rem;
+  color: #ffd166;
+  opacity: 0.85;
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s;
+}
+
+@keyframes diyaFlameFlicker {
+  0% { transform: scale(1) rotate(-1deg); }
+  25% { transform: scale(1.05, 0.96) rotate(1.5deg); }
+  50% { transform: scale(0.97, 1.04) rotate(-1.5deg); }
+  75% { transform: scale(1.03, 0.98) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes diyaAuraPulse {
+  0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
+/* Burst Sparkles when Diya is tapped */
+.diya-sparkle-burst {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1.2rem;
+  animation: flyAndFade 1.2s ease-out forwards;
+  z-index: 99;
+}
+
+@keyframes flyAndFade {
+  0% { opacity: 1; transform: translate(0, 0) scale(0.5) rotate(0deg); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.4) rotate(var(--rot)); }
+}
+
+/* 4. Time-Aware Temple Greeting Tag */
+.time-greeting-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(36, 18, 8, 0.85);
+  border: 1px solid rgba(255, 209, 102, 0.45);
+  color: #ffd166;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 209, 102, 0.2);
+  margin-bottom: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  letter-spacing: 0.3px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.time-greeting-badge:hover {
+  transform: translateY(-2px);
+  border-color: #ffd166;
+}
+
+/* 5. Live Daily Panchangam Golden Ribbon */
+.panchangam-ribbon-wrap {
+  width: 100%;
+  max-width: 960px;
+  margin: 10px auto 26px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 4;
+}
+
+.panchangam-ribbon {
+  background: linear-gradient(135deg, rgba(38, 19, 8, 0.88) 0%, rgba(22, 10, 4, 0.92) 100%);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  border-radius: 18px;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 209, 102, 0.2);
+  text-decoration: none;
+  color: #EDE3C8;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.panchangam-ribbon:hover {
+  transform: translateY(-3px);
+  border-color: #ffd166;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 209, 102, 0.25);
+  color: #fff;
+}
+
+.ribbon-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.ribbon-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.ribbon-title {
+  font-weight: 700;
+  color: #ffd166;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ribbon-details {
+  font-size: 0.88rem;
+  color: #EDE3C8;
+  opacity: 0.9;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.ribbon-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 209, 102, 0.18);
+  color: #ffd166;
+  padding: 7px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.panchangam-ribbon:hover .ribbon-cta {
+  background: #ffd166;
+  color: #1a0b03;
+}
+
+/* 6. 3D Holographic Perspective Tilt on Category Cards */
+.category-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  position: relative;
+}
+
+.category-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+}
+
+.category-card-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle 180px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.28) 0%, transparent 80%);
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+
+.category-card:hover .category-card-shine {
+  opacity: 1;
+}
+
+.category-card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  background: rgba(18, 8, 3, 0.85);
+  border: 1px solid #ffd166;
+  color: #ffd166;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  letter-spacing: 0.3px;
+}
+
+/* 7. 3D Wisdom Flip Card: "నేటి సుభాషితం / శ్లోకం" */
+.shloka-section {
+  width: 100%;
+  max-width: 860px;
+  margin: 35px auto 45px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.shloka-section-heading {
+  font-size: 1.4rem;
+  color: #ffd166;
+  margin-bottom: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.shloka-3d-card-wrap {
+  perspective: 1200px;
+  width: 100%;
+  min-height: 220px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shloka-3d-card {
+  width: 100%;
+  min-height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+}
+
+.shloka-3d-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.shloka-card-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  padding: 28px 24px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, rgba(34, 16, 7, 0.9) 0%, rgba(18, 8, 3, 0.95) 100%);
+  border: 1px solid rgba(255, 209, 102, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 209, 102, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.shloka-card-back {
+  transform: rotateY(180deg);
+  border-color: #ffd166;
+  background: linear-gradient(145deg, rgba(42, 20, 8, 0.95) 0%, rgba(22, 10, 4, 0.98) 100%);
+}
+
+.shloka-verse-text {
+  font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+  color: #ffd166;
+  font-weight: 700;
+  line-height: 1.65;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 10px rgba(255, 209, 102, 0.3);
+}
+
+.shloka-meaning-text {
+  font-size: clamp(0.95rem, 2.2vw, 1.12rem);
+  color: #EDE3C8;
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.shloka-source-tag {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-style: italic;
+}
+
+.shloka-flip-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #ffd166;
+  background: rgba(255, 209, 102, 0.12);
+  padding: 5px 14px;
+  border-radius: 14px;
+  margin-top: 14px;
+  border: 1px dashed rgba(255, 209, 102, 0.4);
+}
+
+/* 8. Spiritual Quick-Action Dock */
+.quick-dock-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 15px auto 35px;
+  max-width: 920px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 4;
+}
+
+.dock-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(26, 12, 5, 0.82);
+  border: 1px solid rgba(255, 209, 102, 0.32);
+  color: #EDE3C8;
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.dock-pill-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  border-color: #ffd166;
+  background: rgba(46, 22, 10, 0.95);
+  color: #ffd166;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 209, 102, 0.3);
+}
+
+.dock-icon {
+  font-size: 1.25rem;
+}
+
+/* Responsive adjustments for 3D elements */
+@media (max-width: 768px) {
+  .brand-logo-wrap {
+    width: 160px;
+    height: 160px;
+  }
+  .mandala-3d-halo {
+    inset: -14px;
+  }
+  .quick-dock-container {
+    gap: 8px;
+  }
+  .dock-pill-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  .panchangam-ribbon {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px;
+  }
+  .ribbon-cta {
+    align-self: flex-end;
+  }
+}
+

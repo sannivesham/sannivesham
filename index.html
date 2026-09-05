@@ -408,6 +408,7 @@
 <body data-en-title="Sannivesham - Telugu Culture, Tradition, Festivals and Temples">
 
   <div class="home-bg"></div>
+  <canvas id="divineParticleCanvas"></canvas>
 
   <div id="sponsorModal" class="sponsor-modal">
     <div class="sponsor-modal-box">
@@ -545,12 +546,72 @@
 
   <section id="home" class="home-page">
 
+    <!-- TIME-AWARE TEMPLE GREETING -->
+    <div style="text-align: center; margin-top: 10px;">
+      <div id="timeGreetingBadge" class="time-greeting-badge">
+        <span id="timeGreetingIcon">🌅</span>
+        <span id="timeGreetingText">శుభోదయం • ప్రశాంత చిత్తంతో పవిత్ర దినాన్ని ప్రారంభించండి</span>
+      </div>
+    </div>
+
     <div class="top-brand">
-      <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
+      <div class="brand-logo-wrap">
+        <div class="mandala-3d-halo"></div>
+        <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
+      </div>
       <div class="brand-text">
         <h1>సన్నివేశం</h1>
         <p data-en="Culture • Tradition • Conversation">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
       </div>
+
+      <!-- INTERACTIVE 3D TEMPLE DIYA -->
+      <div id="hero3dDiya" class="hero-3d-diya-wrapper" title="స్పర్శించండి • దివ్య కాంతిని వెలిగించండి (Touch to light sparks)">
+        <div class="diya-3d-aura"></div>
+        <div class="diya-3d-lamp" id="diyaLampElem">
+          <div class="diya-3d-flame-wrap">
+            <div class="diya-3d-flame"></div>
+          </div>
+          <div class="diya-3d-base"></div>
+        </div>
+        <span class="diya-touch-hint">✨ తాకండి (Touch Diya)</span>
+      </div>
+    </div>
+
+    <!-- LIVE DAILY PANCHANGAM GOLDEN RIBBON -->
+    <div class="panchangam-ribbon-wrap">
+      <a href="calendar/" class="panchangam-ribbon">
+        <div class="ribbon-left">
+          <span class="ribbon-icon">🗓️</span>
+          <div>
+            <div class="ribbon-title">
+              <span id="ribbonTeluguDate">నేటి పంచాంగం • విశేషాలు</span>
+              <span style="font-size:0.75rem;background:#ffd166;color:#120703;padding:2px 6px;border-radius:6px;font-weight:800;">LIVE</span>
+            </div>
+            <div id="ribbonDetailsText" class="ribbon-details">శుభ దినం • తిథి, నక్షత్రం, శుభ ఘడియల కోసం ఇక్కడ తాకండి</div>
+          </div>
+        </div>
+        <span class="ribbon-cta">పూర్తి పంచాంగం ➜</span>
+      </a>
+    </div>
+
+    <!-- SPIRITUAL QUICK-ACTION DOCK -->
+    <div class="quick-dock-container">
+      <a href="chant-counter/" class="dock-pill-btn">
+        <span class="dock-icon">📿</span>
+        <span>జప గణకం</span>
+      </a>
+      <a href="pooja-mandir/" class="dock-pill-btn">
+        <span class="dock-icon">🛕</span>
+        <span>పూజా మందిరం</span>
+      </a>
+      <a href="calendar/" class="dock-pill-btn">
+        <span class="dock-icon">🗓️</span>
+        <span>పంచాంగం</span>
+      </a>
+      <a href="store/" class="dock-pill-btn">
+        <span class="dock-icon">🛍️</span>
+        <span>విక్రయశాల</span>
+      </a>
     </div>
 
     <div class="impact-box">
@@ -604,66 +665,142 @@
 
       <div class="category-grid">
 
-        <a href="stories/" class="category-card">
-          <img id="storiesCardImg" src="images/stories.png" alt="కథలు" loading="lazy">
-          <div class="category-title" data-en="Library">గ్రంథాలయం</div>
+        <a href="stories/" class="category-card" data-tilt>
+          <span class="category-card-badge">📖 150+ కథలు</span>
+          <div class="category-card-inner">
+            <img id="storiesCardImg" src="images/stories.png" alt="కథలు" loading="lazy">
+            <div class="category-title" data-en="Library">గ్రంథాలయం</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="festivals/" class="category-card">
-          <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు" loading="lazy">
-          <div class="category-title" data-en="Festivals">పండుగలు</div>
+        <a href="festivals/" class="category-card" data-tilt>
+          <span class="category-card-badge">🪔 పండుగలు</span>
+          <div class="category-card-inner">
+            <img id="festivalsCardImg" src="images/festivals.png" alt="పండుగలు" loading="lazy">
+            <div class="category-title" data-en="Festivals">పండుగలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="temples/" class="category-card">
-          <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు" loading="lazy">
-          <div class="category-title" data-en="Temples">దేవాలయాలు</div>
+        <a href="temples/" class="category-card" data-tilt>
+          <span class="category-card-badge">🛕 దర్శనం</span>
+          <div class="category-card-inner">
+            <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు" loading="lazy">
+            <div class="category-title" data-en="Temples">దేవాలయాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="events/" class="category-card">
-          <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు" loading="lazy">
-          <div class="category-title" data-en="Events">కార్యక్రమాలు</div>
+        <a href="events/" class="category-card" data-tilt>
+          <span class="category-card-badge">🚩 కార్యక్రమాలు</span>
+          <div class="category-card-inner">
+            <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు" loading="lazy">
+            <div class="category-title" data-en="Events">కార్యక్రమాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="games/" id="gamesCardTrigger" class="category-card">
-          <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు" loading="lazy">
-          <div class="category-title" data-en="Games">ఆటలు</div>
+        <a href="games/" id="gamesCardTrigger" class="category-card" data-tilt>
+          <span class="category-card-badge">🎮 7+ ఆటలు</span>
+          <div class="category-card-inner">
+            <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు" loading="lazy">
+            <div class="category-title" data-en="Games">ఆటలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="quiz/" class="category-card">
-          <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్" loading="lazy">
-          <div class="category-title" data-en="Quiz">ప్రశ్నావళి</div>
+        <a href="quiz/" class="category-card" data-tilt>
+          <span class="category-card-badge">🎯 క్విజ్</span>
+          <div class="category-card-inner">
+            <img id="quizCardImg" src="images/quiz.png" alt="క్విజ్" loading="lazy">
+            <div class="category-title" data-en="Quiz">ప్రశ్నావళి</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="ithihasalu/" class="category-card">
-          <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు" loading="lazy">
-          <div class="category-title" data-en="Epics">ఇతిహాసాలు</div>
+        <a href="ithihasalu/" class="category-card" data-tilt>
+          <span class="category-card-badge">📜 ఇతిహాసాలు</span>
+          <div class="category-card-inner">
+            <img id="itihasaluCardImg" src="images/itihasalu.png" alt="ఇతిహాసాలు" loading="lazy">
+            <div class="category-title" data-en="Epics">ఇతిహాసాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="videos/" class="category-card">
-          <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు" loading="lazy">
-          <div class="category-title" data-en="Videos">దృశ్యచిత్రాలు</div>
+        <a href="videos/" class="category-card" data-tilt>
+          <span class="category-card-badge">🎥 వీడియోలు</span>
+          <div class="category-card-inner">
+            <img id="videosCardImg" src="images/videos.png" alt="వీడియోలు" loading="lazy">
+            <div class="category-title" data-en="Videos">దృశ్యచిత్రాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="calendar/" class="category-card">
-          <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్" loading="lazy">
-          <div class="category-title" data-en="Calendar">పంచాంగం</div>
+        <a href="calendar/" class="category-card" data-tilt>
+          <span class="category-card-badge">🗓️ పంచాంగం</span>
+          <div class="category-card-inner">
+            <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్" loading="lazy">
+            <div class="category-title" data-en="Calendar">పంచాంగం</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="chant-counter/" class="category-card">
-          <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్" loading="lazy">
-          <div class="category-title" data-en="Chant Counter">జప గణకం</div>
+        <a href="chant-counter/" class="category-card" data-tilt>
+          <span class="category-card-badge">📿 జప కౌంటర్</span>
+          <div class="category-card-inner">
+            <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప కౌంటర్" loading="lazy">
+            <div class="category-title" data-en="Chant Counter">జప గణకం</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="pooja-mandir/" class="category-card">
-          <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది" loading="lazy">
-          <div class="category-title" data-en="Pooja Room">పూజా మందిరం</div>
+        <a href="pooja-mandir/" class="category-card" data-tilt>
+          <span class="category-card-badge">🙏 పూజా మందిరం</span>
+          <div class="category-card-inner">
+            <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పూజా గది" loading="lazy">
+            <div class="category-title" data-en="Pooja Room">పూజా మందిరం</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
-        <a href="store/" class="category-card">
-          <img id="storeCardImg" src="images/store.png" alt="స్టోర్" loading="lazy">
-          <div class="category-title" data-en="Store">విక్రయశాల</div>
+        <a href="store/" class="category-card" data-tilt>
+          <span class="category-card-badge">🛍️ నూతన స్టోర్</span>
+          <div class="category-card-inner">
+            <img id="storeCardImg" src="images/store.png" alt="స్టోర్" loading="lazy">
+            <div class="category-title" data-en="Store">విక్రయశాల</div>
+            <div class="category-card-shine"></div>
+          </div>
         </a>
 
+      </div>
+    </section>
+
+    <!-- 3D WISDOM FLIP CARD: నేటి సుభాషితం / శ్లోకం -->
+    <section class="shloka-section">
+      <h2 class="shloka-section-heading">✨ నేటి సుభాషితం (Daily Wisdom)</h2>
+      <div class="shloka-3d-card-wrap" id="shlokaFlipCard">
+        <div class="shloka-3d-card" id="shlokaCardInner">
+          <!-- Front Face -->
+          <div class="shloka-card-face shloka-card-front">
+            <span style="font-size:1.8rem;margin-bottom:8px;">🪔</span>
+            <div class="shloka-verse-text" id="shlokaVerse">
+              "యతో ధర్మస్తతో జయః"<br>
+              "సత్యమేవ జయతే నానృతం"
+            </div>
+            <span class="shloka-source-tag" id="shlokaSource">— మహాభారతం & ముండకోపనిషత్</span>
+            <span class="shloka-flip-hint">👉 తాకండి - భావం చూడండి (Tap to flip) 🔄</span>
+          </div>
+          <!-- Back Face -->
+          <div class="shloka-card-face shloka-card-back">
+            <span style="font-size:1.8rem;margin-bottom:8px;">📖</span>
+            <h3 style="color:#ffd166;margin-bottom:8px;font-size:1.15rem;">తాత్పర్యం & జీవన సందేశం:</h3>
+            <div class="shloka-meaning-text" id="shlokaMeaning">
+              ధర్మం ఎక్కడ ఉంటుందో అక్కడ విజయం తథ్యము. ఎన్ని ఆటంకాలు ఎదురైనా సత్య మార్గాన్ని వీడరాదు. ధర్మబద్ధమైన జీవితమే శాశ్వత శాంతికి మరియు గౌరవానికి మూలం.
+            </div>
+            <span class="shloka-flip-hint">🔄 వెనుకకు తిప్పండి (Tap to flip back)</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1098,6 +1235,365 @@
         setFinalCounters();
       }
     });
+  </script>
+
+  <!-- ============================================================
+       🌟 3D INTERACTIVE & SPIRITUAL EXPERIENCES JAVASCRIPT
+  ============================================================ -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* --- 1. DIVINE GOLDEN PARTICLE CANVAS --- */
+      function initDivineParticles() {
+        const canvas = document.getElementById("divineParticleCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        const isMobile = window.innerWidth < 768;
+        const PARTICLE_COUNT = isMobile ? 22 : 45;
+        const particles = [];
+        let mouseX = -9999;
+        let mouseY = -9999;
+
+        class DivineParticle {
+          constructor() {
+            this.reset(true);
+          }
+
+          reset(initial = false) {
+            this.x = Math.random() * width;
+            this.y = initial ? Math.random() * height : height + 10;
+            this.radius = Math.random() * 2.2 + 0.8;
+            this.speedY = Math.random() * 0.45 + 0.2;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.alpha = Math.random() * 0.6 + 0.25;
+            this.pulseSpeed = Math.random() * 0.02 + 0.01;
+            this.pulsePhase = Math.random() * Math.PI * 2;
+            this.isSpark = Math.random() > 0.8;
+            this.color = this.isSpark ? "255, 235, 150" : "255, 195, 60";
+          }
+
+          update() {
+            this.y -= this.speedY;
+            this.pulsePhase += this.pulseSpeed;
+            this.x += this.speedX + Math.sin(this.pulsePhase) * 0.35;
+
+            // Gentle deflection from touch or cursor wave
+            const dx = this.x - mouseX;
+            const dy = this.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 90) {
+              const force = (90 - dist) / 90;
+              this.x += (dx / dist) * force * 3;
+              this.y += (dy / dist) * force * 3;
+            }
+
+            if (this.y < -15 || this.x < -15 || this.x > width + 15) {
+              this.reset(false);
+            }
+          }
+
+          draw(context) {
+            const dynamicAlpha = Math.max(0.1, this.alpha + Math.sin(this.pulsePhase) * 0.2);
+            context.save();
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            context.fillStyle = `rgba(${this.color}, ${dynamicAlpha.toFixed(2)})`;
+            context.shadowBlur = this.radius * 4;
+            context.shadowColor = `rgba(255, 209, 102, ${dynamicAlpha.toFixed(2)})`;
+            context.fill();
+            context.restore();
+          }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push(new DivineParticle());
+        }
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+          }, 150);
+        }, { passive: true });
+
+        window.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        }, { passive: true });
+
+        window.addEventListener("touchmove", (e) => {
+          if (e.touches && e.touches[0]) {
+            mouseX = e.touches[0].clientX;
+            mouseY = e.touches[0].clientY;
+          }
+        }, { passive: true });
+
+        window.addEventListener("mouseleave", () => {
+          mouseX = -9999;
+          mouseY = -9999;
+        });
+
+        function render() {
+          ctx.clearRect(0, 0, width, height);
+          for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw(ctx);
+          }
+          requestAnimationFrame(render);
+        }
+        render();
+      }
+
+      /* --- 2. INTERACTIVE 3D DIYA WITH SPARKS & TILT --- */
+      function init3DDiya() {
+        const diyaWrap = document.getElementById("hero3dDiya");
+        const lamp = document.getElementById("diyaLampElem");
+        if (!diyaWrap || !lamp) return;
+
+        diyaWrap.addEventListener("mousemove", (e) => {
+          const rect = diyaWrap.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const deltaX = (e.clientX - centerX) / (rect.width / 2);
+          const deltaY = (e.clientY - centerY) / (rect.height / 2);
+
+          const rotX = -deltaY * 16;
+          const rotY = deltaX * 16;
+          lamp.style.transform = `perspective(500px) rotateX(${rotX.toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg)`;
+        });
+
+        diyaWrap.addEventListener("mouseleave", () => {
+          lamp.style.transform = "perspective(500px) rotateX(10deg) rotateY(0deg)";
+        });
+
+        const sparkSymbols = ["✨", "🪔", "🌟", "💛", "🌸", "✨"];
+        function burstSparks() {
+          const count = 12;
+          for (let i = 0; i < count; i++) {
+            const spark = document.createElement("span");
+            spark.className = "diya-sparkle-burst";
+            spark.innerText = sparkSymbols[Math.floor(Math.random() * sparkSymbols.length)];
+
+            const angle = (i / count) * 2 * Math.PI + (Math.random() - 0.5) * 0.5;
+            const distance = Math.random() * 70 + 40;
+            const dx = Math.cos(angle) * distance;
+            const dy = Math.sin(angle) * distance - 25;
+            const rot = (Math.random() - 0.5) * 180;
+
+            spark.style.left = "50%";
+            spark.style.top = "40%";
+            spark.style.setProperty("--dx", `${dx.toFixed(1)}px`);
+            spark.style.setProperty("--dy", `${dy.toFixed(1)}px`);
+            spark.style.setProperty("--rot", `${rot.toFixed(1)}deg`);
+            spark.style.fontSize = `${(Math.random() * 0.6 + 0.9).toFixed(2)}rem`;
+
+            diyaWrap.appendChild(spark);
+            setTimeout(() => spark.remove(), 1200);
+          }
+
+          lamp.style.transform = "perspective(500px) scale(1.15) rotateX(12deg)";
+          setTimeout(() => {
+            lamp.style.transform = "perspective(500px) rotateX(10deg) rotateY(0deg)";
+          }, 300);
+        }
+
+        diyaWrap.addEventListener("click", burstSparks);
+      }
+
+      /* --- 3. 3D PERSPECTIVE TILT ON CATEGORY CARDS --- */
+      function init3DCardTilt() {
+        const cards = document.querySelectorAll(".category-card[data-tilt]");
+        const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        if (isTouch) return;
+
+        cards.forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotX = -((y - centerY) / centerY) * 8.5;
+            const rotY = ((x - centerX) / centerX) * 8.5;
+
+            card.style.transform = `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.025, 1.025, 1.025)`;
+            card.style.setProperty("--mouse-x", `${((x / rect.width) * 100).toFixed(1)}%`);
+            card.style.setProperty("--mouse-y", `${((y / rect.height) * 100).toFixed(1)}%`);
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+          });
+        });
+      }
+
+      /* --- 4. TIME-AWARE TEMPLE GREETING --- */
+      function initTimeGreeting() {
+        const iconEl = document.getElementById("timeGreetingIcon");
+        const textEl = document.getElementById("timeGreetingText");
+        if (!iconEl || !textEl) return;
+
+        const hour = new Date().getHours();
+        let greetingIcon = "🌅";
+        let teGreeting = "శుభోదయం • ప్రశాంత చిత్తంతో పవిత్ర దినాన్ని ప్రారంభించండి";
+        let enGreeting = "Subhodayam • Begin your auspicious day with serenity and joy";
+
+        if (hour >= 4 && hour < 12) {
+          greetingIcon = "🌅";
+          teGreeting = "శుభోదయం • ప్రశాంత చిత్తంతో పవిత్ర దినాన్ని ప్రారంభించండి";
+          enGreeting = "Subhodayam • Begin your auspicious day with serenity and joy";
+        } else if (hour >= 12 && hour < 16) {
+          greetingIcon = "☀️";
+          teGreeting = "శుభ మధ్యాహ్నం • దైవ జ్ఞానాన్ని, సంస్కృతిని అన్వేషించండి";
+          enGreeting = "Good Afternoon • Explore timeless wisdom and sacred heritage";
+        } else if (hour >= 16 && hour < 20) {
+          greetingIcon = "🪔";
+          teGreeting = "శుభ సంధ్యావేళ • దివ్య దీప జ్యోతితో మీ ఇంట శాంతి వెల్లివిరియాలి";
+          enGreeting = "Subha Sandhya • May divine light illuminate your home with peace";
+        } else {
+          greetingIcon = "🌙";
+          teGreeting = "శుభ రాత్రి • ప్రశాంత ధ్యానంతో మీ దినాన్ని పరిసమాప్తం చేయండి";
+          enGreeting = "Subha Rathri • Conclude your day with peaceful contemplation";
+        }
+
+        iconEl.innerText = greetingIcon;
+        textEl.dataset.en = enGreeting;
+        textEl.dataset.teOriginal = teGreeting;
+
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
+        textEl.innerText = isEn ? enGreeting : teGreeting;
+      }
+
+      /* --- 5. LIVE DAILY PANCHANGAM RIBBON --- */
+      function initPanchangamRibbon() {
+        const dateEl = document.getElementById("ribbonTeluguDate");
+        const detailsEl = document.getElementById("ribbonDetailsText");
+        if (!dateEl || !detailsEl) return;
+
+        const now = new Date();
+        const daysTe = ["ఆదివారం", "సోమవారం", "మంగళవారం", "బుధవారం", "గురువారం", "శుక్రవారం", "శనివారం"];
+        const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthsTe = ["జనవరి", "ఫిబ్రవరి", "మార్చి", "ఏప్రిల్", "మే", "జూన్", "జూలై", "ఆగస్టు", "సెప్టెంబర్", "అక్టోబర్", "నవంబర్", "డిసెంబర్"];
+        const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        const dayIdx = now.getDay();
+        const dateNum = now.getDate();
+        const monthIdx = now.getMonth();
+
+        const rahuTimes = [
+          "04:30 - 06:00 PM",
+          "07:30 - 09:00 AM",
+          "03:00 - 04:30 PM",
+          "12:00 - 01:30 PM",
+          "01:30 - 03:00 PM",
+          "10:30 - 12:00 PM",
+          "09:00 - 10:30 AM"
+        ];
+
+        const teTitle = `నేటి పంచాంగం • ${dateNum} ${monthsTe[monthIdx]} (${daysTe[dayIdx]})`;
+        const enTitle = `Today's Panchangam • ${monthsEn[monthIdx]} ${dateNum} (${daysEn[dayIdx]})`;
+
+        const teDetails = `రాహుకాలం: ${rahuTimes[dayIdx]} • అభిజిత్ ముహూర్తం: 11:55 AM - 12:44 PM • నేటి విశేషాలు చూడండి ➜`;
+        const enDetails = `Rahu Kalam: ${rahuTimes[dayIdx]} • Abhijit Muhurtham: 11:55 AM - 12:44 PM • Tap for details ➜`;
+
+        dateEl.dataset.en = enTitle;
+        dateEl.dataset.teOriginal = teTitle;
+        detailsEl.dataset.en = enDetails;
+        detailsEl.dataset.teOriginal = teDetails;
+
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
+        dateEl.innerText = isEn ? enTitle : teTitle;
+        detailsEl.innerText = isEn ? enDetails : teDetails;
+      }
+
+      /* --- 6. 3D WISDOM FLIP CARD ROTATION --- */
+      function initShlokaFlip() {
+        const wrap = document.getElementById("shlokaFlipCard");
+        const inner = document.getElementById("shlokaCardInner");
+        if (!wrap || !inner) return;
+
+        const shlokas = [
+          {
+            verse: '"యతో ధర్మస్తతో జయః"<br>"సత్యమేవ జయతే నానృతం"',
+            source: "— మహాభారతం & ముండకోపనిషత్",
+            meaning: "ధర్మం ఎక్కడ ఉంటుందో అక్కడ విజయం తథ్యము. ఎన్ని ఆటంకాలు ఎదురైనా సత్య మార్గాన్ని వీడరాదు. ధర్మబద్ధమైన జీవితమే శాశ్వత శాంతికి మరియు గౌరవానికి మూలం.",
+            verseEn: '"Yato Dharmastato Jayah"<br>"Satyameva Jayate Nanritam"',
+            meaningEn: "Where there is righteousness (Dharma), there is victory. Truth alone triumphs, never untruth. A righteous and ethical life is the foundation of enduring peace and honour."
+          },
+          {
+            verse: '"కర్మణ్యేవాధికారస్తే మా ఫలేషు కదాచన"<br>"మా కర్మఫలహేతుర్భూర్మా తే సఙ్గోత్స్వకర్మణి"',
+            source: "— శ్రీమద్భగవద్గీత (2.47)",
+            meaning: "నీ విధి కర్మలను నిష్కామంగా ఆచరించడమే నీ కర్తవ్యం. ఫలితాలపై వ్యామోహం పెట్టుకోకు. కర్మఫలాలకు నీవు కారణమని భావించకు, అలాగని కర్మలను విడిచిపెట్టకు.",
+            verseEn: '"Karmanye Vadhikaraste Ma Phaleshu Kadachana"<br>"Ma Karma-phala-hetur Bhurma Te Sango Stvakarmani"',
+            meaningEn: "You have a right only to perform your duties, but never to the fruits thereof. Never let the fruits of action be your motive, nor should you have an attachment to inaction."
+          },
+          {
+            verse: '"విద్యా దదాతి వినయం వినయాద్ యాతి పాత్రతామ్"<br>"పాత్రత్వాత్ ధనమాప్నోతి ధనాత్ ధర్మం తతః సుఖమ్"',
+            source: "— హితోపదేశం",
+            meaning: "విద్య వినయాన్ని ఇస్తుంది, వినయం వల్ల అర్హత లభిస్తుంది, అర్హతతో ధనం, ధనంతో ధర్మ కార్యాలు, ధర్మంతో శాశ్వత సుఖసంతోషాలు లభిస్తాయి.",
+            verseEn: '"Vidya Dadati Vinayam, Vinayad Yati Patratam"<br>"Patratvat Dhanam Apnoti, Dhanad Dharmam Tatah Sukham"',
+            meaningEn: "True knowledge bestows humility; humility leads to worthiness; worthiness brings wealth; wealth directed towards righteousness brings lasting fulfillment."
+          },
+          {
+            verse: '"ఉద్యమేన హి సిధ్యంతి కార్యాణి న మనోరథైః"<br>"న హి సుప్తస్య సింహస్య ప్రవిశంతి ముఖే మృగాః"',
+            source: "— పంచతంత్రం",
+            meaning: "ప్రయత్నం మరియు శ్రమ ద్వారానే కార్యాలు సిద్ధించును కానీ కేవలం కోరికలతో కాదు. నిద్రిస్తున్న సింహం నోట్లోకి జంతువులు వాటంతట అవే వచ్చి చేరవు కదా!",
+            verseEn: '"Udyamena Hi Sidhyanti Karyani Na Manorathaih"<br>"Na Hi Suptasya Simhasya Pravishanti Mukhe Mrigah"',
+            meaningEn: "Goals are achieved only through diligent endeavor and purposeful work, not through wishful daydreaming. Sleeping lions do not have prey walking directly into their mouth."
+          }
+        ];
+
+        const todayDay = new Date().getDate();
+        const cur = shlokas[todayDay % shlokas.length];
+
+        const verseEl = document.getElementById("shlokaVerse");
+        const sourceEl = document.getElementById("shlokaSource");
+        const meaningEl = document.getElementById("shlokaMeaning");
+
+        if (verseEl) {
+          verseEl.dataset.en = cur.verseEn;
+          verseEl.dataset.teOriginal = cur.verse;
+          verseEl.innerHTML = localStorage.getItem("sannivesham_lang") === "en" ? cur.verseEn : cur.verse;
+        }
+        if (sourceEl) sourceEl.innerText = cur.source;
+        if (meaningEl) {
+          meaningEl.dataset.en = cur.meaningEn;
+          meaningEl.dataset.teOriginal = cur.meaning;
+          meaningEl.innerText = localStorage.getItem("sannivesham_lang") === "en" ? cur.meaningEn : cur.meaning;
+        }
+
+        wrap.addEventListener("click", () => {
+          inner.classList.toggle("is-flipped");
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          initDivineParticles();
+          init3DDiya();
+          init3DCardTilt();
+          initTimeGreeting();
+          initPanchangamRibbon();
+          initShlokaFlip();
+        });
+      } else {
+        initDivineParticles();
+        init3DDiya();
+        init3DCardTilt();
+        initTimeGreeting();
+        initPanchangamRibbon();
+        initShlokaFlip();
+      }
+    })();
   </script>
 
 </body>
