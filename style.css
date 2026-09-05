@@ -5475,15 +5475,25 @@ button[class*="delete"] {
   animation: spinMandalaRev 20s linear infinite;
 }
 
-.mandala-3d-halo::after {
-  content: "🕉";
+.halo-akshara {
   position: absolute;
-  top: -14px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.4rem;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  margin-left: -13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Suranna', 'Gautami', 'Noto Sans Telugu', serif;
+  font-size: 1.1rem;
+  font-weight: 800;
   color: #ffd166;
-  text-shadow: 0 0 10px #ffd166;
+  text-shadow: 0 0 10px rgba(255, 209, 102, 0.95), 0 0 20px rgba(255, 183, 3, 0.7);
+  transform: rotate(calc(var(--pos) * 45deg)) translateY(-124px) rotate(calc(var(--pos) * -45deg));
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes spinMandala3D {
@@ -5930,12 +5940,60 @@ button[class*="delete"] {
 
 /* Responsive adjustments for 3D elements */
 @media (max-width: 768px) {
+  #hero3dDiya,
+  .hero-3d-diya-wrapper {
+    display: none !important;
+  }
+  .top-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    padding: 16px 12px !important;
+    margin: 0 auto 15px auto !important;
+    width: 100% !important;
+  }
   .brand-logo-wrap {
-    width: 160px;
-    height: 160px;
+    width: 160px !important;
+    height: 160px !important;
+    margin: 0 auto 12px auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   .mandala-3d-halo {
-    inset: -14px;
+    inset: -14px !important;
+  }
+  .halo-akshara {
+    font-size: 0.85rem !important;
+    transform: rotate(calc(var(--pos) * 45deg)) translateY(-90px) rotate(calc(var(--pos) * -45deg)) !important;
+  }
+  .logo-image {
+    width: 140px !important;
+    height: 140px !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+  .brand-text {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+  .brand-text h1 {
+    font-size: 42px !important;
+    text-align: center !important;
+    margin: 0 auto 6px auto !important;
+  }
+  .brand-text p {
+    font-size: 16px !important;
+    text-align: center !important;
+    margin: 0 auto !important;
   }
   .quick-dock-container {
     gap: 8px;

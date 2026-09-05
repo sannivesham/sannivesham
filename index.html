@@ -410,14 +410,6 @@
   <div class="home-bg"></div>
   <canvas id="divineParticleCanvas"></canvas>
 
-  <div id="sponsorModal" class="sponsor-modal">
-    <div class="sponsor-modal-box">
-      <span id="sponsorCloseBtn" class="sponsor-close-btn">×</span>
-      <a id="sponsorLink" href="#" target="_blank" class="sponsor-modal-link">
-        <img id="sponsorImage" class="sponsor-modal-img" src="" alt="Sponsor">
-      </a>
-    </div>
-  </div>
 
   <!-- THEME SELECTION MODAL -->
   <div id="themeModal" class="theme-modal">
@@ -556,7 +548,16 @@
 
     <div class="top-brand">
       <div class="brand-logo-wrap">
-        <div class="mandala-3d-halo"></div>
+        <div class="mandala-3d-halo">
+          <span class="halo-akshara" style="--pos:0">అ</span>
+          <span class="halo-akshara" style="--pos:1">ఆ</span>
+          <span class="halo-akshara" style="--pos:2">ఇ</span>
+          <span class="halo-akshara" style="--pos:3">ఈ</span>
+          <span class="halo-akshara" style="--pos:4">ఉ</span>
+          <span class="halo-akshara" style="--pos:5">క</span>
+          <span class="halo-akshara" style="--pos:6">గ</span>
+          <span class="halo-akshara" style="--pos:7">శ్రీ</span>
+        </div>
         <img src="images/logo.png" alt="Sannivesham Logo" class="logo-image">
       </div>
       <div class="brand-text">
@@ -573,7 +574,6 @@
           </div>
           <div class="diya-3d-base"></div>
         </div>
-        <span class="diya-touch-hint">✨ తాకండి (Touch Diya)</span>
       </div>
     </div>
 
@@ -584,10 +584,10 @@
           <span class="ribbon-icon">🗓️</span>
           <div>
             <div class="ribbon-title">
-              <span id="ribbonTeluguDate">నేటి పంచాంగం • విశేషాలు</span>
+              <span id="ribbonTeluguDate">పంచాంగం • నేటి తిథి &amp; నక్షత్రం</span>
               <span style="font-size:0.75rem;background:#ffd166;color:#120703;padding:2px 6px;border-radius:6px;font-weight:800;">LIVE</span>
             </div>
-            <div id="ribbonDetailsText" class="ribbon-details">శుభ దినం • తిథి, నక్షత్రం, శుభ ఘడియల కోసం ఇక్కడ తాకండి</div>
+            <div id="ribbonDetailsText" class="ribbon-details">నేటి తిథి, నక్షత్రం, రాహుకాలం మరియు శుభ ముహూర్తాల వివరాలు ➜</div>
           </div>
         </div>
         <span class="ribbon-cta">పూర్తి పంచాంగం ➜</span>
@@ -596,31 +596,31 @@
 
     <!-- SPIRITUAL QUICK-ACTION DOCK -->
     <div class="quick-dock-container">
-      <a href="chant-counter/" class="dock-pill-btn">
-        <span class="dock-icon">📿</span>
-        <span>జప గణకం</span>
+      <a href="stories/" class="dock-pill-btn">
+        <span class="dock-icon">📖</span>
+        <span data-en="Library">గ్రంథాలయం</span>
       </a>
-      <a href="pooja-mandir/" class="dock-pill-btn">
+      <a href="festivals/" class="dock-pill-btn">
+        <span class="dock-icon">🪔</span>
+        <span data-en="Festivals">పండుగలు</span>
+      </a>
+      <a href="temples/" class="dock-pill-btn">
         <span class="dock-icon">🛕</span>
-        <span>పూజా మందిరం</span>
+        <span data-en="Temples">దేవాలయాలు</span>
       </a>
-      <a href="calendar/" class="dock-pill-btn">
-        <span class="dock-icon">🗓️</span>
-        <span>పంచాంగం</span>
-      </a>
-      <a href="store/" class="dock-pill-btn">
-        <span class="dock-icon">🛍️</span>
-        <span>విక్రయశాల</span>
+      <a href="quiz/" class="dock-pill-btn">
+        <span class="dock-icon">🎯</span>
+        <span data-en="Quiz">ప్రశ్నావళి</span>
       </a>
     </div>
 
     <div class="impact-box">
       <div class="impact-card">
-        <span id="schoolCount">0</span>
+        <span id="schoolCount">10</span>
         <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
       </div>
       <div class="impact-card">
-        <span id="studentCount">0</span>
+        <span id="studentCount">2000+</span>
         <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
       </div>
     </div>
@@ -1028,24 +1028,6 @@
     }
     loadHomeCards();
 
-    async function loadSponsorPopup() {
-      try {
-        if (sessionStorage.getItem("sponsorShown")) return;
-        const snap = await getDoc(doc(db, "settings", "sponsor"));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        if (!data.image) return;
-        document.getElementById("sponsorImage").src = data.image;
-        document.getElementById("sponsorLink").href = data.link || "#";
-        document.getElementById("sponsorModal").style.display = "flex";
-        window._sponsorShowing = true;
-        sessionStorage.setItem("sponsorShown", "true");
-      } catch (e) {}
-    }
-    loadSponsorPopup();
-    document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
-      document.getElementById("sponsorModal").style.display = "none";
-    });
 
     async function loadQuestionOfDay() {
       try {
@@ -1195,6 +1177,8 @@
       let count = 0;
       const increment = Math.ceil(target / 100);
       const el = document.getElementById(id);
+      if (!el) return;
+      el.innerText = id === "studentCount" ? "0+" : "0";
       const timer = setInterval(() => {
         count += increment;
         if (count >= target) { count = target; clearInterval(timer); }
@@ -1205,7 +1189,7 @@
     function setFinalCounters() {
       const schoolEl = document.getElementById("schoolCount");
       const studentEl = document.getElementById("studentCount");
-      if (schoolEl) schoolEl.innerText = 10;
+      if (schoolEl) schoolEl.innerText = "10";
       if (studentEl) studentEl.innerText = "2000+";
     }
 
@@ -1214,27 +1198,22 @@
         setFinalCounters();
         return;
       }
-      animateCounter("schoolCount", 10);
-      animateCounter("studentCount", 2000);
-      sessionStorage.setItem("countersShown", "true");
+      setFinalCounters();
+      setTimeout(() => {
+        animateCounter("schoolCount", 10);
+        animateCounter("studentCount", 2000);
+        sessionStorage.setItem("countersShown", "true");
+      }, 350);
     }
 
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        if (window._sponsorShowing) {
-          document.getElementById("sponsorCloseBtn").addEventListener("click", () => {
-            startCounters();
-          }, { once: true });
-        } else {
-          startCounters();
-        }
-      }, 1500);
-    });
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", startCounters);
+    } else {
+      startCounters();
+    }
 
     window.addEventListener("pageshow", (event) => {
-      if (event.persisted) {
-        setFinalCounters();
-      }
+      setFinalCounters();
     });
   </script>
 
@@ -1484,11 +1463,11 @@
         if (window.SanniveshamPanchang) {
           const p = window.SanniveshamPanchang.getPanchang(now);
           const festBadge = p.festivals.length > 0 ? ` • ${p.festivals[0].badge}` : "";
-          const teTitle = `నేటి పంచాంగం • ${p.gregDateTe} (${p.dayNameShortTe})`;
-          const enTitle = `Today's Panchangam • ${p.gregDateEn} (${p.dayNameShortEn})`;
+          const teTitle = `శ్రీ ${p.masamTe} మాసం • ${p.tithiFullTe}${festBadge}`;
+          const enTitle = `${p.masamEn} • ${p.tithiFullEn}${festBadge}`;
 
-          const teDetails = `${p.masamTe} మాసం • ${p.tithiFullTe} • ${p.nakshatraTe} • రాహుకాలం: ${p.rahuKalam}${festBadge} ➜`;
-          const enDetails = `${p.masamEn} • ${p.tithiFullEn} • ${p.nakshatraEn} • Rahu: ${p.rahuKalam} ➜`;
+          const teDetails = `${p.nakshatraTe} నక్షత్రం • రాహుకాలం: ${p.rahuKalam} • ${p.gregDateTe} (${p.dayNameShortTe}) ➜`;
+          const enDetails = `${p.nakshatraEn} • Rahu: ${p.rahuKalam} • ${p.gregDateEn} (${p.dayNameShortEn}) ➜`;
 
           dateEl.dataset.en = enTitle;
           dateEl.dataset.teOriginal = teTitle;
