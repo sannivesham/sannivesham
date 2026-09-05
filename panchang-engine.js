@@ -302,7 +302,7 @@
     };
   }
 
-  function getPanchang(targetDate = new Date()) {
+  function getPanchang(targetDate = new Date(), options = {}) {
     const d = new Date(targetDate);
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
@@ -324,23 +324,22 @@
 
     if (tithiIndex === 15) {
       tithiNameTe = "పౌర్ణమి";
-      tithiNameEn = "Purnima (Full Moon)";
+      tithiNameEn = "Purnima";
     } else if (tithiIndex === 30) {
       tithiNameTe = "అమావాస్య";
-      tithiNameEn = "Amavasya (New Moon)";
+      tithiNameEn = "Amavasya";
     } else {
       tithiNameTe = TITHI_NAMES_TE[tithiInPaksha - 1];
       tithiNameEn = TITHI_NAMES_EN[tithiInPaksha - 1];
     }
 
-    const tithiFullTe = `${isShukla ? "శుక్ల" : "బహుళ"} ${tithiNameTe}`;
-    const tithiFullEn = `${isShukla ? "Shukla" : "Krishna"} ${tithiNameEn}`;
+    const tithiFullTe = `${pakshamTe} ${tithiNameTe}`;
+    const tithiFullEn = `${pakshamEn} ${tithiNameEn}`;
 
-    // Exact Tithi End Time and Next Tithi transition
+    // Exact Tithi end time & transition
     const targetTithiAngle = tithiIndex * 12.0;
     const tithiEndHour = findTithiEndTime(year, month, dateNum, targetTithiAngle);
     const tithiEndObj = formatPeriodTime(tithiEndHour);
-
     const nextTithiIdx = (tithiIndex % 30) + 1;
     const nextIsShukla = nextTithiIdx <= 15;
     const nextTInPaksha = nextIsShukla ? nextTithiIdx : nextTithiIdx - 15;
@@ -353,8 +352,10 @@
       nextTithiNameTe = "అమావాస్య";
       nextTithiNameEn = "Amavasya";
     } else {
-      nextTithiNameTe = TITHI_NAMES_TE[nextTInPaksha - 1];
-      nextTithiNameEn = TITHI_NAMES_EN[nextTInPaksha - 1];
+      const pNameTe = nextIsShukla ? "శుక్ల" : "బహుళ";
+      const pNameEn = nextIsShukla ? "Shukla" : "Krishna";
+      nextTithiNameTe = `${pNameTe} ${TITHI_NAMES_TE[nextTInPaksha - 1]}`;
+      nextTithiNameEn = `${pNameEn} ${TITHI_NAMES_EN[nextTInPaksha - 1]}`;
     }
 
     const tithiTimingTe = `${tithiFullTe} ${tithiEndObj.timeTe} వరకు, తదుపరి ${nextTithiNameTe}`;
@@ -376,9 +377,16 @@
     const nakshatraTimingTe = `${nakshatraTe} ${nakEndObj.timeTe} వరకు, తదుపరి ${nextNakNameTe}`;
     const nakshatraTimingEn = `${nakshatraEn} up to ${nakEndObj.timeEn}, thereafter ${nextNakNameEn}`;
 
-    // 3. Telugu Lunar Month
-    const sunRasi = Math.floor(pos.siderealSun / 30.0);
-    const lunarMonthIndex = (sunRasi + 1) % 12;
+    // 3. Telugu Lunar Month (Amanta Chandramana)
+    let lunarMonthIndex;
+    if (options && typeof options.lunarMonthIndex === "number") {
+      lunarMonthIndex = options.lunarMonthIndex;
+    } else {
+      const moonSunElong = normalize(pos.moonTrue - pos.sunTrue);
+      const sunLongAtNewMoon = normalize(pos.siderealSun - moonSunElong * (0.9856 / 12.19075));
+      const sunRasiAtNewMoon = Math.floor(sunLongAtNewMoon / 30.0);
+      lunarMonthIndex = (sunRasiAtNewMoon + 1) % 12;
+    }
     const masamTe = TELUGU_MONTHS[lunarMonthIndex];
     const masamEn = TELUGU_MONTHS_EN[lunarMonthIndex];
 
@@ -463,10 +471,15 @@
       ayanamTe,
       ayanamEn,
       rutuTe,
+      lunarMonthIndex,
       masamTe,
       masamEn,
+      isShukla,
       pakshamTe,
       pakshamEn,
+      pakshamShortTe: isShukla ? "శుక్ల" : "బహుళ",
+      pakshamShortEn: isShukla ? "Shukla" : "Krishna",
+      gregDateShort: `${dateNum} ${GREG_MONTHS_EN[month - 1].slice(0, 3)}`,
       tithiIndex,
       tithiInPaksha,
       tithiNameTe,
@@ -655,9 +668,93 @@
     };
   }
 
+  function isStartOfTeluguMonth(d) {
+    const pCur = calculatePositions(d.getFullYear(), d.getMonth() + 1, d.getDate(), 6);
+    const tCur = Math.floor(normalize(pCur.moonTrue - pCur.sunTrue) / 12.0) + 1;
+    const prevD = new Date(d.getTime() - 86400000);
+    const pPrev = calculatePositions(prevD.getFullYear(), prevD.getMonth() + 1, prevD.getDate(), 6);
+    const tPrev = Math.floor(normalize(pPrev.moonTrue - pPrev.sunTrue) / 12.0) + 1;
+    return (tCur === 1 && tPrev >= 28) || (tCur === 2 && tPrev >= 29);
+  }
+
+  function isEndOfTeluguMonth(d) {
+    const pCur = calculatePositions(d.getFullYear(), d.getMonth() + 1, d.getDate(), 6);
+    const tCur = Math.floor(normalize(pCur.moonTrue - pCur.sunTrue) / 12.0) + 1;
+    const nextD = new Date(d.getTime() + 86400000);
+    const pNext = calculatePositions(nextD.getFullYear(), nextD.getMonth() + 1, nextD.getDate(), 6);
+    const tNext = Math.floor(normalize(pNext.moonTrue - pNext.sunTrue) / 12.0) + 1;
+    return (tCur === 30 && tNext <= 2) || (tCur === 29 && (tNext === 1 || tNext === 2));
+  }
+
+  function getTeluguMonthCalendar(refDate) {
+    const base = refDate ? new Date(refDate) : new Date();
+    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 6, 0, 0);
+
+    // 1. Walk backwards to find Shukla Padyami (start of this lunar month)
+    let curD = new Date(d.getTime());
+    let maxIter = 40;
+    while (maxIter-- > 0) {
+      if (isStartOfTeluguMonth(curD)) break;
+      curD = new Date(curD.getTime() - 86400000);
+    }
+    const startD = new Date(curD.getTime());
+
+    // 2. Determine the lunarMonthIndex at start of this month
+    const pStart = calculatePositions(startD.getFullYear(), startD.getMonth() + 1, startD.getDate(), 6);
+    const sunRasi = Math.floor(pStart.siderealSun / 30.0);
+    const lunarMonthIndex = (sunRasi + 1) % 12;
+    const masamTe = TELUGU_MONTHS[lunarMonthIndex];
+    const masamEn = TELUGU_MONTHS_EN[lunarMonthIndex];
+
+    // 3. Scan forwards day by day until Amavasya
+    const days = [];
+    let scanD = new Date(startD.getTime());
+    maxIter = 35;
+    while (maxIter-- > 0) {
+      const dayPanchang = getPanchang(new Date(scanD.getTime()), { lunarMonthIndex });
+      days.push(dayPanchang);
+      if (days.length >= 28 && isEndOfTeluguMonth(scanD)) {
+        break;
+      }
+      scanD = new Date(scanD.getTime() + 86400000);
+    }
+
+    const firstDay = days[0];
+    const lastDay = days[days.length - 1];
+    const endD = new Date(lastDay.date.getTime());
+
+    return {
+      lunarMonthIndex,
+      masamTe,
+      masamEn,
+      samvatsaramTe: firstDay.samvatsaramTe,
+      samvatsaramEn: firstDay.samvatsaramEn,
+      startDate: startD,
+      endDate: endD,
+      startGregDateTe: `${firstDay.dateNum} ${GREG_MONTHS_TE[firstDay.month - 1]} ${firstDay.year}`,
+      startGregDateEn: `${firstDay.dateNum} ${GREG_MONTHS_EN[firstDay.month - 1]} ${firstDay.year}`,
+      endGregDateTe: `${lastDay.dateNum} ${GREG_MONTHS_TE[lastDay.month - 1]} ${lastDay.year}`,
+      endGregDateEn: `${lastDay.dateNum} ${GREG_MONTHS_EN[lastDay.month - 1]} ${lastDay.year}`,
+      startWeekday: startD.getDay(),
+      dayCount: days.length,
+      days
+    };
+  }
+
+  function getAdjacentTeluguMonthDate(refDate, direction) {
+    const curMonth = getTeluguMonthCalendar(refDate);
+    if (direction > 0) {
+      return new Date(curMonth.endDate.getTime() + 86400000 * 2);
+    } else {
+      return new Date(curMonth.startDate.getTime() - 86400000 * 2);
+    }
+  }
+
   return {
     getPanchang,
     getMonthPanchang,
+    getTeluguMonthCalendar,
+    getAdjacentTeluguMonthDate,
     TELUGU_MONTHS,
     TELUGU_MONTHS_EN,
     TITHI_NAMES_TE,

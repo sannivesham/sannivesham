@@ -270,6 +270,13 @@
       transform: scale(1.05);
     }
 
+    /* Stable non-sticky navbar on calendar page */
+    .glass-navbar {
+      position: relative !important;
+      top: 0 !important;
+      margin: 14px auto 24px !important;
+    }
+
     .cal-grid-header {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -294,10 +301,10 @@
     }
 
     .cal-day-cell {
-      min-height: 90px;
-      background: rgba(36, 18, 8, 0.7);
-      border: 1px solid rgba(255, 209, 102, 0.2);
-      border-radius: 12px;
+      min-height: 106px;
+      background: rgba(36, 18, 8, 0.75);
+      border: 1px solid rgba(255, 209, 102, 0.22);
+      border-radius: 14px;
       padding: 8px;
       display: flex;
       flex-direction: column;
@@ -310,14 +317,24 @@
     .cal-day-cell:hover {
       transform: translateY(-3px);
       border-color: #ffd166;
-      background: rgba(54, 26, 12, 0.85);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      background: rgba(54, 26, 12, 0.9);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
     }
 
     .cal-day-cell.is-today {
       border: 2px solid #ffd166;
-      background: rgba(80, 42, 18, 0.9);
-      box-shadow: 0 0 16px rgba(255, 209, 102, 0.4);
+      background: linear-gradient(145deg, rgba(92, 48, 20, 0.95), rgba(46, 22, 10, 0.95));
+      box-shadow: 0 0 18px rgba(255, 209, 102, 0.45);
+    }
+
+    .cal-day-cell.is-purnima {
+      border-color: rgba(255, 215, 0, 0.65);
+      background: linear-gradient(145deg, rgba(65, 45, 15, 0.85), rgba(36, 18, 8, 0.8));
+    }
+
+    .cal-day-cell.is-amavasya {
+      border-color: rgba(180, 150, 220, 0.45);
+      background: linear-gradient(145deg, rgba(28, 14, 30, 0.85), rgba(18, 8, 12, 0.8));
     }
 
     .cal-day-cell.empty-cell {
@@ -327,28 +344,49 @@
       pointer-events: none;
     }
 
-    .cell-top {
+    .cell-top-bar {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
+      margin-bottom: 2px;
     }
 
-    .cell-date-num {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #fff;
+    .cell-paksha-pill {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+      letter-spacing: 0.2px;
     }
 
-    .cal-day-cell.is-today .cell-date-num {
+    .cell-paksha-pill.shukla {
+      background: rgba(255, 209, 102, 0.2);
       color: #ffd166;
+      border: 1px solid rgba(255, 209, 102, 0.4);
     }
 
-    .cell-tithi {
-      font-size: 0.72rem;
-      color: #EDE3C8;
-      opacity: 0.9;
-      line-height: 1.2;
-      margin-top: 4px;
+    .cell-paksha-pill.krishna {
+      background: rgba(160, 180, 230, 0.18);
+      color: #b8c9f5;
+      border: 1px solid rgba(160, 180, 230, 0.35);
+    }
+
+    .cell-moon-icon {
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+
+    .cell-tithi-main {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin: 2px 0;
+      word-break: break-word;
+    }
+
+    .cal-day-cell.is-today .cell-tithi-main {
+      color: #ffd166;
     }
 
     .cell-fest-badge {
@@ -356,14 +394,50 @@
       font-size: 0.68rem;
       font-weight: 700;
       color: #120703;
-      background: #ffd166;
+      background: linear-gradient(135deg, #ffd166, #e6b800);
       border-radius: 6px;
-      padding: 2px 4px;
-      margin-top: 4px;
+      padding: 2px 5px;
+      margin: 2px 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .cell-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(255, 209, 102, 0.12);
+      padding-top: 4px;
+      margin-top: 3px;
+    }
+
+    .cell-greg-date {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ffd166;
+      opacity: 0.95;
+    }
+
+    .cell-nakshatra {
+      font-size: 0.68rem;
+      color: #EDE3C8;
+      opacity: 0.75;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 55%;
+    }
+
+    .month-nav-sub {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: #EDE3C8;
+      opacity: 0.88;
+      display: block;
+      margin-top: 4px;
     }
 
     /* FESTIVALS LIST SECTION */
@@ -482,14 +556,21 @@
         grid-template-columns: 1fr;
       }
       .cal-day-cell {
-        min-height: 70px;
+        min-height: 82px;
         padding: 5px;
       }
-      .cell-date-num {
-        font-size: 0.95rem;
+      .cell-tithi-main {
+        font-size: 0.85rem;
       }
-      .cell-tithi {
-        font-size: 0.65rem;
+      .cell-greg-date {
+        font-size: 0.72rem;
+      }
+      .cell-nakshatra {
+        display: none;
+      }
+      .cell-paksha-pill {
+        font-size: 0.58rem;
+        padding: 1px 4px;
       }
     }
   </style>
@@ -588,11 +669,14 @@
     <!-- TAB 2: MONTHLY INTERACTIVE CALENDAR -->
     <section id="sectionMonth" class="calendar-month-box" style="display:none;">
       <div class="month-nav-bar">
-        <button id="prevMonthBtn" class="month-nav-btn" data-en="◀ Prev">◀ మునుపటి నెల</button>
-        <div class="month-nav-title" id="monthNavTitle">లోడ్ అవుతోంది...</div>
+        <button id="prevMonthBtn" class="month-nav-btn" data-en="◀ Prev Month">◀ మునుపటి మాసం</button>
+        <div class="month-nav-title" id="monthNavTitle">
+          <span id="teluguMonthTitle">లోడ్ అవుతోంది...</span>
+          <span class="month-nav-sub" id="gregDateRangeSub"></span>
+        </div>
         <div style="display:flex;gap:8px;">
-          <button id="todayJumpBtn" class="month-nav-btn" data-en="Today">ఈ రోజు</button>
-          <button id="nextMonthBtn" class="month-nav-btn" data-en="Next ▶">తదుపరి నెల ▶</button>
+          <button id="todayJumpBtn" class="month-nav-btn" data-en="Current Month">ఈ మాసం</button>
+          <button id="nextMonthBtn" class="month-nav-btn" data-en="Next Month ▶">తదుపరి మాసం ▶</button>
         </div>
       </div>
 
@@ -657,8 +741,8 @@
       if (!P) return;
 
       const now = new Date();
-      let activeYear = now.getFullYear();
-      let activeMonth = now.getMonth() + 1; // 1-12
+      let activeTeluguRefDate = new Date();
+      let currentTeluguMonthData = null;
 
       // DOM Elements
       const tabToday = document.getElementById("tabToday");
@@ -692,11 +776,11 @@
         } else if (activeTab === "month") {
           tabMonth.classList.add("active");
           sectionMonth.style.display = "block";
-          renderMonthCalendar(activeYear, activeMonth);
+          renderTeluguMonthCalendar(activeTeluguRefDate);
         } else if (activeTab === "festivals") {
           tabFestivals.classList.add("active");
           sectionFestivals.style.display = "block";
-          renderFestivalsTab(activeYear, activeMonth);
+          renderFestivalsTab(activeTeluguRefDate);
         }
       }
 
@@ -753,47 +837,64 @@
         });
       }
 
-      // Render Month Calendar
-      function renderMonthCalendar(year, month) {
-        const monthData = P.getMonthPanchang(year, month);
-        const titleEl = document.getElementById("monthNavTitle");
+      // Render Telugu Chandramana Month Calendar
+      function renderTeluguMonthCalendar(refDate) {
+        currentTeluguMonthData = P.getTeluguMonthCalendar(refDate);
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
+
+        const titleEl = document.getElementById("teluguMonthTitle");
+        const subEl = document.getElementById("gregDateRangeSub");
         const daysGrid = document.getElementById("calendarDaysGrid");
         daysGrid.innerHTML = "";
 
-        // Calculate active Telugu Masa representation for the month
-        const firstDayPanchang = monthData.days[0];
-        const lastDayPanchang = monthData.days[monthData.days.length - 1];
-        const masamString = firstDayPanchang.masamTe === lastDayPanchang.masamTe
-          ? `${firstDayPanchang.masamTe} మాసం`
-          : `${firstDayPanchang.masamTe} - ${lastDayPanchang.masamTe} మాసములు`;
+        if (titleEl) {
+          titleEl.innerText = isEn
+            ? `${currentTeluguMonthData.masamEn} Masam (${currentTeluguMonthData.samvatsaramEn})`
+            : `శ్రీ ${currentTeluguMonthData.masamTe} మాసం (${currentTeluguMonthData.samvatsaramTe})`;
+        }
+        if (subEl) {
+          subEl.innerText = isEn
+            ? `(${currentTeluguMonthData.startGregDateEn} – ${currentTeluguMonthData.endGregDateEn})`
+            : `(${currentTeluguMonthData.startGregDateTe} – ${currentTeluguMonthData.endGregDateTe})`;
+        }
 
-        titleEl.innerText = `${monthData.monthNameTe} ${year} • ${masamString}`;
-
-        // Empty cells before first day of month
-        for (let i = 0; i < monthData.firstDayIndex; i++) {
+        // Empty cells before first day of month (align to Shukla Padyami weekday)
+        for (let i = 0; i < currentTeluguMonthData.startWeekday; i++) {
           const emptyDiv = document.createElement("div");
           emptyDiv.className = "cal-day-cell empty-cell";
           daysGrid.appendChild(emptyDiv);
         }
 
-        // Render each day cell
-        monthData.days.forEach(day => {
+        // Render each day cell starting from Shukla Padyami through Amavasya
+        currentTeluguMonthData.days.forEach(day => {
           const isToday = (day.year === now.getFullYear() && day.month === now.getMonth() + 1 && day.dateNum === now.getDate());
+          const isPurnima = day.tithiIndex === 15;
+          const isAmavasya = day.tithiIndex === 30;
+
           const cell = document.createElement("div");
-          cell.className = `cal-day-cell ${isToday ? "is-today" : ""}`;
+          cell.className = `cal-day-cell ${isToday ? "is-today" : ""} ${isPurnima ? "is-purnima" : ""} ${isAmavasya ? "is-amavasya" : ""}`;
 
           let festHtml = "";
           if (day.festivals.length > 0) {
-            festHtml = `<span class="cell-fest-badge" title="${day.festivals[0].titleTe}">${day.festivals[0].badge}</span>`;
+            const f = day.festivals[0];
+            festHtml = `<span class="cell-fest-badge" title="${isEn ? f.titleEn : f.titleTe}">${f.badge}</span>`;
           }
 
+          const pakshaPillClass = day.isShukla ? "shukla" : "krishna";
+          const pakshaText = isEn ? (day.isShukla ? "Shukla" : "Krishna") : (day.isShukla ? "శుక్ల" : "బహుళ");
+          const moonIcon = isPurnima ? '<span class="cell-moon-icon">🌕</span>' : isAmavasya ? '<span class="cell-moon-icon">🌑</span>' : '';
+
           cell.innerHTML = `
-            <div class="cell-top">
-              <span class="cell-date-num">${day.dateNum}</span>
-              ${day.tithiIndex === 15 ? "🌕" : day.tithiIndex === 30 ? "🌑" : ""}
+            <div class="cell-top-bar">
+              <span class="cell-paksha-pill ${pakshaPillClass}">${pakshaText}</span>
+              ${moonIcon}
             </div>
-            <div class="cell-tithi">${day.tithiNameTe}</div>
+            <div class="cell-tithi-main">${isEn ? day.tithiNameEn : day.tithiNameTe}</div>
             ${festHtml}
+            <div class="cell-bottom-bar">
+              <span class="cell-greg-date">${day.gregDateShort}</span>
+              <span class="cell-nakshatra" title="${isEn ? day.nakshatraEn : day.nakshatraTe}">${isEn ? day.nakshatraEn : day.nakshatraTe}</span>
+            </div>
           `;
 
           cell.addEventListener("click", () => openDayDetailModal(day));
@@ -801,14 +902,17 @@
         });
       }
 
-      // Render Festivals Tab for Active Month
-      function renderFestivalsTab(year, month) {
-        const monthData = P.getMonthPanchang(year, month);
+      // Render Festivals Tab for Active Telugu Month
+      function renderFestivalsTab(refDate) {
+        if (!currentTeluguMonthData) {
+          currentTeluguMonthData = P.getTeluguMonthCalendar(refDate);
+        }
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
         const listGrid = document.getElementById("festivalsListGrid");
         listGrid.innerHTML = "";
 
         const allFests = [];
-        monthData.days.forEach(day => {
+        currentTeluguMonthData.days.forEach(day => {
           if (day.festivals.length > 0) {
             day.festivals.forEach(f => {
               allFests.push({ ...f, day });
@@ -827,8 +931,8 @@
           card.innerHTML = `
             <div class="fest-card-badge">${item.badge.split(" ")[0]}</div>
             <div class="fest-card-info">
-              <h4>${item.titleTe}</h4>
-              <p>${item.day.gregDateTe} (${item.day.dayNameTe.split(" ")[0]}) • ${item.day.tithiFullTe}</p>
+              <h4>${isEn ? item.titleEn : item.titleTe}</h4>
+              <p>${item.day.gregDateTe} (${item.day.dayNameTe.split(" ")[0]}) • ${isEn ? item.day.tithiFullEn : item.day.tithiFullTe}</p>
             </div>
           `;
           card.addEventListener("click", () => openDayDetailModal(item.day));
@@ -836,8 +940,9 @@
         });
       }
 
-      // Day Detail Modal
+      // Day Detail Inspector Modal
       function openDayDetailModal(p) {
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
         document.getElementById("modalDayTitle").innerText = `${p.gregDateTe} • ${p.dayNameTe}`;
         document.getElementById("modalDaySub").innerText = `${p.samvatsaramTe} • ${p.masamTe} మాసం • ${p.ayanamTe}`;
 
@@ -845,7 +950,7 @@
         grid.innerHTML = "";
 
         if (p.festivals.length > 0) {
-          const festNames = p.festivals.map(f => f.titleTe).join(" • ");
+          const festNames = p.festivals.map(f => isEn ? f.titleEn : f.titleTe).join(" • ");
           grid.innerHTML += `
             <div class="panchang-item highlight-fest" style="grid-column:1/-1;">
               <span class="panchang-label">🌟 పర్వదిన విశేషం</span>
@@ -857,6 +962,7 @@
         const items = [
           { label: "📅 తిథి & సమయం", val: isEn ? p.tithiTimingEn : p.tithiTimingTe },
           { label: "⭐ నక్షత్రం & సమయం", val: isEn ? p.nakshatraTimingEn : p.nakshatraTimingTe },
+          { label: "🌕 మాసం & పక్షం", val: `${p.masamTe} మాసం • ${p.pakshamTe}` },
           { label: "☀️ సూర్యోదయం & అస్తమయం", val: `${p.sunrise} - ${p.sunset}` },
           { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham },
           { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu },
@@ -884,34 +990,42 @@
         if (e.target === dayModal) dayModal.classList.remove("show");
       });
 
-      // Month Navigation Controls
+      // Month Navigation Controls (Telugu Chandramana Month Jumps)
       prevMonthBtn.addEventListener("click", () => {
-        activeMonth--;
-        if (activeMonth < 1) {
-          activeMonth = 12;
-          activeYear--;
+        if (!currentTeluguMonthData) {
+          currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate);
         }
-        renderMonthCalendar(activeYear, activeMonth);
+        activeTeluguRefDate = P.getAdjacentTeluguMonthDate(currentTeluguMonthData.startDate, -1);
+        renderTeluguMonthCalendar(activeTeluguRefDate);
       });
 
       nextMonthBtn.addEventListener("click", () => {
-        activeMonth++;
-        if (activeMonth > 12) {
-          activeMonth = 1;
-          activeYear++;
+        if (!currentTeluguMonthData) {
+          currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate);
         }
-        renderMonthCalendar(activeYear, activeMonth);
+        activeTeluguRefDate = P.getAdjacentTeluguMonthDate(currentTeluguMonthData.endDate, 1);
+        renderTeluguMonthCalendar(activeTeluguRefDate);
       });
 
       todayJumpBtn.addEventListener("click", () => {
-        activeYear = now.getFullYear();
-        activeMonth = now.getMonth() + 1;
-        renderMonthCalendar(activeYear, activeMonth);
+        activeTeluguRefDate = new Date();
+        renderTeluguMonthCalendar(activeTeluguRefDate);
       });
+
+      // Language Toggle dynamic refresh
+      const langBtn = document.getElementById("langToggleBtn");
+      if (langBtn) {
+        langBtn.addEventListener("click", () => {
+          setTimeout(() => {
+            renderTodayPanchang();
+            renderTeluguMonthCalendar(activeTeluguRefDate);
+          }, 50);
+        });
+      }
 
       // Initialize
       renderTodayPanchang();
-      renderMonthCalendar(activeYear, activeMonth);
+      renderTeluguMonthCalendar(activeTeluguRefDate);
 
       // Deep link support: #monthlyCalendar
       if (window.location.hash === "#monthlyCalendar" || window.location.hash === "#calendar") {
