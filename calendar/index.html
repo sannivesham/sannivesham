@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -7,27 +7,27 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <title>పంచాంగం (Panchangam / Calendar) - సన్నివేశం | Sannivesham</title>
-  <meta name="description" content="నేటి తిథి, నక్షత్రం, వర్జ్యం, రాహుకాలం, దుర్ముహూర్తం, అమృత ఘడియలు మరియు శుభ ముహూర్తాలతో కూడిన తెలుగు పంచాంగం మరియు క్యాలెండర్.">
-  <link rel="canonical" href="https://sannivesham.com/calendar.html">
+  <title>పంచాంగం & క్యాలెండర్ (Panchangam & Calendar) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="దృక్ సిద్ధాంతం ప్రకారం నేటి తిథి, నక్షత్రం, వర్జ్యం, రాహుకాలం, దుర్ముహూర్తం, అమృత ఘడియలు మరియు సంపూర్ణ తెలుగు మాస క్యాలెండర్.">
+  <link rel="canonical" href="https://sannivesham.com/calendar/">
 
-  <meta property="og:title" content="పంచాంగం (Panchangam / Calendar) - సన్నివేశం">
-  <meta property="og:description" content="నేటి తిథి, నక్షత్రం, వర్జ్యం, రాహుకాలం, దుర్ముహూర్తం, అమృత ఘడియలతో కూడిన రోజువారీ తెలుగు పంచాంగం.">
+  <meta property="og:title" content="పంచాంగం & క్యాలెండర్ - సన్నివేశం">
+  <meta property="og:description" content="రోజువారీ తిథి, నక్షత్రం, రాహుకాలం, శుభ ముహూర్తాలతో కూడిన సంపూర్ణ తెలుగు పంచాంగం మరియు క్యాలెండర్.">
   <meta property="og:image" content="https://sannivesham.com/images/calendar.png">
-  <meta property="og:url" content="https://sannivesham.com/calendar.html">
+  <meta property="og:url" content="https://sannivesham.com/calendar/">
   <meta property="og:type" content="website">
 
-  <!-- Breadcrumb & WebPage Schema for Google Sitelinks -->
+  <!-- Breadcrumb & WebPage Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebPage",
-        "@id": "https://sannivesham.com/calendar.html#webpage",
-        "url": "https://sannivesham.com/calendar.html",
-        "name": "పంచాంగం (Panchangam / Calendar) - సన్నివేశం",
-        "description": "తెలుగు తిథులు, నక్షత్రాలు మరియు శుభ ముహూర్తాలు",
+        "@id": "https://sannivesham.com/calendar/#webpage",
+        "url": "https://sannivesham.com/calendar/",
+        "name": "పంచాంగం & క్యాలెండర్ - సన్నివేశం",
+        "description": "తెలుగు తిథులు, నక్షత్రాలు, మాస క్యాలెండర్ మరియు శుభ ముహూర్తాలు",
         "isPartOf": {
           "@type": "WebSite",
           "@id": "https://sannivesham.com/#website",
@@ -48,7 +48,7 @@
             "@type": "ListItem",
             "position": 2,
             "name": "పంచాంగం",
-            "item": "https://sannivesham.com/calendar.html"
+            "item": "https://sannivesham.com/calendar/"
           }
         ]
       }
@@ -66,16 +66,18 @@
   <style>
     .panchang-page {
       min-height: 100vh;
-      padding: 30px 20px 80px;
-      max-width: 960px;
+      padding: 20px 16px 80px;
+      max-width: 1080px;
       margin: 0 auto;
       position: relative;
       z-index: 2;
     }
+
     .panchang-hero {
       text-align: center;
-      margin: 20px auto 35px;
+      margin: 20px auto 30px;
     }
+
     .panchang-hero h1 {
       font-size: clamp(2rem, 4.5vw, 2.8rem);
       color: #ffd166;
@@ -83,43 +85,93 @@
       font-weight: 700;
       text-shadow: 0 2px 14px rgba(255, 209, 102, 0.3);
     }
+
     .panchang-hero p {
-      font-size: clamp(0.98rem, 2vw, 1.15rem);
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
       color: #EDE3C8;
-      opacity: 0.9;
+      opacity: 0.92;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
     }
+
+    /* VIEW MODE SWITCHER TABS */
+    .cal-tabs-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 25px auto 35px;
+      flex-wrap: wrap;
+    }
+
+    .cal-tab-btn {
+      background: rgba(26, 12, 5, 0.82);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      color: #EDE3C8;
+      padding: 10px 22px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cal-tab-btn:hover {
+      border-color: #ffd166;
+      color: #ffd166;
+      transform: translateY(-2px);
+    }
+
+    .cal-tab-btn.active {
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      border-color: #ffd166;
+      box-shadow: 0 4px 20px rgba(255, 209, 102, 0.4);
+    }
+
+    /* TODAY'S PANCHANG CARD */
     .panchang-card {
-      background: rgba(22, 10, 5, 0.82);
+      background: rgba(22, 10, 5, 0.85);
       border: 1px solid rgba(255, 209, 102, 0.35);
       border-radius: 24px;
       padding: 32px 28px;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
+
     .panchang-header {
       border-bottom: 1px solid rgba(255, 209, 102, 0.25);
       padding-bottom: 20px;
       margin-bottom: 24px;
       text-align: center;
     }
+
     .panchang-year {
       font-size: 1.35rem;
       font-weight: 700;
       color: #ffd166;
       margin-bottom: 6px;
     }
+
     .panchang-today-date {
       font-size: 1.1rem;
       color: #EDE3C8;
-      opacity: 0.92;
+      opacity: 0.95;
     }
+
     .panchang-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
     }
+
     .panchang-item {
       background: rgba(255, 209, 102, 0.05);
       border: 1px solid rgba(255, 209, 102, 0.18);
@@ -128,53 +180,321 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      transition: transform 0.2s, border-color 0.2s;
     }
+
+    .panchang-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 209, 102, 0.45);
+    }
+
     .panchang-item.highlight-good {
-      border-color: rgba(46, 204, 113, 0.4);
-      background: rgba(46, 204, 113, 0.06);
+      border-color: rgba(46, 204, 113, 0.45);
+      background: rgba(46, 204, 113, 0.08);
     }
+
     .panchang-item.highlight-caution {
-      border-color: rgba(231, 76, 60, 0.4);
-      background: rgba(231, 76, 60, 0.06);
+      border-color: rgba(231, 76, 60, 0.45);
+      background: rgba(231, 76, 60, 0.08);
     }
+
+    .panchang-item.highlight-fest {
+      border-color: rgba(255, 209, 102, 0.7);
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%);
+      grid-column: 1 / -1;
+    }
+
     .panchang-label {
       font-size: 0.88rem;
       color: rgba(255, 209, 102, 0.85);
       font-weight: 600;
     }
+
     .panchang-val {
       font-size: 1.15rem;
       color: #fff;
       font-weight: 700;
     }
+
     .panchang-sub {
-      font-size: 0.85rem;
-      color: rgba(237, 227, 200, 0.7);
+      font-size: 0.84rem;
+      color: rgba(237, 227, 200, 0.75);
     }
-    .panchang-links-box {
-      text-align: center;
-      margin-top: 30px;
+
+    /* MONTHLY CALENDAR SECTION */
+    .calendar-month-box {
+      background: rgba(22, 10, 5, 0.85);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 24px;
+      padding: 26px 20px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+      margin-bottom: 35px;
     }
-    .panchang-full-btn {
-      display: inline-flex;
+
+    .month-nav-bar {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, #d4af37, #ffd166);
-      color: #120703;
-      padding: 12px 28px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 209, 102, 0.25);
+      flex-wrap: wrap;
     }
-    .panchang-full-btn:hover {
+
+    .month-nav-title {
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+      font-weight: 700;
+      color: #ffd166;
+      text-align: center;
+      flex: 1;
+    }
+
+    .month-nav-btn {
+      background: rgba(255, 209, 102, 0.15);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      color: #ffd166;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .month-nav-btn:hover {
+      background: #ffd166;
+      color: #120703;
+      transform: scale(1.05);
+    }
+
+    .cal-grid-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .cal-day-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #ffd166;
+      padding: 8px 4px;
+      background: rgba(255, 209, 102, 0.08);
+      border-radius: 8px;
+    }
+
+    .cal-grid-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .cal-day-cell {
+      min-height: 90px;
+      background: rgba(36, 18, 8, 0.7);
+      border: 1px solid rgba(255, 209, 102, 0.2);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .cal-day-cell:hover {
+      transform: translateY(-3px);
+      border-color: #ffd166;
+      background: rgba(54, 26, 12, 0.85);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .cal-day-cell.is-today {
+      border: 2px solid #ffd166;
+      background: rgba(80, 42, 18, 0.9);
+      box-shadow: 0 0 16px rgba(255, 209, 102, 0.4);
+    }
+
+    .cal-day-cell.empty-cell {
+      background: transparent;
+      border: none;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .cell-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .cell-date-num {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .cal-day-cell.is-today .cell-date-num {
+      color: #ffd166;
+    }
+
+    .cell-tithi {
+      font-size: 0.72rem;
+      color: #EDE3C8;
+      opacity: 0.9;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    .cell-fest-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #120703;
+      background: #ffd166;
+      border-radius: 6px;
+      padding: 2px 4px;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* FESTIVALS LIST SECTION */
+    .festivals-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .fest-card {
+      background: rgba(36, 18, 8, 0.75);
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .fest-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 209, 102, 0.45);
+      border-color: #ffd166;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .fest-card-badge {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .fest-card-info h4 {
+      color: #ffd166;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .fest-card-info p {
+      color: #EDE3C8;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    /* DAY DETAIL INSPECTOR MODAL */
+    .day-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .day-modal.show {
+      display: flex;
+    }
+
+    .day-modal-box {
+      background: linear-gradient(145deg, #240f06 0%, #120703 100%);
+      border: 1.5px solid #ffd166;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px 24px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 209, 102, 0.25);
+      position: relative;
+    }
+
+    .day-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      font-size: 1.6rem;
+      color: #ffd166;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-modal-title {
+      font-size: 1.35rem;
+      color: #ffd166;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .day-modal-sub {
+      font-size: 0.95rem;
+      color: #EDE3C8;
+      text-align: center;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .day-modal-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .day-modal-details-grid {
+        grid-template-columns: 1fr;
+      }
+      .cal-day-cell {
+        min-height: 70px;
+        padding: 5px;
+      }
+      .cell-date-num {
+        font-size: 0.95rem;
+      }
+      .cell-tithi {
+        font-size: 0.65rem;
+      }
     }
   </style>
 </head>
-<body>
+<body data-en-title="Panchangam & Calendar - Sannivesham">
 
   <div class="home-bg"></div>
 
@@ -191,8 +511,8 @@
         </div>
       </div>
     </div>
-    <h1 class="loader-title">&#3128;&#3112;&#3149;&#3112;&#3135;&#3125;&#3143;&#3126;&#3074;</h1>
-    <p class="loader-tagline">&#10024; &#3128;&#3074;&#3128;&#3149;&#3093;&#3139;&#3108;&#3135; &bull; &#3128;&#3074;&#3114;&#3149;&#3120;&#3110;&#3134;&#3119;&#3074; &bull; &#3128;&#3074;&#3117;&#3134;&#3127;&#3107; &#10024;</p>
+    <h1 class="loader-title">సన్నివేశం</h1>
+    <p class="loader-tagline">✨ సంస్కృతి • సంప్రదాయం • సంభాషణ ✨</p>
     <div class="loader-pearls">
       <span></span>
       <span></span>
@@ -220,110 +540,385 @@
   </script>
 
   <nav class="glass-navbar">
-    <a href="../index.html#categories">← వెనుకకు</a>
-    <a href="../index.html">ప్రారంభం</a>
-    <a href="./">పంచాంగం</a>
+    <div class="nav-links">
+      <a href="../index.html#categories" data-en="← Back">← వెనుకకు</a>
+      <a href="../index.html" data-en="Home">ప్రారంభం</a>
+      <a href="./" data-en="Panchangam">పంచాంగం</a>
+    </div>
+    <span class="nav-divider"></span>
+    <div class="nav-actions">
+      <button id="themeToggleBtn" class="nav-action-btn theme-btn" title="Choose Theme">🎨</button>
+      <button id="langToggleBtn" class="nav-action-btn lang-btn" title="View in English">EN</button>
+    </div>
   </nav>
 
   <main class="panchang-page">
     <header class="panchang-hero">
-      <h1>🗓️ నిత్య పంచాంగం</h1>
-      <p>తెలుగు కాలమానం ప్రకారం నేటి తిథి, వారం, నక్షత్రం మరియు శుభాశుభ ముహూర్త వివరాలు</p>
+      <h1 data-en="🗓️ Panchangam & Cultural Calendar">🗓️ నిత్య పంచాంగం & క్యాలెండర్</h1>
+      <p data-en="Astronomically accurate Drik Panchangam with daily Tithi, Nakshatra, Rahu Kalam, auspicious Muhurthams, and complete interactive monthly calendar.">
+        దృక్ సిద్ధాంతం ప్రకారం నేటి తిథి, వారం, నక్షత్రం, శుభాశుభ ముహూర్తములు మరియు సంపూర్ణ ఇంటరాక్టివ్ మాస క్యాలెండర్
+      </p>
     </header>
 
-    <div class="panchang-card">
-      <div class="panchang-header">
-        <div class="panchang-year" id="panchangYear">శ్రీ క్రోధి నామ సంవత్సరం</div>
-        <div class="panchang-today-date" id="panchangFullDate">ఉత్తరాయణం • శిశిర ఋతువు</div>
-      </div>
-
-      <div class="panchang-grid">
-        <div class="panchang-item">
-          <span class="panchang-label">📅 నేటి తిథి</span>
-          <span class="panchang-val" id="panchangTithi">బహుళ పక్షం</span>
-          <span class="panchang-sub">సూర్యోదయం నుండి మధ్యాహ్నం వరకు</span>
-        </div>
-
-        <div class="panchang-item">
-          <span class="panchang-label">⭐ నక్షత్రం</span>
-          <span class="panchang-val" id="panchangNakshatra">రోహిణి / మృగశిర</span>
-          <span class="panchang-sub">పవిత్ర నక్షత్ర సంచారం</span>
-        </div>
-
-        <div class="panchang-item">
-          <span class="panchang-label">☀️ సూర్యోదయం & సూర్యాస్తమయం</span>
-          <span class="panchang-val">ఉదయం 06:12 • సాయంత్రం 06:22</span>
-          <span class="panchang-sub">భారతీయ ప్రామాణిక సమయం (IST)</span>
-        </div>
-
-        <div class="panchang-item highlight-good">
-          <span class="panchang-label">✨ అమృత ఘడియలు</span>
-          <span class="panchang-val">ఉదయం 08:35 - 10:10</span>
-          <span class="panchang-sub">సర్వ కార్య సిద్ధి ప్రదం</span>
-        </div>
-
-        <div class="panchang-item highlight-good">
-          <span class="panchang-label">🪔 అభిజిత్ ముహూర్తం</span>
-          <span class="panchang-val">మధ్యాహ్నం 11:55 - 12:44</span>
-          <span class="panchang-sub">శుభ కార్యములకు ఉత్తమ సమయం</span>
-        </div>
-
-        <div class="panchang-item highlight-caution">
-          <span class="panchang-label">⚠️ రాహుకాలం</span>
-          <span class="panchang-val" id="panchangRahu">సాయంత్రం 04:30 - 06:00</span>
-          <span class="panchang-sub">వర్జ్య సమయం</span>
-        </div>
-
-        <div class="panchang-item highlight-caution">
-          <span class="panchang-label">⏳ యమగండం</span>
-          <span class="panchang-val">మధ్యాహ్నం 12:00 - 01:30</span>
-          <span class="panchang-sub">వర్జ్య సమయం</span>
-        </div>
-
-        <div class="panchang-item">
-          <span class="panchang-label">🕉️ కరణం & యోగం</span>
-          <span class="panchang-val">బాలవ • సిద్ధ యోగం</span>
-          <span class="panchang-sub">దైవ చింతనకు శ్రేష్టం</span>
-        </div>
-      </div>
-
-      <div class="panchang-links-box">
-        <a href="calender/" class="panchang-full-btn">
-          సంపూర్ణ పంచాంగ క్యాలెండర్ వీక్షించండి ➜
-        </a>
-      </div>
+    <!-- VIEW MODE SWITCHER TABS -->
+    <div class="cal-tabs-container">
+      <button id="tabToday" class="cal-tab-btn active" data-en="☀️ Today's Panchangam">
+        ☀️ నేటి పంచాంగం
+      </button>
+      <button id="tabMonth" class="cal-tab-btn" data-en="🗓️ Monthly Calendar">
+        🗓️ సంపూర్ణ మాస క్యాలెండర్
+      </button>
+      <button id="tabFestivals" class="cal-tab-btn" data-en="🎉 Monthly Festivals">
+        🎉 ఈ నెల పండుగలు
+      </button>
     </div>
+
+    <!-- TAB 1: TODAY'S PANCHANG CARD -->
+    <section id="sectionToday" class="panchang-card">
+      <div class="panchang-header">
+        <div class="panchang-year" id="todaySamvatsara">శ్రీ క్రోధి నామ సంవత్సరం</div>
+        <div class="panchang-today-date" id="todayFullDate">లోడ్ అవుతోంది...</div>
+      </div>
+
+      <div class="panchang-grid" id="todayGrid">
+        <!-- Dynamically Populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- TAB 2: MONTHLY INTERACTIVE CALENDAR -->
+    <section id="sectionMonth" class="calendar-month-box" style="display:none;">
+      <div class="month-nav-bar">
+        <button id="prevMonthBtn" class="month-nav-btn" data-en="◀ Prev">◀ మునుపటి నెల</button>
+        <div class="month-nav-title" id="monthNavTitle">లోడ్ అవుతోంది...</div>
+        <div style="display:flex;gap:8px;">
+          <button id="todayJumpBtn" class="month-nav-btn" data-en="Today">ఈ రోజు</button>
+          <button id="nextMonthBtn" class="month-nav-btn" data-en="Next ▶">తదుపరి నెల ▶</button>
+        </div>
+      </div>
+
+      <div class="cal-grid-header">
+        <div class="cal-day-name" data-en="Sun">ఆది</div>
+        <div class="cal-day-name" data-en="Mon">సోమ</div>
+        <div class="cal-day-name" data-en="Tue">మంగళ</div>
+        <div class="cal-day-name" data-en="Wed">బుధ</div>
+        <div class="cal-day-name" data-en="Thu">గురు</div>
+        <div class="cal-day-name" data-en="Fri">శుక్ర</div>
+        <div class="cal-day-name" data-en="Sat">శని</div>
+      </div>
+
+      <div class="cal-grid-days" id="calendarDaysGrid">
+        <!-- Dynamically generated days -->
+      </div>
+    </section>
+
+    <!-- TAB 3: FESTIVALS OF THE MONTH -->
+    <section id="sectionFestivals" class="calendar-month-box" style="display:none;">
+      <div class="panchang-header">
+        <div class="panchang-year" id="festivalsSectionTitle">🎉 పండుగలు & విశేషాలు</div>
+        <div class="panchang-today-date" data-en="Auspicious festivals, fasts, and cultural occasions in this month">
+          ఈ మాసంలోని పవిత్ర పర్వదినాలు, ఉపవాసాలు మరియు వ్రతాల వివరాలు
+        </div>
+      </div>
+
+      <div class="festivals-list-grid" id="festivalsListGrid">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
   </main>
 
+  <!-- DAY DETAIL INSPECTOR MODAL -->
+  <div id="dayDetailModal" class="day-modal">
+    <div class="day-modal-box">
+      <button class="day-modal-close" id="modalCloseBtn">&times;</button>
+      <div class="day-modal-title" id="modalDayTitle">వివరాలు</div>
+      <div class="day-modal-sub" id="modalDaySub">పంచాంగ వివరాలు</div>
+
+      <div class="day-modal-details-grid" id="modalDetailsGrid">
+        <!-- Populated on click -->
+      </div>
+    </div>
+  </div>
+
   <footer class="simple-footer">
-    <p class="footer-quote">✨ కాలాయ తస్మై నమః • కాలమే భగవత్ స్వరూపం ✨</p>
+    <p class="footer-quote" data-en="✨ Time is Divine • May Every Moment Bring Peace and Auspiciousness ✨">
+      ✨ కాలాయ తస్మై నమః • కాలమే భగవత్ స్వరూపం ✨
+    </p>
     <p>© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="../script.js?v=2"></script>
-  <script>
-    (function() {
-      const now = new Date();
-      const days = ["ఆదివారం (భానువాసరే)", "సోమవారం (ఇందువాసరే)", "మంగళవారం (భౌమవాసరే)", "బుధవారం (సౌమ్యవాసరే)", "గురువారం (బృహస్పతివాసరే)", "శుక్రవారం (భృగువాసరే)", "శనివారం (స్థిరవాసరే)"];
-      const months = ["జనవరి", "ఫిబ్రవరి", "మార్చి", "ఏప్రిల్", "మే", "జూన్", "జూలై", "ఆగస్టు", "సెప్టెంబర్", "అక్టోబర్", "నవంబర్", "డిసెంబర్"];
-      
-      const dayName = days[now.getDay()];
-      const formatted = ${now.getDate()}   — ;
-      const el = document.getElementById("panchangFullDate");
-      if (el) el.innerText = formatted;
+  <script src="../panchang-engine.js"></script>
+  <script src="../i18n.js"></script>
 
-      const rahuTimes = [
-        "సాయంత్రం 04:30 - 06:00", // Sun
-        "ఉదయం 07:30 - 09:00",     // Mon
-        "మధ్యాహ్నం 03:00 - 04:30", // Tue
-        "మధ్యాహ్నం 12:00 - 01:30", // Wed
-        "మధ్యాహ్నం 01:30 - 03:00", // Thu
-        "ఉదయం 10:30 - 12:00",     // Fri
-        "ఉదయం 09:00 - 10:30"      // Sat
-      ];
-      const rahuEl = document.getElementById("panchangRahu");
-      if (rahuEl) rahuEl.innerText = rahuTimes[now.getDay()];
+  <script>
+    (function () {
+      "use strict";
+
+      const P = window.SanniveshamPanchang;
+      if (!P) return;
+
+      const now = new Date();
+      let activeYear = now.getFullYear();
+      let activeMonth = now.getMonth() + 1; // 1-12
+
+      // DOM Elements
+      const tabToday = document.getElementById("tabToday");
+      const tabMonth = document.getElementById("tabMonth");
+      const tabFestivals = document.getElementById("tabFestivals");
+
+      const sectionToday = document.getElementById("sectionToday");
+      const sectionMonth = document.getElementById("sectionMonth");
+      const sectionFestivals = document.getElementById("sectionFestivals");
+
+      const prevMonthBtn = document.getElementById("prevMonthBtn");
+      const nextMonthBtn = document.getElementById("nextMonthBtn");
+      const todayJumpBtn = document.getElementById("todayJumpBtn");
+
+      const dayModal = document.getElementById("dayDetailModal");
+      const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+      // Tab Switching
+      function setTab(activeTab) {
+        tabToday.classList.remove("active");
+        tabMonth.classList.remove("active");
+        tabFestivals.classList.remove("active");
+
+        sectionToday.style.display = "none";
+        sectionMonth.style.display = "none";
+        sectionFestivals.style.display = "none";
+
+        if (activeTab === "today") {
+          tabToday.classList.add("active");
+          sectionToday.style.display = "block";
+        } else if (activeTab === "month") {
+          tabMonth.classList.add("active");
+          sectionMonth.style.display = "block";
+          renderMonthCalendar(activeYear, activeMonth);
+        } else if (activeTab === "festivals") {
+          tabFestivals.classList.add("active");
+          sectionFestivals.style.display = "block";
+          renderFestivalsTab(activeYear, activeMonth);
+        }
+      }
+
+      tabToday.addEventListener("click", () => setTab("today"));
+      tabMonth.addEventListener("click", () => setTab("month"));
+      tabFestivals.addEventListener("click", () => setTab("festivals"));
+
+      // Render Today's Panchangam
+      function renderTodayPanchang() {
+        const p = P.getPanchang(now);
+        const isEn = localStorage.getItem("sannivesham_lang") === "en";
+
+        document.getElementById("todaySamvatsara").innerText = isEn ? p.samvatsaramEn : p.samvatsaramTe;
+        document.getElementById("todayFullDate").innerText = `${p.gregDateTe} • ${p.dayNameTe} • ${p.ayanamTe} (${p.rutuTe})`;
+
+        const grid = document.getElementById("todayGrid");
+        grid.innerHTML = "";
+
+        // Festival Banner if today has any
+        if (p.festivals.length > 0) {
+          const festNames = p.festivals.map(f => isEn ? f.titleEn : f.titleTe).join(" • ");
+          grid.innerHTML += `
+            <div class="panchang-item highlight-fest">
+              <span class="panchang-label">🌟 నేటి విశేష పర్వదినం / వ్రతం</span>
+              <span class="panchang-val" style="color:#ffd166;font-size:1.25rem;">${festNames}</span>
+              <span class="panchang-sub">పవిత్ర దైవారాధనకు సర్వ శ్రేష్ఠ దినము</span>
+            </div>
+          `;
+        }
+
+        const items = [
+          { label: "📅 నేటి తిథి", val: p.tithiFullTe, sub: "సూర్యోదయ తిథి ఆధారంగా" },
+          { label: "⭐ నక్షత్రం", val: p.nakshatraTe, sub: "చంద్ర నక్షత్ర సంచారం" },
+          { label: "🌕 తెలుగు మాసం & పక్షం", val: `${p.masamTe} మాసం • ${p.pakshamTe}`, sub: "అమాంత కాలమానం" },
+          { label: "☀️ సూర్యోదయం & సూర్యాస్తమయం", val: `${p.sunrise} • ${p.sunset}`, sub: "భారతీయ ప్రామాణిక సమయం (IST)" },
+          { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu, sub: "సర్వ కార్య సిద్ధి ప్రదం", good: true },
+          { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham, sub: "శుభ కార్యములకు ఉత్తమ సమయం", good: true },
+          { label: "⚠️ రాహుకాలం", val: p.rahuKalam, sub: "వర్జ్య సమయం", caution: true },
+          { label: "⏳ యమగండం", val: p.yamagandam, sub: "వర్జ్య సమయం", caution: true },
+          { label: "🛑 గుళిక కాలం", val: p.gulikaKalam, sub: "సాధారణ సమయం" },
+          { label: "🚫 దుర్ముహూర్తం & వర్జ్యం", val: `${p.durmuhurtham}`, sub: `వర్జ్యం: ${p.varjyam}`, caution: true },
+          { label: "🕉️ యోగం & కరణం", val: `${p.yogaTe} • ${p.karanaTe}`, sub: "దైవ చింతనకు శ్రేష్టం" }
+        ];
+
+        items.forEach(item => {
+          const div = document.createElement("div");
+          div.className = `panchang-item ${item.good ? "highlight-good" : ""} ${item.caution ? "highlight-caution" : ""}`;
+          div.innerHTML = `
+            <span class="panchang-label">${item.label}</span>
+            <span class="panchang-val">${item.val}</span>
+            <span class="panchang-sub">${item.sub}</span>
+          `;
+          grid.appendChild(div);
+        });
+      }
+
+      // Render Month Calendar
+      function renderMonthCalendar(year, month) {
+        const monthData = P.getMonthPanchang(year, month);
+        const titleEl = document.getElementById("monthNavTitle");
+        const daysGrid = document.getElementById("calendarDaysGrid");
+        daysGrid.innerHTML = "";
+
+        // Calculate active Telugu Masa representation for the month
+        const firstDayPanchang = monthData.days[0];
+        const lastDayPanchang = monthData.days[monthData.days.length - 1];
+        const masamString = firstDayPanchang.masamTe === lastDayPanchang.masamTe
+          ? `${firstDayPanchang.masamTe} మాసం`
+          : `${firstDayPanchang.masamTe} - ${lastDayPanchang.masamTe} మాసములు`;
+
+        titleEl.innerText = `${monthData.monthNameTe} ${year} • ${masamString}`;
+
+        // Empty cells before first day of month
+        for (let i = 0; i < monthData.firstDayIndex; i++) {
+          const emptyDiv = document.createElement("div");
+          emptyDiv.className = "cal-day-cell empty-cell";
+          daysGrid.appendChild(emptyDiv);
+        }
+
+        // Render each day cell
+        monthData.days.forEach(day => {
+          const isToday = (day.year === now.getFullYear() && day.month === now.getMonth() + 1 && day.dateNum === now.getDate());
+          const cell = document.createElement("div");
+          cell.className = `cal-day-cell ${isToday ? "is-today" : ""}`;
+
+          let festHtml = "";
+          if (day.festivals.length > 0) {
+            festHtml = `<span class="cell-fest-badge" title="${day.festivals[0].titleTe}">${day.festivals[0].badge}</span>`;
+          }
+
+          cell.innerHTML = `
+            <div class="cell-top">
+              <span class="cell-date-num">${day.dateNum}</span>
+              ${day.tithiIndex === 15 ? "🌕" : day.tithiIndex === 30 ? "🌑" : ""}
+            </div>
+            <div class="cell-tithi">${day.tithiNameTe}</div>
+            ${festHtml}
+          `;
+
+          cell.addEventListener("click", () => openDayDetailModal(day));
+          daysGrid.appendChild(cell);
+        });
+      }
+
+      // Render Festivals Tab for Active Month
+      function renderFestivalsTab(year, month) {
+        const monthData = P.getMonthPanchang(year, month);
+        const listGrid = document.getElementById("festivalsListGrid");
+        listGrid.innerHTML = "";
+
+        const allFests = [];
+        monthData.days.forEach(day => {
+          if (day.festivals.length > 0) {
+            day.festivals.forEach(f => {
+              allFests.push({ ...f, day });
+            });
+          }
+        });
+
+        if (allFests.length === 0) {
+          listGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1;color:#ffd166;padding:20px;">ఈ మాసంలో సాధారణ పర్వదినాలు మాత్రమే ఉన్నాయి.</p>`;
+          return;
+        }
+
+        allFests.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "fest-card";
+          card.innerHTML = `
+            <div class="fest-card-badge">${item.badge.split(" ")[0]}</div>
+            <div class="fest-card-info">
+              <h4>${item.titleTe}</h4>
+              <p>${item.day.gregDateTe} (${item.day.dayNameTe.split(" ")[0]}) • ${item.day.tithiFullTe}</p>
+            </div>
+          `;
+          card.addEventListener("click", () => openDayDetailModal(item.day));
+          listGrid.appendChild(card);
+        });
+      }
+
+      // Day Detail Modal
+      function openDayDetailModal(p) {
+        document.getElementById("modalDayTitle").innerText = `${p.gregDateTe} • ${p.dayNameTe}`;
+        document.getElementById("modalDaySub").innerText = `${p.samvatsaramTe} • ${p.masamTe} మాసం • ${p.ayanamTe}`;
+
+        const grid = document.getElementById("modalDetailsGrid");
+        grid.innerHTML = "";
+
+        if (p.festivals.length > 0) {
+          const festNames = p.festivals.map(f => f.titleTe).join(" • ");
+          grid.innerHTML += `
+            <div class="panchang-item highlight-fest" style="grid-column:1/-1;">
+              <span class="panchang-label">🌟 పర్వదిన విశేషం</span>
+              <span class="panchang-val" style="color:#ffd166;">${festNames}</span>
+            </div>
+          `;
+        }
+
+        const items = [
+          { label: "📅 తిథి & పక్షం", val: `${p.pakshamTe} ${p.tithiNameTe}` },
+          { label: "⭐ నక్షత్రం", val: p.nakshatraTe },
+          { label: "☀️ సూర్యోదయం & అస్తమయం", val: `${p.sunrise} - ${p.sunset}` },
+          { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham },
+          { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu },
+          { label: "⚠️ రాహుకాలం", val: p.rahuKalam },
+          { label: "⏳ యమగండం", val: p.yamagandam },
+          { label: "🚫 దుర్ముహూర్తం", val: p.durmuhurtham },
+          { label: "🛑 వర్జ్యం", val: p.varjyam },
+          { label: "🕉️ యోగం & కరణం", val: `${p.yogaTe} • ${p.karanaTe}` }
+        ];
+
+        items.forEach(i => {
+          grid.innerHTML += `
+            <div class="panchang-item">
+              <span class="panchang-label">${i.label}</span>
+              <span class="panchang-val" style="font-size:1.02rem;">${i.val}</span>
+            </div>
+          `;
+        });
+
+        dayModal.classList.add("show");
+      }
+
+      modalCloseBtn.addEventListener("click", () => dayModal.classList.remove("show"));
+      dayModal.addEventListener("click", (e) => {
+        if (e.target === dayModal) dayModal.classList.remove("show");
+      });
+
+      // Month Navigation Controls
+      prevMonthBtn.addEventListener("click", () => {
+        activeMonth--;
+        if (activeMonth < 1) {
+          activeMonth = 12;
+          activeYear--;
+        }
+        renderMonthCalendar(activeYear, activeMonth);
+      });
+
+      nextMonthBtn.addEventListener("click", () => {
+        activeMonth++;
+        if (activeMonth > 12) {
+          activeMonth = 1;
+          activeYear++;
+        }
+        renderMonthCalendar(activeYear, activeMonth);
+      });
+
+      todayJumpBtn.addEventListener("click", () => {
+        activeYear = now.getFullYear();
+        activeMonth = now.getMonth() + 1;
+        renderMonthCalendar(activeYear, activeMonth);
+      });
+
+      // Initialize
+      renderTodayPanchang();
+      renderMonthCalendar(activeYear, activeMonth);
+
+      // Deep link support: #monthlyCalendar
+      if (window.location.hash === "#monthlyCalendar" || window.location.hash === "#calendar") {
+        setTab("month");
+      }
     })();
   </script>
+
 </body>
 </html>

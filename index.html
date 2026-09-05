@@ -889,6 +889,7 @@
 
   <script src="script.js?v=2"></script>
   <script src="i18n.js"></script>
+  <script src="panchang-engine.js"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
@@ -1480,39 +1481,24 @@
         if (!dateEl || !detailsEl) return;
 
         const now = new Date();
-        const daysTe = ["ఆదివారం", "సోమవారం", "మంగళవారం", "బుధవారం", "గురువారం", "శుక్రవారం", "శనివారం"];
-        const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const monthsTe = ["జనవరి", "ఫిబ్రవరి", "మార్చి", "ఏప్రిల్", "మే", "జూన్", "జూలై", "ఆగస్టు", "సెప్టెంబర్", "అక్టోబర్", "నవంబర్", "డిసెంబర్"];
-        const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        if (window.SanniveshamPanchang) {
+          const p = window.SanniveshamPanchang.getPanchang(now);
+          const festBadge = p.festivals.length > 0 ? ` • ${p.festivals[0].badge}` : "";
+          const teTitle = `నేటి పంచాంగం • ${p.gregDateTe} (${p.dayNameShortTe})`;
+          const enTitle = `Today's Panchangam • ${p.gregDateEn} (${p.dayNameShortEn})`;
 
-        const dayIdx = now.getDay();
-        const dateNum = now.getDate();
-        const monthIdx = now.getMonth();
+          const teDetails = `${p.masamTe} మాసం • ${p.tithiFullTe} • ${p.nakshatraTe} • రాహుకాలం: ${p.rahuKalam}${festBadge} ➜`;
+          const enDetails = `${p.masamEn} • ${p.tithiFullEn} • ${p.nakshatraEn} • Rahu: ${p.rahuKalam} ➜`;
 
-        const rahuTimes = [
-          "04:30 - 06:00 PM",
-          "07:30 - 09:00 AM",
-          "03:00 - 04:30 PM",
-          "12:00 - 01:30 PM",
-          "01:30 - 03:00 PM",
-          "10:30 - 12:00 PM",
-          "09:00 - 10:30 AM"
-        ];
+          dateEl.dataset.en = enTitle;
+          dateEl.dataset.teOriginal = teTitle;
+          detailsEl.dataset.en = enDetails;
+          detailsEl.dataset.teOriginal = teDetails;
 
-        const teTitle = `నేటి పంచాంగం • ${dateNum} ${monthsTe[monthIdx]} (${daysTe[dayIdx]})`;
-        const enTitle = `Today's Panchangam • ${monthsEn[monthIdx]} ${dateNum} (${daysEn[dayIdx]})`;
-
-        const teDetails = `రాహుకాలం: ${rahuTimes[dayIdx]} • అభిజిత్ ముహూర్తం: 11:55 AM - 12:44 PM • నేటి విశేషాలు చూడండి ➜`;
-        const enDetails = `Rahu Kalam: ${rahuTimes[dayIdx]} • Abhijit Muhurtham: 11:55 AM - 12:44 PM • Tap for details ➜`;
-
-        dateEl.dataset.en = enTitle;
-        dateEl.dataset.teOriginal = teTitle;
-        detailsEl.dataset.en = enDetails;
-        detailsEl.dataset.teOriginal = teDetails;
-
-        const isEn = localStorage.getItem("sannivesham_lang") === "en";
-        dateEl.innerText = isEn ? enTitle : teTitle;
-        detailsEl.innerText = isEn ? enDetails : teDetails;
+          const isEn = localStorage.getItem("sannivesham_lang") === "en";
+          dateEl.innerText = isEn ? enTitle : teTitle;
+          detailsEl.innerText = isEn ? enDetails : teDetails;
+        }
       }
 
       /* --- 6. 3D WISDOM FLIP CARD ROTATION --- */
