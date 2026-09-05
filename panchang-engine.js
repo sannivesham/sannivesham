@@ -371,11 +371,11 @@
     const nakEndHour = findNakshatraEndTime(year, month, dateNum, targetNakAngle);
     const nakEndObj = formatPeriodTime(nakEndHour);
     const nextNakIdx = (nakshatraIndex + 1) % 27;
-    const nextNakNameTe = NAKSHATRAS_TE[nextNakIdx];
-    const nextNakNameEn = NAKSHATRAS_EN[nextNakIdx];
+    const nextNakshatraNameTe = NAKSHATRAS_TE[nextNakIdx];
+    const nextNakshatraNameEn = NAKSHATRAS_EN[nextNakIdx];
 
-    const nakshatraTimingTe = `${nakshatraTe} ${nakEndObj.timeTe} వరకు, తదుపరి ${nextNakNameTe}`;
-    const nakshatraTimingEn = `${nakshatraEn} up to ${nakEndObj.timeEn}, thereafter ${nextNakNameEn}`;
+    const nakshatraTimingTe = `${nakshatraTe} ${nakEndObj.timeTe} వరకు, తదుపరి ${nextNakshatraNameTe}`;
+    const nakshatraTimingEn = `${nakshatraEn} up to ${nakEndObj.timeEn}, thereafter ${nextNakshatraNameEn}`;
 
     // 3. Telugu Lunar Month (Amanta Chandramana)
     let lunarMonthIndex;
