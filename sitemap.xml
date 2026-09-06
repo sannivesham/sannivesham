@@ -70,9 +70,9 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/pooja-mandir/</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://sannivesham.com/festival-counter/</loc>
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
@@ -140,8 +140,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sannivesham.com/pooja-mandir/pooja-room.html</loc>
-    <lastmod>2026-09-04</lastmod>
+    <loc>https://sannivesham.com/festival-counter/pooja-room.html</loc>
+    <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

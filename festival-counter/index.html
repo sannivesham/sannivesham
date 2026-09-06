@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>పండుగల కౌంటర్ (Festival Counter) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="తెలుగు సంవత్సర పర్వదినాలు, వ్రతాలు, తిథులు మరియు లైవ్ కౌంట్‌డౌన్. ఉగాది నుండి వచ్చే ఉగాది వరకు సంపూర్ణ పండుగల క్యాలెండర్.">
+  <link rel="canonical" href="https://sannivesham.com/festival-counter/">
+
+  <meta property="og:title" content="పండుగల కౌంటర్ (Festival Counter) - సన్నివేశం">
+  <meta property="og:description" content="ఉగాది నుండి వచ్చే ఉగాది వరకు సంపూర్ణ తెలుగు పండుగలు మరియు లైవ్ కౌంట్‌డౌన్.">
+  <meta property="og:image" content="https://sannivesham.com/images/pooja-room.png">
+  <meta property="og:url" content="https://sannivesham.com/festival-counter/">
+  <meta property="og:type" content="website">
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "పండుగల కౌంటర్ (Festival Counter) - సన్నివేశం",
+    "description": "ఉగాది నుండి వచ్చే ఉగాది వరకు సంపూర్ణ తెలుగు పండుగల లైవ్ కౌంట్‌డౌన్",
+    "url": "https://sannivesham.com/festival-counter/"
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Theme Script -->
+  <script src="../theme.js?v=20260906"></script>
+  <link rel="stylesheet" href="../style.css?v=20260906">
+
+  <style>
+    /* =========================================
+       PAGE RESETS & CSS VARIABLES
+    ========================================= */
+    :root {
+      --fc-gold: #ffd166;
+      --fc-gold-glow: rgba(255, 209, 102, 0.35);
+      --fc-accent: #ff9f1c;
+      --fc-bg-dark: #0f0a06;
+      --fc-card-bg: rgba(26, 17, 11, 0.78);
+      --fc-card-border: rgba(255, 209, 102, 0.22);
+      --fc-text-main: #fbf1d8;
+      --fc-text-muted: #d4c0a5;
+      --fc-success: #2ec4b6;
+      --fc-today-glow: rgba(255, 159, 28, 0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Noto Serif Telugu", serif;
+      color: var(--fc-text-main);
+      background-color: var(--fc-bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(255, 170, 0, 0.14), transparent 45%),
+        radial-gradient(circle at 10% 40%, rgba(218, 112, 214, 0.06), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(255, 140, 0, 0.08), transparent 40%),
+        linear-gradient(180deg, #140b05 0%, #0c0805 100%);
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center top;
+      overflow-x: hidden;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* Ambient Particle Canvas */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+    }
+
+    .fc-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    /* =========================================
+       TOP NAVIGATION BAR
+    ========================================= */
+    .fc-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: rgba(25, 16, 10, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 209, 102, 0.18);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .fc-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 999px;
+      color: #ffd166;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .fc-back-btn:hover {
+      background: rgba(255, 209, 102, 0.24);
+      transform: translateX(-3px);
+      box-shadow: 0 0 14px rgba(255, 209, 102, 0.25);
+    }
+
+    .fc-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .fc-nav-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(255, 209, 102, 0.4);
+    }
+
+    .fc-nav-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffd166;
+      letter-spacing: 0.5px;
+    }
+
+    .fc-theme-btn {
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      color: #ffd166;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .fc-theme-btn:hover {
+      background: rgba(255, 209, 102, 0.22);
+      transform: scale(1.04);
+    }
+
+    /* =========================================
+       HERO HEADER
+    ========================================= */
+    .fc-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .fc-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      background: rgba(255, 159, 28, 0.14);
+      border: 1px solid rgba(255, 159, 28, 0.35);
+      color: #ffa500;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      box-shadow: 0 0 18px rgba(255, 159, 28, 0.18);
+    }
+
+    .fc-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffa500;
+      box-shadow: 0 0 10px #ffa500;
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    .fc-main-title {
+      font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+      font-weight: 800;
+      color: #ffd166;
+      letter-spacing: 1px;
+      text-shadow: 0 0 28px rgba(255, 209, 102, 0.25);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .fc-subtitle {
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      color: var(--fc-text-muted);
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       SPOTLIGHT HERO CARD (Next / Today Festival)
+    ========================================= */
+    .fc-spotlight {
+      background: linear-gradient(135deg, rgba(46, 25, 14, 0.9) 0%, rgba(24, 13, 7, 0.92) 100%);
+      border: 1.5px solid rgba(255, 209, 102, 0.4);
+      border-radius: 28px;
+      padding: 34px 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55), 0 0 35px rgba(255, 209, 102, 0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .fc-spotlight::before {
+      content: "";
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255, 159, 28, 0.22), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .fc-spotlight-left {
+      position: relative;
+      z-index: 2;
+    }
+
+    .fc-spotlight-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(255, 209, 102, 0.16);
+      border: 1px solid rgba(255, 209, 102, 0.45);
+      border-radius: 999px;
+      font-size: 0.86rem;
+      color: #ffd166;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .fc-spotlight-title-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .fc-spotlight-icon {
+      font-size: 3.4rem;
+      filter: drop-shadow(0 0 16px rgba(255, 209, 102, 0.4));
+      animation: floatIcon 3.5s ease-in-out infinite;
+    }
+
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .fc-spotlight-name {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: #fff4db;
+      line-height: 1.2;
+    }
+
+    .fc-spotlight-tithi {
+      font-size: 1.15rem;
+      color: #ffd166;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .fc-spotlight-date {
+      font-size: 1rem;
+      color: var(--fc-text-muted);
+      margin-bottom: 14px;
+    }
+
+    .fc-spotlight-desc {
+      font-size: 0.98rem;
+      color: #ead5be;
+      max-width: 580px;
+      line-height: 1.6;
+    }
+
+    /* Big Countdown Clock in Spotlight */
+    .fc-spotlight-timer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .fc-time-unit {
+      background: rgba(14, 8, 4, 0.88);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 18px;
+      padding: 16px 14px;
+      min-width: 90px;
+      text-align: center;
+      box-shadow: inset 0 2px 8px rgba(255, 209, 102, 0.08), 0 6px 18px rgba(0, 0, 0, 0.45);
+      position: relative;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .fc-time-unit:hover {
+      transform: translateY(-3px);
+      border-color: #ffd166;
+    }
+
+    .fc-time-val {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(2rem, 3.8vw, 2.8rem);
+      font-weight: 800;
+      color: #ffd166;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .fc-time-lbl {
+      font-size: 0.82rem;
+      color: var(--fc-text-muted);
+      font-weight: 600;
+    }
+
+    /* Today Banner in Spotlight */
+    .fc-spotlight-today-banner {
+      background: linear-gradient(135deg, rgba(255, 159, 28, 0.25), rgba(255, 209, 102, 0.3));
+      border: 1.5px solid #ffd166;
+      border-radius: 18px;
+      padding: 24px 32px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 209, 102, 0.3);
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    .fc-spotlight-today-banner h3 {
+      font-size: 1.8rem;
+      color: #ffd166;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .fc-spotlight-today-banner p {
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    /* =========================================
+       CONTROLS: FILTER TABS & SEARCH
+    ========================================= */
+    .fc-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+      padding: 16px 20px;
+      background: rgba(26, 16, 10, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 209, 102, 0.16);
+      border-radius: 20px;
+    }
+
+    .fc-filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fc-tab-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 209, 102, 0.2);
+      color: var(--fc-text-muted);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .fc-tab-btn:hover {
+      background: rgba(255, 209, 102, 0.14);
+      color: #ffd166;
+      border-color: rgba(255, 209, 102, 0.35);
+    }
+
+    .fc-tab-btn.active {
+      background: linear-gradient(135deg, #ff9f1c, #d48b00);
+      color: #100a05;
+      font-weight: 700;
+      border-color: #ffd166;
+      box-shadow: 0 0 16px rgba(255, 159, 28, 0.4);
+    }
+
+    .fc-tab-count {
+      background: rgba(0, 0, 0, 0.35);
+      color: inherit;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .fc-tab-btn.active .fc-tab-count {
+      background: rgba(0, 0, 0, 0.22);
+      color: #100a05;
+    }
+
+    .fc-search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 400px;
+    }
+
+    .fc-search-box input {
+      width: 100%;
+      padding: 10px 18px 10px 42px;
+      background: rgba(12, 7, 4, 0.85);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .fc-search-box input:focus {
+      border-color: #ffd166;
+      box-shadow: 0 0 14px rgba(255, 209, 102, 0.25);
+    }
+
+    .fc-search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 209, 102, 0.6);
+      pointer-events: none;
+      font-size: 0.95rem;
+    }
+
+    .fc-search-clear {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* =========================================
+       FESTIVAL GRID & CARDS
+    ========================================= */
+    .fc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 22px;
+      margin-bottom: 50px;
+    }
+
+    .fc-card {
+      background: var(--fc-card-bg);
+      border: 1px solid var(--fc-card-border);
+      border-radius: 22px;
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fc-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 209, 102, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 209, 102, 0.12);
+    }
+
+    /* Card Top Info */
+    .fc-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .fc-card-icon {
+      font-size: 2.3rem;
+      line-height: 1;
+      padding: 10px;
+      background: rgba(255, 209, 102, 0.08);
+      border: 1px solid rgba(255, 209, 102, 0.2);
+      border-radius: 16px;
+      flex-shrink: 0;
+    }
+
+    .fc-card-meta {
+      flex: 1;
+    }
+
+    .fc-card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff3db;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .fc-card-tithi {
+      font-size: 0.94rem;
+      color: #ffd166;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .fc-card-date {
+      font-size: 0.86rem;
+      color: var(--fc-text-muted);
+    }
+
+    .fc-card-desc {
+      font-size: 0.9rem;
+      color: #d8c2aa;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    /* Countdown Grid Inside Card */
+    .fc-card-countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .fc-card-box {
+      background: rgba(14, 8, 4, 0.78);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 12px;
+      padding: 10px 4px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .fc-card-num {
+      font-family: "Outfit", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffd166;
+      line-height: 1.1;
+      margin-bottom: 3px;
+    }
+
+    .fc-card-label {
+      font-size: 0.74rem;
+      color: var(--fc-text-muted);
+      font-weight: 600;
+    }
+
+    /* =========================================
+       STATE 1: TODAY CARD
+    ========================================= */
+    .fc-card.is-today {
+      background: linear-gradient(145deg, rgba(50, 26, 12, 0.92) 0%, rgba(30, 15, 6, 0.94) 100%);
+      border: 2px solid #ffd166;
+      box-shadow: 0 0 28px var(--fc-today-glow), inset 0 0 16px rgba(255, 209, 102, 0.12);
+      animation: todayGlow 3s infinite ease-in-out;
+    }
+
+    @keyframes todayGlow {
+      0%, 100% { border-color: #ffd166; box-shadow: 0 0 24px rgba(255, 209, 102, 0.35); }
+      50% { border-color: #ff9f1c; box-shadow: 0 0 34px rgba(255, 159, 28, 0.55); }
+    }
+
+    .fc-today-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #ff9f1c, #ffd166);
+      color: #100a05;
+      font-weight: 800;
+      font-size: 0.84rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .fc-today-celebration {
+      background: rgba(255, 209, 102, 0.14);
+      border: 1px dashed rgba(255, 209, 102, 0.45);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      color: #ffd166;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-top: auto;
+      letter-spacing: 0.5px;
+    }
+
+    /* =========================================
+       STATE 2: COMPLETED CARD
+    ========================================= */
+    .fc-card.is-completed {
+      background: rgba(18, 12, 8, 0.55);
+      border-color: rgba(255, 255, 255, 0.08);
+      opacity: 0.85;
+    }
+
+    .fc-card.is-completed:hover {
+      opacity: 1;
+      border-color: rgba(46, 196, 182, 0.4);
+    }
+
+    .fc-completed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(46, 196, 182, 0.15);
+      border: 1px solid rgba(46, 196, 182, 0.35);
+      color: #56e2d5;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .fc-completed-box {
+      background: rgba(46, 196, 182, 0.08);
+      border: 1px solid rgba(46, 196, 182, 0.22);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: center;
+      color: #a7f3ec;
+      font-size: 0.92rem;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Empty state */
+    .fc-empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--fc-text-muted);
+      font-size: 1.15rem;
+    }
+
+    .fc-empty-state span {
+      display: block;
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+    }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    .fc-footer {
+      text-align: center;
+      padding: 34px 20px;
+      border-top: 1px solid rgba(255, 209, 102, 0.18);
+      color: var(--fc-text-muted);
+      font-size: 0.95rem;
+    }
+
+    .fc-footer a {
+      color: #ffd166;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* =========================================
+       RESPONSIVENESS
+    ========================================= */
+    @media (max-width: 900px) {
+      .fc-spotlight {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 26px 20px;
+      }
+      .fc-spotlight-timer {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .fc-wrapper {
+        padding: 16px 12px 60px;
+      }
+      .fc-navbar {
+        padding: 8px 14px;
+        margin-bottom: 24px;
+      }
+      .fc-nav-title {
+        font-size: 1.05rem;
+      }
+      .fc-back-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      .fc-theme-btn {
+        padding: 6px 10px;
+        font-size: 0.82rem;
+      }
+      .fc-time-unit {
+        min-width: 68px;
+        padding: 12px 8px;
+      }
+      .fc-time-val {
+        font-size: 1.7rem;
+      }
+      .fc-time-lbl {
+        font-size: 0.72rem;
+      }
+      .fc-controls-bar {
+        padding: 12px 14px;
+      }
+      .fc-filter-tabs {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .fc-tab-btn {
+        padding: 6px 12px;
+        font-size: 0.82rem;
+        flex: 1 1 calc(50% - 6px);
+        justify-content: center;
+      }
+      .fc-search-box {
+        max-width: 100%;
+      }
+      .fc-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating Ambient Particles Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="fc-wrapper">
+
+    <!-- Top Navigation Bar -->
+    <nav class="fc-navbar">
+      <a href="../" class="fc-back-btn">
+        <span>←</span>
+        <span>సన్నివేశం హోమ్</span>
+      </a>
+
+      <a href="../" class="fc-nav-brand">
+        <img src="../images/logo.png" alt="సన్నివేశం" class="fc-nav-logo" onerror="this.style.display='none'">
+        <span class="fc-nav-title">సన్నివేశం</span>
+      </a>
+
+      <button id="themeToggleBtn" class="fc-theme-btn" title="థీమ్ మార్చండి">
+        <span>🎨</span>
+        <span>థీమ్</span>
+      </button>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="fc-header">
+      <div class="fc-badge-pill">
+        <span class="fc-pulse-dot"></span>
+        <span>సంపూర్ణ తెలుగు సంవత్సర క్యాలెండర్ (2026 - 2027)</span>
+      </div>
+      <h1 class="fc-main-title">🪔 పండుగల కౌంటర్</h1>
+      <p class="fc-subtitle">
+        ఉగాది నుండి వచ్చే ఉగాది వరకు మన సనాతన పర్వదినాలు, వ్రతాలు, తిథులు మరియు లైవ్ కౌంట్‌డౌన్.
+      </p>
+    </header>
+
+    <!-- Spotlight Hero Showcase (Dynamic: Next Festival or Today's Festival) -->
+    <section id="heroSpotlight" class="fc-spotlight" style="display: none;">
+      <!-- Populated dynamically by script -->
+    </section>
+
+    <!-- Filter & Search Controls Bar -->
+    <div class="fc-controls-bar">
+      <div class="fc-filter-tabs">
+        <button class="fc-tab-btn active" data-filter="all">
+          <span>అన్నీ</span>
+          <span class="fc-tab-count" id="countAll">0</span>
+        </button>
+        <button class="fc-tab-btn" data-filter="upcoming">
+          <span>రాబోయేవి</span>
+          <span class="fc-tab-count" id="countUpcoming">0</span>
+        </button>
+        <button class="fc-tab-btn" data-filter="today">
+          <span>🎉 నేడు</span>
+          <span class="fc-tab-count" id="countToday">0</span>
+        </button>
+        <button class="fc-tab-btn" data-filter="completed">
+          <span>✅ పూర్తయినవి</span>
+          <span class="fc-tab-count" id="countCompleted">0</span>
+        </button>
+      </div>
+
+      <div class="fc-search-box">
+        <span class="fc-search-icon">🔍</span>
+        <input type="text" id="festivalSearch" placeholder="పండుగ లేదా తిథి పేరుతో వెతకండి...">
+        <button class="fc-search-clear" id="searchClear">×</button>
+      </div>
+    </div>
+
+    <!-- Festival Grid -->
+    <main id="festivalGrid" class="fc-grid">
+      <!-- Generated once via JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="fc-footer">
+      <p>మన పండుగలు • మన సంస్కృతి • మన సనాతన ధర్మం</p>
+      <p style="margin-top: 8px; font-size: 0.86rem;">
+        © 2026 <a href="../">సన్నివేశం (Sannivesham)</a>. సర్వహక్కులు ప్రత్యేకించబడినవి.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Theme Selector Modal Include -->
+  <div id="themeModal" class="theme-modal-backdrop" style="display: none;">
+    <div class="theme-modal-content">
+      <div class="theme-modal-header">
+        <h3 class="theme-modal-title">మీకు నచ్చిన థీమ్‌ను ఎంచుకోండి</h3>
+        <button id="themeCloseBtn" class="theme-close-btn">&times;</button>
+      </div>
+      <div class="theme-cards-grid">
+        <div class="theme-card-option" data-theme-choice="ramayanam">
+          <div class="theme-card-preview theme-preview-ramayanam">
+            <span class="theme-card-icon">🏹</span>
+          </div>
+          <div class="theme-card-name">రామాయణం</div>
+          <div class="theme-card-desc">భక్తి మరియు మర్యాదా పురుషోత్తమ రాముని దివ్య భావన</div>
+        </div>
+        <div class="theme-card-option" data-theme-choice="mahabharatam">
+          <div class="theme-card-preview theme-preview-mahabharatam">
+            <span class="theme-card-icon">🦚</span>
+          </div>
+          <div class="theme-card-name">మహాభారతం</div>
+          <div class="theme-card-desc">గీతాబోధ మరియు ధర్మ స్థాపన సంస్కృతి</div>
+        </div>
+        <div class="theme-card-option" data-theme-choice="light">
+          <div class="theme-card-preview theme-preview-light">
+            <span class="theme-card-icon">☀️</span>
+          </div>
+          <div class="theme-card-name">వెలుగు (Light)</div>
+          <div class="theme-card-desc">స్వర్ణ కాంతులు మరియు ప్రశాంత రూపం</div>
+        </div>
+        <div class="theme-card-option" data-theme-choice="dark">
+          <div class="theme-card-preview theme-preview-dark">
+            <span class="theme-card-icon">🌙</span>
+          </div>
+          <div class="theme-card-name">చీకటి (Dark)</div>
+          <div class="theme-card-desc">రాత్రివేళ ప్రశాంతమైన అధ్యయనానికి అనుకూలం</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       FESTIVAL DATA & REAL-TIME COUNTDOWN ENGINE
+  ===================================================== -->
+  <script type="module">
+    import { db } from "../firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    /* =====================================================
+       1. SECTION BACKGROUND LOADER (Theme-Aware)
+    ===================================================== */
+    async function loadSectionBackground() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "theme"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        
+        function applyBg() {
+          if (window.SanniveshamTheme && window.SanniveshamTheme.resolveBackground) {
+            // Check festivalCounter first, fallback to poojaMandir
+            let bg = window.SanniveshamTheme.resolveBackground(data, "festivalCounter");
+            if (!bg || !bg.chosen) {
+              bg = window.SanniveshamTheme.resolveBackground(data, "poojaMandir");
+            }
+            if (bg && bg.chosen) {
+              document.body.style.backgroundImage = `linear-gradient(rgba(12, 8, 4, 0.82), rgba(10, 6, 3, 0.9)), url('${bg.chosen}')`;
+              document.body.style.backgroundSize = "cover";
+              document.body.style.backgroundPosition = "center top";
+              document.body.style.backgroundAttachment = "fixed";
+            }
+          }
+        }
+        applyBg();
+        window.addEventListener("sannivesham_theme_changed", applyBg);
+        window.addEventListener("resize", applyBg);
+      } catch (err) {
+        console.warn("Could not load festival counter background:", err);
+      }
+    }
+    loadSectionBackground();
+  </script>
+
+  <script>
+    /* =====================================================
+       2. AMBIENT GOLDEN SPARKLE PARTICLES
+    ===================================================== */
+    (function initParticles() {
+      const canvas = document.getElementById("particleCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener("resize", () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      function createParticles() {
+        particles = [];
+        const count = Math.floor(w / 28);
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            radius: Math.random() * 2 + 0.6,
+            vy: -(Math.random() * 0.45 + 0.15),
+            vx: (Math.random() - 0.5) * 0.3,
+            alpha: Math.random() * 0.7 + 0.2,
+            pulseSpeed: Math.random() * 0.02 + 0.005
+          });
+        }
+      }
+      createParticles();
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          p.y += p.vy;
+          p.x += p.vx;
+          p.alpha += Math.sin(Date.now() * p.pulseSpeed) * 0.005;
+          if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 214, 102, ${Math.max(0.1, Math.min(0.85, p.alpha))})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    /* =====================================================
+       3. COMPLETE TELUGU YEAR FESTIVALS LIST (Ugadi to Ugadi)
+    ===================================================== */
+    const teluguMonths = [
+      "జనవరి", "ఫిబ్రవరి", "మార్చి", "ఏప్రిల్", "మే", "జూన్",
+      "జూలై", "ఆగస్టు", "సెప్టెంబర్", "అక్టోబర్", "నవంబర్", "డిసెంబర్"
+    ];
+
+    function formatTeluguDate(dateStr) {
+      const parts = dateStr.split("-");
+      const year = parts[0];
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      return `${day} ${teluguMonths[monthIdx]} ${year}`;
+    }
+
+    const festivals = [
+      // 1. Chaitra Maasam (March - April 2026)
+      {
+        id: "ugadi-2026",
+        name: "ఉగాది",
+        tithi: "చైత్ర శుద్ధ పాడ్యమి (శ్రీ క్రోధి నామ సంవత్సరం)",
+        date: "2026-03-19",
+        icon: "🥭",
+        desc: "తెలుగు నూతన సంవత్సరాది - షడ్రుచుల ఉగాది పచ్చడి మరియు పంచాంగ శ్రవణం."
+      },
+      {
+        id: "rama-navami",
+        name: "శ్రీరామ నవమి",
+        tithi: "చైత్ర శుద్ధ నవమి",
+        date: "2026-03-27",
+        icon: "🏹",
+        desc: "మర్యాదా పురుషోత్తముడు శ్రీరామచంద్రుని జన్మదినం మరియు సీతారాముల కళ్యాణోత్సవం."
+      },
+      {
+        id: "hanuman-jayanti",
+        name: "హనుమాన్ జయంతి",
+        tithi: "చైత్ర శుద్ధ పౌర్ణమి",
+        date: "2026-04-02",
+        icon: "🚩",
+        desc: "భక్త శిఖామణి, ఆంజనేయ స్వామి వారి జన్మదిన పర్వదినం."
+      },
+
+      // 2. Vaisakha Maasam (April - May 2026)
+      {
+        id: "akshaya-tritiya",
+        name: "అక్షయ తృతీయ",
+        tithi: "వైశాఖ శుద్ధ తదియ",
+        date: "2026-04-20",
+        icon: "🪙",
+        desc: "సర్వ శుభకార్యాలకు, దానధర్మాలకు, సువర్ణ కొనుగోలుకు అత్యంత శ్రేష్టమైన పుణ్యతిథి."
+      },
+      {
+        id: "narasimha-jayanti",
+        name: "శ్రీ నృసింహ జయంతి",
+        tithi: "వైశాఖ శుద్ధ చతుర్దశి",
+        date: "2026-05-01",
+        icon: "🦁",
+        desc: "భక్త ప్రహ్లాదుని రక్షించేందుకు శ్రీమహావిష్ణువు నరసింహావతారమెత్తిన దివ్యదినం."
+      },
+      {
+        id: "buddha-purnima",
+        name: "వైశాఖ పౌర్ణమి / బుద్ధ పూర్ణిమ",
+        tithi: "వైశాఖ పౌర్ణమి",
+        date: "2026-05-02",
+        icon: "🪷",
+        desc: "మహా పవిత్రమైన వైశాఖ స్నాన సమాప్తి మరియు గౌతమ బుద్ధుని జయంతి."
+      },
+
+      // 3. Jyeshtha Maasam (May - June 2026)
+      {
+        id: "ganga-dussehra",
+        name: "గంగా దసరా",
+        tithi: "జ్యేష్ఠ శుద్ధ దశమి",
+        date: "2026-05-26",
+        icon: "🌊",
+        desc: "స్వర్గం నుండి భూమికి పవిత్ర గంగానది అవతరించిన మహా పర్వదినం."
+      },
+      {
+        id: "vata-savitri",
+        name: "ఏరువాక పౌర్ణమి / వట సావిత్రి వ్రతం",
+        tithi: "జ్యేష్ఠ పౌర్ణమి",
+        date: "2026-05-31",
+        icon: "🌾",
+        desc: "రైతన్నల ఏరువాక సాగారోత్సవం మరియు సౌభాగ్య ప్రదాయిని వట సావిత్రి పూజ."
+      },
+
+      // 4. Ashadha Maasam (June - July 2026)
+      {
+        id: "tholi-ekadashi",
+        name: "తొలి ఏకాదశి",
+        tithi: "ఆషాఢ శుద్ధ ఏకాదశి (శయన ఏకాదశి)",
+        date: "2026-06-26",
+        icon: "🙏",
+        desc: "చాతుర్మాస్య వ్రతారంభం మరియు శ్రీ మహావిష్ణువు క్షీరాబ్ధి శయన ఏకాదశి."
+      },
+      {
+        id: "guru-purnima",
+        name: "గురు పౌర్ణమి",
+        tithi: "ఆషాఢ పౌర్ణమి (వ్యాస పౌర్ణమి)",
+        date: "2026-06-30",
+        icon: "🌕",
+        desc: "వేద వ్యాస మహర్షి జయంతి మరియు సమస్త గురువులను పూజించే మహోన్నత పర్వదినం."
+      },
+      {
+        id: "bonalu-festival",
+        name: "బోనాలు పండుగ",
+        tithi: "ఆషాఢ మాసం",
+        date: "2026-07-12",
+        icon: "🏺",
+        desc: "తెలంగాణ సంస్కృతికి ప్రతీకైన గ్రామదేవతల, ఉజ్జయినీ మహంకాళి బోనాల సమర్పణ."
+      },
+      {
+        id: "gajanana-chaturthi",
+        name: "గజానన సంకష్టహర చతుర్థి",
+        tithi: "ఆషాఢ బహుళ చవితి",
+        date: "2026-08-02",
+        icon: "🐘",
+        desc: "సంకటాలను హరించే ఆషాఢ బహుళ చవితి సంకష్టహర గణపతి వ్రతం."
+      },
+      {
+        id: "kamika-ekadashi",
+        name: "కామిక ఏకాదశి",
+        tithi: "ఆషాఢ బహుళ ఏకాదశి",
+        date: "2026-08-09",
+        icon: "🪷",
+        desc: "సకల పాపహరమైన పవిత్ర కామిక ఏకాదశి వ్రతం."
+      },
+
+      // 5. Sravana Maasam (August - September 2026)
+      {
+        id: "naga-panchami",
+        name: "నాగ పంచమి / గరుడ పంచమి",
+        tithi: "శ్రావణ శుద్ధ పంచమి",
+        date: "2026-08-17",
+        icon: "🐍",
+        desc: "నాగేంద్రునికి క్షీరాభిషేకం మరియు సోదరుల రక్షణ కోరే పవిత్ర పర్వదినం."
+      },
+      {
+        id: "putrada-ekadashi",
+        name: "శ్రావణ పుత్రద ఏకాదశి",
+        tithi: "శ్రావణ శుద్ధ ఏకాదశి",
+        date: "2026-08-23",
+        icon: "🙏",
+        desc: "సంతాన ప్రాప్తిని, వంశాభివృద్ధిని ప్రసాదించే శ్రావణ పుత్రద ఏకాదశి."
+      },
+      {
+        id: "varalakshmi-vratam",
+        name: "వరలక్ష్మీ వ్రతం",
+        tithi: "శ్రావణ పౌర్ణమి ముందు శుక్రవారం",
+        date: "2026-08-28",
+        icon: "🌺",
+        desc: "సుమంగళి స్త్రీల సౌభాగ్య, ఆయురారోగ్య, అష్టైశ్వర్య ప్రదాయిని వరలక్ష్మీ దేవి పూజ."
+      },
+      {
+        id: "raksha-bandhan",
+        name: "రక్షాబంధన్ / జంధ్యాల పౌర్ణమి",
+        tithi: "శ్రావణ శుద్ధ పౌర్ణమి",
+        date: "2026-08-28",
+        icon: "🪢",
+        desc: "అన్నాచెల్లెళ్ల అనురాగ బంధం రాఖీ పండుగ మరియు నూతన యజ్ఞోపవీత ధారణ."
+      },
+      {
+        id: "krishna-janmashtami",
+        name: "శ్రీకృష్ణ జన్మాష్టమి",
+        tithi: "శ్రావణ బహుళ అష్టమి (గోకులాష్టమి)",
+        date: "2026-09-04",
+        icon: "🦚",
+        desc: "జగద్గురువు శ్రీకృష్ణ పరమాత్ముని జన్మదిన మహోత్సవం మరియు ఉట్లోత్సవం."
+      },
+
+      // 6. Bhadrapada Maasam (September - October 2026)
+      {
+        id: "vinayaka-chavithi",
+        name: "వినాయక చవితి",
+        tithi: "భాద్రపద శుద్ధ చవితి",
+        date: "2026-09-14",
+        icon: "🐘",
+        desc: "విఘ్ననాశకుడు గణపతి మహోత్సవాల ప్రారంభం మరియు 21 పత్రితో పూజ."
+      },
+      {
+        id: "parivartini-ekadashi",
+        name: "పరివర్తిని ఏకాదశి",
+        tithi: "భాద్రపద శుద్ధ ఏకాదశి",
+        date: "2026-09-22",
+        icon: "🪷",
+        desc: "యోగనిద్రలో ఉన్న శ్రీమహావిష్ణువు పార్శ్వం మారే పవిత్ర పరివర్తిని ఏకాదశి."
+      },
+      {
+        id: "ananta-chaturdasi",
+        name: "అనంత పద్మనాభ వ్రతం / గణేశ నిమజ్జనం",
+        tithi: "భాద్రపద శుద్ధ చతుర్దశి",
+        date: "2026-09-25",
+        icon: "🏵️",
+        desc: "14 గ్రంథుల రక్షతో శ్రీ అనంత పద్మనాభ స్వామి వ్రతం మరియు గణేశ నిమజ్జనం."
+      },
+      {
+        id: "mahalaya-amavasya",
+        name: "మహాలయ అమావాస్య",
+        tithi: "భాద్రపద బహుళ అమావాస్య (పెత్తరమాస)",
+        date: "2026-10-10",
+        icon: "🕊️",
+        desc: "పితృ దేవతలకు కృతజ్ఞతగా తర్పణాలు సమర్పించే అత్యంత పుణ్యప్రదమైన మహాలయ అమావాస్య."
+      },
+
+      // 7. Asvayuja Maasam (October - November 2026)
+      {
+        id: "bathukamma-start",
+        name: "దేవీ శరన్నవరాత్రులు ప్రారంభం / ఎంగిలిపూల బతుకమ్మ",
+        tithi: "ఆశ్వయుజ శుద్ధ పాడ్యమి",
+        date: "2026-10-11",
+        icon: "🌸",
+        desc: "శరన్నవరాత్రుల కలశస్థాపన మరియు ప్రకృతిని పూజించే ఎంగిలిపూల బతుకమ్మ ప్రారంభం."
+      },
+      {
+        id: "saraswati-puja",
+        name: "శ్రీ సరస్వతీ పూజ",
+        tithi: "ఆశ్వయుజ శుద్ధ సప్తమి (మూలా నక్షత్రం)",
+        date: "2026-10-18",
+        icon: "🪕",
+        desc: "విద్యాబుద్ధుల ప్రదాయిని శ్రీ సరస్వతీ దేవి విశేష ఆరాధన మరియు అక్షరాభ్యాసం."
+      },
+      {
+        id: "durgashtami",
+        name: "దుర్గాష్టమి / సద్దుల బతుకమ్మ",
+        tithi: "ఆశ్వయుజ శుద్ధ అష్టమి",
+        date: "2026-10-19",
+        icon: "⚔️",
+        desc: "దుర్గతులను బాపే శ్రీ దుర్గాదేవి అర్చన మరియు ఘనమైన సద్దుల బతుకమ్మ వేడుక."
+      },
+      {
+        id: "mahanavami",
+        name: "మహర్నవమి / ఆయుధ పూజ",
+        tithi: "ఆశ్వయుజ శుద్ధ నవమి",
+        date: "2026-10-20",
+        icon: "🛡️",
+        desc: "సకల వృత్తుల ఉపకరణాలు, పుస్తకాలు మరియు వాహనాలకు ఆయుధ పూజ."
+      },
+      {
+        id: "vijayadasami",
+        name: "విజయదశమి / దసరా",
+        tithi: "ఆశ్వయుజ శుద్ధ దశమి",
+        date: "2026-10-21",
+        icon: "🏹",
+        desc: "విజయోత్సవం - శమీ పూజ, పాలపిట్ట దర్శనం మరియు బంధుమిత్రులతో అలయ్-బలయ్."
+      },
+      {
+        id: "atla-tadde",
+        name: "అట్ల తద్ది",
+        tithi: "ఆశ్వయుజ బహుళ తదియ",
+        date: "2026-10-28",
+        icon: "🥞",
+        desc: "తెలుగు స్త్రీల సౌభాగ్య పర్వదినం - గోరింటాకు, ఉయ్యాలలు మరియు అట్ల నైవేద్యం."
+      },
+      {
+        id: "naraka-chaturdasi",
+        name: "నరక చతుర్దశి",
+        tithi: "ఆశ్వయుజ బహుళ చతుర్దశి",
+        date: "2026-11-07",
+        icon: "🪔",
+        desc: "నరకాసుర వధకు సంకేతంగా తెల్లవారుజామున అభ్యంగన స్నానం మరియు దీపారాధన."
+      },
+      {
+        id: "deepavali",
+        name: "దీపావళి / శ్రీ లక్ష్మీ పూజ",
+        tithi: "ఆశ్వయుజ బహుళ అమావాస్య",
+        date: "2026-11-08",
+        icon: "✨",
+        desc: "చీకటిని పారద్రోలే దివ్య దీపాల పండుగ మరియు ధనలక్ష్మీ-కుబేర పూజ."
+      },
+
+      // 8. Karthika Maasam (November - December 2026)
+      {
+        id: "bali-padyami",
+        name: "బలి పాడ్యమి / గోవర్ధన పూజ",
+        tithi: "కార్తీక శుద్ధ పాడ్యమి",
+        date: "2026-11-09",
+        icon: "🐄",
+        desc: "గోమాత పూజ, గోవర్ధన పూజ మరియు బలి చక్రవర్తికి సమర్పించే దీపారాధన."
+      },
+      {
+        id: "bhagini-hasthabhojanam",
+        name: "భగినీ హస్తభోజనం / యమ ద్వితీయ",
+        tithi: "కార్తీక శుద్ధ విదియ",
+        date: "2026-11-10",
+        icon: "🍲",
+        desc: "తోడబుట్టిన సోదరి చేతి ప్రేమపూర్వక భోజనం చేసి దీవెనలు పొందే శుభదినం."
+      },
+      {
+        id: "nagula-chavithi",
+        name: "నాగుల చవితి",
+        tithi: "కార్తీక శుద్ధ చవితి",
+        date: "2026-11-13",
+        icon: "🐍",
+        desc: "పుట్టలో పాలు సమర్పించి నాగదేవతను భక్తిప్రపత్తులతో కొలిచే పర్వదినం."
+      },
+      {
+        id: "ksheerabdhi-dwadasi",
+        name: "క్షీరాబ్ధి ద్వాదశి / చిలుక ద్వాదశి",
+        tithi: "కార్తీక శుద్ధ ద్వాదశి",
+        date: "2026-11-21",
+        icon: "🌿",
+        desc: "తులసి బృందావనం వద్ద ఉసిరి మొక్కను ఉంచి శ్రీ లక్ష్మీనారాయణులకు విశేష పూజ."
+      },
+      {
+        id: "karthika-purnima",
+        name: "కార్తీక పౌర్ణమి / జ్వాలా తోరణం",
+        tithi: "కార్తీక పౌర్ణమి",
+        date: "2026-11-24",
+        icon: "🌕",
+        desc: "శివాలయాలలో 365 వత్తుల దీపారాధన, సత్యనారాయణ వ్రతం మరియు జ్వాలా తోరణ దర్శనం."
+      },
+
+      // 9. Margasira Maasam (December 2026)
+      {
+        id: "subrahmanya-sashti",
+        name: "సుబ్రహ్మణ్య షష్ఠి / స్కంద షష్ఠి",
+        tithi: "మార్గశిర శుద్ధ షష్ఠి",
+        date: "2026-12-14",
+        icon: "🦚",
+        desc: "తారకాసుర సంహారకుడైన శ్రీ సుబ్రహ్మణ్యేశ్వర స్వామి దివ్య కళ్యాణోత్సవం."
+      },
+      {
+        id: "gita-jayanti",
+        name: "గీతా జయంతి / మోక్షదా ఏకాదశి",
+        tithi: "మార్గశిర శుద్ధ ఏకాదశి",
+        date: "2026-12-19",
+        icon: "📖",
+        desc: "కురుక్షేత్ర రణరంగంలో శ్రీకృష్ణుడు అర్జునునికి భగవద్గీతను ప్రబోధించిన పరమ పవిత్ర దినం."
+      },
+
+      // 10. Pushya Maasam (January 2027)
+      {
+        id: "bhogi",
+        name: "భోగి పండుగ",
+        tithi: "దక్షిణాయన సమాప్తి / సంక్రాంతి ప్రథమ దినం",
+        date: "2027-01-14",
+        icon: "🔥",
+        desc: "తెల్లవారుజాము భోగి మంటలు, పిండివంటలు మరియు చిన్నారులకు భోగి పండ్ల దీవెనలు."
+      },
+      {
+        id: "makara-sankranti",
+        name: "మకర సంక్రాంతి",
+        tithi: "సూర్యుని మకర సంక్రమణం / ఉత్తరాయణ పుణ్యకాలం",
+        date: "2027-01-15",
+        icon: "🪁",
+        desc: "తెలుగువారి పెద్ద పండుగ - కొత్త బియ్యపు పాలుపొంగలి, గాలిపటాల సంబరాలు."
+      },
+      {
+        id: "kanuma",
+        name: "కనుమ పండుగ",
+        tithi: "సంక్రాంతి తృతీయ దినం (పశువుల పండుగ)",
+        date: "2027-01-16",
+        icon: "🐂",
+        desc: "వ్యవసాయానికి ఆధారమైన గోవులను, ఎడ్లను అలంకరించి కృతజ్ఞతతో పూజించే సంబరం."
+      },
+      {
+        id: "mukkanuma",
+        name: "ముక్కనుమ",
+        tithi: "సంక్రాంతి చతుర్థ దినం",
+        date: "2027-01-17",
+        icon: "🌾",
+        desc: "బంధుమిత్రుల కలయికలతో విందు వినోదాలు జరుపుకునే సంక్రాంతి ముగింపు దినం."
+      },
+      {
+        id: "vaikuntha-ekadashi",
+        name: "వైకుంఠ ఏకాదశి / ముక్కోటి ఏకాదశి",
+        tithi: "పుష్య శుద్ధ ఏకాదశి",
+        date: "2027-01-18",
+        icon: "🚪",
+        desc: "ఉత్తర ద్వార దర్శనం - ముక్కోటి దేవతలతో కలిసి విష్ణుమూర్తి వైకుంఠ ద్వారాన దర్శనమిచ్చే పర్వదినం."
+      },
+
+      // 11. Magha Maasam (February - March 2027)
+      {
+        id: "ratha-saptami",
+        name: "రథసప్తమి / సూర్య జయంతి",
+        tithi: "మాఘ శుద్ధ సప్తమి",
+        date: "2027-02-13",
+        icon: "☀️",
+        desc: "ప్రత్యక్ష దైవం సూర్యభగవానుని జన్మదినం - జిల్లేడు ఆకుల స్నానం మరియు చిక్కుడు రథ పూజ."
+      },
+      {
+        id: "bhishma-ekadashi",
+        name: "భీష్మ ఏకాదశి",
+        tithi: "మాఘ శుద్ధ ఏకాదశి",
+        date: "2027-02-17",
+        icon: "🏹",
+        desc: "భీష్మాచార్యులు జగత్తుకు శ్రీ విష్ణు సహస్రనామ స్తోత్రం ఉపదేశించిన పవిత్ర ఏకాదశి."
+      },
+      {
+        id: "maha-shivaratri",
+        name: "మహాశివరాత్రి",
+        tithi: "మాఘ బహుళ చతుర్దశి",
+        date: "2027-03-06",
+        icon: "🔱",
+        desc: "పరమశివుని లింగోద్భవ కాలం - కఠోర ఉపవాసం, రాత్రి జాగరణ, బిల్వార్చన మరియు అభిషేకాలు."
+      },
+
+      // 12. Phalguna Maasam (March 2027)
+      {
+        id: "holi-festival",
+        name: "కామదహనం / హోలీ",
+        tithi: "ఫాల్గుణ పౌర్ణమి",
+        date: "2027-03-22",
+        icon: "🎨",
+        desc: "వసంతోత్సవం - రంగుల కేళీ హోలీ మరియు దుష్టశక్తులపై జయానికి ప్రతీకగా కామదహనం."
+      },
+
+      // 13. Coming Ugadi (April 2027)
+      {
+        id: "ugadi-2027",
+        name: "వచ్చే ఉగాది (2027)",
+        tithi: "చైత్ర శుద్ధ పాడ్యమి (శోభకృత్ నామ సంవత్సరం)",
+        date: "2027-04-07",
+        icon: "🪔",
+        desc: "రాబోయే నూతన తెలుగు సంవత్సరాది - సరికొత్త సంకల్పాలతో శుభారంభం."
+      }
+    ];
+
+    /* =====================================================
+       4. TIME HELPERS & STATUS DETERMINATION
+    ===================================================== */
+    // Returns timestamp at 00:00:00 IST for a given YYYY-MM-DD
+    function getFestivalTime(dateStr) {
+      return new Date(dateStr + "T00:00:00+05:30").getTime();
+    }
+
+    // Determine status: "today", "completed", or "upcoming"
+    function getFestivalStatus(festivalTime, now) {
+      const diff = festivalTime - now;
+      // If diff is between -86400000 and 0, today is the festival day!
+      if (diff <= 0 && diff > -86400000) {
+        return "today";
+      } else if (diff <= -86400000) {
+        return "completed";
+      } else {
+        return "upcoming";
+      }
+    }
+
+    function calculateTimeComponents(diff) {
+      if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      return { days, hours, minutes, seconds };
+    }
+
+    /* =====================================================
+       5. BUILD DOM ONCE (Zero InnerHTML Destruction)
+    ===================================================== */
+    const gridContainer = document.getElementById("festivalGrid");
+    const spotlightContainer = document.getElementById("heroSpotlight");
+    let currentFilter = "all";
+    let searchQuery = "";
+
+    // Sort festivals chronologically
+    festivals.sort((a, b) => getFestivalTime(a.date) - getFestivalTime(b.date));
+
+    // Create cards once
+    festivals.forEach(fest => {
+      const fTime = getFestivalTime(fest.date);
+      const card = document.createElement("article");
+      card.className = "fc-card";
+      card.id = "card_" + fest.id;
+      card.dataset.festivalId = fest.id;
+      card.dataset.targetTime = fTime;
+      card.dataset.date = fest.date;
+      card.dataset.name = fest.name.toLowerCase();
+      card.dataset.tithi = fest.tithi.toLowerCase();
+
+      // Top info
+      const topDiv = document.createElement("div");
+      topDiv.className = "fc-card-top";
+      topDiv.innerHTML = `
+        <div class="fc-card-icon">${fest.icon}</div>
+        <div class="fc-card-meta">
+          <div class="fc-status-badge-container"></div>
+          <h3 class="fc-card-title">${fest.name}</h3>
+          <div class="fc-card-tithi">${fest.tithi}</div>
+          <div class="fc-card-date">${formatTeluguDate(fest.date)}</div>
+        </div>
+      `;
+
+      // Description
+      const descP = document.createElement("p");
+      descP.className = "fc-card-desc";
+      descP.textContent = fest.desc;
+
+      // Bottom dynamic container (will hold countdown, completed box, or today celebration)
+      const bottomDiv = document.createElement("div");
+      bottomDiv.className = "fc-card-bottom";
+
+      card.appendChild(topDiv);
+      card.appendChild(descP);
+      card.appendChild(bottomDiv);
+      gridContainer.appendChild(card);
+    });
+
+    /* =====================================================
+       6. SPOTLIGHT BUILDER (Next Upcoming or Today Festival)
+    ===================================================== */
+    let lastSpotlightId = null;
+
+    function updateSpotlight(now) {
+      // Find today's festival first, or else the first upcoming festival
+      let spotlightFest = festivals.find(f => {
+        const diff = getFestivalTime(f.date) - now;
+        return diff <= 0 && diff > -86400000;
+      });
+
+      let isTodaySpotlight = true;
+      if (!spotlightFest) {
+        isTodaySpotlight = false;
+        spotlightFest = festivals.find(f => (getFestivalTime(f.date) - now) > 0);
+      }
+
+      if (!spotlightFest) {
+        spotlightContainer.style.display = "none";
+        return;
+      }
+
+      spotlightContainer.style.display = "grid";
+      const fTime = getFestivalTime(spotlightFest.date);
+      const diff = fTime - now;
+
+      // If festival changed, rebuild spotlight structure
+      if (lastSpotlightId !== spotlightFest.id + (isTodaySpotlight ? "_today" : "_up")) {
+        lastSpotlightId = spotlightFest.id + (isTodaySpotlight ? "_today" : "_up");
+
+        const tagText = isTodaySpotlight ? "🎉 ఈరోజు పర్వదినం!" : "⏳ రాబోయే తదుపరి పర్వదినం";
+        spotlightContainer.innerHTML = `
+          <div class="fc-spotlight-left">
+            <div class="fc-spotlight-tag">
+              <span class="fc-pulse-dot"></span>
+              <span>${tagText}</span>
+            </div>
+            <div class="fc-spotlight-title-group">
+              <div class="fc-spotlight-icon">${spotlightFest.icon}</div>
+              <div>
+                <h2 class="fc-spotlight-name">${spotlightFest.name}</h2>
+                <div class="fc-spotlight-tithi">${spotlightFest.tithi}</div>
+              </div>
+            </div>
+            <div class="fc-spotlight-date">📅 ${formatTeluguDate(spotlightFest.date)}</div>
+            <p class="fc-spotlight-desc">${spotlightFest.desc}</p>
+          </div>
+          <div class="fc-spotlight-right" id="spotlightRight">
+            <!-- Countdown or Today banner -->
+          </div>
+        `;
+
+        const rightDiv = document.getElementById("spotlightRight");
+        if (isTodaySpotlight) {
+          rightDiv.innerHTML = `
+            <div class="fc-spotlight-today-banner">
+              <h3>🎉 నేడు పండుగ!</h3>
+              <p>మీకు మీ కుటుంబ సభ్యులకు పర్వదిన శుభాకాంక్షలు</p>
+            </div>
+          `;
+        } else {
+          rightDiv.innerHTML = `
+            <div class="fc-spotlight-timer">
+              <div class="fc-time-unit">
+                <div class="fc-time-val" id="spDays">00</div>
+                <div class="fc-time-lbl">రోజులు</div>
+              </div>
+              <div class="fc-time-unit">
+                <div class="fc-time-val" id="spHours">00</div>
+                <div class="fc-time-lbl">గంటలు</div>
+              </div>
+              <div class="fc-time-unit">
+                <div class="fc-time-val" id="spMins">00</div>
+                <div class="fc-time-lbl">నిమిషాలు</div>
+              </div>
+              <div class="fc-time-unit">
+                <div class="fc-time-val" id="spSecs">00</div>
+                <div class="fc-time-lbl">సెకన్లు</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Live tick numbers in spotlight if upcoming
+      if (!isTodaySpotlight) {
+        const { days, hours, minutes, seconds } = calculateTimeComponents(diff);
+        const dEl = document.getElementById("spDays");
+        const hEl = document.getElementById("spHours");
+        const mEl = document.getElementById("spMins");
+        const sEl = document.getElementById("spSecs");
+        if (dEl) dEl.textContent = String(days).padStart(2, "0");
+        if (hEl) hEl.textContent = String(hours).padStart(2, "0");
+        if (mEl) mEl.textContent = String(minutes).padStart(2, "0");
+        if (sEl) sEl.textContent = String(seconds).padStart(2, "0");
+      }
+    }
+
+    /* =====================================================
+       7. REAL-TIME TICKER (Updates Node Text Only)
+    ===================================================== */
+    let lastStateMap = {};
+
+    function tickFestivals() {
+      const now = Date.now();
+      let countToday = 0;
+      let countUpcoming = 0;
+      let countCompleted = 0;
+
+      // Update Hero Spotlight
+      updateSpotlight(now);
+
+      // Iterate cards
+      const cards = gridContainer.querySelectorAll(".fc-card");
+      cards.forEach(card => {
+        const fTime = parseInt(card.dataset.targetTime, 10);
+        const diff = fTime - now;
+        const status = getFestivalStatus(fTime, now);
+
+        if (status === "today") countToday++;
+        else if (status === "upcoming") countUpcoming++;
+        else countCompleted++;
+
+        card.dataset.status = status;
+
+        // Has state changed for this card?
+        const prevStatus = lastStateMap[card.id];
+        if (prevStatus !== status) {
+          lastStateMap[card.id] = status;
+          card.classList.remove("is-today", "is-completed", "is-upcoming");
+          card.classList.add("is-" + status);
+
+          const badgeContainer = card.querySelector(".fc-status-badge-container");
+          const bottomDiv = card.querySelector(".fc-card-bottom");
+
+          if (status === "today") {
+            badgeContainer.innerHTML = `<span class="fc-today-badge">🎉 నేడు పండుగ</span>`;
+            bottomDiv.innerHTML = `<div class="fc-today-celebration">🎉 పర్వదిన శుభాకాంక్షలు!</div>`;
+          } else if (status === "completed") {
+            badgeContainer.innerHTML = `<span class="fc-completed-badge">✅ పూర్తయింది</span>`;
+            bottomDiv.innerHTML = `
+              <div class="fc-completed-box">
+                <span>✅ ${formatTeluguDate(card.dataset.date)}న పూర్తయింది</span>
+              </div>
+            `;
+          } else {
+            badgeContainer.innerHTML = ``;
+            bottomDiv.innerHTML = `
+              <div class="fc-card-countdown">
+                <div class="fc-card-box">
+                  <div class="fc-card-num num-days">00</div>
+                  <div class="fc-card-label">రోజులు</div>
+                </div>
+                <div class="fc-card-box">
+                  <div class="fc-card-num num-hours">00</div>
+                  <div class="fc-card-label">గంటలు</div>
+                </div>
+                <div class="fc-card-box">
+                  <div class="fc-card-num num-mins">00</div>
+                  <div class="fc-card-label">నిమిషాలు</div>
+                </div>
+                <div class="fc-card-box">
+                  <div class="fc-card-num num-secs">00</div>
+                  <div class="fc-card-label">సెకన్లు</div>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // If upcoming, update numeric text values only
+        if (status === "upcoming") {
+          const { days, hours, minutes, seconds } = calculateTimeComponents(diff);
+          const dEl = card.querySelector(".num-days");
+          const hEl = card.querySelector(".num-hours");
+          const mEl = card.querySelector(".num-mins");
+          const sEl = card.querySelector(".num-secs");
+          if (dEl) dEl.textContent = String(days).padStart(2, "0");
+          if (hEl) hEl.textContent = String(hours).padStart(2, "0");
+          if (mEl) mEl.textContent = String(minutes).padStart(2, "0");
+          if (sEl) sEl.textContent = String(seconds).padStart(2, "0");
+        }
+      });
+
+      // Update counters in tabs
+      document.getElementById("countAll").textContent = festivals.length;
+      document.getElementById("countUpcoming").textContent = countUpcoming;
+      document.getElementById("countToday").textContent = countToday;
+      document.getElementById("countCompleted").textContent = countCompleted;
+
+      // Re-apply current visibility filter
+      applyFilters();
+    }
+
+    /* =====================================================
+       8. FILTER & SEARCH HANDLERS
+    ===================================================== */
+    function applyFilters() {
+      const q = searchQuery.toLowerCase().trim();
+      const cards = gridContainer.querySelectorAll(".fc-card");
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const status = card.dataset.status;
+        const name = card.dataset.name;
+        const tithi = card.dataset.tithi;
+        const date = card.dataset.date;
+
+        const matchesFilter = (currentFilter === "all") || (status === currentFilter);
+        const matchesSearch = !q || name.includes(q) || tithi.includes(q) || date.includes(q);
+
+        if (matchesFilter && matchesSearch) {
+          card.style.display = "flex";
+          visibleCount++;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      // Handle empty search/filter message
+      let emptyMsg = document.getElementById("fcEmptyMsg");
+      if (visibleCount === 0) {
+        if (!emptyMsg) {
+          emptyMsg = document.createElement("div");
+          emptyMsg.id = "fcEmptyMsg";
+          emptyMsg.className = "fc-empty-state";
+          emptyMsg.innerHTML = `
+            <span>🪔</span>
+            <p>మీరు వెతికిన వివరాలతో పండుగలు ఏవీ కనుగొనబడలేదు.</p>
+          `;
+          gridContainer.appendChild(emptyMsg);
+        }
+        emptyMsg.style.display = "block";
+      } else if (emptyMsg) {
+        emptyMsg.style.display = "none";
+      }
+    }
+
+    // Filter tab clicks
+    document.querySelectorAll(".fc-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".fc-tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    // Search input
+    const searchInput = document.getElementById("festivalSearch");
+    const searchClear = document.getElementById("searchClear");
+
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      searchClear.style.display = searchQuery ? "block" : "none";
+      applyFilters();
+    });
+
+    searchClear.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      searchClear.style.display = "none";
+      applyFilters();
+      searchInput.focus();
+    });
+
+    /* =====================================================
+       9. START ENGINE
+    ===================================================== */
+    tickFestivals();
+    setInterval(tickFestivals, 1000);
+  </script>
+
+</body>
+</html>
