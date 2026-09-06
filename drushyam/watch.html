@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>వీడియో ప్లేయర్ — దృశ్యం | సన్నివేశం</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+Telugu:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="player.css?v=20260906">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-nav-left">
+      <a href="index.html" class="topbar-back" title="దృశ్యం హోమ్‌కు వెళ్లండి">← దృశ్యం హోమ్</a>
+      <a href="../index.html" class="topbar-home-btn" title="సన్నివేశం ప్రధాన పుటకు వెళ్లండి">🏠 సన్నివేశం</a>
+    </div>
+    <div class="topbar-logo" onclick="window.location.href='index.html'">
+      <span>🎬</span>
+      <span>దృశ్యం స్ట్రీమ్</span>
+    </div>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <!-- CINEMATIC PLAYER WRAP -->
+  <div class="player-wrap">
+    <div class="player-stage" id="playerStage">
+
+      <!-- 1. Native HTML5 Video for Direct MP4 / HLS / Archive.org (Zero branding, pure Netflix) -->
+      <video id="nativeVideo" class="player-media" playsinline preload="metadata" style="display:none;"></video>
+
+      <!-- 2. Clean YouTube Container for YouTube videos -->
+      <div id="ytContainer" class="player-media" style="display:none;">
+        <div id="ytPlayer"></div>
+      </div>
+
+      <!-- Poster Thumbnail -->
+      <img class="player-thumb" id="playerThumb" src="" alt="" loading="eager">
+
+      <!-- Loading Spinner -->
+      <div class="video-spinner" id="videoSpinner">
+        <div class="spinner-ring"></div>
+        <span style="font-size:0.85rem;color:var(--gold);font-weight:600;">వీడియో లోడ్ అవుతోంది...</span>
+      </div>
+
+      <!-- Big Center Play Button -->
+      <div class="big-play" id="bigPlay">
+        <button class="big-play-btn" id="bigPlayBtn" aria-label="వీడియో ప్లే చేయండి">▶</button>
+      </div>
+
+      <!-- Resume Toast Indicator -->
+      <div class="resume-toast" id="resumeToast"></div>
+
+      <!-- Lock Screen for Premium Content -->
+      <div class="lock-screen" id="lockScreen">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">ప్రీమియం వీడియో</div>
+        <div class="lock-sub">ఈ ప్రత్యేక యానిమేషన్ / సినిమా చూడడానికి చందా (Subscription) అవసరం.</div>
+        <button class="lock-btn" onclick="window.location.href='subscribe.html'">⭐ సబ్‌స్క్రయిబ్ చేసుకోండి</button>
+      </div>
+
+      <!-- Skip Flash Indicators -->
+      <div class="skip-flash left" id="skipLeft">⏪ 10s</div>
+      <div class="skip-flash right" id="skipRight">10s ⏩</div>
+
+      <!-- Double Tap Zones (Left: -10s, Right: +10s) -->
+      <div class="tap-left" id="tapLeft" title="10 సెకన్లు వెనుకకు స్కిప్ చేయడానికి డబుల్ ట్యాప్ చేయండి"></div>
+      <div class="tap-right" id="tapRight" title="10 సెకన్లు ముందుకు స్కిప్ చేయడానికి డబుల్ ట్యాప్ చేయండి"></div>
+
+      <!-- Netflix / Hotstar Controls Overlay -->
+      <div class="controls" id="controls">
+        <!-- Scrubber Timeline -->
+        <div class="progress-wrap" id="progressWrap" title="సమయానికి వెళ్ళండి">
+          <div class="progress-buffered" id="progressBuffered" style="width:0%"></div>
+          <div class="progress-bar" id="progressBar" style="width:0%">
+            <div class="progress-dot"></div>
+          </div>
+          <div class="progress-tooltip" id="progressTooltip">0:00</div>
+        </div>
+
+        <!-- Controls Row -->
+        <div class="controls-row">
+          <button class="ctrl-btn" id="playPauseBtn" title="Play/Pause (Space)">▶</button>
+          <button class="ctrl-btn ctrl-skip-btn" id="skipBackBtn" title="10 సెకన్లు వెనుకకు (←)">⏪ 10</button>
+          <button class="ctrl-btn ctrl-skip-btn" id="skipFwdBtn" title="10 సెకన్లు ముందుకు (→)">10 ⏩</button>
+
+          <!-- Volume Controls -->
+          <div class="volume-wrap">
+            <button class="ctrl-btn" id="muteBtn" title="మ్యూట్/అన్‌మ్యూట్ (M)">🔊</button>
+            <input class="volume-slider" type="range" id="volumeSlider" min="0" max="100" value="85" aria-label="శబ్దం">
+          </div>
+
+          <!-- Time Display -->
+          <div class="time-display" id="timeDisplay">
+            <span class="time-current">0:00</span> / 0:00
+          </div>
+
+          <div class="spacer"></div>
+
+          <!-- Speed Menu Dropdown (వేగం) -->
+          <div class="speed-menu-wrap">
+            <button class="speed-btn" id="speedBtn" title="ప్లేబ్యాక్ వేగం">1.0x ⚙️</button>
+            <div class="speed-dropdown" id="speedDropdown">
+              <button class="speed-opt" data-rate="0.5">0.5x <span>నెమ్మది</span></button>
+              <button class="speed-opt" data-rate="0.75">0.75x</button>
+              <button class="speed-opt active" data-rate="1.0">1.0x <span>సాధారణం</span></button>
+              <button class="speed-opt" data-rate="1.25">1.25x</button>
+              <button class="speed-opt" data-rate="1.5">1.5x</button>
+              <button class="speed-opt" data-rate="2.0">2.0x <span>వేగవంతం</span></button>
+            </div>
+          </div>
+
+          <!-- Picture in Picture -->
+          <button class="ctrl-btn" id="pipBtn" title="పిక్చర్-ఇన్-పిక్చర్ మోడ్ (PiP)">⧉</button>
+
+          <!-- Fullscreen -->
+          <button class="ctrl-btn" id="fullscreenBtn" title="పూర్తి స్క్రీన్ (F)">⛶</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VIDEO INFO & METADATA -->
+  <main class="video-info">
+    <div class="video-title-row">
+      <h1 class="video-main-title" id="videoTitle">వీడియో లోడ్ అవుతోంది...</h1>
+      <div id="videoAccessBadge"></div>
+    </div>
+
+    <div class="video-meta-row">
+      <span class="video-meta-item" id="videoCat"></span>
+      <span class="video-meta-item" id="videoYear"></span>
+      <span class="video-meta-item" id="videoDur"></span>
+      <span class="video-meta-item" style="color:#2ed573;">✓ Full HD</span>
+    </div>
+
+    <p class="video-desc" id="videoDesc"></p>
+
+    <!-- RELATED VIDEOS / MORE LIKE THIS -->
+    <div class="related-title">
+      <span>🎬</span>
+      <span>మరిన్ని వీడియోలు & కథా చిత్రాలు</span>
+    </div>
+    <div class="related-grid" id="relatedGrid">
+      <div class="related-card" style="padding:20px;text-align:center;color:var(--text-muted);grid-column:1/-1;">
+        వివరాలు లోడ్ అవుతున్నాయి...
+      </div>
+    </div>
+  </main>
+
+  <!-- FIREBASE & PLAYER LOGIC MODULE -->
+  <script type="module">
+    import { auth, db } from "./firebase-config.js";
+    import {
+      doc, getDoc, collection, getDocs
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import { DrushyamPlayer } from "./player.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get("id");
+    let isSubscribed = false;
+    let playerInstance = null;
+
+    function isActiveSubscription(data) {
+      if (!data || !data.active) return false;
+      if (!data.expiresAt) return true;
+      return new Date(data.expiresAt).getTime() > Date.now();
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.innerText = str == null ? "" : String(str);
+      return div.innerHTML;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const snap = await getDoc(doc(db, "subscribers", user.uid));
+          isSubscribed = isActiveSubscription(snap.exists() ? snap.data() : null);
+        } catch (e) {
+          console.warn("Subscriber check error:", e);
+        }
+      }
+      loadVideo();
+    });
+
+    async function loadVideo() {
+      if (!videoId) {
+        document.getElementById("videoTitle").innerText = "వీడియో కనుగొనబడలేదు";
+        alert("వీడియో ID లేదు. దయచేసి సరైన లింక్ ఉపయోగించండి.");
+        return;
+      }
+
+      try {
+        const snap = await getDoc(doc(db, "streamVideos", videoId));
+        if (!snap.exists()) {
+          document.getElementById("videoTitle").innerText = "వీడియో కనుగొనబడలేదు";
+          alert("ఈ వీడియో తొలగించబడి ఉండవచ్చు.");
+          return;
+        }
+
+        const v = snap.data();
+        document.title = `${v.title || "వీడియో"} — దృశ్యం | సన్నివేశం`;
+
+        const thumbEl = document.getElementById("playerThumb");
+        if (v.thumbnail) {
+          thumbEl.src = v.thumbnail;
+        }
+
+        document.getElementById("videoTitle").innerText = v.title || "";
+        document.getElementById("videoDesc").innerText = v.description || "";
+        document.getElementById("videoYear").innerText = v.year ? `📅 ${v.year}` : "";
+        document.getElementById("videoCat").innerText = v.category ? `🏷️ ${v.category}` : "";
+        document.getElementById("videoDur").innerText = v.duration ? `⏱️ ${v.duration}` : "";
+
+        document.getElementById("videoAccessBadge").innerHTML = v.access === "free"
+          ? `<span style="padding:4px 12px;border-radius:20px;background:rgba(46,213,115,0.15);color:#2ed573;font-size:0.78rem;font-weight:800;border:1px solid rgba(46,213,115,0.3);">ఉచితం (FREE)</span>`
+          : `<span style="padding:4px 12px;border-radius:20px;background:rgba(245,166,35,0.15);color:#f5a623;font-size:0.78rem;font-weight:800;border:1px solid rgba(245,166,35,0.3);">⭐ ప్రీమియం</span>`;
+
+        const canWatch = v.access === "free" || isSubscribed;
+
+        if (!canWatch) {
+          document.getElementById("lockScreen").classList.add("show");
+          document.getElementById("bigPlay").classList.add("hide");
+        } else {
+          // Initialize Netflix-tier Universal Player
+          playerInstance = new DrushyamPlayer({ videoId: videoId });
+          playerInstance.loadSource(v);
+        }
+
+        // Load Related Videos
+        loadRelatedVideos(v.categoryId || "");
+
+      } catch (err) {
+        console.error("Error loading video:", err);
+        document.getElementById("videoTitle").innerText = "వీడియో లోడ్ చేయడంలో సమస్య";
+      }
+    }
+
+    async function loadRelatedVideos(catId) {
+      try {
+        const allSnap = await getDocs(collection(db, "streamVideos"));
+        const related = [];
+        allSnap.forEach(d => {
+          if (d.id !== videoId) {
+            related.push({ id: d.id, ...d.data() });
+          }
+        });
+
+        const grid = document.getElementById("relatedGrid");
+        grid.innerHTML = "";
+
+        if (related.length === 0) {
+          grid.innerHTML = "<p style='color:var(--text-muted);grid-column:1/-1;'>సంబంధిత వీడియోలు లేవు.</p>";
+          return;
+        }
+
+        related.slice(0, 8).forEach(r => {
+          const card = document.createElement("div");
+          card.className = "related-card";
+          card.onclick = () => window.location.href = `watch.html?id=${encodeURIComponent(r.id)}`;
+          card.innerHTML = `
+            <img class="related-thumb" src="${escapeHtml(r.thumbnail || '../images/placeholder.jpg')}" alt="${escapeHtml(r.title)}" loading="lazy">
+            <div class="related-body">
+              <div class="related-card-title">${escapeHtml(r.title)}</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:0.75rem;color:var(--text-muted);">
+                <span>${escapeHtml(r.year || "")}</span>
+                <span style="color:var(--gold);">${escapeHtml(r.duration || "")}</span>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.warn("Related videos fetch error:", err);
+      }
+    }
+  </script>
+</body>
+</html>

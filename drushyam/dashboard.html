@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>దృశ్యం స్ట్రీమ్ — Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+Telugu:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0a0a0f;--card:#14141e;--gold:#f5a623;--gold2:#e8942a;
+      --red:#e50914;--green:#2ed573;--text:#fff;--text2:#b3b3b3;--text3:#666;
+      --border:rgba(255,255,255,0.09);
+    }
+    body{background:var(--bg);color:var(--text);font-family:'Inter', -apple-system, sans-serif;min-height:100vh;}
+
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 32px;background:var(--card);border-bottom:1px solid var(--border);
+    }
+    .topbar-logo{font-size:1.25rem;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:8px;}
+    #logoutBtn{
+      padding:8px 20px;border-radius:20px;background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:0.85rem;font-weight:600;
+      transition:0.2s;
+    }
+    #logoutBtn:hover{color:var(--red);border-color:var(--red);background:rgba(229,9,20,0.1);}
+
+    .dash-wrap{max-width:1050px;margin:36px auto 70px;padding:0 24px;}
+    .dash-nav{
+      display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:16px;
+    }
+    .dash-btn{
+      padding:10px 22px;border-radius:25px;border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);color:var(--text2);font-weight:700;font-size:0.88rem;
+      cursor:pointer;transition:all 0.2s;
+    }
+    .dash-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.25);}
+    .dash-btn.active{
+      background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border-color:transparent;
+      box-shadow:0 0 16px rgba(245,166,35,0.3);
+    }
+
+    .dash-section{display:none;}
+    .active-section{display:block;}
+
+    .panel{
+      background:var(--card);border:1px solid var(--border);border-radius:16px;
+      padding:28px;margin-bottom:28px;box-shadow:0 8px 30px rgba(0,0,0,0.35);
+    }
+    .panel h2{font-size:1.2rem;font-weight:800;color:var(--gold);margin-bottom:20px;}
+
+    label{display:block;font-size:0.82rem;font-weight:700;color:var(--text2);margin-bottom:6px;}
+
+    input[type="text"],input[type="number"],textarea,select{
+      width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);color:var(--text);font-size:0.9rem;outline:none;
+      margin-bottom:14px;transition:border-color 0.2s;font-family:inherit;
+    }
+    input:focus,textarea:focus,select:focus{border-color:var(--gold);background:rgba(255,255,255,0.06);}
+    textarea{min-height:85px;resize:vertical;}
+    select option{background:#14141e;color:#fff;}
+
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:640px){.row2{grid-template-columns:1fr;}}
+
+    .btn-primary{
+      padding:12px 28px;border:none;border-radius:25px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:800;
+      font-size:0.92rem;cursor:pointer;transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(245,166,35,0.4);}
+    .btn-outline{
+      padding:10px 20px;border-radius:25px;background:none;border:1px solid rgba(245,166,35,0.4);
+      color:var(--gold);font-weight:700;font-size:0.85rem;cursor:pointer;transition:0.2s;
+    }
+    .btn-outline:hover{background:rgba(245,166,35,0.15);border-color:var(--gold);}
+    .btn-danger{
+      padding:8px 16px;border-radius:20px;background:rgba(229,9,20,0.12);border:1px solid rgba(229,9,20,0.3);
+      color:var(--red);font-weight:700;font-size:0.8rem;cursor:pointer;transition:0.2s;
+    }
+    .btn-danger:hover{background:rgba(229,9,20,0.25);}
+
+    .msg{font-size:0.85rem;font-weight:600;margin-top:10px;min-height:18px;}
+    .msg.success{color:var(--green);}
+    .msg.error{color:var(--red);}
+
+    /* GUIDE BOX */
+    .guide-box{
+      background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);
+      border-radius:12px;padding:16px 20px;margin:8px 0 18px;font-size:0.85rem;line-height:1.65;color:var(--text2);
+    }
+    .guide-box strong{color:var(--gold);}
+    .guide-box a{color:var(--gold);text-decoration:underline;}
+
+    /* ITEM ROWS */
+    .item-row{
+      display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:12px;
+      border:1px solid var(--border);background:rgba(255,255,255,0.02);margin-bottom:12px;
+      flex-wrap:wrap;transition:all 0.2s;
+    }
+    .item-row:hover{border-color:rgba(245,166,35,0.3);background:rgba(255,255,255,0.04);}
+    .item-thumb{width:100px;height:58px;object-fit:cover;border-radius:8px;background:#000;flex-shrink:0;}
+    .item-info{flex:1;min-width:180px;}
+    .item-title{font-size:0.95rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .item-sub{font-size:0.8rem;color:var(--text3);margin-top:4px;}
+    .item-actions{display:flex;gap:10px;align-items:center;}
+
+    .badge{padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:800;letter-spacing:0.5px;}
+    .badge-free{background:rgba(46,213,115,0.15);color:var(--green);border:1px solid rgba(46,213,115,0.3);}
+    .badge-paid{background:rgba(245,166,35,0.15);color:var(--gold);border:1px solid rgba(245,166,35,0.3);}
+    .badge-direct{background:rgba(52,152,219,0.15);color:#3498db;border:1px solid rgba(52,152,219,0.3);}
+    .badge-yt{background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);}
+
+    /* PREVIEW MODAL */
+    .preview-modal{
+      position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;
+      background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);padding:20px;
+    }
+    .preview-modal.show{display:flex;}
+    .preview-card{
+      background:#111;border:1px solid var(--gold);border-radius:16px;width:100%;max-width:760px;
+      overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.8);
+    }
+    .preview-header{
+      display:flex;justify-content:space-between;align-items:center;padding:14px 20px;
+      border-bottom:1px solid var(--border);color:var(--gold);font-weight:700;
+    }
+    .preview-close{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <span>🎬</span>
+      <span>దృశ్యం స్ట్రీమ్ — Admin CMS</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <a href="index.html" target="_blank" class="btn-outline" style="text-decoration:none;padding:6px 16px;font-size:0.8rem;">👁️ వెబ్‌సైట్ చూడండి</a>
+      <button id="logoutBtn">లాగౌట్</button>
+    </div>
+  </header>
+
+  <div class="dash-wrap">
+    <!-- NAVIGATION TABS -->
+    <nav class="dash-nav">
+      <button class="dash-btn active" data-section="categoriesSection">విభాగాలు (Categories)</button>
+      <button class="dash-btn" data-section="videosSection">వీడియోలు (Videos CMS)</button>
+      <button class="dash-btn" data-section="heroSection">హీరో బ్యానర్ (Featured)</button>
+      <button class="dash-btn" data-section="subscribersSection">చందాదారులు (Subscribers)</button>
+    </nav>
+
+    <!-- 1. CATEGORIES SECTION -->
+    <section id="categoriesSection" class="dash-section active-section">
+      <div class="panel">
+        <h2>కొత్త కేటగిరీని జోడించండి</h2>
+        <div class="row2">
+          <div>
+            <label>కేటగిరీ పేరు:</label>
+            <input type="text" id="catName" placeholder="e.g. భక్తి కథా చిత్రాలు, రామాయణ యానిమేషన్స్">
+          </div>
+          <div>
+            <label>ఐకాన్ / ఎమోజీ (Emoji):</label>
+            <input type="text" id="catEmoji" placeholder="e.g. 🕉️, 🏹, 🌺">
+          </div>
+        </div>
+        <label>క్రమ సంఖ్య (Order - తక్కువ ఉంటే ముందు కనిపిస్తుంది):</label>
+        <input type="number" id="catOrder" placeholder="e.g. 1, 2, 3">
+        <button class="btn-primary" id="saveCatBtn">కేటగిరీని భద్రపరచండి</button>
+        <p class="msg" id="catMsg"></p>
+      </div>
+
+      <div class="panel">
+        <h2>ప్రస్తుత కేటగిరీలు</h2>
+        <div id="catList">లోడ్ అవుతోంది...</div>
+      </div>
+    </section>
+
+    <!-- 2. VIDEOS SECTION -->
+    <section id="videosSection" class="dash-section">
+      <div class="panel">
+        <h2>కొత్త వీడియో / కథా చిత్రాన్ని జోడించండి</h2>
+
+        <label>వీడియో శీర్షిక (Title):</label>
+        <input type="text" id="vidTitle" placeholder="e.g. సంపూర్ణ రామాయణం - బాలకాండ యానిమేషన్">
+
+        <label>వివరణ (Description):</label>
+        <textarea id="vidDesc" placeholder="వీడియో గురించి వివరణ..."></textarea>
+
+        <!-- Video Source Selection -->
+        <label>వీడియో మూలం (Video Source Type):</label>
+        <select id="vidSourceType">
+          <option value="direct">⭐ డైరెక్ట్ MP4 వీడియో URL (Archive.org, Cloudflare R2, CDN) — [సిఫార్సు చేయబడింది, 0% బ్రాండింగ్]</option>
+          <option value="youtube">▶ యూట్యూబ్ లింక్ / ID (YouTube Clean Player)</option>
+        </select>
+
+        <!-- Direct MP4 Group -->
+        <div id="directUrlGroup">
+          <label>డైరెక్ట్ వీడియో URL (.mp4 / .m3u8):</label>
+          <input type="text" id="vidDirectUrl" placeholder="e.g. https://archive.org/download/sita-rama-katha/movie.mp4">
+          
+          <div class="guide-box">
+            <strong>💡 ఉచితంగా అపరిమిత సైజ్ వీడియోలను ఎలా హోస్ట్ చేయాలి? (Free Unlimited Hosting):</strong><br>
+            1. <strong><a href="https://archive.org/upload/" target="_blank">Archive.org/upload</a></strong> లోకి వెళ్లి ఉచిత అకౌంట్ ద్వారా మీ యానిమేషన్/సినిమా (.mp4) అప్‌లోడ్ చేయండి.<br>
+            2. అప్‌లోడ్ అయ్యాక పేజీలో <em>"Show All Files"</em> క్లిక్ చేసి <strong>.mp4</strong> లింక్ కాపీ చేయండి.<br>
+            3. ఆ డైరెక్ట్ లింక్‌ను ఇక్కడ పేస్ట్ చేయండి! మీ వెబ్‌సైట్‌లో ఎటువంటి యూట్యూబ్ యాడ్స్, లోగోలు లేకుండా ప్యూర్ నెట్‌ఫ్లిక్స్ కంట్రోల్స్‌తో ప్లే అవుతుంది.
+          </div>
+        </div>
+
+        <!-- YouTube Group -->
+        <div id="youtubeGroup" style="display:none;">
+          <label>యూట్యూబ్ లింక్ లేదా వీడియో ID:</label>
+          <input type="text" id="vidYoutubeId" placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ లేదా dQw4w9WgXcQ">
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>పోస్టర్ / థంబ్‌నెయిల్ ఇమేజ్ URL:</label>
+            <input type="text" id="vidThumb" placeholder="Image URL (ఖాళీగా వదిలేస్తే ఆటో-డిటెక్ట్ అవుతుంది)">
+          </div>
+          <div>
+            <label>ప్రివ్యూ చూడండి:</label>
+            <button type="button" class="btn-outline" id="previewBtn" style="width:100%;height:46px;">👁️ ప్లేయర్ ప్రివ్యూ టెస్ట్</button>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>విభాగం (Category):</label>
+            <select id="vidCategorySelect">
+              <option value="">విభాగాన్ని ఎంచుకోండి</option>
+            </select>
+          </div>
+          <div>
+            <label>యాక్సెస్ (Access Type):</label>
+            <select id="vidAccess">
+              <option value="free">ఉచితం (Free to Watch)</option>
+              <option value="paid">ప్రీమియం (Subscription Required)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>నిడివి (Duration, e.g. 15:40 లేదా 1 hr 45 min):</label>
+            <input type="text" id="vidDuration" placeholder="e.g. 18:30">
+          </div>
+          <div>
+            <label>సంవత్సరం (Year):</label>
+            <input type="text" id="vidYear" placeholder="e.g. 2026">
+          </div>
+        </div>
+
+        <button class="btn-primary" id="saveVidBtn">వీడియోను భద్రపరచండి</button>
+        <p class="msg" id="vidMsg"></p>
+      </div>
+
+      <div class="panel">
+        <h2>ప్రస్తుత వీడియోల జాబితా</h2>
+        <div id="vidList">లోడ్ అవుతోంది...</div>
+      </div>
+    </section>
+
+    <!-- 3. FEATURED / HERO SECTION -->
+    <section id="heroSection" class="dash-section">
+      <div class="panel">
+        <h2>హీరో బ్యానర్ వీడియో (Featured Video)</h2>
+        <p style="color:var(--text2);font-size:0.9rem;margin-bottom:18px;">
+          దృశ్యం హోమ్‌పేజీ పైన భారీ సినిమాటిక్ బ్యానర్‌గా కనిపించే వీడియోను ఇక్కడ ఎంచుకోండి.
+        </p>
+        <select id="heroVideoSelect">
+          <option value="">వీడియోను ఎంచుకోండి</option>
+        </select>
+        <button class="btn-primary" id="saveHeroBtn">ఫీచర్డ్ వీడియోగా సెట్ చేయండి</button>
+        <p class="msg" id="heroMsg"></p>
+      </div>
+    </section>
+
+    <!-- 4. SUBSCRIBERS SECTION -->
+    <section id="subscribersSection" class="dash-section">
+      <div class="panel">
+        <h2>చందాదారుల వివరాలు (Subscribers)</h2>
+        <div id="subList" style="overflow-x:auto;">లోడ్ అవుతోంది...</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- VIDEO PREVIEW MODAL -->
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-card">
+      <div class="preview-header">
+        <span>🎬 వీడియో ప్రివ్యూ టెస్ట్</span>
+        <button class="preview-close" id="previewClose">&times;</button>
+      </div>
+      <div style="aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;" id="previewContainer">
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>
