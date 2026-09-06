@@ -1,4 +1,4 @@
-﻿import { db, auth } from "../firebase-config.js";
+import { db, auth } from "../firebase-config.js";
 import {
   doc,
   getDoc,
@@ -25,7 +25,6 @@ function animateValue(element, start, end, duration = 800) {
   function update(now) {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
     const ease = 1 - Math.pow(1 - progress, 3);
     const current = Math.floor(start + range * ease);
     element.innerText = current.toLocaleString();
@@ -67,7 +66,7 @@ const startGeneralQuiz = document.getElementById("startGeneralQuiz");
 if (startGeneralQuiz) {
   startGeneralQuiz.addEventListener("click", () => {
     if (!selectedDifficulty) {
-      alert("à°¦à°¯à°šà±‡à°¸à°¿ à°¸à±à°²à°­à°‚, à°®à°§à±à°¯à°®à°‚ à°²à±‡à°¦à°¾ à°•à°·à±à°Ÿà°‚ à°¸à±à°¥à°¾à°¯à°¿à°²à°²à±‹ à°’à°•à°¦à°¾à°¨à±à°¨à°¿ à°Žà°‚à°šà±à°•à±‹à°‚à°¡à°¿.");
+      alert("దయచేసి సులభం, మధ్యమం లేదా కష్టం స్థాయిలలో ఒకదాన్ని ఎంచుకోండి.");
       return;
     }
     window.location.href = `play-quiz.html?type=general&level=${selectedDifficulty}`;
@@ -115,7 +114,7 @@ categoryCards.forEach(card => {
 });
 
 /* =========================================================
-   5. REAL-TIME COMMUNITY SCORES (à°¸à°®à±‚à°¹ à°«à°²à°¿à°¤à°‚)
+   5. REAL-TIME COMMUNITY SCORES (సమూహ ఫలితం)
    ========================================================= */
 const sections = ["hari", "hara", "devi", "telugu"];
 const currentScores = {
@@ -167,11 +166,11 @@ onAuthStateChanged(auth, async (user) => {
   if (loggedInBox) loggedInBox.style.display = "block";
 
   // Display user info
-  const displayName = user.displayName || user.email?.split("@")[0] || "à°¸à°¾à°§à°•à±à°¡à±";
-  if (userName) userName.innerText = `à°¨à°®à°¸à±à°•à°¾à°°à°‚, ${displayName}! ðŸ™`;
+  const displayName = user.displayName || user.email?.split("@")[0] || "సాధకుడు";
+  if (userName) userName.innerText = `నమస్కారం, ${displayName}! 🙏`;
   if (userAvatar) {
     const firstLetter = displayName.charAt(0).toUpperCase();
-    userAvatar.innerText = firstLetter || "ðŸ•‰ï¸";
+    userAvatar.innerText = firstLetter || "🕉️";
   }
 
   try {
@@ -191,7 +190,6 @@ onAuthStateChanged(auth, async (user) => {
       const genHard = Number(data.quizScore_general_hard || 0);
       const general = genEasy + genMed + genHard;
 
-      // Sum all quiz scores found in user document
       let total = hari + hara + devi + telugu + general;
       Object.keys(data).forEach(k => {
         if (k.startsWith("quizScore_") &&

@@ -1,4 +1,4 @@
-﻿import { db, auth } from "../firebase-config.js";
+import { db, auth } from "../firebase-config.js";
 import {
   collection,
   getDocs
@@ -26,16 +26,16 @@ if (currentType === "general" && !currentLevel) {
 let currentUser = null;
 
 const labels = {
-  hari: "à°¹à°°à°¿",
-  hara: "à°¹à°°",
-  devi: "à°¦à±‡à°µà°¿",
-  telugu: "à°¤à±†à°²à±à°—à±"
+  hari: "హరి",
+  hara: "హర",
+  devi: "దేవి",
+  telugu: "తెలుగు"
 };
 
 const levelLabels = {
-  easy: "à°¸à±à°²à°­à°‚",
-  medium: "à°®à°§à±à°¯à°®à°‚",
-  hard: "à°•à°·à±à°Ÿà°‚"
+  easy: "సులభం",
+  medium: "మధ్యమం",
+  hard: "కష్టం"
 };
 
 /* =========================================================
@@ -111,13 +111,13 @@ async function loadLeaderboard() {
   if (currentType === "general") {
     scoreKey = `quizScore_general_${currentLevel}`;
     const lvlText = levelLabels[currentLevel] || currentLevel;
-    displayTitle = `ðŸ† à°¸à°¾à°§à°¾à°°à°£ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ (${lvlText}) à°…à°—à±à°°à°¸à±à°¥à°¾à°¨à°¾à°²à±`;
-    displaySubtitle = `à°¸à°¾à°§à°¾à°°à°£ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ ${lvlText} à°¸à±à°¥à°¾à°¯à°¿à°²à±‹ à°…à°¤à±à°¯à°§à°¿à°• à°ªà°¾à°¯à°¿à°‚à°Ÿà±à°²à± à°¸à°¾à°§à°¿à°‚à°šà°¿à°¨ à°µà°¾à°°à±`;
+    displayTitle = `🏆 సాధారణ ప్రశ్నావళి (${lvlText}) అగ్రస్థానాలు`;
+    displaySubtitle = `సాధారణ ప్రశ్నావళి ${lvlText} స్థాయిలో అత్యధిక పాయింట్లు సాధించిన వారు`;
   } else {
     scoreKey = `quizScore_${currentCategory}`;
     const catText = labels[currentCategory] || currentCategory;
-    displayTitle = `ðŸ† ${catText} à°µà°¿à°­à°¾à°—à°‚ à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°•`;
-    displaySubtitle = `${catText} à°µà°¿à°­à°¾à°—à°‚à°²à±‹ à°…à°¤à±à°¯à±à°¤à±à°¤à°® à°«à°²à°¿à°¤à°¾à°²à± à°¸à°¾à°§à°¿à°‚à°šà°¿à°¨ à°œà±à°žà°¾à°¨ à°¸à°¾à°§à°•à±à°²à±`;
+    displayTitle = `🏆 ${catText} విభాగం అగ్రస్థాన పట్టిక`;
+    displaySubtitle = `${catText} విభాగంలో అత్యుత్తమ ఫలితాలు సాధించిన జ్ఞాన సాధకులు`;
   }
 
   if (titleEl) titleEl.innerText = displayTitle;
@@ -125,7 +125,7 @@ async function loadLeaderboard() {
 
   if (podiumEl) podiumEl.style.display = "none";
   if (listEl) {
-    listEl.innerHTML = "<p style='color:rgba(255,209,102,0.7); text-align:center; padding:24px;'>à°…à°—à±à°°à°¸à±à°¥à°¾à°¨à°¾à°² à°µà°¿à°µà°°à°¾à°²à± à°²à±‹à°¡à± à°…à°µà±à°¤à±à°¨à±à°¨à°¾à°¯à°¿...</p>";
+    listEl.innerHTML = "<p style='color:rgba(255,209,102,0.7); text-align:center; padding:24px;'>అగ్రస్థానాల వివరాలు లోడ్ అవుతున్నాయి...</p>";
   }
 
   try {
@@ -135,7 +135,7 @@ async function loadLeaderboard() {
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
       const score = Number(data[scoreKey] || 0);
-      const name = data.name || data.displayName || data.username || "à°œà±à°žà°¾à°¨ à°¸à°¾à°§à°•à±à°¡à±";
+      const name = data.name || data.displayName || data.username || "జ్ఞాన సాధకుడు";
 
       if (score > 0) {
         users.push({
@@ -153,9 +153,9 @@ async function loadLeaderboard() {
       if (listEl) {
         listEl.innerHTML = `
           <div style="text-align:center; padding:32px 18px; color:var(--quiz-text-muted);">
-            <div style="font-size:2.4rem; margin-bottom:12px;">ðŸŒŸ</div>
-            <h3 style="color:#ffd166; font-size:1.25rem; margin-bottom:8px;">à°‡à°‚à°•à°¾ à°Žà°µà°°à±‚ à°¸à±à°•à±‹à°°à± à°¨à°®à±‹à°¦à± à°šà±‡à°¯à°²à±‡à°¦à±</h3>
-            <p>à°ˆ à°µà°¿à°­à°¾à°—à°‚à°²à±‹ à°®à±€à°°à±‡ à°®à±Šà°¦à°Ÿà°—à°¾ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ à°ªà±‚à°°à±à°¤à°¿à°šà±‡à°¸à°¿ à°®à±Šà°¦à°Ÿà°¿ à°¸à±à°¥à°¾à°¨à°¾à°¨à±à°¨à°¿ à°•à±ˆà°µà°¸à°‚ à°šà±‡à°¸à±à°•à±‹à°‚à°¡à°¿!</p>
+            <div style="font-size:2.4rem; margin-bottom:12px;">🌟</div>
+            <h3 style="color:#ffd166; font-size:1.25rem; margin-bottom:8px;">ఇంకా ఎవరూ స్కోరు నమోదు చేయలేదు</h3>
+            <p>ఈ విభాగంలో మీరే మొదటగా ప్రశ్నావళి పూర్తిచేసి మొదటి స్థానాన్ని కైవసం చేసుకోండి!</p>
           </div>
         `;
       }
@@ -172,9 +172,9 @@ async function loadLeaderboard() {
 
       // Order: 2nd, 1st, 3rd for podium effect
       const podiumOrder = [
-        { rank: 2, item: top3[1], medal: "ðŸ¥ˆ", cls: "rank-2" },
-        { rank: 1, item: top3[0], medal: "ðŸ¥‡", cls: "rank-1" },
-        { rank: 3, item: top3[2], medal: "ðŸ¥‰", cls: "rank-3" }
+        { rank: 2, item: top3[1], medal: "🥈", cls: "rank-2" },
+        { rank: 1, item: top3[0], medal: "🥇", cls: "rank-1" },
+        { rank: 3, item: top3[2], medal: "🥉", cls: "rank-3" }
       ];
 
       podiumOrder.forEach(p => {
@@ -184,9 +184,9 @@ async function loadLeaderboard() {
         card.className = `podium-card ${p.cls}`;
         card.innerHTML = `
           <span class="podium-medal">${p.medal}</span>
-          <div class="podium-name">${p.item.name} ${isMe ? "<span style='color:#ffd166;'>(à°®à±€à°°à±)</span>" : ""}</div>
-          <div class="podium-score">â­ ${p.item.score.toLocaleString()}</div>
-          <div style="font-size:0.8rem; color:var(--quiz-text-muted); margin-top:4px;">${p.rank}à°µ à°¸à±à°¥à°¾à°¨à°‚</div>
+          <div class="podium-name">${p.item.name} ${isMe ? "<span style='color:#ffd166;'>(మీరు)</span>" : ""}</div>
+          <div class="podium-score">⭐ ${p.item.score.toLocaleString()}</div>
+          <div style="font-size:0.8rem; color:var(--quiz-text-muted); margin-top:4px;">${p.rank}వ స్థానం</div>
         `;
         podiumEl.appendChild(card);
       });
@@ -202,19 +202,19 @@ async function loadLeaderboard() {
         row.className = isMe ? "lb-row lb-row-me" : "lb-row";
 
         let rankBadge = `${index + 1}`;
-        if (index === 0) rankBadge = "ðŸ¥‡";
-        else if (index === 1) rankBadge = "ðŸ¥ˆ";
-        else if (index === 2) rankBadge = "ðŸ¥‰";
+        if (index === 0) rankBadge = "🥇";
+        else if (index === 1) rankBadge = "🥈";
+        else if (index === 2) rankBadge = "🥉";
 
         row.innerHTML = `
           <div class="lb-left">
             <span class="lb-rank">${rankBadge}</span>
             <span class="lb-name">
               ${user.name}
-              ${isMe ? " <span style='color:var(--quiz-gold); font-weight:800;'>(à°®à±€à°°à±)</span>" : ""}
+              ${isMe ? " <span style='color:var(--quiz-gold); font-weight:800;'>(మీరు)</span>" : ""}
             </span>
           </div>
-          <span class="lb-score">â­ ${user.score.toLocaleString()}</span>
+          <span class="lb-score">⭐ ${user.score.toLocaleString()}</span>
         `;
         listEl.appendChild(row);
       });
@@ -223,7 +223,7 @@ async function loadLeaderboard() {
   } catch (error) {
     console.error("Leaderboard load failed:", error);
     if (listEl) {
-      listEl.innerHTML = "<p style='color:#e74c3c; text-align:center; padding:20px;'>à°…à°—à±à°°à°¸à±à°¥à°¾à°¨à°¾à°²à± à°²à±‹à°¡à± à°šà±‡à°¯à°¡à°‚à°²à±‹ à°²à±‹à°ªà°‚ à°¤à°²à±†à°¤à±à°¤à°¿à°‚à°¦à°¿. à°¦à°¯à°šà±‡à°¸à°¿ à°®à°³à±à°³à±€ à°ªà±à°°à°¯à°¤à±à°¨à°¿à°‚à°šà°‚à°¡à°¿.</p>";
+      listEl.innerHTML = "<p style='color:#e74c3c; text-align:center; padding:20px;'>అగ్రస్థానాలు లోడ్ చేయడంలో లోపం తలెత్తింది. దయచేసి మళ్ళీ ప్రయత్నించండి.</p>";
     }
   }
 }

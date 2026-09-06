@@ -1,4 +1,4 @@
-﻿import { db, auth } from "../firebase-config.js";
+import { db, auth } from "../firebase-config.js";
 import {
   doc,
   getDoc
@@ -40,24 +40,24 @@ if (accuracyText) accuracyText.innerText = `${accuracy}%`;
 if (pointsText) pointsText.innerText = `+${score}`;
 
 const levelLabels = {
-  easy: "à°¸à±à°²à°­à°‚",
-  medium: "à°®à°§à±à°¯à°®à°‚",
-  hard: "à°•à°·à±à°Ÿà°‚"
+  easy: "సులభం",
+  medium: "మధ్యమం",
+  hard: "కష్టం"
 };
 
 const categoryLabels = {
-  hari: "à°¹à°°à°¿ à°µà°¿à°­à°¾à°—à°‚",
-  hara: "à°¹à°° à°µà°¿à°­à°¾à°—à°‚",
-  devi: "à°¦à±‡à°µà°¿ à°µà°¿à°­à°¾à°—à°‚",
-  telugu: "à°¤à±†à°²à±à°—à± à°µà°¿à°­à°¾à°—à°‚"
+  hari: "హరి విభాగం",
+  hara: "హర విభాగం",
+  devi: "దేవి విభాగం",
+  telugu: "తెలుగు విభాగం"
 };
 
 if (resultType) {
   if (type === "general") {
     const lvlText = levelLabels[level] || level;
-    resultType.innerText = `à°¸à°¾à°§à°¾à°°à°£ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ (${lvlText})`;
+    resultType.innerText = `సాధారణ ప్రశ్నావళి (${lvlText})`;
   } else {
-    resultType.innerText = categoryLabels[category] || "à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿";
+    resultType.innerText = categoryLabels[category] || "ప్రశ్నావళి";
   }
 }
 
@@ -66,12 +66,12 @@ if (resultType) {
 ===================================== */
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    if (lifetimeScore) lifetimeScore.innerText = "à°²à°¾à°—à°¿à°¨à± à°…à°µà±à°µà°²à±‡à°¦à±";
+    if (lifetimeScore) lifetimeScore.innerText = "లాగిన్ అవ్వలేదు";
     if (communityScore) {
       if (type === "category" && category) {
         loadCommunityScoreOnly();
       } else {
-        communityScore.innerText = "à°¸à°¾à°§à°¾à°°à°£à°‚";
+        communityScore.innerText = "సాధారణం";
       }
     }
     return;
@@ -85,7 +85,6 @@ onAuthStateChanged(auth, async (user) => {
     if (snap.exists()) {
       const data = snap.data();
 
-      // Total lifetime score across all categories
       let totalLifetime = 0;
       Object.keys(data).forEach(k => {
         if (k.startsWith("quizScore_")) {
@@ -93,9 +92,9 @@ onAuthStateChanged(auth, async (user) => {
         }
       });
 
-      if (lifetimeScore) lifetimeScore.innerText = `${totalLifetime.toLocaleString()} â­`;
+      if (lifetimeScore) lifetimeScore.innerText = `${totalLifetime.toLocaleString()} ⭐`;
     } else {
-      if (lifetimeScore) lifetimeScore.innerText = "0 â­";
+      if (lifetimeScore) lifetimeScore.innerText = "0 ⭐";
     }
   } catch (e) {
     console.error("Error loading user lifetime score:", e);
@@ -106,7 +105,7 @@ onAuthStateChanged(auth, async (user) => {
   if (type === "category" && category) {
     loadCommunityScoreOnly();
   } else {
-    if (communityScore) communityScore.innerText = "à°¸à°¾à°§à°¾à°°à°£à°‚";
+    if (communityScore) communityScore.innerText = "సాధారణం";
   }
 });
 

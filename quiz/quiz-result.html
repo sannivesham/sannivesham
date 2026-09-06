@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>à°«à°²à°¿à°¤à°¾à°²à± - à°¸à°¨à±à°¨à°¿à°µà±‡à°¶à°‚ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ | Sannivesham</title>
+  <title>ఫలితాలు - సన్నివేశం ప్రశ్నావళి | Sannivesham</title>
   <link rel="canonical" href="https://sannivesham.com/quiz/quiz-result.html">
 
   <!-- Google Fonts -->
@@ -29,63 +29,63 @@
 
   <main class="play-quiz-page">
     <!-- Top Pill Navbar -->
-    <nav class="quiz-navbar" aria-label="à°«à°²à°¿à°¤à°¾à°² à°¨à°¾à°µà°¿à°—à±‡à°·à°¨à±">
-      <a href="index.html" class="quiz-nav-back" title="à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿à°•à°¿ à°¤à°¿à°°à°¿à°—à°¿ à°µà±†à°³à±à°³à°‚à°¡à°¿">
-        <span>â† à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿</span>
+    <nav class="quiz-navbar" aria-label="ఫలితాల నావిగేషన్">
+      <a href="index.html" class="quiz-nav-back" title="ప్రశ్నావళికి తిరిగి వెళ్ళండి">
+        <span>← ప్రశ్నావళి</span>
       </a>
 
       <div class="quiz-nav-brand">
-        <span class="quiz-nav-icon">ðŸª”</span>
-        <span class="quiz-nav-title">à°¸à°¨à±à°¨à°¿à°µà±‡à°¶à°‚ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿</span>
+        <span class="quiz-nav-icon">🪔</span>
+        <span class="quiz-nav-title">సన్నివేశం ప్రశ్నావళి</span>
       </div>
 
       <div class="quiz-nav-actions">
-        <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="à°¶à±ˆà°²à°¿ à°Žà°‚à°ªà°¿à°•">
-          <span>ðŸŽ¨</span>
-          <span>à°¶à±ˆà°²à°¿</span>
+        <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="శైలి ఎంపిక">
+          <span>🎨</span>
+          <span>శైలి</span>
         </button>
       </div>
     </nav>
 
     <!-- Results Card -->
     <div class="play-quiz-card result-card">
-      <div style="font-size: 3.2rem; margin-bottom: 8px;">ðŸŽ‰</div>
-      <h1>à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ à°ªà±‚à°°à±à°¤à°¯à°¿à°‚à°¦à°¿!</h1>
-      <p id="resultType" style="color: var(--quiz-gold); font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿</p>
+      <div style="font-size: 3.2rem; margin-bottom: 8px;">🎉</div>
+      <h1>ప్రశ్నావళి పూర్తయింది!</h1>
+      <p id="resultType" style="color: var(--quiz-gold); font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">ప్రశ్నావళి</p>
 
       <h2 id="finalScore">0 / 10</h2>
 
       <div class="result-stats-grid">
         <div class="result-stat-box">
-          <span class="result-stat-label">ðŸŽ¯ à°–à°šà±à°šà°¿à°¤à°¤à±à°µà°‚</span>
+          <span class="result-stat-label">🎯 ఖచ్చితత్వం</span>
           <span class="result-stat-val" id="accuracyText">0%</span>
         </div>
         <div class="result-stat-box">
-          <span class="result-stat-label">âœ¨ à°¸à°‚à°ªà°¾à°¦à°¿à°‚à°šà°¿à°¨ à°ªà°¾à°¯à°¿à°‚à°Ÿà±à°²à±</span>
+          <span class="result-stat-label">✨ సంపాదించిన పాయింట్లు</span>
           <span class="result-stat-val" id="pointsText">+0</span>
         </div>
         <div class="result-stat-box">
-          <span class="result-stat-label">â­ à°®à±Šà°¤à±à°¤à°‚ à°œà±€à°µà°¿à°¤à°•à°¾à°² à°¸à±à°•à±‹à°°à±</span>
+          <span class="result-stat-label">⭐ మొత్తం జీవితకాల స్కోరు</span>
           <span class="result-stat-val" id="lifetimeScore">0</span>
         </div>
         <div class="result-stat-box">
-          <span class="result-stat-label">ðŸŒ à°¸à°®à±‚à°¹ à°«à°²à°¿à°¤à°‚</span>
+          <span class="result-stat-label">🌍 సమూహ ఫలితం</span>
           <span class="result-stat-val" id="communityScore">0</span>
         </div>
       </div>
 
       <div class="quiz-bottom-buttons">
         <button id="playAgainBtn" style="background: linear-gradient(135deg, #ffd166, #ff9f1c); color: #111; font-weight: 800;">
-          ðŸ”„ à°®à°³à±à°³à±€ à°†à°¡à°‚à°¡à°¿
+          🔄 మళ్ళీ ఆడండి
         </button>
         <button id="leaderboardBtn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,209,102,0.4); color: var(--quiz-gold); font-weight: 800;">
-          ðŸ† à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°•
+          🏆 అగ్రస్థాన పట్టిక
         </button>
       </div>
 
       <div style="margin-top: 24px;">
         <a href="index.html" class="quiz-nav-btn" style="display: inline-flex; padding: 10px 28px; font-size: 0.95rem;">
-          â† à°ªà±à°°à°§à°¾à°¨ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ à°ªà±à°Ÿà°•à± à°µà±†à°³à±à°²à°‚à°¡à°¿
+          ← ప్రధాన ప్రశ్నావళి పుటకు వెళ్లండి
         </a>
       </div>
     </div>
@@ -96,7 +96,7 @@
     <div class="theme-modal-backdrop" id="themeModalBackdrop"></div>
     <div class="theme-modal-card">
       <div class="theme-modal-header">
-        <h3>ðŸŽ¨ à°¶à±ˆà°²à°¿à°¨à°¿ à°Žà°‚à°šà±à°•à±‹à°‚à°¡à°¿ (Themes)</h3>
+        <h3>🎨 శైలిని ఎంచుకోండి (Themes)</h3>
         <button class="theme-modal-close" id="themeModalClose">&times;</button>
       </div>
       <div class="theme-list" id="themeList"></div>

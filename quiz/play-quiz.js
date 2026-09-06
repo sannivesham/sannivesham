@@ -157,7 +157,6 @@ async function loadQuestions() {
         const normDoc = normalizeQuestion(d, "");
         if (!normDoc.question) return;
 
-        // Category check (case-insensitive)
         const docCat = normDoc.category;
         if (type === "general") {
           if (docCat === "general" || !docCat) {
@@ -183,7 +182,6 @@ async function loadQuestions() {
       else if (normCategory === "devi") legacyCollectionsToQuery.push({ name: "quizDevi", cat: "devi" });
       else if (normCategory === "telugu") legacyCollectionsToQuery.push({ name: "quizTelugu", cat: "telugu" });
       else if (normCategory) {
-        // dynamic capitalization fallback
         legacyCollectionsToQuery.push({
           name: `quiz${normCategory.charAt(0).toUpperCase() + normCategory.slice(1)}`,
           cat: normCategory
@@ -211,7 +209,6 @@ async function loadQuestions() {
       if (levelMatches.length >= 5) {
         questions = levelMatches;
       } else {
-        // Gracefully combine matching questions with remaining pool so player is never blocked
         questions = candidatePool;
       }
     } else {
@@ -276,9 +273,8 @@ function showQuestion() {
   progressBar.style.width =
     `${((currentQuestion + 1) / questions.length) * 100}%`;
 
-  // Fade the question in for a smoother transition between questions
   questionEl.classList.remove("quiz-fade-in");
-  void questionEl.offsetWidth; // restart animation
+  void questionEl.offsetWidth;
   questionEl.innerText = q.question || "";
   questionEl.classList.add("quiz-fade-in");
 
@@ -431,9 +427,6 @@ async function finishQuiz() {
       console.error("User score save failed:", error);
     }
 
-    // NOTE: this block previously ran twice (a duplicate copy existed here),
-    // which double-counted every category quiz's score in sectionScores.
-    // Now it runs exactly once.
     if (type === "category" && category) {
       const secRef = doc(db, "sectionScores", category);
 

@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   à°¸à°¨à±à°¨à°¿à°µà±‡à°¶à°‚ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ (QUIZ) - à°†à°§à±à°¨à°¿à°• à°¸à±à°Ÿà±ˆà°²à°¿à°‚à°—à±
+/* =========================================================
+   సన్నివేశం ప్రశ్నావళి (QUIZ) - ఆధునిక స్టైలింగ్
    ========================================================= */
 
 :root {
@@ -379,12 +379,12 @@ body {
 }
 
 .user-login-btn:hover {
-  transform: translateY(-2px) scale(1.03);
+  transform: translateY(-2px scale(1.03);
   box-shadow: 0 6px 24px rgba(255, 209, 102, 0.5);
 }
 
 /* =========================================================
-   GENERAL QUIZ BOX (à°¸à°¾à°§à°¾à°°à°£ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿)
+   GENERAL QUIZ BOX (సాధారణ ప్రశ్నావళి)
    ========================================================= */
 .general-quiz-box {
   background: var(--quiz-card-bg);
@@ -510,7 +510,7 @@ body {
 }
 
 /* =========================================================
-   CATEGORY QUIZ GRID (à°µà°¿à°­à°¾à°—à°¾à°² à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿)
+   CATEGORY QUIZ GRID (విభాగాల ప్రశ్నావళి)
    ========================================================= */
 .quiz-section-header {
   text-align: center;
@@ -578,7 +578,6 @@ body {
   filter: brightness(1.08);
 }
 
-/* Gradient overlay for cards */
 .quiz-category-card::before {
   content: "";
   position: absolute;
@@ -641,7 +640,6 @@ body {
   min-height: 42px;
 }
 
-/* Real-time Community Score Badge */
 .community-score-badge {
   display: flex;
   align-items: center;
