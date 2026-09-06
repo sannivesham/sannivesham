@@ -59,19 +59,26 @@ function getQuizKey() {
 }
 
 function setTitle() {
+  const levelNames = {
+    easy: "సులభం",
+    medium: "మధ్యమం",
+    hard: "కష్టం"
+  };
+
   if (type === "general") {
-    quizTitle.innerText = `${level.toUpperCase()} Quiz`;
+    const lvlText = levelNames[level] || level;
+    quizTitle.innerText = `సాధారణ ప్రశ్నావళి (${lvlText})`;
     return;
   }
 
   const titles = {
-    hari: "హరి Quiz",
-    hara: "హర Quiz",
-    devi: "దేవి Quiz",
-    telugu: "తెలుగు Quiz"
+    hari: "హరి విభాగ ప్రశ్నావళి",
+    hara: "హర విభాగ ప్రశ్నావళి",
+    devi: "దేవి విభాగ ప్రశ్నావళి",
+    telugu: "తెలుగు విభాగ ప్రశ్నావళి"
   };
 
-  quizTitle.innerText = titles[category] || "Quiz";
+  quizTitle.innerText = titles[category] || "ప్రశ్నావళి";
 }
 
 function normalizeQuestion(item, defaultCategory = "") {
@@ -133,7 +140,7 @@ function getOptions(q) {
 async function loadQuestions() {
   setTitle();
 
-  questionEl.innerText = "Loading...";
+  questionEl.innerText = "ప్రశ్నలు లోడ్ అవుతున్నాయి...";
 
   try {
     const normCategory = (category || "").toLowerCase().trim();
@@ -224,8 +231,8 @@ async function loadQuestions() {
     questions = questions.slice(0, 10);
 
     if (questions.length === 0) {
-      questionEl.innerText = "ఇంకా ప్రశ్నలు లేవు. Admin లో add చేయండి.";
-      questionCountEl.innerText = "Question 0 / 0";
+      questionEl.innerText = "ఇంకా ప్రశ్నలు లేవు. అడ్మిన్ లో జోడించండి.";
+      questionCountEl.innerText = "ప్రశ్న 0 / 0";
       timer.innerText = "0";
       nextBtn.disabled = true;
       optionButtons.forEach(btn => {
@@ -239,7 +246,7 @@ async function loadQuestions() {
 
   } catch (error) {
     console.error(error);
-    questionEl.innerText = "Questions load కాలేదు. Console check చేయండి.";
+    questionEl.innerText = "ప్రశ్నలు లోడ్ కాలేదు. దయచేసి మళ్ళీ ప్రయత్నించండి.";
   }
 }
 
@@ -264,7 +271,7 @@ function showQuestion() {
   isChecking = false;
   nextBtn.disabled = false;
 
-  questionCountEl.innerText = `Question ${currentQuestion + 1} / ${questions.length}`;
+  questionCountEl.innerText = `ప్రశ్న ${currentQuestion + 1} / ${questions.length}`;
 
   progressBar.style.width =
     `${((currentQuestion + 1) / questions.length) * 100}%`;
@@ -377,9 +384,9 @@ nextBtn.onclick = () => {
 };
 
 quitBtn.onclick = () => {
-  if (confirm("Quiz వదిలేస్తారా?")) {
+  if (confirm("ప్రశ్నావళిని వదిలేసి వెనుకకు వెళ్లాలనుకుంటున్నారా?")) {
     clearInterval(timerInterval);
-    window.location.href = "quiz.html";
+    window.location.href = "index.html";
   }
 };
 

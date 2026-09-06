@@ -1,18 +1,15 @@
 ﻿import { db, auth } from "../firebase-config.js";
-
 import {
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
 import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 /* =====================================
-   LOCAL STORAGE
+   LOCAL STORAGE DATA
 ===================================== */
-
 const score = Number(localStorage.getItem("quizScore")) || 0;
 const total = Number(localStorage.getItem("quizTotal")) || 10;
 const type = localStorage.getItem("quizType") || "general";
@@ -20,182 +17,120 @@ const level = localStorage.getItem("quizLevel") || "";
 const category = localStorage.getItem("quizCategory") || "";
 const quizKey = localStorage.getItem("quizKey") || "";
 
-const accuracy =
-  total === 0
-    ? 0
-    : Math.round((score / total) * 100);
+const accuracy = total === 0 ? 0 : Math.round((score / total) * 100);
 
 /* =====================================
-   HTML
+   DOM ELEMENTS
 ===================================== */
-
 const resultType = document.getElementById("resultType");
 const finalScore = document.getElementById("finalScore");
 const accuracyText = document.getElementById("accuracyText");
 const pointsText = document.getElementById("pointsText");
-
 const lifetimeScore = document.getElementById("lifetimeScore");
 const communityScore = document.getElementById("communityScore");
 
-/* =====================================
-   SHOW RESULT
-===================================== */
-
-finalScore.innerText = `${score} / ${total}`;
-
-accuracyText.innerText =
-  `Accuracy : ${accuracy}%`;
-
-pointsText.innerText =
-  `+${score} Points`;
-
-if (type === "general") {
-
-  resultType.innerText =
-    `General Quiz (${level.toUpperCase()})`;
-
-}
-else {
-
-  const titles = {
-    hari: "Hari Quiz",
-    hara: "Hara Quiz",
-    devi: "Devi Quiz",
-    telugu: "Telugu Quiz"
-  };
-
-  resultType.innerText =
-    titles[category] || "Quiz";
-
-}
+const playAgainBtn = document.getElementById("playAgainBtn");
+const leaderboardBtn = document.getElementById("leaderboardBtn");
 
 /* =====================================
-   USER DATA
+   RENDER RESULT DETAILS
 ===================================== */
+if (finalScore) finalScore.innerText = `${score} / ${total}`;
+if (accuracyText) accuracyText.innerText = `${accuracy}%`;
+if (pointsText) pointsText.innerText = `+${score}`;
 
+const levelLabels = {
+  easy: "à°¸à±à°²à°­à°‚",
+  medium: "à°®à°§à±à°¯à°®à°‚",
+  hard: "à°•à°·à±à°Ÿà°‚"
+};
+
+const categoryLabels = {
+  hari: "à°¹à°°à°¿ à°µà°¿à°­à°¾à°—à°‚",
+  hara: "à°¹à°° à°µà°¿à°­à°¾à°—à°‚",
+  devi: "à°¦à±‡à°µà°¿ à°µà°¿à°­à°¾à°—à°‚",
+  telugu: "à°¤à±†à°²à±à°—à± à°µà°¿à°­à°¾à°—à°‚"
+};
+
+if (resultType) {
+  if (type === "general") {
+    const lvlText = levelLabels[level] || level;
+    resultType.innerText = `à°¸à°¾à°§à°¾à°°à°£ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ (${lvlText})`;
+  } else {
+    resultType.innerText = categoryLabels[category] || "à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿";
+  }
+}
+
+/* =====================================
+   USER DATA & COMMUNITY SCORES
+===================================== */
 onAuthStateChanged(auth, async (user) => {
-
   if (!user) {
-
-    lifetimeScore.innerText =
-      "⭐ Login to save Lifetime Score";
-
-    communityScore.innerText =
-      "🌍 Login Required";
-
+    if (lifetimeScore) lifetimeScore.innerText = "à°²à°¾à°—à°¿à°¨à± à°…à°µà±à°µà°²à±‡à°¦à±";
+    if (communityScore) {
+      if (type === "category" && category) {
+        loadCommunityScoreOnly();
+      } else {
+        communityScore.innerText = "à°¸à°¾à°§à°¾à°°à°£à°‚";
+      }
+    }
     return;
-
   }
 
-  const userRef =
-    doc(db, "users", user.uid);
-
+  // Load User Lifetime Score
   try {
-
-    const snap =
-      await getDoc(userRef);
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
 
     if (snap.exists()) {
-
       const data = snap.data();
 
-      let scoreKey = "";
+      // Total lifetime score across all categories
+      let totalLifetime = 0;
+      Object.keys(data).forEach(k => {
+        if (k.startsWith("quizScore_")) {
+          totalLifetime += Number(data[k] || 0);
+        }
+      });
 
-      if (type === "general") {
-
-        scoreKey =
-          `quizScore_general_${level}`;
-
-      }
-      else {
-
-        scoreKey =
-          `quizScore_${category}`;
-
-      }
-
-      const totalScore =
-        data[scoreKey] || 0;
-
-      lifetimeScore.innerText =
-        `⭐ Lifetime Score : ${totalScore}`;
-
+      if (lifetimeScore) lifetimeScore.innerText = `${totalLifetime.toLocaleString()} â­`;
+    } else {
+      if (lifetimeScore) lifetimeScore.innerText = "0 â­";
     }
-    else {
-
-      lifetimeScore.innerText =
-        "⭐ Lifetime Score : 0";
-
-    }
-
-  }
-  catch (e) {
-
-    console.error(e);
-
-    lifetimeScore.innerText =
-      "⭐ Lifetime Score : --";
-
-  }
-    /* =====================================
-     COMMUNITY SCORE
-  ===================================== */
-
-  if (type === "category") {
-
-    try {
-
-      const secRef = doc(db, "sectionScores", category);
-
-      const secSnap = await getDoc(secRef);
-
-      if (secSnap.exists()) {
-
-        const totalCommunity =
-          secSnap.data().total || 0;
-
-        communityScore.innerText =
-          `🌍 Community Score : ${totalCommunity}`;
-
-      }
-      else {
-
-        communityScore.innerText =
-          "🌍 Community Score : 0";
-
-      }
-
-    }
-    catch (e) {
-
-      console.error(e);
-
-      communityScore.innerText =
-        "🌍 Community Score : --";
-
-    }
-
-  }
-  else {
-
-    communityScore.innerText =
-      "🌍 General Quiz has separate leaderboards";
-
+  } catch (e) {
+    console.error("Error loading user lifetime score:", e);
+    if (lifetimeScore) lifetimeScore.innerText = "--";
   }
 
+  // Load Community Score for Categories
+  if (type === "category" && category) {
+    loadCommunityScoreOnly();
+  } else {
+    if (communityScore) communityScore.innerText = "à°¸à°¾à°§à°¾à°°à°£à°‚";
+  }
 });
 
+async function loadCommunityScoreOnly() {
+  try {
+    const secRef = doc(db, "sectionScores", category);
+    const secSnap = await getDoc(secRef);
+    if (secSnap.exists()) {
+      const totalCommunity = Number(secSnap.data().total) || 0;
+      if (communityScore) communityScore.innerText = `${totalCommunity.toLocaleString()}`;
+    } else {
+      if (communityScore) communityScore.innerText = "0";
+    }
+  } catch (e) {
+    console.error("Error loading community score:", e);
+    if (communityScore) communityScore.innerText = "--";
+  }
+}
+
 /* =====================================
-   PLAY AGAIN BUTTON
+   BUTTON ACTIONS
 ===================================== */
-
-const playAgainBtn =
-  document.querySelectorAll(".quiz-bottom-buttons button")[0];
-
 if (playAgainBtn) {
-
   playAgainBtn.onclick = () => {
-
     localStorage.removeItem("quizScore");
     localStorage.removeItem("quizTotal");
     localStorage.removeItem("quizType");
@@ -203,57 +138,34 @@ if (playAgainBtn) {
     localStorage.removeItem("quizCategory");
     localStorage.removeItem("quizKey");
 
-    window.location.href = "quiz.html";
-
+    if (type === "general") {
+      window.location.href = `play-quiz.html?type=general&level=${level || 'easy'}`;
+    } else if (category) {
+      window.location.href = `play-quiz.html?type=category&category=${category}`;
+    } else {
+      window.location.href = "index.html";
+    }
   };
-
 }
-
-/* =====================================
-   LEADERBOARD BUTTON
-===================================== */
-
-const leaderboardBtn =
-  document.querySelectorAll(".quiz-bottom-buttons button")[1];
 
 if (leaderboardBtn) {
-
   leaderboardBtn.onclick = () => {
-
     if (type === "general") {
-
-      window.location.href =
-        `leaderboard.html?type=general&level=${level}`;
-
+      window.location.href = `leaderboard.html?type=general&level=${level || 'easy'}`;
+    } else {
+      window.location.href = `leaderboard.html?type=category&category=${category || 'hari'}`;
     }
-    else {
-
-      window.location.href =
-        `leaderboard.html?type=category&category=${category}`;
-
-    }
-
   };
-
 }
 
 /* =====================================
-   CLEANUP
+   CLEANUP ON UNLOAD
 ===================================== */
-
 window.addEventListener("beforeunload", () => {
-
   localStorage.removeItem("quizScore");
   localStorage.removeItem("quizTotal");
   localStorage.removeItem("quizType");
   localStorage.removeItem("quizLevel");
   localStorage.removeItem("quizCategory");
   localStorage.removeItem("quizKey");
-
 });
-
-/* =====================================
-   END
-===================================== */
-
-console.log("Quiz Result Loaded Successfully");

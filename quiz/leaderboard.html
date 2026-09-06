@@ -1,74 +1,267 @@
 ﻿<!DOCTYPE html>
 <html lang="te">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaderboard | Sannivesham</title>
-  <script src="../theme.js"></script>
-    <link rel="stylesheet" href="../style.css">
-  <link rel="stylesheet" href="quiz.css">
+
+  <title>à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°• (Leaderboard) - à°¸à°¨à±à°¨à°¿à°µà±‡à°¶à°‚ | Sannivesham</title>
+  <meta name="description" content="à°¸à°¨à±à°¨à°¿à°µà±‡à°¶à°‚ à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°• â€” à°­à°¾à°°à°¤à±€à°¯ à°¸à°‚à°¸à±à°•à±ƒà°¤à°¿, à°‡à°¤à°¿à°¹à°¾à°¸à°¾à°²à±, à°ªà±à°°à°¾à°£à°¾à°²à± à°®à°°à°¿à°¯à± à°¤à±†à°²à±à°—à± à°­à°¾à°·à°¾ à°œà±à°žà°¾à°¨ à°¸à°¾à°§à°•à±à°² à°°à±à°¯à°¾à°‚à°•à±à°²à±.">
+  <link rel="canonical" href="https://sannivesham.com/quiz/leaderboard.html">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Theme & Styles -->
+  <script src="../theme.js?v=20260906"></script>
+  <link rel="stylesheet" href="../style.css?v=20260906">
+  <link rel="stylesheet" href="quiz.css?v=20260906">
 </head>
-
 <body>
+  <!-- 3D Sacred Particle Canvas -->
+  <canvas id="canvas3D"></canvas>
 
+  <!-- Dynamic Theme Background Layer -->
   <div class="quiz-bg"></div>
 
-  <nav class="glass-navbar">
-    <a href="quiz.html">← వెనుకకు</a>
-    <a href="../index.html">హోమ్</a>
-  </nav>
+  <main class="play-quiz-page" style="max-width: 960px;">
+    <!-- Top Pill Navbar -->
+    <nav class="quiz-navbar" aria-label="à°²à±€à°¡à°°à±â€Œà°¬à±‹à°°à±à°¡à± à°¨à°¾à°µà°¿à°—à±‡à°·à°¨à±">
+      <a href="index.html" class="quiz-nav-back" title="à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿ à°ªà±à°Ÿà°•à± à°µà±†à°³à±à°²à°‚à°¡à°¿">
+        <span>â† à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿</span>
+      </a>
 
-  <section class="play-quiz-page">
+      <div class="quiz-nav-brand">
+        <span class="quiz-nav-icon">ðŸ†</span>
+        <span class="quiz-nav-title">à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°•</span>
+      </div>
 
-    <div class="play-quiz-card">
-      <h1 id="lbTitle" style="color:#ffd166;text-align:center;margin-bottom:28px;">
-        🏆 లీడర్‌బోర్డ్
-      </h1>
-
-      <div id="lbList"></div>
-
-      <div style="text-align:center;margin-top:28px;">
-        <button onclick="window.location.href='quiz.html'"
-          style="padding:13px 32px;border-radius:30px;background:#d4af37;color:#111;border:none;font-weight:bold;font-size:16px;cursor:pointer;">
-          వెనుకకు
+      <div class="quiz-nav-actions">
+        <a href="../index.html" class="quiz-nav-btn" title="à°ªà±à°°à°¾à°°à°‚à°­ à°ªà±à°Ÿà°•à± à°µà±†à°³à±à°²à°‚à°¡à°¿">
+          <span>ðŸ </span>
+          <span>à°ªà±à°°à°¾à°°à°‚à°­à°‚</span>
+        </a>
+        <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="à°¶à±ˆà°²à°¿ à°Žà°‚à°ªà°¿à°•">
+          <span>ðŸŽ¨</span>
+          <span>à°¶à±ˆà°²à°¿</span>
         </button>
       </div>
+    </nav>
+
+    <!-- Main Card Container -->
+    <div class="play-quiz-card" style="padding: 32px 24px;">
+      <!-- Interactive Category Switcher Tabs -->
+      <div class="lb-tabs-wrapper" id="lbTabs">
+        <button class="lb-tab-btn" data-type="category" data-cat="hari">
+          <span>ðŸŒŸ à°¹à°°à°¿</span>
+        </button>
+        <button class="lb-tab-btn" data-type="category" data-cat="hara">
+          <span>ðŸ”± à°¹à°°</span>
+        </button>
+        <button class="lb-tab-btn" data-type="category" data-cat="devi">
+          <span>ðŸŒº à°¦à±‡à°µà°¿</span>
+        </button>
+        <button class="lb-tab-btn" data-type="category" data-cat="telugu">
+          <span>ðŸ“œ à°¤à±†à°²à±à°—à±</span>
+        </button>
+        <button class="lb-tab-btn" data-type="general" data-level="easy">
+          <span>ðŸŸ¢ à°¸à°¾à°§à°¾à°°à°£ (à°¸à±à°²à°­à°‚)</span>
+        </button>
+        <button class="lb-tab-btn" data-type="general" data-level="medium">
+          <span>ðŸŸ¡ à°¸à°¾à°§à°¾à°°à°£ (à°®à°§à±à°¯à°®à°‚)</span>
+        </button>
+        <button class="lb-tab-btn" data-type="general" data-level="hard">
+          <span>ðŸ”´ à°¸à°¾à°§à°¾à°°à°£ (à°•à°·à±à°Ÿà°‚)</span>
+        </button>
+      </div>
+
+      <!-- Leaderboard Header -->
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 id="lbTitle" style="color: var(--quiz-gold); font-size: 2.2rem; font-weight: 800; margin-bottom: 6px;">
+          ðŸ† à°…à°—à±à°°à°¸à±à°¥à°¾à°¨ à°ªà°Ÿà±à°Ÿà°¿à°•
+        </h1>
+        <p id="lbSubtitle" style="color: var(--quiz-text-muted); font-size: 0.98rem;">
+          à°…à°¤à±à°¯à±à°¤à±à°¤à°® à°œà±à°žà°¾à°¨ à°¸à°¾à°§à°•à±à°² à°¸à±à°•à±‹à°°à±à°²à± à°®à°°à°¿à°¯à± à°°à±à°¯à°¾à°‚à°•à±à°²à±
+        </p>
+      </div>
+
+      <!-- Top 3 Podium -->
+      <div id="lbPodium" class="lb-podium" style="display: none;"></div>
+
+      <!-- Full Leaderboard List -->
+      <div id="lbList" class="lb-list">
+        <p style="color: rgba(255,209,102,0.7); text-align: center; padding: 24px;">
+          à°…à°—à±à°°à°¸à±à°¥à°¾à°¨à°¾à°² à°µà°¿à°µà°°à°¾à°²à± à°²à±‹à°¡à± à°…à°µà±à°¤à±à°¨à±à°¨à°¾à°¯à°¿...
+        </p>
+      </div>
+
+      <!-- Back Action -->
+      <div style="text-align: center; margin-top: 36px;">
+        <a href="index.html" class="start-quiz-btn" style="text-decoration: none; padding: 12px 36px; display: inline-flex;">
+          <span>â† à°ªà±à°°à°¶à±à°¨à°¾à°µà°³à°¿à°•à°¿ à°¤à°¿à°°à°¿à°—à°¿ à°µà±†à°³à±à°²à°‚à°¡à°¿</span>
+        </a>
+      </div>
     </div>
+  </main>
 
-  </section>
+  <!-- Theme Modal -->
+  <div id="themeModal" class="theme-modal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="theme-modal-backdrop" id="themeModalBackdrop"></div>
+    <div class="theme-modal-card">
+      <div class="theme-modal-header">
+        <h3>ðŸŽ¨ à°¶à±ˆà°²à°¿à°¨à°¿ à°Žà°‚à°šà±à°•à±‹à°‚à°¡à°¿ (Themes)</h3>
+        <button class="theme-modal-close" id="themeModalClose">&times;</button>
+      </div>
+      <div class="theme-list" id="themeList"></div>
+    </div>
+  </div>
 
+  <!-- Global App Script -->
   <script src="../script.js"></script>
+
+  <!-- 3D Sacred Particle Canvas Script -->
+  <script>
+  (function () {
+    const canvas = document.getElementById("canvas3D");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    let mouseX = w / 2;
+    let mouseY = h / 2;
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    const particleCount = window.innerWidth < 768 ? 36 : 70;
+    const particles = [];
+    const colors = ["#ffd166", "#ff9f1c", "#ffeaa7", "#d4af37", "#f39c12"];
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: (Math.random() - 0.5) * w * 1.6,
+        y: (Math.random() - 0.5) * h * 1.6,
+        z: Math.random() * 800 + 100,
+        radius: Math.random() * 2.4 + 1.2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: -(Math.random() * 0.45 + 0.25)
+      });
+    }
+
+    let angleY = 0;
+    let angleX = 0;
+    const fov = 380;
+
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+
+      const targetAngleY = ((mouseX - w / 2) / w) * 0.25;
+      const targetAngleX = ((mouseY - h / 2) / h) * 0.18;
+      angleY += (targetAngleY - angleY) * 0.04;
+      angleX += (targetAngleX - angleX) * 0.04;
+
+      const cx = w / 2;
+      const cy = h / 2;
+
+      particles.forEach(p => {
+        p.y += p.vy;
+        if (p.y < -h * 0.8) p.y = h * 0.8;
+
+        const cosY = Math.cos(angleY);
+        const sinY = Math.sin(angleY);
+        const rx = p.x * cosY - p.z * sinY;
+        const rz = p.x * sinY + p.z * cosY + 500;
+
+        if (rz > 50) {
+          const scale = fov / rz;
+          const sx = cx + rx * scale;
+          const sy = cy + p.y * scale;
+
+          const alpha = Math.max(0.12, Math.min(0.75, scale * 1.2));
+          ctx.beginPath();
+          ctx.arc(sx, sy, p.radius * scale * 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = alpha;
+          ctx.shadowBlur = 8 * scale;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1.0;
+        }
+      });
+
+      requestAnimationFrame(render);
+    }
+    render();
+  })();
+  </script>
+
+  <!-- Leaderboard Logic Module -->
   <script type="module" src="leaderboard.js"></script>
 
+  <!-- Theme Background Loader -->
   <script type="module">
     import { db } from "../firebase-config.js";
-
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     async function loadQuizBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
+      try {
+        let data = null;
+        const themeSnap = await getDoc(doc(db, "settings", "theme"));
+        if (themeSnap.exists()) data = themeSnap.data();
+        if (!data) {
+          const bgSnap = await getDoc(doc(db, "settings", "backgrounds"));
+          if (bgSnap.exists()) data = bgSnap.data();
+        }
+        if (!data) return;
 
-      const data = snap.data();
-      const bg = document.querySelector(".quiz-bg");
-      if (!bg) return;
+        const bg = document.querySelector(".quiz-bg");
+        if (!bg) return;
 
-      if (window.innerWidth <= 700 && data.quizMobile) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
-      } else if (data.quizPc) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "quiz")
+          : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
+
+        if (res && res.chosen) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}")`;
+        }
+      } catch (err) {
+        console.warn("Quiz bg load error:", err);
       }
     }
 
     loadQuizBackground();
+    window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
+
+    // Theme toggle modal logic
+    const themeBtn = document.getElementById("themeToggleBtn");
+    const themeModal = document.getElementById("themeModal");
+    const themeClose = document.getElementById("themeModalClose");
+    const themeBackdrop = document.getElementById("themeModalBackdrop");
+
+    if (themeBtn && themeModal) {
+      themeBtn.addEventListener("click", () => {
+        themeModal.style.display = "flex";
+        if (window.SanniveshamTheme && typeof window.SanniveshamTheme.renderThemeList === "function") {
+          window.SanniveshamTheme.renderThemeList();
+        }
+      });
+    }
+
+    function closeThemeModal() {
+      if (themeModal) themeModal.style.display = "none";
+    }
+
+    if (themeClose) themeClose.addEventListener("click", closeThemeModal);
+    if (themeBackdrop) themeBackdrop.addEventListener("click", closeThemeModal);
   </script>
-
 </body>
-
 </html>
