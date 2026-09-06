@@ -1898,7 +1898,7 @@ const defaultHomeCardLabels = {
   videosCard: "＋ Videos Card",
   calendarCard: "＋ Calendar Card",
   chantCounterCard: "＋ Chant Counter Card",
-  poojaRoomCard: "＋ 🪔 Festival Counter Card",
+  poojaRoomCard: "＋ 🪔 Festival Counter (పండుగల గణకం)",
   storeCard: "＋ Store Card"
 };
 
