@@ -967,8 +967,8 @@
           const data = snap.data();
           const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme];
           if (themeConfig) {
-            themePc = themeConfig.pc || "";
-            themeMobile = themeConfig.mobile || "";
+            themePc = themeConfig.homePc || themeConfig.pc || "";
+            themeMobile = themeConfig.homeMobile || themeConfig.mobile || "";
           }
           if (!themePc) themePc = data.homePc || "";
           if (!themeMobile) themeMobile = data.homeMobile || "";
@@ -1007,24 +1007,41 @@
     loadHomeBackground();
     window.addEventListener("sannivesham_theme_changed", () => {
       loadHomeBackground();
+      loadHomeCards();
     });
 
     async function loadHomeCards() {
-      const snap = await getDoc(doc(db, "settings", "homeCards"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.eventsCard) document.getElementById("eventsCardImg").src = data.eventsCard;
-      if (data.festivalsCard) document.getElementById("festivalsCardImg").src = data.festivalsCard;
-      if (data.templesCard) document.getElementById("templesCardImg").src = data.templesCard;
-      if (data.storiesCard) document.getElementById("storiesCardImg").src = data.storiesCard;
-      if (data.slokasCard) document.getElementById("slokasCardImg").src = data.slokasCard;
-      if (data.quizCard) document.getElementById("quizCardImg").src = data.quizCard;
-      if (data.itihasaluCard) document.getElementById("itihasaluCardImg").src = data.itihasaluCard;
-      if (data.videosCard) document.getElementById("videosCardImg").src = data.videosCard;
-      if (data.calendarCard) document.getElementById("calendarCardImg").src = data.calendarCard;
-      if (data.chantCounterCard) document.getElementById("chantCounterCardImg").src = data.chantCounterCard;
-      if (data.poojaRoomCard) document.getElementById("poojaRoomCardImg").src = data.poojaRoomCard;
-      if (data.storeCard) document.getElementById("storeCardImg").src = data.storeCard;
+      try {
+        const snap = await getDoc(doc(db, "settings", "homeCards"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const currentTheme = window.SanniveshamTheme ? window.SanniveshamTheme.getTheme() : "ramayanam";
+        const themeCards = (data.themes && data.themes[currentTheme]) || {};
+
+        const cardMappings = [
+          { key: "eventsCard", id: "eventsCardImg" },
+          { key: "festivalsCard", id: "festivalsCardImg" },
+          { key: "templesCard", id: "templesCardImg" },
+          { key: "storiesCard", id: "storiesCardImg" },
+          { key: "slokasCard", id: "slokasCardImg" },
+          { key: "quizCard", id: "quizCardImg" },
+          { key: "itihasaluCard", id: "itihasaluCardImg" },
+          { key: "videosCard", id: "videosCardImg" },
+          { key: "calendarCard", id: "calendarCardImg" },
+          { key: "chantCounterCard", id: "chantCounterCardImg" },
+          { key: "poojaRoomCard", id: "poojaRoomCardImg" },
+          { key: "storeCard", id: "storeCardImg" }
+        ];
+
+        cardMappings.forEach(({ key, id }) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const url = themeCards[key] || data[key];
+          if (url) el.src = url;
+        });
+      } catch (err) {
+        console.warn("Home cards load failed:", err);
+      }
     }
     loadHomeCards();
 

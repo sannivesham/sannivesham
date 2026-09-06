@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 
 <head>
@@ -252,49 +252,25 @@
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     async function loadSlokasBackground() {
-
-      const snap =
-      await getDoc(
-        doc(db, "settings", "backgrounds")
-      );
-
-      if (!snap.exists()) return;
-
-      const data = snap.data();
-
-      const bg =
-      document.querySelector(".slokas-bg");
-
-      if (!bg) return;
-
-      if (
-        window.innerWidth <= 700 &&
-        data.slokasMobile
-      ) {
-
-        bg.style.backgroundImage =
-        `linear-gradient(
-          rgba(10,5,0,0.60),
-          rgba(10,5,0,0.65)
-        ),
-        url("${data.slokasMobile}")`;
-
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".slokas-bg");
+        if (!bg) return;
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "slokas")
+          : { chosen: (window.innerWidth <= 700 ? data.slokasMobile : data.slokasPc) || data.slokasPc };
+        if (res.chosen) {
+          bg.style.backgroundImage =
+            linear-gradient(rgba(8,5,2,0.82), rgba(8,5,2,0.88)), url("${res.chosen}");
+        }
+      } catch (err) {
+        console.warn("Slokas background load error:", err);
       }
-
-      else if (data.slokasPc) {
-
-        bg.style.backgroundImage =
-        `linear-gradient(
-          rgba(10,5,0,0.65),
-          rgba(10,5,0,0.70)
-        ),
-        url("${data.slokasPc}")`;
-
-      }
-
     }
-
     loadSlokasBackground();
+    window.addEventListener("sannivesham_theme_changed", loadSlokasBackground);
 
   </script>
 

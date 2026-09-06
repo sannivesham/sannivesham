@@ -203,33 +203,59 @@ navButtons.forEach((button) => {
 });
 
 /* ══════════════════════════════════════
-   THEME-WISE BACKGROUND MANAGER
+   UNIFIED THEME-WISE BACKGROUND MANAGER
 ══════════════════════════════════════ */
 
 const themeSelector = document.getElementById("themeSelectorDashboard");
-const themePcLabel = document.getElementById("currentThemePcLabel");
-const themeMobileLabel = document.getElementById("currentThemeMobileLabel");
-const themePcStatus = document.getElementById("themePcStatus");
-const themeMobileStatus = document.getElementById("themeMobileStatus");
+const bgThemeActiveLabel = document.getElementById("bgThemeActiveLabel");
 
 async function loadThemeBackgroundsAdmin() {
   if (!themeSelector) return;
   const currentTheme = themeSelector.value;
   const themeName = themeSelector.options[themeSelector.selectedIndex].text;
 
-  if (themePcLabel) themePcLabel.innerText = `${themeName} - PC Background`;
-  if (themeMobileLabel) themeMobileLabel.innerText = `${themeName} - Mobile Background`;
+  if (bgThemeActiveLabel) {
+    bgThemeActiveLabel.innerText = `Editing: ${themeName}`;
+  }
 
   try {
     const snap = await getDoc(doc(db, "settings", "backgrounds"));
-    if (snap.exists()) {
-      const data = snap.data();
-      const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme] || {};
-      if (themePcStatus) themePcStatus.innerText = themeConfig.pc ? "✅ Uploaded" : "Default / Not set";
-      if (themeMobileStatus) themeMobileStatus.innerText = themeConfig.mobile ? "✅ Uploaded" : "Default / Not set";
-    }
+    const data = snap.exists() ? snap.data() : {};
+    const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme] || {};
+
+    document.querySelectorAll(".bg-upload-btn").forEach((btn) => {
+      const key = btn.dataset.key;
+      const statusEl = document.getElementById(`status_${key}`);
+      if (!statusEl) return;
+
+      let customUrl = "";
+      if (currentTheme !== "global") {
+        customUrl = themeConfig[key] || "";
+        // Support legacy home background keys
+        if (!customUrl && key === "homePc") customUrl = themeConfig.pc || "";
+        if (!customUrl && key === "homeMobile") customUrl = themeConfig.mobile || "";
+      }
+
+      const globalUrl = data[key] || "";
+
+      if (currentTheme === "global") {
+        if (globalUrl) {
+          statusEl.innerHTML = `<span style="color:#2ec4b6;font-size:0.85rem;font-weight:bold;">✅ Global Set</span> <a href="${globalUrl}" target="_blank" style="color:#ffd166;margin-left:6px;text-decoration:underline;">View</a>`;
+        } else {
+          statusEl.innerHTML = `<span style="opacity:0.6;font-size:0.85rem;">Not set</span>`;
+        }
+      } else {
+        if (customUrl) {
+          statusEl.innerHTML = `<span style="color:#2ec4b6;font-size:0.85rem;font-weight:bold;">✅ Custom (${currentTheme})</span> <a href="${customUrl}" target="_blank" style="color:#ffd166;margin-left:6px;text-decoration:underline;">View</a>`;
+        } else if (globalUrl) {
+          statusEl.innerHTML = `<span style="color:#ffb703;font-size:0.85rem;">🌐 Using Global</span> <a href="${globalUrl}" target="_blank" style="color:#ffd166;margin-left:6px;text-decoration:underline;">View</a>`;
+        } else {
+          statusEl.innerHTML = `<span style="opacity:0.6;font-size:0.85rem;">Default / Not set</span>`;
+        }
+      }
+    });
   } catch (e) {
-    console.log("Error loading theme backgrounds:", e);
+    console.error("Error loading theme backgrounds:", e);
   }
 }
 
@@ -238,43 +264,55 @@ if (themeSelector) {
   loadThemeBackgroundsAdmin();
 }
 
-document.querySelectorAll(".theme-bg-upload-btn").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    if (!themeSelector) return;
-    const currentTheme = themeSelector.value;
-    const device = btn.dataset.device; // 'pc' or 'mobile'
-    const url = await uploadImage();
-    if (!url) return;
-
-    await setDoc(
-      doc(db, "settings", "backgrounds"),
-      {
-        themes: {
-          [currentTheme]: {
-            [device]: url
-          }
-        },
-        updatedAt: serverTimestamp()
-      },
-      { merge: true }
-    );
-
-    alert(`✅ ${currentTheme} ${device.toUpperCase()} background saved successfully!`);
-    loadThemeBackgroundsAdmin();
-  });
-});
-
-/* ══════════════════════════════════════
-   STANDARD BACKGROUND UPLOAD MANAGER
-══════════════════════════════════════ */
-
 document.querySelectorAll(".bg-upload-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const key = btn.dataset.key;
+    const currentTheme = themeSelector ? themeSelector.value : "global";
+    const originalText = btn.innerText;
+
     const url = await uploadImage();
     if (!url) return;
-    await setDoc(doc(db, "settings", "backgrounds"), { [key]: url, updatedAt: serverTimestamp() }, { merge: true });
-    alert(key + " background saved successfully");
+
+    btn.disabled = true;
+    btn.innerText = "Saving...";
+
+    try {
+      if (currentTheme === "global") {
+        await setDoc(
+          doc(db, "settings", "backgrounds"),
+          {
+            [key]: url,
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+        alert(`✅ Global ${key} background saved successfully!`);
+      } else {
+        const themeUpdates = { [key]: url };
+        if (key === "homePc") themeUpdates.pc = url;
+        if (key === "homeMobile") themeUpdates.mobile = url;
+
+        await setDoc(
+          doc(db, "settings", "backgrounds"),
+          {
+            themes: {
+              [currentTheme]: themeUpdates
+            },
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+        alert(`✅ ${currentTheme.toUpperCase()} - ${key} background saved successfully!`);
+      }
+
+      await loadThemeBackgroundsAdmin();
+    } catch (err) {
+      console.error(err);
+      alert("Save failed: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = originalText;
+    }
   });
 });
 
@@ -1846,37 +1884,131 @@ const homeCardBoxes = {
   storeCard: document.getElementById("storeCardBox")
 };
 
+const homeCardsThemeSelector = document.getElementById("homeCardsThemeSelector");
+const homeCardsThemeStatus = document.getElementById("homeCardsThemeStatus");
+
+const defaultHomeCardLabels = {
+  eventsCard: "＋ Events Card",
+  festivalsCard: "＋ Festivals Card",
+  templesCard: "＋ Temples Card",
+  storiesCard: "＋ Library Card",
+  slokasCard: "＋ Games Card",
+  quizCard: "＋ Quiz Card",
+  itihasaluCard: "＋ Ithihasalu Card",
+  videosCard: "＋ Videos Card",
+  calendarCard: "＋ Calendar Card",
+  chantCounterCard: "＋ Chant Counter Card",
+  poojaRoomCard: "＋ Pooja Room Card",
+  storeCard: "＋ Store Card"
+};
+
 Object.keys(homeCardBoxes).forEach(key => {
   const box = homeCardBoxes[key];
   if (!box) return;
   box.addEventListener("click", async () => {
-    const url = await uploadImage(); if (!url) return;
-    box.dataset.image = url; box.innerHTML = `<img src="${url}">`;
+    const url = await uploadImage();
+    if (!url) return;
+    box.dataset.image = url;
+    box.innerHTML = `<img src="${url}"><span style="display:block;font-size:10.5px;color:#2ec4b6;margin-top:4px;">Ready to save</span>`;
   });
 });
 
 async function loadHomeCardsAdmin() {
-  const snap = await getDoc(doc(db, "settings", "homeCards"));
-  if (!snap.exists()) return;
-  const data = snap.data();
+  const currentTheme = homeCardsThemeSelector ? homeCardsThemeSelector.value : "ramayanam";
+  if (homeCardsThemeStatus && homeCardsThemeSelector) {
+    const text = homeCardsThemeSelector.options[homeCardsThemeSelector.selectedIndex].text;
+    homeCardsThemeStatus.innerText = `Active: ${text}`;
+  }
+
+  // Reset boxes to default placeholders first
   Object.keys(homeCardBoxes).forEach(key => {
     const box = homeCardBoxes[key];
-    if (!box || !data[key]) return;
-    box.dataset.image = data[key]; box.innerHTML = `<img src="${data[key]}">`;
+    if (!box) return;
+    box.dataset.image = "";
+    box.innerHTML = `<span>${defaultHomeCardLabels[key] || "＋ Upload Card"}</span>`;
   });
+
+  try {
+    const snap = await getDoc(doc(db, "settings", "homeCards"));
+    if (!snap.exists()) return;
+    const data = snap.data();
+
+    let cardSource = {};
+    if (currentTheme === "global") {
+      cardSource = data;
+    } else {
+      const themeCards = (data.themes && data.themes[currentTheme]) || {};
+      Object.keys(homeCardBoxes).forEach(key => {
+        cardSource[key] = themeCards[key] || data[key] || "";
+      });
+    }
+
+    Object.keys(homeCardBoxes).forEach(key => {
+      const box = homeCardBoxes[key];
+      const imgUrl = cardSource[key];
+      if (!box || !imgUrl) return;
+      box.dataset.image = imgUrl;
+
+      const isCustom = (currentTheme !== "global" && data.themes && data.themes[currentTheme] && data.themes[currentTheme][key]);
+      const badge = currentTheme !== "global"
+        ? (isCustom ? `<span style="display:block;font-size:10px;color:#2ec4b6;font-weight:bold;margin-top:4px;">Custom (${currentTheme})</span>` : `<span style="display:block;font-size:10px;color:#ffb703;margin-top:4px;">Global Fallback</span>`)
+        : "";
+
+      box.innerHTML = `<img src="${imgUrl}">${badge}`;
+    });
+  } catch (e) {
+    console.error("Error loading home cards admin:", e);
+  }
+}
+
+if (homeCardsThemeSelector) {
+  homeCardsThemeSelector.addEventListener("change", loadHomeCardsAdmin);
 }
 loadHomeCardsAdmin();
 
 const saveHomeCardsBtn = document.getElementById("saveHomeCardsBtn");
 if (saveHomeCardsBtn) {
   saveHomeCardsBtn.addEventListener("click", async () => {
+    const currentTheme = homeCardsThemeSelector ? homeCardsThemeSelector.value : "ramayanam";
     const cardData = {};
     Object.keys(homeCardBoxes).forEach(key => {
       const box = homeCardBoxes[key];
       cardData[key] = box?.dataset.image || "";
     });
-    await setDoc(doc(db, "settings", "homeCards"), { ...cardData, updatedAt: serverTimestamp() }, { merge: true });
-    document.getElementById("homeCardsMessage").innerText = "✅ Home cards saved";
+
+    saveHomeCardsBtn.disabled = true;
+    saveHomeCardsBtn.innerText = "Saving...";
+    document.getElementById("homeCardsMessage").innerText = "Saving cards to Firestore...";
+
+    try {
+      if (currentTheme === "global") {
+        await setDoc(
+          doc(db, "settings", "homeCards"),
+          { ...cardData, updatedAt: serverTimestamp() },
+          { merge: true }
+        );
+        document.getElementById("homeCardsMessage").innerText = "✅ Global fallback cards saved successfully!";
+      } else {
+        await setDoc(
+          doc(db, "settings", "homeCards"),
+          {
+            themes: {
+              [currentTheme]: cardData
+            },
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+        document.getElementById("homeCardsMessage").innerText = `✅ Home cards saved for ${currentTheme.toUpperCase()} theme!`;
+      }
+      await loadHomeCardsAdmin();
+    } catch (err) {
+      console.error(err);
+      document.getElementById("homeCardsMessage").innerText = `❌ Error: ${err.message}`;
+    } finally {
+      saveHomeCardsBtn.disabled = false;
+      saveHomeCardsBtn.innerText = "Save Home Cards";
+    }
   });
 }
 

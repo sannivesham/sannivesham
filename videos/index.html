@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
 <meta charset="UTF-8">
@@ -127,18 +127,19 @@ async function loadVideosBackground() {
     const data = snap.data();
     const bg = document.querySelector(".videos-bg");
     if (!bg) return;
-    if (window.innerWidth <= 700 && data.videosMobile) {
+    const res = window.SanniveshamTheme
+      ? window.SanniveshamTheme.resolveBackground(data, "videos")
+      : { chosen: (window.innerWidth <= 700 ? data.videosMobile : data.videosPc) || data.videosPc };
+    if (res.chosen) {
       bg.style.backgroundImage =
-        `linear-gradient(rgba(9,6,3,0.75), rgba(9,6,3,0.82)), url("${data.videosMobile}")`;
-    } else if (data.videosPc) {
-      bg.style.backgroundImage =
-        `linear-gradient(rgba(9,6,3,0.75), rgba(9,6,3,0.82)), url("${data.videosPc}")`;
+        linear-gradient(rgba(9,6,3,0.75), rgba(9,6,3,0.82)), url("${res.chosen}");
     }
   } catch (e) {
-    console.log("Videos background load error:", e);
+    console.warn("Videos background load error:", e);
   }
 }
 loadVideosBackground();
+window.addEventListener("sannivesham_theme_changed", loadVideosBackground);
 const videosGrid=document.getElementById("videosGrid");
 async function loadVideos(){
 try{

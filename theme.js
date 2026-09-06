@@ -131,11 +131,45 @@
   // Safety timeout: never trap the visitor longer than 1200ms
   setTimeout(dismissLoader, 1200);
 
+  function resolveBackground(data, sectionKey) {
+    if (!data) return { pc: "", mobile: "", chosen: "" };
+    const theme = getTheme();
+    const isMobile = window.innerWidth <= 700;
+
+    const themeObj = (data.themes && data.themes[theme]) || data[theme] || {};
+
+    let pcUrl = themeObj[sectionKey + "Pc"] || "";
+    let mobileUrl = themeObj[sectionKey + "Mobile"] || "";
+
+    // Support home section legacy keys
+    if (sectionKey === "home") {
+      if (!pcUrl) pcUrl = themeObj.pc || "";
+      if (!mobileUrl) mobileUrl = themeObj.mobile || "";
+    }
+
+    // Fall back to global document level
+    if (!pcUrl) pcUrl = data[sectionKey + "Pc"] || "";
+    if (!mobileUrl) mobileUrl = data[sectionKey + "Mobile"] || "";
+
+    const chosen = (isMobile && mobileUrl) ? mobileUrl : (pcUrl || mobileUrl || "");
+
+    return { pc: pcUrl, mobile: mobileUrl, chosen };
+  }
+
+  function resolveHomeCard(data, cardKey) {
+    if (!data) return "";
+    const theme = getTheme();
+    const themeCards = (data.themes && data.themes[theme]) || {};
+    return themeCards[cardKey] || data[cardKey] || "";
+  }
+
   window.SanniveshamTheme = {
     getTheme,
     setTheme,
     hasUserChosenTheme,
     openThemeModal,
-    closeThemeModal
+    closeThemeModal,
+    resolveBackground,
+    resolveHomeCard
   };
 })();

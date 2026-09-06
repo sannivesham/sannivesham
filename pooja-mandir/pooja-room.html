@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -536,12 +536,20 @@
         if (!snap.exists()) return;
         const data = snap.data();
         const bg = document.getElementById("poojaRoomBg");
-        const key = window.innerWidth <= 700 ? "poojaRoomMobile" : "poojaRoomPc";
-        const url = data[key] || "";
-        if (url && bg) bg.style.backgroundImage = `linear-gradient(rgba(8,4,0,0.82),rgba(8,4,0,0.88)),url("${url}")`;
-      } catch(e) {}
+        if (!bg) return;
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "poojaRoom")
+          : { chosen: (window.innerWidth <= 700 ? data.poojaRoomMobile : data.poojaRoomPc) || data.poojaRoomPc };
+        if (res.chosen) {
+          bg.style.backgroundImage =
+            linear-gradient(rgba(8,4,0,0.82), rgba(8,4,0,0.88)), url("${res.chosen}");
+        }
+      } catch(e) {
+        console.warn("Pooja room bg load error:", e);
+      }
     }
-
+    loadBg();
+    window.addEventListener("sannivesham_theme_changed", loadBg);
     loadGod();
   </script>
 

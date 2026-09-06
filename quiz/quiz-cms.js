@@ -1,4 +1,4 @@
-﻿import { db, auth } from "../firebase-config.js";
+import { db, auth } from "../firebase-config.js";
 
 import {
   collection,
@@ -19,7 +19,7 @@ import {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.replace("admin.html");
+    window.location.replace("../admin/admin.html");
     return;
   }
 
@@ -39,7 +39,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!isPasswordUser && !isExplicitAdmin) {
     alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.");
-    window.location.replace("admin.html");
+    window.location.replace("../admin/admin.html");
     return;
   }
 
@@ -279,12 +279,7 @@ async function loadMainQuestions() {
   const questions = [];
 
   try {
-    const q = query(
-      collection(db, MAIN_COLLECTION),
-      orderBy("createdAt", "desc")
-    );
-
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(collection(db, MAIN_COLLECTION));
 
     snapshot.forEach(item => {
       const data = item.data();
@@ -303,6 +298,12 @@ async function loadMainQuestions() {
               data.option4 || ""
             ]
       });
+    });
+
+    questions.sort((a, b) => {
+      const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+      const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+      return tB - tA;
     });
   } catch (error) {
     console.warn("Main quizQuestions load failed:", error);

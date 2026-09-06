@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
     <meta charset="UTF-8">
@@ -354,23 +354,25 @@
       } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
       async function loadQuizBackground() {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
-        if (!snap.exists()) return;
-
-        const data = snap.data();
-        const bg = document.querySelector(".quiz-bg");
-        if (!bg) return;
-
-        if (window.innerWidth <= 700 && data.quizMobile) {
-          bg.style.backgroundImage =
-            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizMobile}")`;
-        } else if (data.quizPc) {
-          bg.style.backgroundImage =
-            `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${data.quizPc}")`;
+        try {
+          const snap = await getDoc(doc(db, "settings", "backgrounds"));
+          if (!snap.exists()) return;
+          const data = snap.data();
+          const bg = document.querySelector(".quiz-bg");
+          if (!bg) return;
+          const res = window.SanniveshamTheme
+            ? window.SanniveshamTheme.resolveBackground(data, "quiz")
+            : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
+          if (res.chosen) {
+            bg.style.backgroundImage =
+              linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}");
+          }
+        } catch (err) {
+          console.warn("Quiz bg load error:", err);
         }
       }
-
       loadQuizBackground();
+      window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
     </script>
 
 </body>

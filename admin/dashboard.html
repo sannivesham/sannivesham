@@ -23,7 +23,6 @@
         <button class="dash-btn" data-section="librarySection">Library</button>
         <button class="dash-btn" data-section="videosSection">Videos</button>
         <button class="dash-btn" data-section="slokasSection">Slokas</button>
-        <button class="dash-btn" data-section="quizSection">Quiz</button>
         <button class="dash-btn" data-section="poojaMandirSection">పూజా మందిర్</button>
         <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
         <button class="dash-btn" data-section="aboutSection">About</button>
@@ -449,29 +448,19 @@
            QUIZ CMS SECTION
       ═══════════════════════════════════ -->
       <div id="newQuizSection" class="dash-section">
-        <div class="add-event-box">
-          <h2>Quiz CMS</h2>
-          <p style="color:white;text-align:center;line-height:1.8;margin-bottom:22px;">
-            Add, edit, delete, and manage all quiz questions from the separate Quiz CMS page.
+        <div class="add-event-box" style="text-align: center;">
+          <h2 class="admin-section-title">🎯 Quiz Management & CMS</h2>
+          <p style="color:white;text-align:center;line-height:1.8;margin-bottom:24px;font-size:1.05rem;">
+            Add, edit, delete, and manage all quiz questions across all categories (General, Hari, Hara, Devi, Telugu) and difficulties.
           </p>
-          <a href="quiz-cms.html" class="privacy-btn" style="display:inline-block;margin:auto;">
-            Open Quiz CMS
-          </a>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════
-           QUIZ PAGE SECTION
-      ═══════════════════════════════════ -->
-      <div id="quizSection" class="dash-section">
-        <div class="add-event-box">
-          <h2>Quiz Page</h2>
-          <p style="color:white;text-align:center;line-height:1.8;margin-bottom:22px;">
-            Open the public quiz page to test the quiz UI and gameplay.
-          </p>
-          <a href="quiz.html" class="privacy-btn" style="display:inline-block;margin:auto;">
-            Open Quiz Page
-          </a>
+          <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+            <a href="../quiz/quiz-cms.html" class="privacy-btn" style="display:inline-block;padding:12px 28px;font-weight:bold;font-size:1.05rem;">
+              ⚙️ Open Quiz CMS Manager
+            </a>
+            <a href="../quiz/index.html" class="privacy-btn" target="_blank" style="display:inline-block;padding:12px 28px;background:rgba(255,209,102,0.15);border:1px solid #ffd166;color:#ffd166;">
+              🎮 Test Live Quiz Section ↗
+            </a>
+          </div>
         </div>
       </div>
 
@@ -594,7 +583,25 @@
            HOME CARDS SECTION
       ═══════════════════════════════════ -->
       <div id="homeCardsSection" class="dash-section">
-        <h2 class="admin-section-title">Home Page Cards</h2>
+        <h2 class="admin-section-title">Home Page Cards (Theme-Wise)</h2>
+
+        <div style="background: rgba(255,209,102,0.08); border: 1.5px solid #ffd166; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;">
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <label style="font-weight: bold; color: #ffd166; font-size: 1rem;">🎨 Select Theme for Cards:</label>
+            <select id="homeCardsThemeSelector" style="padding: 8px 14px; border-radius: 8px; background: #260e04; color: #fff; border: 1px solid #ffd166; font-size: 1rem; cursor: pointer;">
+              <option value="ramayanam">🏹 రామాయణం (Ramayanam)</option>
+              <option value="mahabharatam">🦚 మహాభారతం (Mahabharatam)</option>
+              <option value="light">☀️ సాత్విక / వెలుగు (Light)</option>
+              <option value="dark">🌙 సాంప్రదాయ / చీకటి (Dark)</option>
+              <option value="global">🌐 గ్లోబల్ / డిఫాల్ట్ (Global Fallback)</option>
+            </select>
+            <span id="homeCardsThemeStatus" style="font-size: 0.9rem; color: #ffd166; font-weight: 600;"></span>
+          </div>
+          <p style="font-size: 0.85rem; color: #EDE3C8; margin-top: 8px; opacity: 0.88;">
+            Select any theme above to view, upload, and save cards specifically for that theme. If a theme card is not set, it will automatically fall back to the global card.
+          </p>
+        </div>
+
         <div class="add-event-box">
           <div id="eventsCardBox" class="festival-card-upload-box"><span>＋ Events Card</span></div>
           <div id="festivalsCardBox" class="festival-card-upload-box"><span>＋ Festivals Card</span></div>
@@ -674,146 +681,210 @@
       <div id="backgroundsSection" class="dash-section">
         <h2>Background Manager</h2>
 
-        <!-- THEME-WISE HOME BACKGROUNDS -->
-        <div style="background: rgba(255,209,102,0.08); border: 1.5px solid #ffd166; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
-          <h3 style="color: #ffd166; margin-bottom: 8px;">🎨 Theme-Wise Home Backgrounds</h3>
-          <p style="font-size: 0.9rem; color: #EDE3C8; margin-bottom: 14px;">Select a theme to upload and preview its custom background images:</p>
+        <!-- UNIFIED THEME-WISE BACKGROUND MANAGER -->
+        <div style="background: rgba(255,209,102,0.08); border: 1.5px solid #ffd166; border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
+          <h3 style="color: #ffd166; margin-bottom: 8px; font-size: 1.25rem;">🎨 Theme-Wise Background Manager</h3>
+          <p style="font-size: 0.9rem; color: #EDE3C8; margin-bottom: 14px;">
+            Select a theme below to upload and preview PC and Mobile backgrounds for <b>all sections</b>. If a theme background is not set, it will automatically inherit the Global Fallback.
+          </p>
 
-          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
-            <label style="font-weight: bold; color: #ffd166;">Select Theme:</label>
-            <select id="themeSelectorDashboard" style="padding: 8px 14px; border-radius: 8px; background: #260e04; color: #fff; border: 1px solid #ffd166; font-size: 1rem; cursor: pointer;">
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+            <label style="font-weight: bold; color: #ffd166; font-size: 1rem;">Select Theme:</label>
+            <select id="themeSelectorDashboard" style="padding: 8px 16px; border-radius: 8px; background: #260e04; color: #fff; border: 1px solid #ffd166; font-size: 1rem; cursor: pointer;">
               <option value="ramayanam">🏹 రామాయణం (Ramayanam)</option>
               <option value="mahabharatam">🦚 మహాభారతం (Mahabharatam)</option>
               <option value="light">☀️ సాత్విక / వెలుగు (Light)</option>
               <option value="dark">🌙 సాంప్రదాయ / చీకటి (Dark)</option>
+              <option value="global">🌐 గ్లోబల్ / డిఫాల్ట్ (Global Fallback)</option>
             </select>
-          </div>
-
-          <div class="bg-row" style="margin-bottom: 10px;">
-            <h3 id="currentThemePcLabel">Ramayanam PC Background</h3>
-            <button class="theme-bg-upload-btn" data-device="pc">Upload PC Image</button>
-            <span id="themePcStatus" style="font-size: 0.85rem; color: #EDE3C8; margin-left: 10px;"></span>
-          </div>
-
-          <div class="bg-row">
-            <h3 id="currentThemeMobileLabel">Ramayanam Mobile Background</h3>
-            <button class="theme-bg-upload-btn" data-device="mobile">Upload Mobile Image</button>
-            <span id="themeMobileStatus" style="font-size: 0.85rem; color: #EDE3C8; margin-left: 10px;"></span>
+            <span id="bgThemeActiveLabel" style="font-size: 0.95rem; color: #ffd166; font-weight: 600;"></span>
           </div>
         </div>
 
         <div class="bg-manager-box">
-          <h3 style="margin-bottom: 12px; color: #ffd166;">📄 Section Backgrounds</h3>
+          <h3 style="margin-bottom: 16px; color: #ffd166; font-size: 1.15rem;">📄 Section Backgrounds (PC & Mobile)</h3>
 
+          <!-- Home -->
           <div class="bg-row">
-            <h3>Home PC Background</h3>
-            <button class="bg-upload-btn" data-key="homePc">Upload</button>
+            <h3>🏠 Home PC Background</h3>
+            <button class="bg-upload-btn" data-key="homePc">Upload PC</button>
+            <span class="bg-status" id="status_homePc"></span>
           </div>
           <div class="bg-row">
-            <h3>Home Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="homeMobile">Upload</button>
-          </div>
-
-          <div class="bg-row">
-            <h3>Events PC Background</h3>
-            <button class="bg-upload-btn" data-key="eventsPc">Upload</button>
-          </div>
-          <div class="bg-row">
-            <h3>Events Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="eventsMobile">Upload</button>
+            <h3>🏠 Home Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="homeMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_homeMobile"></span>
           </div>
 
+          <!-- Events -->
           <div class="bg-row">
-            <h3>Festivals PC Background</h3>
-            <button class="bg-upload-btn" data-key="festivalsPc">Upload</button>
+            <h3>📅 Events PC Background</h3>
+            <button class="bg-upload-btn" data-key="eventsPc">Upload PC</button>
+            <span class="bg-status" id="status_eventsPc"></span>
           </div>
           <div class="bg-row">
-            <h3>Festivals Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="festivalsMobile">Upload</button>
-          </div>
-
-          <div class="bg-row">
-            <h3>Temples PC Background</h3>
-            <button class="bg-upload-btn" data-key="templesPc">Upload</button>
-          </div>
-          <div class="bg-row">
-            <h3>Temples Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="templesMobile">Upload</button>
+            <h3>📅 Events Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="eventsMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_eventsMobile"></span>
           </div>
 
+          <!-- Festivals -->
           <div class="bg-row">
-            <h3>Library PC Background</h3>
-            <button class="bg-upload-btn" data-key="storiesPc">Upload</button>
+            <h3>🪔 Festivals PC Background</h3>
+            <button class="bg-upload-btn" data-key="festivalsPc">Upload PC</button>
+            <span class="bg-status" id="status_festivalsPc"></span>
           </div>
           <div class="bg-row">
-            <h3>Library Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="storiesMobile">Upload</button>
-          </div>
-
-          <div class="bg-row">
-            <h3>Slokas PC Background</h3>
-            <button class="bg-upload-btn" data-key="slokasPc">Upload</button>
-          </div>
-          <div class="bg-row">
-            <h3>Slokas Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="slokasMobile">Upload</button>
+            <h3>🪔 Festivals Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="festivalsMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_festivalsMobile"></span>
           </div>
 
+          <!-- Temples -->
           <div class="bg-row">
-            <h3>Quiz PC Background</h3>
-            <button class="bg-upload-btn" data-key="quizPc">Upload</button>
+            <h3>🛕 Temples PC Background</h3>
+            <button class="bg-upload-btn" data-key="templesPc">Upload PC</button>
+            <span class="bg-status" id="status_templesPc"></span>
           </div>
           <div class="bg-row">
-            <h3>Quiz Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="quizMobile">Upload</button>
-          </div>
-
-          <div class="bg-row">
-            <h3>Videos PC Background</h3>
-            <button class="bg-upload-btn" data-key="videosPc">Upload</button>
-          </div>
-          <div class="bg-row">
-            <h3>Videos Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="videosMobile">Upload</button>
+            <h3>🛕 Temples Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="templesMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_templesMobile"></span>
           </div>
 
+          <!-- Stories / Library -->
           <div class="bg-row">
-            <h3>ఇతిహాసాలు PC Background</h3>
-            <button class="bg-upload-btn" data-key="ithihasaluPc">Upload</button>
+            <h3>📖 Library PC Background</h3>
+            <button class="bg-upload-btn" data-key="storiesPc">Upload PC</button>
+            <span class="bg-status" id="status_storiesPc"></span>
           </div>
           <div class="bg-row">
-            <h3>ఇతిహాసాలు Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="ithihasaluMobile">Upload</button>
-          </div>
-
-          <div class="bg-row">
-            <h3>Chant Counter PC Background</h3>
-            <button class="bg-upload-btn" data-key="chantCounterPc">Upload</button>
+            <h3>📖 Library Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="storiesMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_storiesMobile"></span>
           </div>
 
+          <!-- Slokas -->
           <div class="bg-row">
-  <h3>Pooja Mandir PC Background</h3>
-  <button class="bg-upload-btn" data-key="poojaMandirPc">Upload</button>
-</div>
-<div class="bg-row">
-  <h3>Pooja Mandir Mobile Background</h3>
-  <button class="bg-upload-btn" data-key="poojaMandirMobile">Upload</button>
-</div>
-<div class="bg-row">
-  <h3>Pooja Room PC Background</h3>
-  <button class="bg-upload-btn" data-key="poojaRoomPc">Upload</button>
-</div>
-<div class="bg-row">
-  <h3>Pooja Room Mobile Background</h3>
-  <button class="bg-upload-btn" data-key="poojaRoomMobile">Upload</button>
-</div>
-          
+            <h3>🕉️ Slokas PC Background</h3>
+            <button class="bg-upload-btn" data-key="slokasPc">Upload PC</button>
+            <span class="bg-status" id="status_slokasPc"></span>
+          </div>
           <div class="bg-row">
-            <h3>Chant Counter Mobile Background</h3>
-            <button class="bg-upload-btn" data-key="chantCounterMobile">Upload</button>
+            <h3>🕉️ Slokas Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="slokasMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_slokasMobile"></span>
           </div>
 
+          <!-- Quiz -->
+          <div class="bg-row">
+            <h3>🎯 Quiz PC Background</h3>
+            <button class="bg-upload-btn" data-key="quizPc">Upload PC</button>
+            <span class="bg-status" id="status_quizPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>🎯 Quiz Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="quizMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_quizMobile"></span>
+          </div>
+
+          <!-- Videos -->
+          <div class="bg-row">
+            <h3>🎥 Videos PC Background</h3>
+            <button class="bg-upload-btn" data-key="videosPc">Upload PC</button>
+            <span class="bg-status" id="status_videosPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>🎥 Videos Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="videosMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_videosMobile"></span>
+          </div>
+
+          <!-- Ithihasalu -->
+          <div class="bg-row">
+            <h3>📜 ఇతిహాసాలు PC Background</h3>
+            <button class="bg-upload-btn" data-key="ithihasaluPc">Upload PC</button>
+            <span class="bg-status" id="status_ithihasaluPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>📜 ఇతిహాసాలు Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="ithihasaluMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_ithihasaluMobile"></span>
+          </div>
+
+          <!-- Chant Counter -->
+          <div class="bg-row">
+            <h3>📿 Chant Counter PC Background</h3>
+            <button class="bg-upload-btn" data-key="chantCounterPc">Upload PC</button>
+            <span class="bg-status" id="status_chantCounterPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>📿 Chant Counter Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="chantCounterMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_chantCounterMobile"></span>
+          </div>
+
+          <!-- Pooja Mandir -->
+          <div class="bg-row">
+            <h3>🛕 Pooja Mandir PC Background</h3>
+            <button class="bg-upload-btn" data-key="poojaMandirPc">Upload PC</button>
+            <span class="bg-status" id="status_poojaMandirPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>🛕 Pooja Mandir Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="poojaMandirMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_poojaMandirMobile"></span>
+          </div>
+
+          <!-- Pooja Room -->
+          <div class="bg-row">
+            <h3>🪔 Pooja Room PC Background</h3>
+            <button class="bg-upload-btn" data-key="poojaRoomPc">Upload PC</button>
+            <span class="bg-status" id="status_poojaRoomPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>🪔 Pooja Room Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="poojaRoomMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_poojaRoomMobile"></span>
+          </div>
+
+          <!-- Calendar -->
+          <div class="bg-row">
+            <h3>📆 Calendar PC Background</h3>
+            <button class="bg-upload-btn" data-key="calendarPc">Upload PC</button>
+            <span class="bg-status" id="status_calendarPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>📆 Calendar Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="calendarMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_calendarMobile"></span>
+          </div>
+
+          <!-- Store -->
+          <div class="bg-row">
+            <h3>🛍️ Store PC Background</h3>
+            <button class="bg-upload-btn" data-key="storePc">Upload PC</button>
+            <span class="bg-status" id="status_storePc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>🛍️ Store Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="storeMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_storeMobile"></span>
+          </div>
+
+          <!-- About -->
+          <div class="bg-row">
+            <h3>ℹ️ About PC Background</h3>
+            <button class="bg-upload-btn" data-key="aboutPc">Upload PC</button>
+            <span class="bg-status" id="status_aboutPc"></span>
+          </div>
+          <div class="bg-row">
+            <h3>ℹ️ About Mobile Background</h3>
+            <button class="bg-upload-btn" data-key="aboutMobile">Upload Mobile</button>
+            <span class="bg-status" id="status_aboutMobile"></span>
+          </div>
         </div>
+
       </div>
 
     </div>

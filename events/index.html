@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 
 <head>
@@ -281,22 +281,29 @@
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     async function loadEventsBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
 
-      const data = snap.data();
-      const bg = document.querySelector(".events-bg");
+        const data = snap.data();
+        const bg = document.querySelector(".events-bg");
+        if (!bg) return;
 
-      if (window.innerWidth <= 700 && data.eventsMobile) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.eventsMobile}")`;
-      } else if (data.eventsPc) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.eventsPc}")`;
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "events")
+          : { chosen: (window.innerWidth <= 700 ? data.eventsMobile : data.eventsPc) || data.eventsPc };
+
+        if (res.chosen) {
+          bg.style.backgroundImage =
+            `linear-gradient(rgba(10,5,0,0.65), rgba(10,5,0,0.70)), url("${res.chosen}")`;
+        }
+      } catch (err) {
+        console.warn("Events background load error:", err);
       }
     }
 
     loadEventsBackground();
+    window.addEventListener("sannivesham_theme_changed", loadEventsBackground);
   </script>
 
   <audio id="bgMusic" loop>

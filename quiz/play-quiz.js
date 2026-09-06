@@ -1,4 +1,4 @@
-﻿import { db } from "../firebase-config.js";
+import { db } from "../firebase-config.js";
 import { auth } from "../firebase-config.js";
 
 import {
@@ -74,8 +74,53 @@ function setTitle() {
   quizTitle.innerText = titles[category] || "Quiz";
 }
 
+function normalizeQuestion(item, defaultCategory = "") {
+  let opts = [];
+  if (Array.isArray(item.options) && item.options.length > 0) {
+    opts = item.options.map(o => String(o || "").trim());
+  } else {
+    opts = [
+      String(item.option1 || "").trim(),
+      String(item.option2 || "").trim(),
+      String(item.option3 || "").trim(),
+      String(item.option4 || "").trim()
+    ];
+  }
+
+  let rawAns = String(item.answer || "").trim();
+  let correctText = rawAns;
+  const optMap = {
+    option1: opts[0],
+    option2: opts[1],
+    option3: opts[2],
+    option4: opts[3],
+    opt1: opts[0],
+    opt2: opts[1],
+    opt3: opts[2],
+    opt4: opts[3],
+    "1": opts[0],
+    "2": opts[1],
+    "3": opts[2],
+    "4": opts[3],
+    "0": opts[0]
+  };
+
+  if (optMap[rawAns.toLowerCase()] !== undefined) {
+    correctText = optMap[rawAns.toLowerCase()];
+  }
+
+  return {
+    ...item,
+    category: (item.category || defaultCategory || "").toLowerCase().trim(),
+    difficulty: (item.difficulty || "").toLowerCase().trim(),
+    question: item.question || item.q || "",
+    options: opts,
+    answer: correctText
+  };
+}
+
 function getOptions(q) {
-  if (Array.isArray(q.options)) return q.options;
+  if (Array.isArray(q.options) && q.options.length > 0) return q.options;
 
   return [
     q.option1 || "",
@@ -91,19 +136,88 @@ async function loadQuestions() {
   questionEl.innerText = "Loading...";
 
   try {
-    const snapshot = await getDocs(collection(db, "quizQuestions"));
+    const normCategory = (category || "").toLowerCase().trim();
+    const normLevel = (level || "").toLowerCase().trim();
+    const targetCategory = type === "general" ? "general" : normCategory;
 
-    const categoryForQuery = type === "general" ? "general" : category;
+    let candidatePool = [];
 
-    questions = [];
+    // 1. Fetch from MAIN_COLLECTION: quizQuestions
+    try {
+      const snapMain = await getDocs(collection(db, "quizQuestions"));
+      snapMain.forEach(docSnap => {
+        const d = docSnap.data();
+        const normDoc = normalizeQuestion(d, "");
+        if (!normDoc.question) return;
 
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
+        // Category check (case-insensitive)
+        const docCat = normDoc.category;
+        if (type === "general") {
+          if (docCat === "general" || !docCat) {
+            candidatePool.push(normDoc);
+          }
+        } else {
+          if (docCat === targetCategory) {
+            candidatePool.push(normDoc);
+          }
+        }
+      });
+    } catch (e) {
+      console.warn("quizQuestions fetch error:", e);
+    }
 
-      if (data.category !== categoryForQuery) return;
-      if (type === "general" && data.difficulty !== level) return;
+    // 2. Fetch from corresponding legacy collections
+    const legacyCollectionsToQuery = [];
+    if (type === "general") {
+      legacyCollectionsToQuery.push({ name: "quizGeneral", cat: "general" });
+    } else {
+      if (normCategory === "hari") legacyCollectionsToQuery.push({ name: "quizHari", cat: "hari" });
+      else if (normCategory === "hara") legacyCollectionsToQuery.push({ name: "quizHara", cat: "hara" });
+      else if (normCategory === "devi") legacyCollectionsToQuery.push({ name: "quizDevi", cat: "devi" });
+      else if (normCategory === "telugu") legacyCollectionsToQuery.push({ name: "quizTelugu", cat: "telugu" });
+      else if (normCategory) {
+        // dynamic capitalization fallback
+        legacyCollectionsToQuery.push({
+          name: `quiz${normCategory.charAt(0).toUpperCase() + normCategory.slice(1)}`,
+          cat: normCategory
+        });
+      }
+    }
 
-      questions.push(data);
+    for (const leg of legacyCollectionsToQuery) {
+      try {
+        const snapLeg = await getDocs(collection(db, leg.name));
+        snapLeg.forEach(docSnap => {
+          const d = docSnap.data();
+          const normDoc = normalizeQuestion(d, leg.cat);
+          if (!normDoc.question) return;
+          candidatePool.push(normDoc);
+        });
+      } catch (e) {
+        console.warn(`${leg.name} fetch error:`, e);
+      }
+    }
+
+    // 3. Filter by difficulty if in General quiz mode
+    if (type === "general" && normLevel) {
+      const levelMatches = candidatePool.filter(q => q.difficulty === normLevel);
+      if (levelMatches.length >= 5) {
+        questions = levelMatches;
+      } else {
+        // Gracefully combine matching questions with remaining pool so player is never blocked
+        questions = candidatePool;
+      }
+    } else {
+      questions = candidatePool;
+    }
+
+    // De-duplicate by question text
+    const seen = new Set();
+    questions = questions.filter(q => {
+      const key = (q.question || "").trim().toLowerCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
 
     shuffle(questions);
@@ -225,21 +339,23 @@ function checkAnswer() {
   nextBtn.disabled = true;
 
   const options = getOptions(q);
-  const correctAnswer = q.answer || "";
+  const correctAnswer = String(q.answer || "").trim();
+  const normalizedCorrect = correctAnswer.toLowerCase();
+  const normalizedSelected = String(selectedAnswer || "").trim().toLowerCase();
 
   optionButtons.forEach(btn => {
     btn.disabled = true;
 
-    if (btn.innerText === correctAnswer) {
+    if (String(btn.innerText || "").trim().toLowerCase() === normalizedCorrect) {
       btn.classList.add("option-correct");
     }
   });
 
-  if (selectedAnswer === correctAnswer) {
+  if (normalizedSelected && normalizedSelected === normalizedCorrect) {
     score++;
-  } else if (selectedAnswer) {
+  } else if (normalizedSelected) {
     optionButtons.forEach(btn => {
-      if (btn.innerText === selectedAnswer) {
+      if (String(btn.innerText || "").trim().toLowerCase() === normalizedSelected) {
         btn.classList.add("option-wrong");
       }
     });

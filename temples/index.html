@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -232,19 +232,25 @@
     getDoc
   } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
   async function loadTemplesBackground() {
-    const snap = await getDoc(doc(db, "settings", "backgrounds"));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    const bg = document.querySelector(".temples-bg");
-    if (window.innerWidth <= 700 && data.templesMobile) {
-      bg.style.backgroundImage =
-        `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.templesMobile}")`;
-    } else if (data.templesPc) {
-      bg.style.backgroundImage =
-        `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.templesPc}")`;
+    try {
+      const snap = await getDoc(doc(db, "settings", "backgrounds"));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      const bg = document.querySelector(".temples-bg");
+      if (!bg) return;
+      const res = window.SanniveshamTheme
+        ? window.SanniveshamTheme.resolveBackground(data, "temples")
+        : { chosen: (window.innerWidth <= 700 ? data.templesMobile : data.templesPc) || data.templesPc };
+      if (res.chosen) {
+        bg.style.backgroundImage =
+          linear-gradient(rgba(10,5,0,0.65), rgba(10,5,0,0.70)), url("${res.chosen}");
+      }
+    } catch (err) {
+      console.warn("Temples bg load error:", err);
     }
   }
   loadTemplesBackground();
+  window.addEventListener("sannivesham_theme_changed", loadTemplesBackground);
 </script>
 <script type="module" src="temples.js"></script>
 <audio id="bgMusic" loop>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -441,16 +441,19 @@
         const data = snap.data();
         const bg = document.querySelector(".stories-bg");
         if (!bg) return;
-        if (window.innerWidth <= 700 && data.chantCounterMobile) {
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "chantCounter")
+          : { chosen: (window.innerWidth <= 700 ? data.chantCounterMobile : data.chantCounterPc) || data.chantCounterPc };
+        if (res.chosen) {
           bg.style.backgroundImage =
-            `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.chantCounterMobile}")`;
-        } else if (data.chantCounterPc) {
-          bg.style.backgroundImage =
-            `linear-gradient(rgba(10,5,0,0.65),rgba(10,5,0,0.70)),url("${data.chantCounterPc}")`;
+            linear-gradient(rgba(10,5,0,0.65), rgba(10,5,0,0.70)), url("${res.chosen}");
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn("Chant counter bg load error:", e);
+      }
     }
     loadChantCounterBackground();
+    window.addEventListener("sannivesham_theme_changed", loadChantCounterBackground);
   </script>
 
   <script type="module">
