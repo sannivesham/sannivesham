@@ -1,6 +1,4 @@
-import { db } from "../firebase-config.js";
-import { auth } from "../firebase-config.js";
-
+import { db, auth } from "../firebase-config.js";
 import {
   collection,
   getDocs,
@@ -10,7 +8,6 @@ import {
   setDoc,
   increment
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
 import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
@@ -100,56 +97,43 @@ function normalizeQuestion(item, defaultCategory = "") {
     option1: opts[0],
     option2: opts[1],
     option3: opts[2],
-    option4: opts[3],
-    opt1: opts[0],
-    opt2: opts[1],
-    opt3: opts[2],
-    opt4: opts[3],
-    "1": opts[0],
-    "2": opts[1],
-    "3": opts[2],
-    "4": opts[3],
-    "0": opts[0]
+    option4: opts[3]
   };
 
-  if (optMap[rawAns.toLowerCase()] !== undefined) {
-    correctText = optMap[rawAns.toLowerCase()];
+  if (optMap[rawAns]) {
+    correctText = optMap[rawAns];
+  } else if (/^[0-3]$/.test(rawAns)) {
+    const idx = parseInt(rawAns, 10);
+    if (opts[idx]) correctText = opts[idx];
   }
 
   return {
-    ...item,
-    category: (item.category || defaultCategory || "").toLowerCase().trim(),
-    difficulty: (item.difficulty || "").toLowerCase().trim(),
-    question: item.question || item.q || "",
+    question: item.question || item.questionText || item.title || "",
     options: opts,
-    answer: correctText
+    answer: correctText,
+    category: (item.category || defaultCategory || "").trim().toLowerCase(),
+    difficulty: (item.difficulty || item.level || "easy").trim().toLowerCase()
   };
 }
 
 function getOptions(q) {
-  if (Array.isArray(q.options) && q.options.length > 0) return q.options;
-
-  return [
-    q.option1 || "",
-    q.option2 || "",
-    q.option3 || "",
-    q.option4 || ""
-  ];
+  if (Array.isArray(q.options) && q.options.length === 4) {
+    return q.options;
+  }
+  return [q.option1, q.option2, q.option3, q.option4].filter(Boolean);
 }
 
 async function loadQuestions() {
   setTitle();
 
-  questionEl.innerText = "ప్రశ్నలు లోడ్ అవుతున్నాయి...";
-
   try {
-    const normCategory = (category || "").toLowerCase().trim();
-    const normLevel = (level || "").toLowerCase().trim();
+    const normCategory = category.trim().toLowerCase();
+    const normLevel = level.trim().toLowerCase();
     const targetCategory = type === "general" ? "general" : normCategory;
 
     let candidatePool = [];
 
-    // 1. Fetch from MAIN_COLLECTION: quizQuestions
+    // 1. Fetch from unified collection `quizQuestions`
     try {
       const snapMain = await getDocs(collection(db, "quizQuestions"));
       snapMain.forEach(docSnap => {
@@ -256,7 +240,6 @@ function showQuestion() {
   }
 
   const q = questions[currentQuestion];
-
   if (!q) {
     finishQuiz();
     return;
@@ -290,13 +273,12 @@ function showQuestion() {
   startTimer();
 }
 
+// Instant evaluation when an option is clicked!
 optionButtons.forEach(btn => {
   btn.onclick = () => {
     if (isChecking || quizFinished) return;
-
-    optionButtons.forEach(b => b.classList.remove("option-selected"));
-    btn.classList.add("option-selected");
     selectedAnswer = btn.innerText;
+    checkAnswer();
   };
 });
 
@@ -332,7 +314,6 @@ function checkAnswer() {
   }
 
   const q = questions[currentQuestion];
-
   if (!q) {
     finishQuiz();
     return;
@@ -341,24 +322,27 @@ function checkAnswer() {
   isChecking = true;
   nextBtn.disabled = true;
 
-  const options = getOptions(q);
   const correctAnswer = String(q.answer || "").trim();
   const normalizedCorrect = correctAnswer.toLowerCase();
   const normalizedSelected = String(selectedAnswer || "").trim().toLowerCase();
 
+  // 1. Highlight the correct answer with green animation on all buttons
   optionButtons.forEach(btn => {
     btn.disabled = true;
-
-    if (String(btn.innerText || "").trim().toLowerCase() === normalizedCorrect) {
+    const btnText = String(btn.innerText || "").trim().toLowerCase();
+    if (btnText && btnText === normalizedCorrect) {
       btn.classList.add("option-correct");
     }
   });
 
+  // 2. Evaluate selected option
   if (normalizedSelected && normalizedSelected === normalizedCorrect) {
     score++;
   } else if (normalizedSelected) {
+    // Wrong answer selected: highlight player's choice in red with shake animation
     optionButtons.forEach(btn => {
-      if (String(btn.innerText || "").trim().toLowerCase() === normalizedSelected) {
+      const btnText = String(btn.innerText || "").trim().toLowerCase();
+      if (btnText && btnText === normalizedSelected) {
         btn.classList.add("option-wrong");
       }
     });
@@ -366,21 +350,23 @@ function checkAnswer() {
 
   currentQuestion++;
 
+  // Advance smoothly after giving player 1.3s to see the green/red animations
   setTimeout(() => {
     if (currentQuestion >= questions.length) {
       finishQuiz();
     } else {
       showQuestion();
     }
-  }, 1200);
+  }, 1300);
 }
 
 nextBtn.onclick = () => {
+  if (isChecking || quizFinished) return;
   checkAnswer();
 };
 
 quitBtn.onclick = () => {
-  if (confirm("ప్రశ్నావళిని వదిలేసి వెనుకకు వెళ్లాలనుకుంటున్నారా?")) {
+  if (confirm("ప్రశ్నావళిని మధ్యలోనే నిష్క్రమించాలనుకుంటున్నారా?")) {
     clearInterval(timerInterval);
     window.location.href = "index.html";
   }
@@ -393,7 +379,6 @@ async function finishQuiz() {
   clearInterval(timerInterval);
 
   nextBtn.disabled = true;
-
   optionButtons.forEach(btn => {
     btn.disabled = true;
   });

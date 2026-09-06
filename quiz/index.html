@@ -40,258 +40,170 @@
     <!-- Dynamic Theme Background Layer -->
     <div class="quiz-bg"></div>
 
-    <main class="quiz-page">
-        <!-- Standardized Top Pill Navbar -->
-        <nav class="quiz-navbar" aria-label="ముఖ్య నావిగేషన్">
-            <a href="../index.html" class="quiz-nav-back" title="ప్రారంభ పుటకు వెళ్లండి">
-                <span>← ప్రారంభ పుట</span>
-            </a>
+    <!-- Centered Glass Navbar -->
+    <nav class="glass-navbar" aria-label="ముఖ్య నావిగేషన్">
+        <a href="../index.html" title="ప్రారంభ పుటకు వెళ్లండి">← ప్రారంభ పుట</a>
+        <a href="./" style="border-color:#ffd166; background:rgba(255,209,102,0.18);">ప్రశ్నావళి</a>
+        <a href="leaderboard.html" title="అగ్రస్థానాలు చూడండి">🏆 అగ్రస్థానాలు</a>
+        <button id="themeToggleBtn" aria-label="శైలిని మార్చండి" title="శైలి ఎంపిక">🎨 శైలి</button>
+    </nav>
 
-            <div class="quiz-nav-brand">
-                <span class="quiz-nav-icon">🪔</span>
-                <span class="quiz-nav-title">సన్నివేశం ప్రశ్నావళి</span>
-            </div>
-
-            <div class="quiz-nav-actions">
-                <a href="leaderboard.html" class="quiz-nav-btn" title="మొత్తం అగ్రస్థానాలు చూడండి">
-                    <span>🏆</span>
-                    <span>అగ్రస్థానాలు</span>
-                </a>
-                <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="శైలిని మార్చండి" title="శైలి ఎంపిక">
-                    <span>🎨</span>
-                    <span>శైలి</span>
-                </button>
-            </div>
-        </nav>
-
-        <!-- Hero Title Banner -->
-        <header class="quiz-hero-banner">
-            <div class="quiz-hero-badge">
-                <span>✨</span>
-                <span>ఆధ్యాత్మిక జ్ఞాన వేదిక</span>
-            </div>
+    <section class="quiz-page">
+        <!-- 1. Hero Title Box (Centered) -->
+        <div class="quiz-title-box">
             <h1>సన్నివేశం ప్రశ్నావళి</h1>
             <p>
-                తెలుగు సంస్కృతి, భారతీయ సంప్రదాయాలు, పవిత్ర దేవాలయాలు, పండుగలు మరియు పురాణ ఇతిహాసాల గురించి మీ జ్ఞానాన్ని పరీక్షించుకోండి, సమూహ స్కోరును పెంచండి.
+                తెలుగు సంస్కృతి, భారతీయ సంప్రదాయాలు, దేవాలయాలు,
+                పండుగలు మరియు గ్రంథాల గురించి మీ జ్ఞానాన్ని పరీక్షించుకోండి, సమూహ స్కోరును పెంచండి.
             </p>
-        </header>
+        </div>
 
-        <!-- User Lifetime Personal Score Banner -->
-        <section class="user-lifetime-banner" id="userScoreBanner">
-            <!-- Loading state placeholder -->
-            <div id="userScoreLoading" style="text-align:center; padding:12px; color:rgba(255,209,102,0.8);">
+        <!-- 2. User Lifetime Personal Score Banner (Centered) -->
+        <div class="user-lifetime-banner" id="userScoreBanner">
+            <!-- Loading State -->
+            <div id="userScoreLoading" style="text-align:center; padding:10px; color:rgba(255,209,102,0.85); font-size:16px;">
                 <span>జ్ఞాన స్కోరు వివరాలు లోడ్ అవుతున్నాయి...</span>
             </div>
 
-            <!-- Logged In State Content -->
+            <!-- Logged In State -->
             <div id="userScoreLoggedIn" style="display:none;">
-                <div class="user-banner-header">
-                    <div class="user-greet-box">
-                        <div class="user-avatar-badge" id="userAvatar">🕉️</div>
-                        <div class="user-info-text">
-                            <h3 id="userName">నమస్కారం!</h3>
-                            <p>సన్నివేశం జ్ఞాన సాధకుడు</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:18px;">
+                    <div style="display:flex; align-items:center; gap:12px; text-align:left;">
+                        <span id="userAvatar" style="font-size:28px; width:44px; height:44px; border-radius:50%; background:rgba(255,209,102,0.2); border:1px solid #ffd166; display:flex; align-items:center; justify-content:center;">🕉️</span>
+                        <div>
+                            <h3 id="userName" style="color:#ffd166; margin:0; font-size:18px; font-weight:700;">నమస్కారం!</h3>
+                            <span style="color:#d4c0a5; font-size:13px;">సన్నివేశం జ్ఞాన సాధకుడు</span>
                         </div>
                     </div>
-                    <div class="user-total-score-badge">
-                        <span>⭐</span>
-                        <span>మొత్తం పాయింట్లు:</span>
-                        <span id="userLifetimeTotal">0</span>
+                    <div style="background:rgba(255,209,102,0.18); border:1px solid #ffd166; border-radius:25px; padding:6px 18px; font-weight:700; color:#ffd166; font-size:16px;">
+                        ⭐ మొత్తం పాయింట్లు: <strong id="userLifetimeTotal" style="color:#fff; font-size:18px;">0</strong>
                     </div>
                 </div>
 
-                <div class="user-score-breakdown">
-                    <div class="score-chip">
-                        <span class="score-chip-label">🌟 హరి విభాగం</span>
-                        <span class="score-chip-val" id="userScoreHari">0</span>
-                    </div>
-                    <div class="score-chip">
-                        <span class="score-chip-label">🔱 హర విభాగం</span>
-                        <span class="score-chip-val" id="userScoreHara">0</span>
-                    </div>
-                    <div class="score-chip">
-                        <span class="score-chip-label">🌺 దేవి విభాగం</span>
-                        <span class="score-chip-val" id="userScoreDevi">0</span>
-                    </div>
-                    <div class="score-chip">
-                        <span class="score-chip-label">📜 తెలుగు విభాగం</span>
-                        <span class="score-chip-val" id="userScoreTelugu">0</span>
-                    </div>
-                    <div class="score-chip">
-                        <span class="score-chip-label">📚 సాధారణ విభాగం</span>
-                        <span class="score-chip-val" id="userScoreGeneral">0</span>
-                    </div>
+                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                    <div class="score-chip">🌟 హరి: <strong id="userScoreHari">0</strong></div>
+                    <div class="score-chip">🔱 హర: <strong id="userScoreHara">0</strong></div>
+                    <div class="score-chip">🌺 దేవి: <strong id="userScoreDevi">0</strong></div>
+                    <div class="score-chip">📜 తెలుగు: <strong id="userScoreTelugu">0</strong></div>
+                    <div class="score-chip">📚 సాధారణం: <strong id="userScoreGeneral">0</strong></div>
                 </div>
             </div>
 
-            <!-- Logged Out State Content -->
-            <div id="userScoreLoggedOut" style="display:none;" class="user-login-prompt">
-                <div>
-                    <h3 style="color:#ffd166; font-size:1.15rem; margin-bottom:4px;">మీ జ్ఞాన ప్రయాణాన్ని ప్రారంభించండి</h3>
-                    <p>ప్రశ్నావళిలో పాల్గొని మీ వ్యక్తిగత స్కోరు శాశ్వతంగా భద్రపరచుకోవడానికి మరియు లీడర్‌బోర్డ్‌లో స్థానం పొందడానికి లాగిన్ అవ్వండి.</p>
-                </div>
-                <a href="../login.html" class="user-login-btn">
-                    <span>🔐</span>
-                    <span>లాగిన్ అవ్వండి</span>
+            <!-- Logged Out State -->
+            <div id="userScoreLoggedOut" style="display:none; text-align:center; padding:8px 12px;">
+                <p style="margin:0 0 14px; font-size:15px; color:#e0d2c0;">
+                    మీ వ్యక్తిగత స్కోరు శాశ్వతంగా భద్రపరచుకోవడానికి మరియు లీడర్‌బోర్డ్‌లో స్థానం పొందడానికి లాగిన్ అవ్వండి.
+                </p>
+                <a href="../login.html" class="start-quiz-btn" style="display:inline-block; text-decoration:none; padding:10px 26px; font-size:15px;">
+                    🔐 లాగిన్ అవ్వండి
                 </a>
             </div>
-        </section>
-
-        <!-- General Quiz Box -->
-        <section class="general-quiz-box">
-            <h2>సాధారణ ప్రశ్నావళి</h2>
-            <p class="general-quiz-desc">
-                భారతీయ సంస్కృతి, దేవాలయాలు మరియు పురాణాల సాధారణ పరిజ్ఞానం. కావలసిన స్థాయిని ఎంచుకొని ప్రారంభించండి.
-            </p>
-
-            <div class="difficulty-buttons">
-                <button class="diff-btn" id="easyQuizBtn" data-level="easy">
-                    <span>🟢 సులభం</span>
-                </button>
-                <button class="diff-btn" id="mediumQuizBtn" data-level="medium">
-                    <span>🟡 మధ్యమం</span>
-                </button>
-                <button class="diff-btn" id="hardQuizBtn" data-level="hard">
-                    <span>🔴 కష్టం</span>
-                </button>
-            </div>
-
-            <div class="general-actions">
-                <button class="start-quiz-btn" id="startGeneralQuiz">
-                    <span>▶ ప్రశ్నావళి ప్రారంభించండి</span>
-                </button>
-                <button class="leaderboard-btn" id="generalLeaderboardBtn">
-                    <span>🏆 అగ్రస్థాన పట్టిక</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- Category Quizzes Title -->
-        <div class="quiz-section-header">
-            <h2>విభాగాల ప్రశ్నావళి</h2>
-            <p>భారతీయ సనాతన ధర్మ విశేషాలపై ప్రత్యేక విభాగాలు</p>
         </div>
 
-        <!-- Category Grid -->
+        <!-- 3. General Quiz Box (Centered) -->
+        <div class="general-quiz-box">
+            <h2>సాధారణ ప్రశ్నావళి</h2>
+            <div class="difficulty-buttons">
+                <button id="easyQuizBtn" data-level="easy">🟢 సులభం</button>
+                <button id="mediumQuizBtn" data-level="medium">🟡 మధ్యమం</button>
+                <button id="hardQuizBtn" data-level="hard">🔴 కష్టం</button>
+            </div>
+            <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+                <button class="start-quiz-btn" id="startGeneralQuiz">
+                    ▶ ప్రశ్నావళి ప్రారంభించండి
+                </button>
+                <button class="leaderboard-btn" id="generalLeaderboardBtn">
+                    🏆 అగ్రస్థాన పట్టిక
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. Section Header (Centered) -->
+        <h2 class="quiz-section-title">
+            విభాగాల ప్రశ్నావళి
+        </h2>
+
+        <!-- 5. 2-Column Category Grid -->
         <div class="quiz-category-grid">
             <!-- Hari -->
             <div class="quiz-category-card" data-category="hari">
-                <img src="../images/hari.png" alt="శ్రీ మహావిష్ణువు" loading="lazy">
+                <img src="../images/hari.png" alt="హరి" loading="lazy">
                 <div class="quiz-card-overlay">
-                    <span class="quiz-card-tag">🌟 వైష్ణవ తత్త్వం</span>
                     <h2>హరి</h2>
-                    <p class="quiz-card-desc">
-                        శ్రీమహావిష్ణువు, దశావతారాలు, భాగవతం మరియు రామాయణ ఇతిహాసాల దివ్య గాథలు.
-                    </p>
-                    <div class="community-score-badge">
-                        <span class="cs-label">🌍 సమూహ ఫలితం</span>
-                        <span class="cs-value" id="hariScore">0</span>
-                    </div>
+                    <p class="community-score">సమూహ ఫలితం</p>
+                    <span id="hariScore">0</span>
                     <div class="quiz-card-buttons">
-                        <button class="quiz-card-btn-start quiz-start-btn">
-                            <span>▶ ప్రారంభించండి</span>
-                        </button>
-                        <button class="quiz-card-btn-lb quiz-leaderboard-btn">
-                            <span>🏆 లీడర్‌బోర్డ్</span>
-                        </button>
+                        <button class="quiz-start-btn">▶ ప్రశ్నావళి ప్రారంభించండి</button>
+                        <button class="quiz-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
                     </div>
                 </div>
             </div>
 
             <!-- Hara -->
             <div class="quiz-category-card" data-category="hara">
-                <img src="../images/hara.png" alt="పరమశివుడు" loading="lazy">
+                <img src="../images/hara.png" alt="హర" loading="lazy">
                 <div class="quiz-card-overlay">
-                    <span class="quiz-card-tag">🔱 శైవ తత్త్వం</span>
                     <h2>హర</h2>
-                    <p class="quiz-card-desc">
-                        పరమేశ్వరుడు, ద్వాదశ జ్యోతిర్లింగాలు, శివ పురాణం మరియు పంచభూత క్షేత్రాల విశేషాలు.
-                    </p>
-                    <div class="community-score-badge">
-                        <span class="cs-label">🌍 సమూహ ఫలితం</span>
-                        <span class="cs-value" id="haraScore">0</span>
-                    </div>
+                    <p class="community-score">సమూహ ఫలితం</p>
+                    <span id="haraScore">0</span>
                     <div class="quiz-card-buttons">
-                        <button class="quiz-card-btn-start quiz-start-btn">
-                            <span>▶ ప్రారంభించండి</span>
-                        </button>
-                        <button class="quiz-card-btn-lb quiz-leaderboard-btn">
-                            <span>🏆 లీడర్‌బోర్డ్</span>
-                        </button>
+                        <button class="quiz-start-btn">▶ ప్రశ్నావళి ప్రారంభించండి</button>
+                        <button class="quiz-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
                     </div>
                 </div>
             </div>
 
             <!-- Devi -->
             <div class="quiz-category-card" data-category="devi">
-                <img src="../images/devi.png" alt="జగన్మాత దేవి" loading="lazy">
+                <img src="../images/devi.png" alt="దేవి" loading="lazy">
                 <div class="quiz-card-overlay">
-                    <span class="quiz-card-tag">🌺 శాక్త తత్త్వం</span>
                     <h2>దేవి</h2>
-                    <p class="quiz-card-desc">
-                        జగన్మాత, అష్టాదశ శక్తిపీఠాలు, దేవీ నవరాత్రులు మరియు లలితా తత్త్వ వైభవం.
-                    </p>
-                    <div class="community-score-badge">
-                        <span class="cs-label">🌍 సమూహ ఫలితం</span>
-                        <span class="cs-value" id="deviScore">0</span>
-                    </div>
+                    <p class="community-score">సమూహ ఫలితం</p>
+                    <span id="deviScore">0</span>
                     <div class="quiz-card-buttons">
-                        <button class="quiz-card-btn-start quiz-start-btn">
-                            <span>▶ ప్రారంభించండి</span>
-                        </button>
-                        <button class="quiz-card-btn-lb quiz-leaderboard-btn">
-                            <span>🏆 లీడర్‌బోర్డ్</span>
-                        </button>
+                        <button class="quiz-start-btn">▶ ప్రశ్నావళి ప్రారంభించండి</button>
+                        <button class="quiz-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
                     </div>
                 </div>
             </div>
 
             <!-- Telugu -->
             <div class="quiz-category-card" data-category="telugu">
-                <img src="../images/telugu.png" alt="తెలుగు సంస్కృతి" loading="lazy">
+                <img src="../images/telugu.png" alt="తెలుగు" loading="lazy">
                 <div class="quiz-card-overlay">
-                    <span class="quiz-card-tag">📜 భాష & సంస్కృతి</span>
                     <h2>తెలుగు</h2>
-                    <p class="quiz-card-desc">
-                        తెనుగు తేజం, తిథులు, పద్యాలు, ప్రాచీన మహాకవులు మరియు పండుగల విశిష్టత.
-                    </p>
-                    <div class="community-score-badge">
-                        <span class="cs-label">🌍 సమూహ ఫలితం</span>
-                        <span class="cs-value" id="teluguScore">0</span>
-                    </div>
+                    <p class="community-score">సమూహ ఫలితం</p>
+                    <span id="teluguScore">0</span>
                     <div class="quiz-card-buttons">
-                        <button class="quiz-card-btn-start quiz-start-btn">
-                            <span>▶ ప్రారంభించండి</span>
-                        </button>
-                        <button class="quiz-card-btn-lb quiz-leaderboard-btn">
-                            <span>🏆 లీడర్‌బోర్డ్</span>
-                        </button>
+                        <button class="quiz-start-btn">▶ ప్రశ్నావళి ప్రారంభించండి</button>
+                        <button class="quiz-leaderboard-btn">🏆 అగ్రస్థాన పట్టిక</button>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
     <!-- Theme Modal -->
-    <div id="themeModal" class="theme-modal" role="dialog" aria-modal="true" aria-labelledby="themeModalTitle" style="display:none;">
+    <div id="themeModal" class="theme-modal" role="dialog" aria-modal="true" style="display:none;">
         <div class="theme-modal-backdrop" id="themeModalBackdrop"></div>
         <div class="theme-modal-card">
             <div class="theme-modal-header">
-                <h3 id="themeModalTitle">🎨 శైలిని ఎంచుకోండి (Themes)</h3>
-                <button class="theme-modal-close" id="themeModalClose" aria-label="మూసివేయి">&times;</button>
+                <h3>🎨 శైలిని ఎంచుకోండి (Themes)</h3>
+                <button class="theme-modal-close" id="themeModalClose">&times;</button>
             </div>
             <div class="theme-list" id="themeList"></div>
         </div>
     </div>
 
-    <!-- Simple Footer -->
+    <!-- Footer -->
     <footer class="simple-footer">
         <script type="module" src="../social-links.js"></script>
-        <p>© 2026 సన్నివేశం. సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.</p>
+        <p>© 2026 సన్నివేశం</p>
     </footer>
 
-    <!-- Global App Script -->
+    <!-- Scripts -->
     <script src="../script.js"></script>
+    <script type="module" src="quiz.js"></script>
 
     <!-- 3D Sacred Particle Canvas Script -->
     <script>
@@ -307,134 +219,73 @@
         h = canvas.height = window.innerHeight;
       });
 
-      let mouseX = w / 2;
-      let mouseY = h / 2;
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      const particleCount = window.innerWidth < 768 ? 42 : 80;
+      const particleCount = window.innerWidth < 768 ? 32 : 65;
       const particles = [];
-      const colors = ["#ffd166", "#ff9f1c", "#ffeaa7", "#d4af37", "#f39c12"];
+      const colors = ["#ffd166", "#ff9f1c", "#ffeaa7", "#d4af37"];
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
-          x: (Math.random() - 0.5) * w * 1.6,
-          y: (Math.random() - 0.5) * h * 1.6,
+          x: (Math.random() - 0.5) * w * 1.5,
+          y: (Math.random() - 0.5) * h * 1.5,
           z: Math.random() * 800 + 100,
-          radius: Math.random() * 2.6 + 1.2,
+          radius: Math.random() * 2.2 + 1.2,
           color: colors[Math.floor(Math.random() * colors.length)],
-          vy: -(Math.random() * 0.45 + 0.25)
+          vy: -(Math.random() * 0.4 + 0.2)
         });
       }
 
-      let angleY = 0;
-      let angleX = 0;
       const fov = 380;
-
       function render() {
         ctx.clearRect(0, 0, w, h);
-
-        const targetAngleY = ((mouseX - w / 2) / w) * 0.25;
-        const targetAngleX = ((mouseY - h / 2) / h) * 0.18;
-        angleY += (targetAngleY - angleY) * 0.04;
-        angleX += (targetAngleX - angleX) * 0.04;
-
         const cx = w / 2;
         const cy = h / 2;
 
         particles.forEach(p => {
           p.y += p.vy;
           if (p.y < -h * 0.8) p.y = h * 0.8;
-
-          const cosY = Math.cos(angleY);
-          const sinY = Math.sin(angleY);
-          const rx = p.x * cosY - p.z * sinY;
-          const rz = p.x * sinY + p.z * cosY + 500;
-
+          const rz = p.z + 500;
           if (rz > 50) {
             const scale = fov / rz;
-            const sx = cx + rx * scale;
+            const sx = cx + p.x * scale;
             const sy = cy + p.y * scale;
-
-            const alpha = Math.max(0.12, Math.min(0.75, scale * 1.2));
+            const alpha = Math.max(0.1, Math.min(0.7, scale * 1.2));
             ctx.beginPath();
-            ctx.arc(sx, sy, p.radius * scale * 1.8, 0, Math.PI * 2);
+            ctx.arc(sx, sy, p.radius * scale * 1.6, 0, Math.PI * 2);
             ctx.fillStyle = p.color;
             ctx.globalAlpha = alpha;
-            ctx.shadowBlur = 8 * scale;
-            ctx.shadowColor = p.color;
             ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1.0;
           }
         });
-
         requestAnimationFrame(render);
       }
       render();
     })();
     </script>
 
-    <!-- Quiz Logic Module -->
-    <script type="module" src="quiz.js"></script>
-
-    <!-- Dynamic Background Loader with Theme Integration -->
+    <!-- Background Loader -->
     <script type="module">
       import { db } from "../firebase-config.js";
       import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
       async function loadQuizBackground() {
         try {
-          let data = null;
-          const themeSnap = await getDoc(doc(db, "settings", "theme"));
-          if (themeSnap.exists()) data = themeSnap.data();
-          if (!data) {
-            const bgSnap = await getDoc(doc(db, "settings", "backgrounds"));
-            if (bgSnap.exists()) data = bgSnap.data();
-          }
-          if (!data) return;
-
+          const snap = await getDoc(doc(db, "settings", "backgrounds"));
+          if (!snap.exists()) return;
+          const data = snap.data();
           const bg = document.querySelector(".quiz-bg");
           if (!bg) return;
-
           const res = window.SanniveshamTheme
             ? window.SanniveshamTheme.resolveBackground(data, "quiz")
             : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
-
-          if (res && res.chosen) {
+          if (res.chosen) {
             bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}")`;
           }
         } catch (err) {
           console.warn("Quiz bg load error:", err);
         }
       }
-
       loadQuizBackground();
       window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
-
-      // Theme toggle modal logic
-      const themeBtn = document.getElementById("themeToggleBtn");
-      const themeModal = document.getElementById("themeModal");
-      const themeClose = document.getElementById("themeModalClose");
-      const themeBackdrop = document.getElementById("themeModalBackdrop");
-
-      if (themeBtn && themeModal) {
-        themeBtn.addEventListener("click", () => {
-          themeModal.style.display = "flex";
-          if (window.SanniveshamTheme && typeof window.SanniveshamTheme.renderThemeList === "function") {
-            window.SanniveshamTheme.renderThemeList();
-          }
-        });
-      }
-
-      function closeThemeModal() {
-        if (themeModal) themeModal.style.display = "none";
-      }
-
-      if (themeClose) themeClose.addEventListener("click", closeThemeModal);
-      if (themeBackdrop) themeBackdrop.addEventListener("click", closeThemeModal);
     </script>
 </body>
 </html>
