@@ -111,65 +111,154 @@
     "రుధిరోద్గారి", "రక్తాక్షి", "క్రోధన", "అక్షయ"
   ];
 
-  const RAHU_TIMES = [
-    "04:30 - 06:00 PM", // Sun
-    "07:30 - 09:00 AM", // Mon
-    "03:00 - 04:30 PM", // Tue
-    "12:00 - 01:30 PM", // Wed
-    "01:30 - 03:00 PM", // Thu
-    "10:30 - 12:00 PM", // Fri
-    "09:00 - 10:30 AM"  // Sat
+  // Segment-of-day indices (0-based out of 8 equal day segments) for muhurthams
+  // Standard Vedic rule: day = sunrise to sunset, split into 8 equal parts
+  const RAHU_SEGMENT   = [7, 1, 6, 4, 5, 3, 2]; // Sun=7,Mon=1,Tue=6,Wed=4,Thu=5,Fri=3,Sat=2 (1-based→0-based below)
+  const YAMA_SEGMENT   = [4, 3, 2, 1, 0, 6, 5];
+  const GULIKA_SEGMENT = [6, 5, 4, 3, 2, 1, 0];
+
+  // Durmuhurtham proportional offsets within the day (as fractions of day duration)
+  // Values sourced from classical texts, expressed in muhurats (1 muhurat = 1/30 of day)
+  const DURM_MUHURTAS = [
+    [[17, 18]], // Sun: muhurat 17 only (~4/5 of day)
+    [[6, 7], [12, 13]], // Mon: 6 & 12
+    [[3, 4], [11, 12]], // Tue
+    [[10, 11]], // Wed
+    [[8, 9], [12, 13]], // Thu
+    [[3, 4], [10, 11]], // Fri
+    [[0, 1], [1, 2]]   // Sat: first two
   ];
 
-  const YAMA_TIMES = [
-    "12:00 - 01:30 PM", // Sun
-    "10:30 - 12:00 PM", // Mon
-    "09:00 - 10:30 AM", // Tue
-    "07:30 - 09:00 AM", // Wed
-    "06:00 - 07:30 AM", // Thu
-    "03:00 - 04:30 PM", // Fri
-    "01:30 - 03:00 PM"  // Sat
-  ];
+  // Amrutha Kalam (Vedic: every day specific nakshatra period — approximated as proportional to day)
+  // Stored as [muhurat_start, muhurat_end] (out of 30 muhurats in a day)
+  const AMRUTHA_MUHURTAS = [4, 4.5, 5, 5.5, 7, 8, 16]; // Sun-Sat start muhurat (duration=1.5 muhurtas)
+  const VARJYAM_MUHURTAS = [3, 7, 17, 22, 2.5, 14, 4.5]; // Sun-Sat start (duration=1.5 muhurtas)
 
-  const GULIKA_TIMES = [
-    "03:00 - 04:30 PM", // Sun
-    "01:30 - 03:00 PM", // Mon
-    "12:00 - 01:30 PM", // Tue
-    "10:30 - 12:00 PM", // Wed
-    "09:00 - 10:30 AM", // Thu
-    "07:30 - 09:00 AM", // Fri
-    "06:00 - 07:30 AM"  // Sat
-  ];
+  // ─── NOAA Solar Algorithm ─────────────────────────────────────────────────
+  // Returns sunrise and sunset as decimal hours in LOCAL time (IST offset given)
+  function noaaSunriseSunset(year, month, day, lat, lon, utcOffsetHours) {
+    const jd = (function() {
+      let y = year, m = month;
+      if (m <= 2) { y--; m += 12; }
+      const A = Math.floor(y / 100);
+      const B = 2 - A + Math.floor(A / 4);
+      return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + B - 1524.5;
+    })();
 
-  const DURMUHURTHAM_TIMES = [
-    "04:35 - 05:25 PM",
-    "12:45 - 01:35 PM & 03:15 - 04:05 PM",
-    "08:35 - 09:25 AM & 10:55 - 11:45 PM",
-    "11:55 AM - 12:45 PM",
-    "10:15 - 11:05 AM & 02:45 - 03:35 PM",
-    "08:35 - 09:25 AM & 12:45 - 01:35 PM",
-    "06:15 - 07:05 AM & 07:05 - 07:55 AM"
-  ];
+    const D = jd - 2451545.0;
+    // Geometric mean longitude of the sun (degrees)
+    const L0 = (280.46646 + 0.9856474 * D) % 360;
+    // Geometric mean anomaly (degrees)
+    const M = (357.52911 + 0.98560028 * D) % 360;
+    const Mrad = M * RAD;
+    // Equation of center
+    const C = (1.914602 - 0.004817 * D / 36525 - 0.000014 * (D / 36525) * (D / 36525)) * Math.sin(Mrad)
+            + 0.019993 * Math.sin(2 * Mrad)
+            + 0.000289 * Math.sin(3 * Mrad);
+    // Sun's true longitude
+    const sunLon = L0 + C;
+    // Apparent longitude (correcting for aberration and nutation)
+    const omega = 125.04 - 0.052954 * D;
+    const lambda = sunLon - 0.00569 - 0.00478 * Math.sin(omega * RAD);
+    // Obliquity of ecliptic
+    const epsilon0 = 23.439291 - 0.013004 * D / 36525;
+    const epsilon = epsilon0 + 0.00256 * Math.cos(omega * RAD);
+    // Sun's declination
+    const decl = Math.asin(Math.sin(epsilon * RAD) * Math.sin(lambda * RAD)) / RAD;
+    // Equation of time (minutes)
+    const y2 = Math.tan((epsilon / 2) * RAD) * Math.tan((epsilon / 2) * RAD);
+    const L0rad = L0 * RAD;
+    const Mrad2 = M * RAD;
+    const eot = (y2 * Math.sin(2 * L0rad)
+               - 2 * 0.016708634 * Math.sin(Mrad2)
+               + 4 * 0.016708634 * y2 * Math.sin(Mrad2) * Math.cos(2 * L0rad)
+               - 0.5 * y2 * y2 * Math.sin(4 * L0rad)
+               - 1.25 * 0.016708634 * 0.016708634 * Math.sin(2 * Mrad2)) * 4 / RAD; // in minutes
 
-  const AMRUTHA_TIMES = [
-    "08:35 - 10:10 AM",
-    "09:15 - 10:45 AM",
-    "10:20 - 11:50 AM",
-    "11:15 AM - 12:45 PM",
-    "01:30 - 03:00 PM",
-    "02:15 - 03:45 PM",
-    "07:45 - 09:15 PM"
-  ];
+    // Hour angle for sunrise (solar zenith 90.833°)
+    const cosHA = (Math.cos(90.833 * RAD) / (Math.cos(lat * RAD) * Math.cos(decl * RAD)))
+                - Math.tan(lat * RAD) * Math.tan(decl * RAD);
 
-  const VARJYAM_TIMES = [
-    "07:15 - 08:45 AM",
-    "01:45 - 03:15 PM",
-    "08:20 - 09:50 PM",
-    "10:30 PM - 12:00 AM",
-    "06:40 - 08:10 AM",
-    "03:20 - 04:50 PM",
-    "11:10 AM - 12:40 PM"
-  ];
+    // Polar day/night handling
+    if (cosHA < -1) return { sunrise: 0, sunset: 24 }; // Midnight sun
+    if (cosHA > 1)  return { sunrise: 12, sunset: 12 }; // Polar night
+
+    const HA = Math.acos(cosHA) / RAD; // degrees
+
+    // Solar noon (in UTC minutes from midnight)
+    const solarNoonUTC = 720 - 4 * lon - eot;
+    const sunriseUTC = solarNoonUTC - HA * 4; // minutes
+    const sunsetUTC  = solarNoonUTC + HA * 4;
+
+    const sunriseLocal = sunriseUTC / 60 + utcOffsetHours;
+    const sunsetLocal  = sunsetUTC  / 60 + utcOffsetHours;
+
+    return { sunrise: sunriseLocal, sunset: sunsetLocal };
+  }
+
+  // Format decimal hours to "HH:MM AM/PM" string
+  function fmtHHMM(h) {
+    let hr = Math.floor(h);
+    let mn = Math.round((h - hr) * 60);
+    if (mn === 60) { mn = 0; hr++; }
+    const period = hr >= 12 ? "PM" : "AM";
+    let displayHr = hr % 12;
+    if (displayHr === 0) displayHr = 12;
+    return `${String(displayHr).padStart(2, "0")}:${String(mn).padStart(2, "0")} ${period}`;
+  }
+
+  // Format a range of decimal hours to "HH:MM AM/PM - HH:MM AM/PM"
+  function fmtRange(startH, endH) {
+    return `${fmtHHMM(startH)} - ${fmtHHMM(endH)}`;
+  }
+
+  // Compute all muhurtham timings from actual sunrise & sunset
+  function computeMuhurthams(sunriseH, sunsetH, dayOfWeek) {
+    const dayDur = sunsetH - sunriseH; // hours
+    const segDur = dayDur / 8;         // each of 8 equal segments
+    const muhurDur = dayDur / 30;      // 1 muhurtham = 1/30 of day duration
+
+    function seg(n) { // n = 0-based segment number
+      return { s: sunriseH + n * segDur, e: sunriseH + (n + 1) * segDur };
+    }
+
+    // Rahu Kalam: segment index (1-based in table, convert to 0-based)
+    const rahuSeg = RAHU_SEGMENT[dayOfWeek] - 1;
+    const yamaSeg = YAMA_SEGMENT[dayOfWeek] - 1;
+    const gulikaSeg = GULIKA_SEGMENT[dayOfWeek] - 1;
+
+    const rahu   = seg(rahuSeg);
+    const yama   = seg(yamaSeg);
+    const gulika = seg(gulikaSeg);
+
+    // Abhijit Muhurtham: 15th muhurtham from sunrise (midday), each muhurtham = dayDur/30
+    // Abhijit = muhurta 15 → starts at sunrise + 14 × muhurtDur, ends at +15
+    const abhijitStart = sunriseH + 14 * muhurDur;
+    const abhijitEnd   = sunriseH + 15 * muhurDur;
+
+    // Durmuhurtham
+    const durm = DURM_MUHURTAS[dayOfWeek].map(([a, b]) =>
+      fmtRange(sunriseH + a * muhurDur, sunriseH + b * muhurDur)
+    ).join(" & ");
+
+    // Amrutha Gadiyalu
+    const amS = sunriseH + AMRUTHA_MUHURTAS[dayOfWeek] * muhurDur;
+    const amrutha = fmtRange(amS, amS + 1.5 * muhurDur);
+
+    // Varjyam
+    const varS = sunriseH + VARJYAM_MUHURTAS[dayOfWeek] * muhurDur;
+    const varjyam = fmtRange(varS, varS + 1.5 * muhurDur);
+
+    return {
+      rahuKalam:        fmtRange(rahu.s, rahu.e),
+      yamagandam:       fmtRange(yama.s, yama.e),
+      gulikaKalam:      fmtRange(gulika.s, gulika.e),
+      abhijitMuhurtham: fmtRange(abhijitStart, abhijitEnd),
+      amruthaGadiyalu:  amrutha,
+      durmuhurtham:     durm,
+      varjyam:          varjyam
+    };
+  }
 
   function normalize(deg) {
     let d = deg % 360.0;
@@ -309,6 +398,10 @@
     const dateNum = d.getDate();
     const dayOfWeek = d.getDay();
 
+    // Location defaults to Hyderabad, IST (+5.5h)
+    const lat = (options && typeof options.lat === "number") ? options.lat : 17.3850;
+    const lon = (options && typeof options.lon === "number") ? options.lon : 78.4867;
+
     const pos = calculatePositions(year, month, dateNum, 6);
 
     // 1. Tithi (at Sunrise)
@@ -427,24 +520,17 @@
       karanaTe = KARANAS_TE[(karanaNum - 2) % 7];
     }
 
-    // 9. Sunrise & Sunset
-    const dayOfYear = Math.floor((d - new Date(year, 0, 0)) / 1000 / 60 / 60 / 24);
-    const solarDeclination = -23.44 * Math.cos(((360 / 365) * (dayOfYear + 10)) * RAD);
-    const sunriseMinutes = 365 - Math.round(solarDeclination * 1.5);
-    const sunsetMinutes = 1095 + Math.round(solarDeclination * 1.5);
+    // 9. Sunrise & Sunset (NOAA solar algorithm — location aware)
+    const solar = noaaSunriseSunset(year, month, dateNum, lat, lon, 5.5);
+    const sunriseH = solar.sunrise;
+    const sunsetH  = solar.sunset;
+    const sunrise  = fmtHHMM(sunriseH);
+    const sunset   = fmtHHMM(sunsetH);
 
-    function formatTime(minutes) {
-      const hrs = Math.floor(minutes / 60);
-      const mins = minutes % 60;
-      const period = hrs >= 12 ? "PM" : "AM";
-      const displayHrs = hrs > 12 ? hrs - 12 : hrs;
-      return `${String(displayHrs).padStart(2, "0")}:${String(mins).padStart(2, "0")} ${period}`;
-    }
+    // 10. All Muhurthams derived from actual sunrise/sunset
+    const muhurthams = computeMuhurthams(sunriseH, sunsetH, dayOfWeek);
 
-    const sunrise = formatTime(sunriseMinutes);
-    const sunset = formatTime(sunsetMinutes);
-
-    // 10. Festivals
+    // 11. Festivals
     const festivals = detectFestivals({
       year,
       month,
@@ -462,6 +548,8 @@
       month,
       dateNum,
       dayOfWeek,
+      lat,
+      lon,
       gregDateTe: `${dateNum} ${GREG_MONTHS_TE[month - 1]} ${year}`,
       gregDateEn: `${GREG_MONTHS_EN[month - 1]} ${dateNum}, ${year}`,
       dayNameTe: DAYS_TE[dayOfWeek],
@@ -506,13 +594,15 @@
       karanaTe,
       sunrise,
       sunset,
-      rahuKalam: RAHU_TIMES[dayOfWeek],
-      yamagandam: YAMA_TIMES[dayOfWeek],
-      gulikaKalam: GULIKA_TIMES[dayOfWeek],
-      abhijitMuhurtham: "11:55 AM - 12:44 PM",
-      amruthaGadiyalu: AMRUTHA_TIMES[dayOfWeek],
-      durmuhurtham: DURMUHURTHAM_TIMES[dayOfWeek],
-      varjyam: VARJYAM_TIMES[dayOfWeek],
+      sunriseH,
+      sunsetH,
+      rahuKalam:        muhurthams.rahuKalam,
+      yamagandam:       muhurthams.yamagandam,
+      gulikaKalam:      muhurthams.gulikaKalam,
+      abhijitMuhurtham: muhurthams.abhijitMuhurtham,
+      amruthaGadiyalu:  muhurthams.amruthaGadiyalu,
+      durmuhurtham:     muhurthams.durmuhurtham,
+      varjyam:          muhurthams.varjyam,
       festivals
     };
   }
@@ -648,14 +738,14 @@
     return list;
   }
 
-  function getMonthPanchang(year, month) {
+  function getMonthPanchang(year, month, lat, lon) {
     const daysInMonth = new Date(year, month, 0).getDate();
     const firstDayIndex = new Date(year, month - 1, 1).getDay();
     const days = [];
 
     for (let day = 1; day <= daysInMonth; day++) {
       const d = new Date(year, month - 1, day, 6, 0, 0);
-      days.push(getPanchang(d));
+      days.push(getPanchang(d, { lat, lon }));
     }
 
     return {
@@ -687,7 +777,7 @@
     return (tCur === 30 && tNext <= 2) || (tCur === 29 && (tNext === 1 || tNext === 2));
   }
 
-  function getTeluguMonthCalendar(refDate) {
+  function getTeluguMonthCalendar(refDate, lat, lon) {
     const base = refDate ? new Date(refDate) : new Date();
     const d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 6, 0, 0);
 
@@ -712,7 +802,7 @@
     let scanD = new Date(startD.getTime());
     maxIter = 35;
     while (maxIter-- > 0) {
-      const dayPanchang = getPanchang(new Date(scanD.getTime()), { lunarMonthIndex });
+      const dayPanchang = getPanchang(new Date(scanD.getTime()), { lunarMonthIndex, lat, lon });
       days.push(dayPanchang);
       if (days.length >= 28 && isEndOfTeluguMonth(scanD)) {
         break;

@@ -1,300 +1,342 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>ప్రొఫైల్ - సన్నివేశం</title>
   <script src="../theme.js"></script>
-    <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../style.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    .profile-page-body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 90px 20px 40px;
-    }
-    .profile-page-box {
-      width: 100%;
-      max-width: 460px;
-      background: rgba(15, 10, 5, 0.55);
-      border: 1px solid rgba(255, 209, 102, 0.35);
-      border-radius: 20px;
-      padding: 30px 26px;
-      backdrop-filter: blur(10px);
-    }
-    .profile-page-box h2 {
-      text-align: center;
-      color: #ffd166;
-      margin-bottom: 20px;
-    }
+    .profile-page-body { min-height:100vh; padding:30px 16px 80px; max-width:520px; margin:0 auto; }
     .profile-back-link {
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 20;
-      color: #ffd166;
-      text-decoration: none;
-      font-size: 1rem;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 14px;
-      border-radius: 20px;
+      display:inline-flex; align-items:center; gap:6px;
+      color:#ffd166; text-decoration:none; font-size:0.9rem;
+      background:rgba(0,0,0,0.4); padding:8px 16px; border-radius:20px;
+      margin-bottom:24px; border:1px solid rgba(255,209,102,0.2); transition:all 0.2s;
     }
+    .profile-back-link:hover { border-color:#ffd166; background:rgba(255,209,102,0.1); }
+    .auth-box {
+      background:rgba(15,8,3,0.82); border:1px solid rgba(255,209,102,0.35);
+      border-radius:24px; padding:32px 28px; backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,0.6);
+    }
+    .auth-box h2 { text-align:center; color:#ffd166; margin-bottom:24px; font-size:1.5rem; }
+    .auth-google-btn {
+      width:100%; background:#fff; color:#1a1a1a; border:none; padding:12px 20px;
+      border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:10px; transition:all 0.2s;
+    }
+    .auth-google-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(255,255,255,0.2); }
+    .auth-msg { text-align:center; font-size:0.88rem; margin-top:10px; color:#e07; }
+    .auth-input {
+      width:100%; background:rgba(36,18,8,0.85); border:1px solid rgba(255,209,102,0.35);
+      color:#EDE3C8; padding:12px 16px; border-radius:12px; font-size:1rem;
+      outline:none; box-sizing:border-box; margin-bottom:12px;
+    }
+    .auth-btn {
+      width:100%; background:linear-gradient(135deg,#d4af37,#ffd166); color:#120703;
+      border:none; padding:12px; border-radius:12px; font-size:1rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .auth-btn:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(255,209,102,0.4); }
+
+    /* Profile cards */
+    .profile-avatar-ring {
+      width:80px; height:80px; border-radius:50%;
+      background:linear-gradient(135deg,#d4af37,#ffd166);
+      display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+      margin:0 auto 16px; box-shadow:0 0 24px rgba(255,209,102,0.45);
+    }
+    .profile-name-title { text-align:center; font-size:1.4rem; font-weight:700; color:#fff; margin-bottom:4px; }
+    .profile-email-sub { text-align:center; font-size:0.82rem; color:rgba(237,227,200,0.55); margin-bottom:26px; }
+    .profile-stats-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .stat-card {
+      background:rgba(255,209,102,0.07); border:1px solid rgba(255,209,102,0.22);
+      border-radius:16px; padding:18px 14px; text-align:center; transition:transform 0.2s, border-color 0.2s;
+    }
+    .stat-card:hover { transform:translateY(-3px); border-color:rgba(255,209,102,0.45); }
+    .stat-card-icon { font-size:1.6rem; margin-bottom:6px; }
+    .stat-card-val { font-size:1.55rem; font-weight:700; color:#ffd166; line-height:1; }
+    .stat-card-lbl { font-size:0.78rem; color:rgba(237,227,200,0.7); margin-top:4px; }
+    .streak-card { grid-column:1 / -1; }
+    .streak-flame { font-size:2.5rem; animation:flame-pulse 1.4s ease-in-out infinite; display:inline-block; }
+    @keyframes flame-pulse { 0%,100%{transform:scale(1) rotate(-4deg);} 50%{transform:scale(1.15) rotate(4deg);} }
+    .streak-val { font-size:2.4rem; font-weight:700; color:#ff7b00; }
+    .streak-label { font-size:0.85rem; color:rgba(237,227,200,0.8); margin-top:4px; }
+
+    /* Birthday section */
+    .bday-section {
+      background:rgba(22,10,5,0.78); border:1px solid rgba(255,209,102,0.3);
+      border-radius:18px; padding:22px 20px; margin-top:16px;
+    }
+    .bday-section h3 { color:#ffd166; font-size:1.05rem; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .dob-input-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .dob-input {
+      flex:1; background:rgba(36,18,8,0.85); border:1px solid rgba(255,209,102,0.35);
+      color:#EDE3C8; padding:10px 14px; border-radius:12px; font-size:0.95rem; outline:none; min-width:160px;
+    }
+    .dob-save-btn {
+      background:linear-gradient(135deg,#d4af37,#ffd166); color:#120703; border:none;
+      padding:10px 20px; border-radius:12px; font-weight:700; font-size:0.9rem;
+      cursor:pointer; transition:all 0.2s; white-space:nowrap;
+    }
+    .dob-save-btn:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(255,209,102,0.4); }
+    .bday-result { margin-top:16px; display:none; }
+    .bday-result.visible { display:block; }
+    .bday-nakshatra-pill {
+      display:inline-block; background:linear-gradient(135deg,rgba(255,209,102,0.2),rgba(212,175,55,0.1));
+      border:1px solid rgba(255,209,102,0.45); border-radius:20px;
+      padding:6px 14px; font-size:0.9rem; color:#ffd166; font-weight:700; margin-bottom:10px;
+    }
+    .bday-countdown-box {
+      background:rgba(255,209,102,0.06); border:1px dashed rgba(255,209,102,0.3);
+      border-radius:14px; padding:14px; text-align:center;
+    }
+    .countdown-days { font-size:2.2rem; font-weight:700; color:#ffd166; }
+    .countdown-lbl { font-size:0.82rem; color:rgba(237,227,200,0.75); margin-top:4px; }
+    .countdown-date { font-size:0.88rem; color:#EDE3C8; margin-top:6px; opacity:0.9; }
+    .logout-btn {
+      width:100%; background:rgba(231,76,60,0.15); border:1px solid rgba(231,76,60,0.4);
+      color:#e74c3c; padding:12px 20px; border-radius:14px; font-size:1rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s; margin-top:16px; display:block;
+    }
+    .logout-btn:hover { background:rgba(231,76,60,0.28); transform:translateY(-2px); }
   </style>
 </head>
 
 <body>
-
   <div class="home-bg"></div>
-
-  <a href="../index.html" class="profile-back-link">← వెనుకకు</a>
-
   <div class="profile-page-body">
-    <div class="profile-page-box">
+    <a href="../index.html" class="profile-back-link">← వెనుకకు</a>
 
-      <!-- LOGIN VIEW -->
-      <div id="loginView">
+    <!-- LOGIN VIEW -->
+    <div id="loginView" class="auth-box">
+      <div id="loginStep1">
         <h2>లాగిన్ చేయండి</h2>
+        <button id="googleLoginBtn" class="auth-google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
+        </button>
+        <div id="googleBtnHolder" style="margin-top:10px;"></div>
+        <p id="loginMsg" class="auth-msg"></p>
+      </div>
+      <div id="loginStep3" style="display:none;">
+        <h2>మీ పేరు నమోదు చేయండి</h2>
+        <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
+        <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
+        <p id="nameMsg" class="auth-msg"></p>
+      </div>
+    </div>
 
-        <div id="loginStep1">
-          <button id="googleLoginBtn" class="auth-google-btn">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
-          </button>
-          <div id="googleBtnHolder" style="margin-top:10px;"></div>
-          <div class="auth-divider" style="margin: 20px 0 16px;">లేదా</div>
-          <div style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.3); border-radius: 10px; padding: 12px; text-align: center; color: #EDE3C8; font-size: 0.9rem;">
-            📱 మొబైల్ OTP లాగిన్ త్వరలో అందుబాటులోకి రానుంది
+    <!-- PROFILE VIEW -->
+    <div id="profileView" style="display:none;">
+      <div class="auth-box">
+        <div class="profile-avatar-ring">👤</div>
+        <div class="profile-name-title" id="profileName"></div>
+        <div class="profile-email-sub" id="profileEmail"></div>
+        <div class="profile-stats-row">
+          <div class="stat-card streak-card">
+            <div><span class="streak-flame">🔥</span></div>
+            <div class="streak-val" id="streakCount">0</div>
+            <div class="streak-label">రోజుల వరుస సందర్శన</div>
           </div>
-          <div id="recaptcha-container"></div>
-          <p id="loginMsg" class="auth-msg"></p>
-        </div>
-
-        <div id="loginStep2" style="display:none;">
-          <input type="text" id="otpInput" placeholder="OTP నమోదు చేయండి" class="auth-input">
-          <button id="verifyOtpBtn" class="auth-btn">Verify చేయండి</button>
-          <p id="otpMsg" class="auth-msg"></p>
-        </div>
-
-        <div id="loginStep3" style="display:none;">
-          <p>మీ పేరు నమోదు చేయండి</p>
-          <input type="text" id="nameInput" placeholder="మీ పేరు" class="auth-input">
-          <button id="saveNameBtn" class="auth-btn">సేవ్ చేయండి</button>
-          <p id="nameMsg" class="auth-msg"></p>
+          <div class="stat-card">
+            <div class="stat-card-icon">⭐</div>
+            <div class="stat-card-val" id="profileScore">0</div>
+            <div class="stat-card-lbl">సాధించిన అంకాలు</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">📅</div>
+            <div class="stat-card-val" id="streakLastSeen">—</div>
+            <div class="stat-card-lbl">గత సందర్శన</div>
+          </div>
         </div>
       </div>
 
-      <!-- PROFILE VIEW -->
-      <div id="profileView" style="display:none;">
-        <div class="profile-avatar" style="text-align:center; font-size:3rem;">👤</div>
-        <h2 id="profileName" style="text-align:center;"></h2>
-
-        <div class="profile-score-badge" style="text-align:center; margin: 16px 0 24px;">
-          ⭐ సాధించిన అంకాలు: <span id="profileScore">0</span>
+      <!-- Panchang Birthday -->
+      <div class="bday-section">
+        <h3>🪔 పంచాంగ జన్మదిన వివరాలు</h3>
+        <div class="dob-input-row">
+          <input type="date" id="dobInput" class="dob-input">
+          <button id="saveDobBtn" class="dob-save-btn">🔍 లెక్కించు</button>
         </div>
-
-        <button id="logoutUserBtn" class="auth-logout-btn" style="width:100%;">లాగ్అవుట్</button>
+        <div class="bday-result" id="bdayResult">
+          <div style="margin-bottom:10px;font-size:0.85rem;color:rgba(237,227,200,0.65);">మీ జన్మ నక్షత్రం &amp; తిథి:</div>
+          <div class="bday-nakshatra-pill" id="bdayNakshatra">—</div>
+          <div class="bday-countdown-box">
+            <div class="countdown-days" id="bdayCountdownDays">—</div>
+            <div class="countdown-lbl">రోజులలో తదుపరి జన్మ నక్షత్ర దినం</div>
+            <div class="countdown-date" id="bdayCountdownDate"></div>
+          </div>
+        </div>
       </div>
 
+      <button id="logoutUserBtn" class="logout-btn">🚪 లాగ్అవుట్</button>
     </div>
   </div>
 
+  <script src="../panchang-engine.js"></script>
+
   <script type="module">
     import { db, auth } from "../firebase-config.js";
+    import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-    import {
-      doc, getDoc, setDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-    import {
-      GoogleAuthProvider, signInWithCredential, RecaptchaVerifier,
-      signInWithPhoneNumber, onAuthStateChanged, signOut
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-
-    // Real Web client ID from Google Cloud Console (Credentials -> OAuth 2.0 Client IDs)
-    // Only used as a fallback for a real browser — never used inside the app,
-    // since the app always uses its native AndroidBridge sign-in below.
     const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
-
     let currentUser = null;
-    let confirmationResult = null;
 
-    function isInsideApp() {
-      return !!window.AndroidBridge;
+    const NAKSHATRAS_TE = ["అశ్విని","భరణి","కృత్తిక","రోహిణి","మృగశిర","ఆర్ద్ర","పునర్వసు","పుష్యమి","ఆశ్లేష","మఖ","పుబ్బ","ఉత్తర","హస్త","చిత్త","స్వాతి","విశాఖ","అనూరాధ","జ్యేష్ఠ","మూల","పూర్వాషాఢ","ఉత్తరాషాఢ","శ్రవణం","ధనిష్ఠ","శతభిషం","పూర్వాభాద్ర","ఉత్తరాభాద్ర","రేవతి"];
+    const TITHI_TE = ["పాడ్యమి","విదియ","తదియ","చవితి","పంచమి","షష్ఠి","సప్తమి","అష్టమి","నవమి","దశమి","ఏకాదశి","ద్వాదశి","త్రయోదశి","చతుర్దశి","పౌర్ణమి","అమావాస్య"];
+
+    function todayStr() {
+      const n = new Date();
+      return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");
     }
 
-    function showStep(id) {
-      ["loginStep1", "loginStep2", "loginStep3"].forEach(s => {
-        const el = document.getElementById(s);
-        if (el) el.style.display = "none";
-      });
-      const target = document.getElementById(id);
-      if (target) target.style.display = "block";
+    async function updateStreak(uid) {
+      const ref = doc(db, "users", uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return;
+      const data = snap.data();
+      const today = todayStr();
+      if (data.lastOpenDate === today) return;
+      const yest = (function(){ const d=new Date(); d.setDate(d.getDate()-1); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); })();
+      const streak = (data.lastOpenDate === yest) ? (data.streak||0)+1 : 1;
+      await updateDoc(ref, { streak, lastOpenDate: today });
     }
 
-    function showLoginView() {
+    function calcBirthInfo(dobStr) {
+      const P = window.SanniveshamPanchang;
+      if (!P) return null;
+      const [y,m,d] = dobStr.split("-").map(Number);
+      const p = P.getPanchang(new Date(y,m-1,d,6,0,0));
+      return { nakshatraIndex: p.nakshatraIndex, tithiIndex: p.tithiIndex, tithiInPaksha: p.tithiInPaksha, isShukla: p.isShukla };
+    }
+
+    function nextNakshatraDate(idx) {
+      const P = window.SanniveshamPanchang;
+      if (!P) return null;
+      const today = new Date(); today.setHours(6,0,0,0);
+      for (let i=1; i<=30; i++) {
+        const d = new Date(today.getTime()+i*86400000);
+        if (P.getPanchang(d).nakshatraIndex === idx) return d;
+      }
+      return null;
+    }
+
+    function renderBirthday(dob) {
+      if (!dob) return;
+      document.getElementById("dobInput").value = dob;
+      const b = calcBirthInfo(dob);
+      if (!b) return;
+      const paksha = b.isShukla ? "శుక్ల" : "బహుళ";
+      const tithi = b.tithiIndex===15 ? "పౌర్ణమి" : b.tithiIndex===30 ? "అమావాస్య" : paksha+" "+(TITHI_TE[b.tithiInPaksha-1]||"");
+      document.getElementById("bdayNakshatra").textContent = "⭐ "+NAKSHATRAS_TE[b.nakshatraIndex]+"  •  📅 "+tithi;
+      const next = nextNakshatraDate(b.nakshatraIndex);
+      document.getElementById("bdayResult").classList.add("visible");
+      if (next) {
+        document.getElementById("bdayCountdownDays").textContent = Math.ceil((next-new Date())/86400000);
+        document.getElementById("bdayCountdownDate").textContent = next.toLocaleDateString("te-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+      }
+    }
+
+    function showLogin(step) {
       document.getElementById("loginView").style.display = "block";
       document.getElementById("profileView").style.display = "none";
+      document.getElementById("loginStep1").style.display = step===1 ? "block" : "none";
+      document.getElementById("loginStep3").style.display = step===3 ? "block" : "none";
     }
 
-    function showProfileView() {
+    function showProfile(data) {
       document.getElementById("loginView").style.display = "none";
       document.getElementById("profileView").style.display = "block";
+      document.getElementById("profileName").textContent = data.name || "User";
+      document.getElementById("profileEmail").textContent = currentUser.email || "";
+      document.getElementById("profileScore").textContent = data.score || 0;
+      document.getElementById("streakCount").textContent = data.streak || 0;
+      const last = data.lastOpenDate || null;
+      document.getElementById("streakLastSeen").textContent = last ? last.slice(5).replace("-","/") : "—";
+      if (data.dob) renderBirthday(data.dob);
     }
 
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       if (user) {
-        const userSnap = await getDoc(doc(db, "users", user.uid));
-        if (!userSnap.exists()) {
-          showLoginView();
-          showStep("loginStep3");
-        } else {
-          const data = userSnap.data();
-          document.getElementById("profileName").innerText = data.name || "User";
-          document.getElementById("profileScore").innerText = data.score || 0;
-          showProfileView();
-        }
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (!snap.exists()) { showLogin(3); return; }
+        await updateStreak(user.uid);
+        const fresh = await getDoc(doc(db, "users", user.uid));
+        showProfile(fresh.data());
       } else {
-        showLoginView();
-        showStep("loginStep1");
+        showLogin(1);
       }
     });
 
-    // Google login — native app bridge takes priority when inside the app
-    window.handleGoogleCredentialResponse = async function(response) {
+    window.handleGoogleCredentialResponse = async function(resp) {
       try {
-        const credential = GoogleAuthProvider.credential(response.credential);
-        const result = await signInWithCredential(auth, credential);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-      }
+        const r = await signInWithCredential(auth, GoogleAuthProvider.credential(resp.credential));
+        const snap = await getDoc(doc(db, "users", r.user.uid));
+        if (!snap.exists()) showLogin(3);
+      } catch(e) { document.getElementById("loginMsg").textContent = "Google లాగిన్ విఫలమైంది"; }
     };
 
     document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      if (isInsideApp()) {
-        window.AndroidBridge.triggerGoogleSignIn();
-        return;
-      }
+      if (window.AndroidBridge) { window.AndroidBridge.triggerGoogleSignIn(); return; }
       try {
         if (window.google && google.accounts && google.accounts.id) {
-          google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleCredentialResponse
+          google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredentialResponse });
+          google.accounts.id.prompt(n => {
+            if (n.isNotDisplayed()||n.isSkippedMoment())
+              google.accounts.id.renderButton(document.getElementById("googleBtnHolder"), { theme:"outline", size:"large", width:260 });
           });
-          google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              document.getElementById("googleBtnHolder").innerHTML = "";
-              google.accounts.id.renderButton(
-                document.getElementById("googleBtnHolder"),
-                { theme: "outline", size: "large", width: 260 }
-              );
-            }
-          });
-        } else {
-          document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-        }
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ లోడ్ కావడం లేదు, మళ్ళీ ప్రయత్నించండి";
-      }
+        } else { document.getElementById("loginMsg").textContent = "Google లాగిన్ లోడ్ కావడం లేదు"; }
+      } catch(e) { document.getElementById("loginMsg").textContent = "Google లాగిన్ లోడ్ కావడం లేదు"; }
     });
 
-    // Called by your Android app after native Google Sign-In succeeds
     window.onNativeGoogleSignIn = async function(idToken) {
       try {
-        const credential = GoogleAuthProvider.credential(idToken);
-        const result = await signInWithCredential(auth, credential);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "Google లాగిన్ విఫలమైంది";
-      }
+        const r = await signInWithCredential(auth, GoogleAuthProvider.credential(idToken));
+        const snap = await getDoc(doc(db, "users", r.user.uid));
+        if (!snap.exists()) showLogin(3);
+      } catch(e) { document.getElementById("loginMsg").textContent = "Google లాగిన్ విఫలమైంది"; }
     };
-
-    window.onNativeGoogleSignInError = function() {
-      document.getElementById("loginMsg").innerText = "Google లాగిన్ రద్దు చేయబడింది";
-    };
-
-    document.getElementById("sendOtpBtn").addEventListener("click", async () => {
-      const phone = document.getElementById("phoneInput").value.trim();
-      if (!phone) { document.getElementById("loginMsg").innerText = "మొబైల్ నంబర్ నమోదు చేయండి"; return; }
-      try {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
-        }
-        let formattedPhone = phone.replace(/\s+/g, "");
-        if (!formattedPhone.startsWith("+")) formattedPhone = "+91" + formattedPhone;
-        confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
-        showStep("loginStep2");
-      } catch (e) {
-        document.getElementById("loginMsg").innerText = "OTP పంపడం విఫలమైంది: " + e.message;
-      }
-    });
-
-    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
-      const otp = document.getElementById("otpInput").value.trim();
-      try {
-        const result = await confirmationResult.confirm(otp);
-        await checkAndSetName(result.user);
-      } catch (e) {
-        document.getElementById("otpMsg").innerText = "OTP తప్పుగా ఉంది";
-      }
-    });
-
-    async function checkAndSetName(user) {
-      const userSnap = await getDoc(doc(db, "users", user.uid));
-      if (!userSnap.exists()) {
-        showLoginView();
-        showStep("loginStep3");
-      }
-      // If it exists, onAuthStateChanged will fire and switch to profile view
-    }
+    window.onNativeGoogleSignInError = function() { document.getElementById("loginMsg").textContent = "రద్దు చేయబడింది"; };
 
     document.getElementById("saveNameBtn").addEventListener("click", async () => {
       const name = document.getElementById("nameInput").value.trim();
-      if (!name) { document.getElementById("nameMsg").innerText = "పేరు నమోదు చేయండి"; return; }
-      await setDoc(doc(db, "users", currentUser.uid), {
-        name, score: 0, answeredDates: [],
-        gameProgress: {
-          wordSearch: { completedLevels: [], metrics: {} },
-          slidingPuzzle: { completedLevels: [], metrics: {} },
-          sudoku: { completedLevels: [], metrics: {} },
-          connectDots: { completedLevels: [], metrics: {} }
-        }
+      if (!name) { document.getElementById("nameMsg").textContent = "పేరు నమోదు చేయండి"; return; }
+      const today = todayStr();
+      await setDoc(doc(db,"users",currentUser.uid), {
+        name, score:0, streak:1, lastOpenDate:today, answeredDates:[],
+        gameProgress: { wordSearch:{completedLevels:[],metrics:{}}, slidingPuzzle:{completedLevels:[],metrics:{}}, sudoku:{completedLevels:[],metrics:{}}, connectDots:{completedLevels:[],metrics:{}} }
       });
-      document.getElementById("profileName").innerText = name;
-      document.getElementById("profileScore").innerText = 0;
-      showProfileView();
+      const s = await getDoc(doc(db,"users",currentUser.uid));
+      showProfile(s.data());
+    });
+
+    document.getElementById("saveDobBtn").addEventListener("click", async () => {
+      const dob = document.getElementById("dobInput").value;
+      if (!dob) { alert("జన్మదినం ఎంచుకోండి"); return; }
+      if (currentUser) await updateDoc(doc(db,"users",currentUser.uid), { dob });
+      renderBirthday(dob);
     });
 
     document.getElementById("logoutUserBtn").addEventListener("click", async () => {
       await signOut(auth);
-      showLoginView();
-      showStep("loginStep1");
+      showLogin(1);
     });
 
-    async function loadHomeBackground() {
-      try {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        const bg = document.querySelector(".home-bg");
-        if (!bg) return;
-        if (window.innerWidth <= 700 && data.homeMobile) {
-          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.55),rgba(10,5,0,0.60)),url("${data.homeMobile}")`;
-        } else if (data.homePc) {
-          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${data.homePc}")`;
-        }
-      } catch (e) {}
-    }
-    loadHomeBackground();
+    // Background
+    try {
+      const snap = await getDoc(doc(db,"settings","backgrounds"));
+      if (snap.exists()) {
+        const d = snap.data(); const bg = document.querySelector(".home-bg");
+        if (bg) bg.style.backgroundImage = window.innerWidth<=700&&d.homeMobile
+          ? `linear-gradient(rgba(10,5,0,0.55),rgba(10,5,0,0.60)),url("${d.homeMobile}")`
+          : d.homePc ? `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.65)),url("${d.homePc}")` : "";
+      }
+    } catch(e) {}
   </script>
-
 </body>
 </html>
-

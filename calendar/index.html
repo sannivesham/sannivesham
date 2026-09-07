@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
@@ -573,6 +573,73 @@
         padding: 1px 4px;
       }
     }
+    /* LOCATION PICKER */
+    .location-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 auto 28px;
+      padding: 14px 20px;
+      background: rgba(22, 10, 5, 0.78);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      max-width: 700px;
+    }
+    .location-detect-btn {
+      background: linear-gradient(135deg, #d4af37, #ffd166);
+      color: #120703;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 22px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .location-detect-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,209,102,0.45); }
+    .location-detect-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .location-city-select {
+      background: rgba(36, 18, 8, 0.88);
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      color: #EDE3C8;
+      padding: 9px 14px;
+      border-radius: 22px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      min-width: 175px;
+    }
+    .location-city-select option { background: #1a0a04; color: #EDE3C8; }
+    .location-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 209, 102, 0.1);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #ffd166;
+      font-weight: 600;
+    }
+    .loc-spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,209,102,0.3);
+      border-top-color: #ffd166;
+      border-radius: 50%;
+      animation: loc-spin 0.7s linear infinite;
+    }
+    @keyframes loc-spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body data-en-title="Panchangam & Calendar - Sannivesham">
@@ -640,6 +707,37 @@
         దృక్ సిద్ధాంతం ప్రకారం నేటి తిథి, వారం, నక్షత్రం, శుభాశుభ ముహూర్తములు మరియు సంపూర్ణ ఇంటరాక్టివ్ మాస క్యాలెండర్
       </p>
     </header>
+
+    <!-- LOCATION PICKER BAR -->
+    <div class="location-bar">
+      <button id="autoDetectBtn" class="location-detect-btn" data-en="📍 Auto-detect Location">📍 స్వయంచాలక స్థానం</button>
+      <select id="citySelect" class="location-city-select">
+        <option value="">🏙️ నగరం ఎంచుకోండి</option>
+        <option value="17.3850,78.4867">హైదరాబాద్ | Hyderabad</option>
+        <option value="13.0827,80.2707">చెన్నై | Chennai</option>
+        <option value="12.9716,77.5946">బెంగళూరు | Bengaluru</option>
+        <option value="28.6139,77.2090">ఢిల్లీ | Delhi</option>
+        <option value="19.0760,72.8777">ముంబై | Mumbai</option>
+        <option value="22.5726,88.3639">కోల్‌కతా | Kolkata</option>
+        <option value="17.6868,83.2185">విశాఖపట్నం | Visakhapatnam</option>
+        <option value="16.5062,80.6480">విజయవాడ | Vijayawada</option>
+        <option value="14.4673,78.8242">కర్నూలు | Kurnool</option>
+        <option value="18.4386,79.1288">కరీంనగర్ | Karimnagar</option>
+        <option value="17.9784,79.5941">వరంగల్ | Warangal</option>
+        <option value="11.0168,76.9558">కోయంబత్తూరు | Coimbatore</option>
+        <option value="9.9252,78.1198">మధురై | Madurai</option>
+        <option value="23.0225,72.5714">అహ్మదాబాద్ | Ahmedabad</option>
+        <option value="18.5204,73.8567">పూణే | Pune</option>
+        <option value="26.8467,80.9462">లక్నో | Lucknow</option>
+        <option value="25.3176,82.9739">వారణాసి | Varanasi</option>
+        <option value="26.9124,75.7873">జైపూర్ | Jaipur</option>
+        <option value="23.2599,77.4126">భోపాల్ | Bhopal</option>
+        <option value="20.2961,85.8245">భువనేశ్వర్ | Bhubaneswar</option>
+        <option value="8.5241,76.9366">తిరువనంతపురం | Thiruvananthapuram</option>
+        <option value="30.7333,76.7794">చండీగఢ్ | Chandigarh</option>
+      </select>
+      <div class="location-pill" id="locationPill">📍 హైదరాబాద్ (డిఫాల్ట్)</div>
+    </div>
 
     <!-- VIEW MODE SWITCHER TABS -->
     <div class="cal-tabs-container">
@@ -730,13 +828,9 @@
     <p>© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="../panchang-engine.js"></script>
-  <script src="../i18n.js"></script>
-
   <script>
     (function () {
       "use strict";
-
       const P = window.SanniveshamPanchang;
       if (!P) return;
 
@@ -744,293 +838,221 @@
       let activeTeluguRefDate = new Date();
       let currentTeluguMonthData = null;
 
-      // DOM Elements
-      const tabToday = document.getElementById("tabToday");
-      const tabMonth = document.getElementById("tabMonth");
-      const tabFestivals = document.getElementById("tabFestivals");
+      // ── Location ─────────────────────────────────────────────────────────────
+      const LOC_KEY = "sannivesham_location";
+      let currentLat = 17.3850, currentLon = 78.4867, currentCityName = "హైదరాబాద్ (డిఫాల్ట్)";
 
-      const sectionToday = document.getElementById("sectionToday");
-      const sectionMonth = document.getElementById("sectionMonth");
-      const sectionFestivals = document.getElementById("sectionFestivals");
-
-      const prevMonthBtn = document.getElementById("prevMonthBtn");
-      const nextMonthBtn = document.getElementById("nextMonthBtn");
-      const todayJumpBtn = document.getElementById("todayJumpBtn");
-
-      const dayModal = document.getElementById("dayDetailModal");
-      const modalCloseBtn = document.getElementById("modalCloseBtn");
-
-      // Tab Switching
-      function setTab(activeTab) {
-        tabToday.classList.remove("active");
-        tabMonth.classList.remove("active");
-        tabFestivals.classList.remove("active");
-
-        sectionToday.style.display = "none";
-        sectionMonth.style.display = "none";
-        sectionFestivals.style.display = "none";
-
-        if (activeTab === "today") {
-          tabToday.classList.add("active");
-          sectionToday.style.display = "block";
-        } else if (activeTab === "month") {
-          tabMonth.classList.add("active");
-          sectionMonth.style.display = "block";
-          renderTeluguMonthCalendar(activeTeluguRefDate);
-        } else if (activeTab === "festivals") {
-          tabFestivals.classList.add("active");
-          sectionFestivals.style.display = "block";
-          renderFestivalsTab(activeTeluguRefDate);
-        }
+      function saveLocation(lat, lon, name) {
+        currentLat = lat; currentLon = lon; currentCityName = name;
+        localStorage.setItem(LOC_KEY, JSON.stringify({ lat, lon, name }));
+        updatePill(name);
+        refreshAll();
+      }
+      function loadSavedLocation() {
+        try {
+          const s = JSON.parse(localStorage.getItem(LOC_KEY));
+          if (s && typeof s.lat === "number") { currentLat = s.lat; currentLon = s.lon; currentCityName = s.name || "—"; updatePill(currentCityName); }
+        } catch(e) {}
+      }
+      function updatePill(name) {
+        const p = document.getElementById("locationPill");
+        if (p) p.textContent = "📍 " + name;
       }
 
-      tabToday.addEventListener("click", () => setTab("today"));
-      tabMonth.addEventListener("click", () => setTab("month"));
-      tabFestivals.addEventListener("click", () => setTab("festivals"));
+      // Location controls
+      const autoDetectBtn = document.getElementById("autoDetectBtn");
+      const citySelect    = document.getElementById("citySelect");
 
-      // Render Today's Panchangam
-      function renderTodayPanchang() {
-        const p = P.getPanchang(now);
+      autoDetectBtn.addEventListener("click", () => {
+        if (!navigator.geolocation) { alert("లొకేషన్ సేవ అందుబాటులో లేదు"); return; }
+        autoDetectBtn.disabled = true;
+        const pill = document.getElementById("locationPill");
+        pill.innerHTML = '<span class="loc-spinner"></span> గుర్తిస్తోంది...';
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          const lat = parseFloat(pos.coords.latitude.toFixed(4));
+          const lon = parseFloat(pos.coords.longitude.toFixed(4));
+          let name = lat.toFixed(2) + "°N " + lon.toFixed(2) + "°E";
+          try {
+            const r = await fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lon + "&zoom=10&addressdetails=1", { headers: { "Accept-Language": "te,en" } });
+            const d = await r.json();
+            const c = d.address.city || d.address.town || d.address.state_district || d.address.state || "";
+            if (c) name = c;
+          } catch(e) {}
+          citySelect.value = "";
+          saveLocation(lat, lon, name);
+          autoDetectBtn.disabled = false;
+        }, (err) => {
+          autoDetectBtn.disabled = false; updatePill(currentCityName);
+          if (err.code === 1) alert("లొకేషన్ అనుమతి నిరాకరించారు.");
+        }, { timeout: 10000 });
+      });
+
+      citySelect.addEventListener("change", () => {
+        if (!citySelect.value) return;
+        const [lat, lon] = citySelect.value.split(",").map(Number);
+        const txt = citySelect.options[citySelect.selectedIndex].text.split(" | ");
+        saveLocation(lat, lon, (txt[1] || txt[0]).trim());
+      });
+
+      // ── Tabs ─────────────────────────────────────────────────────────────────
+      const tabToday    = document.getElementById("tabToday");
+      const tabMonth    = document.getElementById("tabMonth");
+      const tabFestivals= document.getElementById("tabFestivals");
+      const sectionToday    = document.getElementById("sectionToday");
+      const sectionMonth    = document.getElementById("sectionMonth");
+      const sectionFestivals= document.getElementById("sectionFestivals");
+      const prevMonthBtn= document.getElementById("prevMonthBtn");
+      const nextMonthBtn= document.getElementById("nextMonthBtn");
+      const todayJumpBtn= document.getElementById("todayJumpBtn");
+      const dayModal    = document.getElementById("dayDetailModal");
+      const modalCloseBtn= document.getElementById("modalCloseBtn");
+
+      function setTab(t) {
+        [tabToday,tabMonth,tabFestivals].forEach(b => b.classList.remove("active"));
+        [sectionToday,sectionMonth,sectionFestivals].forEach(s => s.style.display="none");
+        if (t === "today")    { tabToday.classList.add("active"); sectionToday.style.display="block"; }
+        else if (t === "month") { tabMonth.classList.add("active"); sectionMonth.style.display="block"; renderMonth(activeTeluguRefDate); }
+        else { tabFestivals.classList.add("active"); sectionFestivals.style.display="block"; renderFests(activeTeluguRefDate); }
+      }
+      tabToday.addEventListener("click",()=>setTab("today"));
+      tabMonth.addEventListener("click",()=>setTab("month"));
+      tabFestivals.addEventListener("click",()=>setTab("festivals"));
+
+      function refreshAll() {
+        renderToday();
+        currentTeluguMonthData = null;
+        const a = document.querySelector(".cal-tab-btn.active");
+        if (a === tabMonth) renderMonth(activeTeluguRefDate);
+        if (a === tabFestivals) renderFests(activeTeluguRefDate);
+      }
+
+      // ── Today ─────────────────────────────────────────────────────────────────
+      function renderToday() {
+        const p = P.getPanchang(now, { lat: currentLat, lon: currentLon });
         const isEn = localStorage.getItem("sannivesham_lang") === "en";
-
         document.getElementById("todaySamvatsara").innerText = isEn ? p.samvatsaramEn : p.samvatsaramTe;
-        document.getElementById("todayFullDate").innerText = `${p.gregDateTe} • ${p.dayNameTe} • ${p.ayanamTe} (${p.rutuTe})`;
-
+        document.getElementById("todayFullDate").innerText = p.gregDateTe + " • " + p.dayNameTe + " • " + p.ayanamTe + " (" + p.rutuTe + ")";
         const grid = document.getElementById("todayGrid");
         grid.innerHTML = "";
-
-        // Festival Banner if today has any
         if (p.festivals.length > 0) {
-          const festNames = p.festivals.map(f => isEn ? f.titleEn : f.titleTe).join(" • ");
-          grid.innerHTML += `
-            <div class="panchang-item highlight-fest">
-              <span class="panchang-label">🌟 నేటి విశేష పర్వదినం / వ్రతం</span>
-              <span class="panchang-val" style="color:#ffd166;font-size:1.25rem;">${festNames}</span>
-              <span class="panchang-sub">పవిత్ర దైవారాధనకు సర్వ శ్రేష్ఠ దినము</span>
-            </div>
-          `;
+          const fn = p.festivals.map(f => isEn ? f.titleEn : f.titleTe).join(" • ");
+          grid.innerHTML += `<div class="panchang-item highlight-fest"><span class="panchang-label">🌟 నేటి విశేష పర్వదినం</span><span class="panchang-val" style="color:#ffd166;font-size:1.25rem;">${fn}</span><span class="panchang-sub">పవిత్ర దైవారాధనకు సర్వ శ్రేష్ఠ దినము</span></div>`;
         }
-
-        const items = [
-          { label: "📅 నేటి తిథి", val: isEn ? p.tithiTimingEn : p.tithiTimingTe, sub: "సూర్యోదయ తిథి & సమాప్తి సమయం" },
-          { label: "⭐ నక్షత్రం", val: isEn ? p.nakshatraTimingEn : p.nakshatraTimingTe, sub: "చంద్ర నక్షత్ర సంచారం & సమాప్తి సమయం" },
-          { label: "🌕 తెలుగు మాసం & పక్షం", val: `${p.masamTe} మాసం • ${p.pakshamTe}`, sub: "అమాంత కాలమానం" },
-          { label: "☀️ సూర్యోదయం & సూర్యాస్తమయం", val: `${p.sunrise} • ${p.sunset}`, sub: "భారతీయ ప్రామాణిక సమయం (IST)" },
-          { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu, sub: "సర్వ కార్య సిద్ధి ప్రదం", good: true },
-          { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham, sub: "శుభ కార్యములకు ఉత్తమ సమయం", good: true },
-          { label: "⚠️ రాహుకాలం", val: p.rahuKalam, sub: "వర్జ్య సమయం", caution: true },
-          { label: "⏳ యమగండం", val: p.yamagandam, sub: "వర్జ్య సమయం", caution: true },
-          { label: "🛑 గుళిక కాలం", val: p.gulikaKalam, sub: "సాధారణ సమయం" },
-          { label: "🚫 దుర్ముహూర్తం & వర్జ్యం", val: `${p.durmuhurtham}`, sub: `వర్జ్యం: ${p.varjyam}`, caution: true },
-          { label: "🕉️ యోగం & కరణం", val: `${p.yogaTe} • ${p.karanaTe}`, sub: "దైవ చింతనకు శ్రేష్టం" }
-        ];
-
-        items.forEach(item => {
-          const div = document.createElement("div");
-          div.className = `panchang-item ${item.good ? "highlight-good" : ""} ${item.caution ? "highlight-caution" : ""}`;
-          div.innerHTML = `
-            <span class="panchang-label">${item.label}</span>
-            <span class="panchang-val">${item.val}</span>
-            <span class="panchang-sub">${item.sub}</span>
-          `;
-          grid.appendChild(div);
+        [
+          { label:"📅 నేటి తిథి", val: isEn?p.tithiTimingEn:p.tithiTimingTe, sub:"సూర్యోదయ తిథి & సమాప్తి సమయం" },
+          { label:"⭐ నక్షత్రం", val: isEn?p.nakshatraTimingEn:p.nakshatraTimingTe, sub:"చంద్ర నక్షత్ర సంచారం" },
+          { label:"🌕 తెలుగు మాసం & పక్షం", val: p.masamTe+" మాసం • "+p.pakshamTe, sub:"అమాంత కాలమానం" },
+          { label:"☀️ సూర్యోదయం & సూర్యాస్తమయం", val: p.sunrise+" • "+p.sunset, sub:"స్థాన-ఆధారిత (NOAA సిద్ధాంతం)" },
+          { label:"✨ అమృత ఘడియలు", val:p.amruthaGadiyalu, sub:"సర్వ కార్య సిద్ధి ప్రదం", good:true },
+          { label:"🪔 అభిజిత్ ముహూర్తం", val:p.abhijitMuhurtham, sub:"శుభ కార్యములకు ఉత్తమ సమయం", good:true },
+          { label:"⚠️ రాహుకాలం", val:p.rahuKalam, sub:"వర్జ్య సమయం", caution:true },
+          { label:"⏳ యమగండం", val:p.yamagandam, sub:"వర్జ్య సమయం", caution:true },
+          { label:"🛑 గుళిక కాలం", val:p.gulikaKalam, sub:"సాధారణ సమయం" },
+          { label:"🚫 దుర్ముహూర్తం & వర్జ్యం", val:p.durmuhurtham, sub:"వర్జ్యం: "+p.varjyam, caution:true },
+          { label:"🕉️ యోగం & కరణం", val:p.yogaTe+" • "+p.karanaTe, sub:"దైవ చింతనకు శ్రేష్టం" }
+        ].forEach(item => {
+          const d = document.createElement("div");
+          d.className = "panchang-item" + (item.good?" highlight-good":"") + (item.caution?" highlight-caution":"");
+          d.innerHTML = `<span class="panchang-label">${item.label}</span><span class="panchang-val">${item.val}</span><span class="panchang-sub">${item.sub}</span>`;
+          grid.appendChild(d);
         });
       }
 
-      // Render Telugu Chandramana Month Calendar
-      function renderTeluguMonthCalendar(refDate) {
-        currentTeluguMonthData = P.getTeluguMonthCalendar(refDate);
+      // ── Monthly Calendar ─────────────────────────────────────────────────────
+      function renderMonth(refDate) {
+        currentTeluguMonthData = P.getTeluguMonthCalendar(refDate, currentLat, currentLon);
         const isEn = localStorage.getItem("sannivesham_lang") === "en";
-
+        const m = currentTeluguMonthData;
         const titleEl = document.getElementById("teluguMonthTitle");
-        const subEl = document.getElementById("gregDateRangeSub");
-        const daysGrid = document.getElementById("calendarDaysGrid");
+        const subEl   = document.getElementById("gregDateRangeSub");
+        const daysGrid= document.getElementById("calendarDaysGrid");
         daysGrid.innerHTML = "";
-
-        if (titleEl) {
-          titleEl.innerText = isEn
-            ? `${currentTeluguMonthData.masamEn} Masam (${currentTeluguMonthData.samvatsaramEn})`
-            : `శ్రీ ${currentTeluguMonthData.masamTe} మాసం (${currentTeluguMonthData.samvatsaramTe})`;
-        }
-        if (subEl) {
-          subEl.innerText = isEn
-            ? `(${currentTeluguMonthData.startGregDateEn} – ${currentTeluguMonthData.endGregDateEn})`
-            : `(${currentTeluguMonthData.startGregDateTe} – ${currentTeluguMonthData.endGregDateTe})`;
-        }
-
-        // Empty cells before first day of month (align to Shukla Padyami weekday)
-        for (let i = 0; i < currentTeluguMonthData.startWeekday; i++) {
-          const emptyDiv = document.createElement("div");
-          emptyDiv.className = "cal-day-cell empty-cell";
-          daysGrid.appendChild(emptyDiv);
-        }
-
-        // Render each day cell starting from Shukla Padyami through Amavasya
-        currentTeluguMonthData.days.forEach(day => {
-          const isToday = (day.year === now.getFullYear() && day.month === now.getMonth() + 1 && day.dateNum === now.getDate());
-          const isPurnima = day.tithiIndex === 15;
-          const isAmavasya = day.tithiIndex === 30;
-
+        if (titleEl) titleEl.innerText = isEn ? m.masamEn+" Masam ("+m.samvatsaramEn+")" : "శ్రీ "+m.masamTe+" మాసం ("+m.samvatsaramTe+")";
+        if (subEl)   subEl.innerText   = isEn ? "("+m.startGregDateEn+" – "+m.endGregDateEn+")" : "("+m.startGregDateTe+" – "+m.endGregDateTe+")";
+        for (let i=0; i<m.startWeekday; i++) { const e=document.createElement("div"); e.className="cal-day-cell empty-cell"; daysGrid.appendChild(e); }
+        m.days.forEach(day => {
+          const isToday   = day.year===now.getFullYear()&&day.month===now.getMonth()+1&&day.dateNum===now.getDate();
+          const isPurnima = day.tithiIndex===15, isAmavasya=day.tithiIndex===30;
           const cell = document.createElement("div");
-          cell.className = `cal-day-cell ${isToday ? "is-today" : ""} ${isPurnima ? "is-purnima" : ""} ${isAmavasya ? "is-amavasya" : ""}`;
-
-          let festHtml = "";
-          if (day.festivals.length > 0) {
-            const f = day.festivals[0];
-            festHtml = `<span class="cell-fest-badge" title="${isEn ? f.titleEn : f.titleTe}">${f.badge}</span>`;
-          }
-
-          const pakshaPillClass = day.isShukla ? "shukla" : "krishna";
-          const pakshaText = isEn ? (day.isShukla ? "Shukla" : "Krishna") : (day.isShukla ? "శుక్ల" : "బహుళ");
-          const moonIcon = isPurnima ? '<span class="cell-moon-icon">🌕</span>' : isAmavasya ? '<span class="cell-moon-icon">🌑</span>' : '';
-
-          cell.innerHTML = `
-            <div class="cell-top-bar">
-              <span class="cell-paksha-pill ${pakshaPillClass}">${pakshaText}</span>
-              ${moonIcon}
-            </div>
-            <div class="cell-tithi-main">${isEn ? day.tithiNameEn : day.tithiNameTe}</div>
-            ${festHtml}
-            <div class="cell-bottom-bar">
-              <span class="cell-greg-date">${day.gregDateShort}</span>
-              <span class="cell-nakshatra" title="${isEn ? day.nakshatraEn : day.nakshatraTe}">${isEn ? day.nakshatraEn : day.nakshatraTe}</span>
-            </div>
-          `;
-
-          cell.addEventListener("click", () => openDayDetailModal(day));
+          cell.className = "cal-day-cell" + (isToday?" is-today":"") + (isPurnima?" is-purnima":"") + (isAmavasya?" is-amavasya":"");
+          const fh = day.festivals.length>0 ? `<span class="cell-fest-badge" title="${isEn?day.festivals[0].titleEn:day.festivals[0].titleTe}">${day.festivals[0].badge}</span>` : "";
+          const pp = day.isShukla?"shukla":"krishna";
+          const pt = isEn?(day.isShukla?"Shukla":"Krishna"):(day.isShukla?"శుక్ల":"బహుళ");
+          const mi = isPurnima?'<span class="cell-moon-icon">🌕</span>':isAmavasya?'<span class="cell-moon-icon">🌑</span>':"";
+          cell.innerHTML = `<div class="cell-top-bar"><span class="cell-paksha-pill ${pp}">${pt}</span>${mi}</div><div class="cell-tithi-main">${isEn?day.tithiNameEn:day.tithiNameTe}</div>${fh}<div class="cell-bottom-bar"><span class="cell-greg-date">${day.gregDateShort}</span><span class="cell-nakshatra">${isEn?day.nakshatraEn:day.nakshatraTe}</span></div>`;
+          cell.addEventListener("click", () => openModal(day));
           daysGrid.appendChild(cell);
         });
       }
 
-      // Render Festivals Tab for Active Telugu Month
-      function renderFestivalsTab(refDate) {
-        if (!currentTeluguMonthData) {
-          currentTeluguMonthData = P.getTeluguMonthCalendar(refDate);
-        }
+      // ── Festivals Tab ─────────────────────────────────────────────────────────
+      function renderFests(refDate) {
+        if (!currentTeluguMonthData) currentTeluguMonthData = P.getTeluguMonthCalendar(refDate, currentLat, currentLon);
         const isEn = localStorage.getItem("sannivesham_lang") === "en";
         const listGrid = document.getElementById("festivalsListGrid");
         listGrid.innerHTML = "";
-
-        const allFests = [];
-        currentTeluguMonthData.days.forEach(day => {
-          if (day.festivals.length > 0) {
-            day.festivals.forEach(f => {
-              allFests.push({ ...f, day });
-            });
-          }
-        });
-
-        if (allFests.length === 0) {
-          listGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1;color:#ffd166;padding:20px;">ఈ మాసంలో సాధారణ పర్వదినాలు మాత్రమే ఉన్నాయి.</p>`;
-          return;
-        }
-
-        allFests.forEach(item => {
-          const card = document.createElement("div");
-          card.className = "fest-card";
-          card.innerHTML = `
-            <div class="fest-card-badge">${item.badge.split(" ")[0]}</div>
-            <div class="fest-card-info">
-              <h4>${isEn ? item.titleEn : item.titleTe}</h4>
-              <p>${item.day.gregDateTe} (${item.day.dayNameTe.split(" ")[0]}) • ${isEn ? item.day.tithiFullEn : item.day.tithiFullTe}</p>
-            </div>
-          `;
-          card.addEventListener("click", () => openDayDetailModal(item.day));
-          listGrid.appendChild(card);
+        const all = [];
+        currentTeluguMonthData.days.forEach(day => day.festivals.forEach(f => all.push({ ...f, day })));
+        if (!all.length) { listGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1;color:#ffd166;padding:20px;">ఈ మాసంలో సాధారణ పర్వదినాలు మాత్రమే ఉన్నాయి.</p>`; return; }
+        all.forEach(item => {
+          const c = document.createElement("div");
+          c.className = "fest-card";
+          c.innerHTML = `<div class="fest-card-badge">${item.badge.split(" ")[0]}</div><div class="fest-card-info"><h4>${isEn?item.titleEn:item.titleTe}</h4><p>${item.day.gregDateTe} (${item.day.dayNameTe.split(" ")[0]}) • ${isEn?item.day.tithiFullEn:item.day.tithiFullTe}</p></div>`;
+          c.addEventListener("click", () => openModal(item.day));
+          listGrid.appendChild(c);
         });
       }
 
-      // Day Detail Inspector Modal
-      function openDayDetailModal(p) {
+      // ── Day Detail Modal ─────────────────────────────────────────────────────
+      function openModal(p) {
         const isEn = localStorage.getItem("sannivesham_lang") === "en";
-        document.getElementById("modalDayTitle").innerText = `${p.gregDateTe} • ${p.dayNameTe}`;
-        document.getElementById("modalDaySub").innerText = `${p.samvatsaramTe} • ${p.masamTe} మాసం • ${p.ayanamTe}`;
-
+        document.getElementById("modalDayTitle").innerText = p.gregDateTe+" • "+p.dayNameTe;
+        document.getElementById("modalDaySub").innerText = p.samvatsaramTe+" • "+p.masamTe+" మాసం • "+p.ayanamTe;
         const grid = document.getElementById("modalDetailsGrid");
         grid.innerHTML = "";
-
-        if (p.festivals.length > 0) {
-          const festNames = p.festivals.map(f => isEn ? f.titleEn : f.titleTe).join(" • ");
-          grid.innerHTML += `
-            <div class="panchang-item highlight-fest" style="grid-column:1/-1;">
-              <span class="panchang-label">🌟 పర్వదిన విశేషం</span>
-              <span class="panchang-val" style="color:#ffd166;">${festNames}</span>
-            </div>
-          `;
+        if (p.festivals.length>0) {
+          const fn = p.festivals.map(f=>isEn?f.titleEn:f.titleTe).join(" • ");
+          grid.innerHTML += `<div class="panchang-item highlight-fest" style="grid-column:1/-1;"><span class="panchang-label">🌟 పర్వదిన విశేషం</span><span class="panchang-val" style="color:#ffd166;">${fn}</span></div>`;
         }
-
-        const items = [
-          { label: "📅 తిథి & సమయం", val: isEn ? p.tithiTimingEn : p.tithiTimingTe },
-          { label: "⭐ నక్షత్రం & సమయం", val: isEn ? p.nakshatraTimingEn : p.nakshatraTimingTe },
-          { label: "🌕 మాసం & పక్షం", val: `${p.masamTe} మాసం • ${p.pakshamTe}` },
-          { label: "☀️ సూర్యోదయం & అస్తమయం", val: `${p.sunrise} - ${p.sunset}` },
-          { label: "🪔 అభిజిత్ ముహూర్తం", val: p.abhijitMuhurtham },
-          { label: "✨ అమృత ఘడియలు", val: p.amruthaGadiyalu },
-          { label: "⚠️ రాహుకాలం", val: p.rahuKalam },
-          { label: "⏳ యమగండం", val: p.yamagandam },
-          { label: "🚫 దుర్ముహూర్తం", val: p.durmuhurtham },
-          { label: "🛑 వర్జ్యం", val: p.varjyam },
-          { label: "🕉️ యోగం & కరణం", val: `${p.yogaTe} • ${p.karanaTe}` }
-        ];
-
-        items.forEach(i => {
-          grid.innerHTML += `
-            <div class="panchang-item">
-              <span class="panchang-label">${i.label}</span>
-              <span class="panchang-val" style="font-size:1.02rem;">${i.val}</span>
-            </div>
-          `;
-        });
-
+        [
+          { label:"📅 తిథి & సమయం", val:isEn?p.tithiTimingEn:p.tithiTimingTe },
+          { label:"⭐ నక్షత్రం & సమయం", val:isEn?p.nakshatraTimingEn:p.nakshatraTimingTe },
+          { label:"🌕 మాసం & పక్షం", val:p.masamTe+" మాసం • "+p.pakshamTe },
+          { label:"☀️ సూర్యోదయం & అస్తమయం", val:p.sunrise+" - "+p.sunset },
+          { label:"🪔 అభిజిత్ ముహూర్తం", val:p.abhijitMuhurtham },
+          { label:"✨ అమృత ఘడియలు", val:p.amruthaGadiyalu },
+          { label:"⚠️ రాహుకాలం", val:p.rahuKalam },
+          { label:"⏳ యమగండం", val:p.yamagandam },
+          { label:"🚫 దుర్ముహూర్తం", val:p.durmuhurtham },
+          { label:"🛑 వర్జ్యం", val:p.varjyam },
+          { label:"🕉️ యోగం & కరణం", val:p.yogaTe+" • "+p.karanaTe }
+        ].forEach(i => { grid.innerHTML += `<div class="panchang-item"><span class="panchang-label">${i.label}</span><span class="panchang-val" style="font-size:1.02rem;">${i.val}</span></div>`; });
         dayModal.classList.add("show");
       }
-
       modalCloseBtn.addEventListener("click", () => dayModal.classList.remove("show"));
-      dayModal.addEventListener("click", (e) => {
-        if (e.target === dayModal) dayModal.classList.remove("show");
-      });
+      dayModal.addEventListener("click", e => { if (e.target===dayModal) dayModal.classList.remove("show"); });
 
-      // Month Navigation Controls (Telugu Chandramana Month Jumps)
+      // ── Navigation ───────────────────────────────────────────────────────────
       prevMonthBtn.addEventListener("click", () => {
-        if (!currentTeluguMonthData) {
-          currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate);
-        }
+        if (!currentTeluguMonthData) currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate, currentLat, currentLon);
         activeTeluguRefDate = P.getAdjacentTeluguMonthDate(currentTeluguMonthData.startDate, -1);
-        renderTeluguMonthCalendar(activeTeluguRefDate);
+        currentTeluguMonthData = null; renderMonth(activeTeluguRefDate);
       });
-
       nextMonthBtn.addEventListener("click", () => {
-        if (!currentTeluguMonthData) {
-          currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate);
-        }
+        if (!currentTeluguMonthData) currentTeluguMonthData = P.getTeluguMonthCalendar(activeTeluguRefDate, currentLat, currentLon);
         activeTeluguRefDate = P.getAdjacentTeluguMonthDate(currentTeluguMonthData.endDate, 1);
-        renderTeluguMonthCalendar(activeTeluguRefDate);
+        currentTeluguMonthData = null; renderMonth(activeTeluguRefDate);
       });
+      todayJumpBtn.addEventListener("click", () => { activeTeluguRefDate = new Date(); currentTeluguMonthData = null; renderMonth(activeTeluguRefDate); });
 
-      todayJumpBtn.addEventListener("click", () => {
-        activeTeluguRefDate = new Date();
-        renderTeluguMonthCalendar(activeTeluguRefDate);
-      });
-
-      // Language Toggle dynamic refresh
       const langBtn = document.getElementById("langToggleBtn");
-      if (langBtn) {
-        langBtn.addEventListener("click", () => {
-          setTimeout(() => {
-            renderTodayPanchang();
-            renderTeluguMonthCalendar(activeTeluguRefDate);
-          }, 50);
-        });
-      }
+      if (langBtn) langBtn.addEventListener("click", () => setTimeout(() => { renderToday(); currentTeluguMonthData = null; renderMonth(activeTeluguRefDate); }, 50));
 
-      // Initialize
-      renderTodayPanchang();
-      renderTeluguMonthCalendar(activeTeluguRefDate);
-
-      // Deep link support: #monthlyCalendar
-      if (window.location.hash === "#monthlyCalendar" || window.location.hash === "#calendar") {
-        setTab("month");
-      }
+      // ── Init ─────────────────────────────────────────────────────────────────
+      loadSavedLocation();
+      renderToday();
+      renderMonth(activeTeluguRefDate);
+      if (window.location.hash === "#monthlyCalendar" || window.location.hash === "#calendar") setTab("month");
     })();
   </script>
 
