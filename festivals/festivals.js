@@ -1,4 +1,4 @@
-﻿import { db } from "../firebase-config.js";
+import { db } from "../firebase-config.js";
 
 import {
   collection,
@@ -6,6 +6,7 @@ import {
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { slugify } from "../library/reader.js";
 
 const festivalsGrid = document.querySelector(".festivals-grid");
 
@@ -21,9 +22,10 @@ async function loadFestivals() {
 
   snapshot.forEach((docItem) => {
     const festival = docItem.data();
+    const slug = festival.slug || slugify(festival.title) || docItem.id;
 
     festivalsGrid.innerHTML += `
-      <a href="festival-detail.html?id=${docItem.id}" class="festival-card">
+      <a href="festival-detail.html?slug=${encodeURIComponent(slug)}" class="festival-card">
         <img src="${festival.cardImage}" alt="${festival.title}">
         <div class="festival-name">${festival.title}</div>
       </a>

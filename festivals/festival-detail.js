@@ -5,9 +5,10 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-import { SacredReader } from "../library/reader.js";
+import { SacredReader, slugify } from "../library/reader.js";
 
 const params = new URLSearchParams(window.location.search);
 let festivalId = params.get("id");
@@ -71,6 +72,23 @@ async function loadFestival() {
       } catch (e) {}
     }
 
+    // 3. Fallback: Search festivals by slugify(title) for legacy items missing slug field
+    if (!festival && queryParam) {
+      const allFestivalsSnap = await getDocs(collection(db, "festivals"));
+      for (const d of allFestivalsSnap.docs) {
+        const data = d.data();
+        const candidateSlug = data.slug || slugify(data.title);
+        if (candidateSlug === queryParam) {
+          festival = data;
+          currentDocId = d.id;
+          if (!data.slug) {
+            updateDoc(doc(db, "festivals", d.id), { slug: queryParam }).catch(() => {});
+          }
+          break;
+        }
+      }
+    }
+
     if (!festival) {
       festivalTitle.innerText = "పండుగ లభించలేదు";
       festivalSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
@@ -123,11 +141,16 @@ async function loadFestival() {
       footerQuote.innerText = `✨ ${festival.footerQuote} ✨`;
     }
 
-    // Set clean URL in address bar if slug exists
-    const cleanSlug = festival.slug || currentDocId;
-    const cleanUrl = `https://sannivesham.com/festivals/${cleanSlug}`;
+    // Set clean URL in address bar with canonical slug
+    const canonicalSlug = festival.slug || slugify(festival.title) || currentDocId;
+    const cleanUrl = `https://sannivesham.com/festivals/${canonicalSlug}`;
     if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `/festivals/${cleanSlug}`);
+      window.history.replaceState(null, null, `/festivals/${canonicalSlug}`);
+    }
+
+    // Auto-heal missing slug in Firestore
+    if (!festival.slug && canonicalSlug) {
+      updateDoc(doc(db, "festivals", currentDocId), { slug: canonicalSlug }).catch(() => {});
     }
 
     // Initialize Sacred Reader Controls

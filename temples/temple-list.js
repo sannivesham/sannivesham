@@ -1,4 +1,4 @@
-﻿import { db } from "../firebase-config.js";
+import { db } from "../firebase-config.js";
 import {
   collection,
   getDocs,
@@ -7,6 +7,7 @@ import {
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { slugify } from "../library/reader.js";
 
 const params = new URLSearchParams(window.location.search);
 const catId = params.get("cat");
@@ -56,8 +57,9 @@ async function loadTemples() {
         return;
       }
 
+      const slug = temple.slug || slugify(temple.title) || temple.id;
       templeListGrid.innerHTML += `
-        <a href="temple-detail.html?id=${temple.id}&cat=${catId}" class="temple-card">
+        <a href="temple-detail.html?slug=${encodeURIComponent(slug)}&cat=${catId}" class="temple-card">
           <img src="${temple.cardImage}" alt="${temple.title}">
           <div class="temple-name">${temple.title}</div>
         </a>

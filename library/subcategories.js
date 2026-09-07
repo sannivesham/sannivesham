@@ -7,6 +7,7 @@ import {
   query,
   where
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { SacredReader, slugify } from "./reader.js";
 
 const params = new URLSearchParams(window.location.search);
 let categoryId = params.get("category") || "";
@@ -75,7 +76,7 @@ function renderSubcategories(list) {
 
   let html = "";
   list.forEach((sub) => {
-    const slug = sub.slug || sub.id;
+    const slug = sub.slug || slugify(sub.title) || sub.id;
     // Direct link to read.html with slug parameter
     const readUrl = `read.html?slug=${encodeURIComponent(slug)}`;
 

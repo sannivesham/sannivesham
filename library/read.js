@@ -5,9 +5,10 @@ import {
   where,
   getDocs,
   doc,
-  getDoc
+  getDoc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-import { SacredReader } from "./reader.js";
+import { SacredReader, slugify } from "./reader.js";
 
 const params = new URLSearchParams(window.location.search);
 let targetSlug = params.get("slug") || params.get("id") || "";
@@ -86,16 +87,50 @@ async function loadContent() {
           }
         } catch (e) {}
       }
+    }
 
-      if (subcategoryData) {
-        // Fetch all items under this subcategory
-        const allItemsQ = query(collection(db, "libraryContent"), where("subcategoryId", "==", subcategoryData.id));
-        const allItemsSnap = await getDocs(allItemsQ);
-        allItemsSnap.forEach(d => {
-          itemsList.push({ id: d.id, ...d.data() });
-        });
-        itemsList.sort((a, b) => (a.order || 0) - (b.order || 0));
+    // 3. Fallback: Search existing items by slugify(title)
+    // This instantly resolves any previously uploaded items that don't have a 'slug' field in Firestore yet!
+    if (!foundItem && !subcategoryData) {
+      const allSubSnap = await getDocs(collection(db, "librarySubcategories"));
+      for (const d of allSubSnap.docs) {
+        const data = d.data();
+        const candidateSlug = data.slug || slugify(data.title);
+        if (candidateSlug === targetSlug) {
+          subcategoryData = { id: d.id, ...data };
+          isSubcategoryCollection = true;
+          if (!data.slug) {
+            updateDoc(doc(db, "librarySubcategories", d.id), { slug: targetSlug }).catch(() => {});
+          }
+          break;
+        }
       }
+    }
+
+    if (!foundItem && !subcategoryData) {
+      const allContentSnap = await getDocs(collection(db, "libraryContent"));
+      for (const d of allContentSnap.docs) {
+        const data = d.data();
+        const candidateSlug = data.slug || slugify(data.title);
+        if (candidateSlug === targetSlug) {
+          foundItem = { id: d.id, ...data };
+          itemsList = [foundItem];
+          if (!data.slug) {
+            updateDoc(doc(db, "libraryContent", d.id), { slug: targetSlug }).catch(() => {});
+          }
+          break;
+        }
+      }
+    }
+
+    // Fetch items for subcategory collection
+    if (subcategoryData && itemsList.length === 0) {
+      const allItemsQ = query(collection(db, "libraryContent"), where("subcategoryId", "==", subcategoryData.id));
+      const allItemsSnap = await getDocs(allItemsQ);
+      allItemsSnap.forEach(d => {
+        itemsList.push({ id: d.id, ...d.data() });
+      });
+      itemsList.sort((a, b) => (a.order || 0) - (b.order || 0));
     }
 
     // If still not found
@@ -153,13 +188,23 @@ async function loadContent() {
     readerVerses.innerHTML = html;
     if (readerOrnament) readerOrnament.style.display = "block";
 
-    // Set clean address bar URL if slug exists
-    const canonicalSlug = isSubcategoryCollection 
-      ? (subcategoryData.slug || subcategoryData.id) 
-      : (foundItem.slug || foundItem.id);
+    // Set clean address bar URL using smart canonical slug
+    const existingSlug = isSubcategoryCollection ? subcategoryData.slug : foundItem.slug;
+    const canonicalSlug = existingSlug || slugify(displayTitle) || (isSubcategoryCollection ? subcategoryData.id : foundItem.id);
     const cleanUrl = `https://sannivesham.com/library/${canonicalSlug}`;
+
+    // Rewrite browser address bar to the clean SEO friendly slug URL
     if (window.history && window.history.replaceState) {
       window.history.replaceState(null, null, `/library/${canonicalSlug}`);
+    }
+
+    // Auto-heal: If document was created in the past without a slug, save the generated slug to Firestore!
+    if (!existingSlug && canonicalSlug) {
+      const col = isSubcategoryCollection ? "librarySubcategories" : "libraryContent";
+      const docId = isSubcategoryCollection ? subcategoryData.id : foundItem.id;
+      updateDoc(doc(db, col, docId), { slug: canonicalSlug }).catch(err => {
+        console.warn("Auto-heal slug error:", err);
+      });
     }
 
     // Initialize Sacred Reader Controls

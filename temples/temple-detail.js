@@ -5,9 +5,10 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-import { SacredReader } from "../library/reader.js";
+import { SacredReader, slugify } from "../library/reader.js";
 
 const params = new URLSearchParams(window.location.search);
 let templeId = params.get("id");
@@ -77,6 +78,23 @@ async function loadTemple() {
       } catch (e) {}
     }
 
+    // 3. Fallback: Search temples by slugify(title) for legacy items missing slug field
+    if (!temple && queryParam) {
+      const allTemplesSnap = await getDocs(collection(db, "temples"));
+      for (const d of allTemplesSnap.docs) {
+        const data = d.data();
+        const candidateSlug = data.slug || slugify(data.title);
+        if (candidateSlug === queryParam) {
+          temple = data;
+          currentDocId = d.id;
+          if (!data.slug) {
+            updateDoc(doc(db, "temples", d.id), { slug: queryParam }).catch(() => {});
+          }
+          break;
+        }
+      }
+    }
+
     if (!temple) {
       templeTitle.innerText = "దేవాలయం లభించలేదు";
       templeSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
@@ -133,11 +151,16 @@ async function loadTemple() {
       footerQuote.innerText = `✨ ${temple.footerQuote} ✨`;
     }
 
-    // Set clean URL in address bar if slug exists
-    const cleanSlug = temple.slug || currentDocId;
-    const cleanUrl = `https://sannivesham.com/temples/${cleanSlug}`;
+    // Set clean URL in address bar with canonical slug
+    const canonicalSlug = temple.slug || slugify(temple.title) || currentDocId;
+    const cleanUrl = `https://sannivesham.com/temples/${canonicalSlug}`;
     if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `/temples/${cleanSlug}`);
+      window.history.replaceState(null, null, `/temples/${canonicalSlug}`);
+    }
+
+    // Auto-heal missing slug in Firestore
+    if (!temple.slug && canonicalSlug) {
+      updateDoc(doc(db, "temples", currentDocId), { slug: canonicalSlug }).catch(() => {});
     }
 
     // Initialize Sacred Reader Controls
