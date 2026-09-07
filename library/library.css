@@ -1,0 +1,683 @@
+/* =========================================================
+   సన్నివేశం గ్రంథాలయం & దివ్య పఠనానుభవం (Sacred Reader) Stylesheet
+   ========================================================= */
+
+:root {
+  --reader-font-size: 21px;
+  --reader-line-height: 2.1;
+  --reader-bg: #0d0603;
+  --reader-surface: rgba(26, 13, 6, 0.85);
+  --reader-border: rgba(255, 209, 102, 0.25);
+  --reader-text: #fbeed9;
+  --reader-text-muted: #d9be9b;
+  --reader-gold: #ffd166;
+  --reader-gold-glow: rgba(255, 209, 102, 0.4);
+  --reader-accent: #e59819;
+}
+
+/* Base Body */
+body.library-body {
+  font-family: 'Noto Serif Telugu', serif;
+  background: #0d0603;
+  color: var(--reader-text);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Background Layer */
+.library-bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 10%, #291206 0%, #120703 60%, #080301 100%);
+  z-index: -2;
+  transition: opacity 0.4s ease;
+}
+
+/* Reading Progress Bar (Top Sticky) */
+#readingProgressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, #d4af37, #ffd166, #ff7b00);
+  box-shadow: 0 0 10px rgba(255, 209, 102, 0.8);
+  z-index: 10000;
+  transition: width 0.1s linear;
+}
+
+/* Reader Navigation & Controls Bar */
+.reader-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: rgba(18, 9, 4, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--reader-border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  transition: all 0.3s ease;
+}
+
+.reader-toolbar.reader-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reader-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reader-back-btn {
+  color: var(--reader-gold);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.95rem;
+  padding: 6px 14px;
+  background: rgba(255, 209, 102, 0.1);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reader-back-btn:hover {
+  background: rgba(255, 209, 102, 0.25);
+  transform: translateX(-2px);
+}
+
+.reader-breadcrumb {
+  font-size: 0.9rem;
+  color: var(--reader-text-muted);
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reader-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reader-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--reader-gold);
+  border: 1px solid rgba(255, 209, 102, 0.28);
+  padding: 6px 11px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.reader-btn:hover {
+  background: rgba(255, 209, 102, 0.2);
+  border-color: var(--reader-gold);
+}
+
+.reader-btn-active {
+  background: var(--reader-gold) !important;
+  color: #120703 !important;
+  font-weight: bold;
+}
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+
+/* 1. Temple Night (Default) */
+body.theme-night {
+  --reader-bg: #0d0603;
+  --reader-surface: rgba(28, 14, 6, 0.92);
+  --reader-border: rgba(255, 209, 102, 0.28);
+  --reader-text: #fcf1e0;
+  --reader-text-muted: #d9be9b;
+  --reader-gold: #ffd166;
+  --reader-gold-glow: rgba(255, 209, 102, 0.45);
+}
+
+/* 2. Sacred Parchment (తాళపత్ర గ్రంథం / Antique Sepia) */
+body.theme-parchment {
+  --reader-bg: #f9f3e5;
+  --reader-surface: #f3e8d2;
+  --reader-border: rgba(140, 68, 12, 0.35);
+  --reader-text: #2a1506;
+  --reader-text-muted: #613b1d;
+  --reader-gold: #8c4302;
+  --reader-gold-glow: rgba(140, 67, 2, 0.25);
+  background: #f9f3e5 !important;
+}
+
+body.theme-parchment .library-bg {
+  background: radial-gradient(circle at 50% 10%, #fff7eb 0%, #f6ecdc 70%, #ebdcc7 100%) !important;
+}
+
+body.theme-parchment .reader-toolbar {
+  background: rgba(245, 233, 212, 0.95);
+  border-color: rgba(140, 68, 12, 0.3);
+}
+
+body.theme-parchment .reader-back-btn,
+body.theme-parchment .reader-btn {
+  background: rgba(140, 67, 2, 0.08);
+  color: #5c2d03;
+  border-color: rgba(140, 67, 2, 0.3);
+}
+
+body.theme-parchment .reader-back-btn:hover,
+body.theme-parchment .reader-btn:hover {
+  background: rgba(140, 67, 2, 0.18);
+}
+
+/* 3. OLED Midnight */
+body.theme-oled {
+  --reader-bg: #000000;
+  --reader-surface: #0a0a0a;
+  --reader-border: rgba(255, 255, 255, 0.15);
+  --reader-text: #f0f0f0;
+  --reader-text-muted: #a0a0a0;
+  --reader-gold: #ffcc00;
+  --reader-gold-glow: rgba(255, 204, 0, 0.35);
+  background: #000000 !important;
+}
+
+body.theme-oled .library-bg {
+  background: #000000 !important;
+}
+
+body.theme-oled .reader-toolbar {
+  background: rgba(10, 10, 10, 0.95);
+}
+
+/* =========================================================
+   READER MAIN ARTICLE CONTAINER
+   ========================================================= */
+
+.reader-container {
+  max-width: 860px;
+  margin: 24px auto 80px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.reader-card {
+  background: var(--reader-surface);
+  border: 1px solid var(--reader-border);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Sacred Temple Arch Border Accent */
+.reader-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--reader-gold), transparent);
+}
+
+.reader-header {
+  text-align: center;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--reader-border);
+}
+
+.reader-om {
+  font-size: 2.2rem;
+  color: var(--reader-gold);
+  display: block;
+  margin-bottom: 8px;
+  text-shadow: 0 0 16px var(--reader-gold-glow);
+  animation: subtleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes subtleGlow {
+  from { opacity: 0.85; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1.02); }
+}
+
+.reader-title {
+  font-size: 2.1rem;
+  color: var(--reader-gold);
+  margin: 6px 0 12px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.reader-subtitle {
+  font-size: 1.05rem;
+  color: var(--reader-text-muted);
+  line-height: 1.6;
+}
+
+/* Stanza / Verses Container */
+.reader-verses {
+  font-size: var(--reader-font-size);
+  line-height: var(--reader-line-height);
+  color: var(--reader-text);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.reader-section {
+  margin-bottom: 38px;
+  padding-bottom: 28px;
+  border-bottom: 1px dotted var(--reader-border);
+}
+
+.reader-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.reader-section-title {
+  font-size: calc(var(--reader-font-size) * 1.15);
+  color: var(--reader-gold);
+  margin-bottom: 18px;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.reader-section-title::before,
+.reader-section-title::after {
+  content: '✦';
+  font-size: 0.85em;
+  opacity: 0.6;
+  color: var(--reader-gold);
+}
+
+.reader-section-image {
+  max-width: 100%;
+  border-radius: 14px;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.reader-text-content {
+  text-align: center;
+  letter-spacing: 0.3px;
+  white-space: pre-line;
+}
+
+.reader-ornament {
+  text-align: center;
+  color: var(--reader-gold);
+  font-size: 1.2rem;
+  margin: 24px 0 10px;
+  opacity: 0.75;
+}
+
+/* =========================================================
+   DEVOTIONAL AUDIO BAR
+   ========================================================= */
+
+.reader-audio-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(18, 9, 4, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--reader-border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 1000;
+  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.audio-track-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--reader-gold);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 600px;
+}
+
+.audio-play-btn {
+  background: linear-gradient(135deg, #ffd166, #e59819);
+  color: #120703;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(255, 209, 102, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.audio-play-btn:hover {
+  transform: scale(1.08);
+}
+
+.audio-slider-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audio-slider {
+  flex: 1;
+  accent-color: var(--reader-gold);
+  cursor: pointer;
+}
+
+.audio-time {
+  font-size: 0.82rem;
+  color: var(--reader-text-muted);
+  font-family: monospace;
+}
+
+.audio-speed-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--reader-gold);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* =========================================================
+   TOAST NOTIFICATION
+   ========================================================= */
+
+.reader-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: rgba(20, 10, 4, 0.95);
+  color: var(--reader-gold);
+  border: 1px solid var(--reader-gold);
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  z-index: 10001;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.reader-toast.toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =========================================================
+   LIBRARY CATEGORIES & SUBCATEGORIES GRID
+   ========================================================= */
+
+.library-hero {
+  text-align: center;
+  padding: 30px 16px 20px;
+}
+
+.library-hero h1 {
+  font-size: 2.6rem;
+  color: #ffd166;
+  margin-bottom: 8px;
+  font-weight: 700;
+  text-shadow: 0 0 18px rgba(255, 209, 102, 0.4);
+}
+
+.library-hero p {
+  color: #d9be9b;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* Instant Search Bar */
+.library-search-wrap {
+  max-width: 540px;
+  margin: 0 auto 30px;
+  position: relative;
+  padding: 0 16px;
+}
+
+.library-search-input {
+  width: 100%;
+  padding: 14px 20px 14px 44px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  background: rgba(25, 12, 5, 0.8);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1.05rem;
+  font-family: inherit;
+  outline: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+
+.library-search-input:focus {
+  border-color: #ffd166;
+  box-shadow: 0 0 20px rgba(255, 209, 102, 0.35);
+}
+
+.library-search-icon {
+  position: absolute;
+  left: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: #ffd166;
+  pointer-events: none;
+}
+
+/* Category Grid */
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+  max-width: 1120px;
+  margin: 0 auto 60px;
+  padding: 0 18px;
+}
+
+.library-cat-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(35, 17, 7, 0.85), rgba(18, 9, 3, 0.9));
+  border: 1px solid rgba(255, 209, 102, 0.25);
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.library-cat-card:hover {
+  transform: translateY(-6px);
+  border-color: #ffd166;
+  box-shadow: 0 14px 32px rgba(255, 209, 102, 0.25);
+}
+
+.library-cat-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.library-cat-body {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.library-cat-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffd166;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.library-cat-arrow {
+  color: #ffd166;
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.library-cat-card:hover .library-cat-arrow {
+  transform: translateX(4px);
+}
+
+/* Subcategory Badges / Grid */
+.subcategory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto 50px;
+  padding: 0 16px;
+}
+
+.subcategory-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: linear-gradient(145deg, rgba(32, 16, 6, 0.85), rgba(16, 8, 3, 0.9));
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  border-radius: 14px;
+  color: #ffd27a;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+}
+
+.subcategory-card:hover {
+  transform: translateY(-4px);
+  border-color: #ffd166;
+  background: linear-gradient(145deg, rgba(48, 24, 9, 0.9), rgba(24, 12, 4, 0.95));
+  box-shadow: 0 8px 24px rgba(255, 209, 102, 0.25);
+  color: #fff;
+}
+
+/* Content List (Items inside subcategory) */
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+  margin: 0 auto 60px;
+  padding: 0 16px;
+}
+
+.content-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: rgba(30, 15, 6, 0.75);
+  border: 1px solid rgba(255, 209, 102, 0.22);
+  border-radius: 14px;
+  text-decoration: none;
+  color: #f7e7ce;
+  font-size: 1.15rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.content-item-card:hover {
+  border-color: #ffd166;
+  background: rgba(45, 22, 9, 0.9);
+  transform: translateX(4px);
+  color: #ffd166;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 700px) {
+  .reader-card {
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+  .reader-title {
+    font-size: 1.65rem;
+  }
+  .reader-toolbar {
+    padding: 8px 10px;
+  }
+  .reader-breadcrumb {
+    display: none;
+  }
+  .reader-btn {
+    padding: 5px 8px;
+    font-size: 0.82rem;
+  }
+  .library-hero h1 {
+    font-size: 2.1rem;
+  }
+  .library-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 10px;
+  }
+  .library-cat-card .library-cat-title {
+    font-size: 1rem;
+  }
+}

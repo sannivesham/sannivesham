@@ -10,11 +10,46 @@
       var search = window.location.search;
       var hash = window.location.hash;
 
+      // Dynamic Smart Slug Routing for Library, Temples, and Festivals
+      var segments = path.split("/").filter(Boolean);
+      if (segments.length >= 2) {
+        var section = segments[0].toLowerCase();
+        var slug = segments[1];
+
+        // Check if slug is not a known static file (.html, .js, .css, etc.)
+        if (slug && !slug.includes(".")) {
+          if (section === "library") {
+            sessionStorage.setItem("sannivesham_lib_slug", slug);
+            sessionStorage.setItem("sannivesham_clean_path", path + search + hash);
+            window.location.replace("/library/read.html?slug=" + encodeURIComponent(slug) + (search ? "&" + search.substring(1) : "") + hash);
+            return;
+          }
+          if (section === "temples") {
+            sessionStorage.setItem("sannivesham_temple_slug", slug);
+            sessionStorage.setItem("sannivesham_clean_path", path + search + hash);
+            window.location.replace("/temples/temple-detail.html?slug=" + encodeURIComponent(slug) + (search ? "&" + search.substring(1) : "") + hash);
+            return;
+          }
+          if (section === "festivals") {
+            sessionStorage.setItem("sannivesham_festival_slug", slug);
+            sessionStorage.setItem("sannivesham_clean_path", path + search + hash);
+            window.location.replace("/festivals/festival-detail.html?slug=" + encodeURIComponent(slug) + (search ? "&" + search.substring(1) : "") + hash);
+            return;
+          }
+        }
+      }
+
       // Normalization map for legacy root URLs to modular section folders
       var redirects = {
-        "/stories.html": "/stories/",
-        "/story-parts.html": "/stories/story-parts.html",
-        "/story-detail.html": "/stories/story-detail.html",
+        "/library": "/library/",
+        "/library.html": "/library/",
+        "/stories": "/library/",
+        "/stories/": "/library/",
+        "/stories.html": "/library/",
+        "/story-parts.html": "/library/subcategories.html",
+        "/story-detail.html": "/library/read.html",
+        "/stories/story-parts.html": "/library/subcategories.html",
+        "/stories/story-detail.html": "/library/read.html",
         "/festivals.html": "/festivals/",
         "/festival-detail.html": "/festivals/festival-detail.html",
         "/temples.html": "/temples/",
@@ -70,7 +105,7 @@
       };
 
       var cleanPath = path.toLowerCase();
-      // Also match case-insensitively
+      // Match case-insensitively
       for (var key in redirects) {
         if (key.toLowerCase() === cleanPath) {
           window.location.replace(redirects[key] + search + hash);

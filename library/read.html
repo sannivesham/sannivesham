@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>దివ్య గ్రంథాలయం - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="భారతీయ ఆధ్యాత్మిక సాహిత్యం, స్తోత్రాలు, సూక్తాలు, సహస్రనామాలు - సన్నివేశం దివ్య గ్రంథాలయం.">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="library.css">
+</head>
+<body class="library-body theme-night">
+
+  <div id="readingProgressBar"></div>
+  <div class="library-bg"></div>
+
+  <!-- STICKY READER TOOLBAR -->
+  <header class="reader-toolbar" id="readerToolbar">
+    <div class="reader-nav-left">
+      <a href="index.html" class="reader-back-btn" id="readerBackBtn">← గ్రంథాలయం</a>
+      <span class="reader-breadcrumb" id="readerBreadcrumb">సన్నివేశం గ్రంథాలయం</span>
+    </div>
+
+    <div class="reader-actions">
+      <button class="reader-btn" id="fontMinusBtn" title="అక్షరాల సైజు తగ్గించండి">A-</button>
+      <span id="fontSizeDisplay" style="font-size:0.85rem;color:#ffd166;font-weight:600;min-width:32px;text-align:center;">21px</span>
+      <button class="reader-btn" id="fontPlusBtn" title="అక్షరాల సైజు పెంచండి">A+</button>
+      <button class="reader-btn" id="themeCycleBtn" title="థీమ్ మార్చండి">🎨 థీమ్</button>
+      <button class="reader-btn" id="copyContentBtn" title="వచనం కాపీ చేయండి">📋 కాపీ</button>
+      <button class="reader-btn" id="shareWhatsAppBtn" title="వాట్సాప్‌లో షేర్ చేయండి">📲 షేర్</button>
+      <button class="reader-btn" id="focusModeBtn" title="ధ్యాన వీక్షణ (Focus Mode)">🧘 ధ్యానం</button>
+    </div>
+  </header>
+
+  <!-- MAIN ARTICLE READER CONTAINER -->
+  <main class="reader-container">
+    <article class="reader-card" id="readerCard">
+      <header class="reader-header">
+        <span class="reader-om">ॐ</span>
+        <h1 class="reader-title" id="readerTitle">లోడ్ అవుతోంది...</h1>
+        <div class="reader-subtitle" id="readerSubtitle">దయచేసి వేచి ఉండండి, పవిత్ర శ్లోకాలు లోడ్ చేయబడుతున్నాయి...</div>
+      </header>
+
+      <div class="reader-verses" id="readerVerses"></div>
+
+      <div class="reader-ornament" id="readerOrnament" style="display:none;">
+        ✦ ॐ శాంతిః శాంతిః శాంతిః ✦
+      </div>
+    </article>
+  </main>
+
+  <!-- BACKGROUND MUSIC (Opt-in) -->
+  <audio id="bgMusic" loop>
+    <source src="../music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn" title="బ్యాక్‌గ్రౌండ్ సంగీతం">🔊</button>
+
+  <script src="../theme.js"></script>
+  <script src="../script.js"></script>
+  <script src="../music.js"></script>
+  <script type="module" src="read.js"></script>
+</body>
+</html>

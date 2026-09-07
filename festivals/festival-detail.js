@@ -1,102 +1,155 @@
-﻿import { db } from "../firebase-config.js";
-
+import { db } from "../firebase-config.js";
 import {
-    doc,
-    getDoc
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { SacredReader } from "../library/reader.js";
 
 const params = new URLSearchParams(window.location.search);
-const festivalId = params.get("id");
+let festivalId = params.get("id");
+let festivalSlug = params.get("slug");
 
-const detailBox =
-    document.getElementById("festivalDetailBox");
+// Check if redirected from 404 router
+const redirectedSlug = sessionStorage.getItem("sannivesham_festival_slug");
+if (redirectedSlug) {
+  festivalSlug = redirectedSlug;
+  sessionStorage.removeItem("sannivesham_festival_slug");
+}
 
-const footerQuote =
-    document.getElementById("festivalFooterQuote");
+// Check path segment for clean URL (e.g. /festivals/vinayaka-chavithi)
+if (!festivalSlug && !festivalId) {
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const fIndex = pathParts.indexOf("festivals");
+  if (fIndex !== -1 && pathParts[fIndex + 1] && !pathParts[fIndex + 1].includes(".html")) {
+    festivalSlug = pathParts[fIndex + 1];
+  }
+}
+
+const festivalTitle = document.getElementById("festivalTitle");
+const festivalSubtitle = document.getElementById("festivalSubtitle");
+const detailBox = document.getElementById("festivalDetailBox");
+const footerQuote = document.getElementById("festivalFooterQuote");
+const festivalBreadcrumb = document.getElementById("festivalBreadcrumb");
+const festivalOrnament = document.getElementById("festivalOrnament");
 
 async function loadFestival() {
+  const queryParam = festivalSlug || festivalId;
+  if (!queryParam) {
+    festivalTitle.innerText = "పండుగ లభించలేదు";
+    festivalSubtitle.innerText = "దయచేసి పండుగల జాబితాకు వెళ్ళండి.";
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="festivals.html" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+    return;
+  }
 
-    if (!festivalId) {
-        detailBox.innerHTML =
-            "<h2>Festival Not Found</h2>";
-        return;
+  let festival = null;
+  let currentDocId = null;
+
+  try {
+    // 1. Try slug search in festivals collection
+    if (festivalSlug) {
+      const q = query(collection(db, "festivals"), where("slug", "==", festivalSlug));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const docItem = snap.docs[0];
+        festival = docItem.data();
+        currentDocId = docItem.id;
+      }
     }
 
-    const snap =
-        await getDoc(
-            doc(db, "festivals", festivalId)
-        );
-
-    if (!snap.exists()) {
-        detailBox.innerHTML =
-            "<h2>Festival Not Found</h2>";
-        return;
+    // 2. Fallback to direct document ID
+    if (!festival && queryParam) {
+      try {
+        const directSnap = await getDoc(doc(db, "festivals", queryParam));
+        if (directSnap.exists()) {
+          festival = directSnap.data();
+          currentDocId = directSnap.id;
+        }
+      } catch (e) {}
     }
 
-    const festival = snap.data();
+    if (!festival) {
+      festivalTitle.innerText = "పండుగ లభించలేదు";
+      festivalSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="festivals.html" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+      return;
+    }
+
+    // Render Title & Subtitle
+    festivalTitle.innerText = festival.title || "పండుగ విశేషాలు";
+    festivalSubtitle.innerText = festival.footerQuote || "భారతీయ సనాతన ధర్మ పండుగ విశిష్టత";
+    if (festivalBreadcrumb) festivalBreadcrumb.innerText = festival.title;
 
     let sectionsHTML = "";
-
-    festival.sections.forEach(section => {
-
-        sectionsHTML += `
-
-      <div class="festival-section">
-
-        <h2>
-          ${section.title}
-        </h2>
-
-        ${section.image
-                ?
-                `<img
-                    src="${section.image}"
-                    class="festival-section-image"
+    (festival.sections || []).forEach(section => {
+      sectionsHTML += `
+        <div class="reader-section">
+          ${section.title ? `<h2 class="reader-section-title">${section.title}</h2>` : ""}
+          ${
+            section.image
+              ? `<img
+                  src="${section.image}"
+                  class="reader-section-image"
+                  alt="${section.title || festival.title}"
                   style="
-  width:${section.imgWidth || 75}%;
-  height:${section.imgHeight || 420}px;
-  filter:brightness(${section.imgBrightness || 100}%);
-  object-fit:cover;
-  display:block;
-
-  ${
-    section.imgPosition === "left"
-      ? "margin:25px auto 25px 0;"
-      : section.imgPosition === "right"
-      ? "margin:25px 0 25px auto;"
-      : "margin:25px auto;"
-  }
-">`
-                :
-                ""
-            }
-
-        <p>
-          ${section.content
-                .replace(/\n/g, "<br>")}
-        </p>
-
-      </div>
-
-    `;
-
+                    width:${section.imgWidth || 80}%;
+                    max-height:${section.imgHeight || 460}px;
+                    filter:brightness(${section.imgBrightness || 100}%);
+                    object-fit:cover;
+                    ${
+                      section.imgPosition === "left"
+                        ? "margin:20px auto 20px 0;"
+                        : section.imgPosition === "right"
+                        ? "margin:20px 0 20px auto;"
+                        : "margin:20px auto;"
+                    }
+                  ">`
+              : ""
+          }
+          <div class="reader-text-content" style="text-align:left;line-height:2.1;">
+            ${(section.content || "").replace(/\n/g, "<br>")}
+          </div>
+        </div>
+      `;
     });
 
-    detailBox.innerHTML = `
+    detailBox.innerHTML = sectionsHTML || "<p style='text-align:center;'>వివరాలు త్వరలో జోడించబడతాయి.</p>";
+    if (festivalOrnament) festivalOrnament.style.display = "block";
 
-    <h1>
-      ${festival.title}
-    </h1>
-
-    ${sectionsHTML}
-
-  `;
-
-    if (festival.footerQuote) {
-        footerQuote.innerText =
-            festival.footerQuote;
+    if (festival.footerQuote && footerQuote) {
+      footerQuote.innerText = `✨ ${festival.footerQuote} ✨`;
     }
 
+    // Set clean URL in address bar if slug exists
+    const cleanSlug = festival.slug || currentDocId;
+    const cleanUrl = `https://sannivesham.com/festivals/${cleanSlug}`;
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, `/festivals/${cleanSlug}`);
+    }
+
+    // Initialize Sacred Reader Controls
+    new SacredReader({
+      type: "festival",
+      title: festival.title
+    });
+
+    // Dynamic SEO Meta Tags
+    const firstSectionText = festival.sections?.[0]?.content?.slice(0, 160) || "";
+    SacredReader.injectSEO({
+      title: `${festival.title} - పూజా విధానం, విశిష్టత, కథ`,
+      description: `${festival.title} పండుగ విశిష్టత మరియు సంపూర్ణ సమాచారం. ${firstSectionText}`,
+      imageUrl: festival.cardImage || festival.sections?.[0]?.image || "",
+      canonicalUrl: cleanUrl,
+      type: "festival"
+    });
+
+  } catch (err) {
+    console.error("Festival load error:", err);
+    festivalTitle.innerText = "లోడ్ చేయడంలో సమస్య ఏర్పడింది";
+  }
 }
 
 loadFestival();

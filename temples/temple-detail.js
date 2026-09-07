@@ -1,96 +1,164 @@
-﻿import { db } from "../firebase-config.js";
+import { db } from "../firebase-config.js";
 import {
   doc,
-  getDoc
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { SacredReader } from "../library/reader.js";
 
 const params = new URLSearchParams(window.location.search);
-const templeId = params.get("id");
+let templeId = params.get("id");
+let templeSlug = params.get("slug");
 const catId = params.get("cat");
 
-const detailBox =
-document.getElementById("templeDetailBox");
+// Check if redirected from 404 router
+const redirectedSlug = sessionStorage.getItem("sannivesham_temple_slug");
+if (redirectedSlug) {
+  templeSlug = redirectedSlug;
+  sessionStorage.removeItem("sannivesham_temple_slug");
+}
 
-const footerQuote =
-document.getElementById("templeFooterQuote");
+// Check path segment for clean URL (e.g. /temples/tirumala-balaji)
+if (!templeSlug && !templeId) {
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const tIndex = pathParts.indexOf("temples");
+  if (tIndex !== -1 && pathParts[tIndex + 1] && !pathParts[tIndex + 1].includes(".html")) {
+    templeSlug = pathParts[tIndex + 1];
+  }
+}
 
-const backToListLink =
-document.getElementById("backToListLink");
+const templeTitle = document.getElementById("templeTitle");
+const templeSubtitle = document.getElementById("templeSubtitle");
+const detailBox = document.getElementById("templeDetailBox");
+const footerQuote = document.getElementById("templeFooterQuote");
+const backToListLink = document.getElementById("backToListLink");
+const templeBreadcrumb = document.getElementById("templeBreadcrumb");
+const templeOrnament = document.getElementById("templeOrnament");
 
 if (catId) {
   backToListLink.href = `temple-list.html?cat=${catId}`;
 }
 
 async function loadTemple() {
-  if (!templeId) {
-    detailBox.innerHTML =
-      "<h2>Temple Not Found</h2>";
+  const queryParam = templeSlug || templeId;
+  if (!queryParam) {
+    templeTitle.innerText = "దేవాలయం లభించలేదు";
+    templeSubtitle.innerText = "దయచేసి దేవాలయాల జాబితాకు వెళ్ళండి.";
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="temples.html" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
     return;
   }
 
-  const snap =
-    await getDoc(
-      doc(db, "temples", templeId)
-    );
+  let temple = null;
+  let currentDocId = null;
 
-  if (!snap.exists()) {
-    detailBox.innerHTML =
-      "<h2>Temple Not Found</h2>";
-    return;
-  }
+  try {
+    // 1. Try slug search in temples collection
+    if (templeSlug) {
+      const q = query(collection(db, "temples"), where("slug", "==", templeSlug));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const docItem = snap.docs[0];
+        temple = docItem.data();
+        currentDocId = docItem.id;
+      }
+    }
 
-  const temple = snap.data();
-
-  if (!catId && temple.categoryId) {
-    backToListLink.href = `temple-list.html?cat=${temple.categoryId}`;
-  }
-
-  let sectionsHTML = "";
-
-  (temple.sections || []).forEach(section => {
-    sectionsHTML += `
-      <div class="festival-section">
-        <h2>
-          ${section.title}
-        </h2>
-        ${
-          section.image
-          ?
-          `<img
-            src="${section.image}"
-            class="festival-section-image"
-            style="
-              width:${section.imgWidth || 75}%;
-              height:${section.imgHeight || 420}px;
-              filter:brightness(${section.imgBrightness || 100}%);
-              object-fit:cover;
-              display:block;
-              ${
-                section.imgPosition === "left"
-                  ? "margin:25px auto 25px 0;"
-                  : section.imgPosition === "right"
-                  ? "margin:25px 0 25px auto;"
-                  : "margin:25px auto;"
-              }
-            ">`
-          :
-          ""
+    // 2. Fallback to direct document ID
+    if (!temple && queryParam) {
+      try {
+        const directSnap = await getDoc(doc(db, "temples", queryParam));
+        if (directSnap.exists()) {
+          temple = directSnap.data();
+          currentDocId = directSnap.id;
         }
-        <p>
-          ${section.content.replace(/\n/g,"<br>")}
-        </p>
-      </div>
-    `;
-  });
+      } catch (e) {}
+    }
 
-  detailBox.innerHTML = `
-    <h1>${temple.title}</h1>
-    ${sectionsHTML}
-  `;
+    if (!temple) {
+      templeTitle.innerText = "దేవాలయం లభించలేదు";
+      templeSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="temples.html" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
+      return;
+    }
 
-  if (temple.footerQuote) {
-    footerQuote.innerText =
-      temple.footerQuote;
+    if (!catId && temple.categoryId) {
+      backToListLink.href = `temple-list.html?cat=${temple.categoryId}`;
+    }
+
+    // Render Title & Subtitle
+    templeTitle.innerText = temple.title || "దేవాలయ విశేషాలు";
+    templeSubtitle.innerText = temple.footerQuote || "భారతీయ సనాతన ధర్మ పుణ్యక్షేత్రం";
+    if (templeBreadcrumb) templeBreadcrumb.innerText = temple.title;
+
+    let sectionsHTML = "";
+    (temple.sections || []).forEach(section => {
+      sectionsHTML += `
+        <div class="reader-section">
+          ${section.title ? `<h2 class="reader-section-title">${section.title}</h2>` : ""}
+          ${
+            section.image
+              ? `<img
+                  src="${section.image}"
+                  class="reader-section-image"
+                  alt="${section.title || temple.title}"
+                  style="
+                    width:${section.imgWidth || 80}%;
+                    max-height:${section.imgHeight || 460}px;
+                    filter:brightness(${section.imgBrightness || 100}%);
+                    object-fit:cover;
+                    ${
+                      section.imgPosition === "left"
+                        ? "margin:20px auto 20px 0;"
+                        : section.imgPosition === "right"
+                        ? "margin:20px 0 20px auto;"
+                        : "margin:20px auto;"
+                    }
+                  ">`
+              : ""
+          }
+          <div class="reader-text-content" style="text-align:left;line-height:2.1;">
+            ${(section.content || "").replace(/\n/g, "<br>")}
+          </div>
+        </div>
+      `;
+    });
+
+    detailBox.innerHTML = sectionsHTML || "<p style='text-align:center;'>వివరాలు త్వరలో జోడించబడతాయి.</p>";
+    if (templeOrnament) templeOrnament.style.display = "block";
+
+    if (temple.footerQuote && footerQuote) {
+      footerQuote.innerText = `✨ ${temple.footerQuote} ✨`;
+    }
+
+    // Set clean URL in address bar if slug exists
+    const cleanSlug = temple.slug || currentDocId;
+    const cleanUrl = `https://sannivesham.com/temples/${cleanSlug}`;
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, `/temples/${cleanSlug}`);
+    }
+
+    // Initialize Sacred Reader Controls
+    new SacredReader({
+      type: "temple",
+      title: temple.title
+    });
+
+    // Dynamic SEO Meta Tags
+    const firstSectionText = temple.sections?.[0]?.content?.slice(0, 160) || "";
+    SacredReader.injectSEO({
+      title: `${temple.title} - దర్శనం, చరిత్ర, విశేషాలు`,
+      description: `${temple.title} గురించి సమగ్ర సమాచారం. ${firstSectionText}`,
+      imageUrl: temple.cardImage || temple.sections?.[0]?.image || "",
+      canonicalUrl: cleanUrl,
+      type: "temple"
+    });
+
+  } catch (err) {
+    console.error("Temple load error:", err);
+    templeTitle.innerText = "లోడ్ చేయడంలో సమస్య ఏర్పడింది";
   }
 }
 

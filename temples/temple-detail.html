@@ -1,62 +1,90 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>దేవాలయం - సన్నివేశం</title>
+  <title>దేవాలయం - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="భారతీయ మరియు తెలుగు పుణ్యక్షేత్రాలు, పురాతన దేవాలయాల విశేషాలు, చరిత్ర మరియు సమగ్ర సమాచారం.">
   <script src="../theme.js"></script>
-    <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="temples.css">
+  <link rel="stylesheet" href="../library/library.css">
 </head>
-<body class="temple-detail-body">
+<body class="temple-detail-body theme-night">
+
+  <div id="readingProgressBar"></div>
   <div class="temples-bg"></div>
-  <nav class="glass-navbar">
-    <a id="backToListLink" href="temples.html">← వెనుకకు</a>
-    <a href="../index.html">ప్రారంభం</a>
-    <a href="temples.html">దేవాలయాలు</a>
-  </nav>
-  <section class="festival-detail-page">
-    <article class="festival-detail-box" id="templeDetailBox">
-      <h1>Loading...</h1>
+
+  <!-- STICKY READER TOOLBAR -->
+  <header class="reader-toolbar" id="readerToolbar">
+    <div class="reader-nav-left">
+      <a id="backToListLink" href="temples.html" class="reader-back-btn">← దేవాలయాలు</a>
+      <span class="reader-breadcrumb" id="templeBreadcrumb">సన్నివేశం దేవాలయాలు</span>
+    </div>
+
+    <div class="reader-actions">
+      <button class="reader-btn" id="fontMinusBtn" title="అక్షరాల సైజు తగ్గించండి">A-</button>
+      <span id="fontSizeDisplay" style="font-size:0.85rem;color:#ffd166;font-weight:600;min-width:32px;text-align:center;">21px</span>
+      <button class="reader-btn" id="fontPlusBtn" title="అక్షరాల సైజు పెంచండి">A+</button>
+      <button class="reader-btn" id="themeCycleBtn" title="థీమ్ మార్చండి">🎨 థీమ్</button>
+      <button class="reader-btn" id="copyContentBtn" title="వివరణ కాపీ చేయండి">📋 కాపీ</button>
+      <button class="reader-btn" id="shareWhatsAppBtn" title="వాట్సాప్‌లో షేర్ చేయండి">📲 షేర్</button>
+      <button class="reader-btn" id="focusModeBtn" title="ధ్యాన వీక్షణ (Focus Mode)">🧘 ధ్యానం</button>
+    </div>
+  </header>
+
+  <!-- MAIN ARTICLE READER CONTAINER -->
+  <main class="reader-container">
+    <article class="reader-card" id="templeDetailCard">
+      <header class="reader-header">
+        <span class="reader-om">ॐ</span>
+        <h1 class="reader-title" id="templeTitle">లోడ్ అవుతోంది...</h1>
+        <div class="reader-subtitle" id="templeSubtitle">పుణ్యక్షేత్ర విశేషాలు లోడ్ చేయబడుతున్నాయి...</div>
+      </header>
+
+      <div class="reader-verses" id="templeDetailBox"></div>
+
+      <div class="reader-ornament" id="templeOrnament" style="display:none;">
+        ✦ సర్వే జనాః సుఖినో భవంతు ✦
+      </div>
     </article>
-  </section>
+  </main>
+
   <footer class="simple-footer">
     <p class="footer-quote" id="templeFooterQuote">
       ✨ దేవాలయాలు భారతీయ సంస్కృతికి ప్రతీకలు ✨
     </p>
-<script type="module" src="../social-links.js"></script>    <p>© 2026 సన్నివేశం</p>
+    <script type="module" src="../social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
   </footer>
+
   <script type="module" src="temple-detail.js"></script>
   <script src="../script.js"></script>
   <script type="module">
     import { db } from "../firebase-config.js";
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     async function loadTempleDetailBackground() {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const bg = document.querySelector(".temples-bg");
-      if (!bg) return;
-      if (window.innerWidth <= 700 && data.templesMobile) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.templesMobile}")`;
-      } else if (data.templesPc) {
-        bg.style.backgroundImage =
-          `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.templesPc}")`;
-      }
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".temples-bg");
+        if (!bg) return;
+        if (window.innerWidth <= 700 && data.templesMobile) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.62), rgba(10,5,0,0.68)), url("${data.templesMobile}")`;
+        } else if (data.templesPc) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.68), rgba(10,5,0,0.72)), url("${data.templesPc}")`;
+        }
+      } catch (e) {}
     }
     loadTempleDetailBackground();
   </script>
-<audio id="bgMusic" loop>
-  <source src="../music/traditional.mp3" type="audio/mpeg">
-</audio>
-<button id="musicBtn" class="music-btn">
-  🔊
-</button>
-<script src="../music.js"></script>
+
+  <audio id="bgMusic" loop>
+    <source src="../music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn" title="సంగీతం">🔊</button>
+  <script src="../music.js"></script>
 </body>
 </html>
-

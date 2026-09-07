@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>గ్రంథాలయం (Library) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="భారతీయ మరియు తెలుగు కథలు, ఆధ్యాత్మిక సాహిత్య గ్రంథాలు, స్తోత్రాలు, సహస్రనామాలు — సన్నివేశం దివ్య గ్రంథాలయం.">
+  <link rel="canonical" href="https://sannivesham.com/library/">
+  <meta property="og:title" content="గ్రంథాలయం (Library) - సన్నివేశం">
+  <meta property="og:description" content="భారతీయ మరియు తెలుగు ఆధ్యాత్మిక సాహిత్య గ్రంథాల సమాహారం.">
+  <meta property="og:image" content="https://sannivesham.com/images/stories.png">
+  <meta property="og:url" content="https://sannivesham.com/library/">
+  <meta property="og:type" content="website">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "గ్రంథాలయం (Library) - సన్నివేశం",
+    "description": "భారతీయ మరియు తెలుగు ఆధ్యాత్మిక సాహిత్య గ్రంథాల సమాహారం",
+    "url": "https://sannivesham.com/library/"
+  }
+  </script>
+
+  <script src="../theme.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="library.css">
+</head>
+<body class="library-body theme-night">
+
+  <div class="library-bg"></div>
+
+  <!-- CREATIVE DIVINE PRELOADER -->
+  <div id="loader" class="creative-loader">
+    <div class="loader-mandala-container">
+      <div class="mandala-ring outer-ring"></div>
+      <div class="mandala-ring inner-ring"></div>
+      <div class="loader-emblem-wrap">
+        <img src="../images/logo.png" class="loader-emblem" alt="Sannivesham Logo">
+        <div class="divine-diya">
+          <div class="diya-flame"></div>
+          <div class="diya-base"></div>
+        </div>
+      </div>
+    </div>
+    <h1 class="loader-title">సన్నివేశం</h1>
+    <p class="loader-tagline">✨ సంస్కృతి • సంప్రదాయం • సంభాషణ ✨</p>
+    <div class="loader-pearls">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <script>
+    (function() {
+      function dismiss() {
+        var el = document.getElementById('loader');
+        if (el && !el.dataset.dismissed) {
+          el.dataset.dismissed = 'true';
+          el.classList.add('loader-hidden');
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 450);
+        }
+      }
+      if (document.readyState === 'complete') {
+        setTimeout(dismiss, 250);
+      } else {
+        window.addEventListener('load', function() { setTimeout(dismiss, 250); });
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(dismiss, 400); });
+      }
+      setTimeout(dismiss, 700);
+    })();
+  </script>
+
+  <!-- NAVBAR -->
+  <nav class="glass-navbar">
+    <a href="../index.html#categories">← వెనుకకు</a>
+    <a href="../index.html">ప్రారంభం</a>
+    <a href="index.html" class="active">గ్రంథాలయం</a>
+  </nav>
+
+  <!-- HERO HEADER -->
+  <header class="library-hero">
+    <h1>దివ్య గ్రంథాలయం</h1>
+    <p>స్తోత్రాలు, సూక్తాలు, సహస్రనామాలు మరియు సనాతన ఆధ్యాత్మిక గ్రంథాల సంపద</p>
+
+    <!-- LIVE SEARCH BAR -->
+    <div class="library-search-wrap">
+      <span class="library-search-icon">🔍</span>
+      <input type="text" id="librarySearchInput" class="library-search-input" placeholder="స్తోత్రం, దేవుడి పేరు లేదా విభాగం వెతకండి...">
+    </div>
+  </header>
+
+  <!-- CATEGORIES GRID -->
+  <main>
+    <section class="library-grid" id="libraryGrid">
+      <p style="text-align:center;grid-column:1/-1;color:#ffd166;padding:40px;">గ్రంథాలయం లోడ్ అవుతోంది...</p>
+    </section>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ గ్రంథాలయం మన సంస్కృతికి జ్ఞాన నిధి ✨</p>
+    <script type="module" src="../social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <audio id="bgMusic" loop>
+    <source src="../music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn" title="సంగీతం">🔊</button>
+
+  <script src="../script.js"></script>
+  <script src="../music.js"></script>
+  <script type="module" src="library.js"></script>
+</body>
+</html>

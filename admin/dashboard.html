@@ -273,6 +273,7 @@
   <div class="add-event-box">
     <h2>కొత్త పండుగ జోడించండి</h2>
     <input type="text" id="festivalTitle" placeholder="పండుగ పేరు">
+    <input type="text" id="festivalSlug" placeholder="Slug / Custom URL (e.g. vinayaka-chavithi)">
     <div id="festivalCardImageGrid" class="festival-card-upload-box">
       <span>＋ Festival Card Image</span>
     </div>
@@ -324,6 +325,7 @@
     </select>
 
     <input type="text" id="templeTitle" placeholder="దేవాలయం పేరు">
+    <input type="text" id="templeSlug" placeholder="Slug / Custom URL (e.g. tirumala-balaji)">
     <div id="templeCardImageGrid" class="festival-card-upload-box">
       <span>＋ Temple Card Image</span>
     </div>
@@ -353,9 +355,25 @@
            LIBRARY SECTION
       ═══════════════════════════════════ -->
       <div id="librarySection" class="dash-section">
+
+        <!-- SEO SLUGS & SITEMAP BATCH TOOL -->
+        <div class="add-event-box" style="border:1px solid rgba(255,209,102,0.4);background:rgba(30,15,5,0.7);margin-bottom:28px;">
+          <h2>⚡ SEO & Clean URLs Tool (Library, Temples, Festivals)</h2>
+          <p style="font-size:0.92rem;color:#ffd166;margin-bottom:14px;line-height:1.5;">
+            Google Search లో నేరుగా ర్యాంక్ అవ్వడానికి పాత రికార్డులకు ఆటోమేటిక్‌గా స్లగ్స్ (Clean URLs) రూపొందించండి లేదా sitemap.xml కోసం లింకులు ఎగుమతి చేసుకోండి.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button id="batchGenerateSlugsBtn" type="button" style="background:#28a745;color:white;border:none;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:bold;">⚡ Generate Slugs for Existing Items</button>
+            <button id="exportSitemapBtn" type="button" style="background:#ffd166;color:#120703;border:none;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:bold;">🗺️ Export Sitemap XML</button>
+          </div>
+          <p id="slugBatchMsg" style="margin-top:10px;font-weight:600;"></p>
+          <textarea id="sitemapOutputBox" style="display:none;width:100%;height:150px;margin-top:12px;background:#111;color:#a8ffb2;font-family:monospace;font-size:0.85rem;padding:10px;border-radius:8px;" readonly></textarea>
+        </div>
+
         <div class="add-event-box">
           <h2>కొత్త Library Category</h2>
           <input type="text" id="libCategoryTitle" placeholder="Category Title (e.g. స్తోత్రాలు)">
+          <input type="text" id="libCategorySlug" placeholder="Category Slug (e.g. stotras)">
           <input type="text" id="libCategoryEmoji" placeholder="Emoji (optional, e.g. 🕉️)">
           <div id="libCategoryImageBox" class="festival-card-upload-box">
             <span>＋ Category Image</span>
@@ -373,6 +391,7 @@
             <option value="">Select Category</option>
           </select>
           <input type="text" id="libSubcategoryTitle" placeholder="Subcategory Title (e.g. Ganesha Stotras)">
+          <input type="text" id="libSubcategorySlug" placeholder="Subcategory Slug (e.g. ganesha-stotras)">
           <input type="number" id="libSubcategoryOrder" placeholder="Order (optional, lower shows first)">
           <button id="saveLibSubcategoryBtn">Save Subcategory</button>
           <p id="libSubcategoryMessage"></p>
@@ -385,7 +404,8 @@
           <select id="libContentSubcategorySelect">
             <option value="">Select Subcategory</option>
           </select>
-          <input type="text" id="libContentTitle" placeholder="Content Title">
+          <input type="text" id="libContentTitle" placeholder="Content Title (e.g. హనుమాన్ చాలీసా)">
+          <input type="text" id="libContentSlug" placeholder="Content Slug / URL (e.g. hanuman-chalisa)">
           <textarea id="libContentText" placeholder="Telugu Text"></textarea>
           <input type="text" id="libContentAudioUrl" placeholder="Audio URL (optional - YouTube/Drive link)">
           <input type="number" id="libContentOrder" placeholder="Order (optional, lower shows first)">

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>గ్రంథాలయ విభాగాలు - సన్నివేశం | Sannivesham</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="library.css">
+</head>
+<body class="library-body theme-night">
+
+  <div class="library-bg"></div>
+
+  <!-- NAVBAR -->
+  <nav class="glass-navbar">
+    <a href="index.html">← విభాగాలు</a>
+    <a href="../index.html">ప్రారంభం</a>
+    <a href="index.html">గ్రంథాలయం</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="library-hero">
+    <h1 id="subCategoryPageTitle">గ్రంథాలయం</h1>
+    <p id="subCategoryPageDesc">ఈ విభాగంలోని పవిత్ర స్తోత్రాలు & రచనలు</p>
+
+    <!-- LIVE SEARCH -->
+    <div class="library-search-wrap">
+      <span class="library-search-icon">🔍</span>
+      <input type="text" id="subcategorySearchInput" class="library-search-input" placeholder="స్తోత్రం లేదా రచనను వెతకండి...">
+    </div>
+  </header>
+
+  <!-- SUBCATEGORIES GRID -->
+  <main>
+    <div class="subcategory-grid" id="subcategoryGrid">
+      <p style="text-align:center;color:#ffd166;padding:40px;">లోడ్ అవుతోంది...</p>
+    </div>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ గ్రంథాలయం మన సంస్కృతికి జ్ఞాన నిధి ✨</p>
+    <script type="module" src="../social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <audio id="bgMusic" loop>
+    <source src="../music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn" title="సంగీతం">🔊</button>
+
+  <script src="../theme.js"></script>
+  <script src="../script.js"></script>
+  <script src="../music.js"></script>
+  <script type="module" src="subcategories.js"></script>
+</body>
+</html>

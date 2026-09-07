@@ -414,10 +414,82 @@ if (festivalCardBox) {
   });
 }
 
+// ══════════════════════════════════════
+// SMART SLUG & CLEAN URL UTILITIES
+// ══════════════════════════════════════
+
+function slugify(text) {
+  if (!text) return "";
+  const englishParts = text.match(/[a-zA-Z0-9]+/g);
+  if (englishParts && englishParts.join("-").length >= 3) {
+    return englishParts.join("-").toLowerCase();
+  }
+  const map = {
+    "హనుమాన్": "hanuman", "చాలీసా": "chalisa", "వినాయక": "vinayaka", "గణపతి": "ganapathi",
+    "శివ": "shiva", "విష్ణు": "vishnu", "వెంకటేశ్వర": "venkateswara", "తిరుమల": "tirumala",
+    "తిరుపతి": "tirupati", "బాలాజీ": "balaji", "స్తోత్రం": "stotram", "స్తోత్రాలు": "stotras",
+    "సహస్రనామ": "sahasranama", "కవచం": "kavacham", "అష్టోత్తర": "ashtottara", "దండకం": "dandakam",
+    "సూక్తం": "suktam", "లక్ష్మీ": "lakshmi", "దుర్గ": "durga", "సరస్వతి": "saraswati",
+    "శ్రీ": "sri", "రామ": "rama", "కృష్ణ": "krishna", "ఆంజనేయ": "anjaneya", "సుబ్రహ్మణ్య": "subrahmanya",
+    "నరసింహ": "narasimha", "సూర్య": "surya", "గాయత్రి": "gayatri", "చవితి": "chavithi",
+    "దసరా": "dasara", "దీపావళి": "diwali", "సంక్రాంతి": "sankranti", "శివరాత్రి": "shivaratri",
+    "ఉగాది": "ugadi", "నవరాత్రి": "navaratri"
+  };
+  let clean = text;
+  for (const [te, en] of Object.entries(map)) {
+    clean = clean.split(te).join(en + " ");
+  }
+  const enMatches = clean.match(/[a-zA-Z0-9]+/g);
+  if (enMatches && enMatches.length > 0) {
+    return enMatches.join("-").toLowerCase();
+  }
+  return "item-" + Math.abs(text.split("").reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0) % 100000);
+}
+
+function attachAutoSlug(titleInputId, slugInputId) {
+  const titleEl = document.getElementById(titleInputId);
+  const slugEl = document.getElementById(slugInputId);
+  if (titleEl && slugEl) {
+    titleEl.addEventListener("input", () => {
+      if (!slugEl.dataset.manuallyEdited) {
+        slugEl.value = slugify(titleEl.value);
+      }
+    });
+    slugEl.addEventListener("input", () => {
+      slugEl.dataset.manuallyEdited = "true";
+    });
+  }
+}
+
+function renderSlugLinkHtml(sectionName, slug, id) {
+  const cleanSlug = slug || id;
+  const url = `https://sannivesham.com/${sectionName}/${cleanSlug}`;
+  return `
+    <div style="margin:6px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <a href="/${sectionName}/${cleanSlug}" target="_blank" style="color:#ffd166;font-size:0.88rem;text-decoration:underline;font-weight:600;">🔗 /${sectionName}/${cleanSlug}</a>
+      <button type="button" class="copy-link-btn" data-url="${url}" style="background:rgba(255,209,102,0.15);color:#ffd166;border:1px solid rgba(255,209,102,0.3);padding:2px 8px;border-radius:6px;font-size:0.8rem;cursor:pointer;">📋 Copy Link</button>
+    </div>
+  `;
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("copy-link-btn")) {
+    const url = e.target.dataset.url;
+    navigator.clipboard.writeText(url).then(() => {
+      const orig = e.target.innerText;
+      e.target.innerText = "✓ Copied!";
+      setTimeout(() => { e.target.innerText = orig; }, 1800);
+    });
+  }
+});
+
 const saveFestivalBtn = document.getElementById("saveFestivalBtn");
 if (saveFestivalBtn) {
+  attachAutoSlug("festivalTitle", "festivalSlug");
   saveFestivalBtn.addEventListener("click", async () => {
     const title = document.getElementById("festivalTitle").value.trim();
+    const slugInput = document.getElementById("festivalSlug");
+    const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const footerQuote = document.getElementById("festivalFooterQuote").value.trim();
     const cardBox = document.getElementById("festivalCardImageGrid");
     const cardImage = cardBox.dataset.image || "";
@@ -436,8 +508,10 @@ if (saveFestivalBtn) {
       return;
     }
     saveFestivalBtn.disabled = true;
-    await addDoc(collection(db, "festivals"), { title, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
+    await addDoc(collection(db, "festivals"), { title, slug, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
     document.getElementById("festivalMessage").innerText = "✅ పండుగ సేవ్ అయింది";
+    if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
+    document.getElementById("festivalTitle").value = "";
     saveFestivalBtn.disabled = false;
     loadAdminFestivals();
   });
@@ -456,6 +530,7 @@ async function loadAdminFestivals() {
         <img src="${festival.cardImage}" alt="${festival.title}">
         <div>
           <h3>${festival.title}</h3>
+          ${renderSlugLinkHtml("festivals", festival.slug, item.id)}
           <p>Sections: ${festival.sections ? festival.sections.length : 0}</p>
           <button class="open-festival-edit-btn" data-id="${item.id}">Edit</button>
           <button class="delete-festival-btn" data-id="${item.id}">Delete</button>
@@ -512,6 +587,7 @@ async function openFestivalInlineEditor(id) {
   editor.innerHTML = `
     <div class="festival-edit-panel">
       <input class="inline-festival-title" value="${festival.title || ""}" placeholder="Festival Title">
+      <input class="inline-festival-slug" value="${festival.slug || slugify(festival.title) || ""}" placeholder="Slug / Clean URL (e.g. vinayaka-chavithi)">
       <div class="festival-card-upload-box inline-card-image" data-image="${festival.cardImage || ""}">
         ${festival.cardImage ? `<img src="${festival.cardImage}">` : `<span>＋ Festival Card Image</span>`}
       </div>
@@ -580,8 +656,11 @@ async function openFestivalInlineEditor(id) {
         imgPosition: box.querySelector(".img-position-input").value || "center"
       });
     });
+    const updatedTitle = editor.querySelector(".inline-festival-title").value.trim();
+    const updatedSlug = editor.querySelector(".inline-festival-slug")?.value.trim() || slugify(updatedTitle);
     await updateDoc(doc(db, "festivals", id), {
-      title: editor.querySelector(".inline-festival-title").value.trim(),
+      title: updatedTitle,
+      slug: updatedSlug,
       cardImage: editor.querySelector(".inline-card-image").dataset.image || "",
       footerQuote: editor.querySelector(".inline-footer-quote").value.trim(),
       sections, updatedAt: serverTimestamp()
@@ -1081,9 +1160,12 @@ if (parseTempleBulkBtn && templeBulkPaste) {
  
 const saveTempleBtn = document.getElementById("saveTempleBtn");
 if (saveTempleBtn) {
+  attachAutoSlug("templeTitle", "templeSlug");
   saveTempleBtn.addEventListener("click", async () => {
     const categoryId = document.getElementById("templeCategorySelect").value;
     const title = document.getElementById("templeTitle").value.trim();
+    const slugInput = document.getElementById("templeSlug");
+    const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const footerQuote = document.getElementById("templeFooterQuote").value.trim();
     const cardBox = document.getElementById("templeCardImageGrid");
     const cardImage = cardBox.dataset.image || "";
@@ -1106,10 +1188,11 @@ if (saveTempleBtn) {
       document.getElementById("templeMessage").innerText = "దయచేసి దేవాలయం పేరు, కార్డ్ ఇమేజ్ మరియు కనీసం ఒక section జోడించండి";
       return;
     }
-    await addDoc(collection(db, "temples"), { categoryId, title, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
+    await addDoc(collection(db, "temples"), { categoryId, title, slug, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
     document.getElementById("templeMessage").innerText = "✅ దేవాలయం సేవ్ అయింది";
  
     document.getElementById("templeTitle").value = "";
+    if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("templeFooterQuote").value = "";
     templeSectionsContainer.innerHTML = "";
     cardBox.dataset.image = "";
@@ -1141,6 +1224,7 @@ async function loadAdminTemples(filterCatId = "") {
         <img src="${temple.cardImage}" alt="${temple.title}">
         <div>
           <h3>${temple.title}</h3>
+          ${renderSlugLinkHtml("temples", temple.slug, item.id)}
           <p>విభాగం: ${catMap[temple.categoryId] || "Uncategorized"}</p>
           <p>Sections: ${temple.sections ? temple.sections.length : 0}</p>
           <button class="edit-temple-btn" data-id="${item.id}">Edit</button>
@@ -1206,6 +1290,7 @@ async function openTempleInlineEditor(id, filterCatId = "") {
     <div class="festival-edit-panel">
       <select class="inline-temple-category-select">${categoryOptionsHTML}</select>
       <input class="inline-temple-title" value="${temple.title || ""}" placeholder="Temple Title">
+      <input class="inline-temple-slug" value="${temple.slug || slugify(temple.title) || ""}" placeholder="Slug / Clean URL (e.g. tirumala-balaji)">
       <div class="festival-card-upload-box inline-temple-card-image" data-image="${temple.cardImage || ""}">
         ${temple.cardImage ? `<img src="${temple.cardImage}">` : `<span>＋ Temple Card Image</span>`}
       </div>
@@ -1274,9 +1359,12 @@ async function openTempleInlineEditor(id, filterCatId = "") {
         imgPosition: box.querySelector(".temple-img-position-input").value || "center"
       });
     });
+    const updatedTitle = editor.querySelector(".inline-temple-title").value.trim();
+    const updatedSlug = editor.querySelector(".inline-temple-slug")?.value.trim() || slugify(updatedTitle);
     await updateDoc(doc(db, "temples", id), {
       categoryId: editor.querySelector(".inline-temple-category-select").value,
-      title: editor.querySelector(".inline-temple-title").value.trim(),
+      title: updatedTitle,
+      slug: updatedSlug,
       cardImage: editor.querySelector(".inline-temple-card-image").dataset.image || "",
       footerQuote: editor.querySelector(".inline-temple-footer-quote").value.trim(),
       sections, updatedAt: serverTimestamp()
@@ -1302,14 +1390,18 @@ if (libCategoryImageBox) {
 
 const saveLibCategoryBtn = document.getElementById("saveLibCategoryBtn");
 if (saveLibCategoryBtn) {
+  attachAutoSlug("libCategoryTitle", "libCategorySlug");
   saveLibCategoryBtn.addEventListener("click", async () => {
     const title = document.getElementById("libCategoryTitle").value.trim();
+    const slugInput = document.getElementById("libCategorySlug");
+    const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const emoji = document.getElementById("libCategoryEmoji").value.trim();
     const orderValue = document.getElementById("libCategoryOrder").value.trim();
     const image = libCategoryImageBox.dataset.image || "";
     if (!title || !image) { document.getElementById("libCategoryMessage").innerText = "Category title and image required"; return; }
-    await addDoc(collection(db, "libraryCategories"), { title, emoji, image, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "libraryCategories"), { title, slug, emoji, image, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
     document.getElementById("libCategoryTitle").value = "";
+    if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libCategoryEmoji").value = "";
     document.getElementById("libCategoryOrder").value = "";
     libCategoryImageBox.dataset.image = "";
@@ -1333,6 +1425,7 @@ async function loadLibCategoriesAdmin() {
         <img src="${data.image}" alt="${data.title}">
         <div>
           <h3>${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
+          ${renderSlugLinkHtml("library", data.slug, data.id)}
           <button class="delete-lib-category-btn" data-id="${data.id}">Delete</button>
         </div>
       </div>
@@ -1364,13 +1457,17 @@ loadLibCategoriesAdmin(); loadLibCategoryOptions();
 
 const saveLibSubcategoryBtn = document.getElementById("saveLibSubcategoryBtn");
 if (saveLibSubcategoryBtn) {
+  attachAutoSlug("libSubcategoryTitle", "libSubcategorySlug");
   saveLibSubcategoryBtn.addEventListener("click", async () => {
     const categoryId = document.getElementById("libSubcategoryCategorySelect").value;
     const title = document.getElementById("libSubcategoryTitle").value.trim();
+    const slugInput = document.getElementById("libSubcategorySlug");
+    const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const orderValue = document.getElementById("libSubcategoryOrder").value.trim();
     if (!categoryId || !title) { document.getElementById("libSubcategoryMessage").innerText = "Category and subcategory title required"; return; }
-    await addDoc(collection(db, "librarySubcategories"), { categoryId, title, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "librarySubcategories"), { categoryId, title, slug, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
     document.getElementById("libSubcategoryTitle").value = "";
+    if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libSubcategoryOrder").value = "";
     document.getElementById("libSubcategoryMessage").innerText = "✅ Subcategory saved";
     loadLibSubcategoriesAdmin(); loadLibSubcategoryOptions();
@@ -1394,6 +1491,7 @@ async function loadLibSubcategoriesAdmin() {
         <div>
           <h3>${data.title}</h3>
           <p>Category: ${categoryMap[data.categoryId] || "Unknown"}</p>
+          ${renderSlugLinkHtml("library", data.slug, data.id)}
           <button class="delete-lib-subcategory-btn" data-id="${data.id}">Delete</button>
         </div>
       </div>
@@ -1428,15 +1526,19 @@ loadLibSubcategoriesAdmin(); loadLibSubcategoryOptions();
 
 const saveLibContentBtn = document.getElementById("saveLibContentBtn");
 if (saveLibContentBtn) {
+  attachAutoSlug("libContentTitle", "libContentSlug");
   saveLibContentBtn.addEventListener("click", async () => {
     const subcategoryId = document.getElementById("libContentSubcategorySelect").value;
     const title = document.getElementById("libContentTitle").value.trim();
+    const slugInput = document.getElementById("libContentSlug");
+    const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const text = document.getElementById("libContentText").value.trim();
     const audioUrl = document.getElementById("libContentAudioUrl").value.trim();
     const orderValue = document.getElementById("libContentOrder").value.trim();
     if (!subcategoryId || !title || !text) { document.getElementById("libContentMessage").innerText = "Subcategory, title and text required"; return; }
-    await addDoc(collection(db, "libraryContent"), { subcategoryId, title, text, audioUrl, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "libraryContent"), { subcategoryId, title, slug, text, audioUrl, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
     document.getElementById("libContentTitle").value = "";
+    if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libContentText").value = "";
     document.getElementById("libContentAudioUrl").value = "";
     document.getElementById("libContentOrder").value = "";
@@ -1462,6 +1564,7 @@ async function loadLibContentAdmin() {
         <div>
           <h3>${data.title}</h3>
           <p>Subcategory: ${subMap[data.subcategoryId] || "Unknown"}</p>
+          ${renderSlugLinkHtml("library", data.slug, data.id)}
           <p>${(data.text || "").slice(0, 80)}${data.text && data.text.length > 80 ? "..." : ""}</p>
           ${data.audioUrl ? `<p>🔊 Audio linked</p>` : ""}
           <button class="edit-lib-content-btn" data-id="${data.id}">Edit</button>
@@ -1489,14 +1592,18 @@ function openLibContentInlineEditor(id, items) {
   editor.innerHTML = `
     <div class="festival-edit-panel">
       <input class="edit-lib-content-title" value="${data.title || ""}" placeholder="Title">
+      <input class="edit-lib-content-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug / Clean URL (e.g. hanuman-chalisa)">
       <textarea class="edit-lib-content-text" placeholder="Telugu Text">${data.text || ""}</textarea>
       <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="Audio URL">
       <button class="save-lib-content-edit-btn">Save Changes</button>
     </div>
   `;
   editor.querySelector(".save-lib-content-edit-btn").addEventListener("click", async () => {
+    const updatedTitle = editor.querySelector(".edit-lib-content-title").value.trim();
+    const updatedSlug = editor.querySelector(".edit-lib-content-slug")?.value.trim() || slugify(updatedTitle);
     await updateDoc(doc(db, "libraryContent", id), {
-      title: editor.querySelector(".edit-lib-content-title").value.trim(),
+      title: updatedTitle,
+      slug: updatedSlug,
       text: editor.querySelector(".edit-lib-content-text").value.trim(),
       audioUrl: editor.querySelector(".edit-lib-content-audio").value.trim(),
       updatedAt: serverTimestamp()
@@ -1505,6 +1612,106 @@ function openLibContentInlineEditor(id, items) {
   });
 }
 loadLibContentAdmin();
+
+// ══════════════════════════════════════
+// BATCH SLUG GENERATOR & SITEMAP EXPORTER
+// ══════════════════════════════════════
+
+const batchGenerateSlugsBtn = document.getElementById("batchGenerateSlugsBtn");
+if (batchGenerateSlugsBtn) {
+  batchGenerateSlugsBtn.addEventListener("click", async () => {
+    const msgEl = document.getElementById("slugBatchMsg");
+    msgEl.innerText = "⏳ పాత రికార్డులను పరిశీలిస్తోంది, దయచేసి వేచి ఉండండి...";
+    batchGenerateSlugsBtn.disabled = true;
+
+    try {
+      let updatedCount = 0;
+      const collectionsToCheck = [
+        "festivals",
+        "temples",
+        "libraryCategories",
+        "librarySubcategories",
+        "libraryContent"
+      ];
+
+      for (const colName of collectionsToCheck) {
+        const snap = await getDocs(collection(db, colName));
+        for (const docItem of snap.docs) {
+          const data = docItem.data();
+          if (!data.slug) {
+            const newSlug = slugify(data.title || "") || docItem.id;
+            await updateDoc(doc(db, colName, docItem.id), {
+              slug: newSlug,
+              updatedAt: serverTimestamp()
+            });
+            updatedCount++;
+          }
+        }
+      }
+
+      msgEl.innerText = `✅ పూర్తి! మొత్తం ${updatedCount} రికార్డులకు విజయవంతంగా స్లగ్స్ జోడించబడ్డాయి.`;
+      loadAdminFestivals();
+      loadAdminTemples();
+      loadLibCategoriesAdmin();
+      loadLibSubcategoriesAdmin();
+      loadLibContentAdmin();
+    } catch (err) {
+      console.error("Batch slug error:", err);
+      msgEl.innerText = "స్లగ్స్ క్రియేట్ చేయడంలో లోపం ఏర్పడింది: " + err.message;
+    } finally {
+      batchGenerateSlugsBtn.disabled = false;
+    }
+  });
+}
+
+const exportSitemapBtn = document.getElementById("exportSitemapBtn");
+if (exportSitemapBtn) {
+  exportSitemapBtn.addEventListener("click", async () => {
+    const box = document.getElementById("sitemapOutputBox");
+    box.style.display = "block";
+    box.value = "⏳ సైట్‌మ్యాప్ లింకులు సేకరిస్తోంది...";
+
+    try {
+      let xml = `  <!-- Live Library & Detail URLs for Google Search -->\n`;
+
+      // Festivals
+      const fSnap = await getDocs(collection(db, "festivals"));
+      fSnap.forEach(d => {
+        const slug = d.data().slug || d.id;
+        xml += `  <url>\n    <loc>https://sannivesham.com/festivals/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>\n`;
+      });
+
+      // Temples
+      const tSnap = await getDocs(collection(db, "temples"));
+      tSnap.forEach(d => {
+        const slug = d.data().slug || d.id;
+        xml += `  <url>\n    <loc>https://sannivesham.com/temples/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>\n`;
+      });
+
+      // Library Subcategories & Content
+      const sSnap = await getDocs(collection(db, "librarySubcategories"));
+      sSnap.forEach(d => {
+        const slug = d.data().slug || d.id;
+        xml += `  <url>\n    <loc>https://sannivesham.com/library/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>\n`;
+      });
+
+      const cSnap = await getDocs(collection(db, "libraryContent"));
+      cSnap.forEach(d => {
+        const slug = d.data().slug;
+        if (slug) {
+          xml += `  <url>\n    <loc>https://sannivesham.com/library/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.80</priority>\n  </url>\n`;
+        }
+      });
+
+      box.value = xml;
+      box.select();
+      alert("✅ Sitemap URLs సిద్ధమయ్యాయి! కింద ఉన్న బాక్స్ నుండి కాపీ చేసుకోండి.");
+    } catch (err) {
+      console.error("Sitemap export error:", err);
+      box.value = "Error: " + err.message;
+    }
+  });
+}
 
 /* ══════════════════════════════════════
    SLOKAS CMS
