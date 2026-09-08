@@ -2998,7 +2998,7 @@ if (saveStoreProductBtn) {
     const imageUrl = imgUrlInput?.value.trim() || storeProductImageBox?.dataset.image || "";
     const inStock = document.getElementById("storeProductInStock")?.checked ?? true;
     const isFeatured = document.getElementById("storeProductIsFeatured")?.checked ?? false;
-    const whatsapp = document.getElementById("storeProductWhatsapp")?.value.trim() || "919876543210";
+    const whatsapp = document.getElementById("storeProductWhatsapp")?.value.trim() || "919493226037";
     const msg = document.getElementById("storeProductMsg");
 
     if (!name || price <= 0) {
@@ -3367,7 +3367,7 @@ if (seedSampleStoreBtn) {
           imageUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80",
           inStock: true,
           isFeatured: true,
-          whatsappNumber: "919876543210"
+          whatsappNumber: "919493226037"
         },
         {
           name: "ఇత్తడి పంచముఖ హారతి దీపం (Five-Face Brass Diya)",
@@ -3380,7 +3380,7 @@ if (seedSampleStoreBtn) {
           imageUrl: "https://images.unsplash.com/photo-1608755728617-aefab37d2edd?w=600&auto=format&fit=crop&q=80",
           inStock: true,
           isFeatured: false,
-          whatsappNumber: "919876543210"
+          whatsappNumber: "919493226037"
         },
         {
           name: "స్వచ్ఛమైన తులసి జపమాల (108 పూసలు + గురు పూస)",
@@ -3393,7 +3393,7 @@ if (seedSampleStoreBtn) {
           imageUrl: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600&auto=format&fit=crop&q=80",
           inStock: true,
           isFeatured: false,
-          whatsappNumber: "919876543210"
+          whatsappNumber: "919493226037"
         },
         {
           name: "శ్రీ వేంకటేశ్వర స్వామి గోల్డ్ ఫాయిల్ దేవతా ఫ్రేమ్",
@@ -3406,7 +3406,7 @@ if (seedSampleStoreBtn) {
           imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&auto=format&fit=crop&q=80",
           inStock: true,
           isFeatured: false,
-          whatsappNumber: "919876543210"
+          whatsappNumber: "919493226037"
         },
         {
           name: "ప్రీమియం గంధం & సాంబ్రాణి కప్పులు (Dhoop Cups)",
@@ -3419,7 +3419,7 @@ if (seedSampleStoreBtn) {
           imageUrl: "https://images.unsplash.com/photo-1602928321679-560bb453f190?w=600&auto=format&fit=crop&q=80",
           inStock: true,
           isFeatured: false,
-          whatsappNumber: "919876543210"
+          whatsappNumber: "919493226037"
         }
       ];
 
