@@ -81,25 +81,39 @@ a {
   left: var(--x);
   top: 105%;
   font-family: var(--font-telugu);
-  font-size: clamp(2rem, 3.2vw, 3rem);
-  color: rgba(122, 32, 72, 0.05);
+  font-size: var(--size, clamp(2.4rem, 4vw, 4.2rem));
+  font-weight: 700;
   animation: floatUp var(--dur) linear infinite;
   animation-delay: var(--delay);
   user-select: none;
   will-change: transform;
 }
 
-@keyframes floatUp {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translate3d(0, -130vh, 0) rotate(12deg); opacity: 0; }
+.amb-maroon {
+  color: rgba(122, 32, 72, 0.16);
+  text-shadow: 0 0 14px rgba(122, 32, 72, 0.1);
 }
 
-/* Completely disable heavy floating DOM letters on mobile for silky smooth 60fps */
+.amb-gold {
+  color: rgba(201, 162, 39, 0.22);
+  text-shadow: 0 0 14px rgba(201, 162, 39, 0.12);
+}
+
+.amb-teal {
+  color: rgba(31, 111, 92, 0.16);
+  text-shadow: 0 0 14px rgba(31, 111, 92, 0.1);
+}
+
+@keyframes floatUp {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  12%  { opacity: 0.95; }
+  85%  { opacity: 0.95; }
+  100% { transform: translate3d(0, -125vh, 0) rotate(14deg); opacity: 0; }
+}
+
 @media (max-width: 768px) {
-  .ambient-letters {
-    display: none !important;
+  .ambient-letters span {
+    font-size: clamp(2rem, 6vw, 3rem);
   }
 }
 
@@ -2025,7 +2039,57 @@ a {
 .stat-pill .stat-val { font-size: 1.25rem; font-weight: 900; color: var(--ink); }
 
 /* -------------------------------------------------------------
-   📱 MOBILE RESPONSIVENESS & SAFE AREAS (ZERO BUFFERING)
+   💻 LAPTOP / DESKTOP SIDE-BY-SIDE HERO LAYOUT (>= 900px)
+------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .hero-section {
+    max-width: 1200px;
+    padding: 3.5rem max(4vw, 32px) 4.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    text-align: left;
+  }
+
+  .hero-text {
+    order: 1;
+    flex: 1.2;
+    max-width: 620px;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .hero-text .eyebrow {
+    justify-content: flex-start;
+  }
+
+  .hero-text h1 {
+    text-align: left;
+  }
+
+  .hero-sub {
+    text-align: left;
+    margin: 0 0 2rem 0;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
+  }
+
+  .hero-tags {
+    justify-content: flex-start;
+  }
+
+  .hero-top-visual {
+    order: 2;
+    flex: 0.95;
+    margin-bottom: 0;
+  }
+}
+
+/* -------------------------------------------------------------
+   📱 MOBILE RESPONSIVENESS & SAFE AREAS (PERFECT HEADER FIT)
 ------------------------------------------------------------- */
 .bottom-dock {
   display: none;
@@ -2033,30 +2097,83 @@ a {
 
 @media (max-width: 768px) {
   .site-header {
-    padding: max(env(safe-area-inset-top, 0px), 6px) 14px 6px;
-    min-height: 56px;
+    padding: max(env(safe-area-inset-top, 0px), 6px) 10px 6px;
+    min-height: 54px;
+    gap: 6px;
+    overflow: hidden;
+  }
+
+  .header-brand {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .brand-link {
+    gap: 6px;
   }
 
   .brand-logo-img {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-brand-prefix {
+    display: none;
   }
 
   .logo-text {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    white-space: nowrap;
   }
 
   .logo-sub {
     display: none;
   }
 
-  .top-stat-pill {
-    padding: 3px 8px;
-    font-size: 0.82rem;
-  }
-
   .desktop-nav {
     display: none;
+  }
+
+  .header-stats {
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .top-stat-pill {
+    padding: 3px 6px;
+    font-size: 0.78rem;
+    gap: 3px;
+  }
+
+  /* Hide XP in mobile header to guarantee Google Sign In button never gets pushed offscreen */
+  .pill-xp {
+    display: none;
+  }
+
+  .header-auth-slot {
+    margin-left: 2px;
+    flex-shrink: 0;
+  }
+
+  .btn-google-header {
+    padding: 4px 9px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .header-user-pill {
+    padding: 2px 6px 2px 2px;
+  }
+
+  .header-user-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header-user-name {
+    max-width: 60px;
+    font-size: 0.75rem;
   }
 
   .bottom-dock {
@@ -2123,5 +2240,15 @@ a {
 
   .cycle-letter {
     font-size: 4rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .btn-google-header .btn-google-text {
+    font-size: 0.74rem;
+  }
+
+  .header-user-name {
+    display: none;
   }
 }
