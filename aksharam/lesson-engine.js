@@ -17,6 +17,7 @@ export class LessonRunner {
     this.pairSelected = null;
     this.pairsMatched = 0;
     this.totalPairs = 0;
+    this.isOpen = false;
   }
 
   start(lesson) {
@@ -25,6 +26,7 @@ export class LessonRunner {
     this.score = 0;
     this.selectedOption = null;
     this.isAnswerChecked = false;
+    this.isOpen = true;
 
     // Show modal
     this.container.classList.add('is-active');
@@ -33,10 +35,16 @@ export class LessonRunner {
     this.renderExercise();
   }
 
-  close() {
+  close(triggerHistoryBack = true) {
+    if (!this.isOpen) return;
+    this.isOpen = false;
     this.container.classList.remove('is-active');
     document.body.classList.remove('modal-open');
     this.onClose();
+
+    if (triggerHistoryBack && window.location.hash === '#lesson') {
+      history.back();
+    }
   }
 
   updateHeader() {
@@ -422,26 +430,26 @@ export class LessonRunner {
     stage.innerHTML = `
       <div class="lesson-celebration-card">
         <div class="celebration-icon">🏆</div>
-        <h2 class="celebration-title">పాఠం పూర్తయింది!</h2>
-        <p class="celebration-subtitle">${this.lesson.title} — ${this.lesson.titleEn}</p>
+        <h2 class="celebration-title">Lesson Completed!</h2>
+        <p class="celebration-subtitle">${this.lesson.titleEn} (${this.lesson.title})</p>
 
         <div class="celebration-stats-grid">
           <div class="stat-pill">
-            <span class="stat-label">మొత్తం XP</span>
+            <span class="stat-label">Total XP</span>
             <span class="stat-val">+${earnedXP} ⚡</span>
           </div>
           <div class="stat-pill">
-            <span class="stat-label">ఖచ్చితత్వం</span>
+            <span class="stat-label">Accuracy</span>
             <span class="stat-val">${Math.min(100, accuracy)}% 🎯</span>
           </div>
           <div class="stat-pill">
-            <span class="stat-label">సాధన స్థితి</span>
-            <span class="stat-val">పూర్తయింది ✓</span>
+            <span class="stat-label">Status</span>
+            <span class="stat-val">Completed ✓</span>
           </div>
         </div>
 
         <button type="button" class="btn-action-primary celebration-btn" id="finishCelebrationBtn">
-          పూర్తి చేయండి (Finish) →
+          Finish Lesson →
         </button>
       </div>
     `;

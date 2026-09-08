@@ -1,9 +1,21 @@
 // Sannivesham Aksharam — Main Application Orchestrator
-// Duolingo-style gamified learning path, XP, Hearts, Streak, Practice, Dictionary & Translator
+// Duolingo-style gamified learning path, XP, Streak, Practice, Dictionary, Translator & Google Sign-In Cloud Sync
 
 import { UNITS, DICTIONARY_WORDS } from './lessons-data.js';
 import { LessonRunner } from './lesson-engine.js';
 import { Sound, speakTelugu } from './audio.js';
+import { auth, db } from '../firebase-config.js';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+import {
+  doc,
+  getDoc,
+  setDoc
+} from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 
 class AksharamApp {
   constructor() {
@@ -12,6 +24,7 @@ class AksharamApp {
     this.gems = parseInt(localStorage.getItem('aksharam_gems') || '10', 10);
     this.completedLessons = this.loadCompletedLessons();
     this.currentTab = 'home';
+    this.currentUser = null;
 
     this.runner = new LessonRunner({
       container: document.getElementById('lessonModal'),
@@ -21,14 +34,17 @@ class AksharamApp {
         this.gems += Math.ceil(pts / 5);
         localStorage.setItem('aksharam_gems', this.gems.toString());
         this.updateTopBar();
+        this.syncToCloud();
       },
       updateStreak: () => {
         this.recordActiveStreak();
+        this.syncToCloud();
       },
       onComplete: (lessonId) => {
         this.completedLessons = this.loadCompletedLessons();
         this.renderPath();
         this.updateProfileTab();
+        this.syncToCloud();
       }
     });
 
@@ -45,6 +61,7 @@ class AksharamApp {
     this.bindPractice();
     this.bindProfile();
     this.initLetterCycle();
+    this.initAuth();
 
     // Hero buttons to navigate
     document.querySelectorAll('[data-goto]').forEach(btn => {
@@ -59,7 +76,7 @@ class AksharamApp {
     const closeBtn = document.getElementById('closeLessonBtn');
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
-        if (confirm('పాఠం మధ్యలో నిష్క్రమించాలా? (Exit current lesson?)')) {
+        if (confirm('Exit current lesson?')) {
           this.runner.close();
         }
       });
@@ -85,7 +102,7 @@ class AksharamApp {
     } else if (lastActive !== today) {
       const diffDays = Math.floor((new Date(today) - new Date(lastActive)) / (1000 * 60 * 60 * 24));
       if (diffDays === 1) {
-        // Active yesterday
+        // Active yesterday, streak intact
       } else if (diffDays > 1) {
         // Streak broken
         this.streak = 1;
@@ -116,18 +133,61 @@ class AksharamApp {
     if (gemsEl) gemsEl.textContent = this.gems;
   }
 
+  // -------------------------------------------------------------
+  // 🧭 BROWSER HISTORY ROUTING & NAVIGATION
+  // -------------------------------------------------------------
   bindNavigation() {
+    // Brand click: treat Aksharam as its own website and navigate to Aksharam Home!
+    const brandHomeBtn = document.getElementById('brandHomeBtn');
+    if (brandHomeBtn) {
+      brandHomeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        Sound.playClick();
+        this.switchTab('home');
+      });
+    }
+
+    // Dock and desktop navigation tabs
     const navItems = document.querySelectorAll('.dock-tab');
     navItems.forEach(tab => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
         Sound.playClick();
         const target = tab.dataset.tab;
         this.switchTab(target);
       });
     });
+
+    // Browser / Device Back Button handling
+    window.addEventListener('popstate', (e) => {
+      // 1. If lesson modal is open, back button safely closes the lesson first!
+      if (this.runner && this.runner.isOpen) {
+        this.runner.close(false);
+        return;
+      }
+
+      // 2. Otherwise navigate to the previous tab or back to 'home'
+      let targetTab = (e.state && e.state.tab) || window.location.hash.replace('#', '');
+      const validTabs = ['home', 'roadmap', 'practice', 'dictionary', 'translator', 'profile'];
+      if (!validTabs.includes(targetTab)) {
+        targetTab = 'home';
+      }
+
+      this.switchTab(targetTab, false);
+    });
+
+    // Initial load route handling
+    const initialHash = window.location.hash.replace('#', '');
+    const validTabs = ['home', 'roadmap', 'practice', 'dictionary', 'translator', 'profile'];
+    const initialTab = validTabs.includes(initialHash) ? initialHash : 'home';
+    this.switchTab(initialTab, false);
+    history.replaceState({ tab: initialTab }, '', '#' + initialTab);
   }
 
-  switchTab(tabName) {
+  switchTab(tabName, pushState = true) {
+    const validTabs = ['home', 'roadmap', 'practice', 'dictionary', 'translator', 'profile'];
+    if (!validTabs.includes(tabName)) tabName = 'home';
+
     this.currentTab = tabName;
 
     document.querySelectorAll('.dock-tab').forEach(t => {
@@ -140,9 +200,21 @@ class AksharamApp {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    if (pushState) {
+      const currentHash = window.location.hash.replace('#', '');
+      if (currentHash !== tabName) {
+        history.pushState({ tab: tabName }, '', '#' + tabName);
+      }
+    }
+
     if (tabName === 'profile') {
       this.updateProfileTab();
     }
+  }
+
+  openLesson(lesson) {
+    history.pushState({ modal: 'lesson', lessonId: lesson.id }, '', '#lesson');
+    this.runner.start(lesson);
   }
 
   // -------------------------------------------------------------
@@ -169,34 +241,32 @@ class AksharamApp {
           <h2 class="unit-title">Unit ${unit.unitNumber}: ${unit.titleEn}</h2>
           <p class="unit-sub">${unit.title} — ${unit.desc}</p>
         </div>
+        <div class="unit-banner-right">
+          <span class="unit-progress-count">${unit.lessons.filter(l => this.completedLessons.includes(l.id)).length} / ${unit.lessons.length}</span>
+        </div>
       `;
       unitEl.appendChild(header);
 
-      // Stepping Stone Path Nodes
+      // Serpentine Lesson Path
       const pathWrap = document.createElement('div');
       pathWrap.className = 'unit-path-nodes';
 
-      // Winding curve offsets for serpentine path look
-      const offsets = [0, 26, -26, 38, -38, 16, -16];
-
-      unit.lessons.forEach((lesson, lIdx) => {
+      unit.lessons.forEach((lesson, lessonIdx) => {
         const isCompleted = this.completedLessons.includes(lesson.id);
-        const isCurrent = !isCompleted && previousLessonUnlocked;
-        const isLocked = !isCompleted && !previousLessonUnlocked;
+        const isUnlocked = previousLessonUnlocked;
+        const isCurrent = isUnlocked && !isCompleted;
+        const isLocked = !isUnlocked;
 
         if (!isCompleted) {
-          previousLessonUnlocked = false; // subsequent lessons stay locked
+          previousLessonUnlocked = false;
         }
 
         const nodeWrap = document.createElement('div');
-        nodeWrap.className = 'node-wrapper';
-        const shiftX = offsets[lIdx % offsets.length];
-        nodeWrap.style.transform = `translateX(${shiftX}px)`;
+        nodeWrap.className = `node-wrapper node-offset-${(lessonIdx % 5) + 1}`;
 
         const node = document.createElement('button');
         node.type = 'button';
         node.className = `path-node ${isCompleted ? 'is-completed' : ''} ${isCurrent ? 'is-current' : ''} ${isLocked ? 'is-locked' : ''}`;
-        node.dataset.lessonId = lesson.id;
         node.setAttribute('aria-label', `${lesson.titleEn} - ${lesson.title}`);
 
         node.innerHTML = `
@@ -211,7 +281,7 @@ class AksharamApp {
           if (isLocked) {
             alert('🔒 Please complete earlier lessons to unlock this one.');
           } else {
-            this.runner.start(lesson);
+            this.openLesson(lesson);
           }
         });
 
@@ -278,7 +348,6 @@ class AksharamApp {
   }
 
   runPracticeSession() {
-    // Generate 3 dynamic revision questions
     const practiceLesson = {
       id: 'practice-' + Date.now(),
       title: 'అభ్యాస సాధన',
@@ -287,7 +356,7 @@ class AksharamApp {
       exercises: [
         {
           type: 'sound_match',
-          promptText: 'వినండి మరియు సరైన అక్షరాన్ని ఎంచుకోండి (Listen and choose):',
+          promptText: 'Listen and choose the matching letter (వినండి):',
           audioTe: 'అ',
           options: ['అ', 'ఆ', 'ఇ', 'ఈ'],
           answer: 'అ'
@@ -300,7 +369,7 @@ class AksharamApp {
         },
         {
           type: 'pair_match',
-          promptText: 'అక్షరాలను జతపరచండి (Match pairs):',
+          promptText: 'Match each character with its sound (జతపరచండి):',
           pairs: [
             { te: 'క', en: 'ka' },
             { te: 'గ', en: 'ga' },
@@ -311,7 +380,7 @@ class AksharamApp {
       ]
     };
 
-    this.runner.start(practiceLesson);
+    this.openLesson(practiceLesson);
   }
 
   // -------------------------------------------------------------
@@ -321,25 +390,44 @@ class AksharamApp {
     const searchInput = document.getElementById('dictSearch');
     const filtersWrap = document.getElementById('dictFilters');
     const resultsGrid = document.getElementById('dictGrid');
-    if (!searchInput || !resultsGrid) return;
 
-    const categories = ['All', 'Vowels', 'Consonants', 'Numbers', 'Phrases', 'Family', 'Daily'];
+    if (!searchInput || !filtersWrap || !resultsGrid) return;
 
-    filtersWrap.innerHTML = categories.map((cat, idx) => `
-      <button type="button" class="filter-chip ${idx === 0 ? 'is-active' : ''}" data-cat="${cat}">${cat}</button>
+    const categories = [
+      { id: 'all', label: 'All Words' },
+      { id: 'vowel', label: 'Vowels' },
+      { id: 'consonant', label: 'Consonants' },
+      { id: 'number', label: 'Numbers' },
+      { id: 'phrase', label: 'Phrases' },
+      { id: 'relation', label: 'Family' }
+    ];
+
+    let activeCat = 'all';
+
+    filtersWrap.innerHTML = categories.map(cat => `
+      <button type="button" class="filter-chip ${cat.id === 'all' ? 'is-active' : ''}" data-cat="${cat.id}">
+        ${cat.label}
+      </button>
     `).join('');
 
-    const render = () => {
-      const q = searchInput.value.trim().toLowerCase();
-      const activeChip = filtersWrap.querySelector('.filter-chip.is-active');
-      const activeCat = activeChip ? activeChip.dataset.cat : 'All';
+    filtersWrap.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        Sound.playClick();
+        filtersWrap.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
+        chip.classList.add('is-active');
+        activeCat = chip.dataset.cat;
+        renderWords();
+      });
+    });
 
-      const filtered = DICTIONARY_WORDS.filter(w => {
-        const matchesCat = activeCat === 'All' || w.category === activeCat;
+    const renderWords = () => {
+      const q = searchInput.value.trim().toLowerCase();
+      const filtered = DICTIONARY_WORDS.filter(item => {
+        const matchesCat = activeCat === 'all' || item.cat === activeCat;
         const matchesQ = !q ||
-          w.te.includes(q) ||
-          w.translit.toLowerCase().includes(q) ||
-          w.en.toLowerCase().includes(q);
+          item.te.toLowerCase().includes(q) ||
+          item.en.toLowerCase().includes(q) ||
+          item.meaning.toLowerCase().includes(q);
         return matchesCat && matchesQ;
       });
 
@@ -355,58 +443,47 @@ class AksharamApp {
         return;
       }
 
-      resultsGrid.innerHTML = filtered.map(item => `
-        <div class="dict-card" data-word="${item.te}">
+      resultsGrid.innerHTML = filtered.map(w => `
+        <div class="dict-card" data-te="${w.te}">
           <div class="dict-card-top">
-            <span class="dict-cat-tag">${item.category}</span>
-            <button type="button" class="dict-speaker-btn" aria-label="Listen">🔊</button>
+            <span class="dict-glyph">${w.te}</span>
+            <button type="button" class="dict-audio-btn" aria-label="Listen to ${w.en}">🔊</button>
           </div>
-          <div class="dict-te">${item.te}</div>
-          <div class="dict-translit">${item.translit}</div>
-          <div class="dict-en">${item.en}</div>
-          ${item.example ? `<div class="dict-example">${item.example}</div>` : ''}
+          <div class="dict-translit">${w.en}</div>
+          <div class="dict-meaning">${w.meaning}</div>
+          ${w.example ? `<div class="dict-example">“${w.example}”</div>` : ''}
         </div>
       `).join('');
 
       resultsGrid.querySelectorAll('.dict-card').forEach(card => {
+        const te = card.dataset.te;
         card.addEventListener('click', () => {
-          Sound.playClick();
-          speakTelugu(card.dataset.word);
+          speakTelugu(te);
         });
       });
     };
 
-    searchInput.addEventListener('input', render);
-
-    filtersWrap.querySelectorAll('.filter-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        Sound.playClick();
-        filtersWrap.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
-        chip.classList.add('is-active');
-        render();
-      });
-    });
-
-    render();
+    searchInput.addEventListener('input', renderWords);
+    renderWords();
   }
 
   // -------------------------------------------------------------
   // 🔄 TRANSLATOR TAB
   // -------------------------------------------------------------
   bindTranslator() {
-    let fromLang = 'te';
-    let toLang = 'en';
-
-    const inputArea = document.getElementById('transInput');
-    const outputArea = document.getElementById('transOutput');
-    const swapBtn = document.getElementById('transSwapBtn');
-    const translateBtn = document.getElementById('transActionBtn');
-    const copyBtn = document.getElementById('transCopyBtn');
     const fromLabel = document.getElementById('transFromLabel');
     const toLabel = document.getElementById('transToLabel');
+    const swapBtn = document.getElementById('transSwapBtn');
+    const inputArea = document.getElementById('transInput');
+    const outputArea = document.getElementById('transOutput');
+    const translateBtn = document.getElementById('transActionBtn');
+    const copyBtn = document.getElementById('transCopyBtn');
     const phrasesWrap = document.getElementById('transPhrases');
 
     if (!inputArea || !outputArea) return;
+
+    let fromLang = 'te';
+    let toLang = 'en';
 
     const updateLabels = () => {
       if (fromLabel) fromLabel.textContent = fromLang === 'te' ? 'Telugu' : 'English';
@@ -416,7 +493,9 @@ class AksharamApp {
 
     const doSwap = () => {
       Sound.playClick();
-      [fromLang, toLang] = [toLang, fromLang];
+      const temp = fromLang;
+      fromLang = toLang;
+      toLang = temp;
       const prevOut = outputArea.textContent.trim();
       if (prevOut && !outputArea.classList.contains('is-placeholder')) {
         inputArea.value = prevOut;
@@ -452,15 +531,16 @@ class AksharamApp {
       }
     };
 
-    if (translateBtn) translateBtn.addEventListener('click', translate);
-
-    inputArea.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'Enter') translate();
-    });
+    if (translateBtn) {
+      translateBtn.addEventListener('click', () => {
+        Sound.playClick();
+        translate();
+      });
+    }
 
     if (copyBtn) {
       copyBtn.addEventListener('click', async () => {
-        const txt = outputArea.textContent;
+        const txt = outputArea.textContent.trim();
         if (txt && !outputArea.classList.contains('is-placeholder')) {
           await navigator.clipboard.writeText(txt).catch(() => {});
           Sound.playClick();
@@ -498,30 +578,273 @@ class AksharamApp {
   }
 
   // -------------------------------------------------------------
-  // 👤 PROFILE TAB
+  // 👤 PROFILE TAB & SETTINGS
   // -------------------------------------------------------------
   bindProfile() {
     const soundToggle = document.getElementById('soundToggleBtn');
     if (soundToggle) {
-      soundToggle.textContent = Sound.enabled ? '🔊 ఆన్ (Sound ON)' : '🔇 ఆఫ్ (Sound OFF)';
+      soundToggle.textContent = Sound.enabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
       soundToggle.addEventListener('click', () => {
         Sound.enabled = !Sound.enabled;
-        soundToggle.textContent = Sound.enabled ? '🔊 ఆన్ (Sound ON)' : '🔇 ఆఫ్ (Sound OFF)';
+        soundToggle.textContent = Sound.enabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
         Sound.playClick();
       });
     }
 
     const resetBtn = document.getElementById('resetProgressBtn');
     if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
+      resetBtn.addEventListener('click', async () => {
         if (confirm('Are you sure you want to reset all your learning progress?')) {
           localStorage.removeItem('aksharam_completed_lessons');
           localStorage.removeItem('aksharam_xp');
           localStorage.removeItem('aksharam_streak');
           localStorage.removeItem('aksharam_gems');
+
+          if (this.currentUser) {
+            try {
+              const userRef = doc(db, 'users', this.currentUser.uid);
+              await setDoc(userRef, {
+                aksharamProgress: {
+                  xp: 0,
+                  streak: 1,
+                  gems: 10,
+                  completedLessons: [],
+                  lastActive: new Date().toDateString(),
+                  updatedAt: new Date().toISOString()
+                }
+              }, { merge: true });
+            } catch (e) {}
+          }
+
           location.reload();
         }
       });
+    }
+  }
+
+  // -------------------------------------------------------------
+  // ☁️ GOOGLE AUTH & FIRESTORE CLOUD SYNC
+  // -------------------------------------------------------------
+  initAuth() {
+    // Top bar Sign In button
+    const headerSignInBtn = document.getElementById('headerGoogleSignInBtn');
+    if (headerSignInBtn) {
+      headerSignInBtn.addEventListener('click', () => {
+        Sound.playClick();
+        this.signInWithGoogle();
+      });
+    }
+
+    // Listen to Firebase Auth state change globally
+    try {
+      onAuthStateChanged(auth, async (user) => {
+        this.currentUser = user;
+        if (user) {
+          await this.syncFromCloud(user);
+        } else {
+          this.updateAuthUI(null);
+        }
+      });
+    } catch (err) {
+      console.warn('Firebase Auth note:', err);
+    }
+  }
+
+  async signInWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      console.error('Google Sign-In error:', err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        alert('Google Sign-In could not be completed: ' + (err.message || err.code));
+      }
+    }
+  }
+
+  async signOutGoogle() {
+    try {
+      await signOut(auth);
+      this.currentUser = null;
+      this.updateAuthUI(null);
+      this.updateProfileTab();
+    } catch (err) {
+      console.error('Sign out error:', err);
+    }
+  }
+
+  async syncFromCloud(user) {
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(userRef);
+
+      if (snap.exists()) {
+        const cloud = snap.data().aksharamProgress;
+        if (cloud) {
+          // Merge local and cloud progress
+          const localCompleted = this.loadCompletedLessons();
+          const cloudCompleted = Array.isArray(cloud.completedLessons) ? cloud.completedLessons : [];
+          this.completedLessons = Array.from(new Set([...localCompleted, ...cloudCompleted]));
+          localStorage.setItem('aksharam_completed_lessons', JSON.stringify(this.completedLessons));
+
+          this.xp = Math.max(this.xp, Number(cloud.xp || 0));
+          localStorage.setItem('aksharam_xp', this.xp.toString());
+
+          this.streak = Math.max(this.streak, Number(cloud.streak || 0));
+          localStorage.setItem('aksharam_streak', this.streak.toString());
+
+          this.gems = Math.max(this.gems, Number(cloud.gems || 0));
+          localStorage.setItem('aksharam_gems', this.gems.toString());
+
+          this.updateTopBar();
+          this.renderPath();
+        }
+      }
+
+      // Sync merged state back to cloud immediately
+      await this.syncToCloud();
+    } catch (e) {
+      console.error('Failed syncing from cloud:', e);
+    } finally {
+      this.updateAuthUI(user);
+      this.updateProfileTab();
+    }
+  }
+
+  async syncToCloud() {
+    if (!this.currentUser) return;
+    try {
+      const userRef = doc(db, 'users', this.currentUser.uid);
+      await setDoc(userRef, {
+        aksharamProgress: {
+          xp: this.xp,
+          streak: this.streak,
+          gems: this.gems,
+          completedLessons: this.completedLessons,
+          lastActive: localStorage.getItem('aksharam_last_active') || new Date().toDateString(),
+          updatedAt: new Date().toISOString()
+        }
+      }, { merge: true });
+    } catch (e) {
+      console.error('Failed syncing to cloud:', e);
+    }
+  }
+
+  updateAuthUI(user) {
+    const headerAuthSlot = document.getElementById('headerAuthSlot');
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const profileAvatarIcon = document.getElementById('profileAvatarIcon');
+    const profileAvatarImg = document.getElementById('profileAvatarImg');
+    const profileSyncStatus = document.getElementById('profileSyncStatus');
+    const profileAuthBox = document.getElementById('profileAuthBox');
+
+    if (user) {
+      // Header: show user avatar pill
+      if (headerAuthSlot) {
+        headerAuthSlot.innerHTML = `
+          <button type="button" class="header-user-pill" id="headerProfilePill" title="${user.displayName || 'Learner'} (Go to Profile)">
+            ${user.photoURL
+              ? `<img src="${user.photoURL}" alt="${user.displayName || ''}" class="header-user-avatar" referrerpolicy="no-referrer">`
+              : `<span class="header-user-avatar" style="background:#7A2048; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">${(user.displayName || 'U')[0].toUpperCase()}</span>`
+            }
+            <span class="header-user-name">${(user.displayName || 'Profile').split(' ')[0]}</span>
+          </button>
+        `;
+        document.getElementById('headerProfilePill')?.addEventListener('click', () => {
+          Sound.playClick();
+          this.switchTab('profile');
+        });
+      }
+
+      // Profile Card
+      if (profileName) profileName.textContent = user.displayName || 'Telugu Learner';
+      if (profileEmail) {
+        profileEmail.textContent = user.email || '';
+        profileEmail.style.display = 'block';
+      }
+      if (profileAvatarImg && user.photoURL) {
+        profileAvatarImg.src = user.photoURL;
+        profileAvatarImg.referrerPolicy = 'no-referrer';
+        profileAvatarImg.style.display = 'block';
+        if (profileAvatarIcon) profileAvatarIcon.style.display = 'none';
+      }
+      if (profileSyncStatus) {
+        profileSyncStatus.textContent = '☁️ Synced to Google Account';
+        profileSyncStatus.classList.add('is-synced');
+      }
+
+      // Profile Auth Box
+      if (profileAuthBox) {
+        profileAuthBox.innerHTML = `
+          <div class="auth-signed-in-inner">
+            <div class="auth-user-info">
+              <strong>Signed in as ${user.displayName || 'Learner'}</strong>
+              <span>Your streak, XP, and lessons sync automatically with this Google account.</span>
+            </div>
+            <button type="button" class="btn-sign-out" id="signOutBtn">
+              Sign Out
+            </button>
+          </div>
+        `;
+        document.getElementById('signOutBtn')?.addEventListener('click', () => {
+          Sound.playClick();
+          this.signOutGoogle();
+        });
+      }
+
+    } else {
+      // Guest / Signed Out State
+      if (headerAuthSlot) {
+        headerAuthSlot.innerHTML = `
+          <button type="button" class="btn-google-header" id="headerGoogleSignInBtn" title="Sign in with Google to sync progress">
+            <svg class="google-icon-svg" viewBox="0 0 24 24" width="16" height="16">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.94 0 12s.45 3.84 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span class="btn-google-text">Sign In</span>
+          </button>
+        `;
+        document.getElementById('headerGoogleSignInBtn')?.addEventListener('click', () => {
+          Sound.playClick();
+          this.signInWithGoogle();
+        });
+      }
+
+      if (profileName) profileName.textContent = 'Telugu Learner';
+      if (profileEmail) profileEmail.style.display = 'none';
+      if (profileAvatarImg) profileAvatarImg.style.display = 'none';
+      if (profileAvatarIcon) profileAvatarIcon.style.display = 'flex';
+      if (profileSyncStatus) {
+        profileSyncStatus.textContent = '💾 Local Guest';
+        profileSyncStatus.classList.remove('is-synced');
+      }
+
+      if (profileAuthBox) {
+        profileAuthBox.innerHTML = `
+          <div class="auth-prompt-inner">
+            <h3 class="auth-prompt-title">Save & Sync Your Progress</h3>
+            <p class="auth-prompt-desc">
+              Sign in with your Google account to automatically preserve your streak, XP, gems, and unlocked lessons across all your devices.
+            </p>
+            <button type="button" class="btn-google-sign-in" id="profileGoogleSignInBtn">
+              <svg class="google-icon-svg" viewBox="0 0 24 24" width="18" height="18">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.94 0 12s.45 3.84 1.25 5.42l4.03-3.15z"/>
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+          </div>
+        `;
+        document.getElementById('profileGoogleSignInBtn')?.addEventListener('click', () => {
+          Sound.playClick();
+          this.signInWithGoogle();
+        });
+      }
     }
   }
 
