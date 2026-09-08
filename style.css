@@ -248,11 +248,11 @@ body {
 ========================= */
 .glass-navbar {
   position: sticky;
-  top: 14px;
+  top: calc(env(safe-area-inset-top, 0px) + 26px);
   z-index: 1000;
   width: fit-content;
   max-width: min(94%, 860px);
-  margin: 14px auto 0;
+  margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 0;
   padding: 8px 18px;
   display: flex;
   justify-content: center;
@@ -1165,7 +1165,8 @@ body {
 
     width: 94%;
 
-    margin: 12px auto 0;
+    margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 0;
+    top: calc(env(safe-area-inset-top, 0px) + 26px);
 
     padding: 12px 18px;
 
@@ -1365,7 +1366,8 @@ body {
   @media (max-width: 700px) {
     .glass-navbar {
       width: calc(100% - 24px) !important;
-      margin: 12px 12px 0 12px !important;
+      margin: calc(env(safe-area-inset-top, 0px) + 28px) 12px 0 12px !important;
+      top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
       padding: 12px 18px 12px 14px !important;
 
       display: flex !important;
@@ -5970,7 +5972,8 @@ button[class*="delete"] {
     -webkit-overflow-scrolling: touch !important;
     width: calc(100% - 24px) !important;
     max-width: calc(100% - 24px) !important;
-    margin: 10px auto 16px auto !important;
+    margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 16px auto !important;
+    top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
     padding: 8px 14px !important;
   }
   .glass-navbar::-webkit-scrollbar {
