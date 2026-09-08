@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>అక్షరం — సరదాగా తెలుగు నేర్చుకోండి | Aksharam by Sannivesham</title>
+  <meta name="description" content="Duolingo శైలిలో తెలుగు వర్ణమాల, గుణింతాలు, సంభాషణలు సులభంగా మరియు ఉచితంగా నేర్చుకోండి.">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=Noto+Serif+Telugu:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 🔝 TOP STATUS BAR -->
+    <header class="top-status-bar">
+      <div class="top-bar-left">
+        <a href="../index.html" class="app-brand-link" title="తిరిగి సన్నివేశం హోమ్‌కు వెళ్లండి">
+          <img src="logo.png" alt="అక్షరం లోగో" class="app-logo">
+          <span class="app-brand-text">అక్షరం</span>
+        </a>
+      </div>
+
+      <div class="top-stats-wrap">
+        <!-- Streak -->
+        <div class="top-stat-pill pill-streak" title="రోజువారీ సాధన స్ట్రీక్ (Daily Streak)">
+          <span class="stat-icon">🔥</span>
+          <span id="topStreak">1</span>
+        </div>
+
+        <!-- Gems -->
+        <div class="top-stat-pill pill-gems" title="రత్నాలు (Gems)">
+          <span class="stat-icon">💎</span>
+          <span id="topGems">10</span>
+        </div>
+
+        <!-- Hearts -->
+        <div class="top-stat-pill pill-hearts" title="గుండెలు / ప్రాణాలు (Hearts)">
+          <span class="stat-icon">❤️</span>
+          <span id="topHearts">5</span>
+        </div>
+
+        <!-- Total XP -->
+        <div class="top-stat-pill pill-xp" title="మొత్తం XP (Experience Points)">
+          <span class="stat-icon">⚡</span>
+          <span id="topXP">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 🗂️ MAIN TABS CONTENT -->
+    <main class="main-content">
+      
+      <!-- TAB 1: 🗺️ LEARN (WINDING PATH) -->
+      <section class="tab-view is-active" id="tab-learn">
+        <div class="units-container" id="unitsContainer">
+          <!-- Dynamic Units & Lessons rendered via app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 2: 🎯 PRACTICE (HEART REFILL) -->
+      <section class="tab-view" id="tab-practice">
+        <div class="practice-container">
+          <div class="practice-hero">
+            <span class="practice-icon">🎯</span>
+            <h2 class="practice-title">అభ్యాస సాధన (Practice)</h2>
+            <p class="practice-desc">
+              గుండెలు అయిపోయాయా? తప్పు చేసిన అక్షరాలను పునశ్చరణ చేసి ఉచితంగా గుండెలను తిరిగి పొందండి!
+            </p>
+            <button type="button" class="btn-practice" id="startPracticeBtn">
+              ❤️ సాధన ప్రారంభించండి (+2 గుండెలు)
+            </button>
+          </div>
+
+          <div class="practice-benefits">
+            <div class="benefit-item">
+              <span class="benefit-icon">🧠</span>
+              <div class="benefit-text">
+                <h4>జ్ఞాపకశక్తిని పెంచుకోండి</h4>
+                <p>పరిపూర్ణమైన ఉచ్ఛారణ మరియు అక్షర గుర్తింపు పునరావృతం ద్వారా సులభం అవుతుంది.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">⚡</span>
+              <div class="benefit-text">
+                <h4>బోనస్ XP సంపాదించండి</h4>
+                <p>ప్రతి సాధన సెషన్‌లో అదనపు 10 XP పాయింట్లు మరియు రత్నాలు లభిస్తాయి.</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">🛡️</span>
+              <div class="benefit-text">
+                <h4>జీరో రిస్క్</h4>
+                <p>సాధనలో తప్పులు పోయినా మీ గుండెలు తగ్గవు.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: 📖 DICTIONARY -->
+      <section class="tab-view" id="tab-dictionary">
+        <div class="dict-container">
+          <div class="dict-header">
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="dictSearch" class="search-input" placeholder="తెలుగు లేదా English లో వెతకండి (Search words)..." autocomplete="off">
+            </div>
+            <div class="filter-chips-wrap" id="dictFilters">
+              <!-- Rendered via JS -->
+            </div>
+            <div class="dict-count-bar" id="dictCount">లోడ్ అవుతోంది...</div>
+          </div>
+
+          <div class="dict-grid" id="dictGrid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: 🔄 TRANSLATOR -->
+      <section class="tab-view" id="tab-translator">
+        <div class="translator-container">
+          <div class="trans-panel">
+            <div class="trans-lang-bar">
+              <span class="trans-lang-label" id="transFromLabel">తెలుగు (Telugu)</span>
+              <button type="button" class="trans-swap-btn" id="transSwapBtn" title="భాషను మార్చండి (Swap languages)">
+                ⇄
+              </button>
+              <span class="trans-lang-label" id="transToLabel">English</span>
+            </div>
+
+            <textarea id="transInput" class="trans-input" placeholder="తెలుగులో ఇక్కడ టైప్ చేయండి..."></textarea>
+            
+            <div class="trans-actions">
+              <button type="button" class="btn-trans-action" id="transActionBtn">
+                అనువదించండి (Translate)
+              </button>
+            </div>
+          </div>
+
+          <div class="trans-output-card">
+            <div id="transOutput" class="trans-output-text is-placeholder">
+              అనువాదం ఇక్కడ కనిపిస్తుంది...
+            </div>
+            <div class="trans-out-footer">
+              <button type="button" class="btn-trans-copy" id="transCopyBtn">
+                📋 కాపీ చేయండి (Copy)
+              </button>
+            </div>
+          </div>
+
+          <div class="trans-quick-phrases">
+            <span class="quick-title">త్వరిత వాక్యాలు (Quick Phrases):</span>
+            <div class="quick-chips-wrap" id="transPhrases">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: 👤 PROFILE -->
+      <section class="tab-view" id="tab-profile">
+        <div class="profile-container">
+          <div class="profile-card">
+            <div class="profile-avatar">🎓</div>
+            <h2 class="profile-name">తెలుగు విద్యార్థి</h2>
+            <span class="profile-badge-pill" id="profLevel">స్థాయి 1 (Level 1)</span>
+          </div>
+
+          <div class="profile-stats-grid">
+            <div class="prof-stat-box">
+              <span class="prof-stat-icon">⚡</span>
+              <span class="prof-stat-val" id="profXP">0 XP</span>
+              <span class="prof-stat-lbl">మొత్తం అనుభవం</span>
+            </div>
+            <div class="prof-stat-box">
+              <span class="prof-stat-icon">🔥</span>
+              <span class="prof-stat-val" id="profStreak">1 రోజు</span>
+              <span class="prof-stat-lbl">సాధన స్ట్రీక్</span>
+            </div>
+            <div class="prof-stat-box">
+              <span class="prof-stat-icon">📚</span>
+              <span class="prof-stat-val" id="profLessons">0 / 20</span>
+              <span class="prof-stat-lbl">పూర్తయిన పాఠాలు</span>
+            </div>
+            <div class="prof-stat-box">
+              <span class="prof-stat-icon">💎</span>
+              <span class="prof-stat-val" id="profGems">10</span>
+              <span class="prof-stat-lbl">రత్నాలు</span>
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="profile-achievements">
+            <h3 class="achieve-title">గౌరవ పతకాలు (Achievements)</h3>
+            <div class="achieve-list">
+              <div class="achieve-item" id="badge-first">
+                <span class="achieve-icon">🌱</span>
+                <div class="achieve-info">
+                  <h4>మొదటి అడుగు (First Step)</h4>
+                  <p>మొదటి పాఠాన్ని విజయవంతంగా పూర్తి చేయండి.</p>
+                </div>
+              </div>
+              <div class="achieve-item" id="badge-vowels">
+                <span class="achieve-icon">🌟</span>
+                <div class="achieve-info">
+                  <h4>అచ్చులు నిపుణుడు (Vowel Master)</h4>
+                  <p>మొదటి విభాగంలోని అన్ని పాఠాలను పూర్తి చేయండి.</p>
+                </div>
+              </div>
+              <div class="achieve-item" id="badge-streak">
+                <span class="achieve-icon">🔥</span>
+                <div class="achieve-info">
+                  <h4>నిరంతర సాధకుడు (3-Day Streak)</h4>
+                  <p>వరుసగా 3 రోజులు యాప్‌ని సందర్శించి సాధన చేయండి.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div class="profile-settings">
+            <button type="button" class="setting-btn" id="soundToggleBtn">
+              🔊 ఆన్ (Sound ON)
+            </button>
+            <button type="button" class="setting-btn btn-danger" id="resetProgressBtn">
+              🔄 ప్రగతిని రీసెట్ చేయండి (Reset Progress)
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 📱 BOTTOM NAVIGATION DOCK -->
+    <nav class="bottom-dock">
+      <button type="button" class="dock-tab is-active" data-tab="learn">
+        <span class="dock-icon">🗺️</span>
+        <span class="dock-label">నేర్చుకోండి</span>
+      </button>
+
+      <button type="button" class="dock-tab" data-tab="practice">
+        <span class="dock-icon">🎯</span>
+        <span class="dock-label">సాధన</span>
+      </button>
+
+      <button type="button" class="dock-tab" data-tab="dictionary">
+        <span class="dock-icon">📖</span>
+        <span class="dock-label">పదకోశం</span>
+      </button>
+
+      <button type="button" class="dock-tab" data-tab="translator">
+        <span class="dock-icon">🔄</span>
+        <span class="dock-label">అనువాదం</span>
+      </button>
+
+      <button type="button" class="dock-tab" data-tab="profile">
+        <span class="dock-icon">👤</span>
+        <span class="dock-label">ప్రొఫైల్</span>
+      </button>
+    </nav>
+
+    <!-- 🎓 FULLSCREEN LESSON RUNNER MODAL -->
+    <div class="lesson-modal" id="lessonModal">
+      <div class="lesson-modal-top">
+        <button type="button" class="btn-close-lesson" id="closeLessonBtn" aria-label="నిష్క్రమించండి (Exit)">
+          ✕
+        </button>
+        <div class="lesson-progress-bar">
+          <div class="lesson-progress-fill"></div>
+        </div>
+        <div class="lesson-hearts-indicator">
+          <span>❤️</span>
+          <span class="lesson-hearts-count">5</span>
+        </div>
+      </div>
+
+      <div class="lesson-stage">
+        <!-- Interactive questions / cards injected here -->
+      </div>
+
+      <div class="lesson-bottom-sheet">
+        <!-- Dynamic check / continue bar injected here -->
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
