@@ -308,30 +308,54 @@
     @media (max-width: 780px) {
       .glass-navbar {
         width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
         margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 0 !important;
         top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
-        padding: 6px 12px !important;
+        padding: 6px 10px !important;
         border-radius: 30px !important;
+        display: flex !important;
+        align-items: center !important;
         justify-content: space-between !important;
+        overflow: hidden !important;
         gap: 6px !important;
+        box-sizing: border-box !important;
+      }
+      .glass-navbar::before, .glass-navbar::after {
+        display: none !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        content: none !important;
       }
       .nav-links {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
         overflow-x: auto !important;
+        overflow-y: hidden !important;
         scrollbar-width: none !important;
         -webkit-overflow-scrolling: touch !important;
-        flex: 1 !important;
+        touch-action: pan-x !important;
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
         gap: 4px !important;
+        overscroll-behavior-x: contain !important;
       }
       .nav-links a {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
         font-size: 0.86rem !important;
         padding: 5px 8px !important;
       }
       .nav-divider {
         height: 18px !important;
         margin: 0 1px !important;
+        flex-shrink: 0 !important;
       }
       .nav-actions {
+        display: flex !important;
+        align-items: center !important;
         gap: 5px !important;
+        flex-shrink: 0 !important;
       }
       .nav-actions .nav-action-btn,
       .nav-actions .music-btn,
@@ -1559,8 +1583,16 @@
         });
       }
 
+      function initNavbarScroll() {
+        const nl = document.querySelector('.nav-links');
+        if (nl) {
+          nl.scrollLeft = 0;
+        }
+      }
+
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => {
+          initNavbarScroll();
           initDivineParticles();
           init3DDiya();
           init3DCardTilt();
@@ -1569,6 +1601,7 @@
           initShlokaFlip();
         });
       } else {
+        initNavbarScroll();
         initDivineParticles();
         init3DDiya();
         init3DCardTilt();

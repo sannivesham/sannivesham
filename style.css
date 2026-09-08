@@ -5964,17 +5964,21 @@ button[class*="delete"] {
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
-    justify-content: flex-start !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    white-space: nowrap !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
     scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
     width: calc(100% - 24px) !important;
     max-width: calc(100% - 24px) !important;
     margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 16px auto !important;
     top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
-    padding: 8px 14px !important;
+    padding: 8px 12px !important;
+  }
+  .glass-navbar::before,
+  .glass-navbar::after {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    content: none !important;
   }
   .glass-navbar::-webkit-scrollbar {
     display: none !important;
@@ -5983,8 +5987,16 @@ button[class*="delete"] {
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
-    gap: 12px !important;
-    flex-shrink: 0 !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x !important;
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+    overscroll-behavior-x: contain !important;
   }
   .nav-links a {
     white-space: nowrap !important;
