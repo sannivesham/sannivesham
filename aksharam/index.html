@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>అక్షరం — తెలుగు నేర్చుకుందాం | Sannivesham Aksharam</title>
-  <meta name="description" content="సులభంగా, సరదాగా మరియు క్రమబద్ధమైన రోడ్‌మ్యాప్‌తో తెలుగు భాషను నేర్చుకోండి. అక్షరమాల, ఉచ్ఛారణ, పదకోశం, మరియు అనువాదం.">
+  <title>Aksharam — Learn Telugu | Sannivesham</title>
+  <meta name="description" content="Master Telugu with ease and joy through a gamified learning roadmap, authentic audio pronunciation, searchable dictionary, and live translator.">
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +29,8 @@
   <!-- 🔝 SITE HEADER -->
   <header class="site-header">
     <div class="header-brand">
-      <a href="../index.html" class="logo" title="తిరిగి సన్నివేశం హోమ్‌కు వెళ్లండి">
-        <img src="logo.png" alt="అక్షరం" class="brand-logo-img">
+      <a href="../index.html" class="brand-link" title="Return to Sannivesham Home">
+        <img src="logo.png" alt="Aksharam" class="brand-logo-img">
         <span class="logo-text">సన్నివేశం అక్షరం <span class="logo-sub">Aksharam</span></span>
       </a>
     </div>
@@ -38,36 +38,36 @@
     <!-- Desktop Navigation Tabs -->
     <nav class="desktop-nav">
       <button type="button" class="nav-link-btn is-active dock-tab" data-tab="home">
-        <span>🏠</span> హోమ్
+        <span>🏠</span> Home
       </button>
       <button type="button" class="nav-link-btn dock-tab" data-tab="roadmap">
-        <span>🗺️</span> రోడ్‌మ్యాప్
+        <span>🗺️</span> Roadmap
       </button>
       <button type="button" class="nav-link-btn dock-tab" data-tab="practice">
-        <span>🎯</span> సాధన
+        <span>🎯</span> Practice
       </button>
       <button type="button" class="nav-link-btn dock-tab" data-tab="dictionary">
-        <span>📖</span> పదకోశం
+        <span>📖</span> Dictionary
       </button>
       <button type="button" class="nav-link-btn dock-tab" data-tab="translator">
-        <span>🔄</span> అనువాదం
+        <span>🔄</span> Translator
       </button>
       <button type="button" class="nav-link-btn dock-tab" data-tab="profile">
-        <span>👤</span> ప్రొఫైల్
+        <span>👤</span> Profile
       </button>
     </nav>
 
     <!-- Header Stats (No Hearts!) -->
     <div class="header-stats">
-      <div class="top-stat-pill pill-streak" title="రోజువారీ సాధన స్ట్రీక్ (Streak)">
+      <div class="top-stat-pill pill-streak" title="Daily Practice Streak">
         <span>🔥</span>
         <span id="topStreak">1</span>
       </div>
-      <div class="top-stat-pill pill-gems" title="రత్నాలు (Gems)">
+      <div class="top-stat-pill pill-gems" title="Gems">
         <span>💎</span>
         <span id="topGems">10</span>
       </div>
-      <div class="top-stat-pill pill-xp" title="మొత్తం XP (Experience Points)">
+      <div class="top-stat-pill pill-xp" title="Total XP">
         <span>⚡</span>
         <span id="topXP">0</span>
       </div>
@@ -78,43 +78,15 @@
   <main class="main-wrapper">
 
     <!-- =========================================================
-         TAB 1: 🏠 HOME (BEAUTIFUL LANDING WITH ROTATING CIRCLE)
+         TAB 1: 🏠 HOME (BEAUTIFUL LANDING WITH ROTATING CIRCLE ON TOP)
     ========================================================= -->
     <section class="tab-view is-active" id="tab-home">
       
       <!-- HERO -->
       <div class="hero-section">
-        <div class="hero-text">
-          <p class="eyebrow">
-            <span class="pulse-dot"></span> తెలుగు నేర్చుకుందాం <span class="mono-tag">telugu nerchukundam</span>
-          </p>
-          <h1>
-            Every letter<br>has a <span class="text-gradient">story.</span>
-            <span class="hero-telugu-sub">ప్రతి అక్షరం ఒక అద్భుతం.</span>
-          </h1>
-          <p class="hero-sub">
-            అక్షరమాల నుండి నిత్య సంభాషణల వరకు — క్రమబద్ధమైన రోడ్‌మ్యాప్, ప్రత్యక్ష ఆడియో ఉచ్ఛారణ, డిజిటల్ పదకోశం మరియు లైవ్ అనువాదంతో సులభంగా తెలుగు నేర్చుకోండి.
-          </p>
 
-          <div class="hero-actions">
-            <button type="button" class="btn btn-primary btn-lg" data-goto="roadmap" id="heroStartBtn">
-              🗺️ రోడ్‌మ్యాప్ ప్రారంభించండి (Start Learning) →
-            </button>
-            <button type="button" class="btn btn-ghost btn-lg" data-goto="translator">
-              🔄 లైవ్ అనువాదం (Translator)
-            </button>
-          </div>
-
-          <div class="hero-tags">
-            <span class="mini-tag">🔤 16 అచ్చులు & 36 హల్లులు</span>
-            <span class="mini-tag">🔊 లైవ్ ఉచ్ఛారణ (Audio)</span>
-            <span class="mini-tag">🌐 English ⇄ Telugu</span>
-            <span class="mini-tag">🎮 గేమిఫైడ్ రోడ్‌మ్యాప్</span>
-          </div>
-        </div>
-
-        <!-- 3D ROTATING LETTER CIRCLE -->
-        <div class="hero-visual" aria-hidden="true">
+        <!-- 3D ROTATING LETTER CIRCLE (ON TOP) -->
+        <div class="hero-top-visual" aria-hidden="true">
           <div class="glow-orb"></div>
           <div class="letter-badge">
             <span class="badge-ring"></span>
@@ -123,45 +95,76 @@
           </div>
           <div class="letter-caption">
             <span class="mono-tag" id="cycleTranslit">a</span>
-            <span class="caption-note">అ to ఱ — సంపూర్ణ వర్ణమాల</span>
+            <span class="caption-note">Vowels & Consonants • సంపూర్ణ వర్ణమాల</span>
           </div>
         </div>
+
+        <!-- HERO CONTENT -->
+        <div class="hero-text">
+          <p class="eyebrow">
+            <span class="pulse-dot"></span> Learn Telugu • <span class="mono-tag">తెలుగు నేర్చుకుందాం</span>
+          </p>
+          <h1>
+            Every letter<br>has a <span class="text-gradient">story.</span>
+            <span class="hero-telugu-sub">ప్రతి అక్షరం ఒక అద్భుతం.</span>
+          </h1>
+          <p class="hero-sub">
+            From your very first letter to fluent everyday conversations — master Telugu with a structured learning roadmap, native audio pronunciation, a searchable dictionary, and an instant live translator.
+          </p>
+
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary btn-lg" data-goto="roadmap" id="heroStartBtn">
+              🗺️ Start Learning (Roadmap) →
+            </button>
+            <button type="button" class="btn btn-ghost btn-lg" data-goto="translator">
+              🔄 Live Translator
+            </button>
+          </div>
+
+          <div class="hero-tags">
+            <span class="mini-tag">🔤 16 Vowels & 36 Consonants</span>
+            <span class="mini-tag">🔊 Real Audio Pronunciation</span>
+            <span class="mini-tag">🌐 English ⇄ Telugu</span>
+            <span class="mini-tag">🎮 Gamified Roadmap</span>
+          </div>
+        </div>
+
       </div>
 
       <!-- FEATURES GRID -->
       <div class="features-container">
         <div class="features-header">
-          <p class="eyebrow" style="justify-content: center;">ఎలా నేర్చుకోవాలి <span class="mono-tag">how it works</span></p>
-          <h2>సమగ్రమైన అభ్యాస వేదిక</h2>
+          <p class="eyebrow" style="justify-content: center;">How It Works <span class="mono-tag">all-in-one platform</span></p>
+          <h2>Comprehensive Learning Suite</h2>
         </div>
 
         <div class="features-grid">
           <div class="feature-card" data-goto="roadmap">
             <div class="feature-icon">📚</div>
-            <h3>క్రమబద్ధమైన రోడ్‌మ్యాప్</h3>
-            <p>5 విభాగాలు, 20 మెట్లు — అచ్చులు, హల్లులు, గుణింతాలు, అంకెలు మరియు దైనందిన సంభాషణలు.</p>
-            <span class="feature-link">రోడ్‌మ్యాప్ చూడండి →</span>
+            <h3>Structured Roadmap</h3>
+            <p>5 Units, 20 bite-sized levels — Vowels, Consonants, Guninthalu, Numbers, and Everyday Conversations.</p>
+            <span class="feature-link">View Roadmap →</span>
           </div>
 
           <div class="feature-card feature-card--teal" data-goto="translator">
             <div class="feature-icon">🔁</div>
-            <h3>లైవ్ అనువాదం</h3>
-            <p>తెలుగు నుండి English మరియు English నుండి తెలుగులోకి తక్షణ అనువాదం & స్వరం.</p>
-            <span class="feature-link">అనువాదం తెరవండి →</span>
+            <h3>Live Translator</h3>
+            <p>Instant two-way translation between Telugu and English with audio speech and quick common phrases.</p>
+            <span class="feature-link">Open Translator →</span>
           </div>
 
           <div class="feature-card feature-card--gold" data-goto="dictionary">
             <div class="feature-icon">🔎</div>
-            <h3>శోధించదగిన పదకోశం</h3>
-            <p>ప్రతి పాఠంలోని పదాలు, అర్థాలు, ఉదాహరణలు మరియు ఆడియో ఉచ్ఛారణ ఒకే శోధనలో.</p>
-            <span class="feature-link">పదాలు శోధించండి →</span>
+            <h3>Searchable Dictionary</h3>
+            <p>Full vocabulary with English transliterations, meanings, contextual examples, and authentic audio.</p>
+            <span class="feature-link">Search Words →</span>
           </div>
 
           <div class="feature-card feature-card--purple" data-goto="practice">
             <div class="feature-icon">🎯</div>
-            <h3>ఉచిత సాధన & రివిజన్</h3>
-            <p>ఎటువంటి ఆంక్షలు లేకుండా మీకు నచ్చినప్పుడు ఉచితంగా అక్షరాలను పునశ్చరణ చేయండి.</p>
-            <span class="feature-link">సాధన చేయండి →</span>
+            <h3>Free Practice & Revision</h3>
+            <p>Revise letters, numbers, and phrases freely whenever you like without time limits or heart restrictions.</p>
+            <span class="feature-link">Start Practice →</span>
           </div>
         </div>
       </div>
@@ -171,7 +174,7 @@
         <div class="culture-glyph" aria-hidden="true">తె</div>
         <blockquote>
           <p>“దేశ భాషలందు తెలుగు లెస్స”</p>
-          <cite>Among the languages of the land, Telugu is the sweetest — శ్రీ కృష్ణదేవరాయలు</cite>
+          <cite>“Among the languages of the land, Telugu is the sweetest” — Sri Krishnadevaraya</cite>
         </blockquote>
       </section>
 
@@ -183,8 +186,8 @@
     <section class="tab-view" id="tab-roadmap">
       <div class="roadmap-container">
         <div class="roadmap-header">
-          <h2>అభ్యాస రోడ్‌మ్యాప్ (Learning Roadmap)</h2>
-          <p>విభాగం 1 నుండి 5 వరకు క్రమపద్ధతిలో నేర్చుకోండి. ప్రతి పాఠాన్ని పూర్తి చేసి తదుపరి మైలురాయిని అన్‌లాక్ చేయండి.</p>
+          <h2>Learning Roadmap</h2>
+          <p>Progress systematically from Unit 1 to Unit 5. Complete each lesson to unlock the next milestone.</p>
         </div>
 
         <div class="units-container" id="unitsContainer">
@@ -200,12 +203,12 @@
       <div class="practice-wrapper">
         <div class="practice-hero">
           <span class="practice-icon">🎯</span>
-          <h2 class="practice-title">ఉచిత అభ్యాస సాధన (Practice)</h2>
+          <h2 class="practice-title">Free Practice & Revision</h2>
           <p class="practice-desc">
-            మీకు నచ్చినప్పుడల్లా అక్షరాలను పునశ్చరణ చేయండి. బోనస్ XP పాయింట్లు మరియు రత్నాలను సంపాదించండి!
+            Revise any letter, number, or vocabulary anytime. Earn bonus XP points and gems with zero penalties!
           </p>
           <button type="button" class="btn-practice" id="startPracticeBtn">
-            ⚡ సాధన ప్రారంభించండి (+15 XP)
+            ⚡ Start Practice (+15 XP)
           </button>
         </div>
 
@@ -213,22 +216,22 @@
           <div class="benefit-item">
             <span class="benefit-icon">🧠</span>
             <div class="benefit-text">
-              <h4>జ్ఞాపకశక్తిని పెంచుకోండి</h4>
-              <p>పరిపూర్ణమైన ఉచ్ఛారణ మరియు అక్షర గుర్తింపు పునరావృతం ద్వారా సులభం అవుతుంది.</p>
+              <h4>Reinforce Memory</h4>
+              <p>Achieve authentic pronunciation and rapid character recognition through spaced repetition.</p>
             </div>
           </div>
           <div class="benefit-item">
             <span class="benefit-icon">💎</span>
             <div class="benefit-text">
-              <h4>బోనస్ రత్నాలు సంపాదించండి</h4>
-              <p>ప్రతి సాధన సెషన్‌లో అదనపు XP మరియు రత్నాలు లభిస్తాయి.</p>
+              <h4>Earn Bonus Rewards</h4>
+              <p>Gain extra XP and gems during each practice session to climb learner levels.</p>
             </div>
           </div>
           <div class="benefit-item">
             <span class="benefit-icon">🛡️</span>
             <div class="benefit-text">
-              <h4>ఎటువంటి పరిమితులు లేవు</h4>
-              <p>పూర్తిగా ఉచితం — ఎన్ని సార్లైనా నిర్భయంగా సాధన చేసుకోవచ్చు.</p>
+              <h4>Zero Restrictions</h4>
+              <p>100% free and unlimited — practice as many times as you like with no heart loss.</p>
             </div>
           </div>
         </div>
@@ -243,12 +246,12 @@
         <div class="dict-header">
           <div class="search-input-wrap">
             <span class="search-icon">🔍</span>
-            <input type="text" id="dictSearch" class="search-input" placeholder="తెలుగు లేదా English లో వెతకండి (Search words)..." autocomplete="off">
+            <input type="text" id="dictSearch" class="search-input" placeholder="Search in English or Telugu (e.g., amma, mother, పుస్తకం)..." autocomplete="off">
           </div>
           <div class="filter-chips-wrap" id="dictFilters">
             <!-- Rendered via JS -->
           </div>
-          <div class="dict-count-bar" id="dictCount">లోడ్ అవుతోంది...</div>
+          <div class="dict-count-bar" id="dictCount">Loading dictionary...</div>
         </div>
 
         <div class="dict-grid" id="dictGrid">
@@ -264,35 +267,35 @@
       <div class="translator-wrapper">
         <div class="trans-panel">
           <div class="trans-lang-bar">
-            <span class="trans-lang-label" id="transFromLabel">తెలుగు (Telugu)</span>
-            <button type="button" class="trans-swap-btn" id="transSwapBtn" title="భాషను మార్చండి (Swap languages)">
+            <span class="trans-lang-label" id="transFromLabel">Telugu</span>
+            <button type="button" class="trans-swap-btn" id="transSwapBtn" title="Swap languages">
               ⇄
             </button>
             <span class="trans-lang-label" id="transToLabel">English</span>
           </div>
 
-          <textarea id="transInput" class="trans-input" placeholder="తెలుగులో ఇక్కడ టైప్ చేయండి..."></textarea>
+          <textarea id="transInput" class="trans-input" placeholder="Type or paste text here..."></textarea>
           
           <div class="trans-actions">
             <button type="button" class="btn-trans-action" id="transActionBtn">
-              అనువదించండి (Translate)
+              Translate
             </button>
           </div>
         </div>
 
         <div class="trans-output-card">
           <div id="transOutput" class="trans-output-text is-placeholder">
-            అనువాదం ఇక్కడ కనిపిస్తుంది...
+            Translation will appear here...
           </div>
           <div class="trans-out-footer">
             <button type="button" class="btn-trans-copy" id="transCopyBtn">
-              📋 కాపీ చేయండి (Copy)
+              📋 Copy Translation
             </button>
           </div>
         </div>
 
         <div class="trans-quick-phrases">
-          <span class="quick-title">త్వరిత వాక్యాలు (Quick Phrases):</span>
+          <span class="quick-title">Quick Phrases:</span>
           <div class="quick-chips-wrap" id="transPhrases">
             <!-- Rendered via JS -->
           </div>
@@ -307,56 +310,56 @@
       <div class="profile-wrapper">
         <div class="profile-card">
           <div class="profile-avatar">🎓</div>
-          <h2 class="profile-name">తెలుగు విద్యార్థి</h2>
-          <span class="profile-badge-pill" id="profLevel">స్థాయి 1 (Level 1)</span>
+          <h2 class="profile-name">Telugu Learner</h2>
+          <span class="profile-badge-pill" id="profLevel">Level 1</span>
         </div>
 
         <div class="profile-stats-grid">
           <div class="prof-stat-box">
             <span class="prof-stat-icon">⚡</span>
             <span class="prof-stat-val" id="profXP">0 XP</span>
-            <span class="prof-stat-lbl">మొత్తం అనుభవం</span>
+            <span class="prof-stat-lbl">Total XP</span>
           </div>
           <div class="prof-stat-box">
             <span class="prof-stat-icon">🔥</span>
-            <span class="prof-stat-val" id="profStreak">1 రోజు</span>
-            <span class="prof-stat-lbl">సాధన స్ట్రీక్</span>
+            <span class="prof-stat-val" id="profStreak">1 Day</span>
+            <span class="prof-stat-lbl">Practice Streak</span>
           </div>
           <div class="prof-stat-box">
             <span class="prof-stat-icon">📚</span>
             <span class="prof-stat-val" id="profLessons">0 / 20</span>
-            <span class="prof-stat-lbl">పూర్తయిన పాఠాలు</span>
+            <span class="prof-stat-lbl">Completed Lessons</span>
           </div>
           <div class="prof-stat-box">
             <span class="prof-stat-icon">💎</span>
             <span class="prof-stat-val" id="profGems">10</span>
-            <span class="prof-stat-lbl">రత్నాలు</span>
+            <span class="prof-stat-lbl">Gems</span>
           </div>
         </div>
 
         <!-- Achievements -->
         <div class="profile-achievements">
-          <h3 class="achieve-title">గౌరవ పతకాలు (Achievements)</h3>
+          <h3 class="achieve-title">Achievements</h3>
           <div class="achieve-list">
             <div class="achieve-item" id="badge-first">
               <span class="achieve-icon">🌱</span>
               <div class="achieve-info">
-                <h4>మొదటి అడుగు (First Step)</h4>
-                <p>మొదటి పాఠాన్ని విజయవంతంగా పూర్తి చేయండి.</p>
+                <h4>First Step</h4>
+                <p>Successfully finish your first Telugu lesson.</p>
               </div>
             </div>
             <div class="achieve-item" id="badge-vowels">
               <span class="achieve-icon">🌟</span>
               <div class="achieve-info">
-                <h4>అచ్చులు నిపుణుడు (Vowel Master)</h4>
-                <p>మొదటి విభాగంలోని అన్ని పాఠాలను పూర్తి చేయండి.</p>
+                <h4>Vowel Master</h4>
+                <p>Complete all 4 lessons in Unit 1 (Vowels).</p>
               </div>
             </div>
             <div class="achieve-item" id="badge-streak">
               <span class="achieve-icon">🔥</span>
               <div class="achieve-info">
-                <h4>నిరంతర సాధకుడు (3-Day Streak)</h4>
-                <p>వరుసగా 3 రోజులు యాప్‌ని సందర్శించి సాధన చేయండి.</p>
+                <h4>Dedication (3-Day Streak)</h4>
+                <p>Visit and practice for 3 consecutive days.</p>
               </div>
             </div>
           </div>
@@ -365,10 +368,10 @@
         <!-- Settings -->
         <div class="profile-settings">
           <button type="button" class="setting-btn" id="soundToggleBtn">
-            🔊 ఆన్ (Sound ON)
+            🔊 Sound: ON
           </button>
           <button type="button" class="setting-btn btn-danger" id="resetProgressBtn">
-            🔄 ప్రగతిని రీసెట్ చేయండి (Reset Progress)
+            🔄 Reset Progress
           </button>
         </div>
       </div>
@@ -380,34 +383,34 @@
   <nav class="bottom-dock">
     <button type="button" class="dock-tab is-active" data-tab="home">
       <span class="dock-icon">🏠</span>
-      <span class="dock-label">హోమ్</span>
+      <span class="dock-label">Home</span>
     </button>
     <button type="button" class="dock-tab" data-tab="roadmap">
       <span class="dock-icon">🗺️</span>
-      <span class="dock-label">రోడ్‌మ్యాప్</span>
+      <span class="dock-label">Roadmap</span>
     </button>
     <button type="button" class="dock-tab" data-tab="practice">
       <span class="dock-icon">🎯</span>
-      <span class="dock-label">సాధన</span>
+      <span class="dock-label">Practice</span>
     </button>
     <button type="button" class="dock-tab" data-tab="dictionary">
       <span class="dock-icon">📖</span>
-      <span class="dock-label">పదకోశం</span>
+      <span class="dock-label">Dictionary</span>
     </button>
     <button type="button" class="dock-tab" data-tab="translator">
       <span class="dock-icon">🔄</span>
-      <span class="dock-label">అనువాదం</span>
+      <span class="dock-label">Translator</span>
     </button>
     <button type="button" class="dock-tab" data-tab="profile">
       <span class="dock-icon">👤</span>
-      <span class="dock-label">ప్రొఫైల్</span>
+      <span class="dock-label">Profile</span>
     </button>
   </nav>
 
   <!-- 🎓 FULLSCREEN LESSON RUNNER MODAL (NO HEARTS!) -->
   <div class="lesson-modal" id="lessonModal">
     <div class="lesson-modal-top">
-      <button type="button" class="btn-close-lesson" id="closeLessonBtn" aria-label="నిష్క్రమించండి (Exit)">
+      <button type="button" class="btn-close-lesson" id="closeLessonBtn" aria-label="Exit Lesson">
         ✕
       </button>
       <div class="lesson-progress-bar">

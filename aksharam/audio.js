@@ -148,7 +148,8 @@ export const Sound = {
 // Initialize sound preference
 Sound.init();
 
-// ---------- TELUGU SPEECH SYNTHESIS ----------
+// ---------- ROBUST TELUGU PRONUNCIATION (TTS + Web Speech Fallback) ----------
+let currentAudio = null;
 let cachedTeluguVoice = null;
 
 function findTeluguVoice() {
@@ -165,30 +166,75 @@ if ('speechSynthesis' in window) {
   };
 }
 
-export function speakTelugu(text, onStart, onEnd) {
-  if (!('speechSynthesis' in window) || !text) return;
-
+function fallbackSpeechSynthesis(text, onStart, onEnd) {
+  if (!('speechSynthesis' in window) || !text) {
+    if (onEnd) onEnd();
+    return;
+  }
   try {
     window.speechSynthesis.cancel();
-  } catch (e) {}
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = cachedTeluguVoice || findTeluguVoice();
+    if (voice) utter.voice = voice;
+    utter.lang = 'te-IN';
+    utter.rate = 0.85;
+    utter.pitch = 1.0;
 
-  const utter = new SpeechSynthesisUtterance(text);
-  const voice = cachedTeluguVoice || findTeluguVoice();
-  if (voice) utter.voice = voice;
-
-  utter.lang = 'te-IN';
-  utter.rate = 0.85;
-  utter.pitch = 1.0;
-
-  if (onStart) utter.onstart = onStart;
-  if (onEnd) {
-    utter.onend = onEnd;
-    utter.onerror = onEnd;
-  }
-
-  try {
+    if (onStart) utter.onstart = onStart;
+    if (onEnd) {
+      utter.onend = onEnd;
+      utter.onerror = onEnd;
+    }
     window.speechSynthesis.speak(utter);
   } catch (e) {
     if (onEnd) onEnd();
   }
 }
+
+export function speakTelugu(text, onStart, onEnd) {
+  if (!text) return;
+  const clean = text.trim();
+  if (!clean) return;
+
+  // Stop any previous audio
+  if (currentAudio) {
+    try {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    } catch (e) {}
+    currentAudio = null;
+  }
+
+  // Try Google Translate TTS audio first (guaranteed native Telugu human voice on all devices)
+  try {
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=te&q=${encodeURIComponent(clean)}`;
+    const audio = new Audio(ttsUrl);
+    currentAudio = audio;
+
+    let started = false;
+    audio.onplay = () => {
+      started = true;
+      if (onStart) onStart();
+    };
+
+    audio.onended = () => {
+      if (onEnd) onEnd();
+    };
+
+    audio.onerror = () => {
+      // If network fails or blocked, fallback to browser SpeechSynthesis
+      fallbackSpeechSynthesis(clean, onStart, onEnd);
+    };
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay policy or error: fallback immediately
+        fallbackSpeechSynthesis(clean, onStart, onEnd);
+      });
+    }
+  } catch (err) {
+    fallbackSpeechSynthesis(clean, onStart, onEnd);
+  }
+}
+

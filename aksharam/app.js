@@ -166,8 +166,8 @@ class AksharamApp {
       header.innerHTML = `
         <div class="unit-banner-left">
           <span class="unit-badge">${unit.badge}</span>
-          <h2 class="unit-title">విభాగం ${unit.unitNumber}: ${unit.title}</h2>
-          <p class="unit-sub">${unit.titleEn} — ${unit.desc}</p>
+          <h2 class="unit-title">Unit ${unit.unitNumber}: ${unit.titleEn}</h2>
+          <p class="unit-sub">${unit.title} — ${unit.desc}</p>
         </div>
       `;
       unitEl.appendChild(header);
@@ -176,8 +176,8 @@ class AksharamApp {
       const pathWrap = document.createElement('div');
       pathWrap.className = 'unit-path-nodes';
 
-      // Winding curve offsets for Duolingo serpentine path look
-      const offsets = [0, 28, -28, 40, -40, 18, -18];
+      // Winding curve offsets for serpentine path look
+      const offsets = [0, 26, -26, 38, -38, 16, -16];
 
       unit.lessons.forEach((lesson, lIdx) => {
         const isCompleted = this.completedLessons.includes(lesson.id);
@@ -197,19 +197,19 @@ class AksharamApp {
         node.type = 'button';
         node.className = `path-node ${isCompleted ? 'is-completed' : ''} ${isCurrent ? 'is-current' : ''} ${isLocked ? 'is-locked' : ''}`;
         node.dataset.lessonId = lesson.id;
-        node.setAttribute('aria-label', `${lesson.title} - ${lesson.titleEn}`);
+        node.setAttribute('aria-label', `${lesson.titleEn} - ${lesson.title}`);
 
         node.innerHTML = `
           <div class="node-inner">
             <span class="node-icon">${isCompleted ? '✓' : isLocked ? '🔒' : lesson.icon}</span>
           </div>
-          ${isCurrent ? '<div class="node-pulse-ring"></div><div class="node-tooltip">ప్రారంభించండి (Start)</div>' : ''}
+          ${isCurrent ? '<div class="node-pulse-ring"></div><div class="node-tooltip">Start Lesson</div>' : ''}
         `;
 
         node.addEventListener('click', () => {
           Sound.playClick();
           if (isLocked) {
-            alert('🔒 ఈ పాఠాన్ని తెరవడానికి మునుపటి పాఠాలను పూర్తి చేయండి (Finish previous lessons to unlock this one).');
+            alert('🔒 Please complete earlier lessons to unlock this one.');
           } else {
             this.runner.start(lesson);
           }
@@ -218,8 +218,8 @@ class AksharamApp {
         const label = document.createElement('div');
         label.className = 'node-label';
         label.innerHTML = `
-          <strong class="node-te-name">${lesson.title}</strong>
-          <span class="node-en-name">${lesson.titleEn}</span>
+          <strong class="node-en-name">${lesson.titleEn}</strong>
+          <span class="node-te-name">${lesson.title}</span>
         `;
 
         nodeWrap.appendChild(node);
@@ -245,15 +245,15 @@ class AksharamApp {
         Sound.playClick();
         if (allUnitDone) {
           Sound.playComplete();
-          alert(`🎉 అభినందనలు! విభాగం ${unit.unitNumber} పూర్తయింది. +50 బోనస్ రత్నాలు లభించాయి!`);
+          alert(`🎉 Congratulations! Unit ${unit.unitNumber} completed. +50 bonus gems earned!`);
         } else {
-          alert(`📦 విభాగం ${unit.unitNumber} లోని అన్ని పాఠాలు పూర్తయిన తర్వాత ఈ బహుమతి పెట్టె తెరుచుకుంటుంది!`);
+          alert(`📦 Complete all lessons in Unit ${unit.unitNumber} to open this milestone chest!`);
         }
       });
 
       const chestLabel = document.createElement('div');
       chestLabel.className = 'node-label';
-      chestLabel.innerHTML = `<strong>విభాగ ముగింపు బహుమతి</strong><span>Unit Bonus Chest</span>`;
+      chestLabel.innerHTML = `<strong>Milestone Chest</strong><span>Unit Bonus</span>`;
 
       chestWrap.appendChild(chest);
       chestWrap.appendChild(chestLabel);
@@ -343,13 +343,13 @@ class AksharamApp {
         return matchesCat && matchesQ;
       });
 
-      document.getElementById('dictCount').textContent = `${filtered.length} పదాలు (words)`;
+      document.getElementById('dictCount').textContent = `${filtered.length} words`;
 
       if (filtered.length === 0) {
         resultsGrid.innerHTML = `
           <div class="dict-empty-state">
             <span class="empty-icon">🔍</span>
-            <p>ఏ ఫలితాలు కనుగొనబడలేదు (No words found)</p>
+            <p>No matching words found</p>
           </div>
         `;
         return;
@@ -409,9 +409,9 @@ class AksharamApp {
     if (!inputArea || !outputArea) return;
 
     const updateLabels = () => {
-      if (fromLabel) fromLabel.textContent = fromLang === 'te' ? 'తెలుగు (Telugu)' : 'English';
-      if (toLabel) toLabel.textContent = toLang === 'te' ? 'తెలుగు (Telugu)' : 'English';
-      inputArea.placeholder = fromLang === 'te' ? 'తెలుగులో ఇక్కడ టైప్ చేయండి...' : 'Type English text here...';
+      if (fromLabel) fromLabel.textContent = fromLang === 'te' ? 'Telugu' : 'English';
+      if (toLabel) toLabel.textContent = toLang === 'te' ? 'Telugu' : 'English';
+      inputArea.placeholder = fromLang === 'te' ? 'Type in Telugu here...' : 'Type in English here...';
     };
 
     const doSwap = () => {
@@ -421,7 +421,7 @@ class AksharamApp {
       if (prevOut && !outputArea.classList.contains('is-placeholder')) {
         inputArea.value = prevOut;
       }
-      outputArea.textContent = fromLang === 'te' ? 'అనువాదం ఇక్కడ కనిపిస్తుంది...' : 'Translation will appear here...';
+      outputArea.textContent = 'Translation will appear here...';
       outputArea.classList.add('is-placeholder');
       updateLabels();
     };
@@ -433,7 +433,7 @@ class AksharamApp {
       if (!text) return;
 
       translateBtn.disabled = true;
-      outputArea.textContent = 'అనువదిస్తోంది (Translating)...';
+      outputArea.textContent = 'Translating...';
       outputArea.classList.remove('is-placeholder');
 
       try {
@@ -444,9 +444,9 @@ class AksharamApp {
         if (data && data[0]) {
           data[0].forEach(p => { if (p[0]) result += p[0]; });
         }
-        outputArea.textContent = result || 'అనువాదం విఫలమైంది (Translation failed)';
+        outputArea.textContent = result || 'Translation unavailable.';
       } catch (err) {
-        outputArea.textContent = 'అనువాదం విఫలమైంది. దయచేసి నెట్‌వర్క్ కనెక్షన్ తనిఖీ చేయండి.';
+        outputArea.textContent = 'Translation failed. Please check network connection.';
       } finally {
         translateBtn.disabled = false;
       }
@@ -464,9 +464,9 @@ class AksharamApp {
         if (txt && !outputArea.classList.contains('is-placeholder')) {
           await navigator.clipboard.writeText(txt).catch(() => {});
           Sound.playClick();
-          copyBtn.textContent = '✓ కాపీ అయింది (Copied)';
+          copyBtn.textContent = '✓ Copied';
           setTimeout(() => {
-            copyBtn.textContent = '📋 కాపీ చేయండి (Copy)';
+            copyBtn.textContent = '📋 Copy';
           }, 2000);
         }
       });
@@ -474,8 +474,8 @@ class AksharamApp {
 
     // Quick phrases
     const quick = [
-      'నమస్కారం', 'ధన్యవాదాలు', 'ఎలా ఉన్నారు?',
-      'శుభోదయం', 'శుభ రాత్రి', 'నేను బాగున్నాను'
+      'నమస్కారం (Hello)', 'ధన్యవాదాలు (Thank you)', 'ఎలా ఉన్నారు? (How are you?)',
+      'శుభోదయం (Good morning)', 'శుభ రాత్రి (Good night)', 'నేను బాగున్నాను (I am fine)'
     ];
     if (phrasesWrap) {
       phrasesWrap.innerHTML = quick.map(p => `
@@ -514,7 +514,7 @@ class AksharamApp {
     const resetBtn = document.getElementById('resetProgressBtn');
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        if (confirm('ఖచ్చితంగా మొత్తం ప్రగతిని రీసెట్ చేయాలనుకుంటున్నారా? (Reset all learning progress?)')) {
+        if (confirm('Are you sure you want to reset all your learning progress?')) {
           localStorage.removeItem('aksharam_completed_lessons');
           localStorage.removeItem('aksharam_xp');
           localStorage.removeItem('aksharam_streak');
@@ -599,9 +599,9 @@ class AksharamApp {
     const profLessons = document.getElementById('profLessons');
     const profGems = document.getElementById('profGems');
 
-    if (profLevel) profLevel.textContent = `స్థాయి ${level} (Level ${level})`;
+    if (profLevel) profLevel.textContent = `Level ${level}`;
     if (profXP) profXP.textContent = `${this.xp} XP`;
-    if (profStreak) profStreak.textContent = `${this.streak} రోజులు (Days)`;
+    if (profStreak) profStreak.textContent = `${this.streak} Days`;
     if (profLessons) profLessons.textContent = `${completedCount} / ${totalLessons}`;
     if (profGems) profGems.textContent = this.gems;
 
