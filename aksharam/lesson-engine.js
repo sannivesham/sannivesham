@@ -6,8 +6,6 @@ export class LessonRunner {
     this.container = options.container || document.getElementById('lessonModal');
     this.onComplete = options.onComplete || (() => {});
     this.onClose = options.onClose || (() => {});
-    this.getHearts = options.getHearts || (() => 5);
-    this.setHearts = options.setHearts || (() => {});
     this.addXP = options.addXP || (() => {});
     this.updateStreak = options.updateStreak || (() => {});
 
@@ -43,12 +41,9 @@ export class LessonRunner {
 
   updateHeader() {
     const progressFill = this.container.querySelector('.lesson-progress-fill');
-    const heartsVal = this.container.querySelector('.lesson-hearts-count');
-
     const total = this.lesson.exercises.length;
     const pct = Math.round((this.currentIndex / total) * 100);
     if (progressFill) progressFill.style.width = `${pct}%`;
-    if (heartsVal) heartsVal.textContent = this.getHearts();
   }
 
   renderExercise() {
@@ -340,12 +335,7 @@ export class LessonRunner {
       this.showSuccessSheet('అద్భుతం! సరిగ్గా చెప్పారు (Excellent! Correct answer)');
     } else {
       Sound.playWrong();
-      const currentHearts = this.getHearts();
-      const newHearts = Math.max(0, currentHearts - 1);
-      this.setHearts(newHearts);
-      this.updateHeader();
-
-      this.showErrorSheet(`సరైన సమాధానం: ${correctAnswer}`, newHearts <= 0);
+      this.showErrorSheet(`సరైన సమాధానం: ${correctAnswer}`);
     }
   }
 
@@ -373,38 +363,28 @@ export class LessonRunner {
     });
   }
 
-  showErrorSheet(correctAnswerText, isOutOfHearts) {
+  showErrorSheet(correctAnswerText) {
     const sheet = this.container.querySelector('.lesson-bottom-sheet');
     sheet.className = 'lesson-bottom-sheet sheet-wrong is-open';
     sheet.innerHTML = `
       <div class="sheet-content">
         <div class="sheet-feedback">
-          <span class="sheet-icon">💔</span>
+          <span class="sheet-icon">💡</span>
           <div>
-            <h3 class="sheet-title">${isOutOfHearts ? 'గుండెలు పూర్తయ్యాయి! (Out of Hearts)' : 'తప్పు సమాధానం'}</h3>
+            <h3 class="sheet-title">సరిచూసుకోండి (Review Answer)</h3>
             <p class="sheet-sub">${correctAnswerText}</p>
           </div>
         </div>
         <button type="button" class="btn-sheet btn-sheet-wrong" id="sheetContinueBtn">
-          ${isOutOfHearts ? 'అభ్యాసంతో నింపండి (Refill Hearts)' : 'సరే, ముందుకు సాగండి (Got it)'}
+          సరే, ముందుకు సాగండి (Continue) →
         </button>
       </div>
     `;
 
     sheet.querySelector('#sheetContinueBtn').addEventListener('click', () => {
       Sound.playClick();
-      if (isOutOfHearts) {
-        this.handleOutOfHearts();
-      } else {
-        this.nextExercise();
-      }
+      this.nextExercise();
     });
-  }
-
-  handleOutOfHearts() {
-    this.close();
-    // Prompt practice mode
-    alert('గుండెలు పూర్తయ్యాయి (You ran out of hearts)! అభ్యాసం (Practice) ట్యాబ్‌ను ఉపయోగించి ఉచితంగా గుండెలను నింపుకోండి.');
   }
 
   nextExercise() {
@@ -455,8 +435,8 @@ export class LessonRunner {
             <span class="stat-val">${Math.min(100, accuracy)}% 🎯</span>
           </div>
           <div class="stat-pill">
-            <span class="stat-label">మిగిలిన గుండెలు</span>
-            <span class="stat-val">${this.getHearts()} ❤️</span>
+            <span class="stat-label">సాధన స్థితి</span>
+            <span class="stat-val">పూర్తయింది ✓</span>
           </div>
         </div>
 

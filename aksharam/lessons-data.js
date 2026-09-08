@@ -263,12 +263,12 @@ export const UNITS = [
           },
           {
             type: "pair_match",
-            promptText: "Match short and long vowel pairs:",
+            promptText: "హ్రస్వ మరియు దీర్ఘ అచ్చుల జతలను కలపండి (Match short to long vowels):",
             pairs: [
-              { te: "అ - ఆ", en: "a - aa" },
-              { te: "ఇ - ఈ", en: "i - ii" },
-              { te: "ఉ - ఊ", en: "u - uu" },
-              { te: "ఎ - ఏ", en: "e - ee" }
+              { te: "అ", en: "ఆ" },
+              { te: "ఇ", en: "ఈ" },
+              { te: "ఉ", en: "ఊ" },
+              { te: "ఎ", en: "ఏ" }
             ]
           },
           {
@@ -817,9 +817,9 @@ export const UNITS = [
           },
           {
             type: "choice",
-            question: "How do you say 'Three' in Telugu?",
-            options: ["మూడు (Moodu)", "రెండు (Rendu)", "ఒకటి (Okati)", "ఐదు (Aidu)"],
-            answer: "మూడు (Moodu)"
+            question: "How do you say 'Three' (3) in Telugu?",
+            options: ["మూడు", "రెండు", "ఒకటి", "ఐదు"],
+            answer: "మూడు"
           },
           {
             type: "sound_match",
@@ -890,9 +890,9 @@ export const UNITS = [
           },
           {
             type: "choice",
-            question: "How do you say 'Ten' in Telugu?",
-            options: ["పది (Padi)", "ఆరు (Aaru)", "ఏడు (Eedu)", "తొమ్మిది (Tommidi)"],
-            answer: "పది (Padi)"
+            question: "How do you say 'Ten' (10) in Telugu?",
+            options: ["పది", "ఆరు", "ఏడు", "తొమ్మిది"],
+            answer: "పది"
           },
           {
             type: "sound_match",
@@ -967,8 +967,8 @@ export const UNITS = [
           {
             type: "choice",
             question: "How do you say 'Thank you' in Telugu?",
-            options: ["ధన్యవాదాలు (Dhanyavaadaalu)", "నమస్కారం (Namaskaram)", "ఎలా ఉన్నారు (Elaa unnaru)", "శుభోదయం (Subhodayam)"],
-            answer: "ధన్యవాదాలు (Dhanyavaadaalu)"
+            options: ["ధన్యవాదాలు", "నమస్కారం", "ఎలా ఉన్నారు?", "శుభోదయం"],
+            answer: "ధన్యవాదాలు"
           },
           {
             type: "sound_match",
@@ -1032,8 +1032,8 @@ export const UNITS = [
           {
             type: "choice",
             question: "What is 'Father' in Telugu?",
-            options: ["నాన్న (Naanna)", "అమ్మ (Amma)", "అన్నయ్య (Annayya)", "తమ్ముడు (Tammudu)"],
-            answer: "నాన్న (Naanna)"
+            options: ["నాన్న", "అమ్మ", "అన్నయ్య", "తమ్ముడు"],
+            answer: "నాన్న"
           },
           {
             type: "sound_match",

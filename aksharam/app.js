@@ -9,19 +9,12 @@ class AksharamApp {
   constructor() {
     this.xp = parseInt(localStorage.getItem('aksharam_xp') || '0', 10);
     this.streak = parseInt(localStorage.getItem('aksharam_streak') || '0', 10);
-    this.hearts = parseInt(localStorage.getItem('aksharam_hearts') || '5', 10);
     this.gems = parseInt(localStorage.getItem('aksharam_gems') || '10', 10);
     this.completedLessons = this.loadCompletedLessons();
-    this.currentTab = 'learn';
+    this.currentTab = 'home';
 
     this.runner = new LessonRunner({
       container: document.getElementById('lessonModal'),
-      getHearts: () => this.hearts,
-      setHearts: (val) => {
-        this.hearts = val;
-        localStorage.setItem('aksharam_hearts', this.hearts.toString());
-        this.updateTopBar();
-      },
       addXP: (pts) => {
         this.xp += pts;
         localStorage.setItem('aksharam_xp', this.xp.toString());
@@ -51,6 +44,16 @@ class AksharamApp {
     this.bindTranslator();
     this.bindPractice();
     this.bindProfile();
+    this.initLetterCycle();
+
+    // Hero buttons to navigate
+    document.querySelectorAll('[data-goto]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        Sound.playClick();
+        this.switchTab(btn.dataset.goto);
+      });
+    });
 
     // Close lesson modal button
     const closeBtn = document.getElementById('closeLessonBtn');
@@ -105,12 +108,10 @@ class AksharamApp {
 
   updateTopBar() {
     const streakEl = document.getElementById('topStreak');
-    const heartsEl = document.getElementById('topHearts');
     const xpEl = document.getElementById('topXP');
     const gemsEl = document.getElementById('topGems');
 
     if (streakEl) streakEl.textContent = this.streak;
-    if (heartsEl) heartsEl.textContent = this.hearts;
     if (xpEl) xpEl.textContent = this.xp;
     if (gemsEl) gemsEl.textContent = this.gems;
   }
@@ -264,7 +265,7 @@ class AksharamApp {
   }
 
   // -------------------------------------------------------------
-  // 🎯 PRACTICE MODE (Heart Refiller)
+  // 🎯 PRACTICE MODE (Free Revision & Bonus XP)
   // -------------------------------------------------------------
   bindPractice() {
     const startBtn = document.getElementById('startPracticeBtn');
@@ -277,12 +278,12 @@ class AksharamApp {
   }
 
   runPracticeSession() {
-    // Generate 3 dynamic questions from completed or foundation letters
+    // Generate 3 dynamic revision questions
     const practiceLesson = {
       id: 'practice-' + Date.now(),
       title: 'అభ్యాస సాధన',
-      titleEn: 'Practice Session',
-      xp: 10,
+      titleEn: 'Practice & Revision Session',
+      xp: 15,
       exercises: [
         {
           type: 'sound_match',
@@ -310,21 +311,7 @@ class AksharamApp {
       ]
     };
 
-    // Temporarily grant an infinite heart for practice
-    const prevHearts = this.hearts;
-    this.runner.getHearts = () => Math.max(1, this.hearts);
-
     this.runner.start(practiceLesson);
-
-    const origOnComplete = this.runner.onComplete;
-    this.runner.onComplete = () => {
-      // Restore +2 hearts
-      this.hearts = Math.min(5, prevHearts + 2);
-      localStorage.setItem('aksharam_hearts', this.hearts.toString());
-      this.updateTopBar();
-      this.runner.onComplete = origOnComplete;
-      alert(`❤️ అభ్యాసం పూర్తయింది! గుండెలు పెరిగాయి (${this.hearts}/5).`);
-    };
   }
 
   // -------------------------------------------------------------
@@ -531,11 +518,74 @@ class AksharamApp {
           localStorage.removeItem('aksharam_completed_lessons');
           localStorage.removeItem('aksharam_xp');
           localStorage.removeItem('aksharam_streak');
-          localStorage.removeItem('aksharam_hearts');
+          localStorage.removeItem('aksharam_gems');
           location.reload();
         }
       });
     }
+  }
+
+  // -------------------------------------------------------------
+  // 🔤 HERO ROTATING LETTER CYCLE (Home Page)
+  // -------------------------------------------------------------
+  initLetterCycle() {
+    const letterEl = document.getElementById('cycleLetter');
+    const translitEl = document.getElementById('cycleTranslit');
+    if (!letterEl || !translitEl) return;
+
+    const aksharamu = [
+      { te: 'అ', en: 'a' },
+      { te: 'ఆ', en: 'aa' },
+      { te: 'ఇ', en: 'i' },
+      { te: 'ఈ', en: 'ii' },
+      { te: 'ఉ', en: 'u' },
+      { te: 'ఊ', en: 'uu' },
+      { te: 'ఋ', en: 'ru' },
+      { te: 'ఎ', en: 'e' },
+      { te: 'ఏ', en: 'ee' },
+      { te: 'ఐ', en: 'ai' },
+      { te: 'ఒ', en: 'o' },
+      { te: 'ఓ', en: 'oo' },
+      { te: 'ఔ', en: 'au' },
+      { te: 'క', en: 'ka' },
+      { te: 'ఖ', en: 'kha' },
+      { te: 'గ', en: 'ga' },
+      { te: 'ఘ', en: 'gha' },
+      { te: 'చ', en: 'cha' },
+      { te: 'జ', en: 'ja' },
+      { te: 'ట', en: 'Ta' },
+      { te: 'డ', en: 'Da' },
+      { te: 'ణ', en: 'Na' },
+      { te: 'త', en: 'ta' },
+      { te: 'ద', en: 'da' },
+      { te: 'న', en: 'na' },
+      { te: 'ప', en: 'pa' },
+      { te: 'బ', en: 'ba' },
+      { te: 'మ', en: 'ma' },
+      { te: 'య', en: 'ya' },
+      { te: 'ర', en: 'ra' },
+      { te: 'ల', en: 'la' },
+      { te: 'వ', en: 'va' },
+      { te: 'శ', en: 'sha' },
+      { te: 'స', en: 'sa' },
+      { te: 'హ', en: 'ha' },
+      { te: 'ళ', en: 'La' },
+      { te: 'ఱ', en: 'Ra' }
+    ];
+
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % aksharamu.length;
+      letterEl.classList.add('letter-swap');
+      translitEl.classList.add('letter-swap');
+
+      setTimeout(() => {
+        letterEl.textContent = aksharamu[i].te;
+        translitEl.textContent = aksharamu[i].en;
+        letterEl.classList.remove('letter-swap');
+        translitEl.classList.remove('letter-swap');
+      }, 350);
+    }, 1400);
   }
 
   updateProfileTab() {
