@@ -1,0 +1,460 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhay Hindu Sena - Kshatriya Dark Maroon and Gold Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Rajdhani:wght@500;600;700&family=Mandali&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0b0a;
+  --bg-2:#161210;
+  --bg-3:#1e1815;
+  --maroon:#8a1c2b;
+  --maroon-bright:#c22c3f;
+  --gold:#d4a54a;
+  --gold-light:#eecb87;
+  --text-light:#f3ece2;
+  --text-muted:#a89d8f;
+  --border:rgba(212,165,74,0.15);
+  --radius:14px;
+  --font-head:'Cormorant Garamond', serif;
+  --font-accent:'Rajdhani', sans-serif;
+  --font-body:'Poppins', sans-serif;
+  --font-te:'Mandali', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text-light);
+  line-height:1.6;
+}
+[lang-te]{display:none;}
+body.te [lang-en]{display:none;}
+body.te [lang-te]{display:inline;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+.container{max-width:1120px;margin:0 auto;padding:0 24px;}
+section{padding:80px 0;}
+
+/* ===== Header ===== */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(14,11,10,0.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;max-width:1120px;margin:0 auto;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-accent);font-weight:700;font-size:20px;
+  color:var(--gold-light);
+}
+.logo span.om{font-size:26px;color:var(--gold);}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{
+  font-family:var(--font-accent);font-weight:600;font-size:15px;
+  color:var(--text-light);letter-spacing:0.3px;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold-light);}
+.lang-toggle{
+  border:1.5px solid var(--gold);color:var(--gold-light);
+  background:none;padding:6px 14px;border-radius:20px;
+  font-family:var(--font-accent);font-weight:600;font-size:13px;
+  cursor:pointer;transition:.2s;
+}
+.lang-toggle:hover{background:var(--gold);color:var(--bg);}
+.hamburger{display:none;font-size:24px;color:var(--gold-light);background:none;border:none;cursor:pointer;}
+
+/* ===== Hero ===== */
+.hero{
+  background:
+    radial-gradient(circle at 15% 20%, rgba(212,165,74,0.08), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(138,28,43,0.18), transparent 50%),
+    var(--bg);
+  text-align:center;
+  padding:120px 24px 100px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.hero-om{
+  font-size:50px;color:var(--gold);margin-bottom:18px;
+  text-shadow:0 0 24px rgba(212,165,74,0.35);
+}
+.hero h1{
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:clamp(34px,5vw,58px);
+  background:linear-gradient(180deg, var(--gold-light), var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  margin-bottom:16px;
+  line-height:1.15;
+}
+.hero p.tagline{
+  font-family:var(--font-accent);
+  font-size:19px;font-weight:600;
+  color:var(--text-muted);
+  letter-spacing:0.5px;
+  max-width:560px;margin:0 auto 36px;
+}
+.btn-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn{
+  font-family:var(--font-accent);font-weight:600;font-size:15px;
+  padding:13px 32px;border-radius:30px;
+  transition:.25s;cursor:pointer;border:2px solid transparent;
+}
+.btn-primary{background:linear-gradient(135deg,var(--maroon-bright),var(--maroon));color:var(--text-light);}
+.btn-primary:hover{filter:brightness(1.15);transform:translateY(-2px);}
+.btn-outline{border-color:var(--gold);color:var(--gold-light);background:none;}
+.btn-outline:hover{background:var(--gold);color:var(--bg);}
+
+/* ===== Stats bar ===== */
+.stats{
+  background:var(--bg-2);
+  border-bottom:1px solid var(--border);
+  border-top:1px solid var(--border);
+}
+.stats .container{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  text-align:center;padding:44px 24px;gap:20px;
+}
+.stat h3{
+  font-family:var(--font-head);font-size:36px;font-weight:700;
+  color:var(--gold-light);
+}
+.stat p{
+  font-family:var(--font-accent);font-size:13px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);
+  margin-top:4px;
+}
+
+/* ===== Section heading ===== */
+.section-head{text-align:center;margin-bottom:52px;}
+.section-head .eyebrow{
+  font-family:var(--font-accent);font-weight:700;font-size:13px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:8px;
+}
+.section-head h2{
+  font-family:var(--font-head);font-weight:700;font-size:38px;
+  color:var(--text-light);
+}
+.divider{
+  width:60px;height:3px;background:var(--gold);margin:16px auto 0;border-radius:2px;
+}
+
+/* ===== Founder ===== */
+.founder{background:var(--bg);}
+.founder-grid{
+  display:grid;grid-template-columns:0.85fr 1.15fr;gap:56px;align-items:center;
+}
+.founder-photo{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 20px 50px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,165,74,0.1);
+}
+.founder-photo img{aspect-ratio:4/5;object-fit:cover;}
+.founder-text h3{
+  font-family:var(--font-head);font-weight:700;font-size:30px;
+  color:var(--gold-light);margin-bottom:6px;
+}
+.founder-text .role{
+  font-family:var(--font-accent);font-weight:600;color:var(--gold);
+  letter-spacing:0.5px;margin-bottom:18px;display:block;
+}
+.founder-text p{color:var(--text-muted);margin-bottom:14px;font-size:15.5px;}
+
+/* ===== Activities ===== */
+.activities{background:var(--bg-2);}
+.activity-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+}
+.activity-card{
+  background:var(--bg-3);border-radius:var(--radius);
+  padding:32px 22px;text-align:center;
+  border:1px solid var(--border);
+  transition:.25s;
+}
+.activity-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 16px 30px -18px rgba(0,0,0,0.6);
+  border-color:var(--gold);
+}
+.activity-icon{
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(145deg,var(--maroon-bright),var(--maroon));
+  color:var(--gold-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 18px;
+}
+.activity-card h4{
+  font-family:var(--font-accent);font-weight:700;font-size:17px;
+  color:var(--gold-light);margin-bottom:8px;
+}
+.activity-card p{font-size:13.5px;color:var(--text-muted);}
+
+/* ===== Gallery ===== */
+.gallery{background:var(--bg);}
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+.gallery-item{
+  aspect-ratio:1/1;border-radius:var(--radius);overflow:hidden;
+  position:relative;cursor:pointer;border:1px solid var(--border);
+}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:.4s;}
+.gallery-item:hover img{transform:scale(1.08);}
+.gallery-item::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.6), transparent 50%);
+  opacity:0;transition:.3s;
+}
+.gallery-item:hover::after{opacity:1;}
+
+/* ===== Contact ===== */
+.contact{background:var(--bg-2);border-top:1px solid var(--border);}
+.contact .section-head h2{color:var(--gold-light);}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+}
+.contact-info p{margin-bottom:16px;font-size:15px;display:flex;gap:10px;align-items:flex-start;color:var(--text-muted);}
+.contact-info b{color:var(--gold-light);display:block;font-family:var(--font-accent);}
+form{display:flex;flex-direction:column;gap:14px;}
+input,textarea{
+  background:var(--bg-3);
+  border:1px solid var(--border);
+  border-radius:8px;padding:13px 16px;
+  color:var(--text-light);font-family:var(--font-body);font-size:14px;
+}
+input:focus,textarea:focus{outline:none;border-color:var(--gold);}
+input::placeholder,textarea::placeholder{color:var(--text-muted);}
+textarea{resize:vertical;min-height:100px;}
+form .btn-primary{align-self:flex-start;}
+
+/* ===== Footer ===== */
+footer{
+  background:var(--bg);border-top:1px solid var(--border);
+  color:var(--text-muted);
+  text-align:center;padding:30px 24px;font-size:13px;
+}
+footer .social{display:flex;gap:20px;justify-content:center;margin-bottom:14px;}
+footer .social a{font-size:18px;color:var(--gold-light);}
+
+/* ===== Responsive ===== */
+@media(max-width:860px){
+  .nav-links{display:none;}
+  .hamburger{display:block;}
+  .stats .container{grid-template-columns:repeat(2,1fr);}
+  .founder-grid,.contact-grid{grid-template-columns:1fr;}
+  .activity-grid{grid-template-columns:repeat(2,1fr);}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+<!-- Top Global Edition Switcher -->
+<div class="site-switcher-bar" style="background:#110505; color:#f7d59b; padding:8px 5%; font-size:0.84rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); font-family:system-ui,sans-serif; position:relative; z-index:999;">
+  <div>
+    <a href="../" style="color:#f7d59b; text-decoration:none; font-weight:600;">&larr; AHS Hub</a> &nbsp;|&nbsp;
+    <a href="../../" style="color:#f7d59b; text-decoration:none;">Sannivesham Main</a>
+  </div>
+  <div style="position:relative; display:inline-block;">
+    <span style="background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); padding:4px 12px; border-radius:14px; color:#fce4b8; font-size:0.8rem;">
+      Edition: <strong>Kshatriya Dark Maroon</strong>
+    </span>
+    <span style="margin-left:8px; font-size:0.8rem;">
+      [ <a href="../portal/" style="color:#eed5b5; text-decoration:none;">Classic</a> | 
+        <a href="../cinematic/" style="color:#eed5b5; text-decoration:none;">Cinematic</a> | 
+        <a href="../vedic-ivory/" style="color:#eed5b5; text-decoration:none;">Ivory</a> | 
+        <a href="../kshatriya-dark/" style="color:#eed5b5; text-decoration:none;">Kshatriya Dark</a> | 
+        <a href="../midnight-blue/" style="color:#eed5b5; text-decoration:none;">Midnight Blue</a> | 
+        <a href="../monochrome/" style="color:#eed5b5; text-decoration:none;">Monochrome</a> ]
+    </span>
+  </div>
+</div>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><span class="om">🕉</span> Abhay Hindu Sena</div>
+    <ul class="nav-links">
+      <li><a href="#about" lang-en>About</a><a href="#about" lang-te>మా గురించి</a></li>
+      <li><a href="#activities" lang-en>Activities</a><a href="#activities" lang-te>కార్యక్రమాలు</a></li>
+      <li><a href="#gallery" lang-en>Gallery</a><a href="#gallery" lang-te>గ్యాలరీ</a></li>
+      <li><a href="#contact" lang-en>Contact</a><a href="#contact" lang-te>సంప్రదించండి</a></li>
+      <li><button class="lang-toggle" onclick="toggleLang()">తెలుగు</button></li>
+    </ul>
+    <button class="hamburger">&#9776;</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-om">🕉</div>
+  <h1>
+    <span lang-en>Abhay Hindu Sena</span>
+    <span lang-te>అభయ్ హిందూ సేన</span>
+  </h1>
+  <p class="tagline">
+    <span lang-en>Working for Dharma, Society, and Sanatana Values</span>
+    <span lang-te>ధర్మం, సమాజం, సనాతన విలువల కోసం కృషి</span>
+  </p>
+  <div class="btn-row">
+    <a href="#about" class="btn btn-primary" lang-en>Learn More</a>
+    <a href="#about" class="btn btn-primary" lang-te>మరింత తెలుసుకోండి</a>
+    <a href="#contact" class="btn btn-outline" lang-en>Join Us</a>
+    <a href="#contact" class="btn btn-outline" lang-te>చేరండి</a>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <div class="stat"><h3>125K+</h3><p lang-en>Community Reach</p><p lang-te>సమాజ చేరిక</p></div>
+    <div class="stat"><h3>50+</h3><p lang-en>Events Organized</p><p lang-te>నిర్వహించిన కార్యక్రమాలు</p></div>
+    <div class="stat"><h3>1000+</h3><p lang-en>Active Volunteers</p><p lang-te>సేవాకార్యకర్తలు</p></div>
+    <div class="stat"><h3>10+</h3><p lang-en>Districts Covered</p><p lang-te>జిల్లాలు</p></div>
+  </div>
+</section>
+
+<section class="founder" id="about">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" lang-en>Leadership</div>
+      <div class="eyebrow" lang-te>నాయకత్వం</div>
+      <h2 lang-en>About the Founder</h2>
+      <h2 lang-te>వ్యవస్థాపకుడి గురించి</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="founder-grid">
+      <div class="founder-photo">
+        <img src="../assets/founder.jpg" alt="Radha Manohar Das">
+      </div>
+      <div class="founder-text">
+        <h3>Radha Manohar Das Snathani</h3>
+        <span class="role" lang-en>Founder, Abhay Hindu Sena</span>
+        <span class="role" lang-te>వ్యవస్థాపకుడు, అభయ్ హిందూ సేన</span>
+        <p lang-en>Founder of Abhay Hindu Sena, dedicated to guiding, protecting, and uniting Hindu society through structured social and religious initiatives.</p>
+        <p lang-te>హిందూ సమాజాన్ని మార్గనిర్దేశం చేయడం, రక్షించడం మరియు ఏకం చేయడం కోసం అభయ్ హిందూ సేన వ్యవస్థాపకుడు.</p>
+        <p lang-en>The organization works across community outreach, cultural preservation, and public awareness — building an active network of volunteers committed to service and Dharma.</p>
+        <p lang-te>సంస్థ సమాజ సేవ, సాంస్కృతిక పరిరక్షణ మరియు ప్రజా చైతన్యం కోసం పనిచేస్తుంది.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="activities" id="activities">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" lang-en>What We Do</div>
+      <div class="eyebrow" lang-te>మేము చేసేది</div>
+      <h2 lang-en>Our Activities</h2>
+      <h2 lang-te>మా కార్యక్రమాలు</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="activity-grid">
+      <div class="activity-card">
+        <div class="activity-icon">🛕</div>
+        <h4 lang-en>Religious Affairs</h4>
+        <h4 lang-te>ధార్మిక వ్యవహారాలు</h4>
+        <p lang-en>Temple protection, awareness drives, and support for Sanatana traditions.</p>
+        <p lang-te>ఆలయ రక్షణ, చైతన్య కార్యక్రమాలు మరియు సనాతన సంప్రదాయాలకు మద్దతు.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🤝</div>
+        <h4 lang-en>Social Welfare</h4>
+        <h4 lang-te>సామాజిక సంక్షేమం</h4>
+        <p lang-en>Community service programs, relief work, and support for those in need.</p>
+        <p lang-te>సమాజ సేవా కార్యక్రమాలు మరియు అవసరమైన వారికి సహాయం.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">📚</div>
+        <h4 lang-en>Education & Youth</h4>
+        <h4 lang-te>విద్య & యువత</h4>
+        <p lang-en>Cultural education initiatives and youth engagement programs.</p>
+        <p lang-te>సాంస్కృతిక విద్యా కార్యక్రమాలు మరియు యువజన భాగస్వామ్యం.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">📢</div>
+        <h4 lang-en>Media & Awareness</h4>
+        <h4 lang-te>మీడియా & చైతన్యం</h4>
+        <p lang-en>Digital outreach through YouTube, satsangs, and public discourse.</p>
+        <p lang-te>యూట్యూబ్, సత్సంగాలు ద్వారా డిజిటల్ ప్రచారం.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" lang-en>Moments</div>
+      <div class="eyebrow" lang-te>క్షణాలు</div>
+      <h2 lang-en>Gallery</h2>
+      <h2 lang-te>గ్యాలరీ</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" title="Tirupati Annual Convention"><img src="../assets/founder.jpg" alt="Tirupati Annual Convention"></div>
+      <div class="gallery-item" title="Yuva Chaitanya Rally"><img src="../assets/hero-desktop.png" alt="Yuva Chaitanya Rally"></div>
+      <div class="gallery-item" title="Gau Samrakshana Camp"><img src="../assets/hero-mobile.png" alt="Gau Samrakshana Camp"></div>
+      <div class="gallery-item" title="Spiritual Discourse by Shri Radha Manohar Das"><img src="../assets/founder.jpg" alt="Spiritual Discourse"></div>
+      <div class="gallery-item" title="Youth Strength and Discipline"><img src="../assets/hero-desktop.png" alt="Youth Strength"></div>
+      <div class="gallery-item" title="Vedic Heritage Defense"><img src="../assets/hero-mobile.png" alt="Vedic Heritage Defense"></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" lang-en>Get In Touch</div>
+      <div class="eyebrow" lang-te>సంప్రదించండి</div>
+      <h2 lang-en>Join the Mission</h2>
+      <h2 lang-te>మా లక్ష్యంలో చేరండి</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p><b lang-en>Address</b><b lang-te>చిరునామా</b>Eeva, 1st Floor, HIG 139, Bharath Nagar, Hyderabad 500018, Telangana, India</p>
+        <p><b lang-en>Email</b><b lang-te>ఇమెయిల్</b>contact@abhayhindusena.org</p>
+        <p><b lang-en>YouTube</b><b lang-te>యూట్యూబ్</b>Radha Manohar Das Official</p>
+        <p><b lang-en>Instagram</b><b lang-te>ఇన్‌స్టాగ్రామ్</b>@radhamanohardas</p>
+      </div>
+      <form onsubmit="event.preventDefault(); const n = this.querySelector('input[type=text]').value; alert('ðŸš© à°§à°¨à±à°¯à°µà°¾à°¦à°¾à°²à± (Thank you), ' + n + '! Your message to Abhay Hindu Sena has been received.'); this.reset();">
+        <input type="text" placeholder="Your name" required>
+        <input type="email" placeholder="Your email" required>
+        <input type="tel" placeholder="Phone number">
+        <textarea placeholder="Your message" required></textarea>
+        <button type="submit" class="btn btn-primary" lang-en>Send Message</button>
+        <button type="submit" class="btn btn-primary" lang-te>సందేశం పంపండి</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="social">
+    <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://www.instagram.com/radhamanohardas/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://sannivesham.com/" target="_blank" rel="noopener">Sannivesham</a>
+  </div>
+  <p>&copy; 2026 Abhay Hindu Sena. All Rights Reserved.</p>
+</footer>
+
+<script>
+function toggleLang(){
+  document.body.classList.toggle('te');
+  const btn = document.querySelector('.lang-toggle');
+  btn.textContent = document.body.classList.contains('te') ? 'English' : 'తెలుగు';
+}
+</script>
+
+</body>
+</html>

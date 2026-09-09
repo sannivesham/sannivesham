@@ -298,6 +298,7 @@ export class LessonRunner {
           this.pairsMatched++;
 
           if (this.pairsMatched === this.totalPairs) {
+            this.score++;
             setTimeout(() => {
               this.showSuccessSheet('అన్ని జతలు సరిగ్గా కలిసాయి! (All pairs matched!)');
             }, 300);
@@ -423,8 +424,8 @@ export class LessonRunner {
       localStorage.setItem('aksharam_completed_lessons', JSON.stringify(completed));
     }
 
-    const total = this.lesson.exercises.length;
-    const accuracy = Math.round((this.score / Math.max(1, total - 1)) * 100);
+    const totalScored = this.lesson.exercises.filter(ex => ex.type !== 'intro').length || 1;
+    const accuracy = Math.min(100, Math.round((this.score / totalScored) * 100));
 
     const stage = this.container.querySelector('.lesson-stage');
     stage.innerHTML = `

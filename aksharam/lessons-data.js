@@ -232,9 +232,9 @@ export const UNITS = [
             promptText: "Match the vowel pairs:",
             pairs: [
               { te: "ఋ", en: "ru (rishi)" },
+              { te: "ౠ", en: "ruu (long ru)" },
               { te: "అం", en: "am (sunna)" },
-              { te: "అః", en: "aha (visarga)" },
-              { te: "ఏ", en: "ee (say)" }
+              { te: "అః", en: "aha (visarga)" }
             ]
           }
         ]
@@ -510,41 +510,33 @@ export const UNITS = [
       },
       {
         id: "u2-l4",
-        title: "అంతస్థాలు & ఊష్మాలు",
-        titleEn: "Liquids, Semivowels & Sibilants",
-        desc: "య, ర, ల, వ, శ, ష, స, హ, ళ",
+        title: "ఊష్మాలు & ప్రత్యేక హల్లులు",
+        titleEn: "Sibilants & Special Consonants",
+        desc: "Master the remaining consonants: శ, ష, స, హ, ళ, క్ష, ఱ — All 36 Consonants!",
         icon: "🌊",
         xp: 20,
         exercises: [
           {
             type: "intro",
-            te: "ర",
-            translit: "ra",
-            soundNote: "Tapped 'r' as in 'sunray'",
-            exampleTe: "రవి",
-            exampleEn: "Ravi (Sun)"
+            te: "శ",
+            translit: "sha",
+            soundNote: "Soft palatal 'sh' as in 'ship' or 'shiva'",
+            exampleTe: "శంఖం",
+            exampleEn: "Shankham (Conch Shell)"
           },
           {
             type: "intro",
-            te: "ల",
-            translit: "la",
-            soundNote: "'l' as in 'lotus'",
-            exampleTe: "లత",
-            exampleEn: "Lata (Creeper / Vine)"
-          },
-          {
-            type: "intro",
-            te: "వ",
-            translit: "va",
-            soundNote: "Soft 'v' / 'w' sound",
-            exampleTe: "వనము",
-            exampleEn: "Vanamu (Forest)"
+            te: "ష",
+            translit: "Sha",
+            soundNote: "Retroflex 'Sh' with tongue curled back",
+            exampleTe: "షణ్ముఖుడు",
+            exampleEn: "Shanmukhudu (Lord Kartikeya)"
           },
           {
             type: "intro",
             te: "స",
             translit: "sa",
-            soundNote: "Clean 's' sound as in 'sun'",
+            soundNote: "Clean dental 's' as in 'sun'",
             exampleTe: "సూర్యుడు",
             exampleEn: "Sooryudu (Sun God)"
           },
@@ -552,30 +544,38 @@ export const UNITS = [
             type: "intro",
             te: "హ",
             translit: "ha",
-            soundNote: "'h' sound as in 'heart'",
+            soundNote: "'h' sound as in 'heart' or 'hamsa'",
             exampleTe: "హంస",
-            exampleEn: "Hamsa (Swan)"
+            exampleEn: "Hamsa (Sacred Swan)"
+          },
+          {
+            type: "intro",
+            te: "ళ & ఱ",
+            translit: "La & Ra",
+            soundNote: "Retroflex 'La' (తాళం) and sharp 'Ra' (Bandira - బండిర)",
+            exampleTe: "తాళం",
+            exampleEn: "Taalam (Lock / Rhythm)"
           },
           {
             type: "choice",
             question: "Which letter represents the sacred swan 'Hamsa'?",
             options: ["హ", "స", "ల", "ర"],
             answer: "హ",
-            tip: "The swan (హంస) is the symbol of Sannivesham!"
+            tip: "The swan (హంస) is the emblem of Sannivesham!"
           },
           {
             type: "sound_match",
             promptText: "Listen and identify the consonant:",
-            audioTe: "స",
+            audioTe: "శ",
             options: ["ష", "శ", "స", "హ"],
-            answer: "స"
+            answer: "శ"
           },
           {
             type: "pair_match",
-            promptText: "Tap matching pairs:",
+            promptText: "Tap matching consonant pairs:",
             pairs: [
-              { te: "ర", en: "ra (sun)" },
-              { te: "వ", en: "va (forest)" },
+              { te: "శ", en: "sha (conch)" },
+              { te: "ష", en: "Sha (kartikeya)" },
               { te: "స", en: "sa (sun god)" },
               { te: "హ", en: "ha (swan)" }
             ]
@@ -755,6 +755,71 @@ export const UNITS = [
             ]
           }
         ]
+      },
+      {
+        id: "u3-l4",
+        title: "ఎత్వం, ఐత్వం, ఒత్వం & ఔత్వం",
+        titleEn: "Advanced Vowel Signs (e, ai, o, au)",
+        desc: "Combine consonants with e, ee, ai, o, oo, and au diacritics: కె, కే, కై, కొ, కో, కౌ",
+        icon: "🎨",
+        xp: 20,
+        exercises: [
+          {
+            type: "intro",
+            te: "కె (Ke) & కే (Kee)",
+            translit: "ke / kee",
+            soundNote: "Etvam (ె) and Etvam Deergham (ే) marks",
+            exampleTe: "కెరటం",
+            exampleEn: "Keratam (Wave)"
+          },
+          {
+            type: "intro",
+            te: "కై (Kai)",
+            translit: "kai",
+            soundNote: "Aitvam (ై) diphthong mark",
+            exampleTe: "కైలాసం",
+            exampleEn: "Kailasam (Abode of Shiva)"
+          },
+          {
+            type: "intro",
+            te: "కొ (Ko) & కో (Koo)",
+            translit: "ko / koo",
+            soundNote: "Otvam (ొ) and Otvam Deergham (ో) marks",
+            exampleTe: "కోకిల",
+            exampleEn: "Kokila (Cuckoo bird)"
+          },
+          {
+            type: "intro",
+            te: "కౌ (Kau)",
+            translit: "kau",
+            soundNote: "Autvam (ౌ) diphthong mark",
+            exampleTe: "కౌగిలి",
+            exampleEn: "Kaugili (Embrace)"
+          },
+          {
+            type: "choice",
+            question: "Which syllable represents 'Kee' with Etvam Deergham?",
+            options: ["కే", "కె", "కై", "కో"],
+            answer: "కే"
+          },
+          {
+            type: "sound_match",
+            promptText: "Listen and identify the syllable:",
+            audioTe: "కో",
+            options: ["కొ", "కో", "కౌ", "కే"],
+            answer: "కో"
+          },
+          {
+            type: "pair_match",
+            promptText: "Tap matching syllable pairs:",
+            pairs: [
+              { te: "కె", en: "ke (wave)" },
+              { te: "కై", en: "kai (kailash)" },
+              { te: "కో", en: "koo (cuckoo)" },
+              { te: "కౌ", en: "kau (embrace)" }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -909,6 +974,120 @@ export const UNITS = [
               { te: "ఏడు (౭)", en: "7 (Seven)" },
               { te: "ఎనిమిది (౮)", en: "8 (Eight)" },
               { te: "పది (౧౦)", en: "10 (Ten)" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "u4-l3",
+        title: "దశకాలు & శతకం",
+        titleEn: "Tens & Hundreds (20, 50, 100)",
+        desc: "Master higher Telugu numbers: ఇరవై (20), యాభై (50), వంద (100)",
+        icon: "💯",
+        xp: 20,
+        exercises: [
+          {
+            type: "intro",
+            te: "ఇరవై (౨౦)",
+            translit: "iravai",
+            soundNote: "Twenty (20)",
+            exampleTe: "ఇరవై",
+            exampleEn: "Twenty (20)"
+          },
+          {
+            type: "intro",
+            te: "యాభై (౫౦)",
+            translit: "yaabhai",
+            soundNote: "Fifty (50)",
+            exampleTe: "యాభై",
+            exampleEn: "Fifty (50)"
+          },
+          {
+            type: "intro",
+            te: "వంద (౧౦౦)",
+            translit: "vanda",
+            soundNote: "One Hundred (100 / Nooru)",
+            exampleTe: "వంద",
+            exampleEn: "Hundred (100)"
+          },
+          {
+            type: "choice",
+            question: "How do you say 'One Hundred' (100) in Telugu?",
+            options: ["వంద", "యాభై", "ఇరవై", "పది"],
+            answer: "వంద"
+          },
+          {
+            type: "sound_match",
+            promptText: "Listen and select the spoken number:",
+            audioTe: "ఇరవై",
+            options: ["పది", "ఇరవై", "యాభై", "వంద"],
+            answer: "ఇరవై"
+          },
+          {
+            type: "pair_match",
+            promptText: "Match numbers with values:",
+            pairs: [
+              { te: "పది (౧౦)", en: "10 (Ten)" },
+              { te: "ఇరవై (౨౦)", en: "20 (Twenty)" },
+              { te: "యాభై (౫౦)", en: "50 (Fifty)" },
+              { te: "వంద (౧౦౦)", en: "100 (Hundred)" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "u4-l4",
+        title: "వారాలు & సమయం",
+        titleEn: "Days of the Week & Time",
+        desc: "Express days, hours, and time in Telugu: ఆదివారం, సోమవారం, సమయం",
+        icon: "⏰",
+        xp: 20,
+        exercises: [
+          {
+            type: "intro",
+            te: "ఆదివారం",
+            translit: "aadivaaram",
+            soundNote: "Sunday (Day of the Sun)",
+            exampleTe: "ఆదివారం సెలవు",
+            exampleEn: "Sunday is a holiday"
+          },
+          {
+            type: "intro",
+            te: "సోమవారం",
+            translit: "somavaaram",
+            soundNote: "Monday (Day of the Moon)",
+            exampleTe: "సోమవారం",
+            exampleEn: "Monday"
+          },
+          {
+            type: "intro",
+            te: "సమయం / గంటలు",
+            translit: "samayam / gantalu",
+            soundNote: "Time and Hours/Clock",
+            exampleTe: "సమయం ఎంత?",
+            exampleEn: "What time is it?"
+          },
+          {
+            type: "choice",
+            question: "What is 'Sunday' in Telugu?",
+            options: ["ఆదివారం", "సోమవారం", "బుధవారం", "శనివారం"],
+            answer: "ఆదివారం"
+          },
+          {
+            type: "sound_match",
+            promptText: "Listen and identify the day:",
+            audioTe: "సోమవారం",
+            options: ["ఆదివారం", "సోమవారం", "సమయం", "గంటలు"],
+            answer: "సోమవారం"
+          },
+          {
+            type: "pair_match",
+            promptText: "Tap matching time pairs:",
+            pairs: [
+              { te: "ఆదివారం", en: "Sunday" },
+              { te: "సోమవారం", en: "Monday" },
+              { te: "సమయం", en: "Time" },
+              { te: "గంట", en: "Hour / Bell" }
             ]
           }
         ]
@@ -1118,6 +1297,63 @@ export const UNITS = [
             ]
           }
         ]
+      },
+      {
+        id: "u5-l4",
+        title: "ఆహారం & రుచులు",
+        titleEn: "Food, Fruits & Dining",
+        desc: "Essential Telugu culinary vocabulary: భోజనం, పాలు, పండు, తీపి, కారం",
+        icon: "🍎",
+        xp: 25,
+        exercises: [
+          {
+            type: "intro",
+            te: "భోజనం",
+            translit: "bhojanam",
+            soundNote: "Meal / Lunch / Dinner",
+            exampleTe: "భోజనం చేసారా?",
+            exampleEn: "Did you have your meal?"
+          },
+          {
+            type: "intro",
+            te: "పాలు",
+            translit: "paalu",
+            soundNote: "Milk",
+            exampleTe: "వేడి పాలు",
+            exampleEn: "Hot milk"
+          },
+          {
+            type: "intro",
+            te: "తీపి & కారం",
+            translit: "teepi & kaaram",
+            soundNote: "Sweet and Spicy flavors",
+            exampleTe: "తీపి లడ్డు",
+            exampleEn: "Sweet laddu"
+          },
+          {
+            type: "choice",
+            question: "How do you say 'Milk' in Telugu?",
+            options: ["పాలు", "నీళ్ళు", "తేనె", "నెయ్యి"],
+            answer: "పాలు"
+          },
+          {
+            type: "sound_match",
+            promptText: "Listen and identify the dining word:",
+            audioTe: "భోజనం",
+            options: ["భోజనం", "అన్నం", "నీళ్ళు", "పాలు"],
+            answer: "భోజనం"
+          },
+          {
+            type: "pair_match",
+            promptText: "Match food vocabulary:",
+            pairs: [
+              { te: "భోజనం", en: "Meal / Feast" },
+              { te: "పాలు", en: "Milk" },
+              { te: "తీపి", en: "Sweet" },
+              { te: "కారం", en: "Spicy" }
+            ]
+          }
+        ]
       }
     ]
   }
@@ -1149,12 +1385,19 @@ export const DICTIONARY_WORDS = [
   { te: "బంతి", translit: "banti", en: "Ball", category: "Consonants", example: "ఆట బంతి (Play ball)" },
   { te: "మల్లె", translit: "malle", en: "Jasmine flower", category: "Consonants", example: "మల్లె పూలు (Jasmine flowers)" },
   { te: "హంస", translit: "hamsa", en: "Swan (Sacred bird)", category: "Consonants", example: "శ్వేత హంస (White swan)" },
+  { te: "శంఖం", translit: "shankham", en: "Conch shell", category: "Consonants", example: "పూజా శంఖం (Sacred conch)" },
+  { te: "తాళం", translit: "taalam", en: "Lock / Key / Musical rhythm", category: "Consonants", example: "ఇంటి తాళం (House lock)" },
+  { te: "రవి", translit: "ravi", en: "Sun", category: "Consonants", example: "రవి కిరణాలు (Sun rays)" },
+  { te: "వనము", translit: "vanamu", en: "Garden / Forest", category: "Consonants", example: "పూల వనము (Flower garden)" },
   { te: "ఒకటి", translit: "okati", en: "One (1 / ౧)", category: "Numbers", example: "ఒకటి" },
   { te: "రెండు", translit: "rendu", en: "Two (2 / ౨)", category: "Numbers", example: "రెండు కళ్ళు (Two eyes)" },
   { te: "మూడు", translit: "moodu", en: "Three (3 / ౩)", category: "Numbers", example: "మూడు లోకాలు (Three worlds)" },
   { te: "నాలుగు", translit: "naalugu", en: "Four (4 / ౪)", category: "Numbers", example: "నాలుగు వేదాలు (Four Vedas)" },
   { te: "ఐదు", translit: "aidu", en: "Five (5 / ౫)", category: "Numbers", example: "ఐదు వేళ్ళు (Five fingers)" },
   { te: "పది", translit: "padi", en: "Ten (10 / ౧౦)", category: "Numbers", example: "పది రూపాయిలు (Ten rupees)" },
+  { te: "ఇరవై", translit: "iravai", en: "Twenty (20 / ౨౦)", category: "Numbers", example: "ఇరవై రూపాయలు" },
+  { te: "యాభై", translit: "yaabhai", en: "Fifty (50 / ౫౦)", category: "Numbers", example: "యాభై శాతం" },
+  { te: "వంద", translit: "vanda", en: "Hundred (100 / ౧౦౦)", category: "Numbers", example: "వంద మార్కులు (Hundred marks)" },
   { te: "నమస్కారం", translit: "namaskaram", en: "Hello / Respectful greetings", category: "Phrases", example: "అందరికీ నమస్కారం" },
   { te: "ధన్యవాదాలు", translit: "dhanyavaadaalu", en: "Thank you", category: "Phrases", example: "చాలా ధన్యవాదాలు" },
   { te: "ఎలా ఉన్నారు?", translit: "elaa unnaru?", en: "How are you?", category: "Phrases", example: "మీరు ఎలా ఉన్నారు?" },
@@ -1166,5 +1409,11 @@ export const DICTIONARY_WORDS = [
   { te: "నీళ్ళు", translit: "neellu", en: "Water", category: "Daily", example: "మంచి నీళ్ళు ఇవ్వండి" },
   { te: "అన్నం", translit: "annam", en: "Cooked rice / Meal", category: "Daily", example: "భోజనం / అన్నం" },
   { te: "పుస్తకం", translit: "pusthakam", en: "Book", category: "Daily", example: "తెలుగు పుస్తకం" },
-  { te: "ప్రశాంతత", translit: "prashantata", en: "Peace / Calmness", category: "Daily", example: "ప్రశాంతమైన మనస్సు" }
+  { te: "ప్రశాంతత", translit: "prashantata", en: "Peace / Calmness", category: "Daily", example: "ప్రశాంతమైన మనస్సు" },
+  { te: "భోజనం", translit: "bhojanam", en: "Meal / Feast", category: "Daily", example: "భోజనం చేసారా?" },
+  { te: "పాలు", translit: "paalu", en: "Milk", category: "Daily", example: "వేడి పాలు (Hot milk)" },
+  { te: "తీపి", translit: "teepi", en: "Sweet taste", category: "Daily", example: "తీపి లడ్డు" },
+  { te: "కారం", translit: "kaaram", en: "Spicy taste", category: "Daily", example: "కారం పొడి" },
+  { te: "ఆదివారం", translit: "aadivaaram", en: "Sunday", category: "Daily", example: "ఆదివారం సెలవు" },
+  { te: "సోమవారం", translit: "somavaaram", en: "Monday", category: "Daily", example: "సోమవారం ప్రారంభం" }
 ];

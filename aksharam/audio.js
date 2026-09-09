@@ -212,16 +212,26 @@ export function speakTelugu(text, onStart, onEnd) {
     currentAudio = audio;
 
     let started = false;
+    let watchdogTimer = setTimeout(() => {
+      if (!started) {
+        try { audio.pause(); } catch (e) {}
+        fallbackSpeechSynthesis(clean, onStart, onEnd);
+      }
+    }, 1200);
+
     audio.onplay = () => {
       started = true;
+      clearTimeout(watchdogTimer);
       if (onStart) onStart();
     };
 
     audio.onended = () => {
+      clearTimeout(watchdogTimer);
       if (onEnd) onEnd();
     };
 
     audio.onerror = () => {
+      clearTimeout(watchdogTimer);
       // If network fails or blocked, fallback to browser SpeechSynthesis
       fallbackSpeechSynthesis(clean, onStart, onEnd);
     };
@@ -229,6 +239,7 @@ export function speakTelugu(text, onStart, onEnd) {
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
+        clearTimeout(watchdogTimer);
         // Autoplay policy or error: fallback immediately
         fallbackSpeechSynthesis(clean, onStart, onEnd);
       });

@@ -1,0 +1,616 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhay Hindu Sena - Cinematic Visual Showcase</title>
+<style>
+  :root {
+    --saffron: #FF6B1A;
+    --saffron-deep: #E8540A;
+    --maroon: #7A0C0C;
+    --maroon-deep: #4A0505;
+    --gold: #D4AF37;
+    --cream: #FFF8EF;
+    --dark: #1A1A1A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', 'Segoe UI', serif;
+    color: var(--dark);
+    line-height: 1.6;
+
+    /* Desktop background photo */
+    background-image: url('../assets/hero-desktop.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: var(--cream); /* fallback while image loads */
+  }
+  @media (max-width: 768px) {
+    body {
+      /* Mobile background photo */
+      background-image: url('../assets/hero-mobile.png');
+      background-attachment: scroll; /* fixed backgrounds are unreliable on mobile browsers */
+    }
+  }
+
+  /* NAVBAR */
+  header {
+    background: linear-gradient(90deg, var(--maroon-deep), var(--maroon));
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.4);
+    border-bottom: 2px solid var(--gold);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gold);
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .logo span.om { font-size: 1.8rem; }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 26px;
+  }
+  nav a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  nav a:hover { color: var(--gold); }
+
+  .lang-switch {
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .lang-switch button {
+    background: transparent;
+    border: none;
+    color: var(--cream);
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.25s;
+  }
+  .lang-switch button.active {
+    background: var(--gold);
+    color: var(--maroon-deep);
+  }
+
+  .menu-toggle {
+    display: none;
+    color: var(--gold);
+    font-size: 1.6rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  /* HERO */
+  .hero {
+    background: transparent;
+    color: white;
+    text-align: center;
+    padding: 110px 5% 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* No dark overlay behind the hero anymore — the photo shows through
+     clean. The glass box itself now carries enough contrast on its own. */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 36px 34px;
+    background: rgba(255,255,255,0.09);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 22px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.28);
+  }
+  .hero h1 {
+    font-size: 2.9rem;
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+    letter-spacing: 1px;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    max-width: 620px;
+    margin: 0 auto 32px;
+    opacity: 0.95;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  }
+  .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 13px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--maroon-deep);
+  }
+  .btn-outline {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 2px solid var(--gold);
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+  /* SECTION GENERIC */
+  section {
+    padding: 75px 8%;
+    position: relative;
+  }
+  /* Still used for Contact — translucent wash + blur so the photo shows
+     through softly while text stays easily readable */
+  .section-alt {
+    background:
+      radial-gradient(circle at 90% 10%, rgba(255,107,26,0.08), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(122,12,12,0.06), transparent 50%),
+      linear-gradient(180deg, rgba(255,248,239,0.88), rgba(255,255,255,0.93));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .section-title {
+    text-align: center;
+    font-size: 2.1rem;
+    color: var(--maroon);
+    margin-bottom: 12px;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: #777;
+    max-width: 560px;
+    margin: 0 auto 45px;
+    font-size: 1rem;
+  }
+  .divider {
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--saffron), var(--gold));
+    margin: 0 auto 45px;
+    border-radius: 2px;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: flex;
+    gap: 55px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .about-img {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+  }
+  .photo-frame {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 6px solid var(--gold);
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(122,12,12,0.35), 0 0 0 8px rgba(212,175,55,0.15);
+  }
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .about-text { flex: 1.4; min-width: 280px; }
+  .about-text h3 {
+    color: var(--saffron-deep);
+    margin-bottom: 10px;
+    font-size: 1.35rem;
+  }
+  .about-text p { margin-bottom: 16px; color: #444; }
+
+  /* ACTIVITIES — one big glass panel wrapping the section, with each
+     card as its own smaller glass box nested inside it */
+  #activities { background: transparent; }
+  .activities-glass {
+    max-width: 1120px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 28px;
+    padding: 55px 45px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+  }
+  .activities-glass .section-title {
+    color: white;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.5);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 26px;
+  }
+  .card {
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 16px;
+    padding: 34px 24px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    border-top: 4px solid var(--saffron);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.28);
+    background: rgba(255,255,255,0.22);
+  }
+  .card .icon { font-size: 2.4rem; margin-bottom: 14px; }
+  .card h4 {
+    color: var(--gold);
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  }
+  .card p {
+    color: rgba(255,255,255,0.92);
+    font-size: 0.92rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+  }
+
+  /* STATS — no dark overlay behind them anymore; each stat is its own
+     glass card sitting straight on the photo */
+  .stats {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 22px;
+    padding: 65px 8%;
+  }
+  .stat {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212,175,55,0.45);
+    border-radius: 16px;
+    padding: 30px 18px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.3);
+    transition: transform 0.3s, background 0.3s;
+  }
+  .stat:hover {
+    transform: translateY(-6px);
+    background: rgba(255,255,255,0.2);
+  }
+  .stat h2 {
+    font-size: 2.5rem;
+    color: var(--gold);
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  }
+  .stat p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+  }
+
+  /* GALLERY */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .gallery-item {
+    height: 190px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--saffron), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.85rem;
+    opacity: 0.92;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+
+  /* CONTACT */
+  .contact-wrap { display: flex; gap: 50px; flex-wrap: wrap; }
+  .contact-info, .contact-form { flex: 1; min-width: 280px; }
+  .contact-info p { margin-bottom: 14px; }
+  .contact-info strong { color: var(--maroon); }
+  .contact-form input, .contact-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+  .contact-form button {
+    background: linear-gradient(90deg, var(--saffron), var(--saffron-deep));
+    color: white;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: #ccc;
+    text-align: center;
+    padding: 45px 5% 22px;
+  }
+  footer .social a {
+    color: var(--gold);
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+  footer .copyright { margin-top: 20px; font-size: 0.8rem; color: #888; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--maroon-deep);
+      flex-direction: column;
+      padding: 20px;
+      display: none;
+      text-align: center;
+      gap: 16px;
+    }
+    nav ul.active { display: flex; }
+    .menu-toggle { display: block; }
+    .hero h1 { font-size: 2.1rem; }
+    .nav-right { gap: 12px; }
+    .activities-glass { padding: 40px 22px; }
+  }
+</style>
+</head>
+<body>
+<!-- Top Global Edition Switcher -->
+<div class="site-switcher-bar" style="background:#110505; color:#f7d59b; padding:8px 5%; font-size:0.84rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); font-family:system-ui,sans-serif; position:relative; z-index:999;">
+  <div>
+    <a href="../" style="color:#f7d59b; text-decoration:none; font-weight:600;">&larr; AHS Hub</a> &nbsp;|&nbsp;
+    <a href="../../" style="color:#f7d59b; text-decoration:none;">Sannivesham Main</a>
+  </div>
+  <div style="position:relative; display:inline-block;">
+    <span style="background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); padding:4px 12px; border-radius:14px; color:#fce4b8; font-size:0.8rem;">
+      Edition: <strong>Cinematic Visual</strong>
+    </span>
+    <span style="margin-left:8px; font-size:0.8rem;">
+      [ <a href="../portal/" style="color:#eed5b5; text-decoration:none;">Classic</a> | 
+        <a href="../vedic-ivory/" style="color:#eed5b5; text-decoration:none;">Ivory</a> | 
+        <a href="../kshatriya-dark/" style="color:#eed5b5; text-decoration:none;">Kshatriya Dark</a> | 
+        <a href="../midnight-blue/" style="color:#eed5b5; text-decoration:none;">Midnight Blue</a> | 
+        <a href="../monochrome/" style="color:#eed5b5; text-decoration:none;">Monochrome</a> ]
+    </span>
+  </div>
+</div>
+
+<header>
+  <div class="logo"><span class="om">🕉</span> Abhay Hindu Sena</div>
+  <div class="nav-right">
+    <nav>
+      <ul id="navMenu">
+        <li><a href="#about" data-en="About" data-te="మా గురించి">About</a></li>
+        <li><a href="#activities" data-en="Activities" data-te="కార్యక్రమాలు">Activities</a></li>
+        <li><a href="#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a></li>
+        <li><a href="#contact" data-en="Contact" data-te="సంప్రదించండి">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="lang-switch">
+      <button id="btnEN" class="active" onclick="setLang('en')">EN</button>
+      <button id="btnTE" onclick="setLang('te')">తెలుగు</button>
+    </div>
+    <button class="menu-toggle" onclick="document.getElementById('navMenu').classList.toggle('active')">☰</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1 data-en="Abhay Hindu Sena" data-te="అభయ్ హిందూ సేన">Abhay Hindu Sena</h1>
+    <p data-en="Working for Dharma, Society, and Sanatana Values"
+       data-te="ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి">
+       Working for Dharma, Society, and Sanatana Values</p>
+    <div class="hero-buttons">
+      <a href="#about" class="btn btn-primary" data-en="Learn More" data-te="మరింత తెలుసుకోండి">Learn More</a>
+      <a href="#contact" class="btn btn-outline" data-en="Join Us" data-te="మాతో చేరండి">Join Us</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <h2 class="section-title" data-en="About the Founder" data-te="వ్యవస్థాపకుడి గురించి">About the Founder</h2>
+  <div class="divider"></div>
+  <div class="about-grid">
+    <div class="about-img">
+      <div class="photo-frame">
+        <img src="../assets/founder.jpg" alt="Radha Manohar Das">
+      </div>
+    </div>
+    <div class="about-text">
+      <h3 data-en="Radha Manohar Das Snathani" data-te="రాధా మనోహర్ దాస్ స్నాతని">Radha Manohar Das Snathani</h3>
+      <p data-en="Founder of Abhay Hindu Sena, dedicated to guiding, protecting, and uniting Hindu society through structured social and religious initiatives."
+         data-te="అభయ్ హిందూ సేన వ్యవస్థాపకుడు, హిందూ సమాజాన్ని మార్గనిర్దేశం చేయడం, రక్షించడం మరియు ఏకం చేయడం కోసం అంకితమయ్యారు.">
+         Founder of Abhay Hindu Sena, dedicated to guiding, protecting, and uniting Hindu society through structured social and religious initiatives.</p>
+      <p data-en="The organization works across community outreach, cultural preservation, and public awareness — building an active network of volunteers committed to service and Dharma."
+         data-te="ఈ సంస్థ సమాజ సేవ, సాంస్కృతిక పరిరక్షణ మరియు ప్రజా చైతన్యం కోసం పనిచేస్తుంది — సేవ మరియు ధర్మం పట్ల నిబద్ధత కలిగిన వాలంటీర్ల నెట్‌వర్క్‌ను నిర్మిస్తుంది.">
+         The organization works across community outreach, cultural preservation, and public awareness — building an active network of volunteers committed to service and Dharma.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><h2>125K+</h2><p data-en="Community Reach" data-te="సమాజ చేరిక">Community Reach</p></div>
+  <div class="stat"><h2>50+</h2><p data-en="Events Organized" data-te="నిర్వహించిన కార్యక్రమాలు">Events Organized</p></div>
+  <div class="stat"><h2>1000+</h2><p data-en="Active Volunteers" data-te="క్రియాశీల వాలంటీర్లు">Active Volunteers</p></div>
+  <div class="stat"><h2>10+</h2><p data-en="Districts Covered" data-te="కవర్ చేసిన జిల్లాలు">Districts Covered</p></div>
+</section>
+
+<section id="activities">
+  <div class="activities-glass">
+    <h2 class="section-title" data-en="Our Activities" data-te="మా కార్యక్రమాలు">Our Activities</h2>
+    <div class="divider"></div>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🛕</div>
+        <h4 data-en="Religious Affairs" data-te="ధార్మిక కార్యక్రమాలు">Religious Affairs</h4>
+        <p data-en="Temple protection, awareness drives, and support for Sanatana traditions."
+           data-te="ఆలయ పరిరక్షణ, చైతన్య కార్యక్రమాలు మరియు సనాతన సంప్రదాయాలకు మద్దతు.">
+           Temple protection, awareness drives, and support for Sanatana traditions.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🤝</div>
+        <h4 data-en="Social Welfare" data-te="సామాజిక సేవ">Social Welfare</h4>
+        <p data-en="Community service programs, relief work, and support for those in need."
+           data-te="సమాజ సేవా కార్యక్రమాలు, సహాయ కార్యక్రమాలు మరియు అవసరమైన వారికి మద్దతు.">
+           Community service programs, relief work, and support for those in need.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📚</div>
+        <h4 data-en="Education & Youth" data-te="విద్య & యువత">Education & Youth</h4>
+        <p data-en="Cultural education initiatives and youth engagement programs."
+           data-te="సాంస్కృతిక విద్యా కార్యక్రమాలు మరియు యువత భాగస్వామ్య కార్యక్రమాలు.">
+           Cultural education initiatives and youth engagement programs.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📢</div>
+        <h4 data-en="Media & Awareness" data-te="మీడియా & చైతన్యం">Media & Awareness</h4>
+        <p data-en="Digital outreach through YouTube, satsangs, and public discourse."
+           data-te="యూట్యూబ్, సత్సంగాలు మరియు ప్రజా ప్రసంగాల ద్వారా డిజిటల్ చేరిక.">
+           Digital outreach through YouTube, satsangs, and public discourse.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="section-title" data-en="Gallery" data-te="గ్యాలరీ">Gallery</h2>
+  <div class="divider"></div>
+  <div class="gallery-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); background:rgba(43,5,5,0.85); backdrop-filter:blur(6px);">
+      <img src="../assets/founder.jpg" alt="Shri Radha Manohar Das in Tirupati" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Tirupati Annual Convention" data-te="à°¤à°¿à°°à±à°ªà°¤à°¿ à°µà°¾à°°à±à°·à°¿à°• à°®à°¹à°¾à°¸à°­">Tirupati Annual Convention</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Historic convention celebrating 1st Anniversary of AHS" data-te="à°…à°­à°¯à± à°¹à°¿à°‚à°¦à±‚ à°¸à±‡à°¨ à°ªà±à°°à°¥à°® à°µà°¾à°°à±à°·à°¿à°•à±‹à°¤à±à°¸à°µ à°¸à°®à±à°®à±‡à°³à°¨à°‚">Historic convention celebrating 1st Anniversary of AHS</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); background:rgba(43,5,5,0.85); backdrop-filter:blur(6px);">
+      <img src="../assets/hero-desktop.png" alt="Yuva Chaitanya Rally" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Yuva Chaitanya Rally" data-te="à°¯à±à°µ à°šà±ˆà°¤à°¨à±à°¯ à°°à±à°¯à°¾à°²à±€">Yuva Chaitanya Rally</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Empowering youth with moral courage and martial discipline" data-te="à°†à°¤à±à°®à°°à°•à±à°·à°£ à°®à°°à°¿à°¯à± à°§à°°à±à°® à°¨à°¿à°·à±à° à°¤à±‹ à°¯à±à°µà°¤ à°šà±ˆà°¤à°¨à±à°¯à°‚">Empowering youth with moral courage and martial discipline</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); background:rgba(43,5,5,0.85); backdrop-filter:blur(6px);">
+      <img src="../assets/hero-mobile.png" alt="Gau Seva Abhiyan" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Gau Samrakshana Camp" data-te="à°—à±‹ à°¸à°‚à°°à°•à±à°·à°£ & à°¸à±‡à°µà°¾ à°¶à°¿à°¬à°¿à°°à°‚">Gau Samrakshana Camp</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Nutrition, shelter and medical care for indigenous breeds" data-te="à°¦à±‡à°¶à±€à°¯ à°—à±‹à°µà±à°²à°•à± à°†à°¹à°¾à°°à°‚ à°®à°°à°¿à°¯à± à°µà±ˆà°¦à±à°¯ à°¸à°¹à°¾à°¯à°‚">Nutrition, shelter and medical care for indigenous breeds</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); background:rgba(43,5,5,0.85); backdrop-filter:blur(6px);">
+      <img src="../assets/founder.jpg" alt="Pravachan and Satsang" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Vedic Scriptural Discourse" data-te="à°µà±‡à°¦ à°µà°¿à°œà±à°žà°¾à°¨ à°ªà±à°°à°µà°šà°¨à°‚">Vedic Scriptural Discourse</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Spiritual satsang by Shri Radha Manohar Das" data-te="à°¶à±à°°à±€ à°°à°¾à°§à°¾ à°®à°¨à±‹à°¹à°°à± à°¦à°¾à°¸à± à°—à°¾à°°à°¿à°šà±‡ à°†à°§à±à°¯à°¾à°¤à±à°®à°¿à°• à°ªà±à°°à°µà°šà°¨à°‚">Spiritual satsang by Shri Radha Manohar Das</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section-alt">
+  <h2 class="section-title" data-en="Get In Touch" data-te="మమ్మల్ని సంప్రదించండి">Get In Touch</h2>
+  <div class="divider"></div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <p><strong data-en="Address:" data-te="చిరునామా:">Address:</strong> Bharath Nagar, Hyderabad, Telangana, India</p>
+      <p><strong data-en="Email:" data-te="ఇమెయిల్:">Email:</strong> contact@abhayhindusena.org</p>
+      <p><strong>YouTube:</strong> Radha Manohar Das Official</p>
+      <p><strong>Instagram:</strong> @radhamanohardas</p>
+    </div>
+    <div class="contact-form">
+      <input type="text" id="ph-name" placeholder="Your Name">
+      <input type="email" id="ph-email" placeholder="Your Email">
+      <textarea rows="4" id="ph-msg" placeholder="Your Message"></textarea>
+      <button data-en="Send Message" data-te="పంపండి">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="social">
+    <a href="#">YouTube</a> | <a href="#">Instagram</a> | <a href="#">Threads</a>
+  </div>
+  <div class="copyright">© 2026 Abhay Hindu Sena. All Rights Reserved.</div>
+</footer>
+
+<script>
+  const placeholders = {
+    en: { name: "Your Name", email: "Your Email", msg: "Your Message" },
+    te: { name: "మీ పేరు", email: "మీ ఇమెయిల్", msg: "మీ సందేశం" }
+  };
+
+  function setLang(lang) {
+    document.querySelectorAll('[data-en]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang);
+    });
+    document.getElementById('ph-name').placeholder = placeholders[lang].name;
+    document.getElementById('ph-email').placeholder = placeholders[lang].email;
+    document.getElementById('ph-msg').placeholder = placeholders[lang].msg;
+
+    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+    document.getElementById('btnTE').classList.toggle('active', lang === 'te');
+    document.documentElement.lang = lang;
+  }
+</script>
+
+</body>
+</html>

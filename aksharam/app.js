@@ -395,11 +395,12 @@ class AksharamApp {
 
     const categories = [
       { id: 'all', label: 'All Words' },
-      { id: 'vowel', label: 'Vowels' },
-      { id: 'consonant', label: 'Consonants' },
-      { id: 'number', label: 'Numbers' },
-      { id: 'phrase', label: 'Phrases' },
-      { id: 'relation', label: 'Family' }
+      { id: 'Vowels', label: 'Vowels' },
+      { id: 'Consonants', label: 'Consonants' },
+      { id: 'Numbers', label: 'Numbers' },
+      { id: 'Phrases', label: 'Phrases' },
+      { id: 'Family', label: 'Family' },
+      { id: 'Daily', label: 'Daily & Food' }
     ];
 
     let activeCat = 'all';
@@ -423,15 +424,17 @@ class AksharamApp {
     const renderWords = () => {
       const q = searchInput.value.trim().toLowerCase();
       const filtered = DICTIONARY_WORDS.filter(item => {
-        const matchesCat = activeCat === 'all' || item.cat === activeCat;
+        const matchesCat = activeCat === 'all' || item.category === activeCat;
         const matchesQ = !q ||
-          item.te.toLowerCase().includes(q) ||
-          item.en.toLowerCase().includes(q) ||
-          item.meaning.toLowerCase().includes(q);
+          (item.te && item.te.toLowerCase().includes(q)) ||
+          (item.translit && item.translit.toLowerCase().includes(q)) ||
+          (item.en && item.en.toLowerCase().includes(q)) ||
+          (item.example && item.example.toLowerCase().includes(q));
         return matchesCat && matchesQ;
       });
 
-      document.getElementById('dictCount').textContent = `${filtered.length} words`;
+      const countEl = document.getElementById('dictCount');
+      if (countEl) countEl.textContent = `${filtered.length} words`;
 
       if (filtered.length === 0) {
         resultsGrid.innerHTML = `
@@ -447,10 +450,10 @@ class AksharamApp {
         <div class="dict-card" data-te="${w.te}">
           <div class="dict-card-top">
             <span class="dict-glyph">${w.te}</span>
-            <button type="button" class="dict-audio-btn" aria-label="Listen to ${w.en}">🔊</button>
+            <button type="button" class="dict-audio-btn" aria-label="Listen to ${w.en || w.te}">🔊</button>
           </div>
-          <div class="dict-translit">${w.en}</div>
-          <div class="dict-meaning">${w.meaning}</div>
+          <div class="dict-translit">${w.translit || w.en || ''}</div>
+          <div class="dict-meaning">${w.en || ''}</div>
           ${w.example ? `<div class="dict-example">“${w.example}”</div>` : ''}
         </div>
       `).join('');
@@ -515,20 +518,57 @@ class AksharamApp {
       outputArea.textContent = 'Translating...';
       outputArea.classList.remove('is-placeholder');
 
+      let translated = '';
+
+      // Tier 1: Google GTX endpoint
       try {
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
         const res = await fetch(url);
-        const data = await res.json();
-        let result = '';
-        if (data && data[0]) {
-          data[0].forEach(p => { if (p[0]) result += p[0]; });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data[0]) {
+            data[0].forEach(p => { if (p[0]) translated += p[0]; });
+          }
         }
-        outputArea.textContent = result || 'Translation unavailable.';
       } catch (err) {
-        outputArea.textContent = 'Translation failed. Please check network connection.';
-      } finally {
-        translateBtn.disabled = false;
+        // Fall through to next tier
       }
+
+      // Tier 2: MyMemory Public Translation API Fallback
+      if (!translated) {
+        try {
+          const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`;
+          const mmRes = await fetch(mmUrl);
+          if (mmRes.ok) {
+            const mmData = await mmRes.json();
+            if (mmData && mmData.responseData && mmData.responseData.translatedText) {
+              translated = mmData.responseData.translatedText;
+            }
+          }
+        } catch (err) {
+          // Fall through to offline dictionary
+        }
+      }
+
+      // Tier 3: Built-in Offline Dictionary Lookup Fallback
+      if (!translated) {
+        const clean = text.toLowerCase();
+        const found = DICTIONARY_WORDS.find(w => {
+          if (fromLang === 'te') {
+            return w.te === text || (w.example && w.example.includes(text));
+          } else {
+            return (w.en && w.en.toLowerCase().includes(clean)) ||
+                   (w.translit && w.translit.toLowerCase() === clean);
+          }
+        });
+
+        if (found) {
+          translated = fromLang === 'te' ? `${found.en} (${found.translit})` : found.te;
+        }
+      }
+
+      outputArea.textContent = translated || 'Translation unavailable. Please check your network connection.';
+      translateBtn.disabled = false;
     };
 
     if (translateBtn) {
@@ -546,7 +586,7 @@ class AksharamApp {
           Sound.playClick();
           copyBtn.textContent = '✓ Copied';
           setTimeout(() => {
-            copyBtn.textContent = '📋 Copy';
+            copyBtn.textContent = '📋 Copy Translation';
           }, 2000);
         }
       });

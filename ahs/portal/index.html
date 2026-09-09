@@ -1,0 +1,820 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhay Hindu Sena</title>
+<style>
+  :root {
+    --saffron: #FF6B1A;
+    --saffron-deep: #E8540A;
+    --maroon: #7A0C0C;
+    --maroon-deep: #4A0505;
+    --gold: #D4AF37;
+    --cream: #FFF8EF;
+    --dark: #1A1A1A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', 'Segoe UI', serif;
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  header {
+    background: linear-gradient(90deg, var(--maroon-deep), var(--maroon));
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.4);
+    border-bottom: 2px solid var(--gold);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gold);
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+  }
+  .logo span.om { font-size: 1.8rem; }
+  .nav-right { display: flex; align-items: center; gap: 22px; }
+
+  nav { position: relative; }
+  nav > ul { list-style: none; display: flex; gap: 4px; }
+  nav > ul > li { position: relative; }
+  nav > ul > li > a,
+  nav > ul > li > button.nav-top {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: color 0.25s;
+    padding: 10px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  nav > ul > li > a:hover,
+  nav > ul > li > button.nav-top:hover,
+  nav > ul > li.open > button.nav-top { color: var(--gold); }
+  .caret { font-size: 0.65rem; transition: transform 0.25s; }
+  nav > ul > li.open .caret { transform: rotate(180deg); }
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 210px;
+    background: linear-gradient(160deg, var(--maroon-deep), var(--maroon));
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: all 0.22s ease;
+    list-style: none;
+    z-index: 300;
+  }
+  nav > ul > li:hover > .dropdown,
+  nav > ul > li.open > .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown li a {
+    display: block;
+    padding: 10px 14px;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .dropdown li a:hover { background: rgba(212,175,55,0.18); color: var(--gold); }
+
+  .lang-switch {
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .lang-switch button {
+    background: transparent;
+    border: none;
+    color: var(--cream);
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.25s;
+  }
+  .lang-switch button.active { background: var(--gold); color: var(--maroon-deep); }
+
+  .menu-toggle { display: none; color: var(--gold); font-size: 1.6rem; cursor: pointer; background: none; border: none; }
+
+  .hero {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(212,175,55,0.25), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(212,175,55,0.2), transparent 40%),
+      linear-gradient(160deg, var(--saffron) 0%, var(--saffron-deep) 40%, var(--maroon) 100%);
+    color: white;
+    text-align: center;
+    padding: 110px 5% 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "🕉";
+    position: absolute;
+    font-size: 450px;
+    opacity: 0.05;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 30px);
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero h1 { font-size: 2.9rem; margin-bottom: 16px; text-shadow: 2px 2px 8px rgba(0,0,0,0.4); letter-spacing: 1px; }
+  .hero p { font-size: 1.15rem; max-width: 620px; margin: 0 auto 32px; opacity: 0.95; }
+  .hero-buttons { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+  .btn {
+    padding: 13px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--gold); color: var(--maroon-deep); }
+  .btn-outline { background: rgba(255,255,255,0.08); color: white; border: 2px solid var(--gold); }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+  section { padding: 75px 8%; position: relative; scroll-margin-top: 90px; }
+  .section-alt {
+    background:
+      radial-gradient(circle at 90% 10%, rgba(255,107,26,0.05), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(122,12,12,0.04), transparent 50%),
+      #ffffff;
+  }
+  .section-title { text-align: center; font-size: 2.1rem; color: var(--maroon); margin-bottom: 12px; }
+  .section-subtitle { text-align: center; color: #777; max-width: 560px; margin: 0 auto 45px; font-size: 1rem; }
+  .divider { width: 70px; height: 4px; background: linear-gradient(90deg, var(--saffron), var(--gold)); margin: 0 auto 45px; border-radius: 2px; }
+
+  .group-block { margin-bottom: 55px; }
+  .group-block:last-child { margin-bottom: 0; }
+  .group-title {
+    color: var(--saffron-deep);
+    font-size: 1.3rem;
+    margin-bottom: 22px;
+    border-left: 4px solid var(--gold);
+    padding-left: 12px;
+  }
+
+  .about-grid { display: flex; gap: 55px; align-items: center; flex-wrap: wrap; }
+  .about-img { flex: 1; min-width: 280px; text-align: center; }
+  .photo-frame {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 6px solid var(--gold);
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(122,12,12,0.35), 0 0 0 8px rgba(212,175,55,0.15);
+  }
+  .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .about-text { flex: 1.4; min-width: 280px; }
+  .about-text h3 { color: var(--saffron-deep); margin-bottom: 10px; font-size: 1.35rem; }
+  .about-text p { margin-bottom: 16px; color: #444; }
+  .about-text .btn { margin-top: 6px; }
+
+  /* CARDS - unified style used everywhere */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+  }
+  .card {
+    background: linear-gradient(160deg, #ffffff, #fff8ef);
+    border-radius: 14px;
+    padding: 34px 24px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    border-top: 4px solid var(--saffron);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover { transform: translateY(-8px); box-shadow: 0 14px 30px rgba(122,12,12,0.15); }
+  .card .icon { font-size: 2.4rem; margin-bottom: 14px; }
+  .card h4 { color: var(--maroon); margin-bottom: 10px; }
+  .card p { color: #666; font-size: 0.92rem; flex-grow: 1; }
+  .card-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--saffron-deep);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 2px;
+    align-self: center;
+    transition: color 0.2s;
+  }
+  .card-link:hover { color: var(--maroon); }
+
+  .stats {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(212,175,55,0.15), transparent 50%),
+      linear-gradient(120deg, var(--maroon-deep), var(--maroon));
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: center;
+    padding: 55px 8%;
+  }
+  .stat h2 { font-size: 2.5rem; color: var(--gold); }
+  .stat p { font-size: 0.9rem; opacity: 0.85; }
+
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+  .gallery-item {
+    height: 190px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--saffron), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.85rem;
+    opacity: 0.92;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+
+  .contact-wrap { display: flex; gap: 50px; flex-wrap: wrap; }
+  .contact-info, .contact-form { flex: 1; min-width: 280px; }
+  .contact-info p { margin-bottom: 14px; }
+  .contact-info strong { color: var(--maroon); }
+  .contact-form input, .contact-form select, .contact-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: #fff;
+  }
+  .contact-form button {
+    background: linear-gradient(90deg, var(--saffron), var(--saffron-deep));
+    color: white;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+
+  /* JOIN US - form section */
+  .join-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, #ffffff, #fff8ef);
+    border-radius: 18px;
+    padding: 45px;
+    box-shadow: 0 10px 35px rgba(122,12,12,0.12);
+    border-top: 5px solid var(--gold);
+  }
+  .join-wrap .contact-form { min-width: unset; }
+  .join-note { text-align: center; color: #888; font-size: 0.85rem; margin-top: 10px; }
+
+  footer { background: var(--dark); color: #ccc; text-align: center; padding: 45px 5% 22px; }
+  footer .social a { color: var(--gold); margin: 0 10px; text-decoration: none; font-size: 1.1rem; }
+  footer .copyright { margin-top: 20px; font-size: 0.8rem; color: #888; }
+
+  @media (max-width: 900px) {
+    .nav-right { gap: 12px; }
+    nav {
+      position: fixed;
+      top: 62px;
+      left: 0; right: 0; bottom: 0;
+      background: var(--maroon-deep);
+      display: none;
+      overflow-y: auto;
+      padding: 10px 0 30px;
+    }
+    nav.active { display: block; }
+    nav > ul { flex-direction: column; gap: 0; }
+    nav > ul > li { width: 100%; }
+    nav > ul > li > a,
+    nav > ul > li > button.nav-top {
+      width: 100%;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+    .dropdown {
+      position: static;
+      opacity: 1; visibility: visible; transform: none;
+      display: none;
+      background: rgba(0,0,0,0.2);
+      border: none; border-radius: 0; box-shadow: none; padding: 0;
+    }
+    nav > ul > li.open .dropdown { display: block; }
+    .dropdown li a { padding: 12px 40px; }
+    .menu-toggle { display: block; }
+    .hero h1 { font-size: 2.1rem; }
+    .join-wrap { padding: 28px; }
+  }
+</style>
+</head>
+<body>
+<!-- Top Global Edition Switcher -->
+<div class="site-switcher-bar" style="background:#110505; color:#f7d59b; padding:8px 5%; font-size:0.84rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); font-family:system-ui,sans-serif; position:relative; z-index:999;">
+  <div>
+    <a href="../" style="color:#f7d59b; text-decoration:none; font-weight:600;">â† AHS Hub</a> &nbsp;|&nbsp;
+    <a href="../../" style="color:#f7d59b; text-decoration:none;">ðŸ  Sannivesham Main</a>
+  </div>
+  <div style="position:relative; display:inline-block;">
+    <span style="background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); padding:4px 12px; border-radius:14px; color:#fce4b8; font-size:0.8rem;">
+      Edition: <strong>ðŸ›ï¸ Classic Portal</strong>
+    </span>
+    <span style="margin-left:8px; font-size:0.8rem;">
+      [ <a href="../cinematic/" style="color:#eed5b5; text-decoration:none;">Cinematic</a> | 
+        <a href="../vedic-ivory/" style="color:#eed5b5; text-decoration:none;">Ivory</a> | 
+        <a href="../kshatriya-dark/" style="color:#eed5b5; text-decoration:none;">Kshatriya Dark</a> | 
+        <a href="../midnight-blue/" style="color:#eed5b5; text-decoration:none;">Midnight Blue</a> | 
+        <a href="../monochrome/" style="color:#eed5b5; text-decoration:none;">Monochrome</a> ]
+    </span>
+  </div>
+</div>
+
+<header>
+  <a href="index.html#home" class="logo"><span class="om">🕉</span> Abhay Hindu Sena</a>
+  <div class="nav-right">
+    <nav id="mainNav">
+      <ul id="navMenu">
+        <li><a href="index.html#home" data-en="Home" data-te="హోమ్">Home</a></li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="About" data-te="మా గురించి">About <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#about" data-en="Abhay Hindu Sena" data-te="అభయ్ హిందూ సేన">Abhay Hindu Sena</a></li>
+            <li><a href="#about" data-en="Radha Manohar Das" data-te="రాధా మనోహర్ దాస్">Radha Manohar Das</a></li>
+            <li><a href="#about" data-en="Vision & Mission" data-te="దృష్టి & లక్ష్యం">Vision & Mission</a></li>
+            <li><a href="#about" data-en="Leadership" data-te="నాయకత్వం">Leadership</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="Our Work" data-te="మా కార్యక్రమాలు">Our Work <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#ourwork" data-en="Initiatives" data-te="కార్యక్రమాలు">Initiatives</a></li>
+            <li><a href="#ourwork" data-en="Seva" data-te="సేవ">Seva</a></li>
+            <li><a href="#ourwork" data-en="Youth" data-te="యువత">Youth</a></li>
+            <li><a href="#ourwork" data-en="Heritage" data-te="వారసత్వం">Heritage</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="Events" data-te="కార్యక్రమాలు">Events <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#events" data-en="Upcoming" data-te="రాబోయేవి">Upcoming</a></li>
+            <li><a href="#events" data-en="Past Events" data-te="గత కార్యక్రమాలు">Past Events</a></li>
+            <li><a href="#events" data-en="Events Map" data-te="ఈవెంట్స్ మ్యాప్">Events Map</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="Media" data-te="మీడియా">Media <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#media" data-en="Videos" data-te="వీడియోలు">Videos</a></li>
+            <li><a href="#media" data-en="Pravachan" data-te="ప్రవచనం">Pravachan</a></li>
+            <li><a href="index.html#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a></li>
+            <li><a href="#media" data-en="News & Media" data-te="వార్తలు & మీడియా">News & Media</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="Knowledge" data-te="జ్ఞానం">Knowledge <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#knowledge" data-en="Dharma" data-te="ధర్మం">Dharma</a></li>
+            <li><a href="#knowledge" data-en="Temples" data-te="ఆలయాలు">Temples</a></li>
+            <li><a href="#knowledge" data-en="Festivals" data-te="పండుగలు">Festivals</a></li>
+            <li><a href="#knowledge" data-en="Hindu Heritage" data-te="హిందూ వారసత్వం">Hindu Heritage</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-top" data-en="Community" data-te="సమాజం">Community <span class="caret">▾</span></button>
+          <ul class="dropdown">
+            <li><a href="#community" data-en="Discussions" data-te="చర్చలు">Discussions</a></li>
+            <li><a href="#gallery" data-en="Photos" data-te="ఫోటోలు">Photos</a></li>
+            <li><a href="#community" data-en="Local Groups" data-te="స్థానిక బృందాలు">Local Groups</a></li>
+            <li><a href="#community" data-en="Announcements" data-te="ప్రకటనలు">Announcements</a></li>
+          </ul>
+        </li>
+
+        <li><a href="index.html#joinus" data-en="Join Us" data-te="మాతో చేరండి">Join Us</a></li>
+        <li><a href="index.html#contact" data-en="Contact" data-te="సంప్రదించండి">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="lang-switch">
+      <button id="btnEN" class="active" onclick="setLang('en')">EN</button>
+      <button id="btnTE" onclick="setLang('te')">తెలుగు</button>
+    </div>
+    <button class="menu-toggle" onclick="document.getElementById('mainNav').classList.toggle('active')">☰</button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1 data-en="Abhay Hindu Sena" data-te="అభయ్ హిందూ సేన">Abhay Hindu Sena</h1>
+    <p data-en="Working for Dharma, Society, and Sanatana Values"
+       data-te="ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి">
+       Working for Dharma, Society, and Sanatana Values</p>
+    <div class="hero-buttons">
+      <a href="#about" class="btn btn-primary" data-en="Learn More" data-te="మరింత తెలుసుకోండి">Learn More</a>
+      <a href="#joinus" class="btn btn-outline" data-en="Join Us" data-te="మాతో చేరండి">Join Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="section-title" data-en="About the Founder" data-te="వ్యవస్థాపకుడి గురించి">About the Founder</h2>
+  <div class="divider"></div>
+  <div class="about-grid">
+    <div class="about-img">
+      <div class="photo-frame">
+        <img src="../assets/founder.jpg" alt="Radha Manohar Das">
+      </div>
+    </div>
+    <div class="about-text">
+      <h3 data-en="Radha Manohar Das Snathani" data-te="రాధా మనోహర్ దాస్ స్నాతని">Radha Manohar Das Snathani</h3>
+      <p data-en="Founder of Abhay Hindu Sena, dedicated to guiding, protecting, and uniting Hindu society through structured social and religious initiatives."
+         data-te="అభయ్ హిందూ సేన వ్యవస్థాపకుడు, హిందూ సమాజాన్ని మార్గనిర్దేశం చేయడం, రక్షించడం మరియు ఏకం చేయడం కోసం అంకితమయ్యారు.">
+         Founder of Abhay Hindu Sena, dedicated to guiding, protecting, and uniting Hindu society through structured social and religious initiatives.</p>
+      <p data-en="The organization works across community outreach, cultural preservation, and public awareness — building an active network of volunteers committed to service and Dharma."
+         data-te="ఈ సంస్థ సమాజ సేవ, సాంస్కృతిక పరిరక్షణ మరియు ప్రజా చైతన్యం కోసం పనిచేస్తుంది — సేవ మరియు ధర్మం పట్ల నిబద్ధత కలిగిన వాలంటీర్ల నెట్‌వర్క్‌ను నిర్మిస్తుంది.">
+         The organization works across community outreach, cultural preservation, and public awareness — building an active network of volunteers committed to service and Dharma.</p>
+      <a href="#about" class="card-link" data-en="Read Full Story →" data-te="పూర్తి కథ చదవండి →">Read Full Story →</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><h2>125K+</h2><p data-en="Community Reach" data-te="సమాజ చేరిక">Community Reach</p></div>
+  <div class="stat"><h2>50+</h2><p data-en="Events Organized" data-te="నిర్వహించిన కార్యక్రమాలు">Events Organized</p></div>
+  <div class="stat"><h2>1000+</h2><p data-en="Active Volunteers" data-te="క్రియాశీల వాలంటీర్లు">Active Volunteers</p></div>
+  <div class="stat"><h2>10+</h2><p data-en="Districts Covered" data-te="కవర్ చేసిన జిల్లాలు">Districts Covered</p></div>
+</section>
+
+<!-- OUR WORK -->
+<section id="ourwork" class="section-alt">
+  <h2 class="section-title" data-en="Our Work" data-te="మా కార్యక్రమాలు">Our Work</h2>
+  <div class="divider"></div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🤝</div>
+      <h4 data-en="Seva" data-te="సేవ">Seva</h4>
+      <p data-en="Community service programs, relief work, and support for those in need."
+         data-te="సమాజ సేవా కార్యక్రమాలు, సహాయ కార్యక్రమాలు మరియు అవసరమైన వారికి మద్దతు.">
+         Community service programs, relief work, and support for those in need.</p>
+      <a href="#ourwork" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📚</div>
+      <h4 data-en="Youth" data-te="యువత">Youth</h4>
+      <p data-en="Cultural education initiatives and youth engagement programs."
+         data-te="సాంస్కృతిక విద్యా కార్యక్రమాలు మరియు యువత భాగస్వామ్య కార్యక్రమాలు.">
+         Cultural education initiatives and youth engagement programs.</p>
+      <a href="#ourwork" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🛕</div>
+      <h4 data-en="Heritage" data-te="వారసత్వం">Heritage</h4>
+      <p data-en="Temple protection, awareness drives, and support for Sanatana traditions."
+         data-te="ఆలయ పరిరక్షణ, చైతన్య కార్యక్రమాలు మరియు సనాతన సంప్రదాయాలకు మద్దతు.">
+         Temple protection, awareness drives, and support for Sanatana traditions.</p>
+      <a href="#ourwork" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📢</div>
+      <h4 data-en="Initiatives" data-te="కార్యక్రమాలు">Initiatives</h4>
+      <p data-en="Digital outreach through YouTube, satsangs, and public discourse."
+         data-te="యూట్యూబ్, సత్సంగాలు మరియు ప్రజా ప్రసంగాల ద్వారా డిజిటల్ చేరిక.">
+         Digital outreach through YouTube, satsangs, and public discourse.</p>
+      <a href="#ourwork" class="card-link">View →</a>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <h2 class="section-title" data-en="Events" data-te="కార్యక్రమాలు">Events</h2>
+  <div class="divider"></div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">📅</div>
+      <h4 data-en="Upcoming Events" data-te="రాబోయే కార్యక్రమాలు">Upcoming Events</h4>
+      <p data-en="See what's happening next and mark your calendar."
+         data-te="తర్వాత ఏమి జరుగుతుందో చూడండి మరియు మీ క్యాలెండర్‌లో గుర్తు పెట్టండి.">
+         See what's happening next and mark your calendar.</p>
+      <a href="#events" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🗓️</div>
+      <h4 data-en="Past Events" data-te="గత కార్యక్రమాలు">Past Events</h4>
+      <p data-en="A look back at our recent programs and gatherings."
+         data-te="మా ఇటీవలి కార్యక్రమాలు మరియు సమావేశాలపై ఒక చూపు.">
+         A look back at our recent programs and gatherings.</p>
+      <a href="#events" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📍</div>
+      <h4 data-en="Events Map" data-te="ఈవెంట్స్ మ్యాప్">Events Map</h4>
+      <p data-en="Find events happening near you across districts."
+         data-te="జిల్లాల్లో మీ దగ్గర జరుగుతున్న కార్యక్రమాలను కనుగొనండి.">
+         Find events happening near you across districts.</p>
+      <a href="#events" class="card-link">View →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA -->
+<section id="media" class="section-alt">
+  <h2 class="section-title" data-en="Media" data-te="మీడియా">Media</h2>
+  <div class="divider"></div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🎥</div>
+      <h4 data-en="Videos" data-te="వీడియోలు">Videos</h4>
+      <p data-en="Watch our latest talks, event highlights, and short films."
+         data-te="మా తాజా ప్రసంగాలు, కార్యక్రమ హైలైట్స్ మరియు షార్ట్ ఫిల్మ్‌లను చూడండి.">
+         Watch our latest talks, event highlights, and short films.</p>
+      <a href="#media" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🙏</div>
+      <h4 data-en="Pravachan" data-te="ప్రవచనం">Pravachan</h4>
+      <p data-en="Spiritual discourses and satsangs from our teachers."
+         data-te="మా గురువుల నుండి ఆధ్యాత్మిక ప్రవచనాలు మరియు సత్సంగాలు.">
+         Spiritual discourses and satsangs from our teachers.</p>
+      <a href="#media" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🖼️</div>
+      <h4 data-en="Gallery" data-te="గ్యాలరీ">Gallery</h4>
+      <p data-en="Photo memories from our events and community work."
+         data-te="మా కార్యక్రమాలు మరియు సమాజ సేవ నుండి ఫోటో జ్ఞాపకాలు.">
+         Photo memories from our events and community work.</p>
+      <a href="#gallery" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📰</div>
+      <h4 data-en="News & Media" data-te="వార్తలు & మీడియా">News & Media</h4>
+      <p data-en="Press mentions, coverage, and official statements."
+         data-te="ప్రెస్ ప్రస్తావనలు, కవరేజ్ మరియు అధికారిక ప్రకటనలు.">
+         Press mentions, coverage, and official statements.</p>
+      <a href="#media" class="card-link">View →</a>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="section-title" data-en="Gallery" data-te="గ్యాలరీ">Gallery</h2>
+  <div class="divider"></div>
+  <div class="gallery-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.15); background:#2b0505;">
+      <img src="../assets/founder.jpg" alt="Shri Radha Manohar Das in Tirupati" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff; background:#360808;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Tirupati Annual Convention" data-te="à°¤à°¿à°°à±à°ªà°¤à°¿ à°µà°¾à°°à±à°·à°¿à°• à°®à°¹à°¾à°¸à°­">Tirupati Annual Convention</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Historic gathering celebrating 1st Anniversary of AHS" data-te="à°…à°­à°¯à± à°¹à°¿à°‚à°¦à±‚ à°¸à±‡à°¨ à°ªà±à°°à°¥à°® à°µà°¾à°°à±à°·à°¿à°•à±‹à°¤à±à°¸à°µ à°¸à°®à±à°®à±‡à°³à°¨à°‚">Historic gathering celebrating 1st Anniversary of AHS</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.15); background:#2b0505;">
+      <img src="../assets/hero-desktop.png" alt="Yuva Chaitanya Rally" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff; background:#360808;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Yuva Chaitanya Rally" data-te="à°¯à±à°µ à°šà±ˆà°¤à°¨à±à°¯ à°°à±à°¯à°¾à°²à±€">Yuva Chaitanya Rally</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Empowering youth with moral strength and self-defense" data-te="à°†à°¤à±à°®à°°à°•à±à°·à°£ à°®à°°à°¿à°¯à± à°§à°°à±à°® à°¨à°¿à°·à±à° à°¤à±‹ à°¯à±à°µà°¤ à°šà±ˆà°¤à°¨à±à°¯à°‚">Empowering youth with moral strength and self-defense</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.15); background:#2b0505;">
+      <img src="../assets/hero-mobile.png" alt="Gau Seva Abhiyan" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff; background:#360808;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Gau Samrakshana Camp" data-te="à°—à±‹ à°¸à°‚à°°à°•à±à°·à°£ & à°¸à±‡à°µà°¾ à°¶à°¿à°¬à°¿à°°à°‚">Gau Samrakshana Camp</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Medical care and nutrition support for indigenous cows" data-te="à°¦à±‡à°¶à±€à°¯ à°—à±‹à°µà±à°²à°•à± à°†à°¹à°¾à°°à°‚ à°®à°°à°¿à°¯à± à°µà±ˆà°¦à±à°¯ à°¸à°¹à°¾à°¯à°‚">Medical care and nutrition support for indigenous cows</p>
+      </div>
+    </div>
+    <div style="border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.15); background:#2b0505;">
+      <img src="../assets/founder.jpg" alt="Pravachan and Satsang" style="width:100%; height:220px; object-fit:cover; display:block;">
+      <div style="padding:14px; color:#fff; background:#360808;">
+        <h5 style="color:#d4af37; margin-bottom:4px;" data-en="Vedic Scriptural Discourse" data-te="à°µà±‡à°¦ à°µà°¿à°œà±à°žà°¾à°¨ à°ªà±à°°à°µà°šà°¨à°‚">Vedic Scriptural Discourse</h5>
+        <p style="font-size:0.82rem; opacity:0.85; margin:0;" data-en="Spiritual satsang by Shri Radha Manohar Das" data-te="à°¶à±à°°à±€ à°°à°¾à°§à°¾ à°®à°¨à±‹à°¹à°°à± à°¦à°¾à°¸à± à°—à°¾à°°à°¿à°šà±‡ à°†à°§à±à°¯à°¾à°¤à±à°®à°¿à°• à°ªà±à°°à°µà°šà°¨à°‚">Spiritual satsang by Shri Radha Manohar Das</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE -->
+<section id="knowledge" class="section-alt">
+  <h2 class="section-title" data-en="Knowledge" data-te="జ్ఞానం">Knowledge</h2>
+  <div class="divider"></div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🕉️</div>
+      <h4 data-en="Dharma" data-te="ధర్మం">Dharma</h4>
+      <p data-en="Understanding the principles that guide righteous living."
+         data-te="ధర్మబద్ధమైన జీవనానికి మార్గనిర్దేశం చేసే సూత్రాలను అర్థం చేసుకోండి.">
+         Understanding the principles that guide righteous living.</p>
+      <a href="#knowledge" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🛕</div>
+      <h4 data-en="Temples" data-te="ఆలయాలు">Temples</h4>
+      <p data-en="Explore the history and significance of sacred temples."
+         data-te="పవిత్రమైన ఆలయాల చరిత్ర మరియు ప్రాముఖ్యతను అన్వేషించండి.">
+         Explore the history and significance of sacred temples.</p>
+      <a href="#knowledge" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🎉</div>
+      <h4 data-en="Festivals" data-te="పండుగలు">Festivals</h4>
+      <p data-en="Learn the meaning and traditions behind Hindu festivals."
+         data-te="హిందూ పండుగల వెనుక ఉన్న అర్థం మరియు సంప్రదాయాలను తెలుసుకోండి.">
+         Learn the meaning and traditions behind Hindu festivals.</p>
+      <a href="#knowledge" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📖</div>
+      <h4 data-en="Hindu Heritage" data-te="హిందూ వారసత్వం">Hindu Heritage</h4>
+      <p data-en="Preserving the timeless wisdom of our ancient culture."
+         data-te="మన ప్రాచీన సంస్కృతి యొక్క శాశ్వతమైన జ్ఞానాన్ని పరిరక్షించడం.">
+         Preserving the timeless wisdom of our ancient culture.</p>
+      <a href="#knowledge" class="card-link">View →</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <h2 class="section-title" data-en="Community" data-te="సమాజం">Community</h2>
+  <div class="divider"></div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">💬</div>
+      <h4 data-en="Discussions" data-te="చర్చలు">Discussions</h4>
+      <p data-en="Join conversations on Dharma, culture, and current topics."
+         data-te="ధర్మం, సంస్కృతి మరియు ప్రస్తుత అంశాలపై చర్చల్లో పాల్గొనండి.">
+         Join conversations on Dharma, culture, and current topics.</p>
+      <a href="#community" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📷</div>
+      <h4 data-en="Photos" data-te="ఫోటోలు">Photos</h4>
+      <p data-en="Community-shared moments from gatherings and seva."
+         data-te="సమావేశాలు మరియు సేవ నుండి సమాజం పంచుకున్న క్షణాలు.">
+         Community-shared moments from gatherings and seva.</p>
+      <a href="#gallery" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">🌍</div>
+      <h4 data-en="Local Groups" data-te="స్థానిక బృందాలు">Local Groups</h4>
+      <p data-en="Find and connect with Abhay Hindu Sena groups near you."
+         data-te="మీ దగ్గర ఉన్న అభయ్ హిందూ సేన బృందాలను కనుగొని కనెక్ట్ అవ్వండి.">
+         Find and connect with Abhay Hindu Sena groups near you.</p>
+      <a href="#community" class="card-link">View →</a>
+    </div>
+    <div class="card">
+      <div class="icon">📣</div>
+      <h4 data-en="Announcements" data-te="ప్రకటనలు">Announcements</h4>
+      <p data-en="Stay updated with the latest news from the organization."
+         data-te="సంస్థ నుండి తాజా వార్తలతో అప్‌డేట్‌గా ఉండండి.">
+         Stay updated with the latest news from the organization.</p>
+      <a href="#community" class="card-link">View →</a>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN US -->
+<section id="joinus" class="section-alt">
+  <h2 class="section-title" data-en="Join Us" data-te="మాతో చేరండి">Join Us</h2>
+  <p class="section-subtitle" data-en="Become a volunteer or support our Seva initiatives — fill in your details below and our team will reach out."
+     data-te="వాలంటీర్‌గా చేరండి లేదా మా సేవా కార్యక్రమాలకు మద్దతు ఇవ్వండి — దిగువ మీ వివరాలను నింపండి, మా బృందం మిమ్మల్ని సంప్రదిస్తుంది.">
+     Become a volunteer or support our Seva initiatives — fill in your details below and our team will reach out.</p>
+  <div class="divider"></div>
+
+  <div class="join-wrap">
+    <form class="contact-form" onsubmit="return false;">
+      <input type="text" id="join-name" placeholder="Full Name">
+      <input type="tel" id="join-phone" placeholder="Phone Number">
+      <input type="email" id="join-email" placeholder="Email Address">
+      <select id="join-interest">
+        <option value="" data-en="I want to..." data-te="నేను దీని కోసం చేరాలనుకుంటున్నాను..." selected disabled>I want to...</option>
+        <option value="volunteer" data-en="Volunteer" data-te="వాలంటీర్">Volunteer</option>
+        <option value="support" data-en="Support Seva" data-te="సేవకు మద్దతు">Support Seva</option>
+        <option value="both" data-en="Both" data-te="రెండూ">Both</option>
+      </select>
+      <textarea rows="4" id="join-msg" placeholder="Tell us a bit about yourself"></textarea>
+      <button type="submit" data-en="Send Details" data-te="వివరాలు పంపండి">Send Details</button>
+    </form>
+    <p class="join-note" data-en="Your details are only used to get in touch with you about volunteering and seva opportunities."
+       data-te="మీ వివరాలు వాలంటీరింగ్ మరియు సేవా అవకాశాల గురించి మిమ్మల్ని సంప్రదించడానికి మాత్రమే ఉపయోగించబడతాయి.">
+       Your details are only used to get in touch with you about volunteering and seva opportunities.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title" data-en="Get In Touch" data-te="మమ్మల్ని సంప్రదించండి">Get In Touch</h2>
+  <div class="divider"></div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <p><strong data-en="Address:" data-te="చిరునామా:">Address:</strong> Bharath Nagar, Hyderabad, Telangana, India</p>
+      <p><strong data-en="Email:" data-te="ఇమెయిల్:">Email:</strong> contact@abhayhindusena.org</p>
+      <p><strong>YouTube:</strong> Radha Manohar Das Official</p>
+      <p><strong>Instagram:</strong> @radhamanohardas</p>
+    </div>
+    <div class="contact-form">
+      <form onsubmit="return false;">
+        <input type="text" id="ph-name" placeholder="Your Name">
+        <input type="email" id="ph-email" placeholder="Your Email">
+        <textarea rows="4" id="ph-msg" placeholder="Your Message"></textarea>
+        <button type="submit" data-en="Send Message" data-te="పంపండి">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="social">
+    <a href="#">YouTube</a> | <a href="#">Instagram</a> | <a href="#">Threads</a>
+  </div>
+  <div class="copyright">© 2026 Abhay Hindu Sena. All Rights Reserved.</div>
+</footer>
+
+<script>
+  const placeholders = {
+    en: { name: "Your Name", email: "Your Email", msg: "Your Message" },
+    te: { name: "మీ పేరు", email: "మీ ఇమెయిల్", msg: "మీ సందేశం" }
+  };
+
+  function setLang(lang) {
+    document.querySelectorAll('[data-en]').forEach(el => {
+      if (el.tagName === 'OPTION') {
+        el.textContent = el.getAttribute('data-' + lang);
+      } else {
+        el.textContent = el.getAttribute('data-' + lang);
+      }
+    });
+    document.getElementById('ph-name').placeholder = placeholders[lang].name;
+    document.getElementById('ph-email').placeholder = placeholders[lang].email;
+    document.getElementById('ph-msg').placeholder = placeholders[lang].msg;
+
+    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+    document.getElementById('btnTE').classList.toggle('active', lang === 'te');
+    document.documentElement.lang = lang;
+  }
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const btn = item.querySelector('.nav-top');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.nav-item.open').forEach(o => { if (o !== item) o.classList.remove('open'); });
+      item.classList.toggle('open', !isOpen);
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item.open').forEach(o => o.classList.remove('open'));
+  });
+  document.querySelectorAll('#navMenu a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('mainNav').classList.remove('active');
+      document.querySelectorAll('.nav-item.open').forEach(o => o.classList.remove('open'));
+    });
+  });
+</script>
+
+</body>
+</html>
