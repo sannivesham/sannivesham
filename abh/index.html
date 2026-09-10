@@ -3073,18 +3073,25 @@
   // Live Photo Gallery from Firestore
   function initLiveGallery() {
     if (!db) return;
-    db.collection('gallery_photos').orderBy('uploadedAt', 'desc').onSnapshot(snapshot => {
+
+    function renderGallery(snapshot) {
       const galleryGrid = document.getElementById('galleryGrid');
       if (!galleryGrid) return;
 
       if (snapshot.empty) {
-        // Keep or restore default curated photos if none uploaded yet
         return;
       }
 
+      const docs = [];
+      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+      docs.sort((a, b) => {
+        const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
+        const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
+        return timeB - timeA;
+      });
+
       let html = '';
-      snapshot.forEach(doc => {
-        const data = doc.data();
+      docs.forEach(data => {
         const title = data.title || 'Abhay Hindu Sena Event';
         const cat = data.category || 'convention';
         const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
@@ -3112,9 +3119,23 @@
           }
         }
       }
-    }, err => {
-      console.log('Using default gallery photos:', err);
-    });
+    }
+
+    function fetchPhotos(tryOrdered = true) {
+      let q = db.collection('gallery_photos');
+      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc');
+
+      q.onSnapshot(snapshot => {
+        renderGallery(snapshot);
+      }, err => {
+        console.warn("Gallery snapshot fallback:", err);
+        if (tryOrdered) {
+          fetchPhotos(false);
+        }
+      });
+    }
+
+    fetchPhotos(true);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

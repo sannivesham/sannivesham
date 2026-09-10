@@ -2436,7 +2436,7 @@
   }
 
   function initGalleryAdmin() {
-    db.collection('gallery_photos').orderBy('uploadedAt', 'desc').onSnapshot(snapshot => {
+    function renderSnapshot(snapshot) {
       const grid = document.getElementById('galleryAdminGrid');
       const countEl = document.getElementById('photoCount');
       const tabCountEl = document.getElementById('tabPhotoCount');
@@ -2454,10 +2454,18 @@
         return;
       }
 
+      // Sort client-side by uploadedAt
+      const docs = [];
+      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+      docs.sort((a, b) => {
+        const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
+        const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
+        return timeB - timeA;
+      });
+
       let html = '';
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const id = doc.id;
+      docs.forEach(data => {
+        const id = data.id;
         const title = data.title || 'Untitled Moment';
         const cat = data.category || 'convention';
         const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
@@ -2495,17 +2503,49 @@
       });
 
       grid.innerHTML = html;
-    }, err => {
-      console.error("Gallery listener error:", err);
-      const grid = document.getElementById('galleryAdminGrid');
-      if (grid) {
-        grid.innerHTML = `
-          <div style="text-align:center; padding:30px; color:#e74c3c; grid-column: 1 / -1;">
-            Unable to load gallery photos. Check Firestore permissions for collection 'gallery_photos'.
-          </div>
-        `;
+    }
+
+    function startQuery(tryOrdered = true) {
+      let query = db.collection('gallery_photos');
+      if (tryOrdered) {
+        query = query.orderBy('uploadedAt', 'desc');
       }
-    });
+
+      query.onSnapshot(snapshot => {
+        renderSnapshot(snapshot);
+      }, err => {
+        console.error("Gallery listener error:", err);
+        // If ordering failed due to index or missing field, retry without order
+        if (tryOrdered) {
+          console.warn("Retrying gallery fetch without index ordering...");
+          startQuery(false);
+          return;
+        }
+
+        const grid = document.getElementById('galleryAdminGrid');
+        if (grid) {
+          grid.innerHTML = `
+            <div style="text-align:center; padding:30px 20px; color:#ff6b6b; grid-column: 1 / -1; background: rgba(231,76,60,0.08); border: 1px dashed rgba(231,76,60,0.4); border-radius: 10px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🔒</div>
+              <h4 style="margin-bottom:8px; color:#e74c3c; font-size: 1.05rem;">Firestore Permission Required</h4>
+              <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px; max-width:500px; margin-left:auto; margin-right:auto;">
+                Your Firestore Security Rules in Firebase Console need permission added for the <code>gallery_photos</code> collection.
+              </p>
+              <div style="background:#0a0303; border:1px solid var(--border-gold); padding:10px 14px; border-radius:6px; font-family:monospace; font-size:0.78rem; color:var(--gold-bright); text-align:left; max-width:440px; margin:0 auto 14px; overflow-x:auto; line-height: 1.5;">
+                match /gallery_photos/{document=**} {<br>
+                &nbsp;&nbsp;allow read, write: if true;<br>
+                }
+              </div>
+              <a href="https://console.firebase.google.com/project/abhay-hindu-sena-org/firestore/rules" target="_blank" rel="noopener" class="btn-action" style="background:var(--gold); color:#000; text-decoration:none; font-weight:700; display:inline-block; padding: 8px 18px; border-radius: 20px;">
+                Open Firebase Console Rules ➔
+              </a>
+            </div>
+          `;
+        }
+      });
+    }
+
+    startQuery(true);
   }
 
   async function deleteGalleryPhoto(id, title) {
