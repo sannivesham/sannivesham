@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dharma Charcha | Live Community Chat | Abhay Hindu Sena</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-bright: #F7D57F;
+    --saffron: #FF6B1A;
+    --saffron-bright: #FF8833;
+    --maroon: #7A0C0C;
+    --bg-dark: #0A0303;
+    --bg-card: #140707;
+    --bg-card-alt: #1F0A0A;
+    --border-gold: rgba(212,175,55,0.3);
+    --text-main: #FFF8EF;
+    --text-muted: #C7B5A0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* TOP HEADER */
+  .chat-app-header {
+    background: linear-gradient(180deg, #200606 0%, #0D0404 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 12px 3%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .circle-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFF;
+    border: 2px solid var(--gold);
+  }
+  .brand-title h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--gold-bright);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+  .brand-title span {
+    font-size: 0.74rem;
+    color: var(--saffron);
+    display: block;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .header-nav a, .header-nav button {
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--border-gold);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+  }
+  .header-nav a:hover, .header-nav button:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+  }
+  .live-pill {
+    background: rgba(46, 204, 113, 0.18) !important;
+    border-color: #2ecc71 !important;
+    color: #2ecc71 !important;
+    pointer-events: none;
+  }
+
+  /* MAIN LAYOUT */
+  .chat-layout {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* SIDEBAR */
+  .chat-sidebar {
+    width: 320px;
+    background: #0F0505;
+    border-right: 1px solid var(--border-gold);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+  .sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+  .sidebar-header h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+  }
+  .search-box {
+    position: relative;
+  }
+  .search-input {
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    color: #FFF;
+    font-family: inherit;
+  }
+  .search-input:focus { outline: none; border-color: var(--gold); }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .info-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .info-card h4 {
+    color: var(--gold-bright);
+    font-size: 0.86rem;
+    margin-bottom: 6px;
+    font-family: 'Cinzel', serif;
+  }
+  .info-card p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .motto-box {
+    font-style: italic;
+    color: var(--saffron-bright);
+    font-size: 0.82rem;
+    text-align: center;
+    padding: 8px;
+    background: rgba(255,107,26,0.08);
+    border-radius: 8px;
+    border: 1px dashed rgba(255,107,26,0.3);
+    margin-bottom: 16px;
+  }
+
+  /* CHAT MAIN AREA */
+  .chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #080202;
+    min-width: 0;
+  }
+
+  /* CHAT FEED */
+  .chat-feed-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .chat-msg {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    animation: fadeIn 0.2s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #000;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .chat-bubble {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 12px;
+    padding: 10px 16px;
+    max-width: 78%;
+  }
+  .chat-bubble-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+  }
+  .chat-sender {
+    font-weight: 700;
+    color: var(--gold-bright);
+    font-size: 0.9rem;
+  }
+  .chat-sender small {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+  .chat-time {
+    color: #887a6c;
+    font-size: 0.72rem;
+    margin-left: auto;
+  }
+  .chat-text {
+    font-size: 0.92rem;
+    color: #FFF;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  /* Badges */
+  .chat-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+  .badge-leader {
+    background: linear-gradient(135deg, #FF6B1A, #D4AF37) !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 8px rgba(255,107,26,0.6);
+  }
+  .badge-speaker {
+    background: rgba(255, 159, 67, 0.25) !important;
+    border: 1px solid #FF9F43;
+    color: #FFB067 !important;
+  }
+  .badge-core {
+    background: rgba(192, 57, 43, 0.3) !important;
+    border: 1px solid #e74c3c;
+    color: #ff7675 !important;
+  }
+  .badge-sevak {
+    background: rgba(212,175,55,0.15) !important;
+    border: 1px solid rgba(212,175,55,0.35);
+    color: var(--gold-bright) !important;
+  }
+
+  /* IDENTITY BAR */
+  .chat-identity-strip {
+    background: #140707;
+    border-top: 1px solid var(--border-gold);
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .identity-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar-mini {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-change-identity {
+    background: transparent;
+    border: 1px solid rgba(212,175,55,0.4);
+    color: var(--gold);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.74rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-change-identity:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  /* INPUT AREA */
+  .chat-input-area {
+    border-top: 1px solid rgba(212,175,55,0.2);
+    padding: 14px 24px;
+    background: #110505;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .chat-input {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #FFF;
+    font-family: inherit;
+    font-size: 0.92rem;
+    flex: 1;
+  }
+  .chat-input:focus { outline: none; border-color: var(--gold); }
+  .chat-send-btn {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    font-size: 0.92rem;
+    padding: 12px 28px;
+    white-space: nowrap;
+  }
+  .chat-send-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255,107,26,0.4);
+  }
+
+  /* ONBOARDING BOX */
+  .chat-onboarding {
+    padding: 40px 24px;
+    background: rgba(20,7,7,0.98);
+    border-top: 1px solid var(--border-gold);
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .onboarding-card {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .onboarding-card h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+  .onboarding-card p {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    margin-bottom: 16px;
+  }
+  .onboarding-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 600px) {
+    .onboarding-fields { grid-template-columns: 1fr; }
+  }
+
+  .terms-preview-box {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 14px 0 12px;
+    text-align: left;
+    font-size: 0.78rem;
+    color: #dedede;
+    line-height: 1.45;
+    max-height: 140px;
+    overflow-y: auto;
+  }
+  .terms-header {
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+  }
+  .terms-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .terms-list li {
+    margin-bottom: 4px;
+  }
+  .terms-list strong {
+    color: var(--gold);
+  }
+  .terms-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    font-size: 0.8rem;
+    color: #e0d5c5;
+    cursor: pointer;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .terms-checkbox-label input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--gold);
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .chat-legal-footer {
+    padding: 8px 24px;
+    font-size: 0.72rem;
+    color: #8c7e6f;
+    background: #0A0303;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* MODAL */
+  .rules-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .rules-modal.active { display: flex; }
+  .rules-card {
+    background: var(--bg-card);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+  }
+
+  @media (max-width: 860px) {
+    .chat-sidebar { display: none; }
+    .chat-app-header { padding: 10px 4%; }
+    .chat-feed-scroll { padding: 16px; }
+    .chat-bubble { max-width: 90%; }
+    .chat-input-area { padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<header class="chat-app-header">
+  <a href="index.html" class="header-brand">
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="circle-logo">
+    <div class="brand-title">
+      <h1>ABHAY HINDU SENA</h1>
+      <span>Dharma Charcha • Live Sevaks Community</span>
+    </div>
+  </a>
+
+  <div class="header-nav">
+    <span class="live-pill">● Live Stream</span>
+    <button onclick="openRulesModal()">📜 Guidelines & Disclaimer</button>
+    <a href="videos.html">🎬 Videos</a>
+    <a href="index.html">🌐 Website</a>
+  </div>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="chat-layout">
+  <!-- SIDEBAR -->
+  <aside class="chat-sidebar">
+    <div class="sidebar-header">
+      <h3>Dharma Charcha</h3>
+      <div class="search-box">
+        <input type="text" id="searchChatInput" class="search-input" placeholder="🔍 Search messages..." oninput="handleSearchChat(this.value)">
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="motto-box">
+        “ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”
+      </div>
+
+      <div class="info-card">
+        <h4>Spiritual Network</h4>
+        <p>A sacred community hub for devotees, youth, and volunteers of Abhay Hindu Sena across Andhra Pradesh, Telangana, and Bharat.</p>
+      </div>
+
+      <div class="info-card">
+        <h4>Designation Roles</h4>
+        <p style="margin-bottom:6px;"><strong style="color:var(--gold-bright);">⭐ Leader:</strong> Dharma coordinator</p>
+        <p style="margin-bottom:6px;"><strong style="color:#FFB067;">🎤 Active Speaker:</strong> Regular speaker</p>
+        <p style="margin-bottom:6px;"><strong style="color:#ff7675;">🛡️ Core Member:</strong> Core leadership</p>
+        <p><strong style="color:var(--gold);">🚩 Sevak:</strong> Devoted community member</p>
+      </div>
+
+      <div class="info-card" style="border-color:rgba(231,76,60,0.4);">
+        <h4 style="color:#ff7675;">Legal Notice</h4>
+        <p>Zero tolerance for abusive or unlawful language. The Founder and organization bear no liability for user opinions.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHAT MAIN AREA -->
+  <main class="chat-main">
+    <!-- MESSAGES FEED -->
+    <div class="chat-feed-scroll" id="chatFeed">
+      <div style="text-align:center; padding:50px; color:var(--text-muted);">
+        Loading live community messages...
+      </div>
+    </div>
+
+    <!-- ONBOARDING FORM (If identity is not yet saved) -->
+    <div class="chat-onboarding" id="chatOnboarding" style="display:none;">
+      <div class="onboarding-card">
+        <div style="font-size:2.2rem; margin-bottom:8px;">🚩</div>
+        <h3>Join Dharma Charcha</h3>
+        <p>Enter your Name and Place once. It will remain fixed so you can message freely.</p>
+        <form onsubmit="handleSaveProfile(event)">
+          <div class="onboarding-fields">
+            <input type="text" id="setupName" class="chat-input" placeholder="Your Full Name (e.g. Ramesh Sharma)" required autocomplete="name">
+            <input type="text" id="setupPlace" class="chat-input" placeholder="Your District / City (e.g. Vijayawada)" required autocomplete="address-level2">
+          </div>
+
+          <!-- Community Guidelines & Disclaimer Box -->
+          <div class="terms-preview-box">
+            <div class="terms-header">
+              <span>📜 Community Code of Conduct & Legal Disclaimer</span>
+            </div>
+            <ul class="terms-list">
+              <li><strong>Zero Tolerance for Abuse:</strong> Abusive words, profanity, harassment, defamatory remarks, or illegal content are strictly prohibited and will result in an immediate ban and deletion.</li>
+              <li><strong>Absolute Non-Liability Disclaimer:</strong> The Founder (Shri Radha Manohar Das), creators, developers, administrators, and the Abhay Hindu Sena organization bear <strong>NO legal, civil, criminal, or personal responsibility or liability</strong> whatsoever for any user-generated comments or material posted in this forum.</li>
+              <li><strong>Sole Individual Accountability:</strong> Every community participant is solely and legally responsible under the law for their own messages.</li>
+              <li><strong>Moderation:</strong> Administrators reserve the unconditional right to mute, disable, ban any user, or delete messages at any time without notice.</li>
+            </ul>
+          </div>
+
+          <label class="terms-checkbox-label">
+            <input type="checkbox" id="termsAgreement" required>
+            <span>I agree to the <strong>Community Guidelines & Legal Disclaimer</strong>. I confirm that I am solely responsible for my messages, and that the Founder and Abhay Hindu Sena bear zero liability.</span>
+          </label>
+
+          <button type="submit" class="chat-send-btn" style="width:100%; margin-top:4px;">
+            Accept Terms & Join Community ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ACTIVE AREA: IDENTITY BAR & MESSAGE INPUT -->
+    <div id="chatActiveArea" style="display:none;">
+      <div class="chat-identity-strip">
+        <div class="identity-badge">
+          <span class="avatar-mini" id="myAvatarMini">SV</span>
+          <span>Posting as: <strong id="myNameDisplay" style="color:var(--gold-bright);">Sevak</strong> (<span id="myPlaceDisplay">Bharat</span>)</span>
+          <span id="myBadgeDisplay" class="chat-badge badge-sevak">🚩 Sevak</span>
+        </div>
+        <button type="button" class="btn-change-identity" onclick="handleChangeProfile()" title="Change name or place">✏️ Change</button>
+      </div>
+
+      <form class="chat-input-area" id="chatForm" onsubmit="handleSendChat(event)">
+        <input type="text" id="chatText" class="chat-input" placeholder="Write your message / seva report..." required autocomplete="off">
+        <button type="submit" class="chat-send-btn" id="chatSendBtn">Post 💬</button>
+      </form>
+
+      <div id="chatDisabledNotice" style="display:none; color:#ff7675; background:rgba(255,107,107,0.12); padding:10px 18px; font-size:0.84rem; border-top:1px solid rgba(255,107,107,0.3); text-align:center;">
+        🚫 Your posting privileges have been restricted by the Administrator.
+      </div>
+    </div>
+
+    <!-- Legal Disclaimer Footer -->
+    <div class="chat-legal-footer">
+      ⚖️ <em>Disclaimer: All views and messages posted here belong solely to respective authors. The Founder, makers, and Abhay Hindu Sena hold zero responsibility or legal liability for user comments.</em>
+    </div>
+  </main>
+</div>
+
+<!-- RULES & DISCLAIMER POPUP MODAL -->
+<div class="rules-modal" id="rulesModal" onclick="closeRulesModal()">
+  <div class="rules-card" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-gold); padding-bottom:10px; margin-bottom:14px;">
+      <h3 style="font-family:'Cinzel',serif; color:var(--gold-bright); font-size:1.15rem;">📜 Community Guidelines & Legal Disclaimer</h3>
+      <button onclick="closeRulesModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer;">&times;</button>
+    </div>
+    <div style="font-size:0.84rem; color:#dedede; line-height:1.6;">
+      <p style="margin-bottom:10px;"><strong style="color:var(--gold);">1. Zero Tolerance for Abusive Content:</strong> Any profanity, vulgarity, offensive personal attacks, defamatory comments, or illegal material is strictly forbidden. Violators will be permanently muted and banned.</p>
+      <p style="margin-bottom:10px;"><strong style="color:var(--gold);">2. Absolute Non-Liability:</strong> The Founder (Shri Radha Manohar Das), the organization Abhay Hindu Sena, its volunteers, and web developers bear <strong>NO legal, civil, or criminal liability</strong> for opinions, claims, statements, or links posted by community members.</p>
+      <p style="margin-bottom:10px;"><strong style="color:var(--gold);">3. Individual Liability:</strong> Every poster is solely, personally, and legally accountable under applicable law for their statements.</p>
+      <p><strong style="color:var(--gold);">4. Moderation Rights:</strong> Administrators reserve the full right to remove any message or restrict any user account without prior explanation.</p>
+    </div>
+    <button class="chat-send-btn" style="width:100%; margin-top:16px;" onclick="closeRulesModal()">Understood & Close</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyANW4b8MGvlLn8XT1auTwukxlu08dm-YJQ",
+    authDomain: "abhay-hindu-sena-org.firebaseapp.com",
+    projectId: "abhay-hindu-sena-org",
+    storageBucket: "abhay-hindu-sena-org.firebasestorage.app",
+    messagingSenderId: "694749073728",
+    appId: "1:694749073728:web:5786bfe0c0a832dbba6aa5",
+    measurementId: "G-T2C9DQN7E2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  let userProfile = null;
+  let isUserDisabled = false;
+  let allLoadedMessages = [];
+
+  function initCommunityChat() {
+    // 1. Check fixed identity profile
+    const saved = localStorage.getItem('ahs_user_profile');
+    if (saved) {
+      try {
+        userProfile = JSON.parse(saved);
+      } catch (e) {
+        userProfile = null;
+      }
+    }
+
+    if (userProfile && userProfile.name && userProfile.place) {
+      showChatInputView();
+      listenToUserStatus();
+    } else {
+      showOnboardingView();
+    }
+
+    // 2. Real-time messages listener
+    listenToCommunityMessages();
+  }
+
+  function showOnboardingView() {
+    document.getElementById('chatOnboarding').style.display = 'block';
+    document.getElementById('chatActiveArea').style.display = 'none';
+  }
+
+  function showChatInputView() {
+    document.getElementById('chatOnboarding').style.display = 'none';
+    document.getElementById('chatActiveArea').style.display = 'block';
+
+    const initials = (userProfile.name || 'SV').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+    document.getElementById('myAvatarMini').textContent = initials;
+    document.getElementById('myNameDisplay').textContent = userProfile.name;
+    document.getElementById('myPlaceDisplay').textContent = userProfile.place;
+    updateBadgeUI(userProfile.role || 'Sevak');
+  }
+
+  function updateBadgeUI(role) {
+    const badgeEl = document.getElementById('myBadgeDisplay');
+    if (!badgeEl) return;
+    badgeEl.className = 'chat-badge';
+    if (role === 'Leader') {
+      badgeEl.classList.add('badge-leader');
+      badgeEl.textContent = '⭐ Leader';
+    } else if (role === 'Active Speaker') {
+      badgeEl.classList.add('badge-speaker');
+      badgeEl.textContent = '🎤 Active Speaker';
+    } else if (role === 'Core Team') {
+      badgeEl.classList.add('badge-core');
+      badgeEl.textContent = '🛡️ Core Member';
+    } else {
+      badgeEl.classList.add('badge-sevak');
+      badgeEl.textContent = '🚩 Sevak';
+    }
+  }
+
+  // Save Identity Profile
+  async function handleSaveProfile(e) {
+    e.preventDefault();
+    const name = document.getElementById('setupName').value.trim();
+    const place = document.getElementById('setupPlace').value.trim();
+    const terms = document.getElementById('termsAgreement');
+    if (terms && !terms.checked) {
+      alert("Please agree to the Community Code of Conduct and Legal Disclaimer to proceed.");
+      return;
+    }
+    if (!name || !place) return;
+
+    const uid = (userProfile && userProfile.uid) ? userProfile.uid : ('sevak_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36));
+    userProfile = {
+      uid: uid,
+      name: name,
+      place: place,
+      role: (userProfile && userProfile.role) ? userProfile.role : 'Sevak',
+      termsAccepted: true
+    };
+    localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
+
+    try {
+      await db.collection('community_users').doc(uid).set({
+        uid: uid,
+        name: name,
+        place: place,
+        role: userProfile.role || 'Sevak',
+        isDisabled: false,
+        termsAccepted: true,
+        termsAcceptedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (err) {
+      console.warn("Sync note:", err);
+    }
+
+    showChatInputView();
+    listenToUserStatus();
+  }
+
+  function handleChangeProfile() {
+    if (confirm("Do you want to edit your Name and Place?")) {
+      document.getElementById('setupName').value = userProfile.name || '';
+      document.getElementById('setupPlace').value = userProfile.place || '';
+      showOnboardingView();
+    }
+  }
+
+  // Listen to user status (Mute/Disable)
+  function listenToUserStatus() {
+    if (!db || !userProfile || !userProfile.uid) return;
+    db.collection('community_users').doc(userProfile.uid).onSnapshot(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        isUserDisabled = data.isDisabled === true;
+        if (data.role) {
+          userProfile.role = data.role;
+          localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
+          updateBadgeUI(data.role);
+        }
+
+        const inputForm = document.getElementById('chatForm');
+        const alertBox = document.getElementById('chatDisabledNotice');
+        if (isUserDisabled) {
+          if (inputForm) inputForm.style.display = 'none';
+          if (alertBox) alertBox.style.display = 'block';
+        } else {
+          if (inputForm) inputForm.style.display = 'flex';
+          if (alertBox) alertBox.style.display = 'none';
+        }
+      }
+    }, err => console.log(err));
+  }
+
+  // Real-time Chat Feed Listener
+  function listenToCommunityMessages() {
+    db.collection('community_messages')
+      .limit(120)
+      .onSnapshot(snapshot => {
+        if (snapshot.empty) {
+          showEmptyChat();
+          return;
+        }
+
+        allLoadedMessages = [];
+        snapshot.forEach(doc => {
+          const m = doc.data();
+          if (!m.deleted) allLoadedMessages.push({ id: doc.id, ...m });
+        });
+
+        // Sort ascending by time
+        allLoadedMessages.sort((a, b) => {
+          const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
+          const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
+          return tA - tB;
+        });
+
+        renderMessages(allLoadedMessages);
+      }, err => {
+        console.error("Firestore stream error:", err);
+        const feed = document.getElementById('chatFeed');
+        if (err.code === 'permission-denied') {
+          feed.innerHTML = `
+            <div style="text-align:center; padding:40px 20px; color:#ff7675; background:rgba(255,107,107,0.08); border-radius:12px; margin:20px;">
+              <div style="font-size:2rem; margin-bottom:8px;">⚠️</div>
+              <div style="font-weight:700; font-size:1.05rem; margin-bottom:6px;">Firestore Permission Denied</div>
+              <div style="font-size:0.85rem; color:#e0d0c0;">
+                Please update your Firebase Console Firestore Rules to allow <code>community_messages</code>.
+              </div>
+            </div>
+          `;
+        }
+      });
+  }
+
+  function renderMessages(msgs) {
+    const feed = document.getElementById('chatFeed');
+    if (!msgs || msgs.length === 0) {
+      showEmptyChat();
+      return;
+    }
+
+    let html = '';
+    msgs.forEach(m => {
+      const initials = (m.name || 'Sevak').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+      const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
+      const timeStr = formatChatTime(timeDate);
+
+      let badgeClass = 'badge-sevak';
+      let badgeText = '🚩 Sevak';
+      if (m.role === 'Leader') {
+        badgeClass = 'badge-leader';
+        badgeText = '⭐ Leader';
+      } else if (m.role === 'Active Speaker') {
+        badgeClass = 'badge-speaker';
+        badgeText = '🎤 Active Speaker';
+      } else if (m.role === 'Core Team') {
+        badgeClass = 'badge-core';
+        badgeText = '🛡️ Core Member';
+      }
+
+      html += `
+        <div class="chat-msg">
+          <div class="chat-avatar">${initials}</div>
+          <div class="chat-bubble">
+            <div class="chat-bubble-top">
+              <span class="chat-sender">${escapeHtml(m.name)} <small>(${escapeHtml(m.place || 'Bharat')})</small></span>
+              <span class="chat-badge ${badgeClass}">${badgeText}</span>
+              <span class="chat-time">${timeStr}</span>
+            </div>
+            <div class="chat-text">${escapeHtml(m.text)}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    feed.innerHTML = html;
+    feed.scrollTop = feed.scrollHeight;
+  }
+
+  function showEmptyChat(customText) {
+    const feed = document.getElementById('chatFeed');
+    feed.innerHTML = `
+      <div style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+        <div style="font-size:2.5rem; margin-bottom:12px;">🚩</div>
+        <div style="font-weight:700; color:var(--gold-bright); font-size:1.1rem; margin-bottom:6px;">
+          ${customText || 'No messages in Dharma Charcha yet'}
+        </div>
+        <div style="font-size:0.85rem; color:#b0a090;">
+          Be the first to post a spiritual update, question, or seva report below!
+        </div>
+      </div>
+    `;
+  }
+
+  function formatChatTime(date) {
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return isToday ? `Today, ${timeStr}` : `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}`;
+  }
+
+  // Send Message
+  async function handleSendChat(e) {
+    e.preventDefault();
+    if (isUserDisabled) {
+      alert("Your account is currently muted by the Administrator.");
+      return;
+    }
+    if (!userProfile || !userProfile.name) {
+      showOnboardingView();
+      return;
+    }
+
+    const input = document.getElementById('chatText');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById('chatSendBtn');
+    btn.disabled = true;
+    btn.textContent = 'Posting...';
+
+    try {
+      await db.collection('community_messages').add({
+        uid: userProfile.uid,
+        name: userProfile.name,
+        place: userProfile.place,
+        role: userProfile.role || 'Sevak',
+        text: text,
+        clientTimestamp: Date.now(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      input.value = '';
+    } catch (err) {
+      console.error("Failed to post message:", err);
+      let errMsg = err.message;
+      if (err.code === 'permission-denied') {
+        errMsg = "Permission Denied: Please update your Firestore Security Rules in Firebase Console to allow read & write for 'community_messages'.";
+      }
+      alert("Error posting message:\n\n" + errMsg);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Post 💬';
+      input.focus();
+    }
+  }
+
+  // Search Chat
+  function handleSearchChat(term) {
+    term = (term || '').toLowerCase().trim();
+    if (!term) {
+      renderMessages(allLoadedMessages);
+      return;
+    }
+    const filtered = allLoadedMessages.filter(m => 
+      (m.text || '').toLowerCase().includes(term) ||
+      (m.name || '').toLowerCase().includes(term) ||
+      (m.place || '').toLowerCase().includes(term)
+    );
+    renderMessages(filtered);
+  }
+
+  // Rules Modal
+  function openRulesModal() {
+    document.getElementById('rulesModal').classList.add('active');
+  }
+  function closeRulesModal() {
+    document.getElementById('rulesModal').classList.remove('active');
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initCommunityChat();
+  });
+</script>
+</body>
+</html>

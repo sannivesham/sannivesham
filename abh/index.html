@@ -938,6 +938,26 @@
     font-size: 0.72rem;
     font-weight: 600;
   }
+  .chat-fullscreen-btn {
+    background: rgba(212,175,55,0.12);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+  }
+  .chat-fullscreen-btn:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(212,175,55,0.4);
+  }
   .chat-feed {
     padding: 18px;
     height: 360px;
@@ -1736,7 +1756,12 @@
   <div class="chat-box-container">
     <div class="chat-header">
       <h4>🚩 Dharma Charcha (Live Sevaks Feed)</h4>
-      <span class="chat-online-badge" id="chatLiveStatus">● Live Stream</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="community.html" class="chat-fullscreen-btn" target="_blank" title="Open full-screen community chat">
+          ⛶ Open Full Chat
+        </a>
+        <span class="chat-online-badge" id="chatLiveStatus">● Live Stream</span>
+      </div>
     </div>
 
     <!-- Live Messages Feed -->
