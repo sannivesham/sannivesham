@@ -236,6 +236,13 @@
     background: #FFF;
     display: block;
   }
+  .hero-badge-wrap {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 14px;
+    clear: both;
+  }
   .hero-badge {
     display: inline-flex;
     align-items: center;
@@ -246,7 +253,6 @@
     border-radius: 30px;
     font-size: 0.82rem;
     color: #FFA466;
-    margin-bottom: 16px;
     line-height: 1.4;
   }
   .hero-title {
@@ -259,8 +265,12 @@
     line-height: 1.38;
     padding-top: 14px;
     padding-bottom: 8px;
-    margin-bottom: 6px;
-    display: inline-block;
+    margin: 0 auto 6px;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    clear: both;
+    text-align: center;
   }
   .hero-founder-tag {
     font-size: clamp(1.05rem, 3.5vw, 1.25rem);
@@ -269,6 +279,14 @@
     line-height: 1.45;
     padding: 4px 0;
     margin-bottom: 14px;
+    text-align: center;
+  }
+  .hero-motto-wrap {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    clear: both;
   }
   .hero-motto-callout {
     display: inline-block;
@@ -280,7 +298,6 @@
     font-size: clamp(0.9rem, 2.8vw, 1.05rem);
     font-style: italic;
     line-height: 1.45;
-    margin-bottom: 20px;
   }
   .hero-lead {
     max-width: 820px;
@@ -1005,6 +1022,10 @@
     line-height: 1.45;
     padding-top: 18px;
     padding-bottom: 10px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto 6px;
+    clear: both;
   }
   body.telugu-mode .section-title,
   body.telugu-mode .founder-details h3,
@@ -1114,16 +1135,20 @@
     <img src="assets/logo.png" alt="Abhay Hindu Sena Official Crest">
   </div>
 
-  <div class="hero-badge">
-    <span>🚩</span> <span data-en="Sanatana Dharma Defense & Youth Movement" data-te="సనాతన ధర్మ రక్షణ & యువ చైతన్యోద్యమం">Sanatana Dharma Defense & Youth Movement</span>
+  <div class="hero-badge-wrap">
+    <div class="hero-badge">
+      <span>🚩</span> <span data-en="Sanatana Dharma Defense & Youth Movement" data-te="సనాతన ధర్మ రక్షణ & యువ చైతన్యోద్యమం">Sanatana Dharma Defense & Youth Movement</span>
+    </div>
   </div>
 
   <h1 class="hero-title" data-en="ABHAY HINDU SENA" data-te="అభయ్ హిందూ సేన">ABHAY HINDU SENA</h1>
   <div class="hero-founder-tag" data-en="Founded by Shri Radha Manohar Das" data-te="వ్యవస్థాపకులు: శ్రీ రాధా మనోహర్ దాస్">
     Founded by Shri Radha Manohar Das
   </div>
-  <div class="hero-motto-callout" data-en="“ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”" data-te="“ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”">
-    “ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”
+  <div class="hero-motto-wrap">
+    <div class="hero-motto-callout" data-en="“ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”" data-te="“ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”">
+      “ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి”
+    </div>
   </div>
   <p class="hero-lead" data-en="Standing fearless in the defense of Vedic heritage, sacred temple preservation, youth martial empowerment, and compassionate Sanatana Seva across Andhra Pradesh, Telangana, and all of Bharat."
      data-te="వేద వారసత్వ పరిరక్షణ, ఆలయ సంరక్షణ, యువతకు ఆత్మరక్షణ శిక్షణ మరియు నిస్వార్థ సనాతన సేవ కోసం ఆంధ్రప్రదేశ్, తెలంగాణ మరియు యావత్ భారతవనిలో నిర్భయంగా ముందడుగు వేస్తున్న ధార్మిక శక్తి.">
