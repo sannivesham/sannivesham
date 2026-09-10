@@ -599,6 +599,69 @@
     font-size: 0.86rem;
     margin-bottom: 20px;
   }
+
+  /* DATA TABLE & METRIC CARDS */
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .metric-val {
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    line-height: 1.1;
+  }
+  .metric-lbl {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .admin-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .admin-data-table th {
+    background: #190808;
+    color: var(--gold-bright);
+    font-weight: 700;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--gold);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .admin-data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: #EEE;
+    vertical-align: middle;
+  }
+  .admin-data-table tr:hover td {
+    background: rgba(212,175,55,0.06);
+  }
+  .sevak-id-tag {
+    font-family: monospace;
+    font-weight: 700;
+    color: #FFD700;
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+  }
 </style>
 </head>
 <body>
@@ -659,6 +722,9 @@
     </button>
     <button class="admin-tab" id="tabCommunityBtn" onclick="switchAdminTab('community')">
       💬 Live Community Chat & Sevaks (<span id="tabMsgCount">0</span>)
+    </button>
+    <button class="admin-tab" id="tabRegistrationsBtn" onclick="switchAdminTab('registrations')">
+      📋 Sevak Registrations & Backup (<span id="tabRegCount">0</span>)
     </button>
   </div>
 
@@ -771,6 +837,96 @@
       </div>
     </div>
   </div>
+
+  <!-- VIEW 3: SEVAK REGISTRATIONS & BACKUP -->
+  <div id="registrationsView" style="display:none;">
+    
+    <!-- Top Analytics Metric Cards -->
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:20px;">
+      <div class="metric-card">
+        <div class="metric-val" id="regTotalCount">0</div>
+        <div class="metric-lbl">Total Enlisted Sevaks (మొత్తం సేవకులు)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="regApCount" style="color:var(--gold-bright);">0</div>
+        <div class="metric-lbl">Andhra Pradesh Sevaks</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="regTgCount" style="color:var(--saffron);">0</div>
+        <div class="metric-lbl">Telangana Sevaks</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val" id="regOtherCount" style="color:#5dade2;">0</div>
+        <div class="metric-lbl">Other Bharat States</div>
+      </div>
+    </div>
+
+    <!-- Registration Table Card -->
+    <div class="dash-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <div>
+          <h2 style="margin:0;">📋 Official Dharma Sevaks Directory & Backup</h2>
+          <p class="card-desc" style="margin-top:4px;">
+            Real-time dual backup (Google Sheets + Firestore) with authentic Kali Yugam Sevak IDs.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-submit" style="width:auto; padding:10px 18px; font-size:0.88rem; background:linear-gradient(135deg, #27ae60, #1e8449); box-shadow:0 4px 15px rgba(39,174,96,0.3);" onclick="exportRegistrationsToCSV()">
+            📥 Export All to CSV / Excel
+          </button>
+          <button type="button" class="btn-action" style="padding:10px 14px; font-size:0.85rem;" onclick="openGasModal()">
+            ⚙️ Google Sheets Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filters Toolbar -->
+      <div style="display:grid; grid-template-columns: 2fr 1fr 1fr auto; gap:12px; margin-bottom:16px;">
+        <input type="text" id="regSearchInput" class="form-input" placeholder="🔍 Search by Sevak ID, Name, Phone, Mandal..." oninput="handleRegFilter()">
+        
+        <select id="regStateFilter" class="form-select" onchange="handleRegFilter()">
+          <option value="ALL">All States (అన్ని రాష్ట్రాలు)</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Other States of Bharat">Other Bharat</option>
+        </select>
+
+        <input type="text" id="regDistrictFilter" class="form-input" placeholder="Filter by District..." oninput="handleRegFilter()">
+
+        <button type="button" class="btn-action" style="padding:0 16px;" onclick="resetRegFilters()">Reset</button>
+      </div>
+
+      <!-- Data Table -->
+      <div style="overflow-x:auto; border-radius:8px; border:1px solid var(--border-gold);">
+        <table class="admin-data-table" id="regTable">
+          <thead>
+            <tr>
+              <th>Sevak ID</th>
+              <th>Full Name</th>
+              <th>WhatsApp Mobile</th>
+              <th>State & District</th>
+              <th>Mandal / Area</th>
+              <th>Instagram</th>
+              <th>Questions / Suggestions</th>
+              <th>Registered At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="regTableBody">
+            <tr>
+              <td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">
+                Loading registered sevaks...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- USER MANAGEMENT MODAL -->
@@ -842,6 +998,46 @@
       <button type="button" class="btn-action btn-delete" style="width:100%; text-align:center; padding:10px;" onclick="handleDeleteUserMessages()">
         🗑️ Delete All Messages by this User
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- GOOGLE SHEETS SETTINGS MODAL -->
+<div class="modal-overlay" id="gasModal" onclick="closeGasModal()">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:560px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-gold); padding-bottom:12px; margin-bottom:16px;">
+      <h3 style="font-family:'Cinzel',serif; color:var(--gold-bright); font-size:1.2rem;">⚙️ Google Sheets Integration Settings</h3>
+      <button onclick="closeGasModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;" aria-label="Close">&times;</button>
+    </div>
+    <p class="card-desc" style="margin-bottom:14px;">
+      Paste your deployed Google Apps Script Web App URL below. When volunteers register on the portal, rows are instantly added to your Google Sheet in real-time.
+    </p>
+    <div class="form-group">
+      <label for="gasUrlInput">Google Apps Script Web App URL *</label>
+      <input type="url" id="gasUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" style="margin-top:4px;">
+      <small style="color:var(--text-muted); font-size:0.75rem; margin-top:4px; display:block;">
+        Must end with <code>/exec</code> and be deployed with access: <strong>Anyone</strong>.
+      </small>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button type="button" class="btn-submit" onclick="saveGasUrl()" style="flex:1;">💾 Save Settings</button>
+      <button type="button" class="btn-action" onclick="closeGasModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEVAK FULL DETAILS MODAL -->
+<div class="modal-overlay" id="sevakDetailModal" onclick="closeSevakDetailModal()">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:580px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-gold); padding-bottom:12px; margin-bottom:16px;">
+      <h3 style="font-family:'Cinzel',serif; color:var(--gold-bright); font-size:1.2rem;">🚩 Official Sevak Enlistment Record</h3>
+      <button onclick="closeSevakDetailModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;" aria-label="Close">&times;</button>
+    </div>
+    <div id="sevakDetailBody">
+      <!-- Injected dynamically -->
+    </div>
+    <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+      <button type="button" class="btn-action" onclick="closeSevakDetailModal()">Close / మూసివేయండి</button>
     </div>
   </div>
 </div>
@@ -1030,19 +1226,28 @@
   function switchAdminTab(tab) {
     const vTabBtn = document.getElementById('tabVideosBtn');
     const cTabBtn = document.getElementById('tabCommunityBtn');
+    const rTabBtn = document.getElementById('tabRegistrationsBtn');
     const vView = document.getElementById('videosView');
     const cView = document.getElementById('communityView');
+    const rView = document.getElementById('registrationsView');
+
+    vTabBtn.classList.remove('active');
+    cTabBtn.classList.remove('active');
+    if (rTabBtn) rTabBtn.classList.remove('active');
+
+    vView.style.display = 'none';
+    cView.style.display = 'none';
+    if (rView) rView.style.display = 'none';
 
     if (tab === 'videos') {
       vTabBtn.classList.add('active');
-      cTabBtn.classList.remove('active');
       vView.style.display = 'block';
-      cView.style.display = 'none';
-    } else {
+    } else if (tab === 'community') {
       cTabBtn.classList.add('active');
-      vTabBtn.classList.remove('active');
       cView.style.display = 'block';
-      vView.style.display = 'none';
+    } else if (tab === 'registrations') {
+      if (rTabBtn) rTabBtn.classList.add('active');
+      if (rView) rView.style.display = 'block';
     }
   }
 
@@ -1053,6 +1258,7 @@
     initVideosListener();
     initCommunityChatAdmin();
     initSevaksDirectoryAdmin();
+    initVolunteerRegistrationsAdmin();
   }
 
   // ==========================================
@@ -1527,6 +1733,280 @@
     } catch (err) {
       alert("Error deleting user messages: " + err.message);
     }
+  }
+
+  // ==========================================
+  // 4. SEVAK REGISTRATIONS & BACKUP DIRECTORY
+  // ==========================================
+  let allRegistrations = [];
+
+  function initVolunteerRegistrationsAdmin() {
+    const storedGasUrl = localStorage.getItem('ahs_gas_url') || '';
+    const input = document.getElementById('gasUrlInput');
+    if (input && storedGasUrl) input.value = storedGasUrl;
+
+    db.collection('volunteer_registrations')
+      .orderBy('registeredAt', 'desc')
+      .onSnapshot(snapshot => {
+        allRegistrations = [];
+        let apCount = 0;
+        let tgCount = 0;
+        let otherCount = 0;
+
+        snapshot.forEach(doc => {
+          const item = doc.data();
+          item.id = doc.id;
+          allRegistrations.push(item);
+
+          const st = (item.state || '').toLowerCase();
+          if (st.includes('andhra')) apCount++;
+          else if (st.includes('telangana')) tgCount++;
+          else otherCount++;
+        });
+
+        const total = allRegistrations.length;
+        const tabEl = document.getElementById('tabRegCount');
+        const totEl = document.getElementById('regTotalCount');
+        const apEl = document.getElementById('regApCount');
+        const tgEl = document.getElementById('regTgCount');
+        const othEl = document.getElementById('regOtherCount');
+
+        if (tabEl) tabEl.textContent = total;
+        if (totEl) totEl.textContent = total;
+        if (apEl) apEl.textContent = apCount;
+        if (tgEl) tgEl.textContent = tgCount;
+        if (othEl) othEl.textContent = otherCount;
+
+        renderRegistrationsTable(allRegistrations);
+      }, err => {
+        console.error("Registrations sync error:", err);
+        const tbody = document.getElementById('regTableBody');
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="9" style="text-align:center; padding:30px; color:#ff6b6b;">
+                Error loading registrations: ${escapeHtml(err.message)}
+              </td>
+            </tr>
+          `;
+        }
+      });
+  }
+
+  function renderRegistrationsTable(list) {
+    const tbody = document.getElementById('regTableBody');
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">
+            No Sevak registrations found matching current filters.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = list.map(item => {
+      const sevakId = item.sevakId || item.id || 'N/A';
+      const name = item.name || 'Sevak';
+      const phone = item.phone || '';
+      const state = item.state || '';
+      const district = item.district || '';
+      const mandal = item.mandal || '';
+      const insta = (item.instagram && item.instagram !== 'N/A') ? item.instagram : '-';
+      const hasNote = (item.question && item.question !== 'N/A') || (item.suggestion && item.suggestion !== 'N/A');
+      const timeDisplay = item.timestamp || (item.registeredAt && item.registeredAt.toDate ? item.registeredAt.toDate().toLocaleString('en-IN') : '-');
+
+      const waLink = phone ? `https://wa.me/91${phone.replace(/[^0-9]/g, '')}` : '#';
+
+      return `
+        <tr>
+          <td><span class="sevak-id-tag">${escapeHtml(sevakId)}</span></td>
+          <td><strong>${escapeHtml(name)}</strong></td>
+          <td>
+            <a href="${waLink}" target="_blank" style="color:#2ecc71; text-decoration:none; font-weight:600;" title="Click to chat on WhatsApp">
+              💬 +91 ${escapeHtml(phone)}
+            </a>
+          </td>
+          <td>${escapeHtml(district)}, <small style="color:var(--text-muted);">${escapeHtml(state)}</small></td>
+          <td>${escapeHtml(mandal)}</td>
+          <td><span style="color:var(--gold);">${escapeHtml(insta)}</span></td>
+          <td>
+            ${hasNote ? '<span style="background:rgba(212,175,55,0.2); color:var(--gold-bright); padding:2px 6px; border-radius:4px; font-size:0.75rem;">📝 Has Note</span>' : '<span style="color:#666;">-</span>'}
+          </td>
+          <td style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(timeDisplay)}</td>
+          <td>
+            <button class="btn-action" style="padding:4px 10px; font-size:0.75rem;" onclick="viewSevakDetails('${escapeHtml(sevakId)}')">
+              🔍 Details
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function handleRegFilter() {
+    const q = (document.getElementById('regSearchInput').value || '').toLowerCase().trim();
+    const stFilter = document.getElementById('regStateFilter').value;
+    const distFilter = (document.getElementById('regDistrictFilter').value || '').toLowerCase().trim();
+
+    const filtered = allRegistrations.filter(item => {
+      if (stFilter !== 'ALL' && item.state !== stFilter) {
+        return false;
+      }
+      if (distFilter && !(item.district || '').toLowerCase().includes(distFilter)) {
+        return false;
+      }
+      if (q) {
+        const matchId = (item.sevakId || '').toLowerCase().includes(q);
+        const matchName = (item.name || '').toLowerCase().includes(q);
+        const matchPhone = (item.phone || '').includes(q);
+        const matchMandal = (item.mandal || '').toLowerCase().includes(q);
+        if (!matchId && !matchName && !matchPhone && !matchMandal) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    renderRegistrationsTable(filtered);
+  }
+
+  function resetRegFilters() {
+    document.getElementById('regSearchInput').value = '';
+    document.getElementById('regStateFilter').value = 'ALL';
+    document.getElementById('regDistrictFilter').value = '';
+    renderRegistrationsTable(allRegistrations);
+  }
+
+  function exportRegistrationsToCSV() {
+    if (!allRegistrations || allRegistrations.length === 0) {
+      alert("No registrations available to export.");
+      return;
+    }
+
+    const headers = [
+      "Sevak ID",
+      "Full Name",
+      "WhatsApp Mobile",
+      "State",
+      "District",
+      "Mandal / Town",
+      "Email",
+      "Instagram ID",
+      "Any Question",
+      "Any Suggestion",
+      "Registered Timestamp",
+      "Source"
+    ];
+
+    const rows = allRegistrations.map(r => [
+      `"${(r.sevakId || '').replace(/"/g, '""')}"`,
+      `"${(r.name || '').replace(/"/g, '""')}"`,
+      `"${(r.phone || '').replace(/"/g, '""')}"`,
+      `"${(r.state || '').replace(/"/g, '""')}"`,
+      `"${(r.district || '').replace(/"/g, '""')}"`,
+      `"${(r.mandal || '').replace(/"/g, '""')}"`,
+      `"${(r.email || '').replace(/"/g, '""')}"`,
+      `"${(r.instagram || '').replace(/"/g, '""')}"`,
+      `"${(r.question || '').replace(/"/g, '""')}"`,
+      `"${(r.suggestion || '').replace(/"/g, '""')}"`,
+      `"${(r.timestamp || '').replace(/"/g, '""')}"`,
+      `"${(r.source || 'Website').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Abhay_Hindu_Sena_Sevaks_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("Downloaded official Sevaks CSV backup! 🚩");
+  }
+
+  function viewSevakDetails(sevakId) {
+    const item = allRegistrations.find(r => (r.sevakId === sevakId || r.id === sevakId));
+    if (!item) return;
+
+    const body = document.getElementById('sevakDetailBody');
+    body.innerHTML = `
+      <div style="background:rgba(212,175,55,0.08); border:1px solid var(--border-gold); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Official Sevak ID:</span>
+            <div style="font-family:'Cinzel',monospace; font-size:1.4rem; color:#FFD700; font-weight:800;">${escapeHtml(item.sevakId || item.id)}</div>
+          </div>
+          <a href="https://wa.me/91${(item.phone || '').replace(/[^0-9]/g, '')}" target="_blank" style="background:#25D366; color:#FFF; padding:8px 14px; border-radius:6px; text-decoration:none; font-size:0.85rem; font-weight:700;">
+            💬 Open WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.88rem; margin-bottom:16px;">
+        <div><span style="color:var(--text-muted);">Name:</span> <strong>${escapeHtml(item.name || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Mobile:</span> <strong>+91 ${escapeHtml(item.phone || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">State:</span> <strong>${escapeHtml(item.state || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">District:</span> <strong>${escapeHtml(item.district || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Mandal / Area:</span> <strong>${escapeHtml(item.mandal || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Instagram:</span> <strong>${escapeHtml(item.instagram || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Email:</span> <strong>${escapeHtml(item.email || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Registered At:</span> <strong>${escapeHtml(item.timestamp || '--')}</strong></div>
+      </div>
+
+      ${item.question && item.question !== 'N/A' ? `
+        <div style="margin-bottom:12px; background:rgba(0,0,0,0.3); border-radius:6px; padding:10px;">
+          <strong style="color:var(--gold-bright); font-size:0.82rem; display:block;">Question for Organization:</strong>
+          <p style="margin:4px 0 0; font-size:0.88rem; color:#EEE;">${escapeHtml(item.question)}</p>
+        </div>
+      ` : ''}
+
+      ${item.suggestion && item.suggestion !== 'N/A' ? `
+        <div style="margin-bottom:12px; background:rgba(0,0,0,0.3); border-radius:6px; padding:10px;">
+          <strong style="color:var(--gold-bright); font-size:0.82rem; display:block;">Seva Suggestion / Idea:</strong>
+          <p style="margin:4px 0 0; font-size:0.88rem; color:#EEE;">${escapeHtml(item.suggestion)}</p>
+        </div>
+      ` : ''}
+    `;
+
+    document.getElementById('sevakDetailModal').classList.add('active');
+  }
+
+  function closeSevakDetailModal() {
+    document.getElementById('sevakDetailModal').classList.remove('active');
+  }
+
+  function openGasModal() {
+    const stored = localStorage.getItem('ahs_gas_url') || '';
+    const input = document.getElementById('gasUrlInput');
+    if (input) input.value = stored;
+    document.getElementById('gasModal').classList.add('active');
+  }
+
+  function closeGasModal() {
+    document.getElementById('gasModal').classList.remove('active');
+  }
+
+  function saveGasUrl() {
+    const url = (document.getElementById('gasUrlInput').value || '').trim();
+    if (!url) {
+      localStorage.removeItem('ahs_gas_url');
+      showToast("Google Sheets Web App URL cleared.");
+      closeGasModal();
+      return;
+    }
+    if (!url.startsWith('https://script.google.com/macros/s/') || !url.includes('/exec')) {
+      if (!confirm("The URL does not appear to end with /exec or match Google Apps Script format.\nSave anyway?")) {
+        return;
+      }
+    }
+    localStorage.setItem('ahs_gas_url', url);
+    showToast("Google Sheets Web App URL saved successfully! 🚩");
+    closeGasModal();
   }
 
   // ==========================================

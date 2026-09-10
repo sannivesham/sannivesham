@@ -1332,6 +1332,172 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(212,175,55,0.6);
   }
+  .form-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* DIGITAL SEVAK ID CARD STYLING */
+  .sevak-card-wrapper {
+    background: linear-gradient(145deg, #1f0707 0%, #0d0303 50%, #290b0b 100%);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(212,175,55,0.4), inset 0 0 15px rgba(212,175,55,0.12);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+  }
+  .sevak-card-wrapper::after {
+    content: '🚩';
+    position: absolute;
+    right: -12px;
+    bottom: -15px;
+    font-size: 7.5rem;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  .sevak-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(212,175,55,0.35);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+  }
+  .sevak-card-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 12px rgba(212,175,55,0.5);
+    background: #FFF;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .sevak-card-org {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  .sevak-card-org-te {
+    font-size: 0.8rem;
+    color: var(--saffron);
+    font-weight: 600;
+  }
+  .sevak-card-sub {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .sevak-id-highlight {
+    background: rgba(255,107,26,0.12);
+    border: 1px solid var(--saffron);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .sevak-id-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .sevak-id-num {
+    font-family: 'Cinzel', monospace;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #FFD700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 12px rgba(255,215,0,0.6);
+  }
+  .sevak-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 480px) {
+    .sevak-info-grid { grid-template-columns: 1fr; }
+  }
+  .sevak-info-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .info-lbl {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .info-val {
+    font-size: 0.88rem;
+    color: #FFF;
+    font-weight: 600;
+    word-break: break-word;
+  }
+  .sevak-card-footer {
+    border-top: 1px solid rgba(212,175,55,0.25);
+    padding-top: 10px;
+    text-align: center;
+  }
+  .sevak-motto {
+    font-size: 0.8rem;
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .sevak-auth {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+  .btn-whatsapp-share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #25D366;
+    color: #FFF;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(37,211,102,0.35);
+    transition: all 0.25s;
+  }
+  .btn-whatsapp-share:hover {
+    background: #1EBE5D;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+  }
+  .btn-copy-id {
+    background: rgba(212,175,55,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+  }
+  .btn-copy-id:hover {
+    background: var(--gold);
+    color: #000;
+  }
 
   /* FOOTER */
   footer {
@@ -1909,47 +2075,103 @@
 
   <div class="form-container">
     <form id="volunteerForm" onsubmit="handleVolunteerSubmit(event)">
-      <div class="form-grid">
-        <div class="form-group">
-          <label data-en="Full Name *" data-te="పూర్తి పేరు *">Full Name *</label>
-          <input type="text" id="vName" class="form-control" placeholder="Your full name" required>
+      
+      <!-- PRIMARY MANDATORY FIELDS (1 TO 5) -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:6px;">
+          <span style="font-size:1.1rem; color:var(--gold-bright);">🚩</span>
+          <h4 style="font-size:0.95rem; color:var(--gold-bright); font-family:var(--font-heading); margin:0;" data-en="Primary Information (Required)" data-te="ప్రాథమిక సమాచారం (తప్పనిసరి)">
+            Primary Information (Required / తప్పనిసరి వివరాలు)
+          </h4>
         </div>
-        <div class="form-group">
-          <label data-en="Phone / WhatsApp *" data-te="ఫోన్ / వాట్సాప్ *">Phone / WhatsApp *</label>
-          <input type="tel" id="vPhone" class="form-control" placeholder="+91 98765 43210" required>
+
+        <div class="form-grid">
+          <!-- 1. Full Name -->
+          <div class="form-group form-full">
+            <label for="vName"><span data-en="1. Full Name *" data-te="1. పూర్తి పేరు *">1. Full Name (పూర్తి పేరు)</span> <span style="color:#FF6B1A;">*</span></label>
+            <input type="text" id="vName" class="form-control" placeholder="మీ పూర్తి పేరు (e.g. Rama Rao)" required autocomplete="name">
+          </div>
+
+          <!-- 2. WhatsApp Mobile -->
+          <div class="form-group">
+            <label for="vPhone"><span data-en="2. WhatsApp Mobile *" data-te="2. వాట్సాప్ మొబైల్ *">2. WhatsApp Mobile (వాట్సాప్ నంబర్)</span> <span style="color:#FF6B1A;">*</span></label>
+            <input type="tel" id="vPhone" class="form-control" placeholder="10-digit number (e.g. 9876543210)" required pattern="[0-9]{10}" maxlength="10" autocomplete="tel">
+            <small style="color:var(--text-muted); font-size:0.75rem;">10 అంకెల మొబైల్ నంబర్ మాత్రమే నమోదు చేయండి</small>
+          </div>
+
+          <!-- 3. State -->
+          <div class="form-group">
+            <label for="vState"><span data-en="3. State *" data-te="3. రాష్ట్రం *">3. State (రాష్ట్రం)</span> <span style="color:#FF6B1A;">*</span></label>
+            <select id="vState" class="form-control" required style="background:#140707;">
+              <option value="" disabled selected>-- రాష్ట్రం ఎంచుకోండి --</option>
+              <option value="Andhra Pradesh">Andhra Pradesh (ఆంధ్రప్రదేశ్)</option>
+              <option value="Telangana">Telangana (తెలంగాణ)</option>
+              <option value="Karnataka">Karnataka (కర్ణాటక)</option>
+              <option value="Tamil Nadu">Tamil Nadu (తమిళనాడు)</option>
+              <option value="Other States of Bharat">Other Bharat (ఇతర భారత రాష్ట్రాలు)</option>
+            </select>
+          </div>
+
+          <!-- 4. District / City -->
+          <div class="form-group">
+            <label for="vDistrict"><span data-en="4. District / City *" data-te="4. జిల్లా / నగరం *">4. District / City (జిల్లా / నగరం)</span> <span style="color:#FF6B1A;">*</span></label>
+            <input type="text" id="vDistrict" class="form-control" placeholder="e.g. Tirupati, Chittoor, Hyderabad..." required>
+          </div>
+
+          <!-- 5. Mandal / Town / Area -->
+          <div class="form-group">
+            <label for="vMandal"><span data-en="5. Mandal / Town / Area *" data-te="5. మండలం / పట్టణం / ప్రాంతం *">5. Mandal / Area (మండలం / ప్రాంతం)</span> <span style="color:#FF6B1A;">*</span></label>
+            <input type="text" id="vMandal" class="form-control" placeholder="e.g. Chandragiri, Alipiri, Madhapur..." required>
+          </div>
         </div>
-        <div class="form-group">
-          <label data-en="Email Address *" data-te="ఈమెయిల్ అడ్రస్ *">Email Address *</label>
-          <input type="email" id="vEmail" class="form-control" placeholder="yourname@gmail.com" required>
+      </div>
+
+      <!-- OPTIONAL DETAILS (6 TO 9) -->
+      <div style="margin-top:24px; margin-bottom:18px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.2); padding-bottom:6px;">
+          <span style="font-size:1rem; color:var(--text-muted);">📝</span>
+          <h4 style="font-size:0.9rem; color:var(--text-muted); font-family:var(--font-heading); margin:0;" data-en="Optional Information" data-te="ఐచ్ఛిక వివరాలు (ఇవి లేకపోయినా నమోదు చేయవచ్చు)">
+            Optional Information (ఐచ్ఛిక వివరాలు - ఇవి లేకపోయినా నమోదు పూర్తి అవుతుంది)
+          </h4>
         </div>
-        <div class="form-group">
-          <label data-en="District & State *" data-te="జిల్లా & రాష్ట్రం *">District & State *</label>
-          <input type="text" id="vLocation" class="form-control" placeholder="e.g. Tirupati, AP" required>
+
+        <div class="form-grid">
+          <!-- 6. Email (Optional) -->
+          <div class="form-group">
+            <label for="vEmail" style="color:var(--text-muted);"><span data-en="6. Email Address" data-te="6. ఈమెయిల్ అడ్రస్">6. Email Address (ఈమెయిల్)</span> <small style="color:#888;">(Optional)</small></label>
+            <input type="email" id="vEmail" class="form-control" placeholder="yourname@gmail.com" autocomplete="email">
+          </div>
+
+          <!-- 7. Instagram ID (Optional) -->
+          <div class="form-group">
+            <label for="vInstagram" style="color:var(--text-muted);"><span data-en="7. Instagram ID" data-te="7. ఇన్‌స్టాగ్రామ్ ఐడీ">7. Instagram Handle (ఇన్‌స్టాగ్రామ్)</span> <small style="color:#888;">(Optional)</small></label>
+            <input type="text" id="vInstagram" class="form-control" placeholder="e.g. @hindu_sevak">
+          </div>
+
+          <!-- 8. Any Question (Optional) -->
+          <div class="form-group form-full">
+            <label for="vQuestion" style="color:var(--text-muted);"><span data-en="8. Any Question for Abhay Hindu Sena?" data-te="8. ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ తెలపండి">8. Any Question? (ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ రాయండి)</span> <small style="color:#888;">(Optional)</small></label>
+            <textarea id="vQuestion" class="form-control" rows="2" placeholder="Ask your question here..."></textarea>
+          </div>
+
+          <!-- 9. Any Suggestion (Optional) -->
+          <div class="form-group form-full">
+            <label for="vSuggestion" style="color:var(--text-muted);"><span data-en="9. Any Suggestions or Seva Ideas?" data-te="9. మీ సలహాలు / సూచనలు">9. Any Suggestions? (మీ సలహాలు / సూచనలు)</span> <small style="color:#888;">(Optional)</small></label>
+            <textarea id="vSuggestion" class="form-control" rows="2" placeholder="Share your suggestions or how you wish to serve..."></textarea>
+          </div>
         </div>
-        <div class="form-group form-full">
-          <label data-en="Preferred Seva Department *" data-te="మీకు ఆసక్తి ఉన్న విభాగం *">Preferred Seva Department *</label>
-          <select id="vDept" class="form-control" required style="background:#000;">
-            <option value="Shiksha - Dharmic Education & Awakening">1. Shiksha (శిక్ష) — Educating People About Dharma</option>
-            <option value="Raksha - Stopping Conversions & Youth Defense">2. Raksha (రక్ష) — Stopping Religious Conversions</option>
-            <option value="Punarutthan - Ghar Wapsi & Reclamation">3. Punarutthan (పునరుత్థాన్) — Ghar Wapsi & Reclaiming Innocents</option>
-            <option value="Devalaya Swatantra - Freeing Hindu Temples">4. Devalaya Swatantra (దేవాలయ స్వతంత్ర) — Free Temples From Govt</option>
-            <option value="Nitya Annadanam & Gau Samrakshana">5. Nitya Annadanam & Gau Samrakshana (నిత్య అన్నదానం & గో సేవ)</option>
-          </select>
-        </div>
-        <div class="form-group form-full">
-          <label data-en="Your Message / Skills" data-te="మీ సందేశం / నైపుణ్యాలు">Your Message / Skills</label>
-          <textarea id="vMessage" class="form-control" rows="3" placeholder="Tell us how you wish to contribute..."></textarea>
-        </div>
-        <div class="form-group form-full">
-          <button type="submit" class="form-submit-btn" data-en="Submit Application to ahsrmdas@gmail.com 🚩" data-te="దరఖాస్తు సమర్పించండి (ahsrmdas@gmail.com) 🚩">
-            Submit Application to ahsrmdas@gmail.com 🚩
-          </button>
+      </div>
+
+      <!-- SUBMIT BUTTON -->
+      <div class="form-group form-full" style="margin-top:12px;">
+        <button type="submit" id="vSubmitBtn" class="form-submit-btn">
+          🚩 Enlist as Dharma Sevak & Get Official ID 🚩
+        </button>
+        <div style="text-align:center; font-size:0.82rem; color:var(--gold-bright); margin-top:10px;">
+          ⚡ Instant Official Digital Sevak ID will be generated upon registration
         </div>
       </div>
     </form>
-    <div style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--text-muted);">
-      Official Email: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a>
-    </div>
   </div>
 </section>
 
@@ -1997,17 +2219,74 @@
   </div>
 </div>
 
-<!-- Volunteer Confirmation Modal -->
+<!-- Volunteer Confirmation & Digital Sevak ID Modal -->
 <div class="modal-backdrop" id="confirmationModal">
-  <div class="modal-content">
-    <div style="font-size:2.8rem; margin-bottom:10px;">🚩</div>
-    <h3 data-en="Dhanyavad! Application Received" data-te="ధన్యవాదాలు! దరఖాస్తు స్వీకరించబడింది" style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.5rem; margin-bottom:10px;">
-      Dhanyavad! Application Received
-    </h3>
-    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:16px;">
-      Thank you for dedicating your energy to Abhay Hindu Sena. Your application has been logged and sent to ahsrmdas@gmail.com. Our coordination team will contact you shortly.
-    </p>
-    <button class="modal-close-btn" onclick="closeModal()">Close / మూసివేయండి</button>
+  <div class="modal-content" style="max-width: 520px; padding: 22px 18px;">
+    
+    <!-- DIGITAL SEVAK ID BADGE CARD -->
+    <div class="sevak-card-wrapper" id="sevakCardArea">
+      <div class="sevak-card-header">
+        <img src="assets/logo.png" alt="AHS Logo" class="sevak-card-logo">
+        <div style="flex:1;">
+          <div class="sevak-card-org">🚩 ABHAY HINDU SENA</div>
+          <div class="sevak-card-org-te">అభయ్ హిందూ సేన • అధికారిక ధర్మ సేవక్ కార్డ్</div>
+          <div class="sevak-card-sub">OFFICIAL DHARMA SEVAK IDENTITY CARD</div>
+        </div>
+      </div>
+
+      <div class="sevak-id-highlight">
+        <span class="sevak-id-label">SEVAK REGISTRATION ID / సేవక్ ఐడీ:</span>
+        <span class="sevak-id-num" id="cardSevakId">5127-ahs-1000</span>
+      </div>
+
+      <div class="sevak-info-grid">
+        <div class="sevak-info-row">
+          <span class="info-lbl">Sevak Name (పేరు):</span>
+          <strong class="info-val" id="cardSevakName">--</strong>
+        </div>
+        <div class="sevak-info-row">
+          <span class="info-lbl">WhatsApp (మొబైల్):</span>
+          <strong class="info-val" id="cardSevakPhone">--</strong>
+        </div>
+        <div class="sevak-info-row">
+          <span class="info-lbl">District & State:</span>
+          <strong class="info-val" id="cardSevakLocation">--</strong>
+        </div>
+        <div class="sevak-info-row">
+          <span class="info-lbl">Mandal / Town:</span>
+          <strong class="info-val" id="cardSevakMandal">--</strong>
+        </div>
+        <div class="sevak-info-row">
+          <span class="info-lbl">Kali Yugam Year:</span>
+          <strong class="info-val"><span id="cardSevakKaliYear">5127</span> కలి యుగం</strong>
+        </div>
+        <div class="sevak-info-row">
+          <span class="info-lbl">Date of Enlistment:</span>
+          <strong class="info-val" id="cardSevakDate">--</strong>
+        </div>
+      </div>
+
+      <div class="sevak-card-footer">
+        <div class="sevak-motto">“ధర్మో రక్షతి రక్షితః — Protect Dharma, Dharma Protects You”</div>
+        <div class="sevak-auth">Sanctified under the guidance of Shri Radha Manohar Das</div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+      <a id="cardWhatsappBtn" href="#" target="_blank" class="btn-whatsapp-share">
+        📲 Share My ID on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)
+      </a>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn-copy-id" style="flex:1;" onclick="copySevakId()">
+          📋 Copy ID
+        </button>
+        <button type="button" class="modal-close-btn" style="flex:1;" onclick="closeModal()">
+          Done / మూసివేయండి
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -2517,36 +2796,204 @@
     initCommunityChat();
   });
 
-  // Volunteer Submission
-  function handleVolunteerSubmit(e) {
+  // ==========================================
+  // KALI YUGAM SEVAK ID & DUAL REGISTRATION ENGINE
+  // ==========================================
+
+  /**
+   * Calculates Kali Yugam Year:
+   * Current year is 5127.
+   * Advances to 5128 on Ugadi 2027 (April 7, 2027), 5129 on Ugadi 2028, etc.
+   */
+  function getKaliYugamYear(date = new Date()) {
+    const ugadiDates = {
+      2026: new Date(2026, 2, 19),
+      2027: new Date(2027, 3, 7),
+      2028: new Date(2028, 2, 27),
+      2029: new Date(2029, 3, 14),
+      2030: new Date(2030, 3, 3)
+    };
+
+    if (date < ugadiDates[2027]) {
+      return 5127;
+    }
+    if (date < ugadiDates[2028]) {
+      return 5128;
+    }
+    if (date < ugadiDates[2029]) {
+      return 5129;
+    }
+    if (date < ugadiDates[2030]) {
+      return 5130;
+    }
+    const year = date.getFullYear();
+    return 5128 + (year - 2027);
+  }
+
+  let currentIssuedSevakId = "";
+
+  // Volunteer Submission Handler
+  async function handleVolunteerSubmit(e) {
     e.preventDefault();
-    const name = document.getElementById('vName').value;
-    const phone = document.getElementById('vPhone').value;
-    const email = document.getElementById('vEmail').value;
-    const loc = document.getElementById('vLocation').value;
-    const dept = document.getElementById('vDept').value;
-    const msg = document.getElementById('vMessage').value;
 
-    const subject = encodeURIComponent("Abhay Hindu Sena Volunteer Registration - " + name);
-    const body = encodeURIComponent(
-      "Jai Shri Ram / Pranam,\n\n" +
-      "A new volunteer application has been submitted on the Abhay Hindu Sena portal:\n\n" +
-      "Name: " + name + "\n" +
-      "Phone / WhatsApp: " + phone + "\n" +
-      "Email: " + email + "\n" +
-      "District / State: " + loc + "\n" +
-      "Preferred Department: " + dept + "\n" +
-      "Message / Skills: " + msg + "\n\n" +
-      "Submitted at: " + new Date().toLocaleString() + "\n"
-    );
+    const name = document.getElementById('vName').value.trim();
+    const phone = document.getElementById('vPhone').value.trim();
+    const state = document.getElementById('vState').value;
+    const district = document.getElementById('vDistrict').value.trim();
+    const mandal = document.getElementById('vMandal').value.trim();
 
-    window.location.href = `mailto:ahsrmdas@gmail.com?subject=${subject}&body=${body}`;
-    document.getElementById('confirmationModal').classList.add('active');
+    // Optional fields
+    const email = document.getElementById('vEmail') ? document.getElementById('vEmail').value.trim() : '';
+    const instagram = document.getElementById('vInstagram') ? document.getElementById('vInstagram').value.trim() : '';
+    const question = document.getElementById('vQuestion') ? document.getElementById('vQuestion').value.trim() : '';
+    const suggestion = document.getElementById('vSuggestion') ? document.getElementById('vSuggestion').value.trim() : '';
+
+    // Validate 10-digit mobile number
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 10) {
+      alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.\n(Please enter a valid 10-digit WhatsApp mobile number.)");
+      document.getElementById('vPhone').focus();
+      return;
+    }
+
+    const submitBtn = document.getElementById('vSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Registering & Generating Official ID...';
+
+    try {
+      const kaliYear = getKaliYugamYear(new Date());
+      let nextSeq = 1000;
+
+      // 1. ATOMIC SEQUENCE ALLOCATION FROM FIRESTORE
+      if (db) {
+        try {
+          const counterRef = db.collection('system_counters').doc('volunteer_counter');
+          nextSeq = await db.runTransaction(async (transaction) => {
+            const snap = await transaction.get(counterRef);
+            let seq = 1000;
+            if (snap.exists && snap.data() && typeof snap.data().lastSeq === 'number') {
+              seq = Math.max(1000, snap.data().lastSeq + 1);
+            }
+            transaction.set(counterRef, {
+              lastSeq: seq,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            return seq;
+          });
+        } catch (trxErr) {
+          console.warn("Atomic counter fallback:", trxErr);
+          let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
+          localStorage.setItem('ahs_last_seq', localSeq);
+          nextSeq = localSeq;
+        }
+      } else {
+        let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
+        localStorage.setItem('ahs_last_seq', localSeq);
+        nextSeq = localSeq;
+      }
+
+      // 2. CONSTRUCT KALI YUGA SEVAK ID: e.g. 5127-ahs-1000
+      const sevakId = `${kaliYear}-ahs-${nextSeq}`;
+      currentIssuedSevakId = sevakId;
+
+      const now = new Date();
+      const timestampFormatted = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+      const regPayload = {
+        sevakId: sevakId,
+        seqNumber: nextSeq,
+        kaliYear: kaliYear,
+        name: name,
+        phone: cleanPhone,
+        state: state,
+        district: district,
+        mandal: mandal,
+        email: email || 'N/A',
+        instagram: instagram || 'N/A',
+        question: question || 'N/A',
+        suggestion: suggestion || 'N/A',
+        registeredAt: (window.firebase && firebase.firestore) ? firebase.firestore.FieldValue.serverTimestamp() : new Date(),
+        timestamp: timestampFormatted,
+        source: 'Official Website'
+      };
+
+      // 3. DUAL BACKUP STREAM A: FIREBASE FIRESTORE
+      if (db) {
+        try {
+          await db.collection('volunteer_registrations').doc(sevakId).set(regPayload);
+        } catch (dbErr) {
+          console.error("Firestore volunteer backup notice:", dbErr);
+        }
+      }
+
+      // 4. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
+      const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || '';
+      if (gasUrl) {
+        try {
+          fetch(gasUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(regPayload)
+          }).catch(err => console.log("Sheets sync triggered"));
+        } catch (gErr) {
+          console.warn("Google Apps Script sync attempt:", gErr);
+        }
+      }
+
+      // 5. POPULATE DIGITAL SEVAK ID CARD
+      document.getElementById('cardSevakId').textContent = sevakId;
+      document.getElementById('cardSevakName').textContent = name;
+      document.getElementById('cardSevakPhone').textContent = "+91 " + cleanPhone;
+      document.getElementById('cardSevakLocation').textContent = `${district}, ${state}`;
+      document.getElementById('cardSevakMandal').textContent = mandal;
+      document.getElementById('cardSevakKaliYear').textContent = kaliYear;
+      document.getElementById('cardSevakDate').textContent = now.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      // 6. WHATSAPP SHARE MESSAGE
+      const shareMsg = 
+        `🚩 జై శ్రీ రామ్! నేను అభయ్ హిందూ సేన (Abhay Hindu Sena) లో ధర్మ సేవకుడిగా చేరాను.\n\n` +
+        `🆔 నా అధికారిక సేవక్ ఐడీ: *${sevakId}*\n` +
+        `👤 పేరు: ${name}\n` +
+        `📍 ప్రాంతం: ${mandal}, ${district} (${state})\n` +
+        `📅 యుగం: ${kaliYear} కలియుగం\n\n` +
+        `సనాతన ధర్మ రక్షణ, దేవాలయాల స్వతంత్రం, నిత్య అన్నదానంలో మీరూ భాగస్వామ్యం అవ్వండి!\n` +
+        `👉 మీ డిజిటల్ సేవక్ ఐడీ ఇక్కడ పొందండి:\nhttps://abhayhindusena.org\n\n` +
+        `#AbhayHinduSena #DharmaSevak #RadhaManoharDas`;
+
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
+      document.getElementById('cardWhatsappBtn').href = waUrl;
+
+      // 7. OPEN DIGITAL ID MODAL
+      document.getElementById('confirmationModal').classList.add('active');
+
+      // Reset form
+      document.getElementById('volunteerForm').reset();
+
+    } catch (err) {
+      console.error("Volunteer registration error:", err);
+      alert("Registration encountered an error: " + err.message + "\nPlease try again or contact headquarters.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
+    }
+  }
+
+  function copySevakId() {
+    if (!currentIssuedSevakId) return;
+    navigator.clipboard.writeText(currentIssuedSevakId).then(() => {
+      alert(`Sevak ID copied: ${currentIssuedSevakId} 🚩\n(సేవక్ ఐడీ కాపీ చేయబడింది)`);
+    }).catch(() => {
+      prompt("Your Sevak ID:", currentIssuedSevakId);
+    });
   }
 
   function closeModal() {
     document.getElementById('confirmationModal').classList.remove('active');
-    document.getElementById('volunteerForm').reset();
   }
 </script>
 </body>
