@@ -1786,9 +1786,267 @@
     .header-brand-text h1 { font-size: 0.88rem; }
     .header-btn { padding: 5px 8px; font-size: 0.72rem; }
   }
+
+  /* ==========================================================================
+     SUPER COOL DIVINE ANIMATIONS & AMBIENT VISUAL EFFECTS
+     ========================================================================== */
+  .ambient-glow-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.75;
+  }
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(85px);
+    opacity: 0.32;
+    will-change: transform;
+    animation: driftOrb 24s infinite alternate ease-in-out;
+    pointer-events: none;
+  }
+  .glow-orb-1 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(255, 107, 26, 0.45) 0%, rgba(122, 12, 12, 0) 70%);
+    top: 5%;
+    left: -120px;
+    animation-duration: 22s;
+  }
+  .glow-orb-2 {
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.38) 0%, rgba(61, 5, 5, 0) 70%);
+    top: 45%;
+    right: -150px;
+    animation-duration: 28s;
+    animation-delay: -7s;
+  }
+  .glow-orb-3 {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255, 140, 0, 0.32) 0%, rgba(13, 4, 4, 0) 70%);
+    bottom: 5%;
+    left: 15%;
+    animation-duration: 26s;
+    animation-delay: -14s;
+  }
+  @keyframes driftOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(65px, 90px) scale(1.15); }
+    100% { transform: translate(-50px, 45px) scale(0.92); }
+  }
+
+  .floating-sparks-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+  }
+
+  /* Make main content layers stack clearly above ambient canvas */
+  .site-header, .glass-navbar, section, footer, .modal-backdrop, .cinema-modal-backdrop {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* DIVINE FLOATING CREST & HALO ROTATION */
+  .hero-circle-wrap {
+    animation: divineFloat 5s ease-in-out infinite alternate;
+    position: relative;
+  }
+  .hero-circle-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0%, rgba(212,175,55,0.7) 25%, transparent 50%, rgba(255,107,26,0.7) 75%, transparent 100%);
+    animation: rotateHalo 9s linear infinite;
+    z-index: -1;
+    filter: blur(8px);
+    pointer-events: none;
+  }
+  @keyframes divineFloat {
+    0% { transform: translateY(0); box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.35); }
+    100% { transform: translateY(-7px); box-shadow: 0 18px 45px rgba(0,0,0,0.9), 0 0 45px rgba(255,107,26,0.55); }
+  }
+  @keyframes rotateHalo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* FOUNDER CIRCULAR FRAME SACRED AURA */
+  .founder-circle-wrap {
+    animation: divineFloatReverse 6s ease-in-out infinite alternate;
+    position: relative;
+  }
+  .founder-circle-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: conic-gradient(from 180deg, transparent 0%, rgba(212,175,55,0.65) 30%, transparent 60%, rgba(255,107,26,0.65) 85%, transparent 100%);
+    animation: rotateHalo 12s linear infinite reverse;
+    z-index: -1;
+    filter: blur(8px);
+    pointer-events: none;
+  }
+  @keyframes divineFloatReverse {
+    0% { transform: translateY(0); box-shadow: 0 10px 35px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.35); }
+    100% { transform: translateY(-8px); box-shadow: 0 18px 45px rgba(0,0,0,0.92), 0 0 40px rgba(212,175,55,0.55); }
+  }
+
+  /* LUXURY BUTTON & BADGE SHIMMER GLOW */
+  .hero-badge, .btn-donate-hero, .btn-gold, .btn-donate-top, .btn-join-top, .btn-enlist-submit, .btn-donate-submit {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-badge::after, .btn-donate-hero::after, .btn-gold::after, .btn-donate-top::after, .btn-join-top::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 45%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+    transform: rotate(25deg);
+    animation: buttonShine 4.5s infinite;
+    pointer-events: none;
+  }
+  @keyframes buttonShine {
+    0%, 65% { left: -100%; }
+    100% { left: 220%; }
+  }
+
+  /* PULSING FLAME AURA ON PRIMARY ACTION BUTTONS */
+  .btn-donate-hero, .btn-gold {
+    animation: buttonPulseGlow 3s ease-in-out infinite alternate;
+  }
+  @keyframes buttonPulseGlow {
+    0% { filter: drop-shadow(0 0 4px rgba(255,107,26,0.3)); }
+    100% { filter: drop-shadow(0 0 12px rgba(212,175,55,0.6)); }
+  }
+
+  /* MISSION & VIDEO & GALLERY CARDS: SMOOTH 3D LIFT & GOLD ILLUMINATION */
+  .mission-card, .video-card, .gallery-card, .donate-box, .volunteer-box {
+    position: relative;
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  .mission-card:hover, .video-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold-bright) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.85), 0 0 25px rgba(212,175,55,0.3) !important;
+  }
+  .mission-card::before, .video-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-bright), var(--saffron), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .mission-card:hover::before, .video-card:hover::before {
+    opacity: 1;
+  }
+
+  /* SCROLL REVEAL (ELEGANT FADE-IN-UP) */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* SEVAK ID CARD HOLOGRAPHIC GOLD SHEEN */
+  .sevak-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .sevak-card::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -150%;
+    width: 70%;
+    height: 220%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.18) 30%, rgba(255,255,255,0.4) 50%, rgba(255,215,0,0.18) 70%, transparent 100%);
+    transform: rotate(30deg);
+    animation: idCardSheen 3.8s infinite 0.8s;
+    pointer-events: none;
+  }
+  @keyframes idCardSheen {
+    0%, 65% { left: -150%; }
+    100% { left: 240%; }
+  }
+
+  /* FLOATING SCROLL TO TOP BUTTON */
+  .floating-scroll-top {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(212,175,55,0.9) 0%, rgba(255,107,26,0.9) 100%);
+    color: #000;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 15px rgba(212,175,55,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.85);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  }
+  .floating-scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+  .floating-scroll-top:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255,107,26,0.7), 0 0 25px rgba(212,175,55,0.8);
+  }
+
+  /* RESPECT PREFERS-REDUCED-MOTION */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 </style>
 </head>
 <body>
+
+<!-- Ambient Sacred Background Effects (Orbs & Glowing Sparks Canvas) -->
+<div class="ambient-glow-wrap" aria-hidden="true">
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
+  <canvas id="ambientSparksCanvas" class="floating-sparks-canvas"></canvas>
+</div>
 
 <!-- Top Header Bar with Circular Logo & Main Action Buttons (Donate & Join Us) -->
 <header class="site-header">
@@ -3310,6 +3568,105 @@
   function closeModal() {
     document.getElementById('confirmationModal').classList.remove('active');
   }
+
+  // =========================================================================
+  // SACRED AMBIENT FLOATING SPARKS & SCROLL REVEAL SCRIPT
+  // =========================================================================
+  (function initSparksAndAnimations() {
+    const canvas = document.getElementById('ambientSparksCanvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }, { passive: true });
+
+      const isMobile = window.innerWidth < 768;
+      const sparksCount = isMobile ? 22 : 45;
+      const sparks = [];
+      const colors = ['rgba(255, 107, 26,', 'rgba(212, 175, 55,', 'rgba(255, 215, 0,', 'rgba(255, 150, 20,'];
+
+      for (let i = 0; i < sparksCount; i++) {
+        sparks.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 2.2 + 0.8,
+          speedY: Math.random() * 0.65 + 0.3,
+          speedX: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.6 + 0.2,
+          pulseSpeed: Math.random() * 0.02 + 0.008,
+          pulseVal: Math.random() * Math.PI,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < sparks.length; i++) {
+          const s = sparks[i];
+          s.y -= s.speedY;
+          s.x += s.speedX + Math.sin(s.pulseVal) * 0.35;
+          s.pulseVal += s.pulseSpeed;
+
+          if (s.y < -10) {
+            s.y = height + 10;
+            s.x = Math.random() * width;
+          }
+
+          const currentAlpha = Math.max(0.1, s.alpha * (0.6 + Math.sin(s.pulseVal) * 0.4));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.color + currentAlpha + ')';
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = 'rgba(255, 107, 26, 0.7)';
+          ctx.fill();
+        }
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // Scroll to Top visibility toggle
+    const scrollBtn = document.getElementById('floatingScrollTop');
+    window.addEventListener('scroll', () => {
+      if (scrollBtn) {
+        if (window.scrollY > 350) {
+          scrollBtn.classList.add('visible');
+        } else {
+          scrollBtn.classList.remove('visible');
+        }
+      }
+    }, { passive: true });
+
+    // Scroll Reveal Initializer
+    const revealTargets = document.querySelectorAll(
+      '.mission-card, .video-card, .gallery-card, .founder-photo-card, .founder-details, .donate-box, .volunteer-box, .section-header'
+    );
+    revealTargets.forEach(el => el.classList.add('reveal-on-scroll'));
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
+
+      revealTargets.forEach(el => observer.observe(el));
+    } else {
+      revealTargets.forEach(el => el.classList.add('is-revealed'));
+    }
+  })();
 </script>
+
+<!-- Floating Scroll to Top & Quick Reach Action -->
+<button class="floating-scroll-top" id="floatingScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" aria-label="Scroll to top">
+  ▲
+</button>
 </body>
 </html>
