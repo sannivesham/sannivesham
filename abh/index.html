@@ -1675,7 +1675,7 @@
     .header-brand-text span { font-size: 0.62rem; }
     .header-btn { padding: 6px 10px; font-size: 0.76rem; }
 
-    /* Floating Glass Navbar */
+    /* Floating Glass Navbar (Optimized for Mobile Touch & Zero Lag) */
     .glass-navbar {
       width: auto !important;
       max-width: calc(100vw - 20px) !important;
@@ -1689,6 +1689,9 @@
       touch-action: pan-x !important;
       scroll-behavior: smooth !important;
       overscroll-behavior-x: contain !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(22, 7, 7, 0.97) !important;
     }
     .glass-nav-links {
       display: flex !important;
@@ -1698,6 +1701,31 @@
     }
     .glass-nav-links a { font-size: 0.76rem; padding: 4px 7px; flex-shrink: 0; }
     .glass-lang-btn { font-size: 0.72rem; padding: 4px 8px; flex-shrink: 0; }
+
+    /* MOBILE SCROLL PERFORMANCE BOOST (ELIMINATES LAG & JANK) */
+    .ambient-glow-wrap { display: none !important; }
+    .floating-sparks-canvas { display: none !important; }
+    .floating-orb { filter: none !important; opacity: 0.18 !important; }
+    .hero-circle-wrap::before, .founder-circle-wrap::before { filter: blur(4px) !important; }
+
+    /* Keep 5 crisp sacred floating symbols on mobile, eliminate heavy drop-shadows */
+    .f-item-6, .f-item-7, .f-item-8, .f-item-9, .f-item-10, .f-orb-3, .f-orb-4 {
+      display: none !important;
+    }
+    .floating-item {
+      filter: none !important;
+      text-shadow: 0 0 8px rgba(255, 107, 26, 0.7);
+      transform: translateZ(0);
+      contain: layout style paint;
+      opacity: 0.35 !important;
+    }
+
+    /* Prevent scroll lag from transition repainting */
+    .reveal-on-scroll {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
 
     /* Hero Section */
     .hero-section { padding: 36px 4% 32px; }
@@ -3716,10 +3744,10 @@
 
   // =========================================================================
   // SACRED AMBIENT FLOATING SPARKS & SCROLL REVEAL SCRIPT
-  // =========================================================================
   (function initSparksAndAnimations() {
+    const isMobile = window.innerWidth < 768;
     const canvas = document.getElementById('ambientSparksCanvas');
-    if (canvas) {
+    if (canvas && !isMobile) {
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
       let height = canvas.height = window.innerHeight;
@@ -3729,8 +3757,7 @@
         height = canvas.height = window.innerHeight;
       }, { passive: true });
 
-      const isMobile = window.innerWidth < 768;
-      const sparksCount = isMobile ? 22 : 45;
+      const sparksCount = 45;
       const sparks = [];
       const colors = ['rgba(255, 107, 26,', 'rgba(212, 175, 55,', 'rgba(255, 215, 0,', 'rgba(255, 150, 20,'];
 
