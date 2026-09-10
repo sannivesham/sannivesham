@@ -146,7 +146,7 @@
     padding: 6px 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     background: rgba(24, 7, 7, 0.88);
     backdrop-filter: blur(14px);
@@ -155,6 +155,8 @@
     border-radius: 40px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
     white-space: nowrap;
     scrollbar-width: none;
   }
@@ -1648,15 +1650,27 @@
 
     /* Floating Glass Navbar */
     .glass-navbar {
-      max-width: 96vw;
-      padding: 5px 8px;
-      gap: 5px;
-      top: 8px;
-      margin: 6px auto 12px;
+      width: auto !important;
+      max-width: calc(100vw - 20px) !important;
+      padding: 5px 8px !important;
+      gap: 5px !important;
+      top: 8px !important;
+      margin: 6px auto 12px !important;
+      justify-content: flex-start !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x !important;
+      scroll-behavior: smooth !important;
+      overscroll-behavior-x: contain !important;
     }
-    .glass-nav-links { gap: 4px; }
-    .glass-nav-links a { font-size: 0.76rem; padding: 4px 7px; }
-    .glass-lang-btn { font-size: 0.72rem; padding: 4px 8px; }
+    .glass-nav-links {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      flex-shrink: 0 !important;
+    }
+    .glass-nav-links a { font-size: 0.76rem; padding: 4px 7px; flex-shrink: 0; }
+    .glass-lang-btn { font-size: 0.72rem; padding: 4px 8px; flex-shrink: 0; }
 
     /* Hero Section */
     .hero-section { padding: 36px 4% 32px; }
@@ -3660,6 +3674,18 @@
       revealTargets.forEach(el => observer.observe(el));
     } else {
       revealTargets.forEach(el => el.classList.add('is-revealed'));
+    }
+
+    // Ensure glass navbar starts at position 0 (Home) on load
+    const glassNav = document.querySelector('.glass-navbar');
+    if (glassNav) {
+      glassNav.scrollLeft = 0;
+      setTimeout(() => { glassNav.scrollLeft = 0; }, 100);
+      glassNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+      });
     }
   })();
 </script>
