@@ -1090,6 +1090,66 @@
   @media (max-width: 600px) {
     .onboarding-fields { grid-template-columns: 1fr; }
   }
+  .terms-preview-box {
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0 12px;
+    text-align: left;
+    font-size: 0.78rem;
+    color: #dedede;
+    line-height: 1.45;
+    max-height: 140px;
+    overflow-y: auto;
+  }
+  .terms-header {
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .terms-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .terms-list li {
+    margin-bottom: 4px;
+  }
+  .terms-list strong {
+    color: var(--gold);
+  }
+  .terms-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    text-align: left;
+    font-size: 0.78rem;
+    color: #e0d5c5;
+    cursor: pointer;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .terms-checkbox-label input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--gold);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .chat-legal-footer {
+    padding: 7px 18px;
+    font-size: 0.7rem;
+    color: #8c7e6f;
+    background: rgba(10,3,3,0.85);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    line-height: 1.4;
+  }
 
   .chat-input-area {
     border-top: 1px solid rgba(212,175,55,0.2);
@@ -1700,8 +1760,27 @@
             <input type="text" id="setupName" class="chat-input" placeholder="Your Full Name (e.g. Ramesh Sharma)" required autocomplete="name">
             <input type="text" id="setupPlace" class="chat-input" placeholder="Your District / City (e.g. Vijayawada)" required autocomplete="address-level2">
           </div>
-          <button type="submit" class="chat-send-btn" style="width:100%; margin-top:8px;">
-            Set Identity & Join Chat ➔
+
+          <!-- Community Guidelines & Non-Liability Disclaimer -->
+          <div class="terms-preview-box">
+            <div class="terms-header">
+              <span>📜 Community Code of Conduct & Legal Disclaimer</span>
+            </div>
+            <ul class="terms-list">
+              <li><strong>Zero Tolerance for Abuse:</strong> Abusive words, profanity, harassment, defamatory remarks, hate speech, or illegal content are strictly prohibited and will result in an immediate ban and deletion.</li>
+              <li><strong>Absolute Non-Liability Disclaimer:</strong> The Founder (Shri Radha Manohar Das), creators, developers, administrators, and the Abhay Hindu Sena organization bear <strong>NO legal, civil, criminal, or personal responsibility or liability</strong> whatsoever for any user-generated comments, opinions, or material posted in this forum.</li>
+              <li><strong>Sole Individual Accountability:</strong> Every community participant is solely, exclusively, and personally responsible under the law for their own messages and conduct.</li>
+              <li><strong>Admin Discretion:</strong> Administrators reserve the unconditional right to mute, disable, ban any user, or delete messages at any time without prior notice.</li>
+            </ul>
+          </div>
+
+          <label class="terms-checkbox-label">
+            <input type="checkbox" id="termsAgreement" required>
+            <span>I agree to the <strong>Community Guidelines & Legal Disclaimer</strong>. I confirm that I am solely responsible for my messages, and that the Founder and Abhay Hindu Sena bear zero liability.</span>
+          </label>
+
+          <button type="submit" class="chat-send-btn" style="width:100%; margin-top:4px;">
+            Accept Terms & Join Community ➔
           </button>
         </form>
       </div>
@@ -1725,6 +1804,11 @@
 
       <div id="chatDisabledNotice" style="display:none; color:#ff7675; background:rgba(255,107,107,0.12); padding:10px 18px; font-size:0.84rem; border-top:1px solid rgba(255,107,107,0.3); text-align:center;">
         🚫 Your posting privileges have been restricted by the Administrator.
+      </div>
+
+      <!-- Legal Disclaimer Footer -->
+      <div class="chat-legal-footer">
+        ⚖️ <em>Disclaimer: All views and messages posted here belong solely to respective authors. The Founder, makers, and Abhay Hindu Sena hold zero responsibility or legal liability for user comments.</em>
       </div>
     </div>
   </div>
@@ -2158,6 +2242,11 @@
     e.preventDefault();
     const name = document.getElementById('setupName').value.trim();
     const place = document.getElementById('setupPlace').value.trim();
+    const terms = document.getElementById('termsAgreement');
+    if (terms && !terms.checked) {
+      alert("Please agree to the Community Code of Conduct and Legal Disclaimer to proceed.");
+      return;
+    }
     if (!name || !place) return;
 
     // Generate or keep UID
@@ -2166,7 +2255,8 @@
       uid: uid,
       name: name,
       place: place,
-      role: (userProfile && userProfile.role) ? userProfile.role : 'Sevak'
+      role: (userProfile && userProfile.role) ? userProfile.role : 'Sevak',
+      termsAccepted: true
     };
     localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
 
@@ -2179,6 +2269,8 @@
           place: place,
           role: userProfile.role || 'Sevak',
           isDisabled: false,
+          termsAccepted: true,
+          termsAcceptedAt: firebase.firestore.FieldValue.serverTimestamp(),
           joinedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
       } catch (err) {
