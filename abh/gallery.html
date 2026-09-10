@@ -1,0 +1,729 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo Gallery | Abhay Hindu Sena</title>
+<meta name="description" content="Complete photo chronicle of Abhay Hindu Sena, featuring annual conventions, youth defense drives, Annadanam, and seva camps under the leadership of Shri Radha Manohar Das.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-bright: #F7D57F;
+    --saffron: #FF6B1A;
+    --saffron-deep: #E8540A;
+    --maroon: #7A0C0C;
+    --maroon-deep: #3D0505;
+    --bg-dark: #0D0404;
+    --bg-card: #160707;
+    --bg-card-alt: #1F0A0A;
+    --border-gold: rgba(212,175,55,0.3);
+    --border-gold-glow: rgba(212,175,55,0.6);
+    --text-main: #FFF8EF;
+    --text-muted: #C7B5A0;
+    --font-heading: 'Cinzel', 'Noto Sans Telugu', 'Mandali', serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* TOP HEADER */
+  .site-header {
+    background: linear-gradient(180deg, rgba(30,5,5,0.98) 0%, rgba(13,4,4,0.99) 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 10px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    min-width: 0;
+  }
+  .circle-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFF;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 10px rgba(212,175,55,0.45);
+    flex-shrink: 0;
+  }
+  .header-brand-text h1 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    font-weight: 800;
+    line-height: 1.35;
+    padding: 1px 0;
+  }
+  .header-brand-text span {
+    font-size: 0.72rem;
+    color: var(--saffron);
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-btn {
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.25s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-back-top {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+  }
+  .btn-back-top:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+  }
+  .btn-donate-top {
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #000;
+  }
+
+  /* FLOATING NAVBAR */
+  .glass-navbar {
+    position: sticky;
+    top: 14px;
+    z-index: 999;
+    margin: 14px auto 0;
+    max-width: 90%;
+    width: fit-content;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(24, 7, 7, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+  }
+  .glass-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .glass-nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .glass-nav-links a:hover,
+  .glass-nav-links a.active {
+    color: #FFF;
+    background: rgba(212,175,55,0.22);
+    font-weight: 600;
+  }
+  .glass-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(212,175,55,0.35);
+  }
+  .glass-lang-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .glass-lang-btn:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  /* PAGE HERO */
+  .gallery-hero {
+    padding: 50px 6% 30px;
+    text-align: center;
+    background: radial-gradient(circle at 50% 15%, rgba(122,12,12,0.45) 0%, rgba(13,4,4,0.85) 75%);
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+  .eyebrow {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--saffron);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .page-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  }
+  .page-sub {
+    max-width: 680px;
+    margin: 0 auto 26px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  /* SEARCH CONTROLS */
+  .controls-wrap {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+  .search-input-wrap {
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .search-input-wrap input {
+    width: 100%;
+    padding: 12px 18px 12px 42px;
+    border-radius: 25px;
+    background: rgba(22,7,7,0.9);
+    border: 1px solid var(--border-gold);
+    color: #FFF;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .search-input-wrap input:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 15px rgba(212,175,55,0.3);
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: var(--gold);
+    pointer-events: none;
+  }
+
+  /* PHOTO GRID */
+  .gallery-main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 5% 70px;
+  }
+  .gallery-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+    color: var(--text-muted);
+    font-size: 0.86rem;
+  }
+  .gallery-stats span strong {
+    color: var(--gold-bright);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 360px));
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .gallery-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    height: 320px;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .gallery-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold-bright);
+    box-shadow: 0 12px 30px rgba(212,175,55,0.25);
+  }
+  .gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .gallery-card:hover img {
+    transform: scale(1.06);
+  }
+  .gallery-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 22px 16px 14px;
+    background: linear-gradient(180deg, transparent 0%, rgba(13,4,4,0.7) 35%, rgba(13,4,4,0.98) 100%);
+    color: #FFF;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    grid-column: 1 / -1;
+  }
+  .empty-state h3 {
+    font-family: var(--font-heading);
+    color: var(--gold-bright);
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  /* LIGHTBOX MODAL */
+  .lightbox-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .lightbox-modal.active {
+    display: flex;
+  }
+  .lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .lightbox-img-wrap {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--gold);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 25px rgba(212,175,55,0.3);
+  }
+  .lightbox-img-wrap img {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    object-fit: contain;
+  }
+  .lightbox-caption {
+    margin-top: 14px;
+    color: var(--gold-bright);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+  .lightbox-close-btn {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border-gold);
+    color: #FFF;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .lightbox-close-btn:hover {
+    background: #e74c3c;
+    border-color: #e74c3c;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #080202;
+    padding: 45px 5% 30px;
+    border-top: 1px solid var(--border-gold);
+    text-align: center;
+  }
+  .footer-logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFF;
+    border: 2px solid var(--gold);
+    margin: 0 auto 10px;
+    display: block;
+  }
+  .footer-brand {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--gold-bright);
+    margin-bottom: 5px;
+    font-weight: 800;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold-bright); }
+  .footer-copy {
+    color: #6d6255;
+    font-size: 0.78rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 16px;
+  }
+
+  body.telugu-mode {
+    font-family: 'Mandali', 'Noto Sans Telugu', 'Poppins', sans-serif;
+  }
+  body.telugu-mode .page-title,
+  body.telugu-mode h3 {
+    font-family: 'Mandali', 'Noto Sans Telugu', serif;
+  }
+
+  @media (max-width: 768px) {
+    .site-header { padding: 10px 4%; }
+    .gallery-hero { padding: 40px 5% 24px; }
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .gallery-card { height: 260px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Header -->
+<header class="site-header">
+  <a href="index.html" class="header-brand">
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Logo" class="circle-logo">
+    <div class="header-brand-text">
+      <h1>ABHAY HINDU SENA</h1>
+      <span data-en="Sanatana Dharma • Rashtra Seva" data-te="సనాతన ధర్మం • రాష్ట్ర సేవ">Sanatana Dharma • Rashtra Seva</span>
+    </div>
+  </a>
+  <div class="header-actions">
+    <a href="index.html" class="header-btn btn-back-top" data-en="← Back to Home" data-te="← ప్రధాన పేజీకి">← Back to Home</a>
+    <a href="index.html#donate" class="header-btn btn-donate-top" data-en="Donate 💛" data-te="విరాళం 💛">Donate 💛</a>
+  </div>
+</header>
+
+<!-- Floating Glass Navbar -->
+<nav class="glass-navbar">
+  <div class="glass-nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#founder">Founder</a>
+    <a href="index.html#missions">Missions</a>
+    <a href="videos.html">Videos</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="index.html#community">Community</a>
+  </div>
+  <span class="glass-divider"></span>
+  <button class="glass-lang-btn" onclick="toggleLanguage()" id="glassLangBtn">
+    🌐 <span id="langText">English / తెలుగు</span>
+  </button>
+</nav>
+
+<!-- Page Hero -->
+<section class="gallery-hero">
+  <span class="eyebrow" data-en="Visual Chronicle" data-te="చిత్రమాలిక">Visual Chronicle</span>
+  <h1 class="page-title" data-en="Complete Photo Gallery" data-te="సమగ్ర చిత్రమాలిక & జ్ఞాపకాలు">Complete Photo Gallery</h1>
+  <p class="page-sub" data-en="Explore snapshots of annual conventions, youth rallies, dharmic discourse meetings, Annadanam, and seva drives."
+     data-te="వార్షికోత్సవాలు, యువ చైతన్య ర్యాలీలు, సదస్సులు మరియు నిరంతర సేవా కార్యక్రమాల చిత్రాలు.">
+    Explore snapshots of annual conventions, youth rallies, dharmic discourse meetings, Annadanam, and seva drives.
+  </p>
+
+  <!-- Controls: Search -->
+  <div class="controls-wrap">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="photoSearchInput" placeholder="Search photos by caption or keyword..." oninput="handleSearch(this.value)">
+    </div>
+  </div>
+</section>
+
+<!-- Main Gallery Section -->
+<main class="gallery-main">
+  <div class="gallery-stats">
+    <span id="photoCountDisplay">Showing <strong>0</strong> photos</span>
+    <a href="index.html" style="color:var(--gold); text-decoration:none; font-weight:600;">← Back to Main Website</a>
+  </div>
+
+  <div class="gallery-grid" id="allPhotosGrid">
+    <div class="empty-state">
+      <h3>Loading Gallery...</h3>
+      <p>Fetching divine moments from the cloud archive...</p>
+    </div>
+  </div>
+</main>
+
+<!-- Lightbox Modal -->
+<div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close">✕</button>
+    <div class="lightbox-img-wrap">
+      <img id="lightboxImg" src="" alt="Full Screen Photo">
+    </div>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="footer-logo">
+  <div class="footer-brand">🚩 ABHAY HINDU SENA</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#founder">Founder</a>
+    <a href="index.html#missions">Missions</a>
+    <a href="videos.html">Videos</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="admin.html" style="color:var(--gold-bright);">⚙️ Admin Dashboard</a>
+    <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>
+  </div>
+  <div class="footer-copy">
+    © 2026 Abhay Hindu Sena. Founded by Shri Radha Manohar Das. All Rights Reserved.
+  </div>
+</footer>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyANW4b8MGvlLn8XT1auTwukxlu08dm-YJQ",
+    authDomain: "abhay-hindu-sena-org.firebaseapp.com",
+    projectId: "abhay-hindu-sena-org",
+    storageBucket: "abhay-hindu-sena-org.firebasestorage.app",
+    messagingSenderId: "694749073728",
+    appId: "1:694749073728:web:5786bfe0c0a832dbba6aa5",
+    measurementId: "G-T2C9DQN7E2"
+  };
+
+  let db = null;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+  } catch (e) {
+    console.warn("Firebase Init:", e);
+  }
+
+  // Curated Fallbacks
+  const defaultPhotos = [
+    {
+      id: "def-1",
+      imageUrl: "assets/founder.jpg",
+      title: "Shri Radha Manohar Das addressing devotees at Tirupati Convention"
+    },
+    {
+      id: "def-2",
+      imageUrl: "assets/hero-desktop.png",
+      title: "Youth Awakening & Martial Discipline Rally"
+    },
+    {
+      id: "def-3",
+      imageUrl: "assets/hero-mobile.png",
+      title: "Dharma Raksha & Cow Protection Drive"
+    },
+    {
+      id: "def-4",
+      imageUrl: "assets/logo.png",
+      title: "Official Crest of Abhay Hindu Sena"
+    }
+  ];
+
+  let allLoadedPhotos = [];
+  let currentSearchQuery = '';
+
+  function loadAllPhotos() {
+    if (!db) {
+      allLoadedPhotos = defaultPhotos;
+      renderPhotos();
+      return;
+    }
+
+    function startQuery(tryOrdered = true) {
+      let q = db.collection('gallery_photos');
+      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc');
+
+      q.onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+          list.sort((a, b) => {
+            const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
+            const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
+            return timeB - timeA;
+          });
+          allLoadedPhotos = list;
+        } else {
+          allLoadedPhotos = defaultPhotos;
+        }
+        renderPhotos();
+      }, err => {
+        console.warn("Firestore error fallback:", err);
+        if (tryOrdered) {
+          startQuery(false);
+          return;
+        }
+        allLoadedPhotos = defaultPhotos;
+        renderPhotos();
+      });
+    }
+
+    startQuery(true);
+  }
+
+  function renderPhotos() {
+    const grid = document.getElementById('allPhotosGrid');
+    const countDisplay = document.getElementById('photoCountDisplay');
+    if (!grid) return;
+
+    const q = currentSearchQuery.toLowerCase().trim();
+    const filtered = allLoadedPhotos.filter(p => {
+      const title = (p.title || '').toLowerCase();
+      return !q || title.includes(q);
+    });
+
+    if (countDisplay) {
+      countDisplay.innerHTML = `Showing <strong>${filtered.length}</strong> photo${filtered.length === 1 ? '' : 's'}`;
+    }
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <h3>No Photos Found</h3>
+          <p>No photos match your current search query. Try clearing the search box.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const title = p.title || 'Abhay Hindu Sena Moment';
+      const imgUrl = p.imageUrl || p.thumbnailUrl || 'assets/hero-desktop.png';
+      const escapedTitle = title.replace(/'/g, "\\'");
+      const escapedUrl = imgUrl.replace(/'/g, "\\'");
+
+      return `
+        <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
+          <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
+          <div class="gallery-overlay">${escapeHtml(title)}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function handleSearch(val) {
+    currentSearchQuery = val;
+    renderPhotos();
+  }
+
+  // Lightbox
+  function openLightbox(imgSrc, caption) {
+    document.getElementById('lightboxImg').src = imgSrc;
+    document.getElementById('lightboxCaption').textContent = caption;
+    document.getElementById('lightboxModal').classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('lightboxModal').classList.remove('active');
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Language Toggle
+  let isTelugu = false;
+  function toggleLanguage() {
+    isTelugu = !isTelugu;
+    document.body.classList.toggle('telugu-mode', isTelugu);
+    const langLabel = document.getElementById('langText');
+    if (langLabel) {
+      langLabel.textContent = isTelugu ? 'తెలుగు (Active)' : 'English / తెలుగు';
+    }
+
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const val = isTelugu ? el.getAttribute('data-te') : el.getAttribute('data-en');
+      if (val) el.textContent = val;
+    });
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
+  document.addEventListener('DOMContentLoaded', loadAllPhotos);
+</script>
+</body>
+</html>

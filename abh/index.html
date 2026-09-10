@@ -849,24 +849,24 @@
   /* PHOTO GALLERY WITH LIGHTBOX */
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 360px));
-    justify-content: center;
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 0;
   }
   .gallery-card {
     border-radius: 14px;
     overflow: hidden;
     position: relative;
-    height: 290px;
+    height: 380px;
     width: 100%;
     border: 1px solid var(--border-gold);
     cursor: pointer;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     background: #0d0404;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
   }
   .gallery-card:hover {
     transform: translateY(-4px);
@@ -885,12 +885,12 @@
   .gallery-overlay {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 16px 14px 12px;
+    padding: 20px 18px 14px;
     background: linear-gradient(180deg, transparent 0%, rgba(13,4,4,0.7) 40%, rgba(13,4,4,0.98) 100%);
     color: #FFF;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    line-height: 1.35;
+    line-height: 1.4;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
 
@@ -2538,13 +2538,20 @@
       <img src="assets/hero-desktop.png" alt="Youth Awakening">
       <div class="gallery-overlay">Youth Awakening Rally</div>
     </div>
-    <div class="gallery-card" onclick="openLightbox('assets/hero-mobile.png', 'Dharma Raksha & Seva Camp Highlights')">
-      <img src="assets/hero-mobile.png" alt="Dharma Raksha">
-      <div class="gallery-overlay">Dharma Raksha & Cow Protection Drive</div>
-    </div>
-    <div class="gallery-card" onclick="openLightbox('assets/logo.png', 'Official Crest of Abhay Hindu Sena')">
-      <img src="assets/logo.png" alt="Official Crest" style="object-fit:contain; background:#180808;">
-      <div class="gallery-overlay">Official Organization Crest</div>
+    <!-- Box 3: View More Card -->
+    <div class="gallery-card view-more-card" onclick="window.location.href='gallery.html'">
+      <div class="view-more-content">
+        <div class="view-more-icon-wrap">
+          <span class="view-more-icon">🖼️</span>
+        </div>
+        <span class="view-more-badge" data-en="Full Archive" data-te="చిత్ర నిధి">Full Archive</span>
+        <h3 data-en="Complete Photo Gallery" data-te="సమగ్ర చిత్రమాలిక">Complete Photo Gallery</h3>
+        <p data-en="Browse all event snapshots, seva camps, youth conventions, and sacred moments."
+           data-te="అభయ్ హిందూ సేన వార్షికోత్సవాలు, సేవా కార్యక్రమాలు మరియు అన్ని ఛాయాచిత్రాలను ఇక్కడ చూడండి.">
+          Browse all event snapshots, seva camps, youth conventions, and sacred moments.
+        </p>
+        <a href="gallery.html" class="btn-view-more" data-en="View All Photos ➔" data-te="అన్ని ఫోటోలు చూడండి ➔">View All Photos ➔</a>
+      </div>
     </div>
   </div>
 </section>
@@ -3062,50 +3069,94 @@
     grid.innerHTML = html;
   }
 
-  // Live Photo Gallery from Firestore
+  // Live Photo Gallery from Firestore (Only 2 Latest Photos + 3rd Box View More)
   function initLiveGallery() {
     if (!db) return;
 
-    function renderGallery(snapshot) {
+    function renderGallery(docs) {
       const galleryGrid = document.getElementById('galleryGrid');
       if (!galleryGrid) return;
 
-      if (snapshot.empty) {
-        return;
+      const defaultPhotos = [
+        {
+          url: 'assets/founder.jpg',
+          title: 'Shri Radha Manohar Das addressing devotees at Tirupati Convention'
+        },
+        {
+          url: 'assets/hero-desktop.png',
+          title: 'Youth Awakening & Martial Discipline Rally'
+        }
+      ];
+
+      // Pick top 2 photos
+      const displayPhotos = [];
+      if (docs.length > 0) {
+        displayPhotos.push({
+          url: docs[0].imageUrl || docs[0].thumbnailUrl || defaultPhotos[0].url,
+          title: docs[0].title || defaultPhotos[0].title
+        });
+      } else {
+        displayPhotos.push(defaultPhotos[0]);
       }
 
-      const docs = [];
-      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-      docs.sort((a, b) => {
-        const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
-        const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
-        return timeB - timeA;
-      });
+      if (docs.length > 1) {
+        displayPhotos.push({
+          url: docs[1].imageUrl || docs[1].thumbnailUrl || defaultPhotos[1].url,
+          title: docs[1].title || defaultPhotos[1].title
+        });
+      } else {
+        displayPhotos.push(defaultPhotos[1]);
+      }
 
       let html = '';
-      docs.forEach(data => {
-        const title = data.title || 'Abhay Hindu Sena Moment';
-        const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
-        const escapedTitle = title.replace(/'/g, "\\'");
-        const escapedUrl = imgUrl.replace(/'/g, "\\'");
+
+      // Box 1 & Box 2: Latest Photos
+      displayPhotos.forEach((photo) => {
+        const escapedTitle = (photo.title || 'Abhay Hindu Sena Moment').replace(/'/g, "\\'");
+        const escapedUrl = photo.url.replace(/'/g, "\\'");
 
         html += `
           <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
-            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
-            <div class="gallery-overlay">${escapeHtml(title)}</div>
+            <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(photo.title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
+            <div class="gallery-overlay">${escapeHtml(photo.title)}</div>
           </div>
         `;
       });
+
+      // Box 3: View More Card
+      html += `
+        <div class="gallery-card view-more-card" onclick="window.location.href='gallery.html'">
+          <div class="view-more-content">
+            <div class="view-more-icon-wrap">
+              <span class="view-more-icon">🖼️</span>
+            </div>
+            <span class="view-more-badge" data-en="Full Archive" data-te="చిత్ర నిధి">Full Archive</span>
+            <h3 data-en="Complete Photo Gallery" data-te="సమగ్ర చిత్రమాలిక">Complete Photo Gallery</h3>
+            <p data-en="Browse all event snapshots, seva camps, youth conventions, and sacred moments."
+               data-te="అభయ్ హిందూ సేన వార్షికోత్సవాలు, సేవా కార్యక్రమాలు మరియు అన్ని ఛాయాచిత్రాలను ఇక్కడ చూడండి.">
+              Browse all event snapshots, seva camps, youth conventions, and sacred moments.
+            </p>
+            <a href="gallery.html" class="btn-view-more" data-en="View All Photos ➔" data-te="అన్ని ఫోటోలు చూడండి ➔">View All Photos ➔</a>
+          </div>
+        </div>
+      `;
 
       galleryGrid.innerHTML = html;
     }
 
     function fetchPhotos(tryOrdered = true) {
       let q = db.collection('gallery_photos');
-      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc');
+      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc').limit(2);
 
       q.onSnapshot(snapshot => {
-        renderGallery(snapshot);
+        const docs = [];
+        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+        docs.sort((a, b) => {
+          const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
+          const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
+          return timeB - timeA;
+        });
+        renderGallery(docs);
       }, err => {
         console.warn("Gallery snapshot fallback:", err);
         if (tryOrdered) {
