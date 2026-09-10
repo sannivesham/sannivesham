@@ -2534,6 +2534,7 @@
     <button class="gallery-tab" onclick="filterGallery('convention', this)">Tirupati Anniversary</button>
     <button class="gallery-tab" onclick="filterGallery('youth', this)">Youth Defense</button>
     <button class="gallery-tab" onclick="filterGallery('seva', this)">Seva & Annadanam</button>
+    <button class="gallery-tab" onclick="filterGallery('temple', this)">Temple Protection</button>
   </div>
 
   <div class="gallery-grid" id="galleryGrid">
@@ -3069,7 +3070,57 @@
     grid.innerHTML = html;
   }
 
-  document.addEventListener('DOMContentLoaded', loadRecentVideos);
+  // Live Photo Gallery from Firestore
+  function initLiveGallery() {
+    if (!db) return;
+    db.collection('gallery_photos').orderBy('uploadedAt', 'desc').onSnapshot(snapshot => {
+      const galleryGrid = document.getElementById('galleryGrid');
+      if (!galleryGrid) return;
+
+      if (snapshot.empty) {
+        // Keep or restore default curated photos if none uploaded yet
+        return;
+      }
+
+      let html = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const title = data.title || 'Abhay Hindu Sena Event';
+        const cat = data.category || 'convention';
+        const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
+        const escapedTitle = title.replace(/'/g, "\\'");
+        const escapedUrl = imgUrl.replace(/'/g, "\\'");
+
+        html += `
+          <div class="gallery-card" data-cat="${escapeHtml(cat)}" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
+            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
+            <div class="gallery-overlay">${escapeHtml(title)}</div>
+          </div>
+        `;
+      });
+
+      galleryGrid.innerHTML = html;
+
+      // Re-apply any currently active filter
+      const activeTab = document.querySelector('.gallery-tab.active');
+      if (activeTab) {
+        const catMatch = activeTab.getAttribute('onclick');
+        if (catMatch && catMatch.includes("'")) {
+          const activeCat = catMatch.split("'")[1];
+          if (activeCat && activeCat !== 'all') {
+            filterGallery(activeCat, activeTab);
+          }
+        }
+      }
+    }, err => {
+      console.log('Using default gallery photos:', err);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadRecentVideos();
+    initLiveGallery();
+  });
   // Language toggle logic
   let isTelugu = false;
   function toggleLanguage() {
