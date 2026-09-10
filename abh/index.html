@@ -1180,6 +1180,8 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
   }
   .chat-input {
     background: rgba(0,0,0,0.5);
@@ -1189,7 +1191,9 @@
     color: #FFF;
     font-family: inherit;
     font-size: 0.85rem;
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
   }
   .chat-input:focus { outline: none; border-color: var(--gold); }
   .chat-send-btn {
@@ -1201,8 +1205,9 @@
     cursor: pointer;
     transition: background 0.2s;
     font-size: 0.88rem;
-    padding: 10px 22px;
+    padding: 10px 20px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .chat-send-btn:hover { background: var(--gold-bright); }
 
@@ -1821,10 +1826,50 @@
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .gallery-card { height: 145px; }
 
-    /* Community Chat */
-    .community-chat-container { border-radius: 12px; }
-    .chat-messages-wrap { height: 350px; padding: 12px 10px; }
-    .chat-input-area { flex-direction: row; padding: 10px 12px; gap: 8px; }
+    /* Community Chat Box & Input (Prevents Button from Overflowing) */
+    .community-chat-container, .chat-box-container {
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .chat-header {
+      padding: 10px 12px !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+    }
+    .chat-header h4 {
+      font-size: 0.90rem !important;
+    }
+    .chat-fullscreen-btn, .chat-online-badge {
+      font-size: 0.7rem !important;
+      padding: 3px 8px !important;
+    }
+    .chat-messages-wrap, .chat-feed { height: 350px; padding: 12px 10px; }
+    .chat-input-area {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      padding: 8px 10px !important;
+      gap: 8px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .chat-input {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      width: auto !important;
+      padding: 10px 12px !important;
+      font-size: 0.84rem !important;
+    }
+    .chat-send-btn {
+      flex: 0 0 auto !important;
+      padding: 10px 16px !important;
+      font-size: 0.84rem !important;
+      white-space: nowrap !important;
+      margin: 0 !important;
+    }
 
     /* Dharma Daan (Donation) Section */
     .donate-details-box { grid-template-columns: 1fr; }
