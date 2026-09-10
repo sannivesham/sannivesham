@@ -531,99 +531,317 @@
     line-height: 1.65;
   }
 
-  /* EVENTS */
-  .events-section {
+  /* VIDEOS & PRAVACHANS SHOWCASE */
+  .videos-section {
     background: linear-gradient(180deg, rgba(22,7,7,0.7) 0%, rgba(13,4,4,0.95) 100%);
     border-top: 1px solid var(--border-gold);
     border-bottom: 1px solid var(--border-gold);
+    position: relative;
   }
-  .events-grid {
+  .videos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: stretch;
   }
-  .event-card {
+  .video-card {
     background: var(--bg-card);
     border: 1px solid var(--border-gold);
     border-radius: 14px;
-    padding: 22px;
-    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.25s, border-color 0.25s;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s, box-shadow 0.28s;
+    cursor: pointer;
+    position: relative;
   }
-  .event-card:hover {
-    transform: translateY(-4px);
+  .video-card:hover {
+    transform: translateY(-6px);
     border-color: var(--gold-bright);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.25);
   }
-  .event-status-badge {
+  .video-thumb-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+  }
+  .video-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  .video-card:hover .video-thumb {
+    transform: scale(1.05);
+  }
+  .video-play-overlay {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    background: rgba(46, 204, 113, 0.2);
-    border: 1px solid #2ecc71;
-    color: #2ecc71;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 3px 9px;
-    border-radius: 15px;
-    text-transform: uppercase;
-  }
-  .event-date-box {
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(13,4,4,0.75) 100%);
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
+    justify-content: center;
+    transition: background 0.25s;
   }
-  .date-square {
-    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+  .video-card:hover .video-play-overlay {
+    background: rgba(0,0,0,0.45);
+  }
+  .video-play-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 20px rgba(255,107,26,0.6);
+    transition: transform 0.25s, box-shadow 0.25s;
+    padding-left: 3px;
+  }
+  .video-card:hover .video-play-btn {
+    transform: scale(1.15);
+    box-shadow: 0 6px 28px rgba(212,175,55,0.8);
+  }
+  .video-cat-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(13,4,4,0.85);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .video-info {
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .video-info h4 {
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    color: #FFF;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .video-info p {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .btn-watch-now {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(212,175,55,0.12);
     border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    padding: 9px 16px;
     border-radius: 8px;
-    width: 48px;
-    height: 48px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    transition: all 0.25s;
+    width: 100%;
+    cursor: pointer;
+  }
+  .video-card:hover .btn-watch-now {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+  }
+
+  /* BOX 3: VIEW MORE CARD */
+  .view-more-card {
+    background: linear-gradient(135deg, rgba(30,5,5,0.95) 0%, rgba(13,4,4,0.98) 100%);
+    border: 2px dashed rgba(212,175,55,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 24px;
+    min-height: 380px;
+  }
+  .view-more-card:hover {
+    border-style: solid;
+    border-color: var(--gold-bright);
+    background: linear-gradient(135deg, rgba(45,8,8,0.98) 0%, rgba(20,5,5,1) 100%);
+  }
+  .view-more-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    height: 100%;
+    width: 100%;
   }
-  .date-day { font-size: 1.15rem; font-weight: 800; color: var(--gold-bright); line-height: 1; }
-  .date-month { font-size: 0.65rem; color: var(--text-main); text-transform: uppercase; font-weight: 600; }
-  .event-location {
-    font-size: 0.82rem;
-    color: var(--gold-bright);
-    font-weight: 500;
+  .view-more-icon-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(255,107,26,0.2) 100%);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 16px;
+    box-shadow: 0 0 25px rgba(212,175,55,0.3);
+    transition: transform 0.3s ease;
   }
-  .event-card h4 {
+  .view-more-card:hover .view-more-icon-wrap {
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 35px rgba(212,175,55,0.5);
+  }
+  .view-more-badge {
+    display: inline-block;
+    background: rgba(255,107,26,0.15);
+    border: 1px solid rgba(255,107,26,0.5);
+    color: #FFA466;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .view-more-card h3 {
     font-family: var(--font-heading);
-    font-size: 1.15rem;
-    color: #FFF;
-    margin-bottom: 8px;
+    font-size: 1.35rem;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+    font-weight: 800;
     line-height: 1.35;
-    padding-top: 3px;
   }
-  .event-card p {
+  .view-more-card p {
     color: var(--text-muted);
     font-size: 0.88rem;
-    line-height: 1.6;
-    margin-bottom: 16px;
-    flex: 1;
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 280px;
   }
-  .event-rsvp-btn {
-    background: rgba(212,175,55,0.12);
-    border: 1px solid var(--gold);
+  .btn-view-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #000;
+    font-weight: 800;
+    font-size: 0.92rem;
+    padding: 11px 24px;
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.35);
+    transition: transform 0.25s, box-shadow 0.25s;
+    text-decoration: none;
+  }
+  .view-more-card:hover .btn-view-more {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(212,175,55,0.6);
+  }
+
+  /* CINEMA VIDEO MODAL */
+  .cinema-modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .cinema-modal-backdrop.active {
+    display: flex;
+  }
+  .cinema-modal-content {
+    background: #0D0404;
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 880px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.95), 0 0 35px rgba(212,175,55,0.3);
+    overflow: hidden;
+    position: relative;
+    animation: cinemaFadeIn 0.25s ease-out;
+  }
+  @keyframes cinemaFadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .cinema-header {
+    background: linear-gradient(90deg, #3D0505 0%, #160707 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .cinema-title {
     color: var(--gold-bright);
-    padding: 8px 14px;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: all 0.2s;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .event-rsvp-btn:hover {
+  .cinema-close-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border-gold);
+    color: #FFF;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .cinema-close-btn:hover {
     background: var(--gold);
     color: #000;
+  }
+  .cinema-iframe-wrap {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+  }
+  .cinema-iframe-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   /* PHOTO GALLERY WITH LIGHTBOX */
@@ -1089,7 +1307,7 @@
     <a href="#home" data-en="Home" data-te="ప్రారంభం">Home</a>
     <a href="#founder" data-en="Founder" data-te="వ్యవస్థాపకులు">Founder</a>
     <a href="#missions" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
-    <a href="#events" data-en="Events" data-te="కార్యక్రమాలు">Events</a>
+    <a href="#videos" data-en="Videos" data-te="వీడియోలు">Videos</a>
     <a href="#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
     <a href="#community" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
   </div>
@@ -1129,7 +1347,7 @@
   <div class="hero-actions">
     <a href="#donate" class="btn btn-donate-hero" data-en="Support Dharma Daan 💛" data-te="ధర్మ దానం చేయండి 💛">Support Dharma Daan 💛</a>
     <a href="#join" class="btn btn-gold" data-en="Join as a Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">Join as a Sevak 🚩</a>
-    <a href="#events" class="btn btn-outline" data-en="Upcoming Events 📅" data-te="కార్యక్రమాలు 📅">Upcoming Events 📅</a>
+    <a href="#videos" class="btn btn-outline" data-en="Watch Videos 📺" data-te="వీడియోలు 📺">Watch Videos 📺</a>
   </div>
 </section>
 
@@ -1241,79 +1459,65 @@
   </div>
 </section>
 
-<!-- Events Schedule Section -->
-<section id="events" class="events-section">
+<!-- Pravachans & Video Discourses Section -->
+<section id="videos" class="videos-section">
+  <span id="events" style="display:block; position:relative; top:-80px; visibility:hidden;"></span>
   <div class="section-header">
-    <span class="eyebrow" data-en="Dharmic Schedule" data-te="కార్యక్రమాల వివరాలు">Dharmic Schedule</span>
-    <h2 class="section-title" data-en="Pravachans & Events Schedule" data-te="శ్రీ రాధా మనోహర్ దాస్ పర్యటనలు & సభలు">Pravachans & Events Schedule</h2>
-    <p class="section-sub" data-en="Participate in upcoming spiritual discourses, youth training camps, and anniversary sammelanams."
-       data-te="రాబోయే ఆధ్యాత్మిక ప్రవచనాలు, యువ శిక్షణ శిబిరాలు మరియు ధార్మిక సమ్మేళనాలలో పాల్గొనండి.">
-      Participate in upcoming spiritual discourses, youth training camps, and anniversary sammelanams.
+    <span class="eyebrow" data-en="Dharmic Discourses" data-te="ధార్మిక ప్రవచనాలు">Dharmic Discourses</span>
+    <h2 class="section-title" data-en="Pravachans & Video Discourses" data-te="శ్రీ రాధా మనోహర్ దాస్ ప్రవచనాలు & వీడియోలు">Pravachans & Video Discourses</h2>
+    <p class="section-sub" data-en="Watch enlightening pravachans, Bhagavad Gita discourses, and sacred messages by Shri Radha Manohar Das."
+       data-te="భగవద్గీత జ్ఞానం, ఆలయ సంరక్షణ మరియు సనాతన ధర్మంపై శ్రీ రాధా మనోహర్ దాస్ గారి దివ్య ప్రవచనాలను ఇక్కడ వీక్షించండి.">
+      Watch enlightening pravachans, Bhagavad Gita discourses, and sacred messages by Shri Radha Manohar Das.
     </p>
   </div>
 
-  <div class="events-grid">
-    <!-- Event 1 -->
-    <div class="event-card">
-      <span class="event-status-badge">Upcoming</span>
-      <div class="event-date-box">
-        <div class="date-square">
-          <span class="date-day">18</span>
-          <span class="date-month">OCT</span>
+  <div class="videos-grid" id="homeVideosGrid">
+    <!-- Box 1: Recent Video 1 -->
+    <div class="video-card" onclick="openCinemaVideo('wH1w9M4mMnM', 'భగవద్గీత విశిష్టత మరియు నిత్య జీవితంలో ఆచరణ | Shri Radha Manohar Das')">
+      <div class="video-thumb-wrap">
+        <img src="https://img.youtube.com/vi/wH1w9M4mMnM/hqdefault.jpg" alt="Pravachan Thumbnail" class="video-thumb">
+        <div class="video-play-overlay">
+          <div class="video-play-btn">▶</div>
         </div>
-        <div>
-          <div class="event-location">📍 Tirupati, Andhra Pradesh</div>
-          <span style="font-size:0.78rem; color:#A89885;">Central Convention Grounds</span>
-        </div>
+        <span class="video-cat-badge">Recent Pravachan</span>
       </div>
-      <h4 data-en="Maha Gita Satsang & Temple Heritage Sammelanam" data-te="మహా గీతా సత్సంగం & ఆలయ పరిరక్షణ సమ్మేళనం">Maha Gita Satsang & Temple Heritage Sammelanam</h4>
-      <p data-en="Keynote discourse by Shri Radha Manohar Das on safeguarding temple traditions and civilizational unity. Free prasadam and book distribution."
-         data-te="శ్రీ రాధా మనోహర్ దాస్ గారిచే ఆలయ సంప్రదాయాలు, సనాతన ధర్మ పరిరక్షణపై ముఖ్యోపన్యాసం. ఉచిత ప్రసాద మరియు గీతా గ్రంథ వితరణ.">
-        Keynote discourse by Shri Radha Manohar Das on safeguarding temple traditions and civilizational unity. Free prasadam and book distribution.
-      </p>
-      <button class="event-rsvp-btn" onclick="openRSVPModal('Maha Gita Satsang - Tirupati')">RSVP / Attend Event</button>
+      <div class="video-info">
+        <h4>భగవద్గీత విశిష్టత మరియు నిత్య జీవితంలో ఆచరణ</h4>
+        <p>శ్రీ రాధా మనోహర్ దాస్ గారిచే భగవద్గీత మార్గదర్శక సందేశం మరియు ధర్మ ఆచరణ.</p>
+        <button class="btn-watch-now">Watch Video ▶️</button>
+      </div>
     </div>
 
-    <!-- Event 2 -->
-    <div class="event-card">
-      <span class="event-status-badge">Upcoming</span>
-      <div class="event-date-box">
-        <div class="date-square">
-          <span class="date-day">05</span>
-          <span class="date-month">NOV</span>
+    <!-- Box 2: Recent Video 2 -->
+    <div class="video-card" onclick="openCinemaVideo('1j51I3-HCOQ', 'ధర్మ రక్షణ కోసం యువత పాత్ర మరియు ఆలయ పరిరక్షణ | Shri Radha Manohar Das')">
+      <div class="video-thumb-wrap">
+        <img src="https://img.youtube.com/vi/1j51I3-HCOQ/hqdefault.jpg" alt="Pravachan Thumbnail" class="video-thumb">
+        <div class="video-play-overlay">
+          <div class="video-play-btn">▶</div>
         </div>
-        <div>
-          <div class="event-location">📍 Vijayawada, Andhra Pradesh</div>
-          <span style="font-size:0.78rem; color:#A89885;">Yuva Chaitanya Sibiram</span>
-        </div>
+        <span class="video-cat-badge">Dharma Discourse</span>
       </div>
-      <h4 data-en="State-Wide Youth Martial & Self-Defense Camp" data-te="రాష్ట్ర స్థాయి యువ ఆత్మరక్షణ & లాఠీ శిక్షణ శిబిరం">State-Wide Youth Martial & Self-Defense Camp</h4>
-      <p data-en="Intensive physical fitness, self-defense tactics, and moral character building for Hindu youth led by senior martial instructors."
-         data-te="యువతలో శారీరక దృఢత్వం, ఆత్మరక్షణ మెలకువలు మరియు క్రమశిక్షణను పెంపొందించే ప్రత్యక్ష శిక్షణ శిబిరం.">
-        Intensive physical fitness, self-defense tactics, and moral character building for Hindu youth led by senior martial instructors.
-      </p>
-      <button class="event-rsvp-btn" onclick="openRSVPModal('Youth Martial Camp - Vijayawada')">RSVP / Attend Event</button>
+      <div class="video-info">
+        <h4>ధర్మ రక్షణ కోసం యువత పాత్ర మరియు ఆలయ పరిరక్షణ</h4>
+        <p>ఆలయాల విముక్తి మరియు హిందూ సమాజ ఐక్యతపై ఉత్తేజకరమైన ధార్మిక సందేశం.</p>
+        <button class="btn-watch-now">Watch Video ▶️</button>
+      </div>
     </div>
 
-    <!-- Event 3 -->
-    <div class="event-card">
-      <span class="event-status-badge">Upcoming</span>
-      <div class="event-date-box">
-        <div class="date-square">
-          <span class="date-day">23</span>
-          <span class="date-month">NOV</span>
+    <!-- Box 3: View More Card -->
+    <div class="video-card view-more-card" onclick="window.location.href='videos.html'">
+      <div class="view-more-content">
+        <div class="view-more-icon-wrap">
+          <span class="view-more-icon">🎬</span>
         </div>
-        <div>
-          <div class="event-location">📍 Hyderabad, Telangana</div>
-          <span style="font-size:0.78rem; color:#A89885;">Dharma Jagruthi Hall</span>
-        </div>
+        <span class="view-more-badge" data-en="Full Archive" data-te="వీడియో నిధి">Full Archive</span>
+        <h3 data-en="Complete Video Library" data-te="సమగ్ర వీడియో భాండాగారం">Complete Video Library</h3>
+        <p data-en="Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search."
+           data-te="మా సమగ్ర వీడియో నిధిలో గీతా ప్రవచనాలు, యువ సదస్సులు మరియు ధార్మిక సభలను ఇక్కడ వీక్షించండి.">
+          Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search.
+        </p>
+        <a href="videos.html" class="btn-view-more" data-en="View All Videos ➔" data-te="అన్ని వీడియోలు చూడండి ➔">View All Videos ➔</a>
       </div>
-      <h4 data-en="Bhagavad Gita for Modern Youth & Career Ethics" data-te="యువతకు భగవద్గీత మార్గదర్శనం & సదస్సు">Bhagavad Gita for Modern Youth & Career Ethics</h4>
-      <p data-en="Special interactive session for college students and working youth on combining spiritual discipline with modern professional duties."
-         data-te="కళాశాల విద్యార్థులు మరియు ఉద్యోగస్తుల కోసం మానసిక ఒత్తిడి నివారణ, ధర్మబద్ధ జీవితంపై ముఖాముఖి సదస్సు.">
-        Special interactive session for college students and working youth on combining spiritual discipline with modern professional duties.
-      </p>
-      <button class="event-rsvp-btn" onclick="openRSVPModal('Bhagavad Gita Youth Session - Hyderabad')">RSVP / Attend Event</button>
     </div>
   </div>
 </section>
@@ -1599,7 +1803,134 @@
   </div>
 </div>
 
+<!-- Cinema Video Modal -->
+<div class="cinema-modal-backdrop" id="cinemaVideoModal" onclick="closeCinemaVideo()">
+  <div class="cinema-modal-content" onclick="event.stopPropagation()">
+    <div class="cinema-header">
+      <div class="cinema-title" id="cinemaVideoTitle">Shri Radha Manohar Das Pravachan</div>
+      <button class="cinema-close-btn" onclick="closeCinemaVideo()" aria-label="Close Video">✕</button>
+    </div>
+    <div class="cinema-iframe-wrap">
+      <iframe id="cinemaIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
 <script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyANW4b8MGvlLn8XT1auTwukxlu08dm-YJQ",
+    authDomain: "abhay-hindu-sena-org.firebaseapp.com",
+    projectId: "abhay-hindu-sena-org",
+    storageBucket: "abhay-hindu-sena-org.firebasestorage.app",
+    messagingSenderId: "694749073728",
+    appId: "1:694749073728:web:5786bfe0c0a832dbba6aa5",
+    measurementId: "G-T2C9DQN7E2"
+  };
+  let db = null;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+  } catch (e) {
+    console.warn("Firebase initialization note:", e);
+  }
+
+  // Cinema Video Player Modal
+  function openCinemaVideo(videoId, title) {
+    const modal = document.getElementById('cinemaVideoModal');
+    const iframe = document.getElementById('cinemaIframe');
+    const titleEl = document.getElementById('cinemaVideoTitle');
+    if (titleEl) titleEl.textContent = title || "Shri Radha Manohar Das Pravachan";
+    if (iframe) iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+    if (modal) modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCinemaVideo() {
+    const modal = document.getElementById('cinemaVideoModal');
+    const iframe = document.getElementById('cinemaIframe');
+    if (iframe) iframe.src = '';
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeCinemaVideo();
+  });
+
+  // Load Recent Videos from Firestore for Box 1 & Box 2
+  function loadRecentVideos() {
+    if (!db) return;
+    db.collection('videos').orderBy('createdAt', 'desc').limit(2).onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        const docs = [];
+        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+        if (docs.length > 0) {
+          updateHomeVideoCards(docs);
+        }
+      }
+    }, err => {
+      console.log('Using default curated videos:', err);
+    });
+  }
+
+  function updateHomeVideoCards(videos) {
+    const grid = document.getElementById('homeVideosGrid');
+    if (!grid) return;
+
+    let html = '';
+    videos.forEach((v, idx) => {
+      const vid = v.videoId || 'wH1w9M4mMnM';
+      const title = v.title || 'Shri Radha Manohar Das Pravachan';
+      const cat = v.category || (idx === 0 ? 'Recent Pravachan' : 'Dharma Discourse');
+      const desc = v.description || 'Watch divine pravachan and spiritual guidance by Shri Radha Manohar Das.';
+      const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+      const escapedTitle = title.replace(/'/g, "\\'");
+
+      html += `
+        <div class="video-card" onclick="openCinemaVideo('${vid}', '${escapedTitle}')">
+          <div class="video-thumb-wrap">
+            <img src="${thumb}" alt="${escapeHtml(title)}" class="video-thumb" loading="lazy">
+            <div class="video-play-overlay">
+              <div class="video-play-btn">▶</div>
+            </div>
+            <span class="video-cat-badge">${escapeHtml(cat)}</span>
+          </div>
+          <div class="video-info">
+            <h4>${escapeHtml(title)}</h4>
+            <p>${escapeHtml(desc)}</p>
+            <button class="btn-watch-now">Watch Video ▶️</button>
+          </div>
+        </div>
+      `;
+    });
+
+    // Box 3: View More Card
+    html += `
+      <div class="video-card view-more-card" onclick="window.location.href='videos.html'">
+        <div class="view-more-content">
+          <div class="view-more-icon-wrap">
+            <span class="view-more-icon">🎬</span>
+          </div>
+          <span class="view-more-badge" data-en="Full Archive" data-te="వీడియో నిధి">Full Archive</span>
+          <h3 data-en="Complete Video Library" data-te="సమగ్ర వీడియో భాండాగారం">Complete Video Library</h3>
+          <p data-en="Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search."
+             data-te="మా సమగ్ర వీడియో నిధిలో గీతా ప్రవచనాలు, యువ సదస్సులు మరియు ధార్మిక సభలను ఇక్కడ వీక్షించండి.">
+            Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search.
+          </p>
+          <a href="videos.html" class="btn-view-more" data-en="View All Videos ➔" data-te="అన్ని వీడియోలు చూడండి ➔">View All Videos ➔</a>
+        </div>
+      </div>
+    `;
+
+    grid.innerHTML = html;
+  }
+
+  document.addEventListener('DOMContentLoaded', loadRecentVideos);
   // Language toggle logic
   let isTelugu = false;
   function toggleLanguage() {

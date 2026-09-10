@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Video Management | Abhay Hindu Sena</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-bright: #F7D57F;
+    --saffron: #FF6B1A;
+    --maroon: #7A0C0C;
+    --bg-dark: #0A0303;
+    --bg-card: #140707;
+    --bg-card-alt: #1F0A0A;
+    --border-gold: rgba(212,175,55,0.3);
+    --text-main: #FFF8EF;
+    --text-muted: #C7B5A0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .admin-header {
+    background: linear-gradient(180deg, #200606 0%, #0D0404 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .circle-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFF;
+    border: 2px solid var(--gold);
+  }
+  .admin-brand h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--gold-bright);
+    font-weight: 800;
+  }
+  .admin-brand span {
+    font-size: 0.75rem;
+    color: var(--saffron);
+    display: block;
+  }
+  .admin-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .admin-nav a, .admin-nav button {
+    text-decoration: none;
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--border-gold);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-main);
+  }
+  .admin-nav a:hover, .admin-nav button:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+  }
+
+  /* CONTAINER */
+  .admin-container {
+    max-width: 1180px;
+    margin: 30px auto 60px;
+    padding: 0 20px;
+  }
+
+  /* STATUS BANNER */
+  .status-banner {
+    background: rgba(46, 204, 113, 0.12);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    color: #2ecc71;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  /* TWO-COLUMN GRID */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+  }
+
+  /* CARD */
+  .dash-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+  }
+  .dash-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dash-card .card-desc {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* FORM STYLES */
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #FFF;
+    font-family: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px rgba(212,175,55,0.25);
+  }
+  .form-select option {
+    background: #140707;
+    color: #FFF;
+  }
+
+  /* PREVIEW BOX */
+  .thumb-preview-box {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #050202;
+    border: 1px dashed var(--border-gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .thumb-preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+  .thumb-placeholder {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #000;
+    font-weight: 800;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.55);
+  }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* PUBLISHED VIDEOS LIST */
+  .videos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 720px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  .video-item {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    gap: 16px;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 10px;
+    padding: 12px;
+    align-items: center;
+    transition: border-color 0.2s;
+  }
+  .video-item:hover {
+    border-color: var(--gold-bright);
+  }
+  @media (max-width: 600px) {
+    .video-item { grid-template-columns: 100px 1fr; }
+    .video-item-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+  }
+  .item-thumb-wrap {
+    width: 130px;
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+  }
+  .item-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .item-info h4 {
+    color: #FFF;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .item-badge {
+    display: inline-block;
+    background: rgba(255,107,26,0.15);
+    border: 1px solid rgba(255,107,26,0.4);
+    color: #FFA466;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 6px;
+  }
+  .item-date {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+  .video-item-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-action {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-action:hover {
+    background: var(--gold);
+    color: #000;
+  }
+  .btn-delete {
+    border-color: rgba(231, 76, 60, 0.4);
+    color: #e74c3c;
+  }
+  .btn-delete:hover {
+    background: #e74c3c;
+    color: #FFF;
+  }
+
+  /* ALERT TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #27ae60;
+    color: #FFF;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.6);
+    display: none;
+    z-index: 4000;
+    animation: toastSlide 0.3s ease-out;
+  }
+  @keyframes toastSlide {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* LOGIN GATE MODAL */
+  .login-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10,3,3,0.96);
+    backdrop-filter: blur(12px);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-card {
+    background: var(--bg-card);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 34px 28px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+  }
+  .login-card h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+  .login-card p {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN MODAL GATE -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div style="font-size:2.4rem; margin-bottom:12px;">🚩</div>
+    <h3>Admin Authorization</h3>
+    <p>Please enter your admin passcode to manage Abhay Hindu Sena videos.</p>
+    <form onsubmit="handleAdminLogin(event)">
+      <div class="form-group">
+        <input type="password" id="passcodeInput" class="form-input" placeholder="Enter Passcode (default: ahs2026)" autofocus required style="text-align:center; font-size:1.1rem; letter-spacing:2px;">
+      </div>
+      <button type="submit" class="btn-submit">Unlock Dashboard ➔</button>
+      <div id="loginError" style="color:#e74c3c; font-size:0.8rem; margin-top:10px; display:none;">Incorrect passcode. Please try again.</div>
+    </form>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="admin-header">
+  <div class="admin-brand">
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="circle-logo">
+    <div>
+      <h1>ABHAY HINDU SENA</h1>
+      <span>Admin Control Panel • Video Management</span>
+    </div>
+  </div>
+  <div class="admin-nav">
+    <a href="index.html" target="_blank">🌐 View Live Website</a>
+    <a href="videos.html" target="_blank">🎬 View Video Library</a>
+    <button onclick="handleLogout()">🔒 Logout</button>
+  </div>
+</header>
+
+<!-- Main Dashboard -->
+<div class="admin-container">
+  <!-- Status Banner -->
+  <div class="status-banner">
+    <span class="status-badge">🟢 Connected to Firebase Project: <strong>abhay-hindu-sena-org</strong></span>
+    <span style="font-size:0.8rem; color:var(--text-muted);">Real-time Cloud Sync Active</span>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- LEFT: ADD VIDEO FORM -->
+    <div class="dash-card">
+      <h2>➕ Add YouTube Video</h2>
+      <p class="card-desc">Paste any YouTube URL or Video ID. The system will automatically fetch the thumbnail and title.</p>
+
+      <form id="addVideoForm" onsubmit="handlePublishVideo(event)">
+        <!-- YouTube URL input -->
+        <div class="form-group">
+          <label for="ytUrl">YouTube Link or Video ID *</label>
+          <input type="text" id="ytUrl" class="form-input" placeholder="e.g. https://www.youtube.com/watch?v=..." required oninput="handleUrlInput(this.value)">
+        </div>
+
+        <!-- Thumbnail Live Preview -->
+        <div class="form-group">
+          <label>Thumbnail Preview</label>
+          <div class="thumb-preview-box">
+            <span class="thumb-placeholder" id="thumbPlaceholder">Paste a link above to preview thumbnail</span>
+            <img id="thumbImg" src="" alt="Thumbnail Preview">
+          </div>
+        </div>
+
+        <!-- Video Title -->
+        <div class="form-group">
+          <label for="videoTitle">Discourse Title *</label>
+          <input type="text" id="videoTitle" class="form-input" placeholder="Enter or auto-fetched title..." required>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="videoCategory">Category *</label>
+          <select id="videoCategory" class="form-select">
+            <option value="Bhagavad Gita">Bhagavad Gita</option>
+            <option value="Temple Defense">Temple Defense</option>
+            <option value="Youth & Dharma">Youth & Dharma</option>
+            <option value="Dharma Pravachan">Dharma Pravachan</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="videoDesc">Brief Description (Optional)</label>
+          <textarea id="videoDesc" class="form-textarea" rows="2" placeholder="Brief summary of the discourse..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          🚀 Publish Video to Website
+        </button>
+      </form>
+    </div>
+
+    <!-- RIGHT: PUBLISHED VIDEOS -->
+    <div class="dash-card">
+      <h2>🎬 Published Videos (<span id="videoCount">0</span>)</h2>
+      <p class="card-desc">All videos currently published in the database. The top 2 automatically appear on the homepage.</p>
+
+      <div class="videos-list" id="publishedVideosList">
+        <div style="text-align:center; padding:40px; color:var(--text-muted);">
+          Loading videos from Firebase...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastMsg">Video published successfully! 🚩</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyANW4b8MGvlLn8XT1auTwukxlu08dm-YJQ",
+    authDomain: "abhay-hindu-sena-org.firebaseapp.com",
+    projectId: "abhay-hindu-sena-org",
+    storageBucket: "abhay-hindu-sena-org.firebasestorage.app",
+    messagingSenderId: "694749073728",
+    appId: "1:694749073728:web:5786bfe0c0a832dbba6aa5",
+    measurementId: "G-T2C9DQN7E2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Authentication
+  const ADMIN_PASS = 'ahs2026';
+  function checkAuth() {
+    if (sessionStorage.getItem('ahs_admin_authenticated') === 'true') {
+      document.getElementById('loginOverlay').style.display = 'none';
+      initDashboard();
+    } else {
+      document.getElementById('loginOverlay').style.display = 'flex';
+    }
+  }
+
+  function handleAdminLogin(e) {
+    e.preventDefault();
+    const pass = document.getElementById('passcodeInput').value.trim();
+    if (pass === ADMIN_PASS) {
+      sessionStorage.setItem('ahs_admin_authenticated', 'true');
+      document.getElementById('loginOverlay').style.display = 'none';
+      initDashboard();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function handleLogout() {
+    sessionStorage.removeItem('ahs_admin_authenticated');
+    window.location.reload();
+  }
+
+  // YouTube Link Parser
+  function extractYouTubeId(url) {
+    if (!url) return null;
+    url = url.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+
+  let currentDetectedId = null;
+
+  function handleUrlInput(val) {
+    const id = extractYouTubeId(val);
+    const thumbImg = document.getElementById('thumbImg');
+    const placeholder = document.getElementById('thumbPlaceholder');
+
+    if (id) {
+      currentDetectedId = id;
+      const thumbUrl = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+      thumbImg.src = thumbUrl;
+      thumbImg.style.display = 'block';
+      placeholder.style.display = 'none';
+
+      // Auto-fetch title via YouTube oEmbed
+      fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.title && !document.getElementById('videoTitle').value) {
+            document.getElementById('videoTitle').value = data.title;
+          }
+        })
+        .catch(() => {});
+    } else {
+      currentDetectedId = null;
+      thumbImg.style.display = 'none';
+      placeholder.style.display = 'block';
+    }
+  }
+
+  // Publish Video
+  async function handlePublishVideo(e) {
+    e.preventDefault();
+    const id = currentDetectedId || extractYouTubeId(document.getElementById('ytUrl').value);
+    const title = document.getElementById('videoTitle').value.trim();
+    const category = document.getElementById('videoCategory').value;
+    const description = document.getElementById('videoDesc').value.trim();
+
+    if (!id) {
+      alert("Please enter a valid YouTube URL or Video ID!");
+      return;
+    }
+    if (!title) {
+      alert("Please enter a video title!");
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Publishing to Cloud... ⏳';
+
+    try {
+      await db.collection('videos').add({
+        videoId: id,
+        title: title,
+        category: category,
+        description: description || "Pravachan discourse by Shri Radha Manohar Das.",
+        author: "Shri Radha Manohar Das",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      showToast("Video published successfully to website! 🚩");
+      document.getElementById('addVideoForm').reset();
+      document.getElementById('thumbImg').style.display = 'none';
+      document.getElementById('thumbPlaceholder').style.display = 'block';
+      currentDetectedId = null;
+    } catch (err) {
+      console.error("Firestore Error:", err);
+      alert("Error publishing video: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Publish Video to Website';
+    }
+  }
+
+  // Delete Video
+  async function deleteVideo(docId, title) {
+    if (!confirm(`Are you sure you want to remove this video?\n\n"${title}"`)) return;
+    try {
+      await db.collection('videos').doc(docId).delete();
+      showToast("Video removed from website.");
+    } catch (err) {
+      alert("Error removing video: " + err.message);
+    }
+  }
+
+  // Real-time List Listener
+  function initDashboard() {
+    db.collection('videos').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+      const listEl = document.getElementById('publishedVideosList');
+      document.getElementById('videoCount').textContent = snapshot.size;
+
+      if (snapshot.empty) {
+        listEl.innerHTML = `
+          <div style="text-align:center; padding:40px; color:var(--text-muted);">
+            No custom videos added yet. Use the form on the left to add your first YouTube discourse!
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      snapshot.forEach(doc => {
+        const v = doc.data();
+        const vid = v.videoId;
+        const title = v.title || 'Untitled Discourse';
+        const cat = v.category || 'General';
+        const dateStr = v.createdAt ? new Date(v.createdAt.toDate()).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : 'Recently Added';
+        const escapedTitle = title.replace(/'/g, "\\'");
+
+        html += `
+          <div class="video-item">
+            <div class="item-thumb-wrap">
+              <img src="https://img.youtube.com/vi/${vid}/hqdefault.jpg" alt="${title}" class="item-thumb">
+            </div>
+            <div class="item-info">
+              <h4>${escapeHtml(title)}</h4>
+              <div>
+                <span class="item-badge">${cat}</span>
+                <span class="item-date">📅 ${dateStr}</span>
+              </div>
+            </div>
+            <div class="video-item-actions">
+              <a href="https://www.youtube.com/watch?v=${vid}" target="_blank" class="btn-action">▶ YouTube</a>
+              <button onclick="deleteVideo('${doc.id}', '${escapedTitle}')" class="btn-action btn-delete">🗑️ Delete</button>
+            </div>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+    }, err => {
+      console.error(err);
+      document.getElementById('publishedVideosList').innerHTML = `
+        <div style="color:#e74c3c; padding:20px;">
+          Firestore connection note: ${err.message}. Make sure your Firestore rules allow read/write.
+        </div>
+      `;
+    });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toastMsg');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
+  checkAuth();
+</script>
+</body>
+</html>
