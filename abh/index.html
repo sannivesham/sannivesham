@@ -6,6 +6,7 @@
 <title>Abhay Hindu Sena | Official Portal | Founded by Shri Radha Manohar Das</title>
 <meta name="description" content="Official website of Abhay Hindu Sena (అభయ్ హిందూ సేన), founded by Shri Radha Manohar Das. Dedicated to Sanatana Dharma defense, temple protection, youth awakening, Annadanam, and Gau Samrakshana.">
 <meta name="keywords" content="Abhay Hindu Sena, Radha Manohar Das, Sanatana Dharma, Hindu Sena, Temple Protection, Youth Defense, Gau Samrakshana, Annadanam, Tirupati">
+<link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -36,121 +37,69 @@
     overflow-x: hidden;
   }
 
-  /* Font classes */
-  .cinzel { font-family: 'Cinzel', serif; }
-  .mandali { font-family: 'Mandali', sans-serif; }
-
-  /* Top Contact & Network Bar */
-  .top-bar {
-    background: #000;
-    padding: 8px 6%;
-    font-size: 0.82rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-gold);
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .top-left-links, .top-right-links {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-  .top-bar a {
-    color: var(--gold-bright);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
-  }
-  .top-bar a:hover { color: #fff; }
-  .top-mail-chip {
-    background: rgba(212,175,55,0.12);
-    border: 1px solid var(--border-gold);
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-family: monospace;
-    font-size: 0.8rem;
-    color: var(--gold-bright);
-  }
-  .lang-toggle-btn {
-    background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(255,107,26,0.2));
-    border: 1px solid var(--gold);
-    color: var(--gold-bright);
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .lang-toggle-btn:hover {
-    background: var(--gold);
-    color: #000;
-    box-shadow: 0 0 12px rgba(212,175,55,0.5);
-  }
-
-  /* Main Navigation */
+  /* Single Clean Regal Navbar */
   .main-nav {
-    background: linear-gradient(180deg, rgba(61,5,5,0.95) 0%, rgba(13,4,4,0.98) 100%);
-    border-bottom: 1px solid var(--border-gold);
-    padding: 16px 6%;
+    background: linear-gradient(180deg, rgba(38,4,4,0.98) 0%, rgba(13,4,4,0.99) 100%);
+    border-bottom: 2px solid var(--border-gold);
+    padding: 12px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.8);
   }
   .nav-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     text-decoration: none;
   }
-  .nav-brand-flag {
-    font-size: 2.2rem;
-    filter: drop-shadow(0 0 10px rgba(255,107,26,0.7));
-    animation: pulseFlag 2.5s infinite ease-in-out;
+  .nav-logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(212,175,55,0.5));
+    transition: transform 0.3s ease;
   }
-  @keyframes pulseFlag {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-  }
+  .nav-brand:hover .nav-logo-img { transform: scale(1.08) rotate(3deg); }
   .nav-brand-text h1 {
     font-family: 'Cinzel', serif;
-    font-size: 1.45rem;
+    font-size: 1.25rem;
     color: var(--gold-bright);
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     font-weight: 800;
     line-height: 1.1;
   }
   .nav-brand-text span {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--saffron);
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     display: block;
     font-weight: 500;
   }
+
+  .nav-links-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
   .nav-links {
     display: flex;
-    gap: 22px;
+    gap: 16px;
     align-items: center;
   }
   .nav-links a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.2s;
+    padding: 6px 4px;
     position: relative;
-    padding-bottom: 4px;
+    white-space: nowrap;
   }
   .nav-links a:hover {
     color: var(--gold-bright);
@@ -164,43 +113,71 @@
     height: 2px;
     background: linear-gradient(90deg, var(--saffron), var(--gold));
   }
-  .nav-cta-btn {
-    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
-    color: #000 !important;
-    font-weight: 700 !important;
-    padding: 9px 20px !important;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
-    transition: all 0.25s !important;
-  }
-  .nav-cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.55);
-  }
-  .nav-cta-btn::after { display: none !important; }
 
-  /* Mobile Hamburger */
-  .mobile-toggle {
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lang-toggle-btn {
+    background: rgba(212,175,55,0.12);
+    border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .lang-toggle-btn:hover {
+    background: var(--gold);
+    color: #000;
+  }
+  .nav-donate-btn {
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    color: #000 !important;
+    font-weight: 800 !important;
+    padding: 7px 18px !important;
+    border-radius: 20px;
+    box-shadow: 0 2px 14px rgba(255,107,26,0.45);
+    transition: all 0.25s !important;
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .nav-donate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255,107,26,0.7);
+  }
+  .nav-donate-btn::after { display: none !important; }
+
+  /* Mobile Nav Toggle */
+  .mobile-menu-btn {
     display: none;
     background: transparent;
     border: 1px solid var(--gold);
     color: var(--gold-bright);
-    font-size: 1.4rem;
-    padding: 6px 12px;
+    font-size: 1.3rem;
+    padding: 5px 10px;
     border-radius: 6px;
     cursor: pointer;
   }
   .mobile-drawer {
     display: none;
     position: fixed;
-    top: 72px;
+    top: 70px;
     left: 0;
     right: 0;
     background: rgba(13,4,4,0.98);
     border-bottom: 2px solid var(--gold);
-    padding: 24px 6%;
+    padding: 20px 6%;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     z-index: 999;
     backdrop-filter: blur(16px);
   }
@@ -208,103 +185,114 @@
   .mobile-drawer a {
     color: var(--text-main);
     text-decoration: none;
-    font-size: 1rem;
-    padding: 10px 0;
+    font-size: 0.95rem;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(212,175,55,0.15);
   }
 
   /* Hero Section */
   .hero-section {
-    padding: 85px 6% 65px;
+    padding: 70px 6% 55px;
     text-align: center;
     background: radial-gradient(circle at 50% 25%, rgba(122,12,12,0.45) 0%, rgba(13,4,4,0.98) 75%);
     border-bottom: 1px solid rgba(212,175,55,0.2);
     position: relative;
     overflow: hidden;
   }
-  .hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: radial-gradient(rgba(212,175,55,0.06) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
+  .hero-emblem-wrap {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    padding: 6px;
+    background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-emblem-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 16px rgba(255,107,26,0.6));
+    animation: gentlePulse 3s infinite ease-in-out;
+  }
+  @keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
   }
   .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: rgba(255,107,26,0.15);
     border: 1px solid rgba(255,107,26,0.45);
-    padding: 7px 22px;
+    padding: 6px 20px;
     border-radius: 30px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: #FFA466;
-    margin-bottom: 24px;
-    box-shadow: 0 0 20px rgba(255,107,26,0.2);
+    margin-bottom: 18px;
   }
   .hero-title {
     font-family: 'Cinzel', serif;
-    font-size: 3.8rem;
+    font-size: 3.4rem;
     font-weight: 900;
     background: linear-gradient(135deg, #FFF 25%, var(--gold-bright) 60%, var(--saffron) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.15;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
+    margin-bottom: 8px;
   }
   .hero-founder-tag {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     color: var(--gold-bright);
     font-weight: 600;
-    margin-bottom: 18px;
-    letter-spacing: 0.5px;
+    margin-bottom: 16px;
   }
   .hero-motto-callout {
     display: inline-block;
     background: linear-gradient(90deg, rgba(122,12,12,0.5), rgba(61,5,5,0.7));
     border: 1px solid var(--border-gold);
     color: #FFF;
-    padding: 10px 24px;
+    padding: 8px 22px;
     border-radius: 40px;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-style: italic;
-    margin-bottom: 26px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    margin-bottom: 22px;
   }
   .hero-lead {
-    max-width: 860px;
-    margin: 0 auto 34px;
-    font-size: 1.1rem;
+    max-width: 820px;
+    margin: 0 auto 30px;
+    font-size: 1.05rem;
     color: var(--text-muted);
-    line-height: 1.85;
+    line-height: 1.8;
   }
   .hero-actions {
     display: flex;
     justify-content: center;
-    gap: 18px;
+    gap: 14px;
     flex-wrap: wrap;
   }
   .btn {
-    padding: 13px 30px;
+    padding: 12px 28px;
     border-radius: 8px;
     font-weight: 600;
     text-decoration: none;
-    font-size: 0.96rem;
+    font-size: 0.94rem;
     transition: all 0.25s ease;
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
+    cursor: pointer;
   }
   .btn-gold {
     background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
     color: #000;
-    box-shadow: 0 4px 22px rgba(212,175,55,0.35);
+    box-shadow: 0 4px 20px rgba(212,175,55,0.35);
   }
   .btn-gold:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(212,175,55,0.6);
+    box-shadow: 0 6px 25px rgba(212,175,55,0.55);
   }
   .btn-outline {
     background: rgba(255,255,255,0.03);
@@ -316,73 +304,78 @@
     border-color: var(--gold-bright);
     color: #fff;
   }
+  .btn-donate {
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 4px 20px rgba(255,107,26,0.4);
+  }
+  .btn-donate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255,107,26,0.65);
+  }
 
-  /* Stats Counter Bar */
+  /* Stats Strip */
   .stats-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 20px;
-    padding: 45px 6%;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    padding: 38px 6%;
     background: rgba(22,7,7,0.85);
     border-bottom: 1px solid rgba(212,175,55,0.15);
   }
   .stat-box {
     text-align: center;
-    padding: 24px 18px;
+    padding: 20px 15px;
     background: rgba(0,0,0,0.45);
     border-radius: 12px;
     border: 1px solid rgba(212,175,55,0.18);
-    transition: transform 0.25s;
-  }
-  .stat-box:hover {
-    transform: translateY(-4px);
-    border-color: var(--gold);
   }
   .stat-box h3 {
     font-family: 'Cinzel', serif;
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     color: var(--gold-bright);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     font-weight: 800;
   }
   .stat-box p {
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     color: var(--text-muted);
   }
 
-  /* Section Wrappers */
+  /* Section Styling */
   section {
-    padding: 85px 6%;
+    padding: 75px 6%;
     position: relative;
   }
   .section-header {
     text-align: center;
-    max-width: 800px;
-    margin: 0 auto 55px;
+    max-width: 780px;
+    margin: 0 auto 50px;
   }
   .eyebrow {
     color: var(--saffron);
-    font-size: 0.88rem;
-    letter-spacing: 2.5px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: 700;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .section-title {
     font-family: 'Cinzel', serif;
-    font-size: 2.6rem;
+    font-size: 2.4rem;
     color: #FFF;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     font-weight: 800;
   }
   .section-sub {
     color: var(--text-muted);
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.75;
   }
 
-  /* Founder Biography Section */
+  /* Founder Biography with Circular Image */
   .founder-section {
     background: linear-gradient(180deg, rgba(22,7,7,0.95) 0%, rgba(13,4,4,1) 100%);
     border-top: 1px solid var(--border-gold);
@@ -390,46 +383,47 @@
   }
   .founder-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 55px;
+    grid-template-columns: 340px 1fr;
+    gap: 50px;
     align-items: center;
   }
   .founder-photo-card {
     text-align: center;
-    position: relative;
   }
-  .founder-photo-wrap {
-    position: relative;
-    width: 100%;
-    max-width: 340px;
+  /* CIRCULAR FRAME FOR SHRI RADHA MANOHAR DAS */
+  .founder-circle-wrap {
+    width: 290px;
+    height: 290px;
     margin: 0 auto;
-    border-radius: 18px;
-    padding: 8px;
-    background: linear-gradient(135deg, var(--gold), var(--saffron), var(--maroon));
-    box-shadow: 0 15px 40px rgba(0,0,0,0.7), 0 0 30px rgba(212,175,55,0.25);
+    border-radius: 50%;
+    padding: 7px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 50%, var(--maroon) 100%);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.35);
+    position: relative;
   }
-  .founder-photo-wrap img {
+  .founder-circle-wrap img {
     width: 100%;
-    height: 430px;
+    height: 100%;
     object-fit: cover;
-    object-position: center top;
-    border-radius: 12px;
+    object-position: center 15%;
+    border-radius: 50%;
+    border: 4px solid #0D0404;
     display: block;
   }
-  .founder-badge-under {
-    margin-top: 16px;
+  .founder-circle-badge {
+    margin-top: 18px;
     display: inline-block;
     background: rgba(212,175,55,0.15);
     border: 1px solid var(--gold);
     color: var(--gold-bright);
-    padding: 6px 16px;
-    border-radius: 20px;
+    padding: 6px 18px;
+    border-radius: 25px;
     font-size: 0.85rem;
     font-weight: 600;
   }
   .founder-details h3 {
     font-family: 'Cinzel', serif;
-    font-size: 2.3rem;
+    font-size: 2.2rem;
     color: var(--gold-bright);
     margin-bottom: 6px;
     font-weight: 800;
@@ -437,228 +431,226 @@
   .founder-details .role-text {
     color: var(--saffron);
     font-weight: 600;
-    font-size: 1.05rem;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    margin-bottom: 18px;
     display: block;
   }
   .founder-details p {
     color: var(--text-muted);
-    font-size: 1.02rem;
-    line-height: 1.85;
-    margin-bottom: 18px;
+    font-size: 0.98rem;
+    line-height: 1.8;
+    margin-bottom: 16px;
   }
   .quote-box {
-    background: linear-gradient(90deg, rgba(122,12,12,0.3) 0%, rgba(212,175,55,0.06) 100%);
+    background: linear-gradient(90deg, rgba(122,12,12,0.35) 0%, rgba(212,175,55,0.08) 100%);
     border-left: 4px solid var(--gold);
-    padding: 18px 22px;
+    padding: 16px 20px;
     border-radius: 0 10px 10px 0;
-    margin: 24px 0;
+    margin: 20px 0;
     font-style: italic;
     color: #FFF;
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.7;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
-  .founder-contact-pills {
+  .founder-actions-row {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-top: 24px;
+    margin-top: 20px;
   }
-  .contact-pill {
+  .pill-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(212,175,55,0.25);
     color: var(--text-main);
-    padding: 9px 18px;
-    border-radius: 30px;
-    font-size: 0.88rem;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85rem;
     text-decoration: none;
     transition: all 0.25s;
   }
-  .contact-pill:hover {
+  .pill-btn:hover {
     background: var(--gold);
     color: #000;
     border-color: var(--gold);
-    box-shadow: 0 0 16px rgba(212,175,55,0.4);
   }
 
-  /* Core Missions / Pillars Section */
-  .missions-section {
-    background: var(--bg-dark);
-  }
+  /* Core Missions */
   .missions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
   }
   .mission-card {
     background: var(--bg-card);
     border: 1px solid var(--border-gold);
-    border-radius: 14px;
-    padding: 32px 26px;
-    transition: all 0.35s ease;
+    border-radius: 12px;
+    padding: 28px 24px;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow: hidden;
-  }
-  .mission-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 4px;
-    background: linear-gradient(90deg, var(--saffron), var(--gold));
-    opacity: 0;
-    transition: opacity 0.3s;
   }
   .mission-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
     border-color: var(--gold-bright);
-    box-shadow: 0 12px 35px rgba(212,175,55,0.18);
+    box-shadow: 0 10px 30px rgba(212,175,55,0.2);
   }
-  .mission-card:hover::before { opacity: 1; }
-  .mission-icon-circle {
-    width: 60px;
-    height: 60px;
-    background: rgba(212,175,55,0.1);
-    border: 1px solid var(--border-gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+  .mission-icon {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
   }
   .mission-card h3 {
     font-family: 'Cinzel', serif;
     color: var(--gold-bright);
-    font-size: 1.35rem;
-    margin-bottom: 12px;
-    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
   }
   .mission-card p {
     color: var(--text-muted);
-    font-size: 0.94rem;
-    line-height: 1.7;
-    margin-bottom: 18px;
-    flex: 1;
-  }
-  .mission-features {
-    list-style: none;
-    border-top: 1px solid rgba(212,175,55,0.15);
-    padding-top: 14px;
-    margin-top: auto;
-  }
-  .mission-features li {
-    font-size: 0.85rem;
-    color: #E2D3BE;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .mission-features li::before {
-    content: '✦';
-    color: var(--saffron);
-    font-size: 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
 
-  /* Discourses & Pravachans */
-  .discourses-section {
+  /* Events Schedule Section */
+  .events-section {
     background: linear-gradient(180deg, rgba(22,7,7,0.7) 0%, rgba(13,4,4,0.95) 100%);
     border-top: 1px solid var(--border-gold);
     border-bottom: 1px solid var(--border-gold);
   }
-  .discourses-grid {
+  .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 26px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
   }
-  .discourse-card {
+  .event-card {
     background: var(--bg-card);
-    border: 1px solid rgba(212,175,55,0.2);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.25s, border-color 0.25s;
-  }
-  .discourse-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--gold);
-  }
-  .discourse-thumb {
-    height: 180px;
-    background-size: cover;
-    background-position: center;
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    padding: 24px;
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    transition: transform 0.25s, border-color 0.25s;
   }
-  .play-icon-overlay {
-    width: 52px;
-    height: 52px;
-    background: rgba(255,107,26,0.85);
-    border-radius: 50%;
+  .event-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-bright);
+  }
+  .event-status-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(255,107,26,0.2);
+    border: 1px solid var(--saffron);
+    color: #FFA466;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 15px;
+    text-transform: uppercase;
+  }
+  .event-date-box {
     display: flex;
     align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .date-square {
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 1.4rem;
-    box-shadow: 0 0 20px rgba(255,107,26,0.6);
+    text-align: center;
   }
-  .discourse-body {
-    padding: 20px;
+  .date-day { font-size: 1.25rem; font-weight: 800; color: var(--gold-bright); line-height: 1; }
+  .date-month { font-size: 0.68rem; color: var(--text-main); text-transform: uppercase; font-weight: 600; }
+  .event-location {
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+    font-weight: 500;
   }
-  .discourse-body h4 {
+  .event-card h4 {
     font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
     color: #FFF;
-    font-size: 1.15rem;
     margin-bottom: 8px;
   }
-  .discourse-body p {
+  .event-card p {
     color: var(--text-muted);
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     line-height: 1.6;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
+    flex: 1;
   }
-  .discourse-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  .event-rsvp-btn {
+    background: rgba(212,175,55,0.12);
+    border: 1px solid var(--gold);
     color: var(--gold-bright);
-    text-decoration: none;
-    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-align: center;
     font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  .discourse-btn:hover { color: #fff; text-decoration: underline; }
+  .event-rsvp-btn:hover {
+    background: var(--gold);
+    color: #000;
+  }
 
-  /* Gallery Section */
-  .gallery-section {
-    background: var(--bg-dark);
+  /* Interactive Photo Gallery */
+  .gallery-filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .gallery-tab {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,175,55,0.25);
+    color: var(--text-muted);
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .gallery-tab.active, .gallery-tab:hover {
+    background: var(--gold);
+    color: #000;
+    font-weight: 600;
   }
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
   }
-  .gallery-item {
-    position: relative;
+  .gallery-card {
     border-radius: 12px;
     overflow: hidden;
-    height: 250px;
+    position: relative;
+    height: 240px;
     border: 1px solid var(--border-gold);
+    cursor: pointer;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
   }
-  .gallery-item img {
+  .gallery-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
   }
-  .gallery-item:hover img { transform: scale(1.06); }
-  .gallery-caption {
+  .gallery-card:hover img { transform: scale(1.06); }
+  .gallery-overlay {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     padding: 14px;
@@ -668,50 +660,202 @@
     font-weight: 500;
   }
 
-  /* Tirupati 1st Anniversary Special Section */
-  .anniversary-section {
-    background: linear-gradient(135deg, rgba(61,5,5,0.7) 0%, rgba(122,12,12,0.5) 50%, rgba(13,4,4,0.9) 100%);
-    border-top: 1px solid var(--border-gold);
-    border-bottom: 1px solid var(--border-gold);
+  /* Community Chat Room */
+  .community-section {
+    background: var(--bg-dark);
   }
-  .anniversary-box {
-    background: rgba(0,0,0,0.5);
-    border: 2px solid var(--gold);
-    border-radius: 16px;
-    padding: 40px;
-    max-width: 960px;
+  .chat-box-container {
+    max-width: 860px;
     margin: 0 auto;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.6), 0 0 25px rgba(212,175,55,0.2);
-    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
   }
-  .anniversary-badge {
-    display: inline-block;
-    background: var(--gold);
+  .chat-header {
+    background: linear-gradient(90deg, #3D0505 0%, #180808 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 16px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .chat-header h4 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chat-online-badge {
+    background: rgba(46, 204, 113, 0.2);
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .chat-feed {
+    padding: 20px;
+    height: 380px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(0,0,0,0.3);
+  }
+  .chat-msg {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .chat-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
     color: #000;
     font-weight: 800;
-    padding: 6px 18px;
-    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.85rem;
-    margin-bottom: 16px;
-    letter-spacing: 1px;
+    flex-shrink: 0;
   }
-  .anniversary-box h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 2.2rem;
-    color: var(--gold-bright);
-    margin-bottom: 14px;
+  .chat-bubble {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 12px;
+    padding: 10px 16px;
+    max-width: 80%;
   }
-  .anniversary-box p {
-    color: var(--text-main);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    max-width: 800px;
-    margin: 0 auto 24px;
+  .chat-bubble-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+    font-size: 0.78rem;
   }
+  .chat-sender { font-weight: 700; color: var(--gold-bright); }
+  .chat-badge {
+    background: rgba(255,107,26,0.2);
+    color: #FFA466;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+  }
+  .chat-time { color: #887a6c; }
+  .chat-text { font-size: 0.9rem; color: #FFF; line-height: 1.5; }
 
-  /* Volunteer / Join Form Section */
+  .chat-input-area {
+    border-top: 1px solid var(--border-gold);
+    padding: 16px 20px;
+    background: var(--bg-card);
+    display: grid;
+    grid-template-columns: 140px 140px 1fr 100px;
+    gap: 10px;
+  }
+  .chat-input {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #FFF;
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+  .chat-input:focus { outline: none; border-color: var(--gold); }
+  .chat-send-btn {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .chat-send-btn:hover { background: var(--gold-bright); }
+
+  /* Donate Section */
+  .donate-section {
+    background: linear-gradient(135deg, rgba(61,5,5,0.8) 0%, rgba(122,12,12,0.6) 50%, rgba(13,4,4,0.95) 100%);
+    border-top: 2px solid var(--border-gold);
+    border-bottom: 2px solid var(--border-gold);
+  }
+  .donate-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(13,4,4,0.9);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 40px 36px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.25);
+  }
+  .donate-causes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .donate-cause-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .donate-cause-card.selected, .donate-cause-card:hover {
+    border-color: var(--gold-bright);
+    background: rgba(212,175,55,0.12);
+  }
+  .donate-cause-card h5 {
+    color: var(--gold-bright);
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .donate-cause-card span { font-size: 0.78rem; color: var(--text-muted); }
+
+  .donate-details-box {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .upi-box {
+    text-align: center;
+    border-right: 1px solid rgba(212,175,55,0.2);
+    padding-right: 20px;
+  }
+  .upi-id-badge {
+    background: rgba(255,107,26,0.15);
+    border: 1px dashed var(--gold);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.05rem;
+    color: var(--gold-bright);
+    display: inline-block;
+    margin: 10px 0;
+  }
+  .bank-details p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .bank-details strong { color: #FFF; }
+
+  /* Volunteer Section */
   .volunteer-section {
-    background: linear-gradient(180deg, rgba(13,4,4,1) 0%, rgba(26,8,8,0.95) 100%);
+    background: #080303;
   }
   .form-container {
     max-width: 780px;
@@ -719,141 +863,100 @@
     background: var(--bg-card);
     border: 1px solid var(--border-gold);
     border-radius: 16px;
-    padding: 42px 36px;
+    padding: 38px 32px;
     box-shadow: 0 15px 45px rgba(0,0,0,0.6);
   }
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 18px;
   }
   .form-full { grid-column: 1 / -1; }
   .form-group label {
     display: block;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 600;
     color: var(--gold-bright);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .form-control {
     width: 100%;
     background: rgba(0,0,0,0.5);
     border: 1px solid rgba(212,175,55,0.3);
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 11px 14px;
     color: #FFF;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.95rem;
-    transition: all 0.25s;
+    font-family: inherit;
+    font-size: 0.92rem;
   }
-  .form-control:focus {
-    outline: none;
-    border-color: var(--gold-bright);
-    box-shadow: 0 0 12px rgba(212,175,55,0.3);
-  }
+  .form-control:focus { outline: none; border-color: var(--gold-bright); }
   .form-submit-btn {
     width: 100%;
     background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
     color: #000;
     font-weight: 800;
-    font-size: 1.05rem;
-    padding: 14px;
+    font-size: 1.02rem;
+    padding: 13px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.35);
     transition: all 0.25s;
-    box-shadow: 0 6px 20px rgba(212,175,55,0.35);
   }
   .form-submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(212,175,55,0.6);
+    box-shadow: 0 6px 25px rgba(212,175,55,0.6);
   }
-
-  /* Contact & Connect Section */
-  .contact-section {
-    background: #080303;
-    border-top: 1px solid var(--border-gold);
-  }
-  .contact-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-  }
-  .contact-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border-gold);
-    border-radius: 12px;
-    padding: 30px 24px;
-    text-align: center;
-    transition: transform 0.25s;
-  }
-  .contact-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--gold);
-  }
-  .contact-icon {
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-  }
-  .contact-card h4 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold-bright);
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-  }
-  .contact-card p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-  .contact-card a {
-    color: var(--gold-bright);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .contact-card a:hover { text-decoration: underline; color: #fff; }
 
   /* Footer */
   footer {
-    background: #040101;
-    padding: 50px 6% 30px;
+    background: #030101;
+    padding: 45px 6% 30px;
     border-top: 1px solid var(--border-gold);
     text-align: center;
   }
+  .footer-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    margin: 0 auto 12px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(212,175,55,0.5));
+  }
   .footer-brand {
     font-family: 'Cinzel', serif;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     color: var(--gold-bright);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-weight: 800;
   }
   .footer-sub {
     color: var(--saffron);
-    font-size: 0.9rem;
-    margin-bottom: 24px;
+    font-size: 0.88rem;
+    margin-bottom: 22px;
   }
   .footer-links {
     display: flex;
     justify-content: center;
-    gap: 22px;
+    gap: 20px;
     flex-wrap: wrap;
-    margin-bottom: 26px;
+    margin-bottom: 24px;
   }
   .footer-links a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     transition: color 0.2s;
   }
   .footer-links a:hover { color: var(--gold-bright); }
   .footer-copy {
-    color: #776a5c;
-    font-size: 0.82rem;
+    color: #6d6255;
+    font-size: 0.8rem;
     border-top: 1px solid rgba(255,255,255,0.06);
     padding-top: 20px;
   }
 
-  /* Modal */
+  /* Lightbox & Modals */
   .modal-backdrop {
     display: none;
     position: fixed;
@@ -871,25 +974,9 @@
     border-radius: 16px;
     max-width: 520px;
     width: 100%;
-    padding: 34px 28px;
+    padding: 32px 26px;
     text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 30px rgba(212,175,55,0.3);
-  }
-  .modal-icon {
-    font-size: 3rem;
-    margin-bottom: 14px;
-  }
-  .modal-content h3 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold-bright);
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-  }
-  .modal-content p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
   }
   .modal-close-btn {
     background: var(--gold);
@@ -899,61 +986,55 @@
     border-radius: 6px;
     font-weight: 700;
     cursor: pointer;
+    margin-top: 16px;
   }
 
-  /* Responsive */
   @media (max-width: 900px) {
     .nav-links { display: none; }
-    .mobile-toggle { display: block; }
+    .mobile-menu-btn { display: block; }
     .founder-grid { grid-template-columns: 1fr; }
-    .founder-photo-wrap img { height: 350px; }
-    .hero-title { font-size: 2.6rem; }
+    .hero-title { font-size: 2.5rem; }
+    .donate-details-box { grid-template-columns: 1fr; }
+    .upi-box { border-right: none; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 20px; padding-right: 0; }
+    .chat-input-area { grid-template-columns: 1fr 1fr; }
+    .chat-input-area input:nth-child(3), .chat-input-area button { grid-column: 1 / -1; }
     .form-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- Top Contact & Language Bar -->
-<div class="top-bar">
-  <div class="top-left-links">
-    <a href="mailto:ahsrmdas@gmail.com" class="top-mail-chip">
-      ✉️ ahsrmdas@gmail.com
-    </a>
-    <span style="color:rgba(212,175,55,0.4)">|</span>
-    <span style="color:var(--text-muted); font-size:0.8rem;" data-en="National Headquarters: Tirupati, Andhra Pradesh" data-te="జాతీయ కేంద్రం: తిరుపతి, ఆంధ్రప్రదేశ్">
-      National Headquarters: Tirupati, Andhra Pradesh
-    </span>
-  </div>
-  <div class="top-right-links">
-    <button class="lang-toggle-btn" onclick="toggleLanguage()" id="curLangLabel">
-      <span>🌐</span> <span id="langText">English / తెలుగు</span>
-    </button>
-  </div>
-</div>
-
-<!-- Main Sticky Header -->
+<!-- Single Clean Navigation Bar -->
 <header class="main-nav">
   <a href="#home" class="nav-brand">
-    <div class="nav-brand-flag">🚩</div>
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Logo" class="nav-logo-img">
     <div class="nav-brand-text">
       <h1>ABHAY HINDU SENA</h1>
       <span data-en="Sanatana Dharma • Rashtra Seva • Youth Defense" data-te="సనాతన ధర్మం • రాష్ట్ర సేవ • యువ చైతన్యం">Sanatana Dharma • Rashtra Seva • Youth Defense</span>
     </div>
   </a>
 
-  <nav class="nav-links">
-    <a href="#home" data-en="Home" data-te="ప్రారంభం">Home</a>
-    <a href="#founder" data-en="Founder" data-te="వ్యవస్థాపకులు">Founder</a>
-    <a href="#missions" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
-    <a href="#discourses" data-en="Pravachans" data-te="ప్రవచనాలు">Pravachans</a>
-    <a href="#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
-    <a href="#anniversary" data-en="Anniversary" data-te="వార్షికోత్సవం">Anniversary</a>
-    <a href="#contact" data-en="Contact" data-te="సంప్రదించండి">Contact</a>
-    <a href="#join" class="nav-cta-btn" data-en="Join the Sena" data-te="మాతో చేరండి">Join the Sena</a>
-  </nav>
+  <div class="nav-links-wrap">
+    <nav class="nav-links">
+      <a href="#home" data-en="Home" data-te="ప్రారంభం">Home</a>
+      <a href="#founder" data-en="Founder" data-te="వ్యవస్థాపకులు">Founder</a>
+      <a href="#missions" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
+      <a href="#events" data-en="Events" data-te="కార్యక్రమాలు">Events</a>
+      <a href="#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
+      <a href="#community" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
+      <a href="#join" data-en="Join Us" data-te="చేరండి">Join Us</a>
+    </nav>
 
-  <button class="mobile-toggle" onclick="toggleMobileDrawer()">☰</button>
+    <div class="nav-actions">
+      <button class="lang-toggle-btn" onclick="toggleLanguage()" id="curLangLabel">
+        🌐 <span id="langText">English / తెలుగు</span>
+      </button>
+      <a href="#donate" class="nav-donate-btn" data-en="Donate 💛" data-te="విరాళం 💛">
+        Donate 💛
+      </a>
+      <button class="mobile-menu-btn" onclick="toggleMobileDrawer()">☰</button>
+    </div>
+  </div>
 </header>
 
 <!-- Mobile Navigation Drawer -->
@@ -961,18 +1042,23 @@
   <a href="#home" onclick="toggleMobileDrawer()" data-en="Home" data-te="ప్రారంభం">Home</a>
   <a href="#founder" onclick="toggleMobileDrawer()" data-en="Founder" data-te="వ్యవస్థాపకులు">Founder</a>
   <a href="#missions" onclick="toggleMobileDrawer()" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
-  <a href="#discourses" onclick="toggleMobileDrawer()" data-en="Pravachans" data-te="ప్రవచనాలు">Pravachans</a>
+  <a href="#events" onclick="toggleMobileDrawer()" data-en="Events" data-te="కార్యక్రమాలు">Events</a>
   <a href="#gallery" onclick="toggleMobileDrawer()" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
-  <a href="#anniversary" onclick="toggleMobileDrawer()" data-en="Anniversary" data-te="వార్షికోత్సవం">Anniversary</a>
-  <a href="#contact" onclick="toggleMobileDrawer()" data-en="Contact" data-te="సంప్రదించండి">Contact</a>
-  <a href="#join" onclick="toggleMobileDrawer()" style="color:var(--gold-bright); font-weight:700;" data-en="Join the Sena" data-te="మాతో చేరండి">Join the Sena</a>
+  <a href="#community" onclick="toggleMobileDrawer()" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
+  <a href="#donate" onclick="toggleMobileDrawer()" style="color:#FFA466; font-weight:700;" data-en="Donate 💛" data-te="విరాళం 💛">Donate 💛</a>
+  <a href="#join" onclick="toggleMobileDrawer()" style="color:var(--gold-bright); font-weight:700;" data-en="Join Us" data-te="చేరండి">Join Us</a>
 </div>
 
 <!-- Hero Section -->
 <section id="home" class="hero-section">
+  <div class="hero-emblem-wrap">
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Official Crest">
+  </div>
+
   <div class="hero-badge">
     <span>🚩</span> <span data-en="Sanatana Dharma Defense & Youth Movement" data-te="సనాతన ధర్మ రక్షణ & యువ చైతన్యోద్యమం">Sanatana Dharma Defense & Youth Movement</span>
   </div>
+
   <h1 class="hero-title" data-en="ABHAY HINDU SENA" data-te="అభయ్ హిందూ సేన">ABHAY HINDU SENA</h1>
   <div class="hero-founder-tag" data-en="Founded by Shri Radha Manohar Das" data-te="వ్యవస్థాపకులు: శ్రీ రాధా మనోహర్ దాస్">
     Founded by Shri Radha Manohar Das
@@ -985,12 +1071,13 @@
     Standing fearless in the defense of Vedic heritage, sacred temple preservation, youth martial empowerment, and compassionate Sanatana Seva across Andhra Pradesh, Telangana, and all of Bharat.
   </p>
   <div class="hero-actions">
-    <a href="#join" class="btn btn-gold" data-en="Join the Movement →" data-te="ఉద్యమంలో చేరండి →">Join the Movement →</a>
-    <a href="#discourses" class="btn btn-outline" data-en="Watch Pravachans 📺" data-te="ప్రవచనాలు చూడండి 📺">Watch Pravachans 📺</a>
+    <a href="#join" class="btn btn-gold" data-en="Join as a Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">Join as a Sevak 🚩</a>
+    <a href="#donate" class="btn btn-donate" data-en="Support Dharma Daan 💛" data-te="ధర్మ దానం చేయండి 💛">Support Dharma Daan 💛</a>
+    <a href="#events" class="btn btn-outline" data-en="Upcoming Events 📅" data-te="కార్యక్రమాలు 📅">Upcoming Events 📅</a>
   </div>
 </section>
 
-<!-- Stats Counter Bar -->
+<!-- Stats Strip -->
 <div class="stats-strip">
   <div class="stat-box">
     <h3>125,000+</h3>
@@ -1010,7 +1097,7 @@
   </div>
 </div>
 
-<!-- Founder Biography Section -->
+<!-- Founder Biography Section with Circular Frame -->
 <section id="founder" class="founder-section">
   <div class="section-header">
     <span class="eyebrow" data-en="Spiritual Architect" data-te="ఆధ్యాత్మిక సారథి">Spiritual Architect</span>
@@ -1023,10 +1110,11 @@
 
   <div class="founder-grid">
     <div class="founder-photo-card">
-      <div class="founder-photo-wrap">
+      <!-- CIRCULAR IMAGE -->
+      <div class="founder-circle-wrap">
         <img src="assets/founder.jpg" alt="Shri Radha Manohar Das">
       </div>
-      <div class="founder-badge-under">
+      <div class="founder-circle-badge">
         🚩 Founder & National Convener
       </div>
     </div>
@@ -1036,246 +1124,321 @@
       <span class="role-text" data-en="Founder & National Convener — Abhay Hindu Sena" data-te="వ్యవస్థాపకులు & జాతీయ కన్వీనర్ — అభయ్ హిందూ సేన">
         Founder & National Convener — Abhay Hindu Sena
       </span>
-      <p data-en="Shri Radha Manohar Das is a revered spiritual speaker, Vedic scholar, and passionate defender of Sanatana Dharma based in Tirupati. Having deeply studied the Bhagavad Gita and Vedic scriptures, and bringing valuable spiritual discipline from his time with ISKCON, he established Abhay Hindu Sena to awaken the youth against cultural complacency."
+      <p data-en="Shri Radha Manohar Das is a revered spiritual speaker, Vedic scholar, and passionate defender of Sanatana Dharma based in Tirupati. Having deeply studied the Bhagavad Gita and Vedic scriptures, and bringing valuable spiritual discipline from his time with ISKCON, he established Abhay Hindu Sena to awaken youth and protect Hindu traditions."
          data-te="భగవద్గీత, వేద శాస్త్రాల ప్రగాఢ అధ్యయనవేత్త అయిన శ్రీ రాధా మనోహర్ దాస్ గారు, తమ నిష్కల్మషమైన వాగ్ధాటి మరియు ధర్మ రక్షణతో తిరుపతి కేంద్రంగా విశేష ప్రజాదరణ పొందారు. ఇస్కాన్ వంటి పవిత్ర సంస్థలలో పొందిన క్రమశిక్షణతో, యువతను మేల్కొలిపి ధర్మ రక్షణ కోసం 'అభయ్ హిందూ సేన'ను స్థాపించారు.">
-        Shri Radha Manohar Das is a revered spiritual speaker, Vedic scholar, and passionate defender of Sanatana Dharma based in Tirupati. Having deeply studied the Bhagavad Gita and Vedic scriptures, and bringing valuable spiritual discipline from his time with ISKCON, he established Abhay Hindu Sena to awaken the youth against cultural complacency.
+        Shri Radha Manohar Das is a revered spiritual speaker, Vedic scholar, and passionate defender of Sanatana Dharma based in Tirupati. Having deeply studied the Bhagavad Gita and Vedic scriptures, and bringing valuable spiritual discipline from his time with ISKCON, he established Abhay Hindu Sena to awaken youth and protect Hindu traditions.
       </p>
       <div class="quote-box" data-en="“A society that honors its temples, values its sacred traditions, and awakens its youth can never be defeated. Truth alone triumphs when courage leads.”"
            data-te="“తన ఆలయాలను గౌరవించే, సాంప్రదాయాలను కాపాడే, యువతను మేల్కొలిపే సమాజాన్ని ఎవరూ ఓడించలేరు. ధైర్యం తోడైనప్పుడే సత్యం జయిస్తుంది.”">
         “A society that honors its temples, values its sacred traditions, and awakens its youth can never be defeated. Truth alone triumphs when courage leads.”
       </div>
-      <p data-en="His pravachans emphasize moral character, physical courage, cow welfare, temple protection, and service to humanity. Through mass youth conventions and cultural outreach programs, he continues to inspire thousands to walk the path of Dharma fearlessly."
+      <p data-en="His pravachans emphasize moral character, physical courage, cow welfare, temple protection, and service to humanity. Under his leadership, thousands of karyakarthas are actively safeguarding cultural heritage across two states."
          data-te="ఆయన ప్రవచనాలు యువతలో శీల సంపదను, శారీరక దృఢత్వాన్ని, గో సంరక్షణను, ఆలయ పరిరక్షణను ప్రోత్సహిస్తాయి. వేలాది మంది కార్యకర్తలను ధర్మ మార్గంలో నడిపించేందుకు అవిశ్రాంతంగా కృషి చేస్తున్నారు.">
-        His pravachans emphasize moral character, physical courage, cow welfare, temple protection, and service to humanity. Through mass youth conventions and cultural outreach programs, he continues to inspire thousands to walk the path of Dharma fearlessly.
+        His pravachans emphasize moral character, physical courage, cow welfare, temple protection, and service to humanity. Under his leadership, thousands of karyakarthas are actively safeguarding cultural heritage across two states.
       </p>
-      <div class="founder-contact-pills">
-        <a href="mailto:ahsrmdas@gmail.com" class="contact-pill">✉️ ahsrmdas@gmail.com</a>
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="contact-pill">📺 YouTube Channel</a>
-        <a href="https://www.instagram.com/radhamanohardas/" target="_blank" rel="noopener" class="contact-pill">📸 Instagram Profile</a>
+      <div class="founder-actions-row">
+        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="pill-btn">📺 Watch Discourses</a>
+        <a href="https://www.instagram.com/radhamanohardas/" target="_blank" rel="noopener" class="pill-btn">📸 Instagram Profile</a>
+        <a href="#events" class="pill-btn">📅 Attend Upcoming Satsang</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Core Missions / Pillars -->
-<section id="missions" class="missions-section">
+<!-- Core Missions -->
+<section id="missions">
   <div class="section-header">
     <span class="eyebrow" data-en="Our Sacred Pillars" data-te="మా ప్రధాన ఆశయాలు">Our Sacred Pillars</span>
-    <h2 class="section-title" data-en="Missions of Abhay Hindu Sena" data-te="అభయ్ హిందూ సేన కార్యకలాపాలు">Missions of Abhay Hindu Sena</h2>
-    <p class="section-sub" data-en="We stand steadfast on five primary pillars of action to uplift society, safeguard temples, and empower future generations."
-       data-te="సమాజ హితం, ఆలయ పరిరక్షణ మరియు యువజన సాధికారత కోసం మేము చేపట్టిన ఐదు ముఖ్య విభాగాలు.">
-      We stand steadfast on five primary pillars of action to uplift society, safeguard temples, and empower future generations.
+    <h2 class="section-title" data-en="Core Missions of the Sena" data-te="అభయ్ హిందూ సేన ముఖ్య కార్యకలాపాలు">Core Missions of the Sena</h2>
+    <p class="section-sub" data-en="Action-oriented initiatives for temple preservation, youth leadership, and humanitarian service."
+       data-te="ఆలయ పరిరక్షణ, యువజన సాధికారత మరియు సేవా కార్యక్రమాల కోసం మా కార్యాచరణ.">
+      Action-oriented initiatives for temple preservation, youth leadership, and humanitarian service.
     </p>
   </div>
 
   <div class="missions-grid">
-    <!-- 1. Temple Heritage -->
     <div class="mission-card">
-      <div class="mission-icon-circle">🛕</div>
-      <h3 data-en="Temple & Land Protection" data-te="ఆలయ & భూముల పరిరక్షణ">Temple & Land Protection</h3>
-      <p data-en="Vigilant defense against encroachment of ancient temple lands, restoration of neglected village shrines, and advocacy for traditional archaka welfare."
+      <div class="mission-icon">🛕</div>
+      <h3 data-en="Temple & Land Defense" data-te="ఆలయ & భూముల పరిరక్షణ">Temple & Land Defense</h3>
+      <p data-en="Vigilant defense against encroachment on ancient temple lands, restoration of dilapidated rural mandirs, and welfare drives for traditional archakas."
          data-te="పురాతన ఆలయ భూముల ఆక్రమణలను అడ్డుకోవడం, గ్రామాల్లో శిథిలావస్థలో ఉన్న గుడులను పునరుద్ధరించడం మరియు అర్చకుల సంక్షేమం కోసం పాటుపడటం.">
-        Vigilant defense against encroachment of ancient temple lands, restoration of neglected village shrines, and advocacy for traditional archaka welfare.
+        Vigilant defense against encroachment on ancient temple lands, restoration of dilapidated rural mandirs, and welfare drives for traditional archakas.
       </p>
-      <ul class="mission-features">
-        <li data-en="Anti-encroachment legal & social drives" data-te="ఆక్రమణల వ్యతిరేక పోరాటం">Anti-encroachment legal & social drives</li>
-        <li data-en="Rural temple revival projects" data-te="గ్రామీణ ఆలయాల పునరుద్ధరణ">Rural temple revival projects</li>
-        <li data-en="Vedic rituals and archaka support" data-te="వేద సాంప్రదాయాలు & అర్చకులకు చేయూత">Vedic rituals and archaka support</li>
-      </ul>
     </div>
 
-    <!-- 2. Youth Defense & Martial Awakening -->
     <div class="mission-card">
-      <div class="mission-icon-circle">🚩</div>
-      <h3 data-en="Youth Awakening & Defense" data-te="యువ చైతన్యం & ఆత్మరక్షణ శిక్షణ">Youth Awakening & Defense</h3>
-      <p data-en="Instilling physical discipline, lathi training, self-defense tactics, and moral fortitude among youth to protect society and resist adversity."
+      <div class="mission-icon">🚩</div>
+      <h3 data-en="Youth Awakening & Defense" data-te="యువ చైతన్యం & ఆత్మరక్షణ">Youth Awakening & Defense</h3>
+      <p data-en="Conducting martial discipline, physical fitness, and lathi training camps to empower youth with moral courage and self-defense skills."
          data-te="యువతలో శారీరక దృఢత్వం, లాఠీ శిక్షణ, ఆత్మరక్షణ మెలకువలు మరియు నైతిక స్థైర్యాన్ని పెంపొందించి సమాజ రక్షకులుగా తీర్చిదిద్దడం.">
-        Instilling physical discipline, lathi training, self-defense tactics, and moral fortitude among youth to protect society and resist adversity.
+        Conducting martial discipline, physical fitness, and lathi training camps to empower youth with moral courage and self-defense skills.
       </p>
-      <ul class="mission-features">
-        <li data-en="Physical fitness & martial training camps" data-te="వ్యాయామ & ఆత్మరక్షణ శిక్షణ శిబిరాలు">Physical fitness & martial training camps</li>
-        <li data-en="Leadership development workshops" data-te="నాయకత్వ లక్షణాల పెంపు">Leadership development workshops</li>
-        <li data-en="Sanatana value camps for students" data-te="విద్యార్థులకు ధార్మిక శిబిరాలు">Sanatana value camps for students</li>
-      </ul>
     </div>
 
-    <!-- 3. Nitya Annadanam -->
     <div class="mission-card">
-      <div class="mission-icon-circle">🍲</div>
-      <h3 data-en="Nitya Annadanam & Seva" data-te="నిత్య అన్నదానం & సేవా కార్యక్రమాలు">Nitya Annadanam & Seva</h3>
-      <p data-en="Serving hot, sanctified meals to pilgrims, underprivileged families, and community members during festivals and times of need."
+      <div class="mission-icon">🍲</div>
+      <h3 data-en="Nitya Annadanam & Seva" data-te="నిత్య అన్నదానం & ఆపన్న సేవ">Nitya Annadanam & Seva</h3>
+      <p data-en="Distributing free, sanctified meals to pilgrims, underprivileged families, and community members during major festivals and emergencies."
          data-te="యాత్రికులు, నిరుపేదలు మరియు పండుగల సమయాల్లో ఆకలితో ఉన్న ప్రతి ఒక్కరికీ పరిశుభ్రమైన, పవిత్రమైన భోజనం అందించే నిరంతర అన్నదానం.">
-        Serving hot, sanctified meals to pilgrims, underprivileged families, and community members during festivals and times of need.
+        Distributing free, sanctified meals to pilgrims, underprivileged families, and community members during major festivals and emergencies.
       </p>
-      <ul class="mission-features">
-        <li data-en="Prasadam distribution at major pilgrim centers" data-te="తీర్థయాత్ర ప్రాంతాల్లో ప్రసాద వితరణ">Prasadam distribution at major pilgrim centers</li>
-        <li data-en="Disaster relief food support" data-te="విపత్తుల సమయాల్లో ఆహార సహాయం">Disaster relief food support</li>
-        <li data-en="Nutritional support for rural children" data-te="గ్రామీణ పిల్లలకు పోషకాహారం">Nutritional support for rural children</li>
-      </ul>
     </div>
 
-    <!-- 4. Gau Samrakshana -->
     <div class="mission-card">
-      <div class="mission-icon-circle">🐄</div>
-      <h3 data-en="Gau Samrakshana & Goshalas" data-te="గో సంరక్షణ & గోశాలల మద్దతు">Gau Samrakshana & Goshalas</h3>
-      <p data-en="Dedicated care, shelter, and medical support for indigenous Desi cows, continuous vigilance against illicit trafficking, and support for goshalas."
+      <div class="mission-icon">🐄</div>
+      <h3 data-en="Gau Samrakshana & Goshalas" data-te="గో సంరక్షణ & గోశాలల సేవ">Gau Samrakshana & Goshalas</h3>
+      <p data-en="Protecting indigenous Desi cattle, providing medical and nutritional aid, combating illegal cow transport, and assisting rural goshalas."
          data-te="దేశీ గోవుల సంరక్షణ, వైద్య సేవలు, అక్రమ గో రవాణాకు అడ్డుకట్ట వేయడం మరియు గోశాలలకు అవసరమైన వనరులు సమకూర్చడం.">
-        Dedicated care, shelter, and medical support for indigenous Desi cows, continuous vigilance against illicit trafficking, and support for goshalas.
+        Protecting indigenous Desi cattle, providing medical and nutritional aid, combating illegal cow transport, and assisting rural goshalas.
       </p>
-      <ul class="mission-features">
-        <li data-en="Active cow rescue & legal intervention" data-te="అక్రమ రవాణా వ్యతిరేక చర్యలు">Active cow rescue & legal intervention</li>
-        <li data-en="Fodder and medical camps for rural cattle" data-te="గ్రామీణ పశువులకు దాణా, వైద్య శిబిరాలు">Fodder and medical camps for rural cattle</li>
-        <li data-en="Promotion of Desi Panchagavya products" data-te="దేశీ పంచగవ్య ఉత్పత్తుల ప్రోత్సాహం">Promotion of Desi Panchagavya products</li>
-      </ul>
-    </div>
-
-    <!-- 5. Dharmic Awakening & Literature -->
-    <div class="mission-card">
-      <div class="mission-icon-circle">📚</div>
-      <h3 data-en="Dharmic Literature & Education" data-te="ధర్మ ప్రచారం & గ్రంథ వితరణ">Dharmic Literature & Education</h3>
-      <p data-en="Free distribution of Bhagavad Gita and sacred books, weekly satsangs, and digital media awareness to counter misinformation."
-         data-te="భగవద్గీత మరియు సనాతన గ్రంథాల ఉచిత వితరణ, వారపు సత్సంగాలు మరియు డిజిటల్ మాధ్యమాల ద్వారా ధర్మ ప్రచారం.">
-        Free distribution of Bhagavad Gita and sacred books, weekly satsangs, and digital media awareness to counter misinformation.
-      </p>
-      <ul class="mission-features">
-        <li data-en="Bhagavad Gita drives in colleges & villages" data-te="కళాశాలలు, గ్రామాల్లో గీతా ప్రచారం">Bhagavad Gita drives in colleges & villages</li>
-        <li data-en="Public satsangs & interactive Q&A" data-te="ప్రజా సత్సంగాలు & సందేహ నివృత్తి">Public satsangs & interactive Q&A</li>
-        <li data-en="YouTube discourses for global reach" data-te="యూట్యూబ్ ద్వారా అంతర్జాతీయ ప్రచారం">YouTube discourses for global reach</li>
-      </ul>
-    </div>
-
-    <!-- 6. Legal & Social Advocacy -->
-    <div class="mission-card">
-      <div class="mission-icon-circle">⚖️</div>
-      <h3 data-en="Dharmic Legal Defense" data-te="ధార్మిక న్యాయ పోరాటం">Dharmic Legal Defense</h3>
-      <p data-en="Standing shoulder-to-shoulder with Hindus facing institutional neglect, providing legal aid, and defending sacred rituals and festivals."
-         data-te="ధార్మిక హక్కుల ఉల్లంఘనలు జరిగినప్పుడు బాధితులకు అండగా నిలబడి, చట్టబద్ధంగా పోరాడే న్యాయ సహాయ విభాగం.">
-        Standing shoulder-to-shoulder with Hindus facing institutional neglect, providing legal aid, and defending sacred rituals and festivals.
-      </p>
-      <ul class="mission-features">
-        <li data-en="Legal panel for temple dispute resolution" data-te="ఆలయ వివాదాలపై న్యాయ సలహా">Legal panel for temple dispute resolution</li>
-        <li data-en="Protection of public religious celebrations" data-te="హిందూ పండుగల నిర్వహణకు రక్షణ">Protection of public religious celebrations</li>
-        <li data-en="Rapid response volunteer network" data-te="అత్యవసర వాలంటీర్ నెట్‌వర్క్">Rapid response volunteer network</li>
-      </ul>
     </div>
   </div>
 </section>
 
-<!-- Discourses Section -->
-<section id="discourses" class="discourses-section">
+<!-- Events Page / Section for His Events -->
+<section id="events" class="events-section">
   <div class="section-header">
-    <span class="eyebrow" data-en="Spiritual Enlightenment" data-te="ఆధ్యాత్మిక విజ్ఞానం">Spiritual Enlightenment</span>
-    <h2 class="section-title" data-en="Pravachans & Discourses" data-te="శ్రీ రాధా మనోహర్ దాస్ ప్రవచనాలు">Pravachans & Discourses</h2>
-    <p class="section-sub" data-en="Listen to transformative lectures by Shri Radha Manohar Das on Bhagavad Gita, civilizational duty, and fearless living."
-       data-te="శ్రీ రాధా మనోహర్ దాస్ గారి భగవద్గీత, ధర్మ పరిరక్షణ మరియు యువ చైతన్య ప్రసంగాలను వీక్షించండి.">
-      Listen to transformative lectures by Shri Radha Manohar Das on Bhagavad Gita, civilizational duty, and fearless living.
+    <span class="eyebrow" data-en="Dharmic Schedule" data-te="కార్యక్రమాల వివరాలు">Dharmic Schedule</span>
+    <h2 class="section-title" data-en="Pravachans & Events Schedule" data-te="శ్రీ రాధా మనోహర్ దాస్ పర్యటనలు & సభలు">Pravachans & Events Schedule</h2>
+    <p class="section-sub" data-en="Participate in upcoming spiritual discourses, youth training camps, and anniversary sammelanams."
+       data-te="రాబోయే ఆధ్యాత్మిక ప్రవచనాలు, యువ శిక్షణ శిబిరాలు మరియు ధార్మిక సమ్మేళనాలలో పాల్గొనండి.">
+      Participate in upcoming spiritual discourses, youth training camps, and anniversary sammelanams.
     </p>
   </div>
 
-  <div class="discourses-grid">
-    <div class="discourse-card">
-      <div class="discourse-thumb" style="background-image: url('assets/hero-desktop.png');">
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="play-icon-overlay">▶</a>
+  <div class="events-grid">
+    <!-- Event 1 -->
+    <div class="event-card">
+      <span class="event-status-badge" style="border-color:#2ecc71; color:#2ecc71;">Upcoming</span>
+      <div class="event-date-box">
+        <div class="date-square">
+          <span class="date-day">18</span>
+          <span class="date-month">OCT</span>
+        </div>
+        <div>
+          <div class="event-location">📍 Tirupati, Andhra Pradesh</div>
+          <span style="font-size:0.78rem; color:#A89885;">Central Convention Grounds</span>
+        </div>
       </div>
-      <div class="discourse-body">
-        <h4 data-en="Bhagavad Gita for Modern Youth" data-te="నేటి యువతకు భగవద్గీత మార్గం">Bhagavad Gita for Modern Youth</h4>
-        <p data-en="How Arjuna's dilemma in Kurukshetra relates to contemporary dilemmas of stress, duty, and spiritual discipline."
-           data-te="కురుక్షేత్రంలో అర్జునుడి కర్తవ్య బోధ నేటి యువత ఎదుర్కొనే ఒత్తిళ్లు, నిర్ణయాలకు ఎలా పరిష్కారమో వివరించే ప్రవచనం.">
-          How Arjuna's dilemma in Kurukshetra relates to contemporary dilemmas of stress, duty, and spiritual discipline.
-        </p>
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="discourse-btn">
-          Watch on YouTube →
-        </a>
-      </div>
+      <h4 data-en="Maha Gita Satsang & Temple Heritage Sammelanam" data-te="మహా గీతా సత్సంగం & ఆలయ పరిరక్షణ సమ్మేళనం">Maha Gita Satsang & Temple Heritage Sammelanam</h4>
+      <p data-en="Keynote discourse by Shri Radha Manohar Das on safeguarding temple traditions and civilizational unity. Free prasadam and book distribution."
+         data-te="శ్రీ రాధా మనోహర్ దాస్ గారిచే ఆలయ సంప్రదాయాలు, సనాతన ధర్మ పరిరక్షణపై ముఖ్యోపన్యాసం. ఉచిత ప్రసాద మరియు గీతా గ్రంథ వితరణ.">
+        Keynote discourse by Shri Radha Manohar Das on safeguarding temple traditions and civilizational unity. Free prasadam and book distribution.
+      </p>
+      <button class="event-rsvp-btn" onclick="openRSVPModal('Maha Gita Satsang - Tirupati')">RSVP / Attend Event</button>
     </div>
 
-    <div class="discourse-card">
-      <div class="discourse-thumb" style="background-image: url('assets/founder.jpg');">
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="play-icon-overlay">▶</a>
+    <!-- Event 2 -->
+    <div class="event-card">
+      <span class="event-status-badge" style="border-color:#2ecc71; color:#2ecc71;">Upcoming</span>
+      <div class="event-date-box">
+        <div class="date-square">
+          <span class="date-day">05</span>
+          <span class="date-month">NOV</span>
+        </div>
+        <div>
+          <div class="event-location">📍 Vijayawada, Andhra Pradesh</div>
+          <span style="font-size:0.78rem; color:#A89885;">Yuva Chaitanya Sibiram</span>
+        </div>
       </div>
-      <div class="discourse-body">
-        <h4 data-en="Sanatana Dharma & Temple Sovereignty" data-te="సనాతన ధర్మం & ఆలయ పరిరక్షణ">Sanatana Dharma & Temple Sovereignty</h4>
-        <p data-en="A fierce discourse delivered in Tirupati on safeguarding temple revenues, land assets, and sacred traditions."
-           data-te="తిరుపతి సమ్మేళనంలో ఆలయాల నిధులు, భూములు మరియు సనాతన సంప్రదాయాల పరిరక్షణపై చేసిన గంభీర ఉపన్యాసం.">
-          A fierce discourse delivered in Tirupati on safeguarding temple revenues, land assets, and sacred traditions.
-        </p>
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="discourse-btn">
-          Watch on YouTube →
-        </a>
-      </div>
+      <h4 data-en="State-Wide Youth Martial & Self-Defense Camp" data-te="రాష్ట్ర స్థాయి యువ ఆత్మరక్షణ & లాఠీ శిక్షణ శిబిరం">State-Wide Youth Martial & Self-Defense Camp</h4>
+      <p data-en="Intensive physical fitness, self-defense tactics, and moral character building for Hindu youth led by senior martial instructors."
+         data-te="యువతలో శారీరక దృఢత్వం, ఆత్మరక్షణ మెలకువలు మరియు క్రమశిక్షణను పెంపొందించే ప్రత్యక్ష శిక్షణ శిబిరం.">
+        Intensive physical fitness, self-defense tactics, and moral character building for Hindu youth led by senior martial instructors.
+      </p>
+      <button class="event-rsvp-btn" onclick="openRSVPModal('Youth Martial Camp - Vijayawada')">RSVP / Attend Event</button>
     </div>
 
-    <div class="discourse-card">
-      <div class="discourse-thumb" style="background-image: url('assets/hero-mobile.png');">
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="play-icon-overlay">▶</a>
+    <!-- Event 3 -->
+    <div class="event-card">
+      <span class="event-status-badge" style="border-color:#2ecc71; color:#2ecc71;">Upcoming</span>
+      <div class="event-date-box">
+        <div class="date-square">
+          <span class="date-day">23</span>
+          <span class="date-month">NOV</span>
+        </div>
+        <div>
+          <div class="event-location">📍 Hyderabad, Telangana</div>
+          <span style="font-size:0.78rem; color:#A89885;">Dharma Jagruthi Hall</span>
+        </div>
       </div>
-      <div class="discourse-body">
-        <h4 data-en="Power of Gau Seva & Ahimsa" data-te="గో సేవ మహత్యం & సంరక్షణ">Power of Gau Seva & Ahimsa</h4>
-        <p data-en="Understanding the spiritual, ecological, and civilizational significance of protecting indigenous cows in Bharat."
-           data-te="భారతదేశంలో దేశీ ఆవుల ప్రాముఖ్యత, పర్యావరణ పరిరక్షణ మరియు గోవులను కాపాడుకోవాల్సిన ఆవశ్యకత.">
-          Understanding the spiritual, ecological, and civilizational significance of protecting indigenous cows in Bharat.
-        </p>
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="discourse-btn">
-          Watch on YouTube →
-        </a>
-      </div>
+      <h4 data-en="Bhagavad Gita for Modern Youth & Career Ethics" data-te="యువతకు భగవద్గీత మార్గదర్శనం & సదస్సు">Bhagavad Gita for Modern Youth & Career Ethics</h4>
+      <p data-en="Special interactive session for college students and working youth on combining spiritual discipline with modern professional duties."
+         data-te="కళాశాల విద్యార్థులు మరియు ఉద్యోగస్తుల కోసం మానసిక ఒత్తిడి నివారణ, ధర్మబద్ధ జీవితంపై ముఖాముఖి సదస్సు.">
+        Special interactive session for college students and working youth on combining spiritual discipline with modern professional duties.
+      </p>
+      <button class="event-rsvp-btn" onclick="openRSVPModal('Bhagavad Gita Youth Session - Hyderabad')">RSVP / Attend Event</button>
     </div>
-  </div>
-
-  <div style="text-align:center; margin-top:35px;">
-    <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener" class="btn btn-gold">
-      📺 Subscribe to Official YouTube Channel
-    </a>
   </div>
 </section>
 
-<!-- Gallery Section -->
-<section id="gallery" class="gallery-section">
+<!-- Interactive Gallery Section -->
+<section id="gallery">
   <div class="section-header">
-    <span class="eyebrow" data-en="Visual Moments" data-te="చిత్రమాలిక">Visual Moments</span>
-    <h2 class="section-title" data-en="Activities & Sammelanams" data-te="కార్యక్రమాల దృశ్యాలు">Activities & Sammelanams</h2>
-    <p class="section-sub" data-en="Snapshots of youth rallies, spiritual discourses, temple seva, and community outreach."
-       data-te="యువజన చైతన్య ర్యాలీలు, సత్సంగాలు మరియు ఆలయ సేవా కార్యక్రమాల చిత్రాలు.">
-      Snapshots of youth rallies, spiritual discourses, temple seva, and community outreach.
+    <span class="eyebrow" data-en="Visual Chronicle" data-te="చిత్రమాలిక">Visual Chronicle</span>
+    <h2 class="section-title" data-en="Photo Gallery & Moments" data-te="సేవా కార్యక్రమాలు & సమ్మేళనాల గ్యాలరీ">Photo Gallery & Moments</h2>
+    <p class="section-sub" data-en="Snapshots of annual conventions, youth rallies, discourse meetings, and Annadanam drives."
+       data-te="వార్షికోత్సవాలు, యువ చైతన్య ర్యాలీలు మరియు నిరంతర సేవా దృశ్యాలు.">
+      Snapshots of annual conventions, youth rallies, discourse meetings, and Annadanam drives.
     </p>
   </div>
 
-  <div class="gallery-grid">
-    <div class="gallery-item">
-      <img src="assets/founder.jpg" alt="Shri Radha Manohar Das in Tirupati Convention">
-      <div class="gallery-caption" data-en="Shri Radha Manohar Das addressing devotees in Tirupati" data-te="తిరుపతి వార్షికోత్సవంలో భక్తులనుద్దేశించి ప్రసంగం">
-        Shri Radha Manohar Das addressing devotees in Tirupati
+  <div class="gallery-filter-tabs">
+    <button class="gallery-tab active" onclick="filterGallery('all', this)">All / అన్నీ</button>
+    <button class="gallery-tab" onclick="filterGallery('convention', this)">Tirupati Anniversary</button>
+    <button class="gallery-tab" onclick="filterGallery('youth', this)">Youth Defense</button>
+    <button class="gallery-tab" onclick="filterGallery('seva', this)">Seva & Annadanam</button>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-card" data-cat="convention" onclick="openLightbox('assets/founder.jpg', 'Shri Radha Manohar Das addressing thousands of devotees at Tirupati Anniversary')">
+      <img src="assets/founder.jpg" alt="Tirupati Anniversary Convention">
+      <div class="gallery-overlay">Tirupati Annual Convention Address</div>
+    </div>
+    <div class="gallery-card" data-cat="youth" onclick="openLightbox('assets/hero-desktop.png', 'Youth Awakening & Martial Discipline Rally Banner')">
+      <img src="assets/hero-desktop.png" alt="Youth Awakening">
+      <div class="gallery-overlay">Youth Awakening Rally</div>
+    </div>
+    <div class="gallery-card" data-cat="seva" onclick="openLightbox('assets/hero-mobile.png', 'Dharma Raksha & Seva Camp Highlights')">
+      <img src="assets/hero-mobile.png" alt="Dharma Raksha">
+      <div class="gallery-overlay">Dharma Raksha & Cow Protection Drive</div>
+    </div>
+    <div class="gallery-card" data-cat="convention" onclick="openLightbox('assets/logo.png', 'Official Crest of Abhay Hindu Sena')">
+      <img src="assets/logo.png" alt="Official Crest" style="object-fit:contain; background:#180808;">
+      <div class="gallery-overlay">Official Organization Crest</div>
+    </div>
+  </div>
+</section>
+
+<!-- Community Chat Room ("Dharma Charcha") -->
+<section id="community" class="community-section">
+  <div class="section-header">
+    <span class="eyebrow" data-en="Sevaks Network" data-te="సేవకుల కలయిక">Sevaks Network</span>
+    <h2 class="section-title" data-en="Abhay Hindu Sena Community Chat" data-te="అభయ్ హిందూ సేన కమ్యూనిటీ చర్చా వేదిక">Abhay Hindu Sena Community Chat</h2>
+    <p class="section-sub" data-en="A dedicated spiritual discussion forum where volunteers, devotees, and youth share updates and coordinate seva."
+       data-te="కార్యకర్తలు, భక్తులు మరియు యువత సమాచారాన్ని పంచుకునేందుకు ఉద్దేశించిన ప్రత్యక్ష వేదిక.">
+      A dedicated spiritual discussion forum where volunteers, devotees, and youth share updates and coordinate seva.
+    </p>
+  </div>
+
+  <div class="chat-box-container">
+    <div class="chat-header">
+      <h4>🚩 Dharma Charcha (Live Sevaks Feed)</h4>
+      <span class="chat-online-badge">● 24 Sevaks Active</span>
+    </div>
+
+    <div class="chat-feed" id="chatFeed">
+      <!-- Default community posts -->
+      <div class="chat-msg">
+        <div class="chat-avatar">RM</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">Shri Radha Manohar Das</span>
+            <span class="chat-badge">Leader</span>
+            <span class="chat-time">Today, 09:30 AM</span>
+          </div>
+          <div class="chat-text">
+            Jai Shri Ram! "ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి". May all our youth embody the strength of Arjuna and the devotion of Hanuman in every village.
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-msg">
+        <div class="chat-avatar">VK</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">Venkatesh K. (Tirupati)</span>
+            <span class="chat-badge">Active Sevak</span>
+            <span class="chat-time">Today, 10:15 AM</span>
+          </div>
+          <div class="chat-text">
+            Nitya Annadanam preparations are complete at the Tirupati center. Over 600 meals will be served to pilgrims today.
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-msg">
+        <div class="chat-avatar">RS</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">Ramesh Sharma (Vijayawada)</span>
+            <span class="chat-badge">Volunteer</span>
+            <span class="chat-time">Today, 11:40 AM</span>
+          </div>
+          <div class="chat-text">
+            Looking forward to the Youth Martial Camp on Nov 5th. 45 youths from our mandal have registered already!
+          </div>
+        </div>
       </div>
     </div>
-    <div class="gallery-item">
-      <img src="assets/hero-desktop.png" alt="Abhay Hindu Sena Youth Awakening Banner">
-      <div class="gallery-caption" data-en="Youth Awakening & Dharmic Unity Rally" data-te="యువ చైతన్య & ధర్మ పరిరక్షణ ర్యాలీ">
-        Youth Awakening & Dharmic Unity Rally
+
+    <form class="chat-input-area" onsubmit="handleSendChat(event)">
+      <input type="text" id="chatUser" class="chat-input" placeholder="Your Name" required>
+      <input type="text" id="chatCity" class="chat-input" placeholder="District / City" required>
+      <input type="text" id="chatText" class="chat-input" placeholder="Write your message / question..." required>
+      <button type="submit" class="chat-send-btn">Post 💬</button>
+    </form>
+  </div>
+</section>
+
+<!-- Donate / Dharma Daan Section -->
+<section id="donate" class="donate-section">
+  <div class="section-header">
+    <span class="eyebrow" data-en="Sacred Contribution" data-te="పవిత్ర భాగస్వామ్యం">Sacred Contribution</span>
+    <h2 class="section-title" data-en="Support with Dharma Daan" data-te="ధర్మ దానం & విరాళం">Support with Dharma Daan</h2>
+    <p class="section-sub" data-en="Your sacred support fuels Nitya Annadanam, Gau Samrakshana, temple restoration, and youth training."
+       data-te="మీ పవిత్ర విరాళం నిత్య అన్నదానం, గో సంరక్షణ, పురాతన ఆలయాల పునరుద్ధరణ మరియు యువతకు శిక్షణ అందించడంలో తోడ్పడుతుంది.">
+      Your sacred support fuels Nitya Annadanam, Gau Samrakshana, temple restoration, and youth training.
+    </p>
+  </div>
+
+  <div class="donate-container">
+    <h4 style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.15rem; margin-bottom:14px; text-align:center;">
+      Choose a Sacred Cause:
+    </h4>
+    <div class="donate-causes-grid">
+      <div class="donate-cause-card selected" onclick="selectCause(this, 'Nitya Annadanam (Food Seva)')">
+        <h5>🍲 Nitya Annadanam</h5>
+        <span>Sponsor meals for pilgrims & needy</span>
+      </div>
+      <div class="donate-cause-card" onclick="selectCause(this, 'Gau Samrakshana (Cow Care)')">
+        <h5>🐄 Gau Samrakshana</h5>
+        <span>Fodder, shelter & medical care</span>
+      </div>
+      <div class="donate-cause-card" onclick="selectCause(this, 'Temple Protection (Mandir Seva)')">
+        <h5>🛕 Temple Defense</h5>
+        <span>Restore rural village shrines</span>
+      </div>
+      <div class="donate-cause-card" onclick="selectCause(this, 'Youth Martial Training Camp')">
+        <h5>🚩 Youth Training</h5>
+        <span>Self-defense & moral education</span>
       </div>
     </div>
-    <div class="gallery-item">
-      <img src="assets/hero-mobile.png" alt="Sanatana Defense Artwork">
-      <div class="gallery-caption" data-en="Kshatriya Spirit & Cultural Pride" data-te="క్షత్రియ తేజస్సు & సాంస్కృతిక గర్వం">
-        Kshatriya Spirit & Cultural Pride
+
+    <div class="donate-details-box">
+      <div class="upi-box">
+        <h5 style="color:#FFF; margin-bottom:6px; font-size:1.05rem;">Quick UPI Donation</h5>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Scan via PhonePe / GooglePay / Paytm</p>
+        <div class="upi-id-badge">
+          ahsrmdas@gmail.com
+        </div>
+        <p style="font-size:0.8rem; color:#A89885; margin-top:6px;">
+          (Or send directly via UPI app to the registered account)
+        </p>
+      </div>
+
+      <div class="bank-details">
+        <h5 style="color:#FFF; margin-bottom:10px; font-size:1.05rem;">Direct Bank Transfer</h5>
+        <p>Account Name: <strong>Abhay Hindu Sena Seva</strong></p>
+        <p>Account Type: <strong>Current Account</strong></p>
+        <p>Branch: <strong>Tirupati, Andhra Pradesh</strong></p>
+        <p>Receipt & Inquiries: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Historic Tirupati 1st Anniversary Section -->
-<section id="anniversary" class="anniversary-section">
-  <div class="anniversary-box">
-    <div class="anniversary-badge" data-en="HISTORIC MILESTONE" data-te="చారిత్రాత్మక ఘట్టం">HISTORIC MILESTONE</div>
-    <h3 data-en="Tirupati 1st Anniversary Sammelanam" data-te="అభయ్ హిందూ సేన ప్రథమ వార్షికోత్సవం">Tirupati 1st Anniversary Sammelanam</h3>
-    <p data-en="In June 2025, Abhay Hindu Sena commemorated its First Anniversary convention in the sacred soil of Tirupati/Annamayya district. Revered Jagadgurus, Peethadhipathis, sadhus, and thousands of disciplined youth gathered under the leadership of Shri Radha Manohar Das to take a sacred pledge for temple security, cow welfare, and righteous living."
-       data-te="జూన్ 2025లో పవిత్ర తిరుపతి/అన్నమయ్య జిల్లా పుణ్యభూమిపై అభయ్ హిందూ సేన ప్రథమ వార్షికోత్సవం అంగరంగ వైభవంగా నిర్వహించబడింది. పూజ్య పీఠాధిపతులు, సాధువులు మరియు వేలాది మంది యువ కార్యకర్తలు శ్రీ రాధా మనోహర్ దాస్ గారి నాయకత్వంలో ఆలయ పరిరక్షణ, గో సంరక్షణ మరియు ధర్మ జీవనం కోసం పవిత్ర ప్రతిజ్ఞ చేశారు.">
-      In June 2025, Abhay Hindu Sena commemorated its First Anniversary convention in the sacred soil of Tirupati/Annamayya district. Revered Jagadgurus, Peethadhipathis, sadhus, and thousands of disciplined youth gathered under the leadership of Shri Radha Manohar Das to take a sacred pledge for temple security, cow welfare, and righteous living.
-    </p>
-    <a href="#join" class="btn btn-gold" data-en="Be Part of Our Mission →" data-te="మా లక్ష్యంలో భాగస్వాములు కండి →">Be Part of Our Mission →</a>
-  </div>
-</section>
-
-<!-- Volunteer / Join Form -->
+<!-- Volunteer / Enlist Section -->
 <section id="join" class="volunteer-section">
   <div class="section-header">
     <span class="eyebrow" data-en="Join Hands for Dharma" data-te="ధర్మ రక్షణలో మీ వంతు భాగస్వామ్యం">Join Hands for Dharma</span>
@@ -1291,7 +1454,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label data-en="Full Name *" data-te="పూర్తి పేరు *">Full Name *</label>
-          <input type="text" id="vName" class="form-control" placeholder="Your name" required>
+          <input type="text" id="vName" class="form-control" placeholder="Your full name" required>
         </div>
         <div class="form-group">
           <label data-en="Phone / WhatsApp *" data-te="ఫోన్ / వాట్సాప్ *">Phone / WhatsApp *</label>
@@ -1317,7 +1480,7 @@
         </div>
         <div class="form-group form-full">
           <label data-en="Your Message / Skills" data-te="మీ సందేశం / నైపుణ్యాలు">Your Message / Skills</label>
-          <textarea id="vMessage" class="form-control" rows="3" placeholder="Tell us about how you wish to contribute..."></textarea>
+          <textarea id="vMessage" class="form-control" rows="3" placeholder="Tell us how you wish to contribute..."></textarea>
         </div>
         <div class="form-group form-full">
           <button type="submit" class="form-submit-btn" data-en="Submit Application to ahsrmdas@gmail.com 🚩" data-te="దరఖాస్తు సమర్పించండి (ahsrmdas@gmail.com) 🚩">
@@ -1326,62 +1489,15 @@
         </div>
       </div>
     </form>
-    <div style="text-align:center; margin-top:20px; font-size:0.85rem; color:var(--text-muted);">
-      Direct Email: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a>
-    </div>
-  </div>
-</section>
-
-<!-- Contact & Connect Section -->
-<section id="contact" class="contact-section">
-  <div class="section-header">
-    <span class="eyebrow" data-en="Connect With Us" data-te="సంప్రదించండి">Connect With Us</span>
-    <h2 class="section-title" data-en="Official Channels" data-te="అధికారిక మార్గాలు">Official Channels</h2>
-    <p class="section-sub" data-en="Reach out to Shri Radha Manohar Das and the central committee for seva, satsangs, or inquiries."
-       data-te="సేవా కార్యక్రమాలు, సత్సంగాలు లేదా సమాచారం కోసం కేంద్ర కార్యాలయాన్ని సంప్రదించండి.">
-      Reach out to Shri Radha Manohar Das and the central committee for seva, satsangs, or inquiries.
-    </p>
-  </div>
-
-  <div class="contact-cards-grid">
-    <div class="contact-card">
-      <div class="contact-icon">✉️</div>
-      <h4 data-en="Official Email" data-te="అధికారిక ఈమెయిల్">Official Email</h4>
-      <p data-en="Write directly to the leadership team" data-te="నాయకత్వ బృందానికి నేరుగా రాయండి">Write directly to the leadership team</p>
-      <p style="margin-top:10px;">
-        <a href="mailto:ahsrmdas@gmail.com" style="font-family:monospace; font-size:1rem;">ahsrmdas@gmail.com</a>
-      </p>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-icon">🛕</div>
-      <h4 data-en="Headquarters" data-te="ప్రధాన కేంద్రం">Headquarters</h4>
-      <p data-en="Holy City of Tirupati" data-te="పవిత్ర తిరుపతి క్షేత్రం">Holy City of Tirupati</p>
-      <p style="color:#FFF; font-weight:600; margin-top:10px;">Andhra Pradesh, Bharat</p>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-icon">📺</div>
-      <h4 data-en="YouTube Channel" data-te="యూట్యూబ్ ఛానల్">YouTube Channel</h4>
-      <p data-en="Watch live discourses & satsangs" data-te="ప్రత్యక్ష ప్రవచనాలు & సత్సంగాలు">Watch live discourses & satsangs</p>
-      <p style="margin-top:10px;">
-        <a href="https://www.youtube.com/@RadhaManoharDas" target="_blank" rel="noopener">@RadhaManoharDas</a>
-      </p>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-icon">📸</div>
-      <h4 data-en="Instagram" data-te="ఇన్‌స్టాగ్రామ్">Instagram</h4>
-      <p data-en="Follow daily updates and quotes" data-te="రోజువారీ సమాచారం & ఆలోచనలు">Follow daily updates and quotes</p>
-      <p style="margin-top:10px;">
-        <a href="https://www.instagram.com/radhamanohardas/" target="_blank" rel="noopener">@radhamanohardas</a>
-      </p>
+    <div style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--text-muted);">
+      Official Email: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
+  <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="footer-logo">
   <div class="footer-brand">🚩 ABHAY HINDU SENA</div>
   <div class="footer-sub" data-en="Sanatana Dharma • Rashtra Seva • Youth Defense" data-te="సనాతన ధర్మం • రాష్ట్ర సేవ • యువ చైతన్యం">
     Sanatana Dharma • Rashtra Seva • Youth Defense
@@ -1390,11 +1506,11 @@
     <a href="#home">Home</a>
     <a href="#founder">Founder</a>
     <a href="#missions">Missions</a>
-    <a href="#discourses">Pravachans</a>
+    <a href="#events">Events</a>
     <a href="#gallery">Gallery</a>
-    <a href="#anniversary">Tirupati Anniversary</a>
-    <a href="#join">Volunteer Form</a>
-    <a href="#contact">Contact</a>
+    <a href="#community">Community</a>
+    <a href="#donate">Donate</a>
+    <a href="#join">Volunteer</a>
     <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>
   </div>
   <div class="footer-copy">
@@ -1402,12 +1518,37 @@
   </div>
 </footer>
 
-<!-- Confirmation Modal -->
+<!-- Lightbox Modal for Gallery -->
+<div class="modal-backdrop" id="lightboxModal" onclick="closeLightbox()">
+  <div class="modal-content" style="max-width:680px;" onclick="event.stopPropagation()">
+    <img id="lightboxImg" src="" alt="Gallery Preview" style="width:100%; max-height:420px; object-fit:contain; border-radius:8px; margin-bottom:12px;">
+    <h4 id="lightboxTitle" style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.1rem; margin-bottom:8px;"></h4>
+    <button class="modal-close-btn" onclick="closeLightbox()">Close / మూసివేయండి</button>
+  </div>
+</div>
+
+<!-- RSVP Modal -->
+<div class="modal-backdrop" id="rsvpModal">
+  <div class="modal-content">
+    <div style="font-size:2.5rem; margin-bottom:10px;">📅</div>
+    <h3 id="rsvpEventTitle" style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.4rem; margin-bottom:10px;">RSVP Confirmation</h3>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:16px;">
+      Thank you for your devotion! Your seat has been marked for this upcoming event. Details will be communicated via WhatsApp/Email.
+    </p>
+    <button class="modal-close-btn" onclick="closeRSVPModal()">Confirm & Close</button>
+  </div>
+</div>
+
+<!-- Volunteer Confirmation Modal -->
 <div class="modal-backdrop" id="confirmationModal">
   <div class="modal-content">
-    <div class="modal-icon">🚩</div>
-    <h3 data-en="Dhanyavad! Application Received" data-te="ధన్యవాదాలు! దరఖాస్తు స్వీకరించబడింది">Dhanyavad! Application Received</h3>
-    <p id="modalMsg">Thank you for pledging your support to Abhay Hindu Sena. Your details have been recorded and sent to ahsrmdas@gmail.com. Our central coordination team will contact you shortly.</p>
+    <div style="font-size:2.8rem; margin-bottom:10px;">🚩</div>
+    <h3 data-en="Dhanyavad! Application Received" data-te="ధన్యవాదాలు! దరఖాస్తు స్వీకరించబడింది" style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.5rem; margin-bottom:10px;">
+      Dhanyavad! Application Received
+    </h3>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:16px;">
+      Thank you for dedicating your energy to Abhay Hindu Sena. Your application has been logged and sent to ahsrmdas@gmail.com. Our coordination team will contact you shortly.
+    </p>
     <button class="modal-close-btn" onclick="closeModal()">Close / మూసివేయండి</button>
   </div>
 </div>
@@ -1434,7 +1575,114 @@
     });
   }
 
-  // Form submission handling
+  // Lightbox
+  function openLightbox(imgSrc, title) {
+    document.getElementById('lightboxImg').src = imgSrc;
+    document.getElementById('lightboxTitle').textContent = title;
+    document.getElementById('lightboxModal').classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('lightboxModal').classList.remove('active');
+  }
+
+  // Gallery filter
+  function filterGallery(category, btn) {
+    document.querySelectorAll('.gallery-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.gallery-card');
+    cards.forEach(c => {
+      if (category === 'all' || c.getAttribute('data-cat') === category) {
+        c.style.display = 'block';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  }
+
+  // RSVP Modal
+  function openRSVPModal(title) {
+    document.getElementById('rsvpEventTitle').textContent = title;
+    document.getElementById('rsvpModal').classList.add('active');
+  }
+  function closeRSVPModal() {
+    document.getElementById('rsvpModal').classList.remove('active');
+  }
+
+  // Cause Selection in Donate Section
+  function selectCause(el, cause) {
+    document.querySelectorAll('.donate-cause-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Community Chat Logic
+  function handleSendChat(e) {
+    e.preventDefault();
+    const name = document.getElementById('chatUser').value.trim();
+    const city = document.getElementById('chatCity').value.trim();
+    const text = document.getElementById('chatText').value.trim();
+    if (!name || !text) return;
+
+    const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+    const timeStr = "Just now";
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg';
+    msgDiv.innerHTML = `
+      <div class="chat-avatar">${initials}</div>
+      <div class="chat-bubble">
+        <div class="chat-bubble-top">
+          <span class="chat-sender">${escapeHtml(name)} (${escapeHtml(city || 'Bharat')})</span>
+          <span class="chat-badge">Sevak</span>
+          <span class="chat-time">${timeStr}</span>
+        </div>
+        <div class="chat-text">${escapeHtml(text)}</div>
+      </div>
+    `;
+
+    const feed = document.getElementById('chatFeed');
+    feed.appendChild(msgDiv);
+    feed.scrollTop = feed.scrollHeight;
+
+    // Save to localStorage
+    const saved = JSON.parse(localStorage.getItem('ahs_chat_messages') || '[]');
+    saved.push({ name, city, text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+    localStorage.setItem('ahs_chat_messages', JSON.stringify(saved));
+
+    document.getElementById('chatText').value = '';
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+  }
+
+  // Load custom messages from localStorage
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = JSON.parse(localStorage.getItem('ahs_chat_messages') || '[]');
+    const feed = document.getElementById('chatFeed');
+    saved.forEach(m => {
+      const initials = m.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-msg';
+      msgDiv.innerHTML = `
+        <div class="chat-avatar">${initials}</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">${escapeHtml(m.name)} (${escapeHtml(m.city || 'Bharat')})</span>
+            <span class="chat-badge">Sevak</span>
+            <span class="chat-time">${m.time || 'Recent'}</span>
+          </div>
+          <div class="chat-text">${escapeHtml(m.text)}</div>
+        </div>
+      `;
+      feed.appendChild(msgDiv);
+    });
+    feed.scrollTop = feed.scrollHeight;
+  });
+
+  // Volunteer Submission
   function handleVolunteerSubmit(e) {
     e.preventDefault();
     const name = document.getElementById('vName').value;
@@ -1444,14 +1692,7 @@
     const dept = document.getElementById('vDept').value;
     const msg = document.getElementById('vMessage').value;
 
-    // Save to local storage for persistence
-    const appData = { name, phone, email, loc, dept, msg, date: new Date().toISOString() };
-    const allApps = JSON.parse(localStorage.getItem('ahs_volunteers') || '[]');
-    allApps.push(appData);
-    localStorage.setItem('ahs_volunteers', JSON.stringify(allApps));
-
-    // Construct mailto link
-    const subject = encodeURIComponent("New Abhay Hindu Sena Volunteer Registration - " + name);
+    const subject = encodeURIComponent("Abhay Hindu Sena Volunteer Registration - " + name);
     const body = encodeURIComponent(
       "Jai Shri Ram / Pranam,\n\n" +
       "A new volunteer application has been submitted on the Abhay Hindu Sena portal:\n\n" +
@@ -1464,10 +1705,7 @@
       "Submitted at: " + new Date().toLocaleString() + "\n"
     );
 
-    // Open mail client
     window.location.href = `mailto:ahsrmdas@gmail.com?subject=${subject}&body=${body}`;
-
-    // Show celebratory modal
     document.getElementById('confirmationModal').classList.add('active');
   }
 
