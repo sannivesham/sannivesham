@@ -1221,64 +1221,91 @@
     padding: 36px 30px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.25);
   }
-  .donate-causes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .donate-cause-card {
-    background: rgba(255,255,255,0.03);
+  .donate-simple-box {
+    background: rgba(0,0,0,0.5);
     border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 10px;
-    padding: 14px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .donate-cause-card.selected, .donate-cause-card:hover {
-    border-color: var(--gold-bright);
-    background: rgba(212,175,55,0.12);
-  }
-  .donate-cause-card h5 {
-    color: var(--gold-bright);
-    font-size: 0.92rem;
-    margin-bottom: 3px;
-  }
-  .donate-cause-card span { font-size: 0.75rem; color: var(--text-muted); }
-
-  .donate-details-box {
-    background: rgba(0,0,0,0.6);
-    border: 1px solid var(--border-gold);
-    border-radius: 12px;
-    padding: 22px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    border-radius: 14px;
+    padding: 26px 20px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 12px;
   }
-  .upi-box {
-    text-align: center;
-    border-right: 1px solid rgba(212,175,55,0.2);
-    padding-right: 18px;
+  .donate-upi-card {
+    background: rgba(255,107,26,0.08);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 12px;
+    padding: 18px 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: 6px 0;
+  }
+  .donate-upi-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0 6px;
   }
   .upi-id-badge {
-    background: rgba(255,107,26,0.15);
+    background: rgba(255,107,26,0.18);
     border: 1px dashed var(--gold);
-    padding: 7px 14px;
+    padding: 9px 16px;
     border-radius: 8px;
     font-family: monospace;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
     color: var(--gold-bright);
-    display: inline-block;
-    margin: 8px 0;
+    letter-spacing: 0.5px;
+    word-break: break-all;
   }
-  .bank-details p {
-    font-size: 0.85rem;
+  .btn-copy-upi {
+    background: rgba(212,175,55,0.18);
+    border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-copy-upi:hover {
+    background: var(--gold);
+    color: #000;
+  }
+  .btn-pay-upi {
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    color: #000;
+    font-weight: 800;
+    padding: 11px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.92rem;
+    box-shadow: 0 4px 18px rgba(255,107,26,0.35);
+    transition: all 0.25s;
+  }
+  .btn-pay-upi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255,107,26,0.55);
+  }
+  .donate-note {
+    font-size: 0.82rem;
     color: var(--text-muted);
-    margin-bottom: 5px;
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 8px auto 0;
+    border-top: 1px solid rgba(212,175,55,0.15);
+    padding-top: 14px;
+    text-align: center;
   }
-  .bank-details strong { color: #FFF; }
 
   /* VOLUNTEER SECTION */
   .volunteer-section {
@@ -2450,46 +2477,37 @@
   </div>
 
   <div class="donate-container">
-    <h4 style="color:var(--gold-bright); font-family:'Cinzel',serif; font-size:1.15rem; margin-bottom:14px; text-align:center;">
-      Choose a Sacred Cause:
-    </h4>
-    <div class="donate-causes-grid">
-      <div class="donate-cause-card selected" onclick="selectCause(this, 'Nitya Annadanam (Food Seva)')">
-        <h5>🍲 Nitya Annadanam</h5>
-        <span>Sponsor meals for pilgrims & needy</span>
-      </div>
-      <div class="donate-cause-card" onclick="selectCause(this, 'Gau Samrakshana (Cow Care)')">
-        <h5>🐄 Gau Samrakshana</h5>
-        <span>Fodder, shelter & medical care</span>
-      </div>
-      <div class="donate-cause-card" onclick="selectCause(this, 'Temple Protection (Mandir Seva)')">
-        <h5>🛕 Temple Defense</h5>
-        <span>Restore rural village shrines</span>
-      </div>
-      <div class="donate-cause-card" onclick="selectCause(this, 'Youth Martial Training Camp')">
-        <h5>🚩 Youth Training</h5>
-        <span>Self-defense & moral education</span>
-      </div>
-    </div>
+    <div class="donate-simple-box">
+      <div style="font-size:2.4rem; margin-bottom:2px;">🙏</div>
+      <h3 style="color:var(--gold-bright); font-family:var(--font-heading); font-size:1.35rem; margin-bottom:4px;" data-en="Support Dharma Seva with your Contribution" data-te="ధర్మ సేవకు మీ పవిత్ర విరాళాన్ని అందించండి">
+        Support Dharma Seva with your Contribution
+      </h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); max-width:540px; margin:0 auto 10px;" data-en="You can contribute any amount directly via UPI apps (Google Pay, PhonePe, Paytm, BHIM)." data-te="మీరు ఏదైనా మొత్తాన్ని UPI యాప్స్ (Google Pay, PhonePe, Paytm, BHIM) ద్వారా నేరుగా సమర్పించవచ్చు.">
+        You can contribute any amount directly via UPI apps (Google Pay, PhonePe, Paytm, BHIM).
+      </p>
 
-    <div class="donate-details-box">
-      <div class="upi-box">
-        <h5 style="color:#FFF; margin-bottom:6px; font-size:1.05rem;">Quick UPI Donation</h5>
-        <p style="font-size:0.85rem; color:var(--text-muted);">Scan via PhonePe / GooglePay / Paytm</p>
-        <div class="upi-id-badge">
-          ahsrmdas@gmail.com
+      <div class="donate-upi-card">
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Official UPI ID (అధికారిక UPI ఐడీ)</span>
+        <div class="donate-upi-row">
+          <div class="upi-id-badge" id="ahsUpiIdText">ahsrmdas@gmail.com</div>
+          <button class="btn-copy-upi" onclick="copyUpiId()" id="copyUpiBtn">
+            <span>📋</span> <span id="copyUpiBtnText" data-en="Copy UPI ID" data-te="కాపీ చేయండి">Copy UPI ID</span>
+          </button>
         </div>
-        <p style="font-size:0.8rem; color:#A89885; margin-top:6px;">
-          (Or send directly via UPI app to the registered account)
-        </p>
+        <div style="margin-top:10px;">
+          <a href="upi://pay?pa=ahsrmdas@gmail.com&pn=Abhay%20Hindu%20Sena&cu=INR" class="btn-pay-upi" data-en="📱 Pay Directly via UPI App" data-te="📱 నేరుగా UPI యాప్ ద్వారా చెల్లించండి">
+            📱 Pay Directly via UPI App
+          </a>
+        </div>
       </div>
 
-      <div class="bank-details">
-        <h5 style="color:#FFF; margin-bottom:10px; font-size:1.05rem;">Direct Bank Transfer</h5>
-        <p>Account Name: <strong>Abhay Hindu Sena Seva</strong></p>
-        <p>Account Type: <strong>Current Account</strong></p>
-        <p>Branch: <strong>Tirupati, Andhra Pradesh</strong></p>
-        <p>Receipt & Inquiries: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a></p>
+      <div class="donate-note">
+        <p style="margin-bottom:6px;" data-en="ℹ️ Note: Official Trust Bank account details will be updated here shortly. For now, you can offer your contribution directly via UPI." data-te="ℹ️ గమనిక: అధికారిక ట్రస్ట్ బ్యాంక్ ఖాతా వివరాలు త్వరలో ఇక్కడ పొందుపరచబడతాయి. ప్రస్తుతానికి మీ పవిత్ర విరాళాన్ని నేరుగా UPI ద్వారా సమర్పించవచ్చు.">
+          ℹ️ <strong>Note:</strong> Official Trust Bank account details will be updated here shortly. For now, you can offer your contribution directly via UPI.
+        </p>
+        <p style="font-size:0.8rem; color:#A89885;" data-en="For donation receipts or inquiries, please contact: ahsrmdas@gmail.com" data-te="రసీదులు లేదా సమాచారం కోసం సంప్రదించండి: ahsrmdas@gmail.com">
+          For donation receipts or inquiries, please contact: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright); text-decoration:underline;">ahsrmdas@gmail.com</a>
+        </p>
       </div>
     </div>
   </div>
@@ -2914,10 +2932,20 @@
     document.getElementById('rsvpModal').classList.remove('active');
   }
 
-  // Cause Selection in Donate Section
-  function selectCause(el, cause) {
-    document.querySelectorAll('.donate-cause-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
+  // Copy UPI ID Helper
+  function copyUpiId() {
+    const upi = "ahsrmdas@gmail.com";
+    navigator.clipboard.writeText(upi).then(() => {
+      const btn = document.getElementById('copyUpiBtnText');
+      if (btn) {
+        btn.textContent = "Copied! ✓ (కాపీ అయింది)";
+        setTimeout(() => {
+          btn.textContent = "Copy UPI ID";
+        }, 2500);
+      }
+    }).catch(() => {
+      prompt("Official UPI ID:", upi);
+    });
   }
 
   // ==========================================
