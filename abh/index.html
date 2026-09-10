@@ -2227,26 +2227,44 @@
   // Real-time Chat Feed Listener
   function listenToCommunityMessages() {
     if (!db) {
-      renderFallbackMessages();
+      showEmptyChat("Firebase not initialized");
       return;
     }
 
     db.collection('community_messages')
-      .orderBy('createdAt', 'asc')
-      .limitToLast(60)
+      .limit(100)
       .onSnapshot(snapshot => {
         const feed = document.getElementById('chatFeed');
         if (snapshot.empty) {
-          renderFallbackMessages();
+          showEmptyChat();
           return;
         }
 
-        feed.innerHTML = '';
+        const msgs = [];
         snapshot.forEach(doc => {
           const m = doc.data();
-          if (m.deleted) return;
+          if (!m.deleted) {
+            msgs.push({ id: doc.id, ...m });
+          }
+        });
+
+        if (msgs.length === 0) {
+          showEmptyChat();
+          return;
+        }
+
+        // Sort ascending by time
+        msgs.sort((a, b) => {
+          const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
+          const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
+          return tA - tB;
+        });
+
+        feed.innerHTML = '';
+        msgs.forEach(m => {
           const initials = (m.name || 'Sevak').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-          const timeStr = m.createdAt ? formatChatTime(m.createdAt.toDate()) : 'Recently';
+          const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
+          const timeStr = formatChatTime(timeDate);
 
           let badgeClass = 'badge-sevak';
           let badgeText = '🚩 Sevak';
@@ -2280,38 +2298,38 @@
         // Auto scroll to bottom
         feed.scrollTop = feed.scrollHeight;
       }, err => {
-        console.warn("Firestore messages stream error:", err);
-        renderFallbackMessages();
+        console.error("Firestore messages stream error:", err);
+        const feed = document.getElementById('chatFeed');
+        if (err.code === 'permission-denied') {
+          feed.innerHTML = `
+            <div style="text-align:center; padding:30px 20px; color:#ff7675; background:rgba(255,107,107,0.08); border-radius:8px; margin:10px;">
+              <div style="font-size:1.6rem; margin-bottom:6px;">⚠️</div>
+              <div style="font-weight:700; margin-bottom:4px; font-size:0.95rem;">Firestore Permission Denied</div>
+              <div style="font-size:0.8rem; color:#e0d0c0; line-height:1.5;">
+                Please update your Firebase Console Firestore Rules to allow <code>community_messages</code>.
+              </div>
+            </div>
+          `;
+        } else {
+          feed.innerHTML = `
+            <div style="text-align:center; padding:30px 20px; color:#c7b5a0;">
+              Error loading messages: ${escapeHtml(err.message)}
+            </div>
+          `;
+        }
       });
   }
 
-  function renderFallbackMessages() {
+  function showEmptyChat(customText) {
     const feed = document.getElementById('chatFeed');
     feed.innerHTML = `
-      <div class="chat-msg">
-        <div class="chat-avatar" style="background:linear-gradient(135deg,#FF6B1A,#D4AF37);">RM</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">Shri Radha Manohar Das</span>
-            <span class="chat-badge badge-leader">⭐ Leader</span>
-            <span class="chat-time">Today, 09:30 AM</span>
-          </div>
-          <div class="chat-text">
-            Jai Shri Ram! "ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి". May all our youth embody the strength of Arjuna and the devotion of Hanuman in every village.
-          </div>
+      <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
+        <div style="font-size:2.2rem; margin-bottom:10px;">🚩</div>
+        <div style="font-weight:700; color:var(--gold-bright); font-size:1.05rem; margin-bottom:6px;">
+          ${customText || 'No messages in Dharma Charcha yet'}
         </div>
-      </div>
-      <div class="chat-msg">
-        <div class="chat-avatar">VK</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">Venkatesh K. (Tirupati)</span>
-            <span class="chat-badge badge-speaker">🎤 Active Speaker</span>
-            <span class="chat-time">Today, 10:15 AM</span>
-          </div>
-          <div class="chat-text">
-            Nitya Annadanam preparations are complete at the Tirupati center. Over 600 meals will be served to pilgrims today.
-          </div>
+        <div style="font-size:0.85rem; color:#b0a090;">
+          Be the first to post a message or seva update below!
         </div>
       </div>
     `;
@@ -2342,24 +2360,32 @@
 
     const btn = document.getElementById('chatSendBtn');
     btn.disabled = true;
+    btn.textContent = 'Posting...';
 
     try {
-      if (db) {
-        await db.collection('community_messages').add({
-          uid: userProfile.uid,
-          name: userProfile.name,
-          place: userProfile.place,
-          role: userProfile.role || 'Sevak',
-          text: text,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }
+      if (!db) throw new Error("Firebase database connection not initialized.");
+
+      await db.collection('community_messages').add({
+        uid: userProfile.uid,
+        name: userProfile.name,
+        place: userProfile.place,
+        role: userProfile.role || 'Sevak',
+        text: text,
+        clientTimestamp: Date.now(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
       input.value = '';
     } catch (err) {
       console.error("Failed to post message:", err);
-      alert("Message sending failed. Please check internet connection.");
+      let errMsg = err.message;
+      if (err.code === 'permission-denied') {
+        errMsg = "Permission Denied: Please ensure your Firestore Security Rules in Firebase Console allow read & write for 'community_messages' and 'community_users'.";
+      }
+      alert("Message sending error:\n\n" + errMsg);
     } finally {
       btn.disabled = false;
+      btn.textContent = 'Post 💬';
       input.focus();
     }
   }

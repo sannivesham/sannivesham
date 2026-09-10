@@ -1113,11 +1113,8 @@
     });
   }
 
-  // ==========================================
-  // 2. LIVE COMMUNITY CHAT (ADMIN VIEW)
-  // ==========================================
   function initCommunityChatAdmin() {
-    db.collection('community_messages').orderBy('createdAt', 'desc').limit(80).onSnapshot(snapshot => {
+    db.collection('community_messages').limit(100).onSnapshot(snapshot => {
       const feed = document.getElementById('adminChatFeed');
       const count = snapshot.size;
       document.getElementById('adminChatCount').textContent = count;
@@ -1132,18 +1129,39 @@
         return;
       }
 
-      let html = '';
+      const msgs = [];
       snapshot.forEach(doc => {
         const m = doc.data();
-        if (m.deleted) return;
-        const mid = doc.id;
+        if (!m.deleted) msgs.push({ id: doc.id, ...m });
+      });
+
+      if (msgs.length === 0) {
+        feed.innerHTML = `
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            No active messages found.
+          </div>
+        `;
+        return;
+      }
+
+      // Sort descending (latest on top for admin review)
+      msgs.sort((a, b) => {
+        const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
+        const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
+        return tB - tA;
+      });
+
+      let html = '';
+      msgs.forEach(m => {
+        const mid = m.id;
         const uid = m.uid || 'anon';
         const name = m.name || 'Sevak';
         const place = m.place || 'Bharat';
         const role = m.role || 'Sevak';
         const text = m.text || '';
         const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-        const timeStr = m.createdAt ? new Date(m.createdAt.toDate()).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : 'Recent';
+        const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
+        const timeStr = timeDate.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
 
         let badgeClass = 'badge-sevak';
         let badgeText = '🚩 Sevak';
@@ -1216,6 +1234,7 @@
         place: 'Kendriya Karyalayam',
         role: 'Leader',
         text: text,
+        clientTimestamp: Date.now(),
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       input.value = '';
