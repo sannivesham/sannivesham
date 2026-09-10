@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --gold: #D4AF37;
@@ -25,6 +25,7 @@
     --border-gold-glow: rgba(212,175,55,0.6);
     --text-main: #FFF8EF;
     --text-muted: #C7B5A0;
+    --font-heading: 'Cinzel', 'Noto Sans Telugu', 'Mandali', serif;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -73,12 +74,13 @@
     min-width: 0;
   }
   .header-brand-text h1 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 1.15rem;
     color: var(--gold-bright);
     letter-spacing: 1px;
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.35;
+    padding: 1px 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -88,6 +90,7 @@
     color: var(--saffron);
     letter-spacing: 0.5px;
     font-weight: 500;
+    line-height: 1.3;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -239,26 +242,32 @@
     gap: 8px;
     background: rgba(255,107,26,0.15);
     border: 1px solid rgba(255,107,26,0.45);
-    padding: 5px 18px;
+    padding: 6px 18px;
     border-radius: 30px;
     font-size: 0.82rem;
     color: #FFA466;
     margin-bottom: 16px;
+    line-height: 1.4;
   }
   .hero-title {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: clamp(2.2rem, 6vw, 3.4rem);
     font-weight: 900;
     background: linear-gradient(135deg, #FFF 25%, var(--gold-bright) 60%, var(--saffron) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    line-height: 1.15;
-    margin-bottom: 8px;
+    line-height: 1.38;
+    padding-top: 14px;
+    padding-bottom: 8px;
+    margin-bottom: 6px;
+    display: inline-block;
   }
   .hero-founder-tag {
     font-size: clamp(1.05rem, 3.5vw, 1.25rem);
     color: var(--gold-bright);
     font-weight: 600;
+    line-height: 1.45;
+    padding: 4px 0;
     margin-bottom: 14px;
   }
   .hero-motto-callout {
@@ -266,10 +275,11 @@
     background: linear-gradient(90deg, rgba(122,12,12,0.5), rgba(61,5,5,0.7));
     border: 1px solid var(--border-gold);
     color: #FFF;
-    padding: 7px 20px;
+    padding: 9px 22px;
     border-radius: 40px;
     font-size: clamp(0.9rem, 2.8vw, 1.05rem);
     font-style: italic;
+    line-height: 1.45;
     margin-bottom: 20px;
   }
   .hero-lead {
@@ -375,11 +385,14 @@
     margin-bottom: 8px;
   }
   .section-title {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 2.3rem;
     color: #FFF;
     margin-bottom: 12px;
     font-weight: 800;
+    line-height: 1.38;
+    padding-top: 8px;
+    padding-bottom: 4px;
   }
   .section-sub {
     color: var(--text-muted);
@@ -434,11 +447,13 @@
     font-weight: 600;
   }
   .founder-details h3 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 2.1rem;
     color: var(--gold-bright);
     margin-bottom: 6px;
     font-weight: 800;
+    line-height: 1.35;
+    padding-top: 4px;
   }
   .founder-details .role-text {
     color: var(--saffron);
@@ -514,10 +529,12 @@
     margin-bottom: 14px;
   }
   .mission-card h3 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     color: var(--gold-bright);
     font-size: 1.2rem;
     margin-bottom: 8px;
+    line-height: 1.35;
+    padding-top: 3px;
   }
   .mission-card p {
     color: var(--text-muted);
@@ -589,10 +606,12 @@
     font-weight: 500;
   }
   .event-card h4 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 1.15rem;
     color: #FFF;
     margin-bottom: 8px;
+    line-height: 1.35;
+    padding-top: 3px;
   }
   .event-card p {
     color: var(--text-muted);
@@ -694,12 +713,14 @@
     align-items: center;
   }
   .chat-header h4 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     color: var(--gold-bright);
     font-size: 1.05rem;
     display: flex;
     align-items: center;
     gap: 8px;
+    line-height: 1.35;
+    padding-top: 2px;
   }
   .chat-online-badge {
     background: rgba(46, 204, 113, 0.2);
@@ -940,16 +961,19 @@
     box-shadow: 0 0 12px rgba(212,175,55,0.4);
   }
   .footer-brand {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 1.4rem;
     color: var(--gold-bright);
     margin-bottom: 5px;
     font-weight: 800;
+    line-height: 1.35;
+    padding-top: 3px;
   }
   .footer-sub {
     color: var(--saffron);
     font-size: 0.85rem;
     margin-bottom: 20px;
+    line-height: 1.4;
   }
   .footer-links {
     display: flex;
@@ -970,6 +994,28 @@
     font-size: 0.78rem;
     border-top: 1px solid rgba(255,255,255,0.06);
     padding-top: 18px;
+  }
+
+  /* TELUGU MODE ADJUSTMENTS - PREVENTS ANY ASCENDER OR MATRA CLIPPING */
+  body.telugu-mode {
+    font-family: 'Mandali', 'Noto Sans Telugu', 'Poppins', sans-serif;
+  }
+  body.telugu-mode .hero-title {
+    font-family: 'Mandali', 'Noto Sans Telugu', serif;
+    line-height: 1.45;
+    padding-top: 18px;
+    padding-bottom: 10px;
+  }
+  body.telugu-mode .section-title,
+  body.telugu-mode .founder-details h3,
+  body.telugu-mode .mission-card h3,
+  body.telugu-mode .event-card h4,
+  body.telugu-mode h1,
+  body.telugu-mode h2,
+  body.telugu-mode h3,
+  body.telugu-mode h4 {
+    font-family: 'Mandali', 'Noto Sans Telugu', serif;
+    line-height: 1.42 !important;
   }
 
   /* MODALS */
@@ -1575,6 +1621,7 @@
   let isTelugu = false;
   function toggleLanguage() {
     isTelugu = !isTelugu;
+    document.body.classList.toggle('telugu-mode', isTelugu);
     const langLabel = document.getElementById('langText');
     if (langLabel) {
       langLabel.textContent = isTelugu ? 'తెలుగు (Active)' : 'English / తెలుగు';
