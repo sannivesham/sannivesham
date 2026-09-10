@@ -1483,6 +1483,32 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(37,211,102,0.5);
   }
+  .btn-download-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #000;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
+    transition: all 0.25s;
+    width: 100%;
+  }
+  .btn-download-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.6);
+  }
+  .btn-download-card:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
   .btn-copy-id {
     background: rgba(212,175,55,0.15);
     border: 1px solid var(--gold);
@@ -2280,9 +2306,14 @@
 
     <!-- ACTION BUTTONS -->
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
-      <a id="cardWhatsappBtn" href="#" target="_blank" class="btn-whatsapp-share">
-        📲 Share My ID on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)
-      </a>
+      <button type="button" id="cardWhatsappBtn" class="btn-whatsapp-share" onclick="shareOnWhatsAppWithImage()">
+        📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)
+      </button>
+
+      <button type="button" id="downloadIdBtn" class="btn-download-card" onclick="downloadSevakIdCard()">
+        📥 Download ID Card Photo (కార్డ్ డౌన్‌లోడ్ చేసుకోండి)
+      </button>
+
       <div style="display:flex; gap:10px;">
         <button type="button" class="btn-copy-id" style="flex:1;" onclick="copySevakId()">
           📋 Copy ID
@@ -2309,6 +2340,8 @@
   </div>
 </div>
 
+<!-- html2canvas for ID Card Generation & Sharing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -2868,10 +2901,46 @@
     submitBtn.textContent = '⏳ Registering & Generating Official ID...';
 
     try {
+      // 1. DUPLICATE CHECK: Verify if mobile number already registered in Firestore
+      if (db) {
+        try {
+          const dupQuery = await db.collection('volunteer_registrations')
+            .where('phone', '==', cleanPhone)
+            .limit(1)
+            .get();
+
+          if (!dupQuery.empty) {
+            const existingRec = dupQuery.docs[0].data();
+            const existingId = existingRec.sevakId || dupQuery.docs[0].id;
+            currentIssuedSevakId = existingId;
+
+            // Populate existing card
+            document.getElementById('cardSevakId').textContent = existingId;
+            document.getElementById('cardSevakName').textContent = existingRec.name || name;
+            document.getElementById('cardSevakPhone').textContent = "+91 " + (existingRec.phone || cleanPhone);
+            document.getElementById('cardSevakLocation').textContent = `${existingRec.district || district}, ${existingRec.state || state}`;
+            document.getElementById('cardSevakMandal').textContent = existingRec.mandal || mandal;
+            document.getElementById('cardSevakKaliYear').textContent = existingRec.kaliYear || getKaliYugamYear();
+            document.getElementById('cardSevakDate').textContent = existingRec.timestamp || 'Already Registered';
+
+            // Open Digital ID Modal
+            document.getElementById('confirmationModal').classList.add('active');
+
+            alert(`⚠️ ఈ మొబైల్ నంబర్ (+91 ${cleanPhone}) ఇప్పటికే నమోదు చేయబడింది!\n\nమీ అధికారిక సేవక్ ఐడీ: ${existingId}\n\n(This mobile number is already registered! You cannot register twice with the same number. Here is your issued Digital Sevak ID card.)`);
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
+            return;
+          }
+        } catch (dupErr) {
+          console.warn("Duplicate phone verification notice:", dupErr);
+        }
+      }
+
       const kaliYear = getKaliYugamYear(new Date());
       let nextSeq = 1000;
 
-      // 1. ATOMIC SEQUENCE ALLOCATION FROM FIRESTORE
+      // 2. ATOMIC SEQUENCE ALLOCATION FROM FIRESTORE
       if (db) {
         try {
           const counterRef = db.collection('system_counters').doc('volunteer_counter');
@@ -2899,7 +2968,7 @@
         nextSeq = localSeq;
       }
 
-      // 2. CONSTRUCT KALI YUGA SEVAK ID: e.g. 5127-ahs-1000
+      // 3. CONSTRUCT KALI YUGA SEVAK ID: e.g. 5127-ahs-1000
       const sevakId = `${kaliYear}-ahs-${nextSeq}`;
       currentIssuedSevakId = sevakId;
 
@@ -2925,7 +2994,7 @@
         source: 'Official Website'
       };
 
-      // 3. DUAL BACKUP STREAM A: FIREBASE FIRESTORE
+      // 4. DUAL BACKUP STREAM A: FIREBASE FIRESTORE
       if (db) {
         try {
           await db.collection('volunteer_registrations').doc(sevakId).set(regPayload);
@@ -2934,7 +3003,7 @@
         }
       }
 
-      // 4. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
+      // 5. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
       const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
       const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || defaultGasUrl;
       if (gasUrl) {
@@ -2950,7 +3019,7 @@
         }
       }
 
-      // 5. POPULATE DIGITAL SEVAK ID CARD
+      // 6. POPULATE DIGITAL SEVAK ID CARD
       document.getElementById('cardSevakId').textContent = sevakId;
       document.getElementById('cardSevakName').textContent = name;
       document.getElementById('cardSevakPhone').textContent = "+91 " + cleanPhone;
@@ -2962,20 +3031,6 @@
         month: 'short',
         year: 'numeric'
       });
-
-      // 6. WHATSAPP SHARE MESSAGE
-      const shareMsg = 
-        `🚩 జై శ్రీ రామ్! నేను అభయ్ హిందూ సేన (Abhay Hindu Sena) లో ధర్మ సేవకుడిగా చేరాను.\n\n` +
-        `🆔 నా అధికారిక సేవక్ ఐడీ: *${sevakId}*\n` +
-        `👤 పేరు: ${name}\n` +
-        `📍 ప్రాంతం: ${mandal}, ${district} (${state})\n` +
-        `📅 యుగం: ${kaliYear} కలియుగం\n\n` +
-        `సనాతన ధర్మ రక్షణ, దేవాలయాల స్వతంత్రం, నిత్య అన్నదానంలో మీరూ భాగస్వామ్యం అవ్వండి!\n` +
-        `👉 మీ డిజిటల్ సేవక్ ఐడీ ఇక్కడ పొందండి:\nhttps://abhayhindusena.org\n\n` +
-        `#AbhayHinduSena #DharmaSevak #RadhaManoharDas`;
-
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
-      document.getElementById('cardWhatsappBtn').href = waUrl;
 
       // 7. OPEN DIGITAL ID MODAL
       document.getElementById('confirmationModal').classList.add('active');
@@ -2990,6 +3045,122 @@
       submitBtn.disabled = false;
       submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
     }
+  }
+
+  // DOWNLOAD ID CARD AS HIGH-RESOLUTION PNG IMAGE
+  async function downloadSevakIdCard() {
+    const card = document.getElementById('sevakCardArea');
+    const btn = document.getElementById('downloadIdBtn');
+    const origText = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.innerHTML = '⏳ Generating Photo...';
+      btn.disabled = true;
+    }
+
+    try {
+      if (!window.html2canvas) {
+        throw new Error("Image generator is loading. Please wait a moment.");
+      }
+      const canvas = await html2canvas(card, {
+        scale: 3,
+        backgroundColor: '#0d0303',
+        useCORS: true,
+        allowTaint: true
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `AHS_Dharma_Sevak_${currentIssuedSevakId || 'Card'}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Card download error:", err);
+      alert("Could not download card image: " + err.message);
+    } finally {
+      if (btn) {
+        btn.innerHTML = origText;
+        btn.disabled = false;
+      }
+    }
+  }
+
+  // SHARE ON WHATSAPP WITH IMAGE FILE ATTACHED
+  async function shareOnWhatsAppWithImage() {
+    const card = document.getElementById('sevakCardArea');
+    const shareBtn = document.getElementById('cardWhatsappBtn');
+    const name = document.getElementById('cardSevakName').textContent || '';
+    const mandal = document.getElementById('cardSevakMandal').textContent || '';
+    const loc = document.getElementById('cardSevakLocation').textContent || '';
+    const kaliYear = document.getElementById('cardSevakKaliYear').textContent || '5127';
+
+    const shareMsg = 
+      `🚩 జై శ్రీ రామ్! నేను అభయ్ హిందూ సేన (Abhay Hindu Sena) లో ధర్మ సేవకుడిగా చేరాను.\n\n` +
+      `🆔 నా అధికారిక సేవక్ ఐడీ: *${currentIssuedSevakId}*\n` +
+      `👤 పేరు: ${name}\n` +
+      `📍 ప్రాంతం: ${mandal}, ${loc}\n` +
+      `📅 యుగం: ${kaliYear} కలియుగం\n\n` +
+      `సనాతన ధర్మ రక్షణ, దేవాలయాల స్వతంత్రం, నిత్య అన్నదానంలో మీరూ భాగస్వామ్యం అవ్వండి!\n` +
+      `👉 మీ డిజిటల్ సేవక్ ఐడీ ఇక్కడ పొందండి:\nhttps://abhayhindusena.github.io/ahs/#join\n\n` +
+      `#AbhayHinduSena #DharmaSevak #RadhaManoharDas`;
+
+    // Attempt native Web Share with file attachment (Mobile WhatsApp directly attaches the image file)
+    if (navigator.share && window.html2canvas) {
+      try {
+        if (shareBtn) {
+          shareBtn.disabled = true;
+          shareBtn.textContent = '⏳ Preparing Card Image...';
+        }
+
+        const canvas = await html2canvas(card, {
+          scale: 2.5,
+          backgroundColor: '#0d0303',
+          useCORS: true,
+          allowTaint: true
+        });
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (blob) {
+          const file = new File([blob], `AHS_Sevak_${currentIssuedSevakId}.png`, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                title: 'Abhay Hindu Sena - Dharma Sevak ID',
+                text: shareMsg,
+                files: [file]
+              });
+              if (shareBtn) {
+                shareBtn.disabled = false;
+                shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
+              }
+              return;
+            } catch (shErr) {
+              if (shErr.name === 'AbortError') {
+                if (shareBtn) {
+                  shareBtn.disabled = false;
+                  shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
+                }
+                return;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Native file share attempt:", err);
+      } finally {
+        if (shareBtn) {
+          shareBtn.disabled = false;
+          shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
+        }
+      }
+    }
+
+    // Fallback for Desktop: download the card image and open WhatsApp with the text
+    downloadSevakIdCard();
+    setTimeout(() => {
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
+      window.open(waUrl, '_blank');
+    }, 600);
   }
 
   function copySevakId() {

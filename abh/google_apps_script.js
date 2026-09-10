@@ -88,6 +88,27 @@ function doPost(e) {
     var sevakId = data.sevakId || (kaliYear + "-ahs-" + autoSeq);
     var name = data.name || "";
     var phone = data.phone || "";
+    var cleanPhone = String(phone).replace(/[^0-9]/g, '');
+
+    // Duplicate Check in Google Sheet
+    var lastRow = sheet.getLastRow();
+    if (lastRow > 1 && cleanPhone.length >= 10) {
+      var phoneValues = sheet.getRange(2, 3, lastRow - 1, 1).getValues();
+      for (var i = 0; i < phoneValues.length; i++) {
+        var existingP = String(phoneValues[i][0]).replace(/[^0-9]/g, '');
+        if (existingP === cleanPhone) {
+          var existingRowId = sheet.getRange(i + 2, 1).getValue();
+          return ContentService
+            .createTextOutput(JSON.stringify({
+              status: "already_registered",
+              sevakId: existingRowId,
+              message: "Mobile number already registered."
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+    }
+
     var state = data.state || "";
     var district = data.district || "";
     var mandal = data.mandal || "";
