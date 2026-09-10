@@ -1638,18 +1638,153 @@
     margin-top: 14px;
   }
 
-  /* RESPONSIVE QUERIES */
+  /* RESPONSIVE QUERIES - MOBILE ONLY ENHANCEMENTS */
   @media (max-width: 768px) {
+    /* Header Bar */
     .site-header { padding: 10px 4%; }
-    .header-brand-text h1 { font-size: 0.98rem; }
-    .header-brand-text span { font-size: 0.65rem; }
-    .header-btn { padding: 6px 12px; font-size: 0.78rem; }
-    .founder-grid { grid-template-columns: 1fr; }
-    .founder-circle-wrap { width: 220px; height: 220px; }
+    .header-brand-text h1 { font-size: 0.96rem; }
+    .header-brand-text span { font-size: 0.62rem; }
+    .header-btn { padding: 6px 10px; font-size: 0.76rem; }
+
+    /* Floating Glass Navbar */
+    .glass-navbar {
+      max-width: 96vw;
+      padding: 5px 8px;
+      gap: 5px;
+      top: 8px;
+      margin: 6px auto 12px;
+    }
+    .glass-nav-links { gap: 4px; }
+    .glass-nav-links a { font-size: 0.76rem; padding: 4px 7px; }
+    .glass-lang-btn { font-size: 0.72rem; padding: 4px 8px; }
+
+    /* Hero Section */
+    .hero-section { padding: 36px 4% 32px; }
+    .hero-circle-wrap { width: 105px; height: 105px; margin: 0 auto 14px; }
+    .hero-badge { font-size: 0.76rem; padding: 5px 12px; }
+    .hero-title {
+      font-size: clamp(1.75rem, 6.5vw, 2.35rem) !important;
+      line-height: 1.25 !important;
+      padding-top: 6px !important;
+      padding-bottom: 4px !important;
+      margin-bottom: 6px;
+    }
+    .hero-founder-tag { font-size: 1.02rem; margin-bottom: 12px; }
+    .hero-motto-callout { font-size: 0.85rem; padding: 8px 14px; }
+    .hero-lead { font-size: 0.88rem; line-height: 1.65; margin-bottom: 22px; padding: 0 4px; }
+
+    /* 1. HERO ACTION BUTTONS: SIDE-BY-SIDE IN ONE LINE ON MOBILE */
+    .hero-actions {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      justify-content: center !important;
+      align-items: stretch !important;
+      gap: 8px !important;
+      width: 100% !important;
+      max-width: 440px !important;
+      margin: 0 auto !important;
+      padding: 0 4px !important;
+    }
+    .hero-actions .btn {
+      flex: 1 1 50% !important;
+      min-width: 0 !important;
+      padding: 12px 6px !important;
+      font-size: 0.8rem !important;
+      font-weight: 700 !important;
+      white-space: nowrap !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 5px !important;
+      letter-spacing: -0.2px;
+    }
+
+    /* Section Global Spacing & Typography */
+    section { padding: 48px 4%; }
+    .section-header { margin-bottom: 22px; }
+    .eyebrow { font-size: 0.72rem; letter-spacing: 1.5px; margin-bottom: 6px; }
+    .section-title {
+      font-size: clamp(1.45rem, 5.5vw, 1.85rem) !important;
+      line-height: 1.3 !important;
+      margin-bottom: 8px;
+    }
+    .section-sub { font-size: 0.86rem; line-height: 1.6; }
+
+    /* Founder Section */
+    .founder-grid { grid-template-columns: 1fr; gap: 24px; }
+    .founder-photo-card { display: flex; flex-direction: column; align-items: center; }
+    .founder-circle-wrap { width: 210px; height: 210px; }
+    .founder-quote-box { font-size: 0.86rem; padding: 13px 15px; margin: 14px 0; line-height: 1.6; }
+    .founder-details p { font-size: 0.88rem; line-height: 1.65; }
+
+    /* 2. FOUNDER SOCIAL LINKS: ALL 3 IN ONE LINE (YOUTUBE, INSTAGRAM, FACEBOOK) */
+    .founder-actions-row {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      gap: 6px !important;
+      width: 100% !important;
+      margin-top: 16px !important;
+    }
+    .founder-actions-row .pill-btn {
+      flex: 1 1 33.33% !important;
+      min-width: 0 !important;
+      padding: 8px 4px !important;
+      font-size: 0.76rem !important;
+      white-space: nowrap !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 4px !important;
+    }
+
+    /* Missions Grid */
+    .missions-grid { grid-template-columns: 1fr; gap: 16px; }
+    .mission-card { padding: 20px 16px; }
+    .mission-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .mission-card p { font-size: 0.86rem; line-height: 1.6; }
+
+    /* Videos & Gallery */
+    .videos-grid { grid-template-columns: 1fr; gap: 16px; }
+    .gallery-filter-tabs { gap: 6px; margin-bottom: 18px; }
+    .gallery-tab { font-size: 0.76rem; padding: 5px 12px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .gallery-card { height: 145px; }
+
+    /* Community Chat */
+    .community-chat-container { border-radius: 12px; }
+    .chat-messages-wrap { height: 350px; padding: 12px 10px; }
+    .chat-input-area { flex-direction: row; padding: 10px 12px; gap: 8px; }
+
+    /* Dharma Daan (Donation) Section */
     .donate-details-box { grid-template-columns: 1fr; }
     .upi-box { border-right: none; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 18px; padding-right: 0; }
-    .chat-input-area { flex-direction: row; }
-    .form-grid { grid-template-columns: 1fr; }
+    .donate-box { padding: 22px 14px; }
+    .preset-amounts { gap: 6px; }
+    .preset-btn { padding: 7px 10px; font-size: 0.82rem; }
+
+    /* Sevak Enlistment Form */
+    .volunteer-box { padding: 22px 14px; }
+    .form-grid { grid-template-columns: 1fr; gap: 12px; }
+    .onboarding-fields { grid-template-columns: 1fr; gap: 10px; }
+    .form-input { padding: 11px 12px; font-size: 0.88rem; }
+    .terms-preview-box { max-height: 120px; font-size: 0.74rem; padding: 10px; }
+
+    /* Confirmation Modal & ID Card */
+    .modal-content { padding: 18px 12px; max-width: 95vw; margin: 10px auto; }
+    .sevak-card { padding: 16px 10px; }
+    .sevak-id-highlight { font-size: 1.15rem; letter-spacing: 1px; }
+    .sevak-info-grid { grid-template-columns: 1fr; gap: 8px; padding: 10px; }
+    .modal-actions { flex-direction: column; gap: 8px; }
+  }
+
+  /* Extra Small Devices (< 375px) */
+  @media (max-width: 375px) {
+    .hero-actions .btn { font-size: 0.74rem !important; padding: 11px 3px !important; }
+    .founder-actions-row .pill-btn { font-size: 0.70rem !important; padding: 7px 2px !important; }
+    .header-brand-text h1 { font-size: 0.88rem; }
+    .header-btn { padding: 5px 8px; font-size: 0.72rem; }
   }
 </style>
 </head>
