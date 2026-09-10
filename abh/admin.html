@@ -1091,17 +1091,6 @@
             <input type="text" id="photoTitle" class="form-input" placeholder="e.g. Tirupati Youth Conference Address" required>
           </div>
 
-          <!-- Category -->
-          <div class="form-group">
-            <label for="photoCategory">Gallery Category *</label>
-            <select id="photoCategory" class="form-select">
-              <option value="convention">Tirupati Anniversary / Conventions</option>
-              <option value="youth">Youth Defense & Training</option>
-              <option value="seva">Seva & Annadanam</option>
-              <option value="temple">Temple Protection & Poojas</option>
-            </select>
-          </div>
-
           <!-- Status Message -->
           <div id="uploadStatusMsg" style="display:none; margin-bottom: 14px; padding: 10px; border-radius: 8px; font-size: 0.84rem; text-align: center;"></div>
 
@@ -2348,7 +2337,6 @@
     const btn = document.getElementById('btnPublishPhoto');
     const statusMsg = document.getElementById('uploadStatusMsg');
     const title = document.getElementById('photoTitle').value.trim();
-    const category = document.getElementById('photoCategory').value;
     const directUrl = document.getElementById('photoDirectUrl').value.trim();
 
     if (!title) {
@@ -2395,7 +2383,6 @@
 
       await db.collection('gallery_photos').add({
         title: title,
-        category: category,
         imageUrl: finalImageUrl,
         thumbnailUrl: finalThumbUrl || finalImageUrl,
         source: 'Admin Dashboard',
@@ -2467,18 +2454,10 @@
       docs.forEach(data => {
         const id = data.id;
         const title = data.title || 'Untitled Moment';
-        const cat = data.category || 'convention';
         const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
         const dateStr = data.uploadedAt && data.uploadedAt.toDate
           ? data.uploadedAt.toDate().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
           : 'Recent';
-
-        const catNames = {
-          convention: 'Anniversary',
-          youth: 'Youth Defense',
-          seva: 'Seva & Annadanam',
-          temple: 'Temple Protection'
-        };
 
         const escapedTitle = title.replace(/'/g, "\\'");
 
@@ -2486,7 +2465,6 @@
           <div class="gallery-admin-card">
             <div class="gallery-admin-thumb-wrap">
               <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" class="gallery-admin-thumb" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
-              <span class="gallery-admin-badge">${catNames[cat] || cat}</span>
             </div>
             <div class="gallery-admin-body">
               <div class="gallery-admin-title" title="${escapeHtml(title)}">${escapeHtml(title)}</div>

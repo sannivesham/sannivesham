@@ -847,57 +847,51 @@
   }
 
   /* PHOTO GALLERY WITH LIGHTBOX */
-  .gallery-filter-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 26px;
-    flex-wrap: wrap;
-  }
-  .gallery-tab {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(212,175,55,0.25);
-    color: var(--text-muted);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .gallery-tab.active, .gallery-tab:hover {
-    background: var(--gold);
-    color: #000;
-    font-weight: 600;
-  }
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 360px));
+    justify-content: center;
+    gap: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 0;
   }
   .gallery-card {
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     position: relative;
-    height: 230px;
+    height: 290px;
+    width: 100%;
     border: 1px solid var(--border-gold);
     cursor: pointer;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    background: #0d0404;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-bright);
+    box-shadow: 0 10px 28px rgba(212,175,55,0.3);
   }
   .gallery-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top;
+    display: block;
     transition: transform 0.4s ease;
   }
   .gallery-card:hover img { transform: scale(1.06); }
   .gallery-overlay {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 12px;
-    background: linear-gradient(180deg, transparent 0%, rgba(13,4,4,0.95) 100%);
+    padding: 16px 14px 12px;
+    background: linear-gradient(180deg, transparent 0%, rgba(13,4,4,0.7) 40%, rgba(13,4,4,0.98) 100%);
     color: #FFF;
-    font-size: 0.82rem;
-    font-weight: 500;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
 
   /* COMMUNITY CHAT ROOM */
@@ -1821,10 +1815,16 @@
 
     /* Videos & Gallery */
     .videos-grid { grid-template-columns: 1fr; gap: 16px; }
-    .gallery-filter-tabs { gap: 6px; margin-bottom: 18px; }
-    .gallery-tab { font-size: 0.76rem; padding: 5px 12px; }
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .gallery-card { height: 145px; }
+    .gallery-grid { 
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+      gap: 16px; 
+      justify-content: center;
+    }
+    .gallery-card { 
+      height: 250px; 
+      max-width: 360px;
+      margin: 0 auto;
+    }
 
     /* Community Chat Box & Input (Prevents Button from Overflowing) */
     .community-chat-container, .chat-box-container {
@@ -2529,28 +2529,20 @@
     </p>
   </div>
 
-  <div class="gallery-filter-tabs">
-    <button class="gallery-tab active" onclick="filterGallery('all', this)">All / అన్నీ</button>
-    <button class="gallery-tab" onclick="filterGallery('convention', this)">Tirupati Anniversary</button>
-    <button class="gallery-tab" onclick="filterGallery('youth', this)">Youth Defense</button>
-    <button class="gallery-tab" onclick="filterGallery('seva', this)">Seva & Annadanam</button>
-    <button class="gallery-tab" onclick="filterGallery('temple', this)">Temple Protection</button>
-  </div>
-
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-card" data-cat="convention" onclick="openLightbox('assets/founder.jpg', 'Shri Radha Manohar Das addressing thousands of devotees at Tirupati Anniversary')">
+    <div class="gallery-card" onclick="openLightbox('assets/founder.jpg', 'Shri Radha Manohar Das addressing thousands of devotees at Tirupati Anniversary')">
       <img src="assets/founder.jpg" alt="Tirupati Anniversary Convention">
       <div class="gallery-overlay">Tirupati Annual Convention Address</div>
     </div>
-    <div class="gallery-card" data-cat="youth" onclick="openLightbox('assets/hero-desktop.png', 'Youth Awakening & Martial Discipline Rally Banner')">
+    <div class="gallery-card" onclick="openLightbox('assets/hero-desktop.png', 'Youth Awakening & Martial Discipline Rally Banner')">
       <img src="assets/hero-desktop.png" alt="Youth Awakening">
       <div class="gallery-overlay">Youth Awakening Rally</div>
     </div>
-    <div class="gallery-card" data-cat="seva" onclick="openLightbox('assets/hero-mobile.png', 'Dharma Raksha & Seva Camp Highlights')">
+    <div class="gallery-card" onclick="openLightbox('assets/hero-mobile.png', 'Dharma Raksha & Seva Camp Highlights')">
       <img src="assets/hero-mobile.png" alt="Dharma Raksha">
       <div class="gallery-overlay">Dharma Raksha & Cow Protection Drive</div>
     </div>
-    <div class="gallery-card" data-cat="convention" onclick="openLightbox('assets/logo.png', 'Official Crest of Abhay Hindu Sena')">
+    <div class="gallery-card" onclick="openLightbox('assets/logo.png', 'Official Crest of Abhay Hindu Sena')">
       <img src="assets/logo.png" alt="Official Crest" style="object-fit:contain; background:#180808;">
       <div class="gallery-overlay">Official Organization Crest</div>
     </div>
@@ -3092,14 +3084,13 @@
 
       let html = '';
       docs.forEach(data => {
-        const title = data.title || 'Abhay Hindu Sena Event';
-        const cat = data.category || 'convention';
+        const title = data.title || 'Abhay Hindu Sena Moment';
         const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
         const escapedTitle = title.replace(/'/g, "\\'");
         const escapedUrl = imgUrl.replace(/'/g, "\\'");
 
         html += `
-          <div class="gallery-card" data-cat="${escapeHtml(cat)}" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
+          <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
             <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
             <div class="gallery-overlay">${escapeHtml(title)}</div>
           </div>
@@ -3107,18 +3098,6 @@
       });
 
       galleryGrid.innerHTML = html;
-
-      // Re-apply any currently active filter
-      const activeTab = document.querySelector('.gallery-tab.active');
-      if (activeTab) {
-        const catMatch = activeTab.getAttribute('onclick');
-        if (catMatch && catMatch.includes("'")) {
-          const activeCat = catMatch.split("'")[1];
-          if (activeCat && activeCat !== 'all') {
-            filterGallery(activeCat, activeTab);
-          }
-        }
-      }
     }
 
     function fetchPhotos(tryOrdered = true) {
