@@ -390,14 +390,22 @@
 <div class="login-overlay" id="loginOverlay">
   <div class="login-card">
     <div style="font-size:2.4rem; margin-bottom:12px;">🚩</div>
-    <h3>Admin Authorization</h3>
-    <p>Please enter your admin passcode to manage Abhay Hindu Sena videos.</p>
+    <h3>Admin Sign In</h3>
+    <p>Sign in with your Firebase Admin account to manage Abhay Hindu Sena videos.</p>
     <form onsubmit="handleAdminLogin(event)">
-      <div class="form-group">
-        <input type="password" id="passcodeInput" class="form-input" placeholder="Enter Passcode (default: ahs2026)" autofocus required style="text-align:center; font-size:1.1rem; letter-spacing:2px;">
+      <div class="form-group" style="text-align:left; margin-bottom:14px;">
+        <label for="adminEmail" style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px; font-weight:500;">Admin Email</label>
+        <input type="email" id="adminEmail" class="form-input" placeholder="admin@example.com" autofocus required autocomplete="username">
       </div>
-      <button type="submit" class="btn-submit">Unlock Dashboard ➔</button>
-      <div id="loginError" style="color:#e74c3c; font-size:0.8rem; margin-top:10px; display:none;">Incorrect passcode. Please try again.</div>
+      <div class="form-group" style="text-align:left; margin-bottom:18px;">
+        <label for="adminPassword" style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px; font-weight:500;">Admin Password</label>
+        <input type="password" id="adminPassword" class="form-input" placeholder="••••••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="loginBtn" class="btn-submit">Sign In to Dashboard ➔</button>
+      <div id="loginError" style="color:#ff6b6b; background:rgba(255,107,107,0.1); border:1px solid rgba(255,107,107,0.3); border-radius:6px; padding:10px 12px; font-size:0.82rem; margin-top:14px; display:none; text-align:left;"></div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:16px;">
+        🔒 Protected by Firebase Authentication.
+      </div>
     </form>
   </div>
 </div>
@@ -412,6 +420,7 @@
     </div>
   </div>
   <div class="admin-nav">
+    <span id="userEmailBadge" style="font-size:0.8rem; color:var(--gold); background:rgba(212,175,55,0.12); border:1px solid var(--border-gold); padding:5px 12px; border-radius:15px; display:none;"></span>
     <a href="index.html" target="_blank">🌐 View Live Website</a>
     <a href="videos.html" target="_blank">🎬 View Video Library</a>
     <button onclick="handleLogout()">🔒 Logout</button>
@@ -496,6 +505,7 @@
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
@@ -511,34 +521,66 @@
   };
 
   firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // Authentication
-  const ADMIN_PASS = 'ahs2026';
-  function checkAuth() {
-    if (sessionStorage.getItem('ahs_admin_authenticated') === 'true') {
-      document.getElementById('loginOverlay').style.display = 'none';
+  // Listen to Authentication State
+  auth.onAuthStateChanged((user) => {
+    const overlay = document.getElementById('loginOverlay');
+    const badge = document.getElementById('userEmailBadge');
+    if (user) {
+      overlay.style.display = 'none';
+      if (badge) {
+        badge.textContent = '👤 ' + user.email;
+        badge.style.display = 'inline-block';
+      }
       initDashboard();
     } else {
-      document.getElementById('loginOverlay').style.display = 'flex';
+      overlay.style.display = 'flex';
+      if (badge) badge.style.display = 'none';
     }
-  }
+  });
 
-  function handleAdminLogin(e) {
+  async function handleAdminLogin(e) {
     e.preventDefault();
-    const pass = document.getElementById('passcodeInput').value.trim();
-    if (pass === ADMIN_PASS) {
-      sessionStorage.setItem('ahs_admin_authenticated', 'true');
-      document.getElementById('loginOverlay').style.display = 'none';
-      initDashboard();
-    } else {
-      document.getElementById('loginError').style.display = 'block';
+    const email = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const btn = document.getElementById('loginBtn');
+    const errDiv = document.getElementById('loginError');
+
+    errDiv.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = 'Verifying Account... ⏳';
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      console.error("Auth Error:", err);
+      let msg = "Invalid login credentials. Please verify your email & password in Firebase Console.";
+      if (err.code === 'auth/user-not-found') {
+        msg = "User not found. Please create this user in Firebase Console -> Authentication -> Users.";
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        msg = "Incorrect password or credentials. Please try again.";
+      } else if (err.code === 'auth/too-many-requests') {
+        msg = "Too many failed attempts. Please wait a few minutes.";
+      } else if (err.message) {
+        msg = err.message;
+      }
+      errDiv.textContent = msg;
+      errDiv.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In to Dashboard ➔';
     }
   }
 
-  function handleLogout() {
-    sessionStorage.removeItem('ahs_admin_authenticated');
-    window.location.reload();
+  async function handleLogout() {
+    try {
+      await auth.signOut();
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   // YouTube Link Parser
@@ -703,8 +745,6 @@
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag] || tag));
   }
-
-  checkAuth();
 </script>
 </body>
 </html>
