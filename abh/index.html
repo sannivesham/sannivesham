@@ -2136,27 +2136,33 @@
         </div>
 
         <div class="form-grid">
-          <!-- 6. Email (Optional) -->
+          <!-- 6. Referred By / Reference (Optional) -->
+          <div class="form-group form-full">
+            <label for="vReferral" style="color:var(--text-muted);"><span data-en="6. Referred By (Name or Sevak ID)" data-te="6. ఎవరి ద్వారా తెలిసింది? (రిఫరల్)">6. Referred By / Reference (ఎవరి ద్వారా తెలిసింది? - రిఫరల్)</span> <small style="color:#888;">(Optional)</small></label>
+            <input type="text" id="vReferral" class="form-control" placeholder="పేరు లేదా సేవక్ ఐడీ (e.g. Ramesh Sharma or 5127-ahs-1000)">
+          </div>
+
+          <!-- 7. Email (Optional) -->
           <div class="form-group">
-            <label for="vEmail" style="color:var(--text-muted);"><span data-en="6. Email Address" data-te="6. ఈమెయిల్ అడ్రస్">6. Email Address (ఈమెయిల్)</span> <small style="color:#888;">(Optional)</small></label>
+            <label for="vEmail" style="color:var(--text-muted);"><span data-en="7. Email Address" data-te="7. ఈమెయిల్ అడ్రస్">7. Email Address (ఈమెయిల్)</span> <small style="color:#888;">(Optional)</small></label>
             <input type="email" id="vEmail" class="form-control" placeholder="yourname@gmail.com" autocomplete="email">
           </div>
 
-          <!-- 7. Instagram ID (Optional) -->
+          <!-- 8. Instagram ID (Optional) -->
           <div class="form-group">
-            <label for="vInstagram" style="color:var(--text-muted);"><span data-en="7. Instagram ID" data-te="7. ఇన్‌స్టాగ్రామ్ ఐడీ">7. Instagram Handle (ఇన్‌స్టాగ్రామ్)</span> <small style="color:#888;">(Optional)</small></label>
+            <label for="vInstagram" style="color:var(--text-muted);"><span data-en="8. Instagram ID" data-te="8. ఇన్‌స్టాగ్రామ్ ఐడీ">8. Instagram Handle (ఇన్‌స్టాగ్రామ్)</span> <small style="color:#888;">(Optional)</small></label>
             <input type="text" id="vInstagram" class="form-control" placeholder="e.g. @hindu_sevak">
           </div>
 
-          <!-- 8. Any Question (Optional) -->
+          <!-- 9. Any Question (Optional) -->
           <div class="form-group form-full">
-            <label for="vQuestion" style="color:var(--text-muted);"><span data-en="8. Any Question for Abhay Hindu Sena?" data-te="8. ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ తెలపండి">8. Any Question? (ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ రాయండి)</span> <small style="color:#888;">(Optional)</small></label>
+            <label for="vQuestion" style="color:var(--text-muted);"><span data-en="9. Any Question for Abhay Hindu Sena?" data-te="9. ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ తెలపండి">9. Any Question? (ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ రాయండి)</span> <small style="color:#888;">(Optional)</small></label>
             <textarea id="vQuestion" class="form-control" rows="2" placeholder="Ask your question here..."></textarea>
           </div>
 
-          <!-- 9. Any Suggestion (Optional) -->
+          <!-- 10. Any Suggestion (Optional) -->
           <div class="form-group form-full">
-            <label for="vSuggestion" style="color:var(--text-muted);"><span data-en="9. Any Suggestions or Seva Ideas?" data-te="9. మీ సలహాలు / సూచనలు">9. Any Suggestions? (మీ సలహాలు / సూచనలు)</span> <small style="color:#888;">(Optional)</small></label>
+            <label for="vSuggestion" style="color:var(--text-muted);"><span data-en="10. Any Suggestions or Seva Ideas?" data-te="10. మీ సలహాలు / సూచనలు">10. Any Suggestions? (మీ సలహాలు / సూచనలు)</span> <small style="color:#888;">(Optional)</small></label>
             <textarea id="vSuggestion" class="form-control" rows="2" placeholder="Share your suggestions or how you wish to serve..."></textarea>
           </div>
         </div>
@@ -2843,6 +2849,7 @@
     const mandal = document.getElementById('vMandal').value.trim();
 
     // Optional fields
+    const referral = document.getElementById('vReferral') ? document.getElementById('vReferral').value.trim() : '';
     const email = document.getElementById('vEmail') ? document.getElementById('vEmail').value.trim() : '';
     const instagram = document.getElementById('vInstagram') ? document.getElementById('vInstagram').value.trim() : '';
     const question = document.getElementById('vQuestion') ? document.getElementById('vQuestion').value.trim() : '';
@@ -2908,6 +2915,7 @@
         state: state,
         district: district,
         mandal: mandal,
+        referral: referral || 'Direct',
         email: email || 'N/A',
         instagram: instagram || 'N/A',
         question: question || 'N/A',

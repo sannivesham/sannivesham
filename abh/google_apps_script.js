@@ -53,6 +53,7 @@ function doPost(e) {
         "State (రాష్ట్రం)",
         "District / City (జిల్లా)",
         "Mandal / Area (మండలం)",
+        "Referred By (రిఫరల్)",
         "Email (ఈమెయిల్)",
         "Instagram ID (ఇన్‌స్టాగ్రామ్)",
         "Any Question (ప్రశ్న)",
@@ -90,6 +91,7 @@ function doPost(e) {
     var state = data.state || "";
     var district = data.district || "";
     var mandal = data.mandal || "";
+    var referral = data.referral || data.referredBy || "Direct";
     var email = data.email || "N/A";
     var instagram = data.instagram || "N/A";
     var question = data.question || "N/A";
@@ -105,6 +107,7 @@ function doPost(e) {
       state,
       district,
       mandal,
+      referral,
       email,
       instagram,
       question,

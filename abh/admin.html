@@ -909,6 +909,7 @@
               <th>WhatsApp Mobile</th>
               <th>State & District</th>
               <th>Mandal / Area</th>
+              <th>Referred By</th>
               <th>Instagram</th>
               <th>Questions / Suggestions</th>
               <th>Registered At</th>
@@ -917,7 +918,7 @@
           </thead>
           <tbody id="regTableBody">
             <tr>
-              <td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">
+              <td colspan="10" style="text-align:center; padding:40px; color:var(--text-muted);">
                 Loading registered sevaks...
               </td>
             </tr>
@@ -1816,6 +1817,7 @@
       const state = item.state || '';
       const district = item.district || '';
       const mandal = item.mandal || '';
+      const referral = (item.referral && item.referral !== 'Direct') ? item.referral : '-';
       const insta = (item.instagram && item.instagram !== 'N/A') ? item.instagram : '-';
       const hasNote = (item.question && item.question !== 'N/A') || (item.suggestion && item.suggestion !== 'N/A');
       const timeDisplay = item.timestamp || (item.registeredAt && item.registeredAt.toDate ? item.registeredAt.toDate().toLocaleString('en-IN') : '-');
@@ -1833,6 +1835,7 @@
           </td>
           <td>${escapeHtml(district)}, <small style="color:var(--text-muted);">${escapeHtml(state)}</small></td>
           <td>${escapeHtml(mandal)}</td>
+          <td><span style="color:#FFF; font-weight:500;">${escapeHtml(referral)}</span></td>
           <td><span style="color:var(--gold);">${escapeHtml(insta)}</span></td>
           <td>
             ${hasNote ? '<span style="background:rgba(212,175,55,0.2); color:var(--gold-bright); padding:2px 6px; border-radius:4px; font-size:0.75rem;">📝 Has Note</span>' : '<span style="color:#666;">-</span>'}
@@ -1865,7 +1868,8 @@
         const matchName = (item.name || '').toLowerCase().includes(q);
         const matchPhone = (item.phone || '').includes(q);
         const matchMandal = (item.mandal || '').toLowerCase().includes(q);
-        if (!matchId && !matchName && !matchPhone && !matchMandal) {
+        const matchReferral = (item.referral || '').toLowerCase().includes(q);
+        if (!matchId && !matchName && !matchPhone && !matchMandal && !matchReferral) {
           return false;
         }
       }
@@ -1895,6 +1899,7 @@
       "State",
       "District",
       "Mandal / Town",
+      "Referred By",
       "Email",
       "Instagram ID",
       "Any Question",
@@ -1910,6 +1915,7 @@
       `"${(r.state || '').replace(/"/g, '""')}"`,
       `"${(r.district || '').replace(/"/g, '""')}"`,
       `"${(r.mandal || '').replace(/"/g, '""')}"`,
+      `"${(r.referral || 'Direct').replace(/"/g, '""')}"`,
       `"${(r.email || '').replace(/"/g, '""')}"`,
       `"${(r.instagram || '').replace(/"/g, '""')}"`,
       `"${(r.question || '').replace(/"/g, '""')}"`,
@@ -1954,6 +1960,7 @@
         <div><span style="color:var(--text-muted);">State:</span> <strong>${escapeHtml(item.state || '--')}</strong></div>
         <div><span style="color:var(--text-muted);">District:</span> <strong>${escapeHtml(item.district || '--')}</strong></div>
         <div><span style="color:var(--text-muted);">Mandal / Area:</span> <strong>${escapeHtml(item.mandal || '--')}</strong></div>
+        <div><span style="color:var(--text-muted);">Referred By:</span> <strong style="color:var(--gold-bright);">${escapeHtml(item.referral || 'Direct')}</strong></div>
         <div><span style="color:var(--text-muted);">Instagram:</span> <strong>${escapeHtml(item.instagram || '--')}</strong></div>
         <div><span style="color:var(--text-muted);">Email:</span> <strong>${escapeHtml(item.email || '--')}</strong></div>
         <div><span style="color:var(--text-muted);">Registered At:</span> <strong>${escapeHtml(item.timestamp || '--')}</strong></div>
