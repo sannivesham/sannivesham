@@ -981,31 +981,133 @@
   }
   .chat-sender { font-weight: 700; color: var(--gold-bright); }
   .chat-badge {
-    background: rgba(255,107,26,0.2);
-    color: #FFA466;
-    padding: 1px 5px;
+    padding: 2px 7px;
     border-radius: 4px;
     font-size: 0.68rem;
+    font-weight: 600;
+  }
+  .badge-leader {
+    background: linear-gradient(135deg, #FF6B1A, #D4AF37) !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 8px rgba(255,107,26,0.6);
+  }
+  .badge-speaker {
+    background: rgba(255, 159, 67, 0.25) !important;
+    border: 1px solid #FF9F43;
+    color: #FFB067 !important;
+    font-weight: 700 !important;
+  }
+  .badge-core {
+    background: rgba(192, 57, 43, 0.3) !important;
+    border: 1px solid #e74c3c;
+    color: #ff7675 !important;
+    font-weight: 700 !important;
+  }
+  .badge-sevak {
+    background: rgba(212,175,55,0.15) !important;
+    border: 1px solid rgba(212,175,55,0.35);
+    color: var(--gold-bright) !important;
+  }
+  .badge-disabled {
+    background: rgba(120,120,120,0.2) !important;
+    border: 1px solid #777;
+    color: #aaa !important;
   }
   .chat-time { color: #887a6c; }
-  .chat-text { font-size: 0.88rem; color: #FFF; line-height: 1.5; }
+  .chat-text { font-size: 0.88rem; color: #FFF; line-height: 1.5; word-break: break-word; }
+
+  .chat-identity-strip {
+    background: rgba(20,7,7,0.9);
+    border-top: 1px solid var(--border-gold);
+    padding: 9px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .identity-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .avatar-mini {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #000;
+    font-size: 0.65rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-change-identity {
+    background: transparent;
+    border: 1px solid rgba(212,175,55,0.4);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-change-identity:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  .chat-onboarding {
+    padding: 30px 20px;
+    background: rgba(20,7,7,0.95);
+    border-top: 1px solid var(--border-gold);
+    text-align: center;
+  }
+  .onboarding-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .onboarding-card h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+  .onboarding-card p {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    margin-bottom: 16px;
+  }
+  .onboarding-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 600px) {
+    .onboarding-fields { grid-template-columns: 1fr; }
+  }
 
   .chat-input-area {
-    border-top: 1px solid var(--border-gold);
-    padding: 14px 18px;
+    border-top: 1px solid rgba(212,175,55,0.2);
+    padding: 12px 18px;
     background: var(--bg-card);
-    display: grid;
-    grid-template-columns: 130px 130px 1fr 90px;
-    gap: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
   .chat-input {
     background: rgba(0,0,0,0.5);
     border: 1px solid rgba(212,175,55,0.3);
     border-radius: 6px;
-    padding: 8px 10px;
+    padding: 10px 14px;
     color: #FFF;
     font-family: inherit;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
+    flex: 1;
   }
   .chat-input:focus { outline: none; border-color: var(--gold); }
   .chat-send-btn {
@@ -1016,7 +1118,9 @@
     font-weight: 700;
     cursor: pointer;
     transition: background 0.2s;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    padding: 10px 22px;
+    white-space: nowrap;
   }
   .chat-send-btn:hover { background: var(--gold-bright); }
 
@@ -1272,8 +1376,7 @@
     .founder-circle-wrap { width: 220px; height: 220px; }
     .donate-details-box { grid-template-columns: 1fr; }
     .upi-box { border-right: none; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 18px; padding-right: 0; }
-    .chat-input-area { grid-template-columns: 1fr 1fr; }
-    .chat-input-area input:nth-child(3), .chat-input-area button { grid-column: 1 / -1; }
+    .chat-input-area { flex-direction: row; }
     .form-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -1573,60 +1676,57 @@
   <div class="chat-box-container">
     <div class="chat-header">
       <h4>🚩 Dharma Charcha (Live Sevaks Feed)</h4>
-      <span class="chat-online-badge">● 24 Sevaks Active</span>
+      <span class="chat-online-badge" id="chatLiveStatus">● Live Stream</span>
     </div>
 
+    <!-- Live Messages Feed -->
     <div class="chat-feed" id="chatFeed">
-      <!-- Default community posts -->
-      <div class="chat-msg">
-        <div class="chat-avatar">RM</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">Shri Radha Manohar Das</span>
-            <span class="chat-badge">Leader</span>
-            <span class="chat-time">Today, 09:30 AM</span>
-          </div>
-          <div class="chat-text">
-            Jai Shri Ram! "ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి". May all our youth embody the strength of Arjuna and the devotion of Hanuman in every village.
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-msg">
-        <div class="chat-avatar">VK</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">Venkatesh K. (Tirupati)</span>
-            <span class="chat-badge">Active Sevak</span>
-            <span class="chat-time">Today, 10:15 AM</span>
-          </div>
-          <div class="chat-text">
-            Nitya Annadanam preparations are complete at the Tirupati center. Over 600 meals will be served to pilgrims today.
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-msg">
-        <div class="chat-avatar">RS</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">Ramesh Sharma (Vijayawada)</span>
-            <span class="chat-badge">Volunteer</span>
-            <span class="chat-time">Today, 11:40 AM</span>
-          </div>
-          <div class="chat-text">
-            Looking forward to the Youth Martial Camp on Nov 5th. 45 youths from our mandal have registered already!
-          </div>
-        </div>
+      <div style="text-align:center; padding:30px; color:#c7b5a0;">
+        Loading live community messages...
       </div>
     </div>
 
-    <form class="chat-input-area" onsubmit="handleSendChat(event)">
-      <input type="text" id="chatUser" class="chat-input" placeholder="Your Name" required>
-      <input type="text" id="chatCity" class="chat-input" placeholder="District / City" required>
-      <input type="text" id="chatText" class="chat-input" placeholder="Write your message / question..." required>
-      <button type="submit" class="chat-send-btn">Post 💬</button>
-    </form>
+    <!-- ONBOARDING: Enter Name & Place once to fix identity -->
+    <div class="chat-onboarding" id="chatOnboarding" style="display:none;">
+      <div class="onboarding-card">
+        <div style="font-size:2.2rem; margin-bottom:8px;">🚩</div>
+        <h3 data-en="Join Dharma Charcha" data-te="ధర్మ చర్చలో చేరండి">Join Dharma Charcha</h3>
+        <p data-en="Enter your Name and Place once. It will remain fixed so you can message freely."
+           data-te="మీ పేరు మరియు ప్రాంతాన్ని ఒకసారి నమోదు చేయండి. ఆ తర్వాత మీరు సులభంగా సందేశాలు పంపవచ్చు.">
+          Enter your Name and Place once. It will remain fixed so you can message freely.
+        </p>
+        <form onsubmit="handleSaveProfile(event)">
+          <div class="onboarding-fields">
+            <input type="text" id="setupName" class="chat-input" placeholder="Your Full Name (e.g. Ramesh Sharma)" required autocomplete="name">
+            <input type="text" id="setupPlace" class="chat-input" placeholder="Your District / City (e.g. Vijayawada)" required autocomplete="address-level2">
+          </div>
+          <button type="submit" class="chat-send-btn" style="width:100%; margin-top:8px;">
+            Set Identity & Join Chat ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- FIXED IDENTITY BAR & MESSAGE INPUT -->
+    <div id="chatActiveArea" style="display:none;">
+      <div class="chat-identity-strip">
+        <div class="identity-badge">
+          <span class="avatar-mini" id="myAvatarMini">SV</span>
+          <span>Posting as: <strong id="myNameDisplay" style="color:var(--gold-bright);">Sevak</strong> (<span id="myPlaceDisplay">Bharat</span>)</span>
+          <span id="myBadgeDisplay" class="chat-badge badge-sevak">🚩 Sevak</span>
+        </div>
+        <button type="button" class="btn-change-identity" onclick="handleChangeProfile()" title="Change name or place">✏️ Change</button>
+      </div>
+
+      <form class="chat-input-area" id="chatForm" onsubmit="handleSendChat(event)">
+        <input type="text" id="chatText" class="chat-input" placeholder="Write your message / seva report..." required autocomplete="off">
+        <button type="submit" class="chat-send-btn" id="chatSendBtn">Post 💬</button>
+      </form>
+
+      <div id="chatDisabledNotice" style="display:none; color:#ff7675; background:rgba(255,107,107,0.12); padding:10px 18px; font-size:0.84rem; border-top:1px solid rgba(255,107,107,0.3); text-align:center;">
+        🚫 Your posting privileges have been restricted by the Administrator.
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1986,71 +2086,292 @@
     el.classList.add('selected');
   }
 
-  // Community Chat Logic
-  function handleSendChat(e) {
+  // ==========================================
+  // REAL-TIME COMMUNITY CHAT LOGIC (FIRESTORE)
+  // ==========================================
+  let userProfile = null;
+  let isUserDisabled = false;
+
+  function initCommunityChat() {
+    // 1. Check if user already set Name & Place
+    const saved = localStorage.getItem('ahs_user_profile');
+    if (saved) {
+      try {
+        userProfile = JSON.parse(saved);
+      } catch (e) {
+        userProfile = null;
+      }
+    }
+
+    if (userProfile && userProfile.name && userProfile.place) {
+      showChatInputView();
+      listenToUserStatus();
+    } else {
+      showOnboardingView();
+    }
+
+    // 2. Start Real-time Chat Feed Listener
+    listenToCommunityMessages();
+  }
+
+  function showOnboardingView() {
+    const onboarding = document.getElementById('chatOnboarding');
+    const activeArea = document.getElementById('chatActiveArea');
+    if (onboarding) onboarding.style.display = 'block';
+    if (activeArea) activeArea.style.display = 'none';
+  }
+
+  function showChatInputView() {
+    const onboarding = document.getElementById('chatOnboarding');
+    const activeArea = document.getElementById('chatActiveArea');
+    if (onboarding) onboarding.style.display = 'none';
+    if (activeArea) activeArea.style.display = 'block';
+
+    const initials = (userProfile.name || 'SV').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+    document.getElementById('myAvatarMini').textContent = initials;
+    document.getElementById('myNameDisplay').textContent = userProfile.name;
+    document.getElementById('myPlaceDisplay').textContent = userProfile.place;
+    updateBadgeUI(userProfile.role || 'Sevak');
+  }
+
+  function updateBadgeUI(role) {
+    const badgeEl = document.getElementById('myBadgeDisplay');
+    if (!badgeEl) return;
+    badgeEl.className = 'chat-badge';
+    if (role === 'Leader') {
+      badgeEl.classList.add('badge-leader');
+      badgeEl.textContent = '⭐ Leader';
+    } else if (role === 'Active Speaker') {
+      badgeEl.classList.add('badge-speaker');
+      badgeEl.textContent = '🎤 Active Speaker';
+    } else if (role === 'Core Team') {
+      badgeEl.classList.add('badge-core');
+      badgeEl.textContent = '🛡️ Core Member';
+    } else {
+      badgeEl.classList.add('badge-sevak');
+      badgeEl.textContent = '🚩 Sevak';
+    }
+  }
+
+  // Handle Save Initial Profile
+  async function handleSaveProfile(e) {
     e.preventDefault();
-    const name = document.getElementById('chatUser').value.trim();
-    const city = document.getElementById('chatCity').value.trim();
-    const text = document.getElementById('chatText').value.trim();
-    if (!name || !text) return;
+    const name = document.getElementById('setupName').value.trim();
+    const place = document.getElementById('setupPlace').value.trim();
+    if (!name || !place) return;
 
-    const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-    const timeStr = "Just now";
+    // Generate or keep UID
+    const uid = (userProfile && userProfile.uid) ? userProfile.uid : ('sevak_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36));
+    userProfile = {
+      uid: uid,
+      name: name,
+      place: place,
+      role: (userProfile && userProfile.role) ? userProfile.role : 'Sevak'
+    };
+    localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
 
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'chat-msg';
-    msgDiv.innerHTML = `
-      <div class="chat-avatar">${initials}</div>
-      <div class="chat-bubble">
-        <div class="chat-bubble-top">
-          <span class="chat-sender">${escapeHtml(name)} (${escapeHtml(city || 'Bharat')})</span>
-          <span class="chat-badge">Sevak</span>
-          <span class="chat-time">${timeStr}</span>
+    // Register user in Firestore
+    if (db) {
+      try {
+        await db.collection('community_users').doc(uid).set({
+          uid: uid,
+          name: name,
+          place: place,
+          role: userProfile.role || 'Sevak',
+          isDisabled: false,
+          joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } catch (err) {
+        console.warn("User registry sync note:", err);
+      }
+    }
+
+    showChatInputView();
+    listenToUserStatus();
+  }
+
+  function handleChangeProfile() {
+    if (confirm("Do you want to edit your Name and Place?")) {
+      document.getElementById('setupName').value = userProfile.name || '';
+      document.getElementById('setupPlace').value = userProfile.place || '';
+      showOnboardingView();
+    }
+  }
+
+  // Listen to this user's moderation status (Roles / Disable)
+  function listenToUserStatus() {
+    if (!db || !userProfile || !userProfile.uid) return;
+    db.collection('community_users').doc(userProfile.uid).onSnapshot(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        isUserDisabled = data.isDisabled === true;
+        if (data.role) {
+          userProfile.role = data.role;
+          localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
+          updateBadgeUI(data.role);
+        }
+
+        const inputForm = document.getElementById('chatForm');
+        const alertBox = document.getElementById('chatDisabledNotice');
+        if (isUserDisabled) {
+          if (inputForm) inputForm.style.display = 'none';
+          if (alertBox) alertBox.style.display = 'block';
+        } else {
+          if (inputForm) inputForm.style.display = 'flex';
+          if (alertBox) alertBox.style.display = 'none';
+        }
+      }
+    }, err => console.log(err));
+  }
+
+  // Real-time Chat Feed Listener
+  function listenToCommunityMessages() {
+    if (!db) {
+      renderFallbackMessages();
+      return;
+    }
+
+    db.collection('community_messages')
+      .orderBy('createdAt', 'asc')
+      .limitToLast(60)
+      .onSnapshot(snapshot => {
+        const feed = document.getElementById('chatFeed');
+        if (snapshot.empty) {
+          renderFallbackMessages();
+          return;
+        }
+
+        feed.innerHTML = '';
+        snapshot.forEach(doc => {
+          const m = doc.data();
+          if (m.deleted) return;
+          const initials = (m.name || 'Sevak').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+          const timeStr = m.createdAt ? formatChatTime(m.createdAt.toDate()) : 'Recently';
+
+          let badgeClass = 'badge-sevak';
+          let badgeText = '🚩 Sevak';
+          if (m.role === 'Leader') {
+            badgeClass = 'badge-leader';
+            badgeText = '⭐ Leader';
+          } else if (m.role === 'Active Speaker') {
+            badgeClass = 'badge-speaker';
+            badgeText = '🎤 Active Speaker';
+          } else if (m.role === 'Core Team') {
+            badgeClass = 'badge-core';
+            badgeText = '🛡️ Core Member';
+          }
+
+          const msgDiv = document.createElement('div');
+          msgDiv.className = 'chat-msg';
+          msgDiv.innerHTML = `
+            <div class="chat-avatar">${initials}</div>
+            <div class="chat-bubble">
+              <div class="chat-bubble-top">
+                <span class="chat-sender">${escapeHtml(m.name)} <span style="font-weight:400; color:#c7b5a0; font-size:0.75rem;">(${escapeHtml(m.place || 'Bharat')})</span></span>
+                <span class="chat-badge ${badgeClass}">${badgeText}</span>
+                <span class="chat-time">${timeStr}</span>
+              </div>
+              <div class="chat-text">${escapeHtml(m.text)}</div>
+            </div>
+          `;
+          feed.appendChild(msgDiv);
+        });
+
+        // Auto scroll to bottom
+        feed.scrollTop = feed.scrollHeight;
+      }, err => {
+        console.warn("Firestore messages stream error:", err);
+        renderFallbackMessages();
+      });
+  }
+
+  function renderFallbackMessages() {
+    const feed = document.getElementById('chatFeed');
+    feed.innerHTML = `
+      <div class="chat-msg">
+        <div class="chat-avatar" style="background:linear-gradient(135deg,#FF6B1A,#D4AF37);">RM</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">Shri Radha Manohar Das</span>
+            <span class="chat-badge badge-leader">⭐ Leader</span>
+            <span class="chat-time">Today, 09:30 AM</span>
+          </div>
+          <div class="chat-text">
+            Jai Shri Ram! "ధర్మం కోసం ఆలోచించండి... ధర్మంగా జీవించండి". May all our youth embody the strength of Arjuna and the devotion of Hanuman in every village.
+          </div>
         </div>
-        <div class="chat-text">${escapeHtml(text)}</div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar">VK</div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-top">
+            <span class="chat-sender">Venkatesh K. (Tirupati)</span>
+            <span class="chat-badge badge-speaker">🎤 Active Speaker</span>
+            <span class="chat-time">Today, 10:15 AM</span>
+          </div>
+          <div class="chat-text">
+            Nitya Annadanam preparations are complete at the Tirupati center. Over 600 meals will be served to pilgrims today.
+          </div>
+        </div>
       </div>
     `;
+  }
 
-    const feed = document.getElementById('chatFeed');
-    feed.appendChild(msgDiv);
-    feed.scrollTop = feed.scrollHeight;
+  function formatChatTime(date) {
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return isToday ? `Today, ${timeStr}` : `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}`;
+  }
 
-    // Save to localStorage
-    const saved = JSON.parse(localStorage.getItem('ahs_chat_messages') || '[]');
-    saved.push({ name, city, text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-    localStorage.setItem('ahs_chat_messages', JSON.stringify(saved));
+  // Send Chat Message
+  async function handleSendChat(e) {
+    e.preventDefault();
+    if (isUserDisabled) {
+      alert("Your account is currently muted by the Administrator.");
+      return;
+    }
+    if (!userProfile || !userProfile.name) {
+      showOnboardingView();
+      return;
+    }
 
-    document.getElementById('chatText').value = '';
+    const input = document.getElementById('chatText');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById('chatSendBtn');
+    btn.disabled = true;
+
+    try {
+      if (db) {
+        await db.collection('community_messages').add({
+          uid: userProfile.uid,
+          name: userProfile.name,
+          place: userProfile.place,
+          role: userProfile.role || 'Sevak',
+          text: text,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+      input.value = '';
+    } catch (err) {
+      console.error("Failed to post message:", err);
+      alert("Message sending failed. Please check internet connection.");
+    } finally {
+      btn.disabled = false;
+      input.focus();
+    }
   }
 
   function escapeHtml(str) {
-    return str.replace(/[&<>'"]/g, tag => ({
+    return (str || '').replace(/[&<>'"]/g, tag => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag] || tag));
   }
 
-  // Load custom messages from localStorage
-  window.addEventListener('DOMContentLoaded', () => {
-    const saved = JSON.parse(localStorage.getItem('ahs_chat_messages') || '[]');
-    const feed = document.getElementById('chatFeed');
-    saved.forEach(m => {
-      const initials = m.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'chat-msg';
-      msgDiv.innerHTML = `
-        <div class="chat-avatar">${initials}</div>
-        <div class="chat-bubble">
-          <div class="chat-bubble-top">
-            <span class="chat-sender">${escapeHtml(m.name)} (${escapeHtml(m.city || 'Bharat')})</span>
-            <span class="chat-badge">Sevak</span>
-            <span class="chat-time">${m.time || 'Recent'}</span>
-          </div>
-          <div class="chat-text">${escapeHtml(m.text)}</div>
-        </div>
-      `;
-      feed.appendChild(msgDiv);
-    });
-    feed.scrollTop = feed.scrollHeight;
+  document.addEventListener('DOMContentLoaded', () => {
+    initCommunityChat();
   });
 
   // Volunteer Submission

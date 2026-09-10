@@ -328,6 +328,223 @@
     color: #FFF;
   }
 
+  /* TABS */
+  .admin-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-gold);
+    padding-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .admin-tab {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-gold);
+    color: var(--text-muted);
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: inherit;
+  }
+  .admin-tab:hover {
+    background: rgba(212,175,55,0.15);
+    color: var(--text-main);
+  }
+  .admin-tab.active {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
+    color: #000;
+    border-color: var(--gold);
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255,107,26,0.3);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 6000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-card {
+    background: var(--bg-card);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.95);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .role-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  @media (max-width: 500px) {
+    .role-options-grid { grid-template-columns: 1fr; }
+  }
+  .role-opt {
+    position: relative;
+    cursor: pointer;
+  }
+  .role-opt input {
+    position: absolute;
+    opacity: 0;
+  }
+  .role-box {
+    display: block;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-gold);
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .role-opt input:checked + .role-box {
+    background: rgba(212,175,55,0.18);
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(212,175,55,0.3);
+  }
+  .role-box strong {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--gold-bright);
+  }
+  .role-box small {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* CHAT FEED IN DASHBOARD */
+  .admin-chat-feed {
+    height: 480px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 8px;
+    border: 1px solid rgba(212,175,55,0.15);
+  }
+  .admin-chat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .admin-chat-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #000;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .admin-chat-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .admin-chat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .user-click-trigger {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--gold-bright);
+    transition: color 0.2s;
+    text-decoration: underline dotted;
+  }
+  .user-click-trigger:hover {
+    color: var(--saffron);
+  }
+
+  /* SEVAKS LIST */
+  .sevaks-list {
+    max-height: 480px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sevak-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .sevak-item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Badges */
+  .chat-badge {
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .badge-leader {
+    background: linear-gradient(135deg, #FF6B1A, #D4AF37) !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+  }
+  .badge-speaker {
+    background: rgba(255, 159, 67, 0.25) !important;
+    border: 1px solid #FF9F43;
+    color: #FFB067 !important;
+  }
+  .badge-core {
+    background: rgba(192, 57, 43, 0.3) !important;
+    border: 1px solid #e74c3c;
+    color: #ff7675 !important;
+  }
+  .badge-sevak {
+    background: rgba(212,175,55,0.15) !important;
+    border: 1px solid rgba(212,175,55,0.35);
+    color: var(--gold-bright) !important;
+  }
+  .badge-disabled {
+    background: rgba(231, 76, 60, 0.2) !important;
+    border: 1px solid #e74c3c;
+    color: #ff7675 !important;
+  }
+
   /* ALERT TOAST */
   .toast {
     position: fixed;
@@ -435,68 +652,196 @@
     <span style="font-size:0.8rem; color:var(--text-muted);">Real-time Cloud Sync Active</span>
   </div>
 
-  <div class="dashboard-grid">
-    <!-- LEFT: ADD VIDEO FORM -->
-    <div class="dash-card">
-      <h2>➕ Add YouTube Video</h2>
-      <p class="card-desc">Paste any YouTube URL or Video ID. The system will automatically fetch the thumbnail and title.</p>
+  <!-- Navigation Tabs -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" id="tabVideosBtn" onclick="switchAdminTab('videos')">
+      🎬 Video Management (<span id="tabVideoCount">0</span>)
+    </button>
+    <button class="admin-tab" id="tabCommunityBtn" onclick="switchAdminTab('community')">
+      💬 Live Community Chat & Sevaks (<span id="tabMsgCount">0</span>)
+    </button>
+  </div>
 
-      <form id="addVideoForm" onsubmit="handlePublishVideo(event)">
-        <!-- YouTube URL input -->
-        <div class="form-group">
-          <label for="ytUrl">YouTube Link or Video ID *</label>
-          <input type="text" id="ytUrl" class="form-input" placeholder="e.g. https://www.youtube.com/watch?v=..." required oninput="handleUrlInput(this.value)">
+  <!-- VIEW 1: VIDEOS VIEW -->
+  <div id="videosView">
+    <div class="dashboard-grid">
+      <!-- LEFT: ADD VIDEO FORM -->
+      <div class="dash-card">
+        <h2>➕ Add YouTube Video</h2>
+        <p class="card-desc">Paste any YouTube URL or Video ID. The system will automatically fetch the thumbnail and title.</p>
+
+        <form id="addVideoForm" onsubmit="handlePublishVideo(event)">
+          <!-- YouTube URL input -->
+          <div class="form-group">
+            <label for="ytUrl">YouTube Link or Video ID *</label>
+            <input type="text" id="ytUrl" class="form-input" placeholder="e.g. https://www.youtube.com/watch?v=..." required oninput="handleUrlInput(this.value)">
+          </div>
+
+          <!-- Thumbnail Live Preview -->
+          <div class="form-group">
+            <label>Thumbnail Preview</label>
+            <div class="thumb-preview-box">
+              <span class="thumb-placeholder" id="thumbPlaceholder">Paste a link above to preview thumbnail</span>
+              <img id="thumbImg" src="" alt="Thumbnail Preview">
+            </div>
+          </div>
+
+          <!-- Video Title -->
+          <div class="form-group">
+            <label for="videoTitle">Discourse Title *</label>
+            <input type="text" id="videoTitle" class="form-input" placeholder="Enter or auto-fetched title..." required>
+          </div>
+
+          <!-- Category -->
+          <div class="form-group">
+            <label for="videoCategory">Category *</label>
+            <select id="videoCategory" class="form-select">
+              <option value="Bhagavad Gita">Bhagavad Gita</option>
+              <option value="Temple Defense">Temple Defense</option>
+              <option value="Youth & Dharma">Youth & Dharma</option>
+              <option value="Dharma Pravachan">Dharma Pravachan</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="videoDesc">Brief Description (Optional)</label>
+            <textarea id="videoDesc" class="form-textarea" rows="2" placeholder="Brief summary of the discourse..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            🚀 Publish Video to Website
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT: PUBLISHED VIDEOS -->
+      <div class="dash-card">
+        <h2>🎬 Published Videos (<span id="videoCount">0</span>)</h2>
+        <p class="card-desc">All videos currently published in the database. The top 2 automatically appear on the homepage.</p>
+
+        <div class="videos-list" id="publishedVideosList">
+          <div style="text-align:center; padding:40px; color:var(--text-muted);">
+            Loading videos from Firebase...
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Thumbnail Live Preview -->
-        <div class="form-group">
-          <label>Thumbnail Preview</label>
-          <div class="thumb-preview-box">
-            <span class="thumb-placeholder" id="thumbPlaceholder">Paste a link above to preview thumbnail</span>
-            <img id="thumbImg" src="" alt="Thumbnail Preview">
+  <!-- VIEW 2: COMMUNITY VIEW -->
+  <div id="communityView" style="display:none;">
+    <div class="dashboard-grid">
+      <!-- LEFT: Real-time Live Community Chat Feed -->
+      <div class="dash-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h2>💬 Live Community Chat (<span id="adminChatCount">0</span>)</h2>
+          <span class="status-badge" style="font-size:0.75rem; padding:4px 8px; border-radius:12px; background:rgba(46,204,113,0.15); border:1px solid #2ecc71; color:#2ecc71;">● Streaming Live</span>
+        </div>
+        <p class="card-desc">Click on any sender's name to assign roles (Leader, Active Speaker) or disable/mute them.</p>
+
+        <div class="admin-chat-feed" id="adminChatFeed">
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            Loading live community messages...
           </div>
         </div>
 
-        <!-- Video Title -->
-        <div class="form-group">
-          <label for="videoTitle">Discourse Title *</label>
-          <input type="text" id="videoTitle" class="form-input" placeholder="Enter or auto-fetched title..." required>
+        <!-- Admin Quick Broadcast Message -->
+        <form id="adminBroadcastForm" onsubmit="handleAdminBroadcast(event)" style="margin-top:14px; display:flex; gap:8px;">
+          <input type="text" id="adminBroadcastText" class="form-input" placeholder="Broadcast official message as Admin (Abhay Hindu Sena) 🚩..." required style="flex:1;">
+          <button type="submit" class="btn-submit" id="broadcastBtn" style="width:auto; padding:0 20px; white-space:nowrap;">Send 🚩</button>
+        </form>
+      </div>
+
+      <!-- RIGHT: Sevaks & Members Directory -->
+      <div class="dash-card">
+        <h2>👥 Registered Sevaks Directory (<span id="sevakCount">0</span>)</h2>
+        <p class="card-desc">All members who joined the community chat. Search and manage permissions.</p>
+
+        <div style="margin-bottom:14px;">
+          <input type="text" id="searchSevaksInput" class="form-input" placeholder="🔍 Search members by name or city..." oninput="filterSevaks(this.value)">
         </div>
 
-        <!-- Category -->
-        <div class="form-group">
-          <label for="videoCategory">Category *</label>
-          <select id="videoCategory" class="form-select">
-            <option value="Bhagavad Gita">Bhagavad Gita</option>
-            <option value="Temple Defense">Temple Defense</option>
-            <option value="Youth & Dharma">Youth & Dharma</option>
-            <option value="Dharma Pravachan">Dharma Pravachan</option>
-            <option value="General">General</option>
-          </select>
-        </div>
-
-        <!-- Description -->
-        <div class="form-group">
-          <label for="videoDesc">Brief Description (Optional)</label>
-          <textarea id="videoDesc" class="form-textarea" rows="2" placeholder="Brief summary of the discourse..."></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
-          🚀 Publish Video to Website
-        </button>
-      </form>
-    </div>
-
-    <!-- RIGHT: PUBLISHED VIDEOS -->
-    <div class="dash-card">
-      <h2>🎬 Published Videos (<span id="videoCount">0</span>)</h2>
-      <p class="card-desc">All videos currently published in the database. The top 2 automatically appear on the homepage.</p>
-
-      <div class="videos-list" id="publishedVideosList">
-        <div style="text-align:center; padding:40px; color:var(--text-muted);">
-          Loading videos from Firebase...
+        <div class="sevaks-list" id="sevaksList">
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            Loading registered members...
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER MANAGEMENT MODAL -->
+<div class="modal-overlay" id="userManageModal" onclick="closeUserModal()">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-gold); padding-bottom:12px; margin-bottom:16px;">
+      <h3 style="font-family:'Cinzel',serif; color:var(--gold-bright); font-size:1.2rem;" id="modalTitle">Manage Member Permissions</h3>
+      <button onclick="closeUserModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;" aria-label="Close">&times;</button>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-gold); border-radius:10px; padding:14px; margin-bottom:18px; display:flex; align-items:center; gap:14px;">
+      <div class="modal-avatar" id="modalUserAvatar" style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--gold),var(--saffron)); color:#000; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:1rem;">RS</div>
+      <div>
+        <h4 id="modalUserFullName" style="color:#FFF; font-size:1.05rem; margin-bottom:2px;">Ramesh Sharma</h4>
+        <div style="font-size:0.8rem; color:var(--text-muted);">
+          📍 <span id="modalUserPlace">Vijayawada</span> • ID: <code id="modalUserId" style="font-size:0.75rem; color:var(--gold);">sevak_123</code>
+        </div>
+        <div style="margin-top:6px; display:flex; gap:8px; align-items:center;">
+          Status: <span id="modalUserStatusBadge" class="chat-badge badge-sevak">Active</span>
+          Role: <span id="modalUserRoleBadge" class="chat-badge badge-sevak">Sevak</span>
+        </div>
+      </div>
+    </div>
+
+    <form onsubmit="handleSaveUserRole(event)">
+      <div class="form-group">
+        <label style="font-weight:600; color:var(--gold); display:block; margin-bottom:6px;">Assign Member Role / Designation:</label>
+        <div class="role-options-grid">
+          <label class="role-opt">
+            <input type="radio" name="userRole" value="Sevak" id="roleSevak">
+            <span class="role-box">
+              <strong>🚩 Sevak</strong>
+              <small>General community member</small>
+            </span>
+          </label>
+          <label class="role-opt">
+            <input type="radio" name="userRole" value="Leader" id="roleLeader">
+            <span class="role-box">
+              <strong>⭐ Leader</strong>
+              <small>Prominent Dharma leader</small>
+            </span>
+          </label>
+          <label class="role-opt">
+            <input type="radio" name="userRole" value="Active Speaker" id="roleSpeaker">
+            <span class="role-box">
+              <strong>🎤 Active Speaker</strong>
+              <small>Regular contributor / speaker</small>
+            </span>
+          </label>
+          <label class="role-opt">
+            <input type="radio" name="userRole" value="Core Team" id="roleCore">
+            <span class="role-box">
+              <strong>🛡️ Core Member</strong>
+              <small>Abhay Hindu Sena leadership</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
+        <button type="submit" class="btn-submit" id="saveRoleBtn" style="flex:1;">💾 Save Permissions</button>
+        <button type="button" id="toggleDisableBtn" class="btn-action" style="padding:10px 18px; font-size:0.85rem;" onclick="handleToggleDisableUser()">
+          🚫 Disable User (Mute)
+        </button>
+      </div>
+    </form>
+
+    <div style="border-top:1px solid rgba(255,255,255,0.08); margin-top:20px; padding-top:14px;">
+      <button type="button" class="btn-action btn-delete" style="width:100%; text-align:center; padding:10px;" onclick="handleDeleteUserMessages()">
+        🗑️ Delete All Messages by this User
+      </button>
     </div>
   </div>
 </div>
@@ -679,11 +1024,46 @@
     }
   }
 
-  // Real-time List Listener
+  // ==========================================
+  // DASHBOARD TABS
+  // ==========================================
+  function switchAdminTab(tab) {
+    const vTabBtn = document.getElementById('tabVideosBtn');
+    const cTabBtn = document.getElementById('tabCommunityBtn');
+    const vView = document.getElementById('videosView');
+    const cView = document.getElementById('communityView');
+
+    if (tab === 'videos') {
+      vTabBtn.classList.add('active');
+      cTabBtn.classList.remove('active');
+      vView.style.display = 'block';
+      cView.style.display = 'none';
+    } else {
+      cTabBtn.classList.add('active');
+      vTabBtn.classList.remove('active');
+      cView.style.display = 'block';
+      vView.style.display = 'none';
+    }
+  }
+
+  // ==========================================
+  // INITIALIZE DASHBOARD
+  // ==========================================
   function initDashboard() {
+    initVideosListener();
+    initCommunityChatAdmin();
+    initSevaksDirectoryAdmin();
+  }
+
+  // ==========================================
+  // 1. VIDEOS LISTENER
+  // ==========================================
+  function initVideosListener() {
     db.collection('videos').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const listEl = document.getElementById('publishedVideosList');
-      document.getElementById('videoCount').textContent = snapshot.size;
+      const count = snapshot.size;
+      document.getElementById('videoCount').textContent = count;
+      document.getElementById('tabVideoCount').textContent = count;
 
       if (snapshot.empty) {
         listEl.innerHTML = `
@@ -724,7 +1104,7 @@
       });
       listEl.innerHTML = html;
     }, err => {
-      console.error(err);
+      console.error("Videos Listener Error:", err);
       document.getElementById('publishedVideosList').innerHTML = `
         <div style="color:#e74c3c; padding:20px;">
           Firestore connection note: ${err.message}. Make sure your Firestore rules allow read/write.
@@ -733,6 +1113,406 @@
     });
   }
 
+  // ==========================================
+  // 2. LIVE COMMUNITY CHAT (ADMIN VIEW)
+  // ==========================================
+  function initCommunityChatAdmin() {
+    db.collection('community_messages').orderBy('createdAt', 'desc').limit(80).onSnapshot(snapshot => {
+      const feed = document.getElementById('adminChatFeed');
+      const count = snapshot.size;
+      document.getElementById('adminChatCount').textContent = count;
+      document.getElementById('tabMsgCount').textContent = count;
+
+      if (snapshot.empty) {
+        feed.innerHTML = `
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">
+            No messages posted in community chat yet.
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      snapshot.forEach(doc => {
+        const m = doc.data();
+        if (m.deleted) return;
+        const mid = doc.id;
+        const uid = m.uid || 'anon';
+        const name = m.name || 'Sevak';
+        const place = m.place || 'Bharat';
+        const role = m.role || 'Sevak';
+        const text = m.text || '';
+        const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+        const timeStr = m.createdAt ? new Date(m.createdAt.toDate()).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : 'Recent';
+
+        let badgeClass = 'badge-sevak';
+        let badgeText = '🚩 Sevak';
+        if (role === 'Leader') {
+          badgeClass = 'badge-leader';
+          badgeText = '⭐ Leader';
+        } else if (role === 'Active Speaker') {
+          badgeClass = 'badge-speaker';
+          badgeText = '🎤 Active Speaker';
+        } else if (role === 'Core Team') {
+          badgeClass = 'badge-core';
+          badgeText = '🛡️ Core Member';
+        }
+
+        const escapedName = name.replace(/'/g, "\\'");
+        const escapedPlace = place.replace(/'/g, "\\'");
+
+        html += `
+          <div class="admin-chat-card">
+            <div class="admin-chat-avatar" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to manage permissions">
+              ${initials}
+            </div>
+            <div class="admin-chat-content">
+              <div class="admin-chat-top">
+                <div>
+                  <span class="user-click-trigger" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to assign role / disable">
+                    ${escapeHtml(name)}
+                  </span>
+                  <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">📍 ${escapeHtml(place)}</span>
+                  <span class="chat-badge ${badgeClass}" style="margin-left:6px;">${badgeText}</span>
+                </div>
+                <span style="font-size:0.75rem; color:#887a6c;">${timeStr}</span>
+              </div>
+              <div style="font-size:0.86rem; color:#FFF; margin-bottom:8px; line-height:1.4;">
+                ${escapeHtml(text)}
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-action" style="padding:3px 8px; font-size:0.72rem;" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
+                  ⚙️ Manage Member
+                </button>
+                <button class="btn-action btn-delete" style="padding:3px 8px; font-size:0.72rem;" onclick="deleteSingleMessage('${mid}')">
+                  🗑️ Delete Message
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      feed.innerHTML = html;
+    }, err => {
+      console.error("Admin chat stream error:", err);
+    });
+  }
+
+  // Admin Broadcast Message
+  async function handleAdminBroadcast(e) {
+    e.preventDefault();
+    const input = document.getElementById('adminBroadcastText');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById('broadcastBtn');
+    btn.disabled = true;
+
+    try {
+      await db.collection('community_messages').add({
+        uid: 'admin_official',
+        name: 'Abhay Hindu Sena (Official)',
+        place: 'Kendriya Karyalayam',
+        role: 'Leader',
+        text: text,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      input.value = '';
+      showToast("Official announcement posted to community! 🚩");
+    } catch (err) {
+      alert("Error broadcasting message: " + err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  // Delete Single Message
+  async function deleteSingleMessage(msgId) {
+    if (!confirm("Are you sure you want to delete this message from the community chat?")) return;
+    try {
+      await db.collection('community_messages').doc(msgId).delete();
+      showToast("Message removed from chat.");
+    } catch (err) {
+      alert("Error deleting message: " + err.message);
+    }
+  }
+
+  // ==========================================
+  // 3. REGISTERED SEVAKS DIRECTORY
+  // ==========================================
+  let allSevaks = [];
+
+  function initSevaksDirectoryAdmin() {
+    db.collection('community_users').onSnapshot(snapshot => {
+      allSevaks = [];
+      snapshot.forEach(doc => {
+        allSevaks.push({ id: doc.id, ...doc.data() });
+      });
+
+      document.getElementById('sevakCount').textContent = allSevaks.length;
+      renderSevaksList(allSevaks);
+    }, err => {
+      console.error("Sevaks directory error:", err);
+    });
+  }
+
+  function renderSevaksList(sevaks) {
+    const listEl = document.getElementById('sevaksList');
+    if (!sevaks || sevaks.length === 0) {
+      listEl.innerHTML = `
+        <div style="text-align:center; padding:30px; color:var(--text-muted);">
+          No registered community members found.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    sevaks.forEach(s => {
+      const name = s.name || 'Sevak';
+      const place = s.place || 'Bharat';
+      const role = s.role || 'Sevak';
+      const uid = s.uid || s.id;
+      const isDisabled = s.isDisabled === true;
+      const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+
+      let badgeClass = 'badge-sevak';
+      let badgeText = '🚩 Sevak';
+      if (role === 'Leader') {
+        badgeClass = 'badge-leader';
+        badgeText = '⭐ Leader';
+      } else if (role === 'Active Speaker') {
+        badgeClass = 'badge-speaker';
+        badgeText = '🎤 Active Speaker';
+      } else if (role === 'Core Team') {
+        badgeClass = 'badge-core';
+        badgeText = '🛡️ Core Member';
+      }
+
+      const statusBadge = isDisabled 
+        ? `<span class="chat-badge badge-disabled">🔴 Muted</span>`
+        : `<span class="chat-badge" style="background:rgba(46,204,113,0.15); border:1px solid #2ecc71; color:#2ecc71;">🟢 Active</span>`;
+
+      const escapedName = name.replace(/'/g, "\\'");
+      const escapedPlace = place.replace(/'/g, "\\'");
+
+      html += `
+        <div class="sevak-item">
+          <div class="sevak-item-info">
+            <div class="admin-chat-avatar" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
+              ${initials}
+            </div>
+            <div>
+              <div style="font-weight:700; color:var(--gold-bright); font-size:0.92rem; cursor:pointer;" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
+                ${escapeHtml(name)}
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">
+                📍 ${escapeHtml(place)} • ${badgeText}
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${statusBadge}
+            <button class="btn-action" style="padding:4px 10px; font-size:0.75rem;" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
+              Manage ➔
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    listEl.innerHTML = html;
+  }
+
+  function filterSevaks(term) {
+    term = (term || '').toLowerCase().trim();
+    if (!term) {
+      renderSevaksList(allSevaks);
+      return;
+    }
+    const filtered = allSevaks.filter(s => 
+      (s.name || '').toLowerCase().includes(term) || 
+      (s.place || '').toLowerCase().includes(term) ||
+      (s.role || '').toLowerCase().includes(term)
+    );
+    renderSevaksList(filtered);
+  }
+
+  // ==========================================
+  // 4. USER MODERATION MODAL
+  // ==========================================
+  let currentTargetUser = null;
+
+  async function openUserModal(uid, name, place, currentRole) {
+    currentTargetUser = {
+      uid: uid,
+      name: name,
+      place: place,
+      role: currentRole || 'Sevak',
+      isDisabled: false
+    };
+
+    // Check if we have cached details or fetch directly
+    const cached = allSevaks.find(s => s.uid === uid || s.id === uid);
+    if (cached) {
+      currentTargetUser = { ...currentTargetUser, ...cached };
+    } else {
+      try {
+        const snap = await db.collection('community_users').doc(uid).get();
+        if (snap.exists) {
+          currentTargetUser = { ...currentTargetUser, ...snap.data() };
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    // Populate modal fields
+    document.getElementById('modalTitle').textContent = `Manage: ${currentTargetUser.name}`;
+    document.getElementById('modalUserFullName').textContent = currentTargetUser.name;
+    document.getElementById('modalUserPlace').textContent = currentTargetUser.place;
+    document.getElementById('modalUserId').textContent = currentTargetUser.uid;
+
+    const initials = (currentTargetUser.name || 'SV').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+    document.getElementById('modalUserAvatar').textContent = initials;
+
+    // Badges
+    const statusBadge = document.getElementById('modalUserStatusBadge');
+    if (currentTargetUser.isDisabled) {
+      statusBadge.className = 'chat-badge badge-disabled';
+      statusBadge.textContent = '🔴 Muted / Disabled';
+    } else {
+      statusBadge.className = 'chat-badge';
+      statusBadge.style.background = 'rgba(46,204,113,0.15)';
+      statusBadge.style.color = '#2ecc71';
+      statusBadge.textContent = '🟢 Active';
+    }
+
+    const roleBadge = document.getElementById('modalUserRoleBadge');
+    roleBadge.textContent = currentTargetUser.role;
+
+    // Radio selection
+    const role = currentTargetUser.role || 'Sevak';
+    if (role === 'Leader') document.getElementById('roleLeader').checked = true;
+    else if (role === 'Active Speaker') document.getElementById('roleSpeaker').checked = true;
+    else if (role === 'Core Team') document.getElementById('roleCore').checked = true;
+    else document.getElementById('roleSevak').checked = true;
+
+    // Toggle button text
+    const disableBtn = document.getElementById('toggleDisableBtn');
+    if (currentTargetUser.isDisabled) {
+      disableBtn.textContent = '✅ Enable User (Unmute)';
+      disableBtn.style.color = '#2ecc71';
+      disableBtn.style.borderColor = '#2ecc71';
+    } else {
+      disableBtn.textContent = '🚫 Disable User (Mute)';
+      disableBtn.style.color = '#e74c3c';
+      disableBtn.style.borderColor = 'rgba(231,76,60,0.5)';
+    }
+
+    document.getElementById('userManageModal').classList.add('active');
+  }
+
+  function closeUserModal() {
+    document.getElementById('userManageModal').classList.remove('active');
+    currentTargetUser = null;
+  }
+
+  // Save Role
+  async function handleSaveUserRole(e) {
+    e.preventDefault();
+    if (!currentTargetUser || !currentTargetUser.uid) return;
+
+    const selectedRadio = document.querySelector('input[name="userRole"]:checked');
+    const newRole = selectedRadio ? selectedRadio.value : 'Sevak';
+    const btn = document.getElementById('saveRoleBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Saving... ⏳';
+
+    try {
+      // 1. Update user record in community_users
+      await db.collection('community_users').doc(currentTargetUser.uid).set({
+        name: currentTargetUser.name,
+        place: currentTargetUser.place,
+        role: newRole,
+        isDisabled: currentTargetUser.isDisabled || false,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      // 2. Update recent messages by this user to reflect the new role
+      const msgsSnap = await db.collection('community_messages')
+        .where('uid', '==', currentTargetUser.uid)
+        .limit(20)
+        .get();
+
+      const batch = db.batch();
+      msgsSnap.forEach(docSnap => {
+        batch.update(docSnap.ref, { role: newRole });
+      });
+      await batch.commit();
+
+      showToast(`User role updated to "${newRole}"! 🚩`);
+      closeUserModal();
+    } catch (err) {
+      console.error(err);
+      alert("Error saving role: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '💾 Save Permissions';
+    }
+  }
+
+  // Toggle Disable / Enable
+  async function handleToggleDisableUser() {
+    if (!currentTargetUser || !currentTargetUser.uid) return;
+    const newDisabledState = !currentTargetUser.isDisabled;
+    const actionText = newDisabledState ? "DISABLE and MUTE" : "ENABLE and UNMUTE";
+
+    if (!confirm(`Are you sure you want to ${actionText} this user (${currentTargetUser.name})?`)) return;
+
+    try {
+      await db.collection('community_users').doc(currentTargetUser.uid).set({
+        isDisabled: newDisabledState,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      showToast(newDisabledState ? "User has been disabled & muted." : "User has been re-enabled!");
+      closeUserModal();
+    } catch (err) {
+      alert("Error updating user status: " + err.message);
+    }
+  }
+
+  // Delete All Messages by User
+  async function handleDeleteUserMessages() {
+    if (!currentTargetUser || !currentTargetUser.uid) return;
+    if (!confirm(`Are you sure you want to DELETE ALL messages sent by "${currentTargetUser.name}"?`)) return;
+
+    try {
+      const snap = await db.collection('community_messages')
+        .where('uid', '==', currentTargetUser.uid)
+        .get();
+
+      if (snap.empty) {
+        alert("No messages found for this user.");
+        return;
+      }
+
+      const batch = db.batch();
+      snap.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+
+      showToast(`Deleted ${snap.size} message(s) from this user.`);
+      closeUserModal();
+    } catch (err) {
+      alert("Error deleting user messages: " + err.message);
+    }
+  }
+
+  // ==========================================
+  // UTILITIES
+  // ==========================================
   function showToast(msg) {
     const t = document.getElementById('toastMsg');
     t.textContent = msg;
