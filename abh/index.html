@@ -212,7 +212,7 @@
   .hero-section {
     padding: 55px 6% 45px;
     text-align: center;
-    background: radial-gradient(circle at 50% 25%, rgba(122,12,12,0.45) 0%, rgba(13,4,4,0.98) 75%);
+    background: radial-gradient(circle at 50% 25%, rgba(122,12,12,0.45) 0%, rgba(13,4,4,0.78) 75%);
     border-bottom: 1px solid rgba(212,175,55,0.2);
     position: relative;
     overflow: hidden;
@@ -393,7 +393,7 @@
 
   /* FOUNDER BIOGRAPHY WITH CIRCULAR IMAGE */
   .founder-section {
-    background: linear-gradient(180deg, rgba(22,7,7,0.95) 0%, rgba(13,4,4,1) 100%);
+    background: linear-gradient(180deg, rgba(22,7,7,0.85) 0%, rgba(13,4,4,0.88) 100%);
     border-top: 1px solid var(--border-gold);
     border-bottom: 1px solid var(--border-gold);
   }
@@ -1309,7 +1309,7 @@
 
   /* VOLUNTEER SECTION */
   .volunteer-section {
-    background: #080303;
+    background: rgba(8, 3, 3, 0.85);
   }
   .form-container {
     max-width: 760px;
@@ -2069,6 +2069,91 @@
     box-shadow: 0 8px 25px rgba(255,107,26,0.7), 0 0 25px rgba(212,175,55,0.8);
   }
 
+  /* SACRED FLOATING BACKGROUND OBJECTS */
+  .sacred-floating-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .floating-item {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.38;
+    filter: drop-shadow(0 0 16px rgba(255, 107, 26, 0.85)) drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
+    animation: floatUpSacred 20s linear infinite;
+    will-change: transform, opacity;
+  }
+
+  .floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(45px);
+    opacity: 0.32;
+    will-change: transform;
+    animation: floatDriftSacred 22s ease-in-out infinite alternate;
+  }
+
+  /* Individual floating item positions & timing */
+  .f-item-1 { left: 6%; font-size: 2.8rem; animation-duration: 22s; animation-delay: 0s; }
+  .f-item-2 { left: 88%; font-size: 2.6rem; animation-duration: 19s; animation-delay: -5s; }
+  .f-item-3 { left: 20%; font-size: 2.3rem; animation-duration: 25s; animation-delay: -10s; }
+  .f-item-4 { left: 76%; font-size: 2.0rem; animation-duration: 17s; animation-delay: -3s; }
+  .f-item-5 { left: 48%; font-size: 2.5rem; animation-duration: 23s; animation-delay: -8s; }
+  .f-item-6 { left: 12%; font-size: 2.2rem; animation-duration: 21s; animation-delay: -14s; }
+  .f-item-7 { left: 64%; font-size: 2.7rem; animation-duration: 26s; animation-delay: -7s; }
+  .f-item-8 { left: 93%; font-size: 1.8rem; animation-duration: 16s; animation-delay: -11s; }
+  .f-item-9 { left: 32%; font-size: 2.4rem; animation-duration: 24s; animation-delay: -16s; }
+  .f-item-10 { left: 82%; font-size: 2.1rem; animation-duration: 20s; animation-delay: -2s; }
+
+  /* Floating Golden Aura Bokeh Orbs */
+  .f-orb-1 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,107,26,0.45) 0%, transparent 70%); top: 15%; left: 4%; animation-duration: 22s; }
+  .f-orb-2 { width: 340px; height: 340px; background: radial-gradient(circle, rgba(212,175,55,0.4) 0%, transparent 70%); top: 58%; right: 4%; animation-duration: 26s; animation-delay: -6s; }
+  .f-orb-3 { width: 240px; height: 240px; background: radial-gradient(circle, rgba(255,140,0,0.35) 0%, transparent 70%); bottom: 10%; left: 22%; animation-duration: 18s; animation-delay: -12s; }
+  .f-orb-4 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,175,55,0.35) 0%, transparent 70%); top: 32%; right: 28%; animation-duration: 24s; animation-delay: -4s; }
+
+  @keyframes floatUpSacred {
+    0% {
+      transform: translateY(105vh) rotate(0deg) scale(0.85);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.38;
+    }
+    50% {
+      transform: translateY(50vh) rotate(180deg) scale(1.1);
+      opacity: 0.48;
+    }
+    88% {
+      opacity: 0.38;
+    }
+    100% {
+      transform: translateY(-15vh) rotate(360deg) scale(0.9);
+      opacity: 0;
+    }
+  }
+
+  @keyframes floatDriftSacred {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, -45px) scale(1.18); }
+    100% { transform: translate(-45px, 35px) scale(0.92); }
+  }
+
+  /* Ensure all content layers sit cleanly above the floating layer */
+  .hero-circle-wrap, .hero-badge-wrap, .hero-title, .hero-founder-tag, .hero-motto-wrap, .hero-lead, .hero-actions,
+  .section-header, .missions-grid, .founder-grid, .videos-grid, .gallery-grid, .donate-container, .form-container,
+  .community-chat-container, .site-header, .glass-navbar, footer {
+    position: relative;
+    z-index: 2;
+  }
+
   /* RESPECT PREFERS-REDUCED-MOTION */
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
@@ -2087,6 +2172,24 @@
   <div class="glow-orb glow-orb-2"></div>
   <div class="glow-orb glow-orb-3"></div>
   <canvas id="ambientSparksCanvas" class="floating-sparks-canvas"></canvas>
+</div>
+
+<!-- Sacred Floating Background Elements (Symbols, Embers & Glowing Orbs) -->
+<div class="sacred-floating-layer" aria-hidden="true">
+  <div class="floating-item f-item-1">🕉️</div>
+  <div class="floating-item f-item-2">🔱</div>
+  <div class="floating-item f-item-3">🚩</div>
+  <div class="floating-item f-item-4">✨</div>
+  <div class="floating-item f-item-5">🪔</div>
+  <div class="floating-item f-item-6">🕉️</div>
+  <div class="floating-item f-item-7">🔱</div>
+  <div class="floating-item f-item-8">✨</div>
+  <div class="floating-item f-item-9">🚩</div>
+  <div class="floating-item f-item-10">✨</div>
+  <div class="floating-orb f-orb-1"></div>
+  <div class="floating-orb f-orb-2"></div>
+  <div class="floating-orb f-orb-3"></div>
+  <div class="floating-orb f-orb-4"></div>
 </div>
 
 <!-- Top Header Bar with Circular Logo & Main Action Buttons (Donate & Join Us) -->
