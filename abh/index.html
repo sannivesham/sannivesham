@@ -2927,7 +2927,8 @@
       }
 
       // 4. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
-      const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || '';
+      const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
+      const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || defaultGasUrl;
       if (gasUrl) {
         try {
           fetch(gasUrl, {

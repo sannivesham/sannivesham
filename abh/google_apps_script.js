@@ -19,13 +19,25 @@
  * =========================================================================
  */
 
+// ABHAY HINDU SENA - OFFICIAL GOOGLE SHEET ID
+var SPREADSHEET_ID = "1Xgm56f2L8AZIduz_6kR24WYA6_QtTYFhdx9Pg2epPOA";
+
+function getSpreadsheet() {
+  try {
+    if (SPREADSHEET_ID) {
+      return SpreadsheetApp.openById(SPREADSHEET_ID);
+    }
+  } catch(e) {}
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function doPost(e) {
   var lock = LockService.getScriptLock();
   // Wait up to 30 seconds for other concurrent requests to avoid row collision
   lock.tryLock(30000);
 
   try {
-    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var doc = getSpreadsheet();
     var sheet = doc.getSheetByName("Sevaks");
     if (!sheet) {
       sheet = doc.getActiveSheet();

@@ -1741,7 +1741,8 @@
   let allRegistrations = [];
 
   function initVolunteerRegistrationsAdmin() {
-    const storedGasUrl = localStorage.getItem('ahs_gas_url') || '';
+    const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
+    const storedGasUrl = localStorage.getItem('ahs_gas_url') || defaultGasUrl;
     const input = document.getElementById('gasUrlInput');
     if (input && storedGasUrl) input.value = storedGasUrl;
 
@@ -1981,7 +1982,8 @@
   }
 
   function openGasModal() {
-    const stored = localStorage.getItem('ahs_gas_url') || '';
+    const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
+    const stored = localStorage.getItem('ahs_gas_url') || defaultGasUrl;
     const input = document.getElementById('gasUrlInput');
     if (input) input.value = stored;
     document.getElementById('gasModal').classList.add('active');
