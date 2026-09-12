@@ -2289,10 +2289,10 @@
 
   <!-- Top Main Action Buttons (Donate & Join Us) -->
   <div class="header-actions">
-    <a href="#donate" class="header-btn btn-donate-top" data-en="Donate 💛" data-te="విరాళం 💛">
+    <a href="donate.html" class="header-btn btn-donate-top" data-en="Donate 💛" data-te="విరాళం 💛">
       Donate 💛
     </a>
-    <a href="#join" class="header-btn btn-join-top" data-en="Join Us 🚩" data-te="చేరండి 🚩">
+    <a href="join.html" class="header-btn btn-join-top" data-en="Join Us 🚩" data-te="చేరండి 🚩">
       Join Us 🚩
     </a>
   </div>
@@ -2301,12 +2301,14 @@
 <!-- Floating Glass Navbar Pill with Integrated Language Toggle -->
 <nav class="glass-navbar">
   <div class="glass-nav-links">
-    <a href="#home" data-en="Home" data-te="ప్రారంభం">Home</a>
+    <a href="#home" class="active" data-en="Home" data-te="ప్రారంభం">Home</a>
     <a href="#founder" data-en="Founder" data-te="వ్యవస్థాపకులు">Founder</a>
     <a href="#missions" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
-    <a href="#videos" data-en="Videos" data-te="వీడియోలు">Videos</a>
-    <a href="#gallery" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
+    <a href="videos.html" data-en="Videos" data-te="వీడియోలు">Videos</a>
+    <a href="gallery.html" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
     <a href="#community" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
+    <a href="join.html" data-en="Join Us" data-te="చేరండి">Join Us</a>
+    <a href="donate.html" data-en="Donate" data-te="విరాళం">Donate</a>
   </div>
   <span class="glass-divider"></span>
   <!-- Language Toggle Inside Glass Navbar -->
@@ -2342,8 +2344,8 @@
     Standing fearless in the defense of Vedic heritage, sacred temple preservation, youth martial empowerment, and compassionate Sanatana Seva across Andhra Pradesh, Telangana, and all of Bharat.
   </p>
   <div class="hero-actions">
-    <a href="#donate" class="btn btn-donate-hero" data-en="Support Dharma Daan 💛" data-te="ధర్మ దానం చేయండి 💛">Support Dharma Daan 💛</a>
-    <a href="#join" class="btn btn-gold" data-en="Join as a Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">Join as a Sevak 🚩</a>
+    <a href="donate.html" class="btn btn-donate-hero" data-en="Support Dharma Daan 💛" data-te="ధర్మ దానం చేయండి 💛">Support Dharma Daan 💛</a>
+    <a href="join.html" class="btn btn-gold" data-en="Join as a Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">Join as a Sevak 🚩</a>
   </div>
 </section>
 
@@ -2653,173 +2655,6 @@
   </div>
 </section>
 
-<!-- Donate / Dharma Daan Section -->
-<section id="donate" class="donate-section">
-  <div class="section-header">
-    <span class="eyebrow" data-en="Sacred Contribution" data-te="పవిత్ర భాగస్వామ్యం">Sacred Contribution</span>
-    <h2 class="section-title" data-en="Support with Dharma Daan" data-te="ధర్మ దానం & విరాళం">Support with Dharma Daan</h2>
-    <p class="section-sub" data-en="Your sacred support fuels Nitya Annadanam, Gau Samrakshana, temple restoration, and youth training."
-       data-te="మీ పవిత్ర విరాళం నిత్య అన్నదానం, గో సంరక్షణ, పురాతన ఆలయాల పునరుద్ధరణ మరియు యువతకు శిక్షణ అందించడంలో తోడ్పడుతుంది.">
-      Your sacred support fuels Nitya Annadanam, Gau Samrakshana, temple restoration, and youth training.
-    </p>
-  </div>
-
-  <div class="donate-container">
-    <div class="donate-simple-box">
-      <div style="font-size:2.4rem; margin-bottom:2px;">🙏</div>
-      <h3 style="color:var(--gold-bright); font-family:var(--font-heading); font-size:1.35rem; margin-bottom:4px;" data-en="Support Dharma Seva with your Contribution" data-te="ధర్మ సేవకు మీ పవిత్ర విరాళాన్ని అందించండి">
-        Support Dharma Seva with your Contribution
-      </h3>
-      <p style="font-size:0.9rem; color:var(--text-muted); max-width:540px; margin:0 auto 10px;" data-en="You can contribute any amount directly via UPI apps (Google Pay, PhonePe, Paytm, BHIM)." data-te="మీరు ఏదైనా మొత్తాన్ని UPI యాప్స్ (Google Pay, PhonePe, Paytm, BHIM) ద్వారా నేరుగా సమర్పించవచ్చు.">
-        You can contribute any amount directly via UPI apps (Google Pay, PhonePe, Paytm, BHIM).
-      </p>
-
-      <div class="donate-upi-card">
-        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Official UPI ID (అధికారిక UPI ఐడీ)</span>
-        <div class="donate-upi-row">
-          <div class="upi-id-badge" id="ahsUpiIdText">ahsrmdas@gmail.com</div>
-          <button class="btn-copy-upi" onclick="copyUpiId()" id="copyUpiBtn">
-            <span>📋</span> <span id="copyUpiBtnText" data-en="Copy UPI ID" data-te="కాపీ చేయండి">Copy UPI ID</span>
-          </button>
-        </div>
-        <div style="margin-top:10px;">
-          <a href="upi://pay?pa=ahsrmdas@gmail.com&pn=Abhay%20Hindu%20Sena&cu=INR" class="btn-pay-upi" data-en="📱 Pay Directly via UPI App" data-te="📱 నేరుగా UPI యాప్ ద్వారా చెల్లించండి">
-            📱 Pay Directly via UPI App
-          </a>
-        </div>
-      </div>
-
-      <div class="donate-note">
-        <p style="margin-bottom:6px;" data-en="ℹ️ Note: Official Trust Bank account details will be updated here shortly. For now, you can offer your contribution directly via UPI." data-te="ℹ️ గమనిక: అధికారిక ట్రస్ట్ బ్యాంక్ ఖాతా వివరాలు త్వరలో ఇక్కడ పొందుపరచబడతాయి. ప్రస్తుతానికి మీ పవిత్ర విరాళాన్ని నేరుగా UPI ద్వారా సమర్పించవచ్చు.">
-          ℹ️ <strong>Note:</strong> Official Trust Bank account details will be updated here shortly. For now, you can offer your contribution directly via UPI.
-        </p>
-        <p style="font-size:0.8rem; color:#A89885;" data-en="For donation receipts or inquiries, please contact: ahsrmdas@gmail.com" data-te="రసీదులు లేదా సమాచారం కోసం సంప్రదించండి: ahsrmdas@gmail.com">
-          For donation receipts or inquiries, please contact: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright); text-decoration:underline;">ahsrmdas@gmail.com</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Volunteer / Enlist Section -->
-<section id="join" class="volunteer-section">
-  <div class="section-header">
-    <span class="eyebrow" data-en="Join Hands for Dharma" data-te="ధర్మ రక్షణలో మీ వంతు భాగస్వామ్యం">Join Hands for Dharma</span>
-    <h2 class="section-title" data-en="Enlist as a Sevak" data-te="వాలంటీర్ గా నమోదు చేసుకోండి">Enlist as a Sevak</h2>
-    <p class="section-sub" data-en="Join thousands of active volunteers across Bharat. Fill this form to register directly with Abhay Hindu Sena headquarters."
-       data-te="దేశవ్యాప్తంగా వేలాది మంది క్రియాశీల వాలంటీర్లతో కలిసి నడవండి. కేంద్ర కమిటీకి నేరుగా నమోదు చేసుకోవడానికి ఈ ఫారమ్‌ను పూరించండి.">
-      Join thousands of active volunteers across Bharat. Fill this form to register directly with Abhay Hindu Sena headquarters.
-    </p>
-  </div>
-
-  <div class="form-container">
-    <form id="volunteerForm" onsubmit="handleVolunteerSubmit(event)">
-      
-      <!-- PRIMARY MANDATORY FIELDS (1 TO 5) -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:6px;">
-          <span style="font-size:1.1rem; color:var(--gold-bright);">🚩</span>
-          <h4 style="font-size:0.95rem; color:var(--gold-bright); font-family:var(--font-heading); margin:0;" data-en="Primary Information (Required)" data-te="ప్రాథమిక సమాచారం (తప్పనిసరి)">
-            Primary Information (Required / తప్పనిసరి వివరాలు)
-          </h4>
-        </div>
-
-        <div class="form-grid">
-          <!-- 1. Full Name -->
-          <div class="form-group form-full">
-            <label for="vName"><span data-en="1. Full Name *" data-te="1. పూర్తి పేరు *">1. Full Name (పూర్తి పేరు)</span> <span style="color:#FF6B1A;">*</span></label>
-            <input type="text" id="vName" class="form-control" placeholder="మీ పూర్తి పేరు (e.g. Rama Rao)" required autocomplete="name">
-          </div>
-
-          <!-- 2. WhatsApp Mobile -->
-          <div class="form-group">
-            <label for="vPhone"><span data-en="2. WhatsApp Mobile *" data-te="2. వాట్సాప్ మొబైల్ *">2. WhatsApp Mobile (వాట్సాప్ నంబర్)</span> <span style="color:#FF6B1A;">*</span></label>
-            <input type="tel" id="vPhone" class="form-control" placeholder="10-digit number (e.g. 9876543210)" required pattern="[0-9]{10}" maxlength="10" autocomplete="tel">
-            <small style="color:var(--text-muted); font-size:0.75rem;">10 అంకెల మొబైల్ నంబర్ మాత్రమే నమోదు చేయండి</small>
-          </div>
-
-          <!-- 3. State -->
-          <div class="form-group">
-            <label for="vState"><span data-en="3. State *" data-te="3. రాష్ట్రం *">3. State (రాష్ట్రం)</span> <span style="color:#FF6B1A;">*</span></label>
-            <select id="vState" class="form-control" required style="background:#140707;">
-              <option value="" disabled selected>-- రాష్ట్రం ఎంచుకోండి --</option>
-              <option value="Andhra Pradesh">Andhra Pradesh (ఆంధ్రప్రదేశ్)</option>
-              <option value="Telangana">Telangana (తెలంగాణ)</option>
-              <option value="Karnataka">Karnataka (కర్ణాటక)</option>
-              <option value="Tamil Nadu">Tamil Nadu (తమిళనాడు)</option>
-              <option value="Other States of Bharat">Other Bharat (ఇతర భారత రాష్ట్రాలు)</option>
-            </select>
-          </div>
-
-          <!-- 4. District / City -->
-          <div class="form-group">
-            <label for="vDistrict"><span data-en="4. District / City *" data-te="4. జిల్లా / నగరం *">4. District / City (జిల్లా / నగరం)</span> <span style="color:#FF6B1A;">*</span></label>
-            <input type="text" id="vDistrict" class="form-control" placeholder="e.g. Tirupati, Chittoor, Hyderabad..." required>
-          </div>
-
-          <!-- 5. Mandal / Town / Area -->
-          <div class="form-group">
-            <label for="vMandal"><span data-en="5. Mandal / Town / Area *" data-te="5. మండలం / పట్టణం / ప్రాంతం *">5. Mandal / Area (మండలం / ప్రాంతం)</span> <span style="color:#FF6B1A;">*</span></label>
-            <input type="text" id="vMandal" class="form-control" placeholder="e.g. Chandragiri, Alipiri, Madhapur..." required>
-          </div>
-        </div>
-      </div>
-
-      <!-- OPTIONAL DETAILS (6 TO 9) -->
-      <div style="margin-top:24px; margin-bottom:18px;">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.2); padding-bottom:6px;">
-          <span style="font-size:1rem; color:var(--text-muted);">📝</span>
-          <h4 style="font-size:0.9rem; color:var(--text-muted); font-family:var(--font-heading); margin:0;" data-en="Optional Information" data-te="ఐచ్ఛిక వివరాలు (ఇవి లేకపోయినా నమోదు చేయవచ్చు)">
-            Optional Information (ఐచ్ఛిక వివరాలు - ఇవి లేకపోయినా నమోదు పూర్తి అవుతుంది)
-          </h4>
-        </div>
-
-        <div class="form-grid">
-          <!-- 6. Referred By / Reference (Optional) -->
-          <div class="form-group form-full">
-            <label for="vReferral" style="color:var(--text-muted);"><span data-en="6. Referred By (Name or Sevak ID)" data-te="6. ఎవరి ద్వారా తెలిసింది? (రిఫరల్)">6. Referred By / Reference (ఎవరి ద్వారా తెలిసింది? - రిఫరల్)</span> <small style="color:#888;">(Optional)</small></label>
-            <input type="text" id="vReferral" class="form-control" placeholder="పేరు లేదా సేవక్ ఐడీ (e.g. Ramesh Sharma or 5127-ahs-1000)">
-          </div>
-
-          <!-- 7. Email (Optional) -->
-          <div class="form-group">
-            <label for="vEmail" style="color:var(--text-muted);"><span data-en="7. Email Address" data-te="7. ఈమెయిల్ అడ్రస్">7. Email Address (ఈమెయిల్)</span> <small style="color:#888;">(Optional)</small></label>
-            <input type="email" id="vEmail" class="form-control" placeholder="yourname@gmail.com" autocomplete="email">
-          </div>
-
-          <!-- 8. Instagram ID (Optional) -->
-          <div class="form-group">
-            <label for="vInstagram" style="color:var(--text-muted);"><span data-en="8. Instagram ID" data-te="8. ఇన్‌స్టాగ్రామ్ ఐడీ">8. Instagram Handle (ఇన్‌స్టాగ్రామ్)</span> <small style="color:#888;">(Optional)</small></label>
-            <input type="text" id="vInstagram" class="form-control" placeholder="e.g. @hindu_sevak">
-          </div>
-
-          <!-- 9. Any Question (Optional) -->
-          <div class="form-group form-full">
-            <label for="vQuestion" style="color:var(--text-muted);"><span data-en="9. Any Question for Abhay Hindu Sena?" data-te="9. ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ తెలపండి">9. Any Question? (ఏవైనా ప్రశ్నలు ఉంటే ఇక్కడ రాయండి)</span> <small style="color:#888;">(Optional)</small></label>
-            <textarea id="vQuestion" class="form-control" rows="2" placeholder="Ask your question here..."></textarea>
-          </div>
-
-          <!-- 10. Any Suggestion (Optional) -->
-          <div class="form-group form-full">
-            <label for="vSuggestion" style="color:var(--text-muted);"><span data-en="10. Any Suggestions or Seva Ideas?" data-te="10. మీ సలహాలు / సూచనలు">10. Any Suggestions? (మీ సలహాలు / సూచనలు)</span> <small style="color:#888;">(Optional)</small></label>
-            <textarea id="vSuggestion" class="form-control" rows="2" placeholder="Share your suggestions or how you wish to serve..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- SUBMIT BUTTON -->
-      <div class="form-group form-full" style="margin-top:12px;">
-        <button type="submit" id="vSubmitBtn" class="form-submit-btn">
-          🚩 Enlist as Dharma Sevak & Get Official ID 🚩
-        </button>
-        <div style="text-align:center; font-size:0.82rem; color:var(--gold-bright); margin-top:10px;">
-          ⚡ Instant Official Digital Sevak ID will be generated upon registration
-        </div>
-      </div>
-    </form>
-  </div>
-</section>
-
 <!-- Footer -->
 <footer>
   <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="footer-logo">
@@ -2831,11 +2666,11 @@
     <a href="#home">Home</a>
     <a href="#founder">Founder</a>
     <a href="#missions">Missions</a>
-    <a href="#events">Events</a>
-    <a href="#gallery">Gallery</a>
+    <a href="videos.html">Videos</a>
+    <a href="gallery.html">Gallery</a>
     <a href="#community">Community</a>
-    <a href="#donate">Donate</a>
-    <a href="#join">Volunteer</a>
+    <a href="join.html">Join Us</a>
+    <a href="donate.html">Donate</a>
     <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>
   </div>
   <div class="footer-copy">
@@ -2861,82 +2696,6 @@
       Thank you for your devotion! Your seat has been marked for this upcoming event. Details will be communicated via WhatsApp/Email.
     </p>
     <button class="modal-close-btn" onclick="closeRSVPModal()">Confirm & Close</button>
-  </div>
-</div>
-
-<!-- Volunteer Confirmation & Digital Sevak ID Modal -->
-<div class="modal-backdrop" id="confirmationModal">
-  <div class="modal-content" style="max-width: 520px; padding: 22px 18px;">
-    
-    <!-- DIGITAL SEVAK ID BADGE CARD -->
-    <div class="sevak-card-wrapper" id="sevakCardArea">
-      <div class="sevak-card-header">
-        <img src="assets/logo.png" alt="AHS Logo" class="sevak-card-logo">
-        <div style="flex:1;">
-          <div class="sevak-card-org">🚩 ABHAY HINDU SENA</div>
-          <div class="sevak-card-org-te">అభయ్ హిందూ సేన • అధికారిక ధర్మ సేవక్ కార్డ్</div>
-          <div class="sevak-card-sub">OFFICIAL DHARMA SEVAK IDENTITY CARD</div>
-        </div>
-      </div>
-
-      <div class="sevak-id-highlight">
-        <span class="sevak-id-label">SEVAK REGISTRATION ID / సేవక్ ఐడీ:</span>
-        <span class="sevak-id-num" id="cardSevakId">5127-ahs-1000</span>
-      </div>
-
-      <div class="sevak-info-grid">
-        <div class="sevak-info-row">
-          <span class="info-lbl">Sevak Name (పేరు):</span>
-          <strong class="info-val" id="cardSevakName">--</strong>
-        </div>
-        <div class="sevak-info-row">
-          <span class="info-lbl">WhatsApp (మొబైల్):</span>
-          <strong class="info-val" id="cardSevakPhone">--</strong>
-        </div>
-        <div class="sevak-info-row">
-          <span class="info-lbl">District & State:</span>
-          <strong class="info-val" id="cardSevakLocation">--</strong>
-        </div>
-        <div class="sevak-info-row">
-          <span class="info-lbl">Mandal / Town:</span>
-          <strong class="info-val" id="cardSevakMandal">--</strong>
-        </div>
-        <div class="sevak-info-row">
-          <span class="info-lbl">Kali Yugam Year:</span>
-          <strong class="info-val"><span id="cardSevakKaliYear">5127</span> కలి యుగం</strong>
-        </div>
-        <div class="sevak-info-row">
-          <span class="info-lbl">Date of Enlistment:</span>
-          <strong class="info-val" id="cardSevakDate">--</strong>
-        </div>
-      </div>
-
-      <div class="sevak-card-footer">
-        <div class="sevak-motto">“ధర్మో రక్షతి రక్షితః — Protect Dharma, Dharma Protects You”</div>
-        <div class="sevak-auth">Sanctified under the guidance of Shri Radha Manohar Das</div>
-      </div>
-    </div>
-
-    <!-- ACTION BUTTONS -->
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
-      <button type="button" id="cardWhatsappBtn" class="btn-whatsapp-share" onclick="shareOnWhatsAppWithImage()">
-        📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)
-      </button>
-
-      <button type="button" id="downloadIdBtn" class="btn-download-card" onclick="downloadSevakIdCard()">
-        📥 Download ID Card Photo (కార్డ్ డౌన్‌లోడ్ చేసుకోండి)
-      </button>
-
-      <div style="display:flex; gap:10px;">
-        <button type="button" class="btn-copy-id" style="flex:1;" onclick="copySevakId()">
-          📋 Copy ID
-        </button>
-        <button type="button" class="modal-close-btn" style="flex:1;" onclick="closeModal()">
-          Done / మూసివేయండి
-        </button>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -3559,347 +3318,6 @@
   document.addEventListener('DOMContentLoaded', () => {
     initCommunityChat();
   });
-
-  // ==========================================
-  // KALI YUGAM SEVAK ID & DUAL REGISTRATION ENGINE
-  // ==========================================
-
-  /**
-   * Calculates Kali Yugam Year:
-   * Current year is 5127.
-   * Advances to 5128 on Ugadi 2027 (April 7, 2027), 5129 on Ugadi 2028, etc.
-   */
-  function getKaliYugamYear(date = new Date()) {
-    const ugadiDates = {
-      2026: new Date(2026, 2, 19),
-      2027: new Date(2027, 3, 7),
-      2028: new Date(2028, 2, 27),
-      2029: new Date(2029, 3, 14),
-      2030: new Date(2030, 3, 3)
-    };
-
-    if (date < ugadiDates[2027]) {
-      return 5127;
-    }
-    if (date < ugadiDates[2028]) {
-      return 5128;
-    }
-    if (date < ugadiDates[2029]) {
-      return 5129;
-    }
-    if (date < ugadiDates[2030]) {
-      return 5130;
-    }
-    const year = date.getFullYear();
-    return 5128 + (year - 2027);
-  }
-
-  let currentIssuedSevakId = "";
-
-  // Volunteer Submission Handler
-  async function handleVolunteerSubmit(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('vName').value.trim();
-    const phone = document.getElementById('vPhone').value.trim();
-    const state = document.getElementById('vState').value;
-    const district = document.getElementById('vDistrict').value.trim();
-    const mandal = document.getElementById('vMandal').value.trim();
-
-    // Optional fields
-    const referral = document.getElementById('vReferral') ? document.getElementById('vReferral').value.trim() : '';
-    const email = document.getElementById('vEmail') ? document.getElementById('vEmail').value.trim() : '';
-    const instagram = document.getElementById('vInstagram') ? document.getElementById('vInstagram').value.trim() : '';
-    const question = document.getElementById('vQuestion') ? document.getElementById('vQuestion').value.trim() : '';
-    const suggestion = document.getElementById('vSuggestion') ? document.getElementById('vSuggestion').value.trim() : '';
-
-    // Validate 10-digit mobile number
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    if (cleanPhone.length < 10) {
-      alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.\n(Please enter a valid 10-digit WhatsApp mobile number.)");
-      document.getElementById('vPhone').focus();
-      return;
-    }
-
-    const submitBtn = document.getElementById('vSubmitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Registering & Generating Official ID...';
-
-    try {
-      // 1. DUPLICATE CHECK: Verify if mobile number already registered in Firestore
-      if (db) {
-        try {
-          const dupQuery = await db.collection('volunteer_registrations')
-            .where('phone', '==', cleanPhone)
-            .limit(1)
-            .get();
-
-          if (!dupQuery.empty) {
-            const existingRec = dupQuery.docs[0].data();
-            const existingId = existingRec.sevakId || dupQuery.docs[0].id;
-            currentIssuedSevakId = existingId;
-
-            // Populate existing card
-            document.getElementById('cardSevakId').textContent = existingId;
-            document.getElementById('cardSevakName').textContent = existingRec.name || name;
-            document.getElementById('cardSevakPhone').textContent = "+91 " + (existingRec.phone || cleanPhone);
-            document.getElementById('cardSevakLocation').textContent = `${existingRec.district || district}, ${existingRec.state || state}`;
-            document.getElementById('cardSevakMandal').textContent = existingRec.mandal || mandal;
-            document.getElementById('cardSevakKaliYear').textContent = existingRec.kaliYear || getKaliYugamYear();
-            document.getElementById('cardSevakDate').textContent = existingRec.timestamp || 'Already Registered';
-
-            // Open Digital ID Modal
-            document.getElementById('confirmationModal').classList.add('active');
-
-            alert(`⚠️ ఈ మొబైల్ నంబర్ (+91 ${cleanPhone}) ఇప్పటికే నమోదు చేయబడింది!\n\nమీ అధికారిక సేవక్ ఐడీ: ${existingId}\n\n(This mobile number is already registered! You cannot register twice with the same number. Here is your issued Digital Sevak ID card.)`);
-
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
-            return;
-          }
-        } catch (dupErr) {
-          console.warn("Duplicate phone verification notice:", dupErr);
-        }
-      }
-
-      const kaliYear = getKaliYugamYear(new Date());
-      let nextSeq = 1000;
-
-      // 2. ATOMIC SEQUENCE ALLOCATION FROM FIRESTORE
-      if (db) {
-        try {
-          const counterRef = db.collection('system_counters').doc('volunteer_counter');
-          nextSeq = await db.runTransaction(async (transaction) => {
-            const snap = await transaction.get(counterRef);
-            let seq = 1000;
-            if (snap.exists && snap.data() && typeof snap.data().lastSeq === 'number') {
-              seq = Math.max(1000, snap.data().lastSeq + 1);
-            }
-            transaction.set(counterRef, {
-              lastSeq: seq,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            return seq;
-          });
-        } catch (trxErr) {
-          console.warn("Atomic counter fallback:", trxErr);
-          let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
-          localStorage.setItem('ahs_last_seq', localSeq);
-          nextSeq = localSeq;
-        }
-      } else {
-        let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
-        localStorage.setItem('ahs_last_seq', localSeq);
-        nextSeq = localSeq;
-      }
-
-      // 3. CONSTRUCT KALI YUGA SEVAK ID: e.g. 5127-ahs-1000
-      const sevakId = `${kaliYear}-ahs-${nextSeq}`;
-      currentIssuedSevakId = sevakId;
-
-      const now = new Date();
-      const timestampFormatted = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-
-      const regPayload = {
-        sevakId: sevakId,
-        seqNumber: nextSeq,
-        kaliYear: kaliYear,
-        name: name,
-        phone: cleanPhone,
-        state: state,
-        district: district,
-        mandal: mandal,
-        referral: referral || 'Direct',
-        email: email || 'N/A',
-        instagram: instagram || 'N/A',
-        question: question || 'N/A',
-        suggestion: suggestion || 'N/A',
-        registeredAt: (window.firebase && firebase.firestore) ? firebase.firestore.FieldValue.serverTimestamp() : new Date(),
-        timestamp: timestampFormatted,
-        source: 'Official Website'
-      };
-
-      // 4. DUAL BACKUP STREAM A: FIREBASE FIRESTORE
-      if (db) {
-        try {
-          await db.collection('volunteer_registrations').doc(sevakId).set(regPayload);
-        } catch (dbErr) {
-          console.error("Firestore volunteer backup notice:", dbErr);
-        }
-      }
-
-      // 5. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
-      const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
-      const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || defaultGasUrl;
-      if (gasUrl) {
-        try {
-          fetch(gasUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(regPayload)
-          }).catch(err => console.log("Sheets sync triggered"));
-        } catch (gErr) {
-          console.warn("Google Apps Script sync attempt:", gErr);
-        }
-      }
-
-      // 6. POPULATE DIGITAL SEVAK ID CARD
-      document.getElementById('cardSevakId').textContent = sevakId;
-      document.getElementById('cardSevakName').textContent = name;
-      document.getElementById('cardSevakPhone').textContent = "+91 " + cleanPhone;
-      document.getElementById('cardSevakLocation').textContent = `${district}, ${state}`;
-      document.getElementById('cardSevakMandal').textContent = mandal;
-      document.getElementById('cardSevakKaliYear').textContent = kaliYear;
-      document.getElementById('cardSevakDate').textContent = now.toLocaleDateString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      });
-
-      // 7. OPEN DIGITAL ID MODAL
-      document.getElementById('confirmationModal').classList.add('active');
-
-      // Reset form
-      document.getElementById('volunteerForm').reset();
-
-    } catch (err) {
-      console.error("Volunteer registration error:", err);
-      alert("Registration encountered an error: " + err.message + "\nPlease try again or contact headquarters.");
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
-    }
-  }
-
-  // DOWNLOAD ID CARD AS HIGH-RESOLUTION PNG IMAGE
-  async function downloadSevakIdCard() {
-    const card = document.getElementById('sevakCardArea');
-    const btn = document.getElementById('downloadIdBtn');
-    const origText = btn ? btn.innerHTML : '';
-    if (btn) {
-      btn.innerHTML = '⏳ Generating Photo...';
-      btn.disabled = true;
-    }
-
-    try {
-      if (!window.html2canvas) {
-        throw new Error("Image generator is loading. Please wait a moment.");
-      }
-      const canvas = await html2canvas(card, {
-        scale: 3,
-        backgroundColor: '#0d0303',
-        useCORS: true,
-        allowTaint: true
-      });
-      const dataUrl = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = `AHS_Dharma_Sevak_${currentIssuedSevakId || 'Card'}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error("Card download error:", err);
-      alert("Could not download card image: " + err.message);
-    } finally {
-      if (btn) {
-        btn.innerHTML = origText;
-        btn.disabled = false;
-      }
-    }
-  }
-
-  // SHARE ON WHATSAPP WITH IMAGE FILE ATTACHED
-  async function shareOnWhatsAppWithImage() {
-    const card = document.getElementById('sevakCardArea');
-    const shareBtn = document.getElementById('cardWhatsappBtn');
-    const name = document.getElementById('cardSevakName').textContent || '';
-    const mandal = document.getElementById('cardSevakMandal').textContent || '';
-    const loc = document.getElementById('cardSevakLocation').textContent || '';
-    const kaliYear = document.getElementById('cardSevakKaliYear').textContent || '5127';
-
-    const shareMsg = 
-      `🚩 జై శ్రీ రామ్! నేను అభయ్ హిందూ సేన (Abhay Hindu Sena) లో ధర్మ సేవకుడిగా చేరాను.\n\n` +
-      `🆔 నా అధికారిక సేవక్ ఐడీ: *${currentIssuedSevakId}*\n` +
-      `👤 పేరు: ${name}\n` +
-      `📍 ప్రాంతం: ${mandal}, ${loc}\n` +
-      `📅 యుగం: ${kaliYear} కలియుగం\n\n` +
-      `సనాతన ధర్మ రక్షణ, దేవాలయాల స్వతంత్రం, నిత్య అన్నదానంలో మీరూ భాగస్వామ్యం అవ్వండి!\n` +
-      `👉 మీ డిజిటల్ సేవక్ ఐడీ ఇక్కడ పొందండి:\nhttps://abhayhindusena.github.io/ahs/#join\n\n` +
-      `#AbhayHinduSena #DharmaSevak #RadhaManoharDas`;
-
-    // Attempt native Web Share with file attachment (Mobile WhatsApp directly attaches the image file)
-    if (navigator.share && window.html2canvas) {
-      try {
-        if (shareBtn) {
-          shareBtn.disabled = true;
-          shareBtn.textContent = '⏳ Preparing Card Image...';
-        }
-
-        const canvas = await html2canvas(card, {
-          scale: 2.5,
-          backgroundColor: '#0d0303',
-          useCORS: true,
-          allowTaint: true
-        });
-
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-        if (blob) {
-          const file = new File([blob], `AHS_Sevak_${currentIssuedSevakId}.png`, { type: 'image/png' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-              await navigator.share({
-                title: 'Abhay Hindu Sena - Dharma Sevak ID',
-                text: shareMsg,
-                files: [file]
-              });
-              if (shareBtn) {
-                shareBtn.disabled = false;
-                shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
-              }
-              return;
-            } catch (shErr) {
-              if (shErr.name === 'AbortError') {
-                if (shareBtn) {
-                  shareBtn.disabled = false;
-                  shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
-                }
-                return;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        console.warn("Native file share attempt:", err);
-      } finally {
-        if (shareBtn) {
-          shareBtn.disabled = false;
-          shareBtn.innerHTML = '📲 Share ID + Card on WhatsApp (వాట్సాప్‌లో షేర్ చేయండి)';
-        }
-      }
-    }
-
-    // Fallback for Desktop: download the card image and open WhatsApp with the text
-    downloadSevakIdCard();
-    setTimeout(() => {
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
-      window.open(waUrl, '_blank');
-    }, 600);
-  }
-
-  function copySevakId() {
-    if (!currentIssuedSevakId) return;
-    navigator.clipboard.writeText(currentIssuedSevakId).then(() => {
-      alert(`Sevak ID copied: ${currentIssuedSevakId} 🚩\n(సేవక్ ఐడీ కాపీ చేయబడింది)`);
-    }).catch(() => {
-      prompt("Your Sevak ID:", currentIssuedSevakId);
-    });
-  }
-
-  function closeModal() {
-    document.getElementById('confirmationModal').classList.remove('active');
-  }
 
   // =========================================================================
   // SACRED AMBIENT FLOATING SPARKS & SCROLL REVEAL SCRIPT
