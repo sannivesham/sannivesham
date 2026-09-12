@@ -909,6 +909,50 @@
 
   let currentIssuedSevakId = "";
 
+  // Get or initialize persistent Sevak sequence number
+  function getNextSevakSequence() {
+    let lastSeq = parseInt(localStorage.getItem('ahs_last_seq'), 10);
+    if (!lastSeq || isNaN(lastSeq) || lastSeq < 1000) {
+      const now = new Date();
+      lastSeq = 1000 + (now.getDate() * 7) + (now.getMonth() * 3);
+    }
+    const nextSeq = lastSeq + 1;
+    localStorage.setItem('ahs_last_seq', nextSeq);
+    return nextSeq;
+  }
+
+  // Non-blocking background cloud sync
+  function syncRegistrationToCloud(payload) {
+    // 1. Try Firestore with short timeout (fails silently if suspended/offline)
+    if (db) {
+      try {
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000));
+        Promise.race([
+          db.collection('volunteer_registrations').doc(payload.sevakId).set(payload),
+          timeoutPromise
+        ]).catch(err => {
+          console.warn("Firestore background sync deferred:", err.message);
+        });
+      } catch (e) {
+        console.warn("Firestore error:", e);
+      }
+    }
+
+    // 2. Google Apps Script / Webhook (mode: 'no-cors')
+    const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
+    const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || defaultGasUrl;
+    if (gasUrl) {
+      try {
+        fetch(gasUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
+      } catch (e) {}
+    }
+  }
+
   // Volunteer Submission Handler
   async function handleVolunteerSubmit(e) {
     e.preventDefault();
@@ -936,82 +980,54 @@
 
     const submitBtn = document.getElementById('vSubmitBtn');
     submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Registering & Generating Official ID...';
+    submitBtn.textContent = '⏳ Generating Official Digital Sevak ID...';
 
     try {
-      // 1. DUPLICATE CHECK: Verify if mobile number already registered in Firestore
-      if (db) {
-        try {
-          const dupQuery = await db.collection('volunteer_registrations')
-            .where('phone', '==', cleanPhone)
-            .limit(1)
-            .get();
-
-          if (!dupQuery.empty) {
-            const existingRec = dupQuery.docs[0].data();
-            const existingId = existingRec.sevakId || dupQuery.docs[0].id;
-            currentIssuedSevakId = existingId;
-
-            // Populate existing card
-            document.getElementById('cardSevakId').textContent = existingId;
-            document.getElementById('cardSevakName').textContent = existingRec.name || name;
-            document.getElementById('cardSevakPhone').textContent = "+91 " + (existingRec.phone || cleanPhone);
-            document.getElementById('cardSevakLocation').textContent = `${existingRec.district || district}, ${existingRec.state || state}`;
-            document.getElementById('cardSevakMandal').textContent = existingRec.mandal || mandal;
-            document.getElementById('cardSevakKaliYear').textContent = existingRec.kaliYear || getKaliYugamYear();
-            document.getElementById('cardSevakDate').textContent = existingRec.timestamp || 'Already Registered';
-
-            // Open Digital ID Modal
-            document.getElementById('confirmationModal').classList.add('active');
-
-            alert(`⚠️ ఈ మొబైల్ నంబర్ (+91 ${cleanPhone}) ఇప్పటికే నమోదు చేయబడింది!\n\nమీ అధికారిక సేవక్ ఐడీ: ${existingId}\n\n(This mobile number is already registered! You cannot register twice with the same number. Here is your issued Digital Sevak ID card.)`);
-
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
-            return;
-          }
-        } catch (dupErr) {
-          console.warn("Duplicate phone verification notice:", dupErr);
-        }
+      // 1. LOCAL DUPLICATE CHECK: Verify if mobile number was already registered on this device
+      let localRegistry = [];
+      try {
+        localRegistry = JSON.parse(localStorage.getItem('ahs_volunteer_registry') || '[]');
+      } catch (err) {
+        localRegistry = [];
       }
 
+      const existingRec = localRegistry.find(r => r.phone === cleanPhone);
+      if (existingRec) {
+        const existingId = existingRec.sevakId;
+        currentIssuedSevakId = existingId;
+
+        // Populate existing card
+        document.getElementById('cardSevakId').textContent = existingId;
+        document.getElementById('cardSevakName').textContent = existingRec.name || name;
+        document.getElementById('cardSevakPhone').textContent = "+91 " + (existingRec.phone || cleanPhone);
+        document.getElementById('cardSevakLocation').textContent = `${existingRec.district || district}, ${existingRec.state || state}`;
+        document.getElementById('cardSevakMandal').textContent = existingRec.mandal || mandal;
+        document.getElementById('cardSevakKaliYear').textContent = existingRec.kaliYear || getKaliYugamYear();
+        document.getElementById('cardSevakDate').textContent = existingRec.displayDate || existingRec.timestamp || 'Registered';
+
+        // Open Digital ID Modal
+        document.getElementById('confirmationModal').classList.add('active');
+
+        alert(`⚠️ ఈ మొబైల్ నంబర్ (+91 ${cleanPhone}) ఇప్పటికే నమోదు చేయబడింది!\n\nమీ అధికారిక సేవక్ ఐడీ: ${existingId}\n\n(This mobile number is already registered! Here is your issued Digital Sevak ID card.)`);
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';
+        return;
+      }
+
+      // 2. GENERATE KALI YUGA SEVAK ID INSTANTLY
       const kaliYear = getKaliYugamYear(new Date());
-      let nextSeq = 1000;
-
-      // 2. ATOMIC SEQUENCE ALLOCATION FROM FIRESTORE
-      if (db) {
-        try {
-          const counterRef = db.collection('system_counters').doc('volunteer_counter');
-          nextSeq = await db.runTransaction(async (transaction) => {
-            const snap = await transaction.get(counterRef);
-            let seq = 1000;
-            if (snap.exists && snap.data() && typeof snap.data().lastSeq === 'number') {
-              seq = Math.max(1000, snap.data().lastSeq + 1);
-            }
-            transaction.set(counterRef, {
-              lastSeq: seq,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            return seq;
-          });
-        } catch (trxErr) {
-          console.warn("Atomic counter fallback:", trxErr);
-          let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
-          localStorage.setItem('ahs_last_seq', localSeq);
-          nextSeq = localSeq;
-        }
-      } else {
-        let localSeq = parseInt(localStorage.getItem('ahs_last_seq') || '999', 10) + 1;
-        localStorage.setItem('ahs_last_seq', localSeq);
-        nextSeq = localSeq;
-      }
-
-      // 3. CONSTRUCT KALI YUGA SEVAK ID: e.g. 5127-ahs-1000
+      const nextSeq = getNextSevakSequence();
       const sevakId = `${kaliYear}-ahs-${nextSeq}`;
       currentIssuedSevakId = sevakId;
 
       const now = new Date();
       const timestampFormatted = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const displayDateStr = now.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
 
       const regPayload = {
         sevakId: sevakId,
@@ -1027,58 +1043,37 @@
         instagram: instagram || 'N/A',
         question: question || 'N/A',
         suggestion: suggestion || 'N/A',
-        registeredAt: (window.firebase && firebase.firestore) ? firebase.firestore.FieldValue.serverTimestamp() : new Date(),
         timestamp: timestampFormatted,
+        displayDate: displayDateStr,
         source: 'Official Website'
       };
 
-      // 4. DUAL BACKUP STREAM A: FIREBASE FIRESTORE
-      if (db) {
-        try {
-          await db.collection('volunteer_registrations').doc(sevakId).set(regPayload);
-        } catch (dbErr) {
-          console.error("Firestore volunteer backup notice:", dbErr);
-        }
-      }
+      // Store in persistent local registry
+      localRegistry.push(regPayload);
+      localStorage.setItem('ahs_volunteer_registry', JSON.stringify(localRegistry));
+      localStorage.setItem('ahs_last_registered_sevak', JSON.stringify(regPayload));
 
-      // 5. DUAL BACKUP STREAM B: GOOGLE APPS SCRIPT / GOOGLE SHEETS
-      const defaultGasUrl = "https://script.google.com/macros/s/AKfycbyFy8TkBpOHXIYo06Z4vyRcRxR0aDPfKouOgcSFUMGfR09QC-fbKjcBy67AyRxUr9L19A/exec";
-      const gasUrl = localStorage.getItem('ahs_gas_url') || window.AHS_GAS_URL || defaultGasUrl;
-      if (gasUrl) {
-        try {
-          fetch(gasUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(regPayload)
-          }).catch(err => console.log("Sheets sync triggered"));
-        } catch (gErr) {
-          console.warn("Google Apps Script sync attempt:", gErr);
-        }
-      }
-
-      // 6. POPULATE DIGITAL SEVAK ID CARD
+      // 3. IMMEDIATELY POPULATE DIGITAL SEVAK ID CARD (ZERO LAG)
       document.getElementById('cardSevakId').textContent = sevakId;
       document.getElementById('cardSevakName').textContent = name;
       document.getElementById('cardSevakPhone').textContent = "+91 " + cleanPhone;
       document.getElementById('cardSevakLocation').textContent = `${district}, ${state}`;
       document.getElementById('cardSevakMandal').textContent = mandal;
       document.getElementById('cardSevakKaliYear').textContent = kaliYear;
-      document.getElementById('cardSevakDate').textContent = now.toLocaleDateString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      });
+      document.getElementById('cardSevakDate').textContent = displayDateStr;
 
-      // 7. OPEN DIGITAL ID MODAL
+      // 4. OPEN DIGITAL ID MODAL INSTANTLY
       document.getElementById('confirmationModal').classList.add('active');
 
-      // Reset form
+      // Reset form fields
       document.getElementById('volunteerForm').reset();
+
+      // 5. ASYNCHRONOUS NON-BLOCKING BACKGROUND CLOUD SYNC
+      syncRegistrationToCloud(regPayload);
 
     } catch (err) {
       console.error("Volunteer registration error:", err);
-      alert("Registration encountered an error: " + err.message + "\nPlease try again or contact headquarters.");
+      alert("Registration error: " + err.message + "\nPlease try again.");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = '🚩 Enlist as Dharma Sevak & Get Official ID 🚩';

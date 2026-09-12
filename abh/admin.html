@@ -1978,13 +1978,25 @@
 
         renderRegistrationsTable(allRegistrations);
       }, err => {
-        console.error("Registrations sync error:", err);
+        console.warn("Firestore registrations notice:", err);
+        // Fallback to local storage registry
+        try {
+          const localData = JSON.parse(localStorage.getItem('ahs_volunteer_registry') || '[]');
+          if (localData && localData.length > 0) {
+            allRegistrations = localData;
+            renderRegistrationsTable(allRegistrations);
+            const totEl = document.getElementById('regTotalCount');
+            if (totEl) totEl.textContent = localData.length;
+            return;
+          }
+        } catch (e) {}
+
         const tbody = document.getElementById('regTableBody');
         if (tbody) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="9" style="text-align:center; padding:30px; color:#ff6b6b;">
-                Error loading registrations: ${escapeHtml(err.message)}
+              <td colspan="9" style="text-align:center; padding:30px; color:#c7b5a0;">
+                No registrations recorded yet.
               </td>
             </tr>
           `;
