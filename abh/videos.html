@@ -107,6 +107,16 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 18px rgba(212,175,55,0.6);
   }
+  .btn-community-top {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+  }
+  .btn-community-top:hover {
+    background: rgba(212,175,55,0.22);
+    border-color: var(--gold-bright);
+    color: #FFF;
+  }
   .btn-join-top {
     background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
     color: #FFF;
@@ -546,6 +556,12 @@
     font-family: 'Mandali', 'Noto Sans Telugu', serif;
     line-height: 1.4 !important;
   }
+
+  @media (max-width: 768px) {
+    .site-header { padding: 10px 4%; }
+    .header-actions { gap: 6px; }
+    .header-btn { padding: 5px 8px; font-size: 0.72rem; gap: 3px; }
+  }
 </style>
 </head>
 <body>
@@ -560,6 +576,7 @@
     </div>
   </a>
   <div class="header-actions">
+    <a href="community.html" class="header-btn btn-community-top" data-en="Community 💬" data-te="కమ్యూనిటీ 💬">Community 💬</a>
     <a href="donate.html" class="header-btn btn-donate-top" data-en="Donate 💛" data-te="విరాళం 💛">Donate 💛</a>
     <a href="join.html" class="header-btn btn-join-top" data-en="Join Us 🚩" data-te="చేరండి 🚩">Join Us 🚩</a>
   </div>
@@ -573,7 +590,7 @@
     <a href="index.html#missions">Missions</a>
     <a href="videos.html" class="active">Videos</a>
     <a href="gallery.html">Gallery</a>
-    <a href="index.html#community">Community</a>
+    <a href="community.html">Community</a>
     <a href="join.html">Join Us</a>
     <a href="donate.html">Donate</a>
   </div>
@@ -638,6 +655,7 @@
     <a href="index.html#missions">Missions</a>
     <a href="videos.html">Videos</a>
     <a href="gallery.html">Gallery</a>
+    <a href="community.html">Community</a>
     <a href="join.html">Join Us</a>
     <a href="donate.html">Donate</a>
     <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>

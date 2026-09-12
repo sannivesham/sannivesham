@@ -115,6 +115,17 @@
     transition: all 0.25s ease;
     white-space: nowrap;
   }
+  .btn-community-top {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+  }
+  .btn-community-top:hover {
+    background: rgba(212, 175, 55, 0.22);
+    border-color: var(--gold-bright);
+    color: #FFF;
+    transform: translateY(-2px);
+  }
   .btn-donate-top {
     background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
     color: #000;
@@ -1205,352 +1216,167 @@
   }
   .chat-send-btn:hover { background: var(--gold-bright); }
 
-  /* DONATE SECTION */
-  .donate-section {
-    background: linear-gradient(135deg, rgba(61,5,5,0.8) 0%, rgba(122,12,12,0.6) 50%, rgba(13,4,4,0.95) 100%);
-    border-top: 2px solid var(--border-gold);
-    border-bottom: 2px solid var(--border-gold);
+  /* 3 ACTION PORTALS: JOIN, DONATE, COMMUNITY */
+  .portals-section {
+    background: radial-gradient(circle at 50% 20%, rgba(122, 12, 12, 0.35) 0%, rgba(13, 4, 4, 0.95) 75%);
+    border-top: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 70px 5% 85px;
   }
-  .donate-container {
-    max-width: 860px;
+  .portals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
     margin: 0 auto;
-    background: rgba(13,4,4,0.92);
-    border: 2px solid var(--gold);
-    border-radius: 16px;
-    padding: 36px 30px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.25);
   }
-  .donate-simple-box {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 14px;
-    padding: 26px 20px;
+  .portal-card {
+    background: linear-gradient(160deg, rgba(32, 10, 10, 0.92) 0%, rgba(18, 5, 5, 0.95) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 18px;
+    padding: 32px 26px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-  .donate-upi-card {
-    background: rgba(255,107,26,0.08);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 12px;
-    padding: 18px 20px;
-    width: 100%;
-    max-width: 500px;
-    margin: 6px 0;
-  }
-  .donate-upi-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 10px 0 6px;
-  }
-  .upi-id-badge {
-    background: rgba(255,107,26,0.18);
-    border: 1px dashed var(--gold);
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--gold-bright);
-    letter-spacing: 0.5px;
-    word-break: break-all;
-  }
-  .btn-copy-upi {
-    background: rgba(212,175,55,0.18);
-    border: 1px solid var(--gold);
-    color: var(--gold-bright);
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-size: 0.84rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn-copy-upi:hover {
-    background: var(--gold);
-    color: #000;
-  }
-  .btn-pay-upi {
-    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
-    color: #000;
-    font-weight: 800;
-    padding: 11px 22px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.92rem;
-    box-shadow: 0 4px 18px rgba(255,107,26,0.35);
-    transition: all 0.25s;
-  }
-  .btn-pay-upi:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(255,107,26,0.55);
-  }
-  .donate-note {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    max-width: 520px;
-    margin: 8px auto 0;
-    border-top: 1px solid rgba(212,175,55,0.15);
-    padding-top: 14px;
-    text-align: center;
-  }
-
-  /* VOLUNTEER SECTION */
-  .volunteer-section {
-    background: rgba(8, 3, 3, 0.85);
-  }
-  .form-container {
-    max-width: 760px;
-    margin: 0 auto;
-    background: var(--bg-card);
-    border: 1px solid var(--border-gold);
-    border-radius: 16px;
-    padding: 34px 28px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.6);
-  }
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .form-full { grid-column: 1 / -1; }
-  .form-group label {
-    display: block;
-    font-size: 0.84rem;
-    font-weight: 600;
-    color: var(--gold-bright);
-    margin-bottom: 5px;
-  }
-  .form-control {
-    width: 100%;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 8px;
-    padding: 10px 12px;
-    color: #FFF;
-    font-family: inherit;
-    font-size: 0.9rem;
-  }
-  .form-control:focus { outline: none; border-color: var(--gold-bright); }
-  .form-submit-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
-    color: #000;
-    font-weight: 800;
-    font-size: 0.98rem;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(212,175,55,0.35);
-    transition: all 0.25s;
-  }
-  .form-submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(212,175,55,0.6);
-  }
-  .form-submit-btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* DIGITAL SEVAK ID CARD STYLING */
-  .sevak-card-wrapper {
-    background: linear-gradient(145deg, #1f0707 0%, #0d0303 50%, #290b0b 100%);
-    border: 2px solid var(--gold);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 0 30px rgba(212,175,55,0.4), inset 0 0 15px rgba(212,175,55,0.12);
     position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
     overflow: hidden;
-    text-align: left;
   }
-  .sevak-card-wrapper::after {
-    content: '🚩';
+  .portal-card::before {
+    content: '';
     position: absolute;
-    right: -12px;
-    bottom: -15px;
-    font-size: 7.5rem;
-    opacity: 0.05;
-    pointer-events: none;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+    transition: opacity 0.3s;
   }
-  .sevak-card-header {
+  .portal-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-gold-glow);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(212, 175, 55, 0.25);
+  }
+  .portal-card:hover::before {
+    opacity: 1;
+  }
+  .portal-card-top {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(212,175,55,0.35);
-    padding-bottom: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
-  .sevak-card-logo {
+  .portal-icon-box {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    border: 2px solid var(--gold);
-    box-shadow: 0 0 12px rgba(212,175,55,0.5);
-    background: #FFF;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .sevak-card-org {
-    font-family: var(--font-heading);
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--gold-bright);
-    letter-spacing: 1px;
-    line-height: 1.2;
-  }
-  .sevak-card-org-te {
-    font-size: 0.8rem;
-    color: var(--saffron);
-    font-weight: 600;
-  }
-  .sevak-card-sub {
-    font-size: 0.68rem;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .sevak-id-highlight {
-    background: rgba(255,107,26,0.12);
-    border: 1px solid var(--saffron);
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    text-align: center;
-  }
-  .sevak-id-label {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--gold-bright);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .sevak-id-num {
-    font-family: 'Cinzel', monospace;
-    font-size: 1.6rem;
-    font-weight: 900;
-    color: #FFD700;
-    letter-spacing: 2px;
-    text-shadow: 0 0 12px rgba(255,215,0,0.6);
-  }
-  .sevak-info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 14px;
-    background: rgba(0,0,0,0.4);
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 14px;
-  }
-  @media (max-width: 480px) {
-    .sevak-info-grid { grid-template-columns: 1fr; }
-  }
-  .sevak-info-row {
-    display: flex;
-    flex-direction: column;
-  }
-  .info-lbl {
-    font-size: 0.68rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .info-val {
-    font-size: 0.88rem;
-    color: #FFF;
-    font-weight: 600;
-    word-break: break-word;
-  }
-  .sevak-card-footer {
-    border-top: 1px solid rgba(212,175,55,0.25);
-    padding-top: 10px;
-    text-align: center;
-  }
-  .sevak-motto {
-    font-size: 0.8rem;
-    color: var(--gold-bright);
-    font-weight: 600;
-  }
-  .sevak-auth {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    margin-top: 3px;
-  }
-  .btn-whatsapp-share {
+    background: rgba(255, 107, 26, 0.15);
+    border: 1.5px solid var(--saffron);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background: #25D366;
-    color: #FFF;
+    font-size: 1.6rem;
+    box-shadow: 0 0 16px rgba(255, 107, 26, 0.3);
+  }
+  .portal-icon-gold {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.3);
+  }
+  .portal-icon-saffron {
+    background: rgba(232, 84, 10, 0.18);
+    border-color: var(--saffron-deep);
+    box-shadow: 0 0 16px rgba(232, 84, 10, 0.3);
+  }
+  .portal-tag {
+    font-size: 0.72rem;
     font-weight: 700;
-    font-size: 0.95rem;
-    padding: 12px 16px;
-    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(255, 107, 26, 0.12);
+    border: 1px solid rgba(255, 107, 26, 0.4);
+    color: var(--saffron);
+  }
+  .portal-tag-gold {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: rgba(212, 175, 55, 0.4);
+    color: var(--gold-bright);
+  }
+  .portal-tag-saffron {
+    background: rgba(255, 107, 26, 0.12);
+    border-color: rgba(255, 107, 26, 0.4);
+    color: #FFA066;
+  }
+  .portal-heading {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .portal-desc {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+  .portal-footer-btn {
+    margin-top: auto;
+  }
+  .btn-portal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 18px;
+    border-radius: 25px;
     text-decoration: none;
-    box-shadow: 0 4px 15px rgba(37,211,102,0.35);
+    font-size: 0.88rem;
+    font-weight: 700;
     transition: all 0.25s;
   }
-  .btn-whatsapp-share:hover {
-    background: #1EBE5D;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+  .btn-portal-join {
+    background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
+    color: #FFF;
+    box-shadow: 0 4px 15px rgba(255, 107, 26, 0.35);
   }
-  .btn-download-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  .btn-portal-join:hover {
+    box-shadow: 0 6px 22px rgba(255, 107, 26, 0.6);
+    transform: translateY(-2px);
+  }
+  .btn-portal-donate {
     background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
     color: #000;
-    font-weight: 800;
-    font-size: 0.95rem;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
-    transition: all 0.25s;
-    width: 100%;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
   }
-  .btn-download-card:hover {
+  .btn-portal-donate:hover {
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.6);
   }
-  .btn-download-card:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none;
+  .btn-portal-community {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
   }
-  .btn-copy-id {
-    background: rgba(212,175,55,0.15);
-    border: 1px solid var(--gold);
-    color: var(--gold-bright);
-    font-weight: 600;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.88rem;
-    transition: all 0.2s;
-  }
-  .btn-copy-id:hover {
+  .btn-portal-community:hover {
     background: var(--gold);
     color: #000;
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 900px) {
+    .portals-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      max-width: 500px;
+    }
+    .portal-card {
+      padding: 24px 20px;
+    }
   }
 
   /* FOOTER */
@@ -1671,8 +1497,8 @@
     /* Header Bar */
     .site-header { padding: 10px 4%; }
     .header-brand-text h1 { font-size: 0.96rem; }
-    .header-brand-text span { font-size: 0.62rem; }
-    .header-btn { padding: 6px 10px; font-size: 0.76rem; }
+    .header-actions { gap: 6px; }
+    .header-btn { padding: 5px 8px; font-size: 0.72rem; gap: 3px; }
 
     /* Floating Glass Navbar (Optimized for Mobile Touch & Zero Lag) */
     .glass-navbar {
@@ -2277,7 +2103,7 @@
   <div class="floating-orb f-orb-4"></div>
 </div>
 
-<!-- Top Header Bar with Circular Logo & Main Action Buttons (Donate & Join Us) -->
+<!-- Top Header Bar with Circular Logo & Main Action Buttons (Community, Donate & Join Us) -->
 <header class="site-header">
   <a href="#home" class="header-brand">
     <img src="assets/logo.png" alt="Abhay Hindu Sena Logo" class="circle-logo">
@@ -2287,8 +2113,11 @@
     </div>
   </a>
 
-  <!-- Top Main Action Buttons (Donate & Join Us) -->
+  <!-- Top Main Action Buttons (Community, Donate & Join Us) -->
   <div class="header-actions">
+    <a href="community.html" class="header-btn btn-community-top" data-en="Community 💬" data-te="కమ్యూనిటీ 💬">
+      Community 💬
+    </a>
     <a href="donate.html" class="header-btn btn-donate-top" data-en="Donate 💛" data-te="విరాళం 💛">
       Donate 💛
     </a>
@@ -2306,7 +2135,7 @@
     <a href="#missions" data-en="Missions" data-te="లక్ష్యాలు">Missions</a>
     <a href="videos.html" data-en="Videos" data-te="వీడియోలు">Videos</a>
     <a href="gallery.html" data-en="Gallery" data-te="గ్యాలరీ">Gallery</a>
-    <a href="#community" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
+    <a href="community.html" data-en="Community" data-te="కమ్యూనిటీ">Community</a>
     <a href="join.html" data-en="Join Us" data-te="చేరండి">Join Us</a>
     <a href="donate.html" data-en="Donate" data-te="విరాళం">Donate</a>
   </div>
@@ -2558,98 +2387,63 @@
   </div>
 </section>
 
-<!-- Community Chat Room ("Dharma Charcha") -->
-<section id="community" class="community-section">
+<!-- Action Portals Section: Join Us, Donate, Community -->
+<section id="portals" class="portals-section">
   <div class="section-header">
-    <span class="eyebrow" data-en="Sevaks Network" data-te="సేవకుల కలయిక">Sevaks Network</span>
-    <h2 class="section-title" data-en="Abhay Hindu Sena Community Chat" data-te="అభయ్ హిందూ సేన కమ్యూనిటీ చర్చా వేదిక">Abhay Hindu Sena Community Chat</h2>
-    <p class="section-sub" data-en="A dedicated spiritual discussion forum where volunteers, devotees, and youth share updates and coordinate seva."
-       data-te="కార్యకర్తలు, భక్తులు మరియు యువత సమాచారాన్ని పంచుకునేందుకు ఉద్దేశించిన ప్రత్యక్ష వేదిక.">
-      A dedicated spiritual discussion forum where volunteers, devotees, and youth share updates and coordinate seva.
+    <span class="eyebrow" data-en="Get Involved • Sanatana Seva" data-te="ధర్మ రక్షణలో భాగస్వామ్యం">Get Involved • Sanatana Seva</span>
+    <h2 class="section-title" data-en="Serve, Support & Connect" data-te="సేవ • విరాళం • కమ్యూనిటీ">Serve, Support & Connect</h2>
+    <p class="section-sub" data-en="Choose your pathway to serve Sanatana Dharma. Enlist as an official volunteer, offer sacred Dharma Daan, or unite with fellow sevaks in our live community forum."
+       data-te="సనాతన ధర్మ రక్షణలో మీ వంతు బాధ్యతను నిర్వర్తించండి. అధికారిక వాలంటీర్‌గా నమోదు చేసుకోండి, పవిత్ర ధర్మ దానం అందించండి లేదా ప్రత్యక్ష కమ్యూనిటీ చర్చా వేదికలో కలవండి.">
+      Choose your pathway to serve Sanatana Dharma. Enlist as an official volunteer, offer sacred Dharma Daan, or unite with fellow sevaks in our live community forum.
     </p>
   </div>
 
-  <div class="chat-box-container">
-    <div class="chat-header">
-      <h4>🚩 Dharma Charcha (Live Sevaks Feed)</h4>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <a href="community.html" class="chat-fullscreen-btn" target="_blank" title="Open full-screen community chat">
-          ⛶ Open Full Chat
-        </a>
-        <span class="chat-online-badge" id="chatLiveStatus">● Live Stream</span>
+  <div class="portals-grid">
+    <!-- Box 1: Join Us -->
+    <div class="portal-card" onclick="window.location.href='join.html'">
+      <div class="portal-card-top">
+        <div class="portal-icon-box">🚩</div>
+        <span class="portal-tag" data-en="Volunteers" data-te="వాలంటీర్లు">Volunteers</span>
+      </div>
+      <h3 class="portal-heading" data-en="Enlist as a Sevak" data-te="సేవకుడిగా చేరండి">Enlist as a Sevak</h3>
+      <p class="portal-desc" data-en="Join hands with thousands of dedicated volunteers across Bharat. Fill out our simple enlistment form and instantly receive your official Kali Yuga Digital Sevak ID."
+         data-te="దేశవ్యాప్తంగా వేలాది మంది ధర్మ కార్యకర్తలతో కలిసి నడవండి. ఫారమ్‌ను పూరించి మీ అధికారిక డిజిటల్ సేవక్ ఐడీ కార్డ్‌ను తక్షణమే పొందండి.">
+        Join hands with thousands of dedicated volunteers across Bharat. Fill out our simple enlistment form and instantly receive your official Kali Yuga Digital Sevak ID.
+      </p>
+      <div class="portal-footer-btn">
+        <a href="join.html" class="btn-portal btn-portal-join" data-en="Join as Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">Join as Sevak 🚩</a>
       </div>
     </div>
 
-    <!-- Live Messages Feed -->
-    <div class="chat-feed" id="chatFeed">
-      <div style="text-align:center; padding:30px; color:#c7b5a0;">
-        Loading live community messages...
+    <!-- Box 2: Donate -->
+    <div class="portal-card" onclick="window.location.href='donate.html'">
+      <div class="portal-card-top">
+        <div class="portal-icon-box portal-icon-gold">🙏</div>
+        <span class="portal-tag portal-tag-gold" data-en="Dharma Daan" data-te="ధర్మ దానం">Dharma Daan</span>
+      </div>
+      <h3 class="portal-heading" data-en="Support with Donation" data-te="ధర్మ దానం చేయండి">Support with Donation</h3>
+      <p class="portal-desc" data-en="Your sacred contribution fuels Nitya Annadanam, Gau Samrakshana, ancient temple restoration, and youth defense camps. Official payment gateway coming soon."
+         data-te="నిత్య అన్నదానం, గో సంరక్షణ, పురాతన ఆలయాల పరిరక్షణ మరియు ధార్మిక శిక్షణకు మీ వంతు పవిత్ర విరాళాన్ని అందించండి. అధికారిక గేట్‌వే త్వరలో ప్రారంభం.">
+        Your sacred contribution fuels Nitya Annadanam, Gau Samrakshana, ancient temple restoration, and youth defense camps. Official payment gateway coming soon.
+      </p>
+      <div class="portal-footer-btn">
+        <a href="donate.html" class="btn-portal btn-portal-donate" data-en="Support & Donate 💛" data-te="ధర్మ దానం 💛">Support & Donate 💛</a>
       </div>
     </div>
 
-    <!-- ONBOARDING: Enter Name & Place once to fix identity -->
-    <div class="chat-onboarding" id="chatOnboarding" style="display:none;">
-      <div class="onboarding-card">
-        <div style="font-size:2.2rem; margin-bottom:8px;">🚩</div>
-        <h3 data-en="Join Dharma Charcha" data-te="ధర్మ చర్చలో చేరండి">Join Dharma Charcha</h3>
-        <p data-en="Enter your Name and Place once. It will remain fixed so you can message freely."
-           data-te="మీ పేరు మరియు ప్రాంతాన్ని ఒకసారి నమోదు చేయండి. ఆ తర్వాత మీరు సులభంగా సందేశాలు పంపవచ్చు.">
-          Enter your Name and Place once. It will remain fixed so you can message freely.
-        </p>
-        <form onsubmit="handleSaveProfile(event)">
-          <div class="onboarding-fields">
-            <input type="text" id="setupName" class="chat-input" placeholder="Your Full Name (e.g. Ramesh Sharma)" required autocomplete="name">
-            <input type="text" id="setupPlace" class="chat-input" placeholder="Your District / City (e.g. Vijayawada)" required autocomplete="address-level2">
-          </div>
-
-          <!-- Community Guidelines & Non-Liability Disclaimer -->
-          <div class="terms-preview-box">
-            <div class="terms-header">
-              <span>📜 Community Code of Conduct & Legal Disclaimer</span>
-            </div>
-            <ul class="terms-list">
-              <li><strong>Zero Tolerance for Abuse:</strong> Abusive words, profanity, harassment, defamatory remarks, hate speech, or illegal content are strictly prohibited and will result in an immediate ban and deletion.</li>
-              <li><strong>Absolute Non-Liability Disclaimer:</strong> The Founder (Shri Radha Manohar Das), creators, developers, administrators, and the Abhay Hindu Sena organization bear <strong>NO legal, civil, criminal, or personal responsibility or liability</strong> whatsoever for any user-generated comments, opinions, or material posted in this forum.</li>
-              <li><strong>Sole Individual Accountability:</strong> Every community participant is solely, exclusively, and personally responsible under the law for their own messages and conduct.</li>
-              <li><strong>Admin Discretion:</strong> Administrators reserve the unconditional right to mute, disable, ban any user, or delete messages at any time without prior notice.</li>
-            </ul>
-          </div>
-
-          <label class="terms-checkbox-label">
-            <input type="checkbox" id="termsAgreement" required>
-            <span>I agree to the <strong>Community Guidelines & Legal Disclaimer</strong>. I confirm that I am solely responsible for my messages, and that the Founder and Abhay Hindu Sena bear zero liability.</span>
-          </label>
-
-          <button type="submit" class="chat-send-btn" style="width:100%; margin-top:4px;">
-            Accept Terms & Join Community ➔
-          </button>
-        </form>
+    <!-- Box 3: Community -->
+    <div class="portal-card" onclick="window.location.href='community.html'">
+      <div class="portal-card-top">
+        <div class="portal-icon-box portal-icon-saffron">💬</div>
+        <span class="portal-tag portal-tag-saffron" data-en="Live Discussion" data-te="ప్రత్యక్ష చర్చ">Live Discussion</span>
       </div>
-    </div>
-
-    <!-- FIXED IDENTITY BAR & MESSAGE INPUT -->
-    <div id="chatActiveArea" style="display:none;">
-      <div class="chat-identity-strip">
-        <div class="identity-badge">
-          <span class="avatar-mini" id="myAvatarMini">SV</span>
-          <span>Posting as: <strong id="myNameDisplay" style="color:var(--gold-bright);">Sevak</strong> (<span id="myPlaceDisplay">Bharat</span>)</span>
-          <span id="myBadgeDisplay" class="chat-badge badge-sevak">🚩 Sevak</span>
-        </div>
-        <button type="button" class="btn-change-identity" onclick="handleChangeProfile()" title="Change name or place">✏️ Change</button>
-      </div>
-
-      <form class="chat-input-area" id="chatForm" onsubmit="handleSendChat(event)">
-        <input type="text" id="chatText" class="chat-input" placeholder="Write your message / seva report..." required autocomplete="off">
-        <button type="submit" class="chat-send-btn" id="chatSendBtn">Post 💬</button>
-      </form>
-
-      <div id="chatDisabledNotice" style="display:none; color:#ff7675; background:rgba(255,107,107,0.12); padding:10px 18px; font-size:0.84rem; border-top:1px solid rgba(255,107,107,0.3); text-align:center;">
-        🚫 Your posting privileges have been restricted by the Administrator.
-      </div>
-
-      <!-- Legal Disclaimer Footer -->
-      <div class="chat-legal-footer">
-        ⚖️ <em>Disclaimer: All views and messages posted here belong solely to respective authors. The Founder, makers, and Abhay Hindu Sena hold zero responsibility or legal liability for user comments.</em>
+      <h3 class="portal-heading" data-en="Dharma Charcha Community" data-te="ధర్మ చర్చా కమ్యూనిటీ">Dharma Charcha Community</h3>
+      <p class="portal-desc" data-en="Step into our dedicated full-screen live community forum. Connect directly with sevaks, share local seva reports, coordinate drives, and receive spiritual updates."
+         data-te="అభయ్ హిందూ సేన ప్రత్యేక పూర్తి స్థాయి చర్చా వేదికలోకి ప్రవేశించండి. ఇతర సేవకులతో మాట్లాడండి, సేవా వివరాలను మరియు సమాచారాన్ని పంచుకోండి.">
+        Step into our dedicated full-screen live community forum. Connect directly with sevaks, share local seva reports, coordinate drives, and receive spiritual updates.
+      </p>
+      <div class="portal-footer-btn">
+        <a href="community.html" class="btn-portal btn-portal-community" data-en="Enter Community 💬" data-te="కమ్యూనిటీలోకి రండి 💬">Enter Community 💬</a>
       </div>
     </div>
   </div>
@@ -2668,7 +2462,7 @@
     <a href="#missions">Missions</a>
     <a href="videos.html">Videos</a>
     <a href="gallery.html">Gallery</a>
-    <a href="#community">Community</a>
+    <a href="community.html">Community</a>
     <a href="join.html">Join Us</a>
     <a href="donate.html">Donate</a>
     <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>
@@ -2997,327 +2791,11 @@
     });
   }
 
-  // ==========================================
-  // REAL-TIME COMMUNITY CHAT LOGIC (FIRESTORE)
-  // ==========================================
-  let userProfile = null;
-  let isUserDisabled = false;
-
-  function initCommunityChat() {
-    // 1. Check if user already set Name & Place
-    const saved = localStorage.getItem('ahs_user_profile');
-    if (saved) {
-      try {
-        userProfile = JSON.parse(saved);
-      } catch (e) {
-        userProfile = null;
-      }
-    }
-
-    if (userProfile && userProfile.name && userProfile.place) {
-      showChatInputView();
-      listenToUserStatus();
-    } else {
-      showOnboardingView();
-    }
-
-    // 2. Start Real-time Chat Feed Listener
-    listenToCommunityMessages();
-  }
-
-  function showOnboardingView() {
-    const onboarding = document.getElementById('chatOnboarding');
-    const activeArea = document.getElementById('chatActiveArea');
-    if (onboarding) onboarding.style.display = 'block';
-    if (activeArea) activeArea.style.display = 'none';
-  }
-
-  function showChatInputView() {
-    const onboarding = document.getElementById('chatOnboarding');
-    const activeArea = document.getElementById('chatActiveArea');
-    if (onboarding) onboarding.style.display = 'none';
-    if (activeArea) activeArea.style.display = 'block';
-
-    const initials = (userProfile.name || 'SV').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-    document.getElementById('myAvatarMini').textContent = initials;
-    document.getElementById('myNameDisplay').textContent = userProfile.name;
-    document.getElementById('myPlaceDisplay').textContent = userProfile.place;
-    updateBadgeUI(userProfile.role || 'Sevak');
-  }
-
-  function updateBadgeUI(role) {
-    const badgeEl = document.getElementById('myBadgeDisplay');
-    if (!badgeEl) return;
-    badgeEl.className = 'chat-badge';
-    if (role === 'Leader') {
-      badgeEl.classList.add('badge-leader');
-      badgeEl.textContent = '⭐ Leader';
-    } else if (role === 'Active Speaker') {
-      badgeEl.classList.add('badge-speaker');
-      badgeEl.textContent = '🎤 Active Speaker';
-    } else if (role === 'Core Team') {
-      badgeEl.classList.add('badge-core');
-      badgeEl.textContent = '🛡️ Core Member';
-    } else {
-      badgeEl.classList.add('badge-sevak');
-      badgeEl.textContent = '🚩 Sevak';
-    }
-  }
-
-  // Handle Save Initial Profile
-  async function handleSaveProfile(e) {
-    e.preventDefault();
-    const name = document.getElementById('setupName').value.trim();
-    const place = document.getElementById('setupPlace').value.trim();
-    const terms = document.getElementById('termsAgreement');
-    if (terms && !terms.checked) {
-      alert("Please agree to the Community Code of Conduct and Legal Disclaimer to proceed.");
-      return;
-    }
-    if (!name || !place) return;
-
-    // Generate or keep UID
-    const uid = (userProfile && userProfile.uid) ? userProfile.uid : ('sevak_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36));
-    userProfile = {
-      uid: uid,
-      name: name,
-      place: place,
-      role: (userProfile && userProfile.role) ? userProfile.role : 'Sevak',
-      termsAccepted: true
-    };
-    localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
-
-    // Register user in Firestore
-    if (db) {
-      try {
-        await db.collection('community_users').doc(uid).set({
-          uid: uid,
-          name: name,
-          place: place,
-          role: userProfile.role || 'Sevak',
-          isDisabled: false,
-          termsAccepted: true,
-          termsAcceptedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-      } catch (err) {
-        console.warn("User registry sync note:", err);
-      }
-    }
-
-    showChatInputView();
-    listenToUserStatus();
-  }
-
-  function handleChangeProfile() {
-    if (confirm("Do you want to edit your Name and Place?")) {
-      document.getElementById('setupName').value = userProfile.name || '';
-      document.getElementById('setupPlace').value = userProfile.place || '';
-      showOnboardingView();
-    }
-  }
-
-  // Listen to this user's moderation status (Roles / Disable)
-  function listenToUserStatus() {
-    if (!db || !userProfile || !userProfile.uid) return;
-    db.collection('community_users').doc(userProfile.uid).onSnapshot(doc => {
-      if (doc.exists) {
-        const data = doc.data();
-        isUserDisabled = data.isDisabled === true;
-        if (data.role) {
-          userProfile.role = data.role;
-          localStorage.setItem('ahs_user_profile', JSON.stringify(userProfile));
-          updateBadgeUI(data.role);
-        }
-
-        const inputForm = document.getElementById('chatForm');
-        const alertBox = document.getElementById('chatDisabledNotice');
-        if (isUserDisabled) {
-          if (inputForm) inputForm.style.display = 'none';
-          if (alertBox) alertBox.style.display = 'block';
-        } else {
-          if (inputForm) inputForm.style.display = 'flex';
-          if (alertBox) alertBox.style.display = 'none';
-        }
-      }
-    }, err => console.log(err));
-  }
-
-  // Real-time Chat Feed Listener
-  function listenToCommunityMessages() {
-    if (!db) {
-      showEmptyChat("Firebase not initialized");
-      return;
-    }
-
-    db.collection('community_messages')
-      .limit(100)
-      .onSnapshot(snapshot => {
-        const feed = document.getElementById('chatFeed');
-        if (snapshot.empty) {
-          showEmptyChat();
-          return;
-        }
-
-        const msgs = [];
-        snapshot.forEach(doc => {
-          const m = doc.data();
-          if (!m.deleted) {
-            msgs.push({ id: doc.id, ...m });
-          }
-        });
-
-        if (msgs.length === 0) {
-          showEmptyChat();
-          return;
-        }
-
-        // Sort ascending by time
-        msgs.sort((a, b) => {
-          const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
-          const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
-          return tA - tB;
-        });
-
-        feed.innerHTML = '';
-        msgs.forEach(m => {
-          const initials = (m.name || 'Sevak').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-          const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
-          const timeStr = formatChatTime(timeDate);
-
-          let badgeClass = 'badge-sevak';
-          let badgeText = '🚩 Sevak';
-          if (m.role === 'Leader') {
-            badgeClass = 'badge-leader';
-            badgeText = '⭐ Leader';
-          } else if (m.role === 'Active Speaker') {
-            badgeClass = 'badge-speaker';
-            badgeText = '🎤 Active Speaker';
-          } else if (m.role === 'Core Team') {
-            badgeClass = 'badge-core';
-            badgeText = '🛡️ Core Member';
-          }
-
-          const msgDiv = document.createElement('div');
-          msgDiv.className = 'chat-msg';
-          msgDiv.innerHTML = `
-            <div class="chat-avatar">${initials}</div>
-            <div class="chat-bubble">
-              <div class="chat-bubble-top">
-                <span class="chat-sender">${escapeHtml(m.name)} <span style="font-weight:400; color:#c7b5a0; font-size:0.75rem;">(${escapeHtml(m.place || 'Bharat')})</span></span>
-                <span class="chat-badge ${badgeClass}">${badgeText}</span>
-                <span class="chat-time">${timeStr}</span>
-              </div>
-              <div class="chat-text">${escapeHtml(m.text)}</div>
-            </div>
-          `;
-          feed.appendChild(msgDiv);
-        });
-
-        // Auto scroll to bottom
-        feed.scrollTop = feed.scrollHeight;
-      }, err => {
-        console.error("Firestore messages stream error:", err);
-        const feed = document.getElementById('chatFeed');
-        if (err.code === 'permission-denied') {
-          feed.innerHTML = `
-            <div style="text-align:center; padding:30px 20px; color:#ff7675; background:rgba(255,107,107,0.08); border-radius:8px; margin:10px;">
-              <div style="font-size:1.6rem; margin-bottom:6px;">⚠️</div>
-              <div style="font-weight:700; margin-bottom:4px; font-size:0.95rem;">Firestore Permission Denied</div>
-              <div style="font-size:0.8rem; color:#e0d0c0; line-height:1.5;">
-                Please update your Firebase Console Firestore Rules to allow <code>community_messages</code>.
-              </div>
-            </div>
-          `;
-        } else {
-          feed.innerHTML = `
-            <div style="text-align:center; padding:30px 20px; color:#c7b5a0;">
-              Error loading messages: ${escapeHtml(err.message)}
-            </div>
-          `;
-        }
-      });
-  }
-
-  function showEmptyChat(customText) {
-    const feed = document.getElementById('chatFeed');
-    feed.innerHTML = `
-      <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
-        <div style="font-size:2.2rem; margin-bottom:10px;">🚩</div>
-        <div style="font-weight:700; color:var(--gold-bright); font-size:1.05rem; margin-bottom:6px;">
-          ${customText || 'No messages in Dharma Charcha yet'}
-        </div>
-        <div style="font-size:0.85rem; color:#b0a090;">
-          Be the first to post a message or seva update below!
-        </div>
-      </div>
-    `;
-  }
-
-  function formatChatTime(date) {
-    const now = new Date();
-    const isToday = date.toDateString() === now.toDateString();
-    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return isToday ? `Today, ${timeStr}` : `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}`;
-  }
-
-  // Send Chat Message
-  async function handleSendChat(e) {
-    e.preventDefault();
-    if (isUserDisabled) {
-      alert("Your account is currently muted by the Administrator.");
-      return;
-    }
-    if (!userProfile || !userProfile.name) {
-      showOnboardingView();
-      return;
-    }
-
-    const input = document.getElementById('chatText');
-    const text = input.value.trim();
-    if (!text) return;
-
-    const btn = document.getElementById('chatSendBtn');
-    btn.disabled = true;
-    btn.textContent = 'Posting...';
-
-    try {
-      if (!db) throw new Error("Firebase database connection not initialized.");
-
-      await db.collection('community_messages').add({
-        uid: userProfile.uid,
-        name: userProfile.name,
-        place: userProfile.place,
-        role: userProfile.role || 'Sevak',
-        text: text,
-        clientTimestamp: Date.now(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      input.value = '';
-    } catch (err) {
-      console.error("Failed to post message:", err);
-      let errMsg = err.message;
-      if (err.code === 'permission-denied') {
-        errMsg = "Permission Denied: Please ensure your Firestore Security Rules in Firebase Console allow read & write for 'community_messages' and 'community_users'.";
-      }
-      alert("Message sending error:\n\n" + errMsg);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Post 💬';
-      input.focus();
-    }
-  }
-
   function escapeHtml(str) {
     return (str || '').replace(/[&<>'"]/g, tag => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag] || tag));
   }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initCommunityChat();
-  });
 
   // =========================================================================
   // SACRED AMBIENT FLOATING SPARKS & SCROLL REVEAL SCRIPT
