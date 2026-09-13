@@ -712,11 +712,10 @@
   let currentSearchQuery = '';
 
   function loadAllVideos() {
-    if (!db) {
-      allLoadedVideos = defaultVideos;
-      renderVideos();
-      return;
-    }
+    allLoadedVideos = defaultVideos;
+    renderVideos();
+
+    if (!db) return;
 
     db.collection('videos').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       if (!snapshot.empty) {

@@ -631,11 +631,10 @@
   let currentSearchQuery = '';
 
   function loadAllPhotos() {
-    if (!db) {
-      allLoadedPhotos = defaultPhotos;
-      renderPhotos();
-      return;
-    }
+    allLoadedPhotos = defaultPhotos;
+    renderPhotos();
+
+    if (!db) return;
 
     function startQuery(tryOrdered = true) {
       let q = db.collection('gallery_photos');
