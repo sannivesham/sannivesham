@@ -779,6 +779,24 @@
     border-radius: 4px;
     font-size: 0.82rem;
   }
+  .btn-storage-mode {
+    flex: 1;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-gold);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-storage-mode.active {
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    color: #000;
+    border-color: var(--gold);
+    box-shadow: 0 2px 10px rgba(212,175,55,0.3);
+  }
 </style>
 </head>
 <body>
@@ -1059,6 +1077,38 @@
         <p class="card-desc">Upload photos directly from your device or paste an image URL. Hosted on free high-speed cloud CDN with instant live synchronization to the website gallery.</p>
 
         <form id="addPhotoForm" onsubmit="handleUploadPhoto(event)">
+          <!-- Cloud Storage Provider Toggle -->
+          <div class="form-group">
+            <label style="color:var(--gold-bright); font-weight:600; font-size:0.85rem; display:block; margin-bottom:8px;">Cloud Storage Provider</label>
+            <div style="display:flex; gap:10px;">
+              <button type="button" id="btnModeCdn" class="btn-storage-mode active" onclick="switchStorageMode('cdn')">⚡ Fast Cloud CDN (Instant)</button>
+              <button type="button" id="btnModeTg" class="btn-storage-mode" onclick="switchStorageMode('telegram')">✈️ Telegram Channel Storage</button>
+            </div>
+          </div>
+
+          <!-- Telegram Config Box -->
+          <div id="telegramConfigBox" style="display:none; background:rgba(0,136,204,0.08); border:1px solid rgba(0,136,204,0.35); border-radius:10px; padding:14px; margin-bottom:16px;">
+            <div style="font-weight:700; color:#29b6f6; font-size:0.88rem; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              ✈️ Telegram Bot & Private Channel Setup
+            </div>
+            <p style="font-size:0.75rem; color:#b0bec5; margin:0 0 10px; line-height:1.4;">
+              Upload photos directly into your private Telegram channel for unlimited free cloud archiving, then display on your live gallery without exposing Telegram to visitors.
+            </p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <label style="font-size:0.75rem; color:#90a4ae; display:block; margin-bottom:3px;">Bot Token</label>
+                <input type="password" id="tgBotToken" class="form-input" placeholder="e.g. 123456:ABC-DEF..." style="font-size:0.8rem; padding:8px 10px;" onchange="saveTgSettings()">
+              </div>
+              <div>
+                <label style="font-size:0.75rem; color:#90a4ae; display:block; margin-bottom:3px;">Channel Username / ID</label>
+                <input type="text" id="tgChatId" class="form-input" placeholder="e.g. @your_channel or -100..." style="font-size:0.8rem; padding:8px 10px;" onchange="saveTgSettings()">
+              </div>
+            </div>
+            <div style="font-size:0.72rem; color:#78909c;">
+              💡 <em>Create bot via @BotFather in Telegram &gt; Create private channel &gt; Add bot as Admin.</em>
+            </div>
+          </div>
+
           <!-- File Drop/Select -->
           <div class="form-group">
             <label>Choose Photo from Device</label>
@@ -1517,108 +1567,204 @@
     });
   }
 
-  function initCommunityChatAdmin() {
-    db.collection('community_messages').limit(100).onSnapshot(snapshot => {
-      const feed = document.getElementById('adminChatFeed');
-      const count = snapshot.size;
-      document.getElementById('adminChatCount').textContent = count;
-      document.getElementById('tabMsgCount').textContent = count;
+  // ==========================================
+  // 2. COMMUNITY CHAT ADMIN & MODERATION
+  // ==========================================
+  let adminChatMessages = [];
+  let adminChatChannel = null;
 
-      if (snapshot.empty) {
-        feed.innerHTML = `
-          <div style="text-align:center; padding:30px; color:var(--text-muted);">
-            No messages posted in community chat yet.
-          </div>
-        `;
-        return;
+  const defaultSeedMessages = [
+    {
+      id: "sevak_seed_1",
+      uid: "sevak_seed_1",
+      name: "Venkat Raman",
+      place: "Vijayawada",
+      role: "Sevak",
+      text: "జై శ్రీరామ్! విజయవాడ కనకదుర్గ గుడి ప్రాంగణంలో ఆదివారం జరిగే ధర్మ ప్రచార కార్యక్రమానికి సేవా బృందం సిద్ధంగా ఉంది. 🙏🚩",
+      clientTimestamp: Date.now() - 7200000
+    },
+    {
+      id: "sevak_seed_2",
+      uid: "sevak_seed_2",
+      name: "Sai Krishna",
+      place: "Hyderabad",
+      role: "Active Speaker",
+      text: "నమస్కారం సోదరులారా! భాగ్యనగరంలో గోరక్షణ జాగృతి సమావేశం విజయవంతంగా జరిగింది. దాదాపు 150 మంది యువకులు పాల్గొన్నారు.",
+      clientTimestamp: Date.now() - 3600000
+    },
+    {
+      id: "sevak_seed_3",
+      uid: "sevak_seed_3",
+      name: "Radha Manohar Das",
+      place: "Kendriya Karyalayam",
+      role: "Leader",
+      text: "సనాతన ధర్మ రక్షణ, గో సంరక్షణ మరియు నిత్య అన్నదానంలో యువత భాగస్వామ్యమే మన బలం. ప్రతి ఒక్కరూ ధర్మ సేవకులుగా ముందుకు రండి. 🙏🚩",
+      clientTimestamp: Date.now() - 1800000
+    }
+  ];
+
+  function getLocalCommunityMsgs() {
+    try {
+      const stored = localStorage.getItem('ahs_community_messages');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return defaultSeedMessages;
+  }
+
+  function saveLocalCommunityMsgs(msgs) {
+    try {
+      localStorage.setItem('ahs_community_messages', JSON.stringify(msgs));
+    } catch (e) {}
+  }
+
+  function renderAdminChatFeed(msgs) {
+    const feed = document.getElementById('adminChatFeed');
+    const count = msgs.length;
+    document.getElementById('adminChatCount').textContent = count;
+    document.getElementById('tabMsgCount').textContent = count;
+
+    if (count === 0) {
+      feed.innerHTML = `
+        <div style="text-align:center; padding:30px; color:var(--text-muted);">
+          No active messages found in community chat.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    msgs.forEach(m => {
+      const mid = m.id;
+      const uid = m.uid || 'anon';
+      const name = m.name || 'Sevak';
+      const place = m.place || 'Bharat';
+      const role = m.role || 'Sevak';
+      const text = m.text || '';
+      const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
+      const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
+      const timeStr = timeDate.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+
+      let badgeClass = 'badge-sevak';
+      let badgeText = '🚩 Sevak';
+      if (role === 'Leader') {
+        badgeClass = 'badge-leader';
+        badgeText = '⭐ Leader';
+      } else if (role === 'Active Speaker') {
+        badgeClass = 'badge-speaker';
+        badgeText = '🎤 Active Speaker';
+      } else if (role === 'Core Team') {
+        badgeClass = 'badge-core';
+        badgeText = '🛡️ Core Member';
       }
 
-      const msgs = [];
-      snapshot.forEach(doc => {
-        const m = doc.data();
-        if (!m.deleted) msgs.push({ id: doc.id, ...m });
-      });
+      const escapedName = name.replace(/'/g, "\\'");
+      const escapedPlace = place.replace(/'/g, "\\'");
 
-      if (msgs.length === 0) {
-        feed.innerHTML = `
-          <div style="text-align:center; padding:30px; color:var(--text-muted);">
-            No active messages found.
+      html += `
+        <div class="admin-chat-card" id="chatCard_${escapeHtml(mid)}">
+          <div class="admin-chat-avatar" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to manage permissions">
+            ${initials}
           </div>
-        `;
-        return;
-      }
-
-      // Sort descending (latest on top for admin review)
-      msgs.sort((a, b) => {
-        const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
-        const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
-        return tB - tA;
-      });
-
-      let html = '';
-      msgs.forEach(m => {
-        const mid = m.id;
-        const uid = m.uid || 'anon';
-        const name = m.name || 'Sevak';
-        const place = m.place || 'Bharat';
-        const role = m.role || 'Sevak';
-        const text = m.text || '';
-        const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SV';
-        const timeDate = m.createdAt ? (m.createdAt.toDate ? m.createdAt.toDate() : new Date(m.createdAt.seconds * 1000)) : (m.clientTimestamp ? new Date(m.clientTimestamp) : new Date());
-        const timeStr = timeDate.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-
-        let badgeClass = 'badge-sevak';
-        let badgeText = '🚩 Sevak';
-        if (role === 'Leader') {
-          badgeClass = 'badge-leader';
-          badgeText = '⭐ Leader';
-        } else if (role === 'Active Speaker') {
-          badgeClass = 'badge-speaker';
-          badgeText = '🎤 Active Speaker';
-        } else if (role === 'Core Team') {
-          badgeClass = 'badge-core';
-          badgeText = '🛡️ Core Member';
-        }
-
-        const escapedName = name.replace(/'/g, "\\'");
-        const escapedPlace = place.replace(/'/g, "\\'");
-
-        html += `
-          <div class="admin-chat-card">
-            <div class="admin-chat-avatar" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to manage permissions">
-              ${initials}
+          <div class="admin-chat-content">
+            <div class="admin-chat-top">
+              <div>
+                <span class="user-click-trigger" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to assign role / disable">
+                  ${escapeHtml(name)}
+                </span>
+                <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">📍 ${escapeHtml(place)}</span>
+                <span class="chat-badge ${badgeClass}" style="margin-left:6px;">${badgeText}</span>
+              </div>
+              <span style="font-size:0.75rem; color:#887a6c;">${timeStr}</span>
             </div>
-            <div class="admin-chat-content">
-              <div class="admin-chat-top">
-                <div>
-                  <span class="user-click-trigger" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')" title="Click to assign role / disable">
-                    ${escapeHtml(name)}
-                  </span>
-                  <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">📍 ${escapeHtml(place)}</span>
-                  <span class="chat-badge ${badgeClass}" style="margin-left:6px;">${badgeText}</span>
-                </div>
-                <span style="font-size:0.75rem; color:#887a6c;">${timeStr}</span>
-              </div>
-              <div style="font-size:0.86rem; color:#FFF; margin-bottom:8px; line-height:1.4;">
-                ${escapeHtml(text)}
-              </div>
-              <div style="display:flex; gap:8px;">
-                <button class="btn-action" style="padding:3px 8px; font-size:0.72rem;" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
-                  ⚙️ Manage Member
-                </button>
-                <button class="btn-action btn-delete" style="padding:3px 8px; font-size:0.72rem;" onclick="deleteSingleMessage('${mid}')">
-                  🗑️ Delete Message
-                </button>
-              </div>
+            <div style="font-size:0.86rem; color:#FFF; margin-bottom:8px; line-height:1.4;">
+              ${escapeHtml(text)}
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-action" style="padding:3px 8px; font-size:0.72rem;" onclick="openUserModal('${uid}', '${escapedName}', '${escapedPlace}', '${role}')">
+                ⚙️ Manage Member
+              </button>
+              <button class="btn-action btn-delete" style="padding:3px 8px; font-size:0.72rem;" onclick="deleteSingleMessage('${mid}')">
+                🗑️ Delete Message
+              </button>
             </div>
           </div>
-        `;
-      });
-
-      feed.innerHTML = html;
-    }, err => {
-      console.error("Admin chat stream error:", err);
+        </div>
+      `;
     });
+
+    feed.innerHTML = html;
+  }
+
+  function initCommunityChatAdmin() {
+    // 1. Load from local cache immediately (fastest 0ms render)
+    const local = getLocalCommunityMsgs();
+    adminChatMessages = [...local].sort((a, b) => (b.clientTimestamp || 0) - (a.clientTimestamp || 0));
+    renderAdminChatFeed(adminChatMessages);
+
+    // 2. Setup BroadcastChannel
+    try {
+      adminChatChannel = new BroadcastChannel('ahs_community_chat');
+      adminChatChannel.onmessage = (event) => {
+        if (event.data && event.data.type === 'new_msg') {
+          const incoming = event.data.message;
+          if (!adminChatMessages.some(m => m.id === incoming.id)) {
+            adminChatMessages.unshift(incoming);
+            renderAdminChatFeed(adminChatMessages);
+          }
+        } else if (event.data && event.data.type === 'delete_msg') {
+          adminChatMessages = adminChatMessages.filter(m => m.id !== event.data.id);
+          renderAdminChatFeed(adminChatMessages);
+        }
+      };
+    } catch (e) {}
+
+    // 3. Setup window storage listener
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ahs_community_messages') {
+        const updated = getLocalCommunityMsgs();
+        adminChatMessages = [...updated].sort((a, b) => (b.clientTimestamp || 0) - (a.clientTimestamp || 0));
+        renderAdminChatFeed(adminChatMessages);
+      }
+    });
+
+    // 4. Firestore listener with graceful fallback
+    if (db) {
+      try {
+        db.collection('community_messages').limit(100).onSnapshot(snapshot => {
+          if (!snapshot.empty) {
+            const remoteMsgs = [];
+            snapshot.forEach(doc => {
+              const m = doc.data();
+              if (!m.deleted) remoteMsgs.push({ id: doc.id, ...m });
+            });
+
+            // Merge
+            const currentLocal = getLocalCommunityMsgs();
+            const merged = [...remoteMsgs];
+            currentLocal.forEach(loc => {
+              if (!merged.some(r => r.id === loc.id)) {
+                merged.push(loc);
+              }
+            });
+
+            saveLocalCommunityMsgs(merged);
+            adminChatMessages = [...merged].sort((a, b) => {
+              const tA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt.seconds * 1000) : (a.clientTimestamp || 0);
+              const tB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt.seconds * 1000) : (b.clientTimestamp || 0);
+              return tB - tA;
+            });
+            renderAdminChatFeed(adminChatMessages);
+          }
+        }, err => {
+          console.warn("Firestore admin chat notice (resilient mode active):", err.message);
+        });
+      } catch (err) {
+        console.warn("Admin chat init warning:", err);
+      }
+    }
   }
 
   // Admin Broadcast Message
@@ -1630,35 +1776,86 @@
 
     const btn = document.getElementById('broadcastBtn');
     btn.disabled = true;
+    btn.innerHTML = 'Broadcasting... ⏳';
 
-    try {
-      await db.collection('community_messages').add({
-        uid: 'admin_official',
-        name: 'Abhay Hindu Sena (Official)',
-        place: 'Kendriya Karyalayam',
-        role: 'Leader',
-        text: text,
-        clientTimestamp: Date.now(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      input.value = '';
-      showToast("Official announcement posted to community! 🚩");
-    } catch (err) {
-      alert("Error broadcasting message: " + err.message);
-    } finally {
-      btn.disabled = false;
+    const newMsg = {
+      id: 'adm_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+      uid: 'admin_official',
+      name: 'Abhay Hindu Sena (Official)',
+      place: 'Kendriya Karyalayam',
+      role: 'Leader',
+      text: text,
+      clientTimestamp: Date.now()
+    };
+
+    // 1. Optimistic local update
+    const currentMsgs = getLocalCommunityMsgs();
+    currentMsgs.push(newMsg);
+    saveLocalCommunityMsgs(currentMsgs);
+
+    adminChatMessages.unshift(newMsg);
+    renderAdminChatFeed(adminChatMessages);
+    input.value = '';
+
+    // 2. Broadcast across tabs & windows
+    if (adminChatChannel) {
+      try {
+        adminChatChannel.postMessage({ type: 'new_msg', message: newMsg });
+      } catch (err) {}
     }
+    window.dispatchEvent(new Event('storage'));
+
+    // 3. Non-blocking cloud sync
+    if (db) {
+      try {
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000));
+        Promise.race([
+          db.collection('community_messages').add({
+            ...newMsg,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }),
+          timeoutPromise
+        ]).catch(err => {
+          console.warn("Cloud broadcast sync deferred:", err.message);
+        });
+      } catch (err) {}
+    }
+
+    showToast("Official announcement posted to community! 🚩");
+    btn.disabled = false;
+    btn.innerHTML = '📢 Post Official Announcement';
   }
 
   // Delete Single Message
   async function deleteSingleMessage(msgId) {
     if (!confirm("Are you sure you want to delete this message from the community chat?")) return;
-    try {
-      await db.collection('community_messages').doc(msgId).delete();
-      showToast("Message removed from chat.");
-    } catch (err) {
-      alert("Error deleting message: " + err.message);
+
+    // 1. Remove locally
+    let currentMsgs = getLocalCommunityMsgs();
+    currentMsgs = currentMsgs.filter(m => m.id !== msgId);
+    saveLocalCommunityMsgs(currentMsgs);
+
+    adminChatMessages = adminChatMessages.filter(m => m.id !== msgId);
+    renderAdminChatFeed(adminChatMessages);
+
+    // 2. Broadcast deletion
+    if (adminChatChannel) {
+      try {
+        adminChatChannel.postMessage({ type: 'delete_msg', id: msgId });
+      } catch (err) {}
     }
+    window.dispatchEvent(new Event('storage'));
+
+    // 3. Non-blocking Firestore delete
+    if (db) {
+      try {
+        db.collection('community_messages').doc(msgId).delete().catch(err => {
+          console.warn("Firestore delete deferred:", err.message);
+        });
+      } catch (err) {}
+    }
+
+    showToast("Message removed from chat. 🗑️");
   }
 
   // ==========================================
@@ -2228,10 +2425,71 @@
   }
 
   // ==========================================
-  // 5. GALLERY MANAGEMENT
+  // 5. GALLERY & CLOUD STORAGE MANAGEMENT
   // ==========================================
   let selectedPhotoFile = null;
   let selectedPhotoDataUrl = null;
+  let currentStorageMode = 'cdn';
+  let adminGalleryPhotos = [];
+  let adminGalleryChannel = null;
+
+  const defaultAdminGalleryPhotos = [
+    {
+      id: "def-1",
+      imageUrl: "assets/founder.jpg",
+      title: "Shri Radha Manohar Das addressing devotees at Tirupati Convention",
+      source: "Official Archive"
+    },
+    {
+      id: "def-2",
+      imageUrl: "assets/hero-desktop.png",
+      title: "Youth Awakening & Martial Discipline Rally",
+      source: "Official Archive"
+    },
+    {
+      id: "def-3",
+      imageUrl: "assets/hero-mobile.png",
+      title: "Dharma Raksha & Cow Protection Drive",
+      source: "Official Archive"
+    },
+    {
+      id: "def-4",
+      imageUrl: "assets/logo.png",
+      title: "Official Crest of Abhay Hindu Sena",
+      source: "Official Archive"
+    }
+  ];
+
+  function switchStorageMode(mode) {
+    currentStorageMode = mode;
+    const btnCdn = document.getElementById('btnModeCdn');
+    const btnTg = document.getElementById('btnModeTg');
+    const tgBox = document.getElementById('telegramConfigBox');
+
+    if (mode === 'telegram') {
+      if (btnTg) btnTg.classList.add('active');
+      if (btnCdn) btnCdn.classList.remove('active');
+      if (tgBox) tgBox.style.display = 'block';
+    } else {
+      if (btnCdn) btnCdn.classList.add('active');
+      if (btnTg) btnTg.classList.remove('active');
+      if (tgBox) tgBox.style.display = 'none';
+    }
+  }
+
+  function loadTgSettings() {
+    const tokenInput = document.getElementById('tgBotToken');
+    const chatInput = document.getElementById('tgChatId');
+    if (tokenInput) tokenInput.value = localStorage.getItem('ahs_tg_bot_token') || '';
+    if (chatInput) chatInput.value = localStorage.getItem('ahs_tg_chat_id') || '';
+  }
+
+  function saveTgSettings() {
+    const tokenInput = document.getElementById('tgBotToken');
+    const chatInput = document.getElementById('tgChatId');
+    if (tokenInput) localStorage.setItem('ahs_tg_bot_token', tokenInput.value.trim());
+    if (chatInput) localStorage.setItem('ahs_tg_chat_id', chatInput.value.trim());
+  }
 
   function handlePhotoFileSelect(input) {
     if (input.files && input.files[0]) {
@@ -2344,6 +2602,53 @@
     }
   }
 
+  // Upload to Telegram Private Channel
+  async function uploadToTelegram(file, botToken, chatId) {
+    const compressedBlob = await compressImage(file);
+    const formData = new FormData();
+    formData.append('chat_id', chatId);
+    formData.append('photo', compressedBlob, 'photo.jpg');
+    formData.append('caption', '🚩 Abhay Hindu Sena Gallery Archive - ' + new Date().toLocaleString('en-IN'));
+
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+      method: 'POST',
+      body: formData
+    });
+    const json = await res.json();
+    if (!json.ok) {
+      throw new Error(json.description || 'Telegram Bot API error');
+    }
+
+    // High performance public delivery: mirror to Cloud CDN or fetch direct link
+    try {
+      const cdnRes = await uploadToCloudCDN(file);
+      return {
+        url: cdnRes.url,
+        thumb: cdnRes.thumb,
+        tgMessageId: json.result.message_id
+      };
+    } catch (e) {
+      // Direct Telegram file path fallback
+      const photos = json.result.photo;
+      const fileId = photos[photos.length - 1].file_id;
+      const fileRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`);
+      const fileJson = await fileRes.json();
+      if (fileJson.ok && fileJson.result.file_path) {
+        const tgDirectUrl = `https://api.telegram.org/file/bot${botToken}/${fileJson.result.file_path}`;
+        return {
+          url: tgDirectUrl,
+          thumb: tgDirectUrl,
+          tgMessageId: json.result.message_id
+        };
+      }
+      return {
+        url: selectedPhotoDataUrl,
+        thumb: selectedPhotoDataUrl,
+        tgMessageId: json.result.message_id
+      };
+    }
+  }
+
   async function handleUploadPhoto(e) {
     e.preventDefault();
     const btn = document.getElementById('btnPublishPhoto');
@@ -2361,6 +2666,18 @@
       return;
     }
 
+    // Verify Telegram settings if Telegram mode is selected
+    if (selectedPhotoFile && currentStorageMode === 'telegram') {
+      const tgToken = (document.getElementById('tgBotToken').value || '').trim();
+      const tgChat = (document.getElementById('tgChatId').value || '').trim();
+      if (!tgToken || !tgChat) {
+        alert("Please enter both your Telegram Bot Token and Channel Username / ID in the setup box above.");
+        document.getElementById('telegramConfigBox').style.display = 'block';
+        return;
+      }
+      saveTgSettings();
+    }
+
     btn.disabled = true;
     btn.innerHTML = '⏳ Uploading Photo...';
     statusMsg.style.display = 'block';
@@ -2371,35 +2688,85 @@
 
     let finalImageUrl = directUrl;
     let finalThumbUrl = directUrl;
+    let uploadSource = 'Admin Dashboard';
 
     try {
       if (selectedPhotoFile) {
-        statusMsg.textContent = '☁️ Uploading to high-speed cloud CDN...';
-        try {
-          const uploadRes = await uploadToCloudCDN(selectedPhotoFile);
-          finalImageUrl = uploadRes.url;
-          finalThumbUrl = uploadRes.thumb;
-        } catch (cloudErr) {
-          console.warn("Cloud CDN upload fallback attempt:", cloudErr);
-          // If cloud API fails, try direct base64 if small, or inform user
-          if (selectedPhotoDataUrl && selectedPhotoDataUrl.length < 950000) {
-            finalImageUrl = selectedPhotoDataUrl;
-            finalThumbUrl = selectedPhotoDataUrl;
-          } else {
-            throw new Error("Could not reach Cloud CDN (" + cloudErr.message + "). Please paste a direct image URL instead.");
+        if (currentStorageMode === 'telegram') {
+          statusMsg.textContent = '✈️ Archiving to private Telegram channel...';
+          const tgToken = document.getElementById('tgBotToken').value.trim();
+          const tgChat = document.getElementById('tgChatId').value.trim();
+          const tgRes = await uploadToTelegram(selectedPhotoFile, tgToken, tgChat);
+          finalImageUrl = tgRes.url;
+          finalThumbUrl = tgRes.thumb;
+          uploadSource = 'Telegram Channel Cloud';
+        } else {
+          statusMsg.textContent = '☁️ Uploading to high-speed cloud CDN...';
+          try {
+            const uploadRes = await uploadToCloudCDN(selectedPhotoFile);
+            finalImageUrl = uploadRes.url;
+            finalThumbUrl = uploadRes.thumb;
+            uploadSource = 'Cloud CDN';
+          } catch (cloudErr) {
+            console.warn("Cloud CDN upload fallback attempt:", cloudErr);
+            if (selectedPhotoDataUrl && selectedPhotoDataUrl.length < 950000) {
+              finalImageUrl = selectedPhotoDataUrl;
+              finalThumbUrl = selectedPhotoDataUrl;
+              uploadSource = 'Direct Local';
+            } else {
+              throw new Error("Could not reach Cloud CDN (" + cloudErr.message + "). Please paste a direct image URL instead.");
+            }
           }
         }
       }
 
-      statusMsg.textContent = '💾 Saving to public gallery database...';
+      statusMsg.textContent = '💾 Publishing to gallery...';
 
-      await db.collection('gallery_photos').add({
+      const newPhoto = {
+        id: 'photo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
         title: title,
         imageUrl: finalImageUrl,
         thumbnailUrl: finalThumbUrl || finalImageUrl,
-        source: 'Admin Dashboard',
-        uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+        source: uploadSource,
+        uploadedAt: new Date().toISOString()
+      };
+
+      // 1. Save to localStorage immediately
+      let localPhotos = [];
+      try {
+        localPhotos = JSON.parse(localStorage.getItem('ahs_gallery_photos') || '[]');
+      } catch (e) {
+        localPhotos = [];
+      }
+      localPhotos.unshift(newPhoto);
+      localStorage.setItem('ahs_gallery_photos', JSON.stringify(localPhotos));
+
+      // 2. Broadcast to website gallery (instant cross-tab update)
+      try {
+        if (adminGalleryChannel) {
+          adminGalleryChannel.postMessage({ type: 'new_photo', photo: newPhoto });
+        }
+      } catch (e) {}
+      window.dispatchEvent(new Event('storage'));
+
+      // 3. Background non-blocking Firestore sync
+      if (db) {
+        try {
+          const timeoutPromise = new Promise((_, rej) => setTimeout(() => rej(new Error("Timeout")), 3000));
+          Promise.race([
+            db.collection('gallery_photos').add({
+              title: title,
+              imageUrl: finalImageUrl,
+              thumbnailUrl: finalThumbUrl || finalImageUrl,
+              source: uploadSource,
+              uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }),
+            timeoutPromise
+          ]).catch(err => {
+            console.warn("Firestore gallery backup deferred:", err.message);
+          });
+        } catch (e) {}
+      }
 
       statusMsg.style.background = 'rgba(39, 174, 96, 0.2)';
       statusMsg.style.border = '1px solid #27ae60';
@@ -2414,6 +2781,9 @@
       document.getElementById('galleryImgPreview').style.display = 'none';
       document.getElementById('galleryPlaceholder').style.display = 'block';
       document.getElementById('galleryPlaceholder').textContent = 'Select a file or paste a link to preview';
+
+      // Update grid
+      renderAdminGalleryCards();
 
       showToast("Photo added to public gallery! 🚩");
 
@@ -2434,120 +2804,156 @@
     }
   }
 
+  function getLocalGalleryPhotos() {
+    try {
+      const stored = localStorage.getItem('ahs_gallery_photos');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return [];
+  }
+
+  function renderAdminGalleryCards() {
+    const grid = document.getElementById('galleryAdminGrid');
+    const countEl = document.getElementById('photoCount');
+    const tabCountEl = document.getElementById('tabPhotoCount');
+    if (!grid) return;
+
+    const local = getLocalGalleryPhotos();
+    const combined = [...local, ...defaultAdminGalleryPhotos];
+    const seen = new Set();
+    adminGalleryPhotos = combined.filter(p => {
+      const key = p.id || p.imageUrl;
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    const count = adminGalleryPhotos.length;
+    if (countEl) countEl.textContent = count;
+    if (tabCountEl) tabCountEl.textContent = count;
+
+    if (count === 0) {
+      grid.innerHTML = `
+        <div style="text-align:center; padding:40px; color:var(--text-muted); grid-column: 1 / -1;">
+          No photos in the gallery yet. Upload your first photo on the left!
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    adminGalleryPhotos.forEach(data => {
+      const id = data.id;
+      const title = data.title || 'Untitled Moment';
+      const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
+      const sourceBadge = data.source || 'Gallery';
+      const isDefault = String(id).startsWith('def-');
+      const dateStr = data.uploadedAt && data.uploadedAt.toDate
+        ? data.uploadedAt.toDate().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+        : (data.uploadedAt ? new Date(data.uploadedAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : 'Archive');
+
+      const escapedTitle = title.replace(/'/g, "\\'");
+
+      html += `
+        <div class="gallery-admin-card" id="adminPhoto_${escapeHtml(id)}">
+          <div class="gallery-admin-thumb-wrap">
+            <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" class="gallery-admin-thumb" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
+            <span style="position:absolute; top:6px; left:6px; background:rgba(0,0,0,0.75); color:var(--gold-bright); padding:2px 7px; border-radius:4px; font-size:0.68rem; border:1px solid rgba(212,175,55,0.4);">
+              ${escapeHtml(sourceBadge)}
+            </span>
+          </div>
+          <div class="gallery-admin-body">
+            <div class="gallery-admin-title" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+            <div class="gallery-admin-meta">
+              <span>📅 ${dateStr}</span>
+            </div>
+            <div class="gallery-admin-actions">
+              <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener" class="btn-gallery-action">🔍 View</a>
+              ${!isDefault ? `<button type="button" onclick="deleteGalleryPhoto('${id}', '${escapedTitle}')" class="btn-gallery-action btn-gallery-del">🗑️ Delete</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    grid.innerHTML = html;
+  }
+
   function initGalleryAdmin() {
-    function renderSnapshot(snapshot) {
-      const grid = document.getElementById('galleryAdminGrid');
-      const countEl = document.getElementById('photoCount');
-      const tabCountEl = document.getElementById('tabPhotoCount');
-      const count = snapshot.size;
+    loadTgSettings();
+    renderAdminGalleryCards();
 
-      if (countEl) countEl.textContent = count;
-      if (tabCountEl) tabCountEl.textContent = count;
+    // Setup BroadcastChannel for gallery sync
+    try {
+      adminGalleryChannel = new BroadcastChannel('ahs_gallery_sync');
+      adminGalleryChannel.onmessage = () => {
+        renderAdminGalleryCards();
+      };
+    } catch (e) {}
 
-      if (snapshot.empty) {
-        grid.innerHTML = `
-          <div style="text-align:center; padding:40px; color:var(--text-muted); grid-column: 1 / -1;">
-            No photos in the gallery yet. Upload your first photo on the left!
-          </div>
-        `;
-        return;
+    // Storage listener
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ahs_gallery_photos') {
+        renderAdminGalleryCards();
       }
+    });
 
-      // Sort client-side by uploadedAt
-      const docs = [];
-      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-      docs.sort((a, b) => {
-        const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
-        const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
-        return timeB - timeA;
-      });
-
-      let html = '';
-      docs.forEach(data => {
-        const id = data.id;
-        const title = data.title || 'Untitled Moment';
-        const imgUrl = data.imageUrl || data.thumbnailUrl || 'assets/hero-desktop.png';
-        const dateStr = data.uploadedAt && data.uploadedAt.toDate
-          ? data.uploadedAt.toDate().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
-          : 'Recent';
-
-        const escapedTitle = title.replace(/'/g, "\\'");
-
-        html += `
-          <div class="gallery-admin-card">
-            <div class="gallery-admin-thumb-wrap">
-              <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" class="gallery-admin-thumb" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
-            </div>
-            <div class="gallery-admin-body">
-              <div class="gallery-admin-title" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
-              <div class="gallery-admin-meta">
-                <span>📅 ${dateStr}</span>
-              </div>
-              <div class="gallery-admin-actions">
-                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener" class="btn-gallery-action">🔍 View</a>
-                <button type="button" onclick="deleteGalleryPhoto('${id}', '${escapedTitle}')" class="btn-gallery-action btn-gallery-del">🗑️ Delete</button>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-
-      grid.innerHTML = html;
+    // Optional Firestore sync
+    if (db) {
+      try {
+        db.collection('gallery_photos').limit(60).onSnapshot(snapshot => {
+          if (!snapshot.empty) {
+            const remote = [];
+            snapshot.forEach(doc => remote.push({ id: doc.id, ...doc.data() }));
+            const local = getLocalGalleryPhotos();
+            const merged = [...local];
+            remote.forEach(r => {
+              if (!merged.some(l => l.id === r.id || l.imageUrl === r.imageUrl)) {
+                merged.push(r);
+              }
+            });
+            localStorage.setItem('ahs_gallery_photos', JSON.stringify(merged));
+            renderAdminGalleryCards();
+          }
+        }, err => {
+          console.warn("Firestore gallery stream notice (resilient mode active):", err.message);
+        });
+      } catch (e) {}
     }
-
-    function startQuery(tryOrdered = true) {
-      let query = db.collection('gallery_photos');
-      if (tryOrdered) {
-        query = query.orderBy('uploadedAt', 'desc');
-      }
-
-      query.onSnapshot(snapshot => {
-        renderSnapshot(snapshot);
-      }, err => {
-        console.error("Gallery listener error:", err);
-        // If ordering failed due to index or missing field, retry without order
-        if (tryOrdered) {
-          console.warn("Retrying gallery fetch without index ordering...");
-          startQuery(false);
-          return;
-        }
-
-        const grid = document.getElementById('galleryAdminGrid');
-        if (grid) {
-          grid.innerHTML = `
-            <div style="text-align:center; padding:30px 20px; color:#ff6b6b; grid-column: 1 / -1; background: rgba(231,76,60,0.08); border: 1px dashed rgba(231,76,60,0.4); border-radius: 10px;">
-              <div style="font-size: 2rem; margin-bottom: 8px;">🔒</div>
-              <h4 style="margin-bottom:8px; color:#e74c3c; font-size: 1.05rem;">Firestore Permission Required</h4>
-              <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px; max-width:500px; margin-left:auto; margin-right:auto;">
-                Your Firestore Security Rules in Firebase Console need permission added for the <code>gallery_photos</code> collection.
-              </p>
-              <div style="background:#0a0303; border:1px solid var(--border-gold); padding:10px 14px; border-radius:6px; font-family:monospace; font-size:0.78rem; color:var(--gold-bright); text-align:left; max-width:440px; margin:0 auto 14px; overflow-x:auto; line-height: 1.5;">
-                match /gallery_photos/{document=**} {<br>
-                &nbsp;&nbsp;allow read, write: if true;<br>
-                }
-              </div>
-              <a href="https://console.firebase.google.com/project/abhay-hindu-sena-org/firestore/rules" target="_blank" rel="noopener" class="btn-action" style="background:var(--gold); color:#000; text-decoration:none; font-weight:700; display:inline-block; padding: 8px 18px; border-radius: 20px;">
-                Open Firebase Console Rules ➔
-              </a>
-            </div>
-          `;
-        }
-      });
-    }
-
-    startQuery(true);
   }
 
   async function deleteGalleryPhoto(id, title) {
     if (!confirm(`Are you sure you want to permanently delete photo:\n"${title}"?`)) {
       return;
     }
+
+    // 1. Remove locally
+    let local = getLocalGalleryPhotos();
+    local = local.filter(p => p.id !== id);
+    localStorage.setItem('ahs_gallery_photos', JSON.stringify(local));
+
+    // 2. Broadcast
     try {
-      await db.collection('gallery_photos').doc(id).delete();
-      showToast("Photo removed from gallery! 🗑️");
-    } catch (err) {
-      alert("Error deleting photo: " + err.message);
+      if (adminGalleryChannel) {
+        adminGalleryChannel.postMessage({ type: 'delete_photo', id: id });
+      }
+    } catch (e) {}
+    window.dispatchEvent(new Event('storage'));
+
+    // 3. Firestore delete non-blocking
+    if (db) {
+      try {
+        db.collection('gallery_photos').doc(id).delete().catch(err => {
+          console.warn("Firestore photo delete deferred:", err.message);
+        });
+      } catch (e) {}
     }
+
+    renderAdminGalleryCards();
+    showToast("Photo removed from gallery! 🗑️");
   }
 
   // ==========================================

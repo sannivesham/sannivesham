@@ -631,7 +631,22 @@
   let currentSearchQuery = '';
 
   function loadAllPhotos() {
-    allLoadedPhotos = defaultPhotos;
+    let localPhotos = [];
+    try {
+      localPhotos = JSON.parse(localStorage.getItem('ahs_gallery_photos') || '[]');
+    } catch (e) {
+      localPhotos = [];
+    }
+
+    // Combine local uploaded photos with default photos (avoiding duplicates)
+    const combined = [...localPhotos, ...defaultPhotos];
+    const seen = new Set();
+    allLoadedPhotos = combined.filter(p => {
+      const key = p.id || p.imageUrl || p.url;
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     renderPhotos();
 
     if (!db) return;
@@ -649,24 +664,38 @@
             const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
             return timeB - timeA;
           });
-          allLoadedPhotos = list;
-        } else {
-          allLoadedPhotos = defaultPhotos;
+          
+          const merged = [...list, ...localPhotos, ...defaultPhotos];
+          const mSeen = new Set();
+          allLoadedPhotos = merged.filter(p => {
+            const key = p.id || p.imageUrl || p.url;
+            if (!key || mSeen.has(key)) return false;
+            mSeen.add(key);
+            return true;
+          });
         }
         renderPhotos();
       }, err => {
         console.warn("Firestore error fallback:", err);
-        if (tryOrdered) {
-          startQuery(false);
-          return;
-        }
-        allLoadedPhotos = defaultPhotos;
-        renderPhotos();
       });
     }
 
     startQuery(true);
   }
+
+  // Cross-tab real-time sync when photos are uploaded from admin
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'ahs_gallery_photos') {
+      loadAllPhotos();
+    }
+  });
+
+  try {
+    const galleryChannel = new BroadcastChannel('ahs_gallery_sync');
+    galleryChannel.onmessage = () => {
+      loadAllPhotos();
+    };
+  } catch (e) {}
 
   function renderPhotos() {
     const grid = document.getElementById('allPhotosGrid');
