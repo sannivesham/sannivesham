@@ -2187,9 +2187,526 @@
       transition-duration: 0.001ms !important;
     }
   }
+
+  /* ========================================================================= */
+  /* DIGITAL INAUGURATION CEREMONY CURTAIN & MAINTENANCE STYLES */
+  /* ========================================================================= */
+  .launch-curtain-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center top, #2C0909 0%, #150303 60%, #080101 100%);
+    z-index: 999999;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    box-sizing: border-box;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .launch-curtain-overlay.curtain-fadeout {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+  }
+  .launch-curtain-container {
+    max-width: 680px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  .launch-crest-wrap {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .launch-aura-ring {
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,26,0.5) 0%, rgba(212,175,55,0.2) 60%, transparent 80%);
+    animation: auraPulse 2.5s infinite alternate ease-in-out;
+  }
+  @keyframes auraPulse {
+    0% { transform: scale(0.9); opacity: 0.5; }
+    100% { transform: scale(1.15); opacity: 0.9; filter: drop-shadow(0 0 25px rgba(255,107,26,0.8)); }
+  }
+  .launch-crest-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFF;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 35px rgba(212,175,55,0.6);
+    position: relative;
+    z-index: 2;
+  }
+  .launch-shloka-badge {
+    display: inline-block;
+    background: rgba(255,107,26,0.14);
+    border: 1px solid rgba(255,107,26,0.45);
+    color: #FFA466;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 18px;
+    border-radius: 25px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .launch-curtain-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 2.7rem);
+    color: var(--gold-bright);
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin: 0 0 2px;
+    text-shadow: 0 0 20px rgba(212,175,55,0.5);
+    line-height: 1.2;
+  }
+  .launch-curtain-telugu {
+    font-family: 'Noto Sans Telugu', serif;
+    font-size: 1.15rem;
+    color: var(--saffron);
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .launch-curtain-founder {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+  .launch-curtain-founder strong {
+    color: #FFF;
+    font-size: 0.88rem;
+    display: block;
+    margin-top: 2px;
+  }
+  .launch-curtain-card {
+    background: rgba(26, 7, 7, 0.88);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 30px 24px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.2);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+  }
+  .launch-pill-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,107,26,0.18);
+    border: 1px solid var(--saffron);
+    color: #FFA466;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .live-dot-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FF6B1A;
+    box-shadow: 0 0 10px #FF6B1A;
+    animation: blinkDot 1s infinite alternate;
+  }
+  @keyframes blinkDot {
+    0% { opacity: 0.4; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.3); }
+  }
+  .launch-curtain-heading {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.3rem, 3.8vw, 1.85rem);
+    color: var(--gold-bright);
+    margin: 0 0 10px;
+    letter-spacing: 1px;
+  }
+  .launch-curtain-sub {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .curtain-live-sync-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--gold);
+    background: rgba(212,175,55,0.08);
+    border: 1px dashed rgba(212,175,55,0.4);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  .sync-radar-icon {
+    display: inline-block;
+    animation: radarSpin 3s linear infinite;
+  }
+  @keyframes radarSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .curtain-countdown-box {
+    background: radial-gradient(circle, rgba(255,107,26,0.25) 0%, rgba(20,4,4,0.95) 100%);
+    border: 2px solid var(--saffron);
+    border-radius: 16px;
+    padding: 24px 16px;
+    margin: 15px 0 22px;
+    box-shadow: 0 0 40px rgba(255,107,26,0.4);
+    animation: pulseCurtainBox 1s infinite alternate;
+  }
+  @keyframes pulseCurtainBox {
+    0% { box-shadow: 0 0 20px rgba(255,107,26,0.3); }
+    100% { box-shadow: 0 0 50px rgba(255,107,26,0.7); }
+  }
+  .countdown-tagline {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: #FFA466;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .curtain-countdown-digit {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(4.5rem, 12vw, 6.5rem);
+    font-weight: 900;
+    color: var(--gold-bright);
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(247,213,127,0.9), 0 0 60px rgba(255,107,26,0.7);
+    animation: zoomDigit 1s infinite ease-out;
+  }
+  @keyframes zoomDigit {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.95; }
+  }
+  .curtain-countdown-desc {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  .curtain-celebration-box {
+    background: radial-gradient(circle, rgba(46,204,113,0.2) 0%, rgba(20,4,4,0.9) 100%);
+    border: 2px solid #2ecc71;
+    border-radius: 14px;
+    padding: 18px;
+    margin: 15px 0 22px;
+  }
+  .celebration-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: #2ecc71;
+    font-weight: 800;
+  }
+  .curtain-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-curtain-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-curtain-action.join {
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    color: #000;
+    border: none;
+    box-shadow: 0 2px 14px rgba(255,107,26,0.4);
+  }
+  .btn-curtain-action.join:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(212,175,55,0.6);
+  }
+  .btn-curtain-action.yt {
+    background: rgba(255,0,0,0.15);
+    border: 1px solid rgba(255,0,0,0.4);
+    color: #ff8585;
+  }
+  .btn-curtain-action.yt:hover {
+    background: #ff0000;
+    color: #FFF;
+  }
+  .btn-curtain-action.insta {
+    background: rgba(225,48,108,0.15);
+    border: 1px solid rgba(225,48,108,0.4);
+    color: #ff9ec4;
+  }
+  .btn-curtain-action.insta:hover {
+    background: #e1306c;
+    color: #FFF;
+  }
+  .btn-curtain-action.admin {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+  }
+  .curtain-footer-admin {
+    margin-top: 24px;
+    font-size: 0.76rem;
+  }
+  .curtain-footer-admin a {
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .curtain-footer-admin a:hover {
+    color: var(--gold-bright);
+  }
+
+  /* MAINTENANCE OVERLAY */
+  .maintenance-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(12, 3, 3, 0.98);
+    backdrop-filter: blur(12px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .maintenance-card {
+    background: #180606;
+    border: 2px solid var(--border-gold);
+    border-radius: 16px;
+    max-width: 540px;
+    width: 100%;
+    padding: 36px 24px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+  }
+  .maintenance-crest {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    margin: 0 auto 14px;
+    background: #FFF;
+  }
+  .maintenance-badge {
+    display: inline-block;
+    background: rgba(243,156,18,0.15);
+    border: 1px solid rgba(243,156,18,0.5);
+    color: #f39c12;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+  }
+  .maintenance-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--gold-bright);
+    margin: 0 0 4px;
+  }
+  .maintenance-card h3 {
+    font-size: 1.05rem;
+    color: #FFF;
+    margin-bottom: 14px;
+  }
+  .maintenance-card p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .maintenance-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* ADMIN PREVIEW BAR */
+  .admin-preview-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: linear-gradient(90deg, #7A0C0C 0%, #3D0505 100%);
+    border-bottom: 2px solid var(--gold);
+    z-index: 999998;
+    padding: 7px 16px;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .admin-preview-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .admin-preview-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .preview-btn {
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: none;
+  }
+  .preview-btn.launch {
+    background: var(--gold);
+    color: #000;
+  }
+  .preview-btn.close {
+    background: rgba(255,255,255,0.15);
+    color: #FFF;
+  }
 </style>
 </head>
 <body>
+
+<!-- ========================================================================= -->
+<!-- 1. ADMIN PREVIEW FLOATING BAR -->
+<!-- ========================================================================= -->
+<div id="adminPreviewBar" class="admin-preview-bar" style="display:none;">
+  <div class="admin-preview-content">
+    <span>👁️ <strong>Admin Preview Mode Active:</strong> Visitors currently see the Inauguration Curtain.</span>
+    <div class="admin-preview-btns">
+      <a href="admin.html" class="preview-btn launch">🚀 Open Launch Control</a>
+      <button type="button" onclick="closeAdminPreview()" class="preview-btn close">Hide Bar ✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 2. PRE-LAUNCH / DIGITAL INAUGURATION CEREMONY CURTAIN -->
+<!-- ========================================================================= -->
+<div id="launchCurtainOverlay" class="launch-curtain-overlay" style="display:none;">
+  <div class="launch-curtain-container">
+    
+    <!-- Sacred Crest with Golden Aura -->
+    <div class="launch-crest-wrap">
+      <div class="launch-aura-ring"></div>
+      <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="launch-crest-img">
+    </div>
+
+    <!-- Sacred Vedic Invocation -->
+    <div class="launch-shloka-badge">
+      <span>🚩 ॐ श्री गुरुభ्यो नमः • धर्मो रक्षति रक्षितః 🚩</span>
+    </div>
+
+    <h1 class="launch-curtain-title">ABHAY HINDU SENA</h1>
+    <div class="launch-curtain-telugu">అభయ్ హిందూ సేన</div>
+    
+    <div class="launch-curtain-founder">
+      <span>FOUNDED BY</span>
+      <strong>SHRI RADHA MANOHAR DAS JI</strong>
+    </div>
+
+    <!-- Launching Soon Ribbon / Card -->
+    <div class="launch-curtain-card">
+      <div class="launch-pill-live">
+        <span class="live-dot-pulse"></span>
+        <span id="curtainStatusText">DIGITAL INAUGURATION CEREMONY</span>
+      </div>
+
+      <h2 class="launch-curtain-heading" id="curtainMainHeading">
+        OFFICIAL PORTAL LAUNCHING SOON
+      </h2>
+      <p class="launch-curtain-sub" id="curtainSubText">
+        ధర్మ రక్షణ, ఆలయ పరిరక్షణ మరియు యువజన జాగృతి కోసం అభయ్ హిందూ సేన అధికారిక పోర్టల్ త్వరలో లోకార్పణ కానుంది.
+        <br>
+        The official digital gateway is undergoing sacred consecration for worldwide unveiling.
+      </p>
+
+      <!-- LIVE COUNTDOWN DISPLAY (Revealed when Admin initiates 10s Launch) -->
+      <div id="curtainCountdownBox" class="curtain-countdown-box" style="display:none;">
+        <div class="countdown-tagline">INAUGURATION CEREMONY COMMENCING!</div>
+        <div class="countdown-digits-wrapper">
+          <div class="curtain-countdown-digit" id="curtainCountdownDigit">10</div>
+        </div>
+        <div class="curtain-countdown-desc">Unveiling the sacred portal live...</div>
+      </div>
+
+      <!-- CELEBRATION MESSAGE (At 0s) -->
+      <div id="curtainCelebrationBox" class="curtain-celebration-box" style="display:none;">
+        <div class="celebration-title">✨ జై శ్రీ రామ్! JAI SHREE RAM! ✨</div>
+        <p>The Official Portal of Abhay Hindu Sena is now LIVE!</p>
+      </div>
+
+      <!-- Stay tuned indicator -->
+      <div class="curtain-live-sync-indicator" id="curtainLiveSyncIndicator">
+        <span class="sync-radar-icon">📡</span> Live Ceremony Sync Active • Portal unlocks automatically on launch
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="curtain-actions-row">
+        <button type="button" class="btn-curtain-action join" onclick="openRSVPModal('Grand Portal Launch Sevak')">
+          🚩 Join as Sevak / నమోదు చేసుకోండి
+        </button>
+        <a href="https://youtube.com/@abhayhindusena" target="_blank" rel="noopener" class="btn-curtain-action yt">
+          📺 YouTube Live
+        </a>
+        <a href="https://instagram.com/abhayhindusena" target="_blank" rel="noopener" class="btn-curtain-action insta">
+          📸 Instagram
+        </a>
+      </div>
+    </div>
+
+    <!-- Discreet Admin Portal Link at bottom -->
+    <div class="curtain-footer-admin">
+      <a href="admin.html">🔐 Admin Launch Portal</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 3. MAINTENANCE OVERLAY -->
+<!-- ========================================================================= -->
+<div id="maintenanceOverlay" class="maintenance-overlay" style="display:none;">
+  <div class="maintenance-card">
+    <div style="font-size:2.2rem; margin-bottom:10px;">⚙️ 🕉️</div>
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Logo" class="maintenance-crest">
+    <h2>ABHAY HINDU SENA</h2>
+    <div class="maintenance-badge">PAUSED FOR MAINTENANCE</div>
+    <h3>Scheduled Upgrades in Progress</h3>
+    <p>
+      అభయ్ హిందూ సేన అధికారిక వెబ్‌సైట్ సాంకేతిక నవీకరణల నిమిత్తం తాత్కాలికంగా నిలిపివేయబడింది. దయచేసి కొద్దిసేపటి తర్వాత మళ్లీ సందర్శించండి.
+      <br><br>
+      Our digital portal is undergoing scheduled enhancements. We will be back online shortly!
+    </p>
+    <div class="maintenance-actions">
+      <a href="https://youtube.com/@abhayhindusena" target="_blank" class="btn-curtain-action yt">YouTube Channel ↗</a>
+      <a href="admin.html" class="btn-curtain-action admin">Admin Login ↗</a>
+    </div>
+  </div>
+</div>
 
 <!-- Ambient Sacred Background Effects (Orbs & Glowing Sparks Canvas) -->
 <div class="ambient-glow-wrap" aria-hidden="true">
@@ -2867,8 +3384,190 @@
     fetchPhotos(true);
   }
 
+  // =========================================================================
+  // REAL-TIME DIGITAL INAUGURATION & LAUNCH SYSTEM
+  // =========================================================================
+  let visitorSiteStatus = null;
+  let visitorCountdownTimer = null;
+  const launchVisitorChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ahs_launch_control') : null;
+
+  function isPreviewMode() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('preview') === 'true') return true;
+    try {
+      if (localStorage.getItem('ahs_admin_token') === 'true') return true;
+    } catch(e) {}
+    return false;
+  }
+
+  function closeAdminPreview() {
+    const bar = document.getElementById('adminPreviewBar');
+    if (bar) bar.style.display = 'none';
+  }
+
+  function initLaunchGatekeeper() {
+    const curtain = document.getElementById('launchCurtainOverlay');
+    const maintenance = document.getElementById('maintenanceOverlay');
+    const previewBar = document.getElementById('adminPreviewBar');
+
+    // If Admin preview mode is active, do not block the page!
+    if (isPreviewMode()) {
+      if (curtain) curtain.style.display = 'none';
+      if (maintenance) maintenance.style.display = 'none';
+      if (previewBar) previewBar.style.display = 'block';
+      return;
+    }
+
+    // Check local storage for initial fast render (defaults to prelaunch if not yet launched)
+    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'prelaunch';
+    applyVisitorStatus(cachedStatus);
+
+    // Listen on Firestore
+    if (db) {
+      db.collection('site_settings').doc('launch_status').onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data) {
+            if (data.countdownActive && data.countdownStartTime) {
+              const elapsed = Math.floor((Date.now() - data.countdownStartTime) / 1000);
+              const remaining = Math.max(0, 10 - elapsed);
+              if (remaining > 0) {
+                triggerVisitorCountdown(remaining);
+                return;
+              }
+            }
+            if (data.status) {
+              applyVisitorStatus(data.status);
+              localStorage.setItem('ahs_launch_status', data.status);
+            }
+          }
+        }
+      }, err => {
+        console.warn("Visitor launch status sync note:", err);
+      });
+    }
+
+    // Listen on BroadcastChannel for instant multi-tab sync
+    if (launchVisitorChannel) {
+      launchVisitorChannel.onmessage = (event) => {
+        const msg = event.data;
+        if (!msg) return;
+        if (msg.action === 'site_status_changed' && msg.status) {
+          applyVisitorStatus(msg.status);
+          localStorage.setItem('ahs_launch_status', msg.status);
+        } else if (msg.action === 'countdown_start') {
+          triggerVisitorCountdown(msg.seconds || 10);
+        } else if (msg.action === 'countdown_cancelled') {
+          cancelVisitorCountdown();
+        } else if (msg.action === 'site_launched') {
+          completeVisitorLaunch();
+        }
+      };
+    }
+  }
+
+  function applyVisitorStatus(status) {
+    if (isPreviewMode()) return;
+    visitorSiteStatus = status;
+    const curtain = document.getElementById('launchCurtainOverlay');
+    const maintenance = document.getElementById('maintenanceOverlay');
+
+    if (status === 'launched') {
+      if (curtain) curtain.style.display = 'none';
+      if (maintenance) maintenance.style.display = 'none';
+      document.body.style.overflow = '';
+    } else if (status === 'maintenance') {
+      if (curtain) curtain.style.display = 'none';
+      if (maintenance) maintenance.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    } else {
+      // 'prelaunch'
+      if (maintenance) maintenance.style.display = 'none';
+      if (curtain) {
+        curtain.style.display = 'flex';
+        curtain.classList.remove('curtain-fadeout');
+      }
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function triggerVisitorCountdown(startSeconds = 10) {
+    if (isPreviewMode()) return;
+    const curtain = document.getElementById('launchCurtainOverlay');
+    if (curtain) {
+      curtain.style.display = 'flex';
+      curtain.classList.remove('curtain-fadeout');
+    }
+    document.body.style.overflow = 'hidden';
+
+    const countBox = document.getElementById('curtainCountdownBox');
+    const digitEl = document.getElementById('curtainCountdownDigit');
+    const celebrBox = document.getElementById('curtainCelebrationBox');
+    const mainHead = document.getElementById('curtainMainHeading');
+    const subText = document.getElementById('curtainSubText');
+
+    if (countBox) countBox.style.display = 'block';
+    if (celebrBox) celebrBox.style.display = 'none';
+    if (mainHead) mainHead.textContent = 'CEREMONY IN PROGRESS...';
+    if (subText) subText.textContent = 'The countdown has been initiated! Portal unlocking in real-time...';
+
+    let sec = startSeconds;
+    if (digitEl) digitEl.textContent = sec;
+
+    if (visitorCountdownTimer) clearInterval(visitorCountdownTimer);
+    visitorCountdownTimer = setInterval(() => {
+      sec--;
+      if (digitEl) digitEl.textContent = sec;
+      if (sec <= 0) {
+        clearInterval(visitorCountdownTimer);
+        visitorCountdownTimer = null;
+        completeVisitorLaunch();
+      }
+    }, 1000);
+  }
+
+  function cancelVisitorCountdown() {
+    if (visitorCountdownTimer) {
+      clearInterval(visitorCountdownTimer);
+      visitorCountdownTimer = null;
+    }
+    const countBox = document.getElementById('curtainCountdownBox');
+    const mainHead = document.getElementById('curtainMainHeading');
+    const subText = document.getElementById('curtainSubText');
+    if (countBox) countBox.style.display = 'none';
+    if (mainHead) mainHead.textContent = 'OFFICIAL PORTAL LAUNCHING SOON';
+    if (subText) subText.innerHTML = 'ధర్మ రక్షణ, ఆలయ పరిరక్షణ మరియు యువజన జాగృతి కోసం అభయ్ హిందూ సేన అధికారిక పోర్టల్ త్వరలో లోకార్పణ కానుంది.<br>The official digital gateway is undergoing sacred consecration for worldwide unveiling.';
+  }
+
+  function completeVisitorLaunch() {
+    if (visitorCountdownTimer) {
+      clearInterval(visitorCountdownTimer);
+      visitorCountdownTimer = null;
+    }
+    const countBox = document.getElementById('curtainCountdownBox');
+    const celebrBox = document.getElementById('curtainCelebrationBox');
+    const curtain = document.getElementById('launchCurtainOverlay');
+
+    if (countBox) countBox.style.display = 'none';
+    if (celebrBox) celebrBox.style.display = 'block';
+
+    localStorage.setItem('ahs_launch_status', 'launched');
+    visitorSiteStatus = 'launched';
+
+    // Slide / fade out the curtain smoothly after a brief moment of celebration
+    setTimeout(() => {
+      if (curtain) {
+        curtain.classList.add('curtain-fadeout');
+        setTimeout(() => {
+          curtain.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 800);
+      }
+    }, 1200);
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
+    initLaunchGatekeeper();
     loadRecentVideos();
     initLiveGallery();
   });

@@ -797,6 +797,286 @@
     border-color: var(--gold);
     box-shadow: 0 2px 10px rgba(212,175,55,0.3);
   }
+
+  /* LAUNCH & CEREMONY CONTROL SECTION */
+  .launch-control-card {
+    background: linear-gradient(135deg, rgba(30, 8, 8, 0.95) 0%, rgba(15, 4, 4, 0.98) 100%);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .launch-control-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--saffron), var(--gold), var(--saffron));
+  }
+  .launch-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 16px;
+  }
+  .launch-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .launch-icon-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: radial-gradient(circle, rgba(255,107,26,0.3) 0%, rgba(212,175,55,0.1) 100%);
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  .launch-title-wrap h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.18rem;
+    color: var(--gold-bright);
+    margin: 0;
+  }
+  .launch-title-wrap p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .launch-status-pill {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .launch-status-pill.prelaunch {
+    background: rgba(231, 76, 60, 0.15);
+    border: 1px solid rgba(231, 76, 60, 0.5);
+    color: #ff6b6b;
+  }
+  .launch-status-pill.launched {
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid rgba(46, 204, 113, 0.5);
+    color: #2ecc71;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+  }
+  .launch-status-pill.maintenance {
+    background: rgba(243, 156, 18, 0.15);
+    border: 1px solid rgba(243, 156, 18, 0.5);
+    color: #f39c12;
+  }
+  .launch-status-pill.counting {
+    background: rgba(255, 107, 26, 0.2);
+    border: 1px solid var(--saffron);
+    color: #ffa466;
+    animation: pulseGlow 1s infinite alternate;
+  }
+  @keyframes pulseGlow {
+    from { box-shadow: 0 0 5px rgba(255,107,26,0.3); }
+    to { box-shadow: 0 0 20px rgba(255,107,26,0.8); }
+  }
+  .launch-actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(212,175,55,0.2);
+  }
+  .btn-launch-primary {
+    background: linear-gradient(135deg, #FF6B1A 0%, #D4AF37 100%);
+    color: #000;
+    font-family: 'Cinzel', 'Poppins', serif;
+    font-weight: 800;
+    font-size: 0.92rem;
+    padding: 11px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 18px rgba(255,107,26,0.4);
+    transition: all 0.25s ease;
+  }
+  .btn-launch-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(212,175,55,0.6);
+  }
+  .btn-launch-primary:active {
+    transform: translateY(0);
+  }
+  .btn-launch-secondary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-launch-secondary:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--gold-bright);
+    color: #FFF;
+  }
+  .btn-launch-secondary.pause:hover {
+    background: rgba(243, 156, 18, 0.15);
+    border-color: #f39c12;
+    color: #f39c12;
+  }
+  .btn-launch-secondary.unlaunch:hover {
+    background: rgba(231, 76, 60, 0.15);
+    border-color: #e74c3c;
+    color: #ff6b6b;
+  }
+  .launch-explanation {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* FULLSCREEN COUNTDOWN MODAL FOR ADMIN */
+  .countdown-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(35,7,7,0.96) 0%, rgba(10,2,2,0.98) 100%);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+  }
+  .countdown-modal-overlay.active {
+    display: flex;
+  }
+  .countdown-modal-card {
+    background: linear-gradient(180deg, #1C0808 0%, #0D0303 100%);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 40px 30px;
+    max-width: 550px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(255,107,26,0.35), 0 20px 50px rgba(0,0,0,0.9);
+    position: relative;
+    animation: zoomModal 0.3s ease-out;
+  }
+  @keyframes zoomModal {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .countdown-crest {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    margin: 0 auto 16px;
+    background: #FFF;
+    box-shadow: 0 0 25px rgba(212,175,55,0.5);
+  }
+  .countdown-modal-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .countdown-modal-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .countdown-big-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,26,0.2) 0%, rgba(212,175,55,0.05) 100%);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(255,107,26,0.3);
+  }
+  .countdown-number {
+    font-family: 'Cinzel', serif;
+    font-size: 4.8rem;
+    font-weight: 900;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px rgba(247,213,127,0.8), 0 0 40px rgba(255,107,26,0.6);
+    line-height: 1;
+    animation: countPulse 1s infinite alternate;
+  }
+  @keyframes countPulse {
+    0% { transform: scale(0.95); }
+    100% { transform: scale(1.05); }
+  }
+  .countdown-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .countdown-progress-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--saffron), var(--gold));
+    transition: width 1s linear;
+  }
+  .countdown-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+  .btn-skip-countdown {
+    background: rgba(212,175,55,0.2);
+    border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn-skip-countdown:hover {
+    background: var(--gold);
+    color: #000;
+  }
+  .btn-cancel-countdown {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-muted);
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  .btn-cancel-countdown:hover {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+  }
 </style>
 </head>
 <body>
@@ -825,6 +1105,36 @@
   </div>
 </div>
 
+<!-- 10-SECOND COUNTDOWN MODAL FOR ADMIN -->
+<div class="countdown-modal-overlay" id="adminCountdownModal">
+  <div class="countdown-modal-card">
+    <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="countdown-crest">
+    <h2>ABHAY HINDU SENA</h2>
+    <p id="countdownModalSubtitle">Grand Digital Inauguration Commencing Worldwide In...</p>
+    
+    <div class="countdown-big-circle">
+      <div class="countdown-number" id="countdownNumber">10</div>
+    </div>
+
+    <div class="countdown-progress-bar">
+      <div class="countdown-progress-fill" id="countdownProgressFill" style="width: 100%;"></div>
+    </div>
+
+    <div style="font-size:0.85rem; color:var(--gold-bright); margin-bottom:18px; font-weight:600;" id="countdownStatusMsg">
+      Broadcasting inauguration countdown to all connected visitors... 📡
+    </div>
+
+    <div class="countdown-controls">
+      <button type="button" class="btn-skip-countdown" onclick="completeLaunchImmediately()">
+        ⏩ Skip Countdown & Launch Now
+      </button>
+      <button type="button" class="btn-cancel-countdown" onclick="cancelLaunchCountdown()">
+        ❌ Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Header -->
 <header class="admin-header">
   <div class="admin-brand">
@@ -848,6 +1158,43 @@
   <div class="status-banner">
     <span class="status-badge">🟢 Connected to Firebase Project: <strong>abhay-hindu-sena-org</strong></span>
     <span style="font-size:0.8rem; color:var(--text-muted);">Real-time Cloud Sync Active</span>
+  </div>
+
+  <!-- OFFICIAL LAUNCH & DIGITAL INAUGURATION CONTROLLER -->
+  <div class="launch-control-card">
+    <div class="launch-header-row">
+      <div class="launch-title-wrap">
+        <div class="launch-icon-badge">🚀</div>
+        <div>
+          <h3>Digital Inauguration & Launch Control</h3>
+          <p>Control live website status, initiate the 10-second launch countdown, or activate maintenance mode.</p>
+        </div>
+      </div>
+      <div>
+        <div id="launchStatusBadge" class="launch-status-pill prelaunch">
+          <span id="launchStatusDot">🔴</span> <span id="launchStatusText">PRE-LAUNCH (Curtain Active)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="launch-actions-bar">
+      <button type="button" id="btnLaunchSite" class="btn-launch-primary" onclick="startLaunchCountdown()">
+        🚀 Launch Website (10s Countdown)
+      </button>
+      <button type="button" id="btnPauseSite" class="btn-launch-secondary pause" onclick="setSiteStatus('maintenance')">
+        ⏸️ Pause / Maintenance Mode
+      </button>
+      <button type="button" id="btnUnlaunchSite" class="btn-launch-secondary unlaunch" onclick="setSiteStatus('prelaunch')">
+        🔒 Unlaunch / Pre-Launch Mode
+      </button>
+      <a href="index.html?preview=true" target="_blank" class="btn-launch-secondary preview">
+        👁️ Preview Live Site (Bypass) ↗
+      </a>
+    </div>
+
+    <div class="launch-explanation" id="launchExplanation">
+      ℹ️ <strong>Current Visitor Experience:</strong> <span id="launchExplanationText">Website is currently locked behind the Grand Digital Inauguration curtain ("Launching Soon").</span>
+    </div>
   </div>
 
   <!-- Navigation Tabs -->
@@ -1319,6 +1666,7 @@
     const overlay = document.getElementById('loginOverlay');
     const badge = document.getElementById('userEmailBadge');
     if (user) {
+      localStorage.setItem('ahs_admin_token', 'true');
       overlay.style.display = 'none';
       if (badge) {
         badge.textContent = '👤 ' + user.email;
@@ -1326,6 +1674,7 @@
       }
       initDashboard();
     } else {
+      localStorage.removeItem('ahs_admin_token');
       overlay.style.display = 'flex';
       if (badge) badge.style.display = 'none';
     }
@@ -1366,6 +1715,7 @@
 
   async function handleLogout() {
     try {
+      localStorage.removeItem('ahs_admin_token');
       await auth.signOut();
       window.location.reload();
     } catch (e) {
@@ -1508,15 +1858,279 @@
   }
 
   // ==========================================
+  // LAUNCH & CEREMONY CONTROL SYSTEM
+  // ==========================================
+  let currentSiteStatus = 'prelaunch';
+  let countdownTimerId = null;
+  let countdownSecondsRemaining = 10;
+  const launchBroadcastChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ahs_launch_control') : null;
+
+  // Web Audio Chime Synthesizer
+  function playLaunchAudioTone(freq = 800, duration = 0.12, type = 'sine') {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch (e) {
+      // Audio not permitted or not supported
+    }
+  }
+
+  function playTriumphantChime() {
+    try {
+      [528, 660, 792, 1056].forEach((f, idx) => {
+        setTimeout(() => playLaunchAudioTone(f, 0.6, 'triangle'), idx * 120);
+      });
+    } catch (e) {}
+  }
+
+  function initLaunchControlAdmin() {
+    // 1. Check local storage first for instant response
+    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'prelaunch';
+    applyStatusToAdminUI(cachedStatus);
+
+    // 2. Listen to Firestore
+    if (db) {
+      db.collection('site_settings').doc('launch_status').onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && data.status) {
+            applyStatusToAdminUI(data.status);
+            localStorage.setItem('ahs_launch_status', data.status);
+          }
+        }
+      }, err => {
+        console.warn("Launch status snapshot fallback:", err);
+      });
+    }
+
+    // 3. Listen to BroadcastChannel
+    if (launchBroadcastChannel) {
+      launchBroadcastChannel.onmessage = (event) => {
+        if (event.data && event.data.action === 'site_status_changed') {
+          applyStatusToAdminUI(event.data.status);
+        }
+      };
+    }
+  }
+
+  function applyStatusToAdminUI(status) {
+    currentSiteStatus = status;
+    const badge = document.getElementById('launchStatusBadge');
+    const dot = document.getElementById('launchStatusDot');
+    const text = document.getElementById('launchStatusText');
+    const desc = document.getElementById('launchExplanationText');
+    if (!badge || !text) return;
+
+    badge.className = 'launch-status-pill ' + status;
+
+    if (status === 'launched') {
+      dot.textContent = '🟢';
+      text.textContent = 'LIVE TO PUBLIC';
+      if (desc) desc.innerHTML = '<span style="color:#2ecc71; font-weight:600;">Website is fully LIVE to the public worldwide.</span> Visitors see the full official portal without any curtain.';
+    } else if (status === 'maintenance') {
+      dot.textContent = '🟡';
+      text.textContent = 'PAUSED (Maintenance Mode)';
+      if (desc) desc.innerHTML = '<span style="color:#f39c12; font-weight:600;">Website is PAUSED for maintenance.</span> Visitors see a dignified "Scheduled Maintenance" notice.';
+    } else {
+      dot.textContent = '🔴';
+      text.textContent = 'PRE-LAUNCH (Curtain Active)';
+      if (desc) desc.innerHTML = '<span style="color:#ff6b6b; font-weight:600;">Website is locked behind Inauguration Curtain.</span> Visitors see "Launching Soon" with live listener.';
+    }
+  }
+
+  async function setSiteStatus(newStatus) {
+    if (newStatus === 'maintenance') {
+      if (!confirm("Pause public website access and display Maintenance Notice to visitors?")) return;
+    } else if (newStatus === 'prelaunch') {
+      if (!confirm("Reset website to Pre-Launch mode? (The Inauguration Curtain will be displayed to all visitors)")) return;
+    }
+
+    applyStatusToAdminUI(newStatus);
+    localStorage.setItem('ahs_launch_status', newStatus);
+
+    if (launchBroadcastChannel) {
+      launchBroadcastChannel.postMessage({
+        action: 'site_status_changed',
+        status: newStatus,
+        timestamp: Date.now()
+      });
+    }
+
+    if (db) {
+      try {
+        await db.collection('site_settings').doc('launch_status').set({
+          status: newStatus,
+          countdownActive: false,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedBy: (auth && auth.currentUser) ? auth.currentUser.email : 'admin'
+        }, { merge: true });
+      } catch (err) {
+        console.error("Failed to update status in Firestore:", err);
+      }
+    }
+
+    alert(newStatus === 'maintenance' ? 'Website paused in Maintenance Mode.' : 'Website reset to Pre-Launch Curtain.');
+  }
+
+  function startLaunchCountdown() {
+    if (countdownTimerId) clearInterval(countdownTimerId);
+
+    countdownSecondsRemaining = 10;
+    const modal = document.getElementById('adminCountdownModal');
+    const numEl = document.getElementById('countdownNumber');
+    const fillEl = document.getElementById('countdownProgressFill');
+    const subTitle = document.getElementById('countdownModalSubtitle');
+    const statusMsg = document.getElementById('countdownStatusMsg');
+
+    if (modal) modal.classList.add('active');
+    if (numEl) {
+      numEl.textContent = '10';
+      numEl.style.fontSize = '4.8rem';
+    }
+    if (fillEl) fillEl.style.width = '100%';
+    if (subTitle) subTitle.textContent = 'Grand Digital Inauguration Commencing In...';
+    if (statusMsg) statusMsg.textContent = 'Broadcasting inauguration countdown to all active visitors... 📡';
+
+    playLaunchAudioTone(880, 0.15);
+
+    // Broadcast countdown start to Firestore and BroadcastChannel
+    if (launchBroadcastChannel) {
+      launchBroadcastChannel.postMessage({
+        action: 'countdown_start',
+        seconds: 10,
+        startTime: Date.now()
+      });
+    }
+
+    if (db) {
+      db.collection('site_settings').doc('launch_status').set({
+        countdownActive: true,
+        countdownDuration: 10,
+        countdownStartTime: Date.now(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }).catch(err => console.warn(err));
+    }
+
+    countdownTimerId = setInterval(() => {
+      countdownSecondsRemaining--;
+
+      if (numEl) numEl.textContent = countdownSecondsRemaining;
+      if (fillEl) fillEl.style.width = (countdownSecondsRemaining * 10) + '%';
+
+      if (countdownSecondsRemaining > 0) {
+        // Ticking audio tone
+        playLaunchAudioTone(800 + (10 - countdownSecondsRemaining) * 40, 0.1);
+      } else {
+        clearInterval(countdownTimerId);
+        countdownTimerId = null;
+        onCountdownFinished();
+      }
+    }, 1000);
+  }
+
+  function completeLaunchImmediately() {
+    if (countdownTimerId) {
+      clearInterval(countdownTimerId);
+      countdownTimerId = null;
+    }
+    onCountdownFinished();
+  }
+
+  function cancelLaunchCountdown() {
+    if (countdownTimerId) {
+      clearInterval(countdownTimerId);
+      countdownTimerId = null;
+    }
+    const modal = document.getElementById('adminCountdownModal');
+    if (modal) modal.classList.remove('active');
+
+    // Cancel in Firestore and BroadcastChannel
+    if (launchBroadcastChannel) {
+      launchBroadcastChannel.postMessage({ action: 'countdown_cancelled' });
+    }
+    if (db) {
+      db.collection('site_settings').doc('launch_status').set({
+        countdownActive: false,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }).catch(err => console.warn(err));
+    }
+  }
+
+  async function onCountdownFinished() {
+    const numEl = document.getElementById('countdownNumber');
+    const subTitle = document.getElementById('countdownModalSubtitle');
+    const statusMsg = document.getElementById('countdownStatusMsg');
+    const fillEl = document.getElementById('countdownProgressFill');
+
+    if (numEl) {
+      numEl.textContent = '🚀';
+      numEl.style.fontSize = '3.5rem';
+    }
+    if (fillEl) fillEl.style.width = '0%';
+    if (subTitle) subTitle.textContent = '✨ JAI SHREE RAM! ✨';
+    if (statusMsg) statusMsg.innerHTML = '<span style="color:#2ecc71; font-size:1.1rem; font-weight:700;">WEBSITE IS NOW LIVE WORLDWIDE!</span><br>Redirecting directly to the live website...';
+
+    playTriumphantChime();
+
+    // Mark launched in local storage & BroadcastChannel
+    applyStatusToAdminUI('launched');
+    localStorage.setItem('ahs_launch_status', 'launched');
+
+    if (launchBroadcastChannel) {
+      launchBroadcastChannel.postMessage({
+        action: 'site_launched',
+        status: 'launched',
+        timestamp: Date.now()
+      });
+    }
+
+    if (db) {
+      try {
+        await db.collection('site_settings').doc('launch_status').set({
+          status: 'launched',
+          countdownActive: false,
+          launchedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedBy: (auth && auth.currentUser) ? auth.currentUser.email : 'admin'
+        }, { merge: true });
+      } catch (err) {
+        console.error("Error setting launched status:", err);
+      }
+    }
+
+    // Direct redirect to index.html after 1.2s celebration!
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1200);
+  }
+
+  // ==========================================
   // INITIALIZE DASHBOARD
   // ==========================================
   function initDashboard() {
+    initLaunchControlAdmin();
     initVideosListener();
     initCommunityChatAdmin();
     initSevaksDirectoryAdmin();
     initVolunteerRegistrationsAdmin();
     initGalleryAdmin();
   }
+
+  // Initial load check even before login
+  document.addEventListener('DOMContentLoaded', () => {
+    initLaunchControlAdmin();
+  });
 
   // ==========================================
   // 1. VIDEOS LISTENER
