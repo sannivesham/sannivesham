@@ -563,6 +563,10 @@
     border-radius: 20px;
     padding: 34px 30px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .receipt-header {
     text-align: center;
@@ -585,11 +589,18 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .form-group {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
   .form-group.full-width {
     grid-column: 1 / -1;
@@ -598,8 +609,13 @@
     font-size: 0.78rem;
     color: var(--gold-bright);
     font-weight: 600;
+    word-break: break-word;
   }
   .form-input, .form-select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     background: rgba(0,0,0,0.5);
     border: 1px solid var(--border-gold);
     border-radius: 8px;
@@ -609,6 +625,11 @@
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s;
+  }
+  .form-select {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .form-input:focus, .form-select:focus {
     border-color: var(--gold-bright);
@@ -787,10 +808,11 @@
 
   /* RESPONSIVE & MOBILE POLISH */
   @media (max-width: 850px) {
-    .payment-methods-grid { grid-template-columns: 1fr; gap: 20px; }
-    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .payment-methods-grid { grid-template-columns: 1fr; gap: 20px; width: 100%; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; width: 100%; }
+    .form-group.full-width { grid-column: 1; }
     .hero-title { font-size: 1.85rem; }
-    .receipt-section { padding: 24px 18px; }
+    .receipt-section { padding: 24px 18px; width: 100%; }
   }
 
   @media (max-width: 600px) {
@@ -798,6 +820,8 @@
       padding: 8px 12px;
       flex-wrap: nowrap;
       gap: 8px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .circle-logo {
       width: 36px;
@@ -822,6 +846,7 @@
       max-width: 100%;
       margin: 8px auto 0;
       padding: 6px 10px;
+      box-sizing: border-box;
     }
     .glass-nav-links a {
       font-size: 0.76rem;
@@ -832,7 +857,9 @@
       font-size: 0.72rem;
     }
     .donate-hero {
-      padding: 28px 14px 20px;
+      padding: 24px 14px 18px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .hero-badge {
       font-size: 0.72rem;
@@ -840,7 +867,7 @@
       margin-bottom: 12px;
     }
     .hero-title {
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       line-height: 1.25;
       margin-bottom: 8px;
     }
@@ -857,11 +884,15 @@
       padding: 4px 10px;
     }
     .section-container {
-      padding: 10px 12px 40px;
+      padding: 10px 14px 40px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .amount-selector-box {
       padding: 16px 12px;
       margin-bottom: 22px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .amount-selector-title {
       font-size: 0.82rem;
@@ -872,7 +903,7 @@
       margin-bottom: 12px;
     }
     .amount-chip {
-      padding: 6px 13px;
+      padding: 6px 12px;
       font-size: 0.82rem;
     }
     .custom-amount-wrap {
@@ -882,9 +913,16 @@
     .custom-amount-input {
       font-size: 0.95rem;
     }
+    .payment-methods-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      width: 100%;
+    }
     .payment-card {
-      padding: 20px 14px;
+      padding: 18px 14px;
       border-radius: 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .payment-card-title {
       font-size: 1.2rem;
@@ -894,12 +932,14 @@
       margin-bottom: 14px;
     }
     .qr-wrapper {
-      max-width: 210px;
+      max-width: 200px;
       padding: 10px;
       margin-bottom: 14px;
     }
     .upi-id-box {
       padding: 10px 12px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .upi-id-val {
       font-size: 0.95rem;
@@ -907,30 +947,38 @@
     .btn-upi-mobile {
       padding: 11px 14px;
       font-size: 0.86rem;
+      width: 100%;
+      box-sizing: border-box;
     }
     .bank-details-list {
       gap: 10px;
       margin-bottom: 0;
+      width: 100%;
     }
     .bank-detail-item {
       padding: 10px 12px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .detail-label {
       font-size: 0.72rem;
     }
     .detail-val {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
     }
     .detail-val.gold {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
     }
     .btn-copy {
-      padding: 5px 10px;
+      padding: 4px 10px;
       font-size: 0.72rem;
     }
     .receipt-section {
-      padding: 20px 14px;
+      padding: 18px 12px;
       border-radius: 16px;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     .receipt-header h3 {
       font-size: 1.2rem;
@@ -938,19 +986,35 @@
     .receipt-header p {
       font-size: 0.78rem;
     }
+    .form-grid {
+      grid-template-columns: 1fr;
+      width: 100%;
+      gap: 12px;
+    }
+    .form-group {
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
     .form-input, .form-select {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
       font-size: 16px; /* Prevents auto-zoom on iOS */
-      padding: 9px 12px;
+      padding: 10px 12px;
     }
     .form-actions {
       flex-direction: column;
       width: 100%;
+      gap: 10px;
     }
     .btn-submit-wa, .btn-submit-direct {
       width: 100%;
       justify-content: center;
-      padding: 11px 16px;
+      padding: 12px 14px;
       font-size: 0.86rem;
+      box-sizing: border-box;
     }
   }
 </style>
@@ -1167,7 +1231,7 @@
 
         <div class="form-group">
           <label class="form-label" data-en="City / District & State *" data-te="నగరం / జిల్లా & రాష్ట్రం *">City / District & State *</label>
-          <input type="text" id="donorPlace" class="form-input" placeholder="e.g. Vijayawada, Andhra Pradesh" required>
+          <input type="text" id="donorPlace" class="form-input" placeholder="e.g. Vijayawada, AP" required>
         </div>
 
         <div class="form-group">
@@ -1178,8 +1242,8 @@
         <div class="form-group">
           <label class="form-label" data-en="Payment Method *" data-te="చెల్లింపు విధానం *">Payment Method *</label>
           <select id="donorMethod" class="form-select" required>
-            <option value="UPI / QR Code Scan">UPI / QR Code Scan (GPay / PhonePe / Paytm)</option>
-            <option value="Direct SBI Account Transfer">Direct SBI Bank Transfer (NEFT / IMPS / RTGS)</option>
+            <option value="UPI / QR Code Scan">UPI / QR Code (GPay / PhonePe / Paytm)</option>
+            <option value="Direct SBI Account Transfer">SBI Account Transfer (NEFT / IMPS / RTGS)</option>
             <option value="Net Banking / Branch Cash Deposit">Net Banking / Branch Deposit</option>
           </select>
         </div>
@@ -1191,7 +1255,7 @@
 
         <div class="form-group full-width">
           <label class="form-label" data-en="Sacred Intention / Gotram & Nakshatram (Optional for Sankalpam)" data-te="సంకల్పం కోసం గోత్రం & నక్షత్రం (ఐచ్ఛికం)">Sacred Intention / Gotram & Nakshatram (Optional for Sankalpam)</label>
-          <input type="text" id="donorIntention" class="form-input" placeholder="e.g. Koundinya Gotram, Rohini Nakshatram - Nitya Annadanam">
+          <input type="text" id="donorIntention" class="form-input" placeholder="e.g. Koundinya Gotram, Rohini Nakshatram">
         </div>
       </div>
 
