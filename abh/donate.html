@@ -247,61 +247,12 @@
     gap: 6px;
   }
 
-  /* SEVA CAUSES SELECTOR */
+  /* SECTION CONTAINER */
   .section-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px 5% 60px;
     width: 100%;
-  }
-  .causes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 14px;
-    margin-bottom: 30px;
-  }
-  .cause-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-gold);
-    border-radius: 14px;
-    padding: 16px 18px;
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .cause-card:hover,
-  .cause-card.active {
-    border-color: var(--gold-bright);
-    background: rgba(45, 12, 12, 0.85);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.2);
-  }
-  .cause-card.active::after {
-    content: "✓";
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    color: #2ecc71;
-    font-weight: 800;
-    font-size: 0.95rem;
-  }
-  .cause-icon {
-    font-size: 1.8rem;
-    flex-shrink: 0;
-  }
-  .cause-info h4 {
-    font-size: 0.95rem;
-    color: var(--gold-bright);
-    margin-bottom: 3px;
-    font-weight: 700;
-  }
-  .cause-info p {
-    font-size: 0.76rem;
-    color: var(--text-muted);
-    line-height: 1.35;
   }
 
   /* AMOUNT PRESET SELECTOR */
@@ -905,39 +856,7 @@
 <!-- MAIN CONTENT CONTAINER -->
 <div class="section-container">
 
-  <!-- 1. CHOOSE SEVA CAUSE -->
-  <div class="causes-grid">
-    <div class="cause-card active" onclick="selectCause(this, 'Nitya Annadanam', 'నిత్య అన్నదానం')">
-      <div class="cause-icon">🍲</div>
-      <div class="cause-info">
-        <h4 data-en="Nitya Annadanam" data-te="నిత్య అన్నదానం">Nitya Annadanam</h4>
-        <p data-en="Daily feeding of devotees, sadhus & the needy" data-te="భక్తులకు, సాధువులకు, నిరుపేదలకు నిత్య అన్నప్రసాదం">Daily feeding of devotees, sadhus & the needy</p>
-      </div>
-    </div>
-    <div class="cause-card" onclick="selectCause(this, 'Gau Samrakshana', 'గో సంరక్షణ & సేవా')">
-      <div class="cause-icon">🐄</div>
-      <div class="cause-info">
-        <h4 data-en="Gau Samrakshana" data-te="గో సంరక్షణ & సేవా">Gau Samrakshana</h4>
-        <p data-en="Grass fodder, veterinary care & Goshala shelter" data-te="గోవులకు గ్రాసం, వైద్యం మరియు గోశాలల నిర్వహణ">Grass fodder, veterinary care & Goshala shelter</p>
-      </div>
-    </div>
-    <div class="cause-card" onclick="selectCause(this, 'Dharma Raksha & Youth Awakening', 'ధర్మ రక్షణ & యువత శిక్షణ')">
-      <div class="cause-icon">🚩</div>
-      <div class="cause-info">
-        <h4 data-en="Youth Dharma Awakening" data-te="ధర్మ రక్షణ & యువత శిక్షణ">Youth Dharma Awakening</h4>
-        <p data-en="Dharmic training camps, self-defense & martial arts" data-te="యువతకు ఆత్మరక్షణ, ధర్మ జాగృతి శిక్షణ శిబిరాలు">Dharmic training camps, self-defense & martial arts</p>
-      </div>
-    </div>
-    <div class="cause-card" onclick="selectCause(this, 'Temple Restoration', 'ఆలయాల పునరుద్ధరణ')">
-      <div class="cause-icon">🛕</div>
-      <div class="cause-info">
-        <h4 data-en="Temple Restoration" data-te="ఆలయాల పునరుద్ధరణ">Temple Restoration</h4>
-        <p data-en="Rebuilding neglected village temples & Pujari seva" data-te="ప్రాచీన ఆలయాల జీర్ణోద్ధరణ మరియు పూజారుల పోషణ">Rebuilding neglected village temples & Pujari seva</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. AMOUNT PRESET SELECTOR -->
+  <!-- 1. AMOUNT PRESET SELECTOR -->
   <div class="amount-selector-box">
     <div class="amount-selector-title" data-en="Select Contribution Amount (₹)" data-te="మీ పవిత్ర విరాళం మొత్తాన్ని ఎంచుకోండి (₹)">
       Select Contribution Amount (₹)
@@ -1187,17 +1106,7 @@
 </footer>
 
 <script>
-  let currentCauseEn = "Nitya Annadanam";
-  let currentCauseTe = "నిత్య అన్నదానం";
   let currentAmount = 1116;
-
-  function selectCause(el, causeEn, causeTe) {
-    document.querySelectorAll('.cause-card').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    currentCauseEn = causeEn;
-    currentCauseTe = causeTe;
-    updateUpiIntent();
-  }
 
   function setAmount(amt) {
     currentAmount = amt;
@@ -1222,7 +1131,7 @@
   function updateUpiIntent() {
     const upiLink = document.getElementById('upiDeepLink');
     if (upiLink) {
-      const causeText = encodeURIComponent("Dharma Seva " + currentCauseEn);
+      const causeText = encodeURIComponent("Sanatana Dharma Daan");
       upiLink.href = `upi://pay?pa=44174507242@sbi&pn=SRI+RADHA+MANOHAR+DAS+FOUNDATION&cu=INR&am=${currentAmount}&tn=${causeText}`;
     }
   }
@@ -1271,7 +1180,7 @@
     const amount = document.getElementById('donorAmount').value.trim();
     const method = document.getElementById('donorMethod').value;
     const utr = document.getElementById('donorUtr').value.trim() || 'Pending';
-    const intention = document.getElementById('donorIntention').value.trim() || currentCauseEn;
+    const intention = document.getElementById('donorIntention').value.trim() || 'Sanatana Dharma Seva';
 
     // Save locally
     saveDonationRecord({ name, phone, place, amount, method, utr, intention, date: new Date().toISOString() });
@@ -1307,7 +1216,7 @@
     const place = document.getElementById('donorPlace').value.trim() || 'Bharat';
     const method = document.getElementById('donorMethod').value;
     const utr = document.getElementById('donorUtr').value.trim() || 'Pending';
-    const intention = document.getElementById('donorIntention').value.trim() || currentCauseEn;
+    const intention = document.getElementById('donorIntention').value.trim() || 'Sanatana Dharma Seva';
 
     saveDonationRecord({ name, phone, place, amount, method, utr, intention, date: new Date().toISOString() });
     alert("🙏 Thank you! Your donation intimation has been saved. Our team will verify and acknowledge your sacred contribution.");
