@@ -590,9 +590,11 @@
   }
   .videos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     align-items: stretch;
+    max-width: 1400px;
+    margin: 0 auto;
   }
   .video-card {
     background: var(--bg-card);
@@ -897,9 +899,9 @@
   /* PHOTO GALLERY WITH LIGHTBOX */
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1400px;
     margin: 0 auto;
   }
   .gallery-card {
@@ -1405,7 +1407,82 @@
     transform: translateY(-2px);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
+    .videos-grid,
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important;
+    }
+    .video-card {
+      border-radius: 12px;
+    }
+    .video-info {
+      padding: 10px 8px;
+    }
+    .video-info h4 {
+      font-size: 0.82rem;
+      line-height: 1.25;
+      margin-bottom: 4px;
+      -webkit-line-clamp: 2;
+    }
+    .video-info p {
+      display: none;
+    }
+    .btn-watch-now {
+      padding: 6px 8px;
+      font-size: 0.74rem;
+      border-radius: 6px;
+    }
+    .video-play-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
+    }
+    .video-cat-badge {
+      font-size: 0.62rem;
+      padding: 2px 7px;
+      top: 6px;
+      left: 6px;
+    }
+    .gallery-card {
+      height: 220px;
+      border-radius: 12px;
+    }
+    .gallery-overlay {
+      padding: 12px 10px 8px;
+      font-size: 0.78rem;
+      line-height: 1.25;
+    }
+    .view-more-card {
+      min-height: auto;
+      height: 100%;
+      padding: 14px 10px;
+      border-radius: 12px;
+    }
+    .view-more-icon-wrap {
+      width: 44px;
+      height: 44px;
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+    .view-more-badge {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      margin-bottom: 6px;
+    }
+    .view-more-card h3 {
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .view-more-card p {
+      display: none;
+    }
+    .btn-view-more {
+      font-size: 0.72rem;
+      padding: 7px 12px;
+      border-radius: 16px;
+    }
     .portals-grid {
       grid-template-columns: 1fr;
       gap: 18px;
@@ -2368,13 +2445,29 @@
       </div>
     </div>
 
-    <!-- Box 3: View More Card -->
+    <!-- Box 3: Recent Video 3 -->
+    <div class="video-card" onclick="openCinemaVideo('2L7j-3v8X6M', 'సనాతన ధర్మం మరియు గో సంరక్షణ ప్రాముఖ్యత | Shri Radha Manohar Das')">
+      <div class="video-thumb-wrap">
+        <img src="https://img.youtube.com/vi/2L7j-3v8X6M/hqdefault.jpg" alt="Pravachan Thumbnail" class="video-thumb" onerror="this.src='https://img.youtube.com/vi/wH1w9M4mMnM/hqdefault.jpg'">
+        <div class="video-play-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+        <span class="video-cat-badge">Youth & Dharma</span>
+      </div>
+      <div class="video-info">
+        <h4>సనాతన ధర్మం మరియు గో సంరక్షణ ప్రాముఖ్యత</h4>
+        <p>సనాతన ధర్మం, గో సంరక్షణ మరియు ఆలయ సంస్కృతిని కాపాడుకోవడంలో యువత కర్తవ్యం.</p>
+        <button class="btn-watch-now">Watch Video ▶️</button>
+      </div>
+    </div>
+
+    <!-- Box 4: View More Card -->
     <div class="video-card view-more-card" onclick="window.location.href='videos.html'">
       <div class="view-more-content">
         <div class="view-more-icon-wrap">
           <span class="view-more-icon">🎬</span>
         </div>
-        <span class="view-more-badge" data-en="Full Archive" data-te="వీడియో నిధి">Full Archive</span>
+        <span class="view-more-badge" data-en="Full Library" data-te="వీడియో నిధి">Full Library</span>
         <h3 data-en="Complete Video Library" data-te="సమగ్ర వీడియో భాండాగారం">Complete Video Library</h3>
         <p data-en="Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search."
            data-te="మా సమగ్ర వీడియో నిధిలో గీతా ప్రవచనాలు, యువ సదస్సులు మరియు ధార్మిక సభలను ఇక్కడ వీక్షించండి.">
@@ -2398,21 +2491,25 @@
   </div>
 
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-card" onclick="openLightbox('assets/founder.jpg', 'Shri Radha Manohar Das addressing thousands of devotees at Tirupati Anniversary')">
-      <img src="assets/founder.jpg" alt="Tirupati Anniversary Convention">
-      <div class="gallery-overlay">Tirupati Annual Convention Address</div>
+    <div class="gallery-card" onclick="openLightbox('assets/founder.jpg', 'Shri Radha Manohar Das addressing devotees at Annual Convention')">
+      <img src="assets/founder.jpg" alt="Convention Address">
+      <div class="gallery-overlay">Annual Convention Address</div>
     </div>
-    <div class="gallery-card" onclick="openLightbox('assets/hero-desktop.png', 'Youth Awakening & Martial Discipline Rally Banner')">
+    <div class="gallery-card" onclick="openLightbox('assets/hero-desktop.png', 'Youth Awakening & Martial Discipline Rally')">
       <img src="assets/hero-desktop.png" alt="Youth Awakening">
       <div class="gallery-overlay">Youth Awakening Rally</div>
     </div>
-    <!-- Box 3: View More Card -->
+    <div class="gallery-card" onclick="openLightbox('assets/hero-mobile.png', 'Dharma Raksha & Seva Convention')">
+      <img src="assets/hero-mobile.png" alt="Dharma Raksha Drive">
+      <div class="gallery-overlay">Dharma Raksha & Seva Drive</div>
+    </div>
+    <!-- Box 4: View More Card -->
     <div class="gallery-card view-more-card" onclick="window.location.href='gallery.html'">
       <div class="view-more-content">
         <div class="view-more-icon-wrap">
           <span class="view-more-icon">🖼️</span>
         </div>
-        <span class="view-more-badge" data-en="Full Archive" data-te="చిత్ర నిధి">Full Archive</span>
+        <span class="view-more-badge" data-en="Complete Gallery" data-te="చిత్ర నిధి">Complete Gallery</span>
         <h3 data-en="Complete Photo Gallery" data-te="సమగ్ర చిత్రమాలిక">Complete Photo Gallery</h3>
         <p data-en="Browse all event snapshots, seva camps, youth conventions, and sacred moments."
            data-te="అభయ్ హిందూ సేన వార్షికోత్సవాలు, సేవా కార్యక్రమాలు మరియు అన్ని ఛాయాచిత్రాలను ఇక్కడ చూడండి.">
@@ -2591,10 +2688,10 @@
     if (e.key === 'Escape') closeCinemaVideo();
   });
 
-  // Load Recent Videos from Firestore for Box 1 & Box 2
+  // Load Recent Videos from Firestore for Box 1, 2, 3 + Box 4 View More
   function loadRecentVideos() {
     if (!db) return;
-    db.collection('videos').orderBy('createdAt', 'desc').limit(2).onSnapshot(snapshot => {
+    db.collection('videos').orderBy('createdAt', 'desc').limit(3).onSnapshot(snapshot => {
       if (!snapshot.empty) {
         const docs = [];
         snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
@@ -2612,10 +2709,11 @@
     if (!grid) return;
 
     let html = '';
-    videos.forEach((v, idx) => {
+    const top3 = (videos || []).slice(0, 3);
+    top3.forEach((v, idx) => {
       const vid = v.videoId || 'wH1w9M4mMnM';
       const title = v.title || 'Shri Radha Manohar Das Pravachan';
-      const cat = v.category || (idx === 0 ? 'Recent Pravachan' : 'Dharma Discourse');
+      const cat = v.category || (idx === 0 ? 'Recent Pravachan' : (idx === 1 ? 'Dharma Discourse' : 'Youth & Dharma'));
       const desc = v.description || 'Watch divine pravachan and spiritual guidance by Shri Radha Manohar Das.';
       const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
       const escapedTitle = title.replace(/'/g, "\\'");
@@ -2638,14 +2736,14 @@
       `;
     });
 
-    // Box 3: View More Card
+    // Box 4: View More Card (Takes to separate videos page)
     html += `
       <div class="video-card view-more-card" onclick="window.location.href='videos.html'">
         <div class="view-more-content">
           <div class="view-more-icon-wrap">
             <span class="view-more-icon">🎬</span>
           </div>
-          <span class="view-more-badge" data-en="Full Archive" data-te="వీడియో నిధి">Full Archive</span>
+          <span class="view-more-badge" data-en="Full Library" data-te="వీడియో నిధి">Full Library</span>
           <h3 data-en="Complete Video Library" data-te="సమగ్ర వీడియో భాండాగారం">Complete Video Library</h3>
           <p data-en="Explore all uploaded pravachans, Gita satsangs, and sacred youth discourses with instant search."
              data-te="మా సమగ్ర వీడియో నిధిలో గీతా ప్రవచనాలు, యువ సదస్సులు మరియు ధార్మిక సభలను ఇక్కడ వీక్షించండి.">
@@ -2659,68 +2757,77 @@
     grid.innerHTML = html;
   }
 
-  // Live Photo Gallery from Firestore (Only 2 Latest Photos + 3rd Box View More)
+  // Live Photo Gallery from Firestore & Local Sync (3 Latest Photos + 4th Box View More)
   function initLiveGallery() {
-    if (!db) return;
+    function getCleanLocalPhotos() {
+      let local = [];
+      try {
+        local = JSON.parse(localStorage.getItem('ahs_gallery_photos') || '[]');
+      } catch (e) { local = []; }
+      return (local || []).filter(p => p && p.source !== 'Official Archive' && !String(p.id || '').startsWith('def-'));
+    }
 
     function renderGallery(docs) {
       const galleryGrid = document.getElementById('galleryGrid');
       if (!galleryGrid) return;
 
-      const defaultPhotos = [
-        {
-          url: 'assets/founder.jpg',
-          title: 'Shri Radha Manohar Das addressing devotees at Tirupati Convention'
-        },
-        {
-          url: 'assets/hero-desktop.png',
-          title: 'Youth Awakening & Martial Discipline Rally'
-        }
-      ];
+      const cleanDocs = (docs || []).filter(p => p && p.source !== 'Official Archive' && !String(p.id || '').startsWith('def-'));
+      const localPhotos = getCleanLocalPhotos();
 
-      // Pick top 2 photos
-      const displayPhotos = [];
-      if (docs.length > 0) {
-        displayPhotos.push({
-          url: docs[0].imageUrl || docs[0].thumbnailUrl || defaultPhotos[0].url,
-          title: docs[0].title || defaultPhotos[0].title
-        });
-      } else {
-        displayPhotos.push(defaultPhotos[0]);
-      }
-
-      if (docs.length > 1) {
-        displayPhotos.push({
-          url: docs[1].imageUrl || docs[1].thumbnailUrl || defaultPhotos[1].url,
-          title: docs[1].title || defaultPhotos[1].title
-        });
-      } else {
-        displayPhotos.push(defaultPhotos[1]);
-      }
-
-      let html = '';
-
-      // Box 1 & Box 2: Latest Photos
-      displayPhotos.forEach((photo) => {
-        const escapedTitle = (photo.title || 'Abhay Hindu Sena Moment').replace(/'/g, "\\'");
-        const escapedUrl = photo.url.replace(/'/g, "\\'");
-
-        html += `
-          <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
-            <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(photo.title)}" loading="lazy" onerror="this.src='assets/hero-desktop.png'">
-            <div class="gallery-overlay">${escapeHtml(photo.title)}</div>
-          </div>
-        `;
+      const merged = [...cleanDocs, ...localPhotos];
+      const seen = new Set();
+      const uniquePhotos = merged.filter(p => {
+        const key = p.id || p.imageUrl || p.url;
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
       });
 
-      // Box 3: View More Card
+      const top3 = uniquePhotos.slice(0, 3);
+      let html = '';
+
+      if (top3.length > 0) {
+        // Box 1, Box 2, Box 3: Latest Photos
+        top3.forEach((photo) => {
+          const url = photo.imageUrl || photo.url || photo.thumbnailUrl || 'assets/founder.jpg';
+          const title = photo.title || 'Abhay Hindu Sena Sacred Moment';
+          const escapedTitle = title.replace(/'/g, "\\'");
+          const escapedUrl = url.replace(/'/g, "\\'");
+
+          html += `
+            <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
+              <img src="${escapeHtml(url)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='assets/founder.jpg'">
+              <div class="gallery-overlay">${escapeHtml(title)}</div>
+            </div>
+          `;
+        });
+      } else {
+        // Fallback photos (if no live uploads yet)
+        const defaults = [
+          { url: 'assets/founder.jpg', title: 'Shri Radha Manohar Das addressing devotees at Annual Convention' },
+          { url: 'assets/hero-desktop.png', title: 'Youth Awakening & Martial Discipline Rally' },
+          { url: 'assets/hero-mobile.png', title: 'Dharma Raksha & Seva Convention' }
+        ];
+        defaults.forEach(photo => {
+          const escapedTitle = photo.title.replace(/'/g, "\\'");
+          const escapedUrl = photo.url.replace(/'/g, "\\'");
+          html += `
+            <div class="gallery-card" onclick="openLightbox('${escapedUrl}', '${escapedTitle}')">
+              <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(photo.title)}" loading="lazy">
+              <div class="gallery-overlay">${escapeHtml(photo.title)}</div>
+            </div>
+          `;
+        });
+      }
+
+      // Box 4: View More Card (Takes to separate gallery page)
       html += `
         <div class="gallery-card view-more-card" onclick="window.location.href='gallery.html'">
           <div class="view-more-content">
             <div class="view-more-icon-wrap">
               <span class="view-more-icon">🖼️</span>
             </div>
-            <span class="view-more-badge" data-en="Full Archive" data-te="చిత్ర నిధి">Full Archive</span>
+            <span class="view-more-badge" data-en="Complete Gallery" data-te="చిత్ర నిధి">Complete Gallery</span>
             <h3 data-en="Complete Photo Gallery" data-te="సమగ్ర చిత్రమాలిక">Complete Photo Gallery</h3>
             <p data-en="Browse all event snapshots, seva camps, youth conventions, and sacred moments."
                data-te="అభయ్ హిందూ సేన వార్షికోత్సవాలు, సేవా కార్యక్రమాలు మరియు అన్ని ఛాయాచిత్రాలను ఇక్కడ చూడండి.">
@@ -2734,9 +2841,13 @@
       galleryGrid.innerHTML = html;
     }
 
+    renderGallery([]);
+
+    if (!db) return;
+
     function fetchPhotos(tryOrdered = true) {
       let q = db.collection('gallery_photos');
-      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc').limit(2);
+      if (tryOrdered) q = q.orderBy('uploadedAt', 'desc').limit(3);
 
       q.onSnapshot(snapshot => {
         const docs = [];
@@ -2749,14 +2860,13 @@
         renderGallery(docs);
       }, err => {
         console.warn("Gallery snapshot fallback:", err);
-        if (tryOrdered) {
-          fetchPhotos(false);
-        }
+        if (tryOrdered) fetchPhotos(false);
       });
     }
 
     fetchPhotos(true);
   }
+
 
   document.addEventListener('DOMContentLoaded', () => {
     loadRecentVideos();

@@ -629,45 +629,28 @@
     console.warn("Firebase Init:", e);
   }
 
-  // Curated Fallbacks
-  const defaultPhotos = [
-    {
-      id: "def-1",
-      imageUrl: "assets/founder.jpg",
-      title: "Shri Radha Manohar Das addressing devotees at Tirupati Convention"
-    },
-    {
-      id: "def-2",
-      imageUrl: "assets/hero-desktop.png",
-      title: "Youth Awakening & Martial Discipline Rally"
-    },
-    {
-      id: "def-3",
-      imageUrl: "assets/hero-mobile.png",
-      title: "Dharma Raksha & Cow Protection Drive"
-    },
-    {
-      id: "def-4",
-      imageUrl: "assets/logo.png",
-      title: "Official Crest of Abhay Hindu Sena"
-    }
-  ];
-
   let allLoadedPhotos = [];
   let currentSearchQuery = '';
 
   function loadAllPhotos() {
     let localPhotos = [];
     try {
-      localPhotos = JSON.parse(localStorage.getItem('ahs_gallery_photos') || '[]');
+      const stored = localStorage.getItem('ahs_gallery_photos');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          localPhotos = parsed.filter(p => p && p.source !== 'Official Archive' && !String(p.id || '').startsWith('def-'));
+          if (localPhotos.length !== parsed.length) {
+            localStorage.setItem('ahs_gallery_photos', JSON.stringify(localPhotos));
+          }
+        }
+      }
     } catch (e) {
       localPhotos = [];
     }
 
-    // Combine local uploaded photos with default photos (avoiding duplicates)
-    const combined = [...localPhotos, ...defaultPhotos];
     const seen = new Set();
-    allLoadedPhotos = combined.filter(p => {
+    allLoadedPhotos = localPhotos.filter(p => {
       const key = p.id || p.imageUrl || p.url;
       if (!key || seen.has(key)) return false;
       seen.add(key);
@@ -684,14 +667,19 @@
       q.onSnapshot(snapshot => {
         if (!snapshot.empty) {
           const list = [];
-          snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data && data.source !== 'Official Archive' && !String(doc.id).startsWith('def-')) {
+              list.push({ id: doc.id, ...data });
+            }
+          });
           list.sort((a, b) => {
             const timeA = a.uploadedAt && a.uploadedAt.toMillis ? a.uploadedAt.toMillis() : (a.uploadedAt ? new Date(a.uploadedAt).getTime() : 0);
             const timeB = b.uploadedAt && b.uploadedAt.toMillis ? b.uploadedAt.toMillis() : (b.uploadedAt ? new Date(b.uploadedAt).getTime() : 0);
             return timeB - timeA;
           });
           
-          const merged = [...list, ...localPhotos, ...defaultPhotos];
+          const merged = [...list, ...localPhotos];
           const mSeen = new Set();
           allLoadedPhotos = merged.filter(p => {
             const key = p.id || p.imageUrl || p.url;
@@ -741,8 +729,8 @@
     if (filtered.length === 0) {
       grid.innerHTML = `
         <div class="empty-state">
-          <h3>No Photos Found</h3>
-          <p>No photos match your current search query. Try clearing the search box.</p>
+          <h3>${q ? 'No Photos Found' : 'No Photos Published Yet'}</h3>
+          <p>${q ? 'No photos match your current search query. Try clearing the search box.' : 'Photos uploaded or linked from Instagram, YouTube, or web links via the Admin Portal will appear here.'}</p>
         </div>
       `;
       return;

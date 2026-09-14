@@ -1120,10 +1120,19 @@
             </div>
           </div>
 
-          <!-- Direct URL Option -->
-          <div class="form-group">
-            <label for="photoDirectUrl">Or Paste Image URL Directly</label>
-            <input type="url" id="photoDirectUrl" class="form-input" placeholder="e.g. https://i.ibb.co/... or https://..." oninput="handlePhotoUrlInput(this.value)">
+          <!-- Smart Link Option (Instagram / YouTube / Image URL) -->
+          <div class="form-group" style="background:rgba(212,175,55,0.06); border:1px solid var(--border-gold); border-radius:12px; padding:14px; margin-bottom:14px;">
+            <label for="photoDirectUrl" style="color:var(--gold-bright); font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              🔗 Paste Instagram, YouTube, or Image Link
+            </label>
+            <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">
+              Paste an Instagram post / reel URL, YouTube link, or direct image URL. The photo and title will be fetched automatically!
+            </p>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="photoDirectUrl" class="form-input" placeholder="e.g. https://www.instagram.com/p/... or https://youtu.be/..." oninput="handleSmartPhotoLink(this.value)" style="flex:1;">
+              <button type="button" class="btn-action" onclick="fetchSmartPhotoLink()" style="background:var(--gold); color:#000; font-weight:700; padding:0 16px; border-radius:8px; white-space:nowrap;">Fetch ➔</button>
+            </div>
+            <div id="smartLinkBadge" style="display:none; font-size:0.76rem; color:#2ecc71; margin-top:8px; font-weight:600;"></div>
           </div>
 
           <!-- Photo Preview -->
@@ -2433,32 +2442,8 @@
   let adminGalleryPhotos = [];
   let adminGalleryChannel = null;
 
-  const defaultAdminGalleryPhotos = [
-    {
-      id: "def-1",
-      imageUrl: "assets/founder.jpg",
-      title: "Shri Radha Manohar Das addressing devotees at Tirupati Convention",
-      source: "Official Archive"
-    },
-    {
-      id: "def-2",
-      imageUrl: "assets/hero-desktop.png",
-      title: "Youth Awakening & Martial Discipline Rally",
-      source: "Official Archive"
-    },
-    {
-      id: "def-3",
-      imageUrl: "assets/hero-mobile.png",
-      title: "Dharma Raksha & Cow Protection Drive",
-      source: "Official Archive"
-    },
-    {
-      id: "def-4",
-      imageUrl: "assets/logo.png",
-      title: "Official Crest of Abhay Hindu Sena",
-      source: "Official Archive"
-    }
-  ];
+  let detectedImageUrl = null;
+  let detectedSource = null;
 
   function switchStorageMode(mode) {
     currentStorageMode = mode;
@@ -2495,7 +2480,11 @@
     if (input.files && input.files[0]) {
       const file = input.files[0];
       selectedPhotoFile = file;
+      detectedImageUrl = null;
+      detectedSource = null;
       document.getElementById('photoDirectUrl').value = '';
+      const badge = document.getElementById('smartLinkBadge');
+      if (badge) badge.style.display = 'none';
       document.getElementById('dropZoneText').textContent = 'Selected: ' + file.name;
 
       const reader = new FileReader();
@@ -2518,33 +2507,115 @@
     }
   }
 
-  function handlePhotoUrlInput(url) {
+  function handleSmartPhotoLink(url) {
     const val = (url || '').trim();
     const img = document.getElementById('galleryImgPreview');
     const placeholder = document.getElementById('galleryPlaceholder');
+    const badge = document.getElementById('smartLinkBadge');
+    const titleInput = document.getElementById('photoTitle');
 
-    if (val) {
-      selectedPhotoFile = null;
-      selectedPhotoDataUrl = null;
-      document.getElementById('photoFileInput').value = '';
-      document.getElementById('dropZoneText').textContent = 'Click to Browse Photo';
-
-      img.src = val;
-      img.style.display = 'block';
-      placeholder.style.display = 'none';
-      img.onerror = function() {
-        img.style.display = 'none';
-        placeholder.style.display = 'block';
-        placeholder.textContent = 'Invalid Image URL or blocked by CORS';
-      };
-      img.onload = function() {
-        placeholder.style.display = 'none';
-      };
-    } else {
+    if (!val) {
+      detectedImageUrl = null;
+      detectedSource = null;
       img.style.display = 'none';
       placeholder.style.display = 'block';
       placeholder.textContent = 'Select a file or paste a link to preview';
+      if (badge) badge.style.display = 'none';
+      return;
     }
+
+    // Reset file selection when link is pasted
+    selectedPhotoFile = null;
+    selectedPhotoDataUrl = null;
+    document.getElementById('photoFileInput').value = '';
+    document.getElementById('dropZoneText').textContent = 'Click to Browse Photo';
+
+    // 1. Check YouTube Video / Shorts / Post
+    const ytId = extractYouTubeId(val);
+    if (ytId) {
+      const ytImg = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      detectedImageUrl = ytImg;
+      detectedSource = 'YouTube';
+      img.src = ytImg;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.color = '#2ecc71';
+        badge.textContent = '✅ Detected YouTube Post / Video (Thumbnail fetched)';
+      }
+
+      // Auto-fetch YouTube title
+      fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${ytId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.title && (!titleInput.value || titleInput.value.startsWith('YouTube'))) {
+            titleInput.value = data.title;
+          }
+        })
+        .catch(() => {});
+      if (!titleInput.value) titleInput.value = 'YouTube Discourse Moment';
+      return;
+    }
+
+    // 2. Check Instagram Post or Reel
+    const instaMatch = val.match(/(?:instagram\.com\/(?:p|reel)|instagr\.am\/p)\/([a-zA-Z0-9_-]+)/i);
+    if (instaMatch && instaMatch[1]) {
+      const shortcode = instaMatch[1];
+      const instaImg = `https://www.instagram.com/p/${shortcode}/media/?size=l`;
+      detectedImageUrl = instaImg;
+      detectedSource = 'Instagram';
+      img.src = instaImg;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.color = '#2ecc71';
+        badge.textContent = `✅ Detected Instagram Post (Code: ${shortcode})`;
+      }
+
+      if (!titleInput.value) {
+        titleInput.value = `Instagram Post (${shortcode})`;
+      }
+      return;
+    }
+
+    // 3. Direct Image URL
+    detectedImageUrl = val;
+    detectedSource = 'Web Link';
+    img.src = val;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+    if (badge) {
+      badge.style.display = 'block';
+      badge.style.color = '#2ecc71';
+      badge.textContent = '✅ Direct Web Image Link';
+    }
+    img.onerror = function() {
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.color = '#ff6b6b';
+        badge.textContent = '⚠️ Preview failed or blocked by CORS. You can still publish it.';
+      }
+    };
+    img.onload = function() {
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.color = '#2ecc71';
+        badge.textContent = '✅ Image Loaded Successfully';
+      }
+    };
+  }
+
+  function fetchSmartPhotoLink() {
+    const val = (document.getElementById('photoDirectUrl').value || '').trim();
+    if (!val) {
+      alert("Please paste an Instagram, YouTube, or Image link first!");
+      return;
+    }
+    handleSmartPhotoLink(val);
   }
 
   // Compress image client-side to maintain speed & storage efficiency
@@ -2686,9 +2757,9 @@
     statusMsg.style.color = 'var(--gold-bright)';
     statusMsg.textContent = '🚀 Preparing image upload...';
 
-    let finalImageUrl = directUrl;
-    let finalThumbUrl = directUrl;
-    let uploadSource = 'Admin Dashboard';
+    let finalImageUrl = detectedImageUrl || directUrl;
+    let finalThumbUrl = detectedImageUrl || directUrl;
+    let uploadSource = detectedSource || 'Web Link';
 
     try {
       if (selectedPhotoFile) {
@@ -2714,7 +2785,7 @@
               finalThumbUrl = selectedPhotoDataUrl;
               uploadSource = 'Direct Local';
             } else {
-              throw new Error("Could not reach Cloud CDN (" + cloudErr.message + "). Please paste a direct image URL instead.");
+              throw new Error("Could not reach Cloud CDN (" + cloudErr.message + "). Please paste an Instagram, YouTube, or image URL instead.");
             }
           }
         }
@@ -2738,6 +2809,7 @@
       } catch (e) {
         localPhotos = [];
       }
+      localPhotos = localPhotos.filter(p => p && p.source !== 'Official Archive' && !String(p.id || '').startsWith('def-'));
       localPhotos.unshift(newPhoto);
       localStorage.setItem('ahs_gallery_photos', JSON.stringify(localPhotos));
 
@@ -2771,13 +2843,17 @@
       statusMsg.style.background = 'rgba(39, 174, 96, 0.2)';
       statusMsg.style.border = '1px solid #27ae60';
       statusMsg.style.color = '#2ecc71';
-      statusMsg.textContent = '🎉 Photo published to live website gallery successfully!';
+      statusMsg.textContent = `🎉 Photo published to live website gallery successfully via ${uploadSource}!`;
 
       // Reset form
       document.getElementById('addPhotoForm').reset();
       selectedPhotoFile = null;
       selectedPhotoDataUrl = null;
+      detectedImageUrl = null;
+      detectedSource = null;
       document.getElementById('dropZoneText').textContent = 'Click to Browse Photo';
+      const badge = document.getElementById('smartLinkBadge');
+      if (badge) badge.style.display = 'none';
       document.getElementById('galleryImgPreview').style.display = 'none';
       document.getElementById('galleryPlaceholder').style.display = 'block';
       document.getElementById('galleryPlaceholder').textContent = 'Select a file or paste a link to preview';
@@ -2785,7 +2861,7 @@
       // Update grid
       renderAdminGalleryCards();
 
-      showToast("Photo added to public gallery! 🚩");
+      showToast(`Photo added to public gallery via ${uploadSource}! 🚩`);
 
       setTimeout(() => {
         statusMsg.style.display = 'none';
@@ -2809,7 +2885,13 @@
       const stored = localStorage.getItem('ahs_gallery_photos');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) {
+          const cleaned = parsed.filter(p => p && p.source !== 'Official Archive' && !String(p.id || '').startsWith('def-'));
+          if (cleaned.length !== parsed.length) {
+            localStorage.setItem('ahs_gallery_photos', JSON.stringify(cleaned));
+          }
+          return cleaned;
+        }
       }
     } catch (e) {}
     return [];
@@ -2822,9 +2904,8 @@
     if (!grid) return;
 
     const local = getLocalGalleryPhotos();
-    const combined = [...local, ...defaultAdminGalleryPhotos];
     const seen = new Set();
-    adminGalleryPhotos = combined.filter(p => {
+    adminGalleryPhotos = local.filter(p => {
       const key = p.id || p.imageUrl;
       if (!key || seen.has(key)) return false;
       seen.add(key);
@@ -2838,7 +2919,7 @@
     if (count === 0) {
       grid.innerHTML = `
         <div style="text-align:center; padding:40px; color:var(--text-muted); grid-column: 1 / -1;">
-          No photos in the gallery yet. Upload your first photo on the left!
+          No photos published yet. Paste an Instagram link, YouTube link, or upload an image on the left!
         </div>
       `;
       return;
