@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Donate • Dharma Daan | Abhay Hindu Sena</title>
-<meta name="description" content="Support Abhay Hindu Sena with sacred Dharma Daan for Nitya Annadanam, Gau Samrakshana, temple preservation, and youth empowerment.">
+<title>Dharma Daan • Donate | Abhay Hindu Sena</title>
+<meta name="description" content="Contribute sacred Dharma Daan to Sri Radha Manohar Das Foundation (Abhay Hindu Sena). Support Nitya Annadanam, Gau Samrakshana, and Temple Preservation via SBI Bank or UPI.">
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --gold: #D4AF37;
@@ -24,6 +24,7 @@
     --border-gold-glow: rgba(212,175,55,0.6);
     --text-main: #FFF8EF;
     --text-muted: #C7B5A0;
+    --sbi-blue: #0080FF;
     --font-heading: 'Cinzel', 'Noto Sans Telugu', 'Mandali', serif;
   }
 
@@ -101,16 +102,6 @@
     align-items: center;
     gap: 5px;
   }
-  .btn-back-top {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border-gold);
-    color: var(--text-main);
-  }
-  .btn-back-top:hover {
-    background: var(--gold);
-    color: #000;
-    border-color: var(--gold);
-  }
   .btn-community-top {
     background: rgba(255,255,255,0.06);
     border: 1px solid var(--border-gold);
@@ -154,7 +145,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .glass-nav-links::-webkit-scrollbar { display: none; }
   .glass-nav-links a {
     color: var(--text-muted);
     text-decoration: none;
@@ -196,137 +190,596 @@
     color: #000;
   }
 
-  /* COMING SOON MAIN CONTAINER */
+  /* HERO HEADER */
   .donate-hero {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 6% 80px;
-    background: radial-gradient(circle at 50% 30%, rgba(122,12,12,0.45) 0%, rgba(13,4,4,0.92) 80%);
-    position: relative;
-    overflow: hidden;
-  }
-  .donate-card {
-    max-width: 650px;
-    width: 100%;
-    background: linear-gradient(135deg, rgba(28, 8, 8, 0.95) 0%, rgba(16, 5, 5, 0.98) 100%);
-    border: 2px solid var(--border-gold);
-    border-radius: 24px;
-    padding: 48px 36px;
+    padding: 40px 5% 30px;
     text-align: center;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.2);
+    background: radial-gradient(circle at 50% 20%, rgba(122,12,12,0.4) 0%, rgba(13,4,4,0.95) 75%);
     position: relative;
-    animation: fadeInScale 0.4s ease-out;
   }
-  @keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.96); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .donate-badge {
+  .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background: rgba(255, 107, 26, 0.15);
     border: 1px solid rgba(255, 107, 26, 0.5);
     color: var(--saffron);
-    padding: 6px 18px;
-    border-radius: 20px;
-    font-size: 0.78rem;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
-  .donate-icon {
-    font-size: 3.6rem;
-    margin-bottom: 12px;
-    display: inline-block;
-    filter: drop-shadow(0 0 16px rgba(212,175,55,0.4));
-  }
-  .donate-title {
+  .hero-title {
     font-family: var(--font-heading);
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
     color: var(--gold-bright);
-    margin-bottom: 14px;
-    line-height: 1.3;
+    margin-bottom: 12px;
+    line-height: 1.25;
     letter-spacing: 1px;
+    text-shadow: 0 2px 20px rgba(212,175,55,0.3);
   }
-  .coming-soon-pill {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
-    color: #000;
-    font-weight: 800;
-    font-size: 0.9rem;
-    padding: 7px 22px;
-    border-radius: 25px;
-    margin-bottom: 22px;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
-  }
-  .donate-desc {
+  .hero-subtitle {
     color: var(--text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin-bottom: 28px;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
+    max-width: 720px;
+    margin: 0 auto 24px;
+    line-height: 1.65;
   }
-  .info-box {
-    background: rgba(0,0,0,0.55);
-    border: 1px dashed var(--border-gold);
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 30px;
-    text-align: left;
-  }
-  .info-box p {
-    font-size: 0.85rem;
-    color: #C7B5A0;
-    line-height: 1.6;
-    margin-bottom: 8px;
-  }
-  .info-box p:last-child { margin-bottom: 0; }
-  .info-box strong { color: var(--gold-bright); }
-
-  .actions-row {
+  .trust-pills {
     display: flex;
-    gap: 14px;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
   }
-  .btn-action-main {
-    padding: 12px 26px;
+  .trust-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-gold);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    color: var(--gold-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* SEVA CAUSES SELECTOR */
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 5% 60px;
+    width: 100%;
+  }
+  .causes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  .cause-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .cause-card:hover,
+  .cause-card.active {
+    border-color: var(--gold-bright);
+    background: rgba(45, 12, 12, 0.85);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.2);
+  }
+  .cause-card.active::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    color: #2ecc71;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+  .cause-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .cause-info h4 {
+    font-size: 0.95rem;
+    color: var(--gold-bright);
+    margin-bottom: 3px;
+    font-weight: 700;
+  }
+  .cause-info p {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+
+  /* AMOUNT PRESET SELECTOR */
+  .amount-selector-box {
+    background: rgba(22, 7, 7, 0.85);
+    border: 1px solid var(--border-gold);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 34px;
+    text-align: center;
+  }
+  .amount-selector-title {
+    font-size: 0.88rem;
+    color: var(--gold-bright);
+    font-weight: 700;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .amount-chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .amount-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+    padding: 8px 18px;
     border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .amount-chip:hover,
+  .amount-chip.active {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
+    color: #000;
+    border-color: var(--gold-bright);
+    box-shadow: 0 4px 15px rgba(212,175,55,0.35);
+  }
+  .custom-amount-wrap {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border-gold);
+    border-radius: 25px;
+    padding: 4px 14px;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+  .custom-amount-wrap span {
+    color: var(--gold-bright);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-right: 6px;
+  }
+  .custom-amount-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #FFF;
+    font-size: 1rem;
+    font-weight: 700;
+    width: 100%;
+    font-family: inherit;
+  }
+
+  /* DONATION PAYMENT METHODS (SIDE BY SIDE DUAL CARDS) */
+  .payment-methods-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+    align-items: stretch;
+  }
+
+  /* CARD 1: UPI / SCAN & PAY */
+  .payment-card {
+    background: linear-gradient(145deg, rgba(28, 8, 8, 0.95) 0%, rgba(16, 5, 5, 0.98) 100%);
+    border: 2px solid var(--border-gold);
+    border-radius: 20px;
+    padding: 28px 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.12);
+  }
+  .card-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212,175,55,0.15);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-bright);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    width: fit-content;
+  }
+  .payment-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    font-weight: 800;
+  }
+  .payment-card-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+
+  /* QR Code Box */
+  .qr-wrapper {
+    background: #FFF;
+    border-radius: 14px;
+    padding: 14px;
+    max-width: 250px;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .qr-wrapper:hover {
+    transform: scale(1.02);
+  }
+  .qr-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+  .qr-zoom-tip {
+    font-size: 0.7rem;
+    color: #444;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* UPI ID Box */
+  .upi-id-box {
+    background: rgba(0,0,0,0.6);
+    border: 1px dashed var(--border-gold);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .upi-id-text {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .upi-id-val {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    font-family: monospace;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+  }
+  .btn-copy {
+    background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
+    border: none;
+    color: #000;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-copy:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+  }
+
+  /* Mobile Pay Now Button */
+  .btn-upi-mobile {
+    background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
+    color: #FFF;
     text-decoration: none;
+    text-align: center;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    box-shadow: 0 4px 15px rgba(255,107,26,0.35);
+    transition: all 0.25s;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-upi-mobile:hover {
+    box-shadow: 0 6px 20px rgba(255,107,26,0.55);
+    transform: translateY(-1px);
+  }
+
+  /* Supported Apps Row */
+  .supported-apps {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+  }
+  .supported-apps span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .app-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .app-badge {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    color: #DDD;
+    font-weight: 600;
+  }
+
+  /* CARD 2: BANK ACCOUNT DETAILS */
+  .bank-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .bank-detail-item {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .bank-detail-item.highlight {
+    border-color: var(--gold-bright);
+    background: rgba(212,175,55,0.08);
+  }
+  .detail-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .detail-val {
+    font-size: 0.94rem;
+    color: #FFF;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .detail-val.gold {
+    color: var(--gold-bright);
+    font-size: 1.05rem;
+    font-family: monospace;
+  }
+  .btn-doc-link {
+    background: rgba(0, 128, 255, 0.12);
+    border: 1px solid rgba(0, 128, 255, 0.4);
+    color: #64B5F6;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .btn-doc-link:hover {
+    background: rgba(0, 128, 255, 0.22);
+    border-color: #64B5F6;
+    color: #FFF;
+  }
+
+  /* DEVOTEE SEVA RECEIPT INTIMATION FORM */
+  .receipt-section {
+    background: linear-gradient(135deg, rgba(24, 7, 7, 0.95) 0%, rgba(14, 4, 4, 0.98) 100%);
+    border: 2px solid var(--border-gold);
+    border-radius: 20px;
+    padding: 34px 30px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+  }
+  .receipt-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .receipt-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+  }
+  .receipt-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+  .form-label {
+    font-size: 0.78rem;
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .form-input, .form-select {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--border-gold);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #FFF;
+    font-size: 0.88rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus {
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px rgba(212,175,55,0.2);
+  }
+  .form-select option {
+    background: #160707;
+    color: #FFF;
+  }
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .btn-submit-wa {
+    background: #25D366;
+    color: #FFF;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(37,211,102,0.35);
+  }
+  .btn-submit-wa:hover {
+    box-shadow: 0 6px 20px rgba(37,211,102,0.55);
+    transform: translateY(-2px);
+  }
+  .btn-submit-direct {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-gold);
+    color: var(--text-main);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
     transition: all 0.25s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
   }
-  .btn-primary-action {
-    background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
-    color: #FFF;
-    box-shadow: 0 4px 15px rgba(255,107,26,0.35);
-  }
-  .btn-primary-action:hover {
-    box-shadow: 0 8px 25px rgba(255,107,26,0.55);
-    transform: translateY(-2px);
-  }
-  .btn-secondary-action {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border-gold);
-    color: var(--text-main);
-  }
-  .btn-secondary-action:hover {
+  .btn-submit-direct:hover {
     background: var(--gold);
     color: #000;
     border-color: var(--gold);
     transform: translateY(-2px);
+  }
+
+  /* TOAST NOTIFICATION */
+  .toast-box {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #27ae60;
+    color: #FFF;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    z-index: 9999;
+    display: none;
+    animation: toastPop 0.3s ease-out;
+  }
+  @keyframes toastPop {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MODAL FOR IMAGE ZOOM */
+  .img-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .img-modal.active {
+    display: flex;
+  }
+  .modal-inner {
+    max-width: 500px;
+    width: 100%;
+    background: #110404;
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  }
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: #FFF;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .modal-inner img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 12px;
   }
 
   /* FOOTER */
@@ -378,25 +831,25 @@
   body.telugu-mode {
     font-family: 'Mandali', 'Noto Sans Telugu', 'Poppins', sans-serif;
   }
-  body.telugu-mode .donate-title,
+  body.telugu-mode .hero-title,
+  body.telugu-mode .payment-card-title,
   body.telugu-mode h1,
   body.telugu-mode h2,
   body.telugu-mode h3 {
     font-family: 'Mandali', 'Noto Sans Telugu', serif;
   }
 
-  @media (max-width: 768px) {
-    .site-header { padding: 10px 4%; }
-    .donate-card { padding: 36px 20px; }
-    .donate-title { font-size: 1.6rem; }
-    .actions-row { flex-direction: column; }
-    .btn-action-main { width: 100%; justify-content: center; }
+  @media (max-width: 850px) {
+    .payment-methods-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 1.75rem; }
+    .receipt-section { padding: 24px 18px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Top Header -->
+<!-- TOP HEADER -->
 <header class="site-header">
   <a href="index.html" class="header-brand">
     <img src="assets/logo.png" alt="Abhay Hindu Sena Logo" class="circle-logo">
@@ -411,7 +864,7 @@
   </div>
 </header>
 
-<!-- Floating Glass Navbar -->
+<!-- FLOATING GLASS NAVBAR -->
 <nav class="glass-navbar">
   <div class="glass-nav-links">
     <a href="index.html">Home</a>
@@ -429,53 +882,291 @@
   </button>
 </nav>
 
-<!-- Main Coming Soon Section -->
-<main class="donate-hero">
-  <div class="donate-card">
-    <div class="donate-badge" data-en="Sacred Dharma Daan" data-te="పవిత్ర ధర్మ దానం">
-      Sacred Dharma Daan
+<!-- HERO SECTION -->
+<section class="donate-hero">
+  <div class="hero-badge" data-en="🚩 Sacred Dharma Daan & Seva Nidhi" data-te="🚩 పవిత్ర ధర్మ దానం & సేవా నిధి">
+    🚩 Sacred Dharma Daan & Seva Nidhi
+  </div>
+  <h1 class="hero-title" data-en="Support Dharma Raksha & Gau Seva" data-te="సనాతన ధర్మ రక్షణకు & గో-సేవకు మీ చేయూత">
+    Support Dharma Raksha & Gau Seva
+  </h1>
+  <p class="hero-subtitle" data-en="“ధర్మో రక్షతి రక్షితః” — Every contribution empowers Nitya Annadanam, Gau Samrakshana, dilapidated temple restoration, and youth defense training across Andhra Pradesh and Bharat."
+     data-te="“ధర్మో రక్షతి రక్షితః” — మీరు అందించే ప్రతి పవిత్ర రూపాయి నేరుగా నిత్య అన్నదానం, గో సంరక్షణ, ప్రాచీన ఆలయాల పునరుద్ధరణ మరియు యువత ధర్మ రక్షణ శిక్షణకు మాత్రమే వినియోగించబడుతుంది.">
+    “ధర్మో రక్షతి రక్షితః” — Every contribution empowers Nitya Annadanam, Gau Samrakshana, dilapidated temple restoration, and youth defense training across Andhra Pradesh and Bharat.
+  </p>
+  <div class="trust-pills">
+    <span class="trust-pill">🏛️ Verified SBI Trust Account</span>
+    <span class="trust-pill">🛡️ Sri Radha Manohar Das Foundation</span>
+    <span class="trust-pill">⚡ Instant QR & UPI Payment</span>
+    <span class="trust-pill">📜 100% Sacred Utilization</span>
+  </div>
+</section>
+
+<!-- MAIN CONTENT CONTAINER -->
+<div class="section-container">
+
+  <!-- 1. CHOOSE SEVA CAUSE -->
+  <div class="causes-grid">
+    <div class="cause-card active" onclick="selectCause(this, 'Nitya Annadanam', 'నిత్య అన్నదానం')">
+      <div class="cause-icon">🍲</div>
+      <div class="cause-info">
+        <h4 data-en="Nitya Annadanam" data-te="నిత్య అన్నదానం">Nitya Annadanam</h4>
+        <p data-en="Daily feeding of devotees, sadhus & the needy" data-te="భక్తులకు, సాధువులకు, నిరుపేదలకు నిత్య అన్నప్రసాదం">Daily feeding of devotees, sadhus & the needy</p>
+      </div>
     </div>
-    
-    <div>
-      <span class="donate-icon">🙏</span>
+    <div class="cause-card" onclick="selectCause(this, 'Gau Samrakshana', 'గో సంరక్షణ & సేవా')">
+      <div class="cause-icon">🐄</div>
+      <div class="cause-info">
+        <h4 data-en="Gau Samrakshana" data-te="గో సంరక్షణ & సేవా">Gau Samrakshana</h4>
+        <p data-en="Grass fodder, veterinary care & Goshala shelter" data-te="గోవులకు గ్రాసం, వైద్యం మరియు గోశాలల నిర్వహణ">Grass fodder, veterinary care & Goshala shelter</p>
+      </div>
     </div>
-
-    <h1 class="donate-title" data-en="Support with Dharma Daan" data-te="ధర్మ దానం & విరాళాల వేదిక">
-      Support with Dharma Daan
-    </h1>
-
-    <div class="coming-soon-pill" data-en="✨ COMING SOON ✨" data-te="✨ త్వరలో ప్రారంభం ✨">
-      ✨ COMING SOON ✨
+    <div class="cause-card" onclick="selectCause(this, 'Dharma Raksha & Youth Awakening', 'ధర్మ రక్షణ & యువత శిక్షణ')">
+      <div class="cause-icon">🚩</div>
+      <div class="cause-info">
+        <h4 data-en="Youth Dharma Awakening" data-te="ధర్మ రక్షణ & యువత శిక్షణ">Youth Dharma Awakening</h4>
+        <p data-en="Dharmic training camps, self-defense & martial arts" data-te="యువతకు ఆత్మరక్షణ, ధర్మ జాగృతి శిక్షణ శిబిరాలు">Dharmic training camps, self-defense & martial arts</p>
+      </div>
     </div>
-
-    <p class="donate-desc" data-en="Our official online donation gateway and Trust Bank integration are currently being configured to ensure complete transparency and seamless contributions. We will be launching this portal very shortly."
-       data-te="అభయ్ హిందూ సేన అధికారిక ట్రస్ట్ బ్యాంక్ ఖాతా వివరాలు మరియు ఆన్‌లైన్ పేమెంట్ గేట్‌వే సేవలు ప్రస్తుతం సిద్ధమవుతున్నాయి. పూర్తి పారదర్శకతతో కూడిన అధికారిక విరాళాల వేదిక అతి త్వరలో ప్రారంభించబడుతుంది.">
-      Our official online donation gateway and Trust Bank integration are currently being configured to ensure complete transparency and seamless contributions. We will be launching this portal very shortly.
-    </p>
-
-    <div class="info-box">
-      <p data-en="🏛️ <strong>Purpose:</strong> All contributions directly support Nitya Annadanam drives, sacred Gau Samrakshana, ancient temple restoration, and youth defense training camps."
-         data-te="🏛️ <strong>లక్ష్యం:</strong> మీ పవిత్ర విరాళాలు నేరుగా నిత్య అన్నదానం, గో సంరక్షణ, పురాతన ఆలయాల పునరుద్ధరణ మరియు యువతకు ధర్మ రక్షణ శిక్షణ కార్యక్రమాలకు ఉపయోగించబడతాయి.">
-        🏛️ <strong>Purpose:</strong> All contributions directly support Nitya Annadanam drives, sacred Gau Samrakshana, ancient temple restoration, and youth defense training camps.
-      </p>
-      <p data-en="📧 <strong>Inquiries:</strong> For direct donor communication or receipt inquiries, kindly contact: <a href='mailto:ahsrmdas@gmail.com' style='color:var(--gold-bright);'>ahsrmdas@gmail.com</a>"
-         data-te="📧 <strong>సంప్రదింపులు:</strong> విరాళాల గురించిన వివరాలు లేదా సంప్రదింపుల కోసం దయచేసి ఈమెయిల్ చేయండి: <a href='mailto:ahsrmdas@gmail.com' style='color:var(--gold-bright);'>ahsrmdas@gmail.com</a>">
-        📧 <strong>Inquiries:</strong> For direct donor communication or receipt inquiries, kindly contact: <a href="mailto:ahsrmdas@gmail.com" style="color:var(--gold-bright);">ahsrmdas@gmail.com</a>
-      </p>
-    </div>
-
-    <div class="actions-row">
-      <a href="join.html" class="btn-action-main btn-primary-action" data-en="Enlist as a Sevak 🚩" data-te="సేవకుడిగా చేరండి 🚩">
-        Enlist as a Sevak 🚩
-      </a>
-      <a href="index.html" class="btn-action-main btn-secondary-action" data-en="← Return to Home" data-te="← ప్రధాన పేజీకి వెళ్లండి">
-        ← Return to Home
-      </a>
+    <div class="cause-card" onclick="selectCause(this, 'Temple Restoration', 'ఆలయాల పునరుద్ధరణ')">
+      <div class="cause-icon">🛕</div>
+      <div class="cause-info">
+        <h4 data-en="Temple Restoration" data-te="ఆలయాల పునరుద్ధరణ">Temple Restoration</h4>
+        <p data-en="Rebuilding neglected village temples & Pujari seva" data-te="ప్రాచీన ఆలయాల జీర్ణోద్ధరణ మరియు పూజారుల పోషణ">Rebuilding neglected village temples & Pujari seva</p>
+      </div>
     </div>
   </div>
-</main>
 
-<!-- Footer -->
+  <!-- 2. AMOUNT PRESET SELECTOR -->
+  <div class="amount-selector-box">
+    <div class="amount-selector-title" data-en="Select Contribution Amount (₹)" data-te="మీ పవిత్ర విరాళం మొత్తాన్ని ఎంచుకోండి (₹)">
+      Select Contribution Amount (₹)
+    </div>
+    <div class="amount-chips">
+      <button type="button" class="amount-chip" onclick="setAmount(501)">₹501</button>
+      <button type="button" class="amount-chip active" onclick="setAmount(1116)">₹1,116</button>
+      <button type="button" class="amount-chip" onclick="setAmount(2116)">₹2,116</button>
+      <button type="button" class="amount-chip" onclick="setAmount(5116)">₹5,116</button>
+      <button type="button" class="amount-chip" onclick="setAmount(11116)">₹11,116</button>
+    </div>
+    <div class="custom-amount-wrap">
+      <span>₹</span>
+      <input type="number" id="customAmountInput" class="custom-amount-input" placeholder="Custom Amount" value="1116" oninput="handleCustomAmount(this.value)">
+    </div>
+  </div>
+
+  <!-- 3. PAYMENT METHODS DUAL GRID -->
+  <div class="payment-methods-grid">
+
+    <!-- METHOD A: UPI SCAN & PAY -->
+    <div class="payment-card">
+      <span class="card-header-badge">⚡ Instant & Direct</span>
+      <h3 class="payment-card-title" data-en="UPI & QR Code Payment" data-te="యూపీఐ & క్యూఆర్ కోడ్ చెల్లింపు">UPI & QR Code Payment</h3>
+      <p class="payment-card-sub" data-en="Scan with Google Pay, PhonePe, Paytm, BHIM, YONO SBI, WhatsApp Pay, or any banking UPI app."
+         data-te="Google Pay, PhonePe, Paytm, BHIM, YONO SBI, WhatsApp Pay లేదా ఏదైనా యూపీఐ యాప్ ద్వారా స్కాన్ చేసి నేరుగా పంపండి.">
+        Scan with Google Pay, PhonePe, Paytm, BHIM, YONO SBI, WhatsApp Pay, or any banking UPI app.
+      </p>
+
+      <!-- QR CODE IMAGE -->
+      <div class="qr-wrapper" onclick="openQrModal()" title="Click to view full screen">
+        <img src="assets/donation-qr.png" alt="Official SBI UPI QR Code - Sri Radha Manohar Das Foundation" class="qr-img">
+        <div class="qr-zoom-tip">🔍 Click to Zoom QR</div>
+      </div>
+
+      <!-- UPI ID BOX -->
+      <div class="upi-id-box">
+        <div>
+          <div class="upi-id-text">Official Verified UPI ID:</div>
+          <div class="upi-id-val" id="upiIdValue">44174507242@sbi</div>
+        </div>
+        <button type="button" class="btn-copy" onclick="copyText('44174507242@sbi', 'UPI ID Copied!')">
+          📋 Copy
+        </button>
+      </div>
+
+      <!-- DIRECT MOBILE PAY BUTTON -->
+      <a href="upi://pay?pa=44174507242@sbi&pn=SRI+RADHA+MANOHAR+DAS+FOUNDATION&cu=INR&am=1116" id="upiDeepLink" class="btn-upi-mobile">
+        📱 Open in UPI App (GPay / PhonePe)
+      </a>
+
+      <!-- SUPPORTED APPS -->
+      <div class="supported-apps">
+        <span>Accepted Everywhere via BHIM UPI</span>
+        <div class="app-badges">
+          <span class="app-badge">Google Pay</span>
+          <span class="app-badge">PhonePe</span>
+          <span class="app-badge">Paytm</span>
+          <span class="app-badge">BHIM</span>
+          <span class="app-badge">YONO SBI</span>
+          <span class="app-badge">WhatsApp Pay</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- METHOD B: OFFICIAL SBI BANK ACCOUNT -->
+    <div class="payment-card">
+      <span class="card-header-badge" style="background:rgba(0,128,255,0.15); color:#64B5F6; border-color:rgba(0,128,255,0.4);">
+        🏛️ Bank Transfer / Net Banking
+      </span>
+      <h3 class="payment-card-title" data-en="State Bank of India (SBI)" data-te="స్టేట్ బ్యాంక్ ఆఫ్ ఇండియా (SBI)">State Bank of India (SBI)</h3>
+      <p class="payment-card-sub" data-en="For direct NEFT, RTGS, IMPS, or Branch Deposit transfers directly into the official Foundation account."
+         data-te="నెఫ్ట్ (NEFT), ఆర్టీజీఎస్ (RTGS), ఐఎమ్‌పీఎస్ (IMPS) లేదా నేరుగా బ్యాంక్ బ్రాంచ్ డిపాజిట్ కోసం అధికారిక వివరాలు:">
+        For direct NEFT, RTGS, IMPS, or Branch Deposit transfers directly into the official Foundation account.
+      </p>
+
+      <div class="bank-details-list">
+        <div class="bank-detail-item">
+          <div>
+            <div class="detail-label">Account Holder Name</div>
+            <div class="detail-val" style="color:var(--gold-bright);">SRI RADHA MANOHAR DAS FOUNDATION</div>
+          </div>
+          <button type="button" class="btn-copy" onclick="copyText('SRI RADHA MANOHAR DAS FOUNDATION', 'Account Name Copied!')">📋 Copy</button>
+        </div>
+
+        <div class="bank-detail-item highlight">
+          <div>
+            <div class="detail-label">Current Account Number</div>
+            <div class="detail-val gold" id="bankAccNo">44174507242</div>
+          </div>
+          <button type="button" class="btn-copy" onclick="copyText('44174507242', 'Account Number Copied!')">📋 Copy</button>
+        </div>
+
+        <div class="bank-detail-item highlight">
+          <div>
+            <div class="detail-label">Branch IFSC Code</div>
+            <div class="detail-val gold" id="bankIfsc">SBIN0001008</div>
+          </div>
+          <button type="button" class="btn-copy" onclick="copyText('SBIN0001008', 'IFSC Code Copied!')">📋 Copy</button>
+        </div>
+
+        <div class="bank-detail-item">
+          <div>
+            <div class="detail-label">Branch Name</div>
+            <div class="detail-val">GOVERNORPET (VIJAYAWADA)</div>
+          </div>
+          <span style="font-size:0.75rem; color:#888;">Code: 01008</span>
+        </div>
+
+        <div class="bank-detail-item">
+          <div>
+            <div class="detail-label">Branch Address & City</div>
+            <div class="detail-val" style="font-size:0.82rem; font-weight:500;">Alibaig Street, P.B. No. 319, Vijayawada, Krishna Dist., AP - 520002</div>
+          </div>
+        </div>
+
+        <div class="bank-detail-item">
+          <div>
+            <div class="detail-label">MICR Code & Toll Free</div>
+            <div class="detail-val" style="font-size:0.82rem;">MICR: 520002004 • Toll Free: 1800 1234</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="javascript:void(0)" onclick="openDocModal()" class="btn-doc-link">
+        📄 View Official SBI Account Confirmation Letter ➔
+      </a>
+    </div>
+
+  </div>
+
+  <!-- 4. DEVOTEE SEVA RECEIPT INTIMATION FORM -->
+  <section class="receipt-section">
+    <div class="receipt-header">
+      <h3 data-en="Notify Foundation of Your Contribution" data-te="విరాళం అందించిన వివరాలను తెలియజేయండి">
+        Notify Foundation of Your Contribution
+      </h3>
+      <p data-en="Kindly share your payment details so our foundation can confirm receipt, dedicate Sankalpam in ongoing sevas, and convey sacred blessings."
+         data-te="మీరు విరాళం పంపిన తర్వాత ఈ క్రింది ఫారమ్ ద్వారా వివరాలు తెలియజేస్తే, మా నిర్వాహకులు రశీదును ధృవీకరించి ధర్మ సంకల్పంలో మీ పేరును చేరుస్తారు.">
+        Kindly share your payment details so our foundation can confirm receipt, dedicate Sankalpam in ongoing sevas, and convey sacred blessings.
+      </p>
+    </div>
+
+    <form id="donationNoticeForm" onsubmit="handleReceiptSubmit(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" data-en="Devotee Full Name *" data-te="భక్తుని పూర్తి పేరు *">Devotee Full Name *</label>
+          <input type="text" id="donorName" class="form-input" placeholder="e.g. Ramesh Varma" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-en="WhatsApp Mobile Number *" data-te="వాట్సాప్ మొబైల్ నంబర్ *">WhatsApp Mobile Number *</label>
+          <input type="tel" id="donorPhone" class="form-input" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-en="City / District & State *" data-te="నగరం / జిల్లా & రాష్ట్రం *">City / District & State *</label>
+          <input type="text" id="donorPlace" class="form-input" placeholder="e.g. Vijayawada, Andhra Pradesh" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-en="Amount Contributed (₹) *" data-te="అందించిన విరాళం మొత్తం (₹) *">Amount Contributed (₹) *</label>
+          <input type="number" id="donorAmount" class="form-input" placeholder="e.g. 1116" value="1116" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-en="Payment Method *" data-te="చెల్లింపు విధానం *">Payment Method *</label>
+          <select id="donorMethod" class="form-select" required>
+            <option value="UPI / QR Code Scan">UPI / QR Code Scan (GPay / PhonePe / Paytm)</option>
+            <option value="Direct SBI Account Transfer">Direct SBI Bank Transfer (NEFT / IMPS / RTGS)</option>
+            <option value="Net Banking / Branch Cash Deposit">Net Banking / Branch Deposit</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-en="Bank UTR / Transaction Reference ID" data-te="బ్యాంక్ UTR / ట్రాన్సాక్షన్ నంబర్">Bank UTR / Transaction Reference ID</label>
+          <input type="text" id="donorUtr" class="form-input" placeholder="12-digit UTR / Ref Number">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label" data-en="Sacred Intention / Gotram & Nakshatram (Optional for Sankalpam)" data-te="సంకల్పం కోసం గోత్రం & నక్షత్రం (ఐచ్ఛికం)">Sacred Intention / Gotram & Nakshatram (Optional for Sankalpam)</label>
+          <input type="text" id="donorIntention" class="form-input" placeholder="e.g. Koundinya Gotram, Rohini Nakshatram - Nitya Annadanam">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit-wa">
+          📲 Send Details on Official WhatsApp ➔
+        </button>
+        <button type="button" class="btn-submit-direct" onclick="submitDirectLocal()">
+          💾 Save Receipt Request Online
+        </button>
+      </div>
+    </form>
+  </section>
+
+</div>
+
+<!-- TOAST BOX -->
+<div id="toastBox" class="toast-box">Copied!</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" class="img-modal" onclick="closeQrModal()">
+  <div class="modal-inner" onclick="event.stopPropagation()">
+    <button class="modal-close-btn" onclick="closeQrModal()">&times;</button>
+    <h3 style="color:var(--gold-bright); margin-bottom:12px; font-family:var(--font-heading);">SBI Scan & Pay QR</h3>
+    <img src="assets/donation-qr.png" alt="SBI Donation QR">
+    <div style="font-size:0.85rem; color:var(--gold-bright); font-weight:700; font-family:monospace; margin-bottom:6px;">
+      44174507242@sbi
+    </div>
+    <div style="font-size:0.75rem; color:var(--text-muted);">
+      SRI RADHA MANOHAR DAS FOUNDATION
+    </div>
+  </div>
+</div>
+
+<!-- BANK DOC MODAL -->
+<div id="docModal" class="img-modal" onclick="closeDocModal()">
+  <div class="modal-inner" style="max-width:650px;" onclick="event.stopPropagation()">
+    <button class="modal-close-btn" onclick="closeDocModal()">&times;</button>
+    <h3 style="color:var(--gold-bright); margin-bottom:12px; font-family:var(--font-heading);">Official SBI Account Confirmation</h3>
+    <img src="assets/sbi-account-doc.png" alt="SBI Account Confirmation Letter">
+    <div style="font-size:0.8rem; color:var(--text-muted);">
+      State Bank of India • Governorpet Branch, Vijayawada • Account No: 44174507242
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
   <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="footer-logo">
   <div class="footer-brand">🚩 ABHAY HINDU SENA</div>
@@ -491,11 +1182,147 @@
     <a href="mailto:ahsrmdas@gmail.com">ahsrmdas@gmail.com</a>
   </div>
   <div class="footer-copy">
-    © 2026 Abhay Hindu Sena. Founded by Shri Radha Manohar Das. All Rights Reserved.
+    © 2026 Abhay Hindu Sena. Official Trust: Sri Radha Manohar Das Foundation. All Rights Reserved.
   </div>
 </footer>
 
 <script>
+  let currentCauseEn = "Nitya Annadanam";
+  let currentCauseTe = "నిత్య అన్నదానం";
+  let currentAmount = 1116;
+
+  function selectCause(el, causeEn, causeTe) {
+    document.querySelectorAll('.cause-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    currentCauseEn = causeEn;
+    currentCauseTe = causeTe;
+    updateUpiIntent();
+  }
+
+  function setAmount(amt) {
+    currentAmount = amt;
+    document.getElementById('customAmountInput').value = amt;
+    document.querySelectorAll('.amount-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.textContent.includes(amt.toString()));
+    });
+    document.getElementById('donorAmount').value = amt;
+    updateUpiIntent();
+  }
+
+  function handleCustomAmount(val) {
+    const num = parseInt(val, 10);
+    if (!isNaN(num) && num > 0) {
+      currentAmount = num;
+      document.querySelectorAll('.amount-chip').forEach(chip => chip.classList.remove('active'));
+      document.getElementById('donorAmount').value = num;
+      updateUpiIntent();
+    }
+  }
+
+  function updateUpiIntent() {
+    const upiLink = document.getElementById('upiDeepLink');
+    if (upiLink) {
+      const causeText = encodeURIComponent("Dharma Seva " + currentCauseEn);
+      upiLink.href = `upi://pay?pa=44174507242@sbi&pn=SRI+RADHA+MANOHAR+DAS+FOUNDATION&cu=INR&am=${currentAmount}&tn=${causeText}`;
+    }
+  }
+
+  function copyText(text, msg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showToast(msg || "Copied to clipboard!"));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(msg || "Copied to clipboard!");
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toastBox');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+  }
+
+  function openQrModal() {
+    document.getElementById('qrModal').classList.add('active');
+  }
+  function closeQrModal() {
+    document.getElementById('qrModal').classList.remove('active');
+  }
+
+  function openDocModal() {
+    document.getElementById('docModal').classList.add('active');
+  }
+  function closeDocModal() {
+    document.getElementById('docModal').classList.remove('active');
+  }
+
+  // Handle Form Submission
+  function handleReceiptSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('donorName').value.trim();
+    const phone = document.getElementById('donorPhone').value.trim();
+    const place = document.getElementById('donorPlace').value.trim();
+    const amount = document.getElementById('donorAmount').value.trim();
+    const method = document.getElementById('donorMethod').value;
+    const utr = document.getElementById('donorUtr').value.trim() || 'Pending';
+    const intention = document.getElementById('donorIntention').value.trim() || currentCauseEn;
+
+    // Save locally
+    saveDonationRecord({ name, phone, place, amount, method, utr, intention, date: new Date().toISOString() });
+
+    // Format WhatsApp message
+    const waText = 
+      `🚩 *నమస్కారం! శ్రీ రాధా మనోహర్ దాస్ ఫౌండేషన్ (అభయ్ హిందూ సేన)*\n\n` +
+      `నేను ధర్మ సేవ కోసం పవిత్ర విరాళాన్ని సమర్పించాను. వివరాలు:\n` +
+      `👤 *భక్తుని పేరు:* ${name}\n` +
+      `📱 *మొబైల్ నంబర్:* ${phone}\n` +
+      `📍 *ప్రాంతం:* ${place}\n` +
+      `💰 *విరాళం మొత్తం:* ₹${amount}\n` +
+      `💳 *చెల్లింపు విధానం:* ${method}\n` +
+      `🔢 *UTR / ట్రాన్సాక్షన్ ID:* ${utr}\n` +
+      `🙏 *సేవా సంకల్పం:* ${intention}\n\n` +
+      `దయచేసి రశీదు మరియు ఆశీస్సులు అందించవలసిందిగా కోరుతున్నాను. జై శ్రీరామ్! 🚩`;
+
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(waText)}`;
+    window.open(waUrl, '_blank');
+    showToast("Opening WhatsApp with your donation details... 🚩");
+  }
+
+  function submitDirectLocal() {
+    const name = document.getElementById('donorName').value.trim();
+    const phone = document.getElementById('donorPhone').value.trim();
+    const amount = document.getElementById('donorAmount').value.trim();
+
+    if (!name || !phone || !amount) {
+      alert("Please fill in your Name, Phone Number, and Amount before submitting.");
+      return;
+    }
+
+    const place = document.getElementById('donorPlace').value.trim() || 'Bharat';
+    const method = document.getElementById('donorMethod').value;
+    const utr = document.getElementById('donorUtr').value.trim() || 'Pending';
+    const intention = document.getElementById('donorIntention').value.trim() || currentCauseEn;
+
+    saveDonationRecord({ name, phone, place, amount, method, utr, intention, date: new Date().toISOString() });
+    alert("🙏 Thank you! Your donation intimation has been saved. Our team will verify and acknowledge your sacred contribution.");
+    document.getElementById('donationNoticeForm').reset();
+  }
+
+  function saveDonationRecord(record) {
+    try {
+      const list = JSON.parse(localStorage.getItem('ahs_donation_records') || '[]');
+      list.unshift(record);
+      localStorage.setItem('ahs_donation_records', JSON.stringify(list));
+    } catch(e) {}
+  }
+
+  // Language Toggle
   let isTelugu = false;
   function toggleLanguage() {
     isTelugu = !isTelugu;
@@ -516,6 +1343,9 @@
       }
     });
   }
+
+  // Init
+  updateUpiIntent();
 </script>
 </body>
 </html>
