@@ -47,19 +47,23 @@
   .chat-app-header {
     background: linear-gradient(180deg, #200606 0%, #0D0404 100%);
     border-bottom: 1px solid var(--border-gold);
-    padding: 12px 3%;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
     z-index: 100;
+    width: 100%;
+    box-sizing: border-box;
   }
   .header-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
+    min-width: 0;
+    flex-shrink: 0;
   }
   .circle-logo {
     width: 44px;
@@ -68,6 +72,10 @@
     object-fit: cover;
     background: #FFF;
     border: 2px solid var(--gold);
+    flex-shrink: 0;
+  }
+  .brand-title {
+    min-width: 0;
   }
   .brand-title h1 {
     font-family: 'Cinzel', serif;
@@ -75,20 +83,27 @@
     color: var(--gold-bright);
     font-weight: 800;
     letter-spacing: 0.5px;
-    line-height: 1.2;
+    line-height: 1.15;
+    white-space: nowrap;
   }
   .brand-title span {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: var(--saffron);
     display: block;
+    white-space: nowrap;
+    line-height: 1.2;
   }
 
   .header-nav {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .header-nav::-webkit-scrollbar { display: none; }
   .header-nav a, .header-nav button {
     text-decoration: none;
     padding: 6px 14px;
@@ -308,18 +323,24 @@
   .chat-identity-strip {
     background: #140707;
     border-top: 1px solid var(--border-gold);
-    padding: 10px 24px;
+    padding: 8px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
     flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 8px;
   }
   .identity-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
   }
   .avatar-mini {
     width: 26px;
@@ -332,6 +353,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+  }
+  .identity-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
   .btn-change-identity {
     background: transparent;
@@ -342,6 +370,8 @@
     font-size: 0.74rem;
     cursor: pointer;
     transition: all 0.2s;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   .btn-change-identity:hover {
     background: var(--gold);
@@ -351,35 +381,42 @@
   /* INPUT AREA */
   .chat-input-area {
     border-top: 1px solid rgba(212,175,55,0.2);
-    padding: 14px 24px;
+    padding: 10px 18px;
     background: #110505;
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
     flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   .chat-input {
     background: rgba(0,0,0,0.6);
     border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 8px;
-    padding: 12px 16px;
+    border-radius: 20px;
+    padding: 10px 16px;
     color: #FFF;
     font-family: inherit;
-    font-size: 0.92rem;
-    flex: 1;
+    font-size: 16px;
+    flex: 1 1 0%;
+    min-width: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
   }
   .chat-input:focus { outline: none; border-color: var(--gold); }
   .chat-send-btn {
     background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
     color: #000;
     border: none;
-    border-radius: 8px;
-    font-weight: 700;
+    border-radius: 20px;
+    font-weight: 800;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.2s;
-    font-size: 0.92rem;
-    padding: 12px 28px;
+    font-size: 0.9rem;
+    padding: 10px 22px;
     white-space: nowrap;
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
   .chat-send-btn:hover {
     transform: translateY(-1px);
@@ -520,47 +557,122 @@
   @media (max-width: 860px) {
     .chat-sidebar { display: none; }
     .chat-app-header {
-      padding: 8px 12px;
-      gap: 8px;
-    }
-    .brand-title h1 {
-      font-size: 0.95rem;
-    }
-    .brand-title span {
-      font-size: 0.65rem;
+      padding: 8px 10px;
+      gap: 6px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .circle-logo {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+    .header-brand {
+      gap: 6px;
+      flex-shrink: 0;
+      max-width: 52%;
+      min-width: 0;
+    }
+    .brand-title {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .brand-title h1 {
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+    .brand-title span {
+      font-size: 0.60rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
     }
     .header-nav {
       overflow-x: auto;
       flex-wrap: nowrap;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
-      gap: 6px;
-      max-width: 58%;
+      gap: 4px;
+      max-width: 48%;
+      flex: 1 1 auto;
+      justify-content: flex-end;
     }
     .header-nav::-webkit-scrollbar { display: none; }
     .header-nav a, .header-nav button, .live-pill {
-      font-size: 0.72rem;
-      padding: 4px 9px;
+      font-size: 0.68rem;
+      padding: 4px 8px;
       white-space: nowrap;
       flex-shrink: 0;
+      border-radius: 12px;
     }
     .chat-feed-scroll {
-      padding: 14px 12px;
+      padding: 12px 10px;
+      gap: 10px;
       -webkit-overflow-scrolling: touch;
     }
-    .chat-bubble { max-width: 92%; padding: 8px 12px; }
-    .chat-input-area { padding: 8px 10px; gap: 8px; }
-    .chat-input {
-      font-size: 16px; /* Prevents auto-zoom on mobile */
-      padding: 10px 12px;
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      font-size: 0.72rem;
+      flex-shrink: 0;
     }
-    .chat-send-btn { padding: 10px 16px; font-size: 0.85rem; }
-    .chat-identity-strip { padding: 6px 12px; font-size: 0.74rem; }
-    .chat-legal-footer { font-size: 0.68rem; padding: 6px 10px; }
+    .chat-bubble {
+      max-width: calc(100% - 42px);
+      padding: 8px 12px;
+    }
+    .chat-identity-strip {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      width: 100%;
+      box-sizing: border-box;
+      gap: 6px;
+    }
+    .avatar-mini {
+      width: 22px;
+      height: 22px;
+      font-size: 0.64rem;
+    }
+    .chat-badge {
+      font-size: 0.62rem;
+      padding: 1px 6px;
+    }
+    .btn-change-identity {
+      padding: 2px 8px;
+      font-size: 0.68rem;
+    }
+    .chat-input-area {
+      padding: 8px 10px;
+      gap: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .chat-input {
+      font-size: 16px;
+      padding: 9px 12px;
+      min-width: 0 !important;
+      flex: 1 1 0%;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 20px;
+    }
+    .chat-send-btn {
+      padding: 9px 16px;
+      font-size: 0.84rem;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .chat-legal-footer {
+      font-size: 0.62rem;
+      padding: 4px 8px;
+      line-height: 1.25;
+      width: 100%;
+      box-sizing: border-box;
+    }
     .rules-card { padding: 20px 16px; max-height: 85vh; overflow-y: auto; }
     .onboarding-card { padding: 20px 14px; }
   }
@@ -574,14 +686,14 @@
     <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="circle-logo">
     <div class="brand-title">
       <h1>ABHAY HINDU SENA</h1>
-      <span>Dharma Charcha • Live Sevaks Community</span>
+      <span>Dharma Charcha • Live Community</span>
     </div>
   </a>
 
   <div class="header-nav">
-    <span class="live-pill">● Live Stream</span>
-    <button onclick="openRulesModal()">📜 Guidelines & Disclaimer</button>
-    <a href="join.html">🚩 Join Us</a>
+    <span class="live-pill">● Live</span>
+    <button onclick="openRulesModal()">📜 Guidelines</button>
+    <a href="join.html">🚩 Join</a>
     <a href="donate.html">💛 Donate</a>
     <a href="videos.html">🎬 Videos</a>
     <a href="index.html">🌐 Home</a>
@@ -675,14 +787,14 @@
       <div class="chat-identity-strip">
         <div class="identity-badge">
           <span class="avatar-mini" id="myAvatarMini">SV</span>
-          <span>Posting as: <strong id="myNameDisplay" style="color:var(--gold-bright);">Sevak</strong> (<span id="myPlaceDisplay">Bharat</span>)</span>
+          <span class="identity-text">Posting as: <strong id="myNameDisplay" style="color:var(--gold-bright);">Sevak</strong> (<span id="myPlaceDisplay">Bharat</span>)</span>
           <span id="myBadgeDisplay" class="chat-badge badge-sevak">🚩 Sevak</span>
         </div>
         <button type="button" class="btn-change-identity" onclick="handleChangeProfile()" title="Change name or place">✏️ Change</button>
       </div>
 
       <form class="chat-input-area" id="chatForm" onsubmit="handleSendChat(event)">
-        <input type="text" id="chatText" class="chat-input" placeholder="Write your message / seva report..." required autocomplete="off">
+        <input type="text" id="chatText" class="chat-input" placeholder="Write your message / seva report..." autocomplete="off">
         <button type="submit" class="chat-send-btn" id="chatSendBtn">Post 💬</button>
       </form>
 
@@ -693,7 +805,7 @@
 
     <!-- Legal Disclaimer Footer -->
     <div class="chat-legal-footer">
-      ⚖️ <em>Disclaimer: All views and messages posted here belong solely to respective authors. The Founder, makers, and Abhay Hindu Sena hold zero responsibility or legal liability for user comments.</em>
+      ⚖️ <em>Disclaimer: Views posted belong solely to authors. Abhay Hindu Sena & Founder bear no legal liability for user comments.</em>
     </div>
   </main>
 </div>
@@ -1072,7 +1184,10 @@
 
     const input = document.getElementById('chatText');
     const text = input.value.trim();
-    if (!text) return;
+    if (!text) {
+      input.focus();
+      return;
+    }
 
     const btn = document.getElementById('chatSendBtn');
     btn.disabled = true;
