@@ -125,30 +125,35 @@
   /* FLOATING NAVBAR */
   .glass-navbar {
     position: sticky;
-    top: 14px;
+    top: 10px;
     z-index: 999;
-    margin: 14px auto 0;
-    max-width: 90%;
+    margin: 10px auto 0;
+    max-width: calc(100% - 20px);
     width: fit-content;
-    padding: 8px 18px;
+    padding: 6px 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(24, 7, 7, 0.9);
+    gap: 8px;
+    background: rgba(24, 7, 7, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(212, 175, 55, 0.4);
     border-radius: 40px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    white-space: nowrap;
+    scrollbar-width: none;
+    box-sizing: border-box;
   }
+  .glass-navbar::-webkit-scrollbar { display: none; }
   .glass-nav-links {
     display: flex;
     align-items: center;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    gap: 6px;
+    flex-shrink: 0;
   }
-  .glass-nav-links::-webkit-scrollbar { display: none; }
   .glass-nav-links a {
     color: var(--text-muted);
     text-decoration: none;
@@ -158,6 +163,7 @@
     border-radius: 20px;
     transition: all 0.2s;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .glass-nav-links a:hover,
   .glass-nav-links a.active {
@@ -169,6 +175,7 @@
     width: 1px;
     height: 18px;
     background: rgba(212,175,55,0.35);
+    flex-shrink: 0;
   }
   .glass-lang-btn {
     background: rgba(255,255,255,0.06);
@@ -184,6 +191,7 @@
     align-items: center;
     gap: 5px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .glass-lang-btn:hover {
     background: var(--gold);

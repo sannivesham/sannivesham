@@ -558,9 +558,26 @@
   }
 
   @media (max-width: 768px) {
-    .site-header { padding: 10px 4%; }
+    .site-header { padding: 8px 12px; width: 100%; box-sizing: border-box; }
     .header-actions { gap: 6px; }
     .header-btn { padding: 5px 8px; font-size: 0.72rem; gap: 3px; }
+    .glass-navbar {
+      width: calc(100% - 16px) !important;
+      max-width: calc(100% - 16px) !important;
+      margin: 8px auto 0 !important;
+      padding: 5px 8px !important;
+      box-sizing: border-box !important;
+    }
+    .glass-nav-links a {
+      font-size: 0.76rem !important;
+      padding: 4px 8px !important;
+      flex-shrink: 0;
+    }
+    .glass-lang-btn {
+      font-size: 0.72rem !important;
+      padding: 3px 8px !important;
+      flex-shrink: 0;
+    }
   }
 </style>
 </head>

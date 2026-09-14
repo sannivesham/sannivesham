@@ -135,26 +135,34 @@
   /* FLOATING NAVBAR */
   .glass-navbar {
     position: sticky;
-    top: 14px;
+    top: 10px;
     z-index: 999;
-    margin: 14px auto 0;
-    max-width: 90%;
+    margin: 10px auto 0;
+    max-width: calc(100% - 20px);
     width: fit-content;
-    padding: 8px 18px;
+    padding: 6px 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(24, 7, 7, 0.9);
+    gap: 8px;
+    background: rgba(24, 7, 7, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(212, 175, 55, 0.4);
     border-radius: 40px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    white-space: nowrap;
+    scrollbar-width: none;
+    box-sizing: border-box;
   }
+  .glass-navbar::-webkit-scrollbar { display: none; }
   .glass-nav-links {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
   }
   .glass-nav-links a {
     color: var(--text-muted);
@@ -165,6 +173,7 @@
     border-radius: 20px;
     transition: all 0.2s;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .glass-nav-links a:hover,
   .glass-nav-links a.active {
@@ -176,6 +185,7 @@
     width: 1px;
     height: 18px;
     background: rgba(212,175,55,0.35);
+    flex-shrink: 0;
   }
   .glass-lang-btn {
     background: rgba(255,255,255,0.06);
@@ -191,6 +201,7 @@
     align-items: center;
     gap: 5px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .glass-lang-btn:hover {
     background: var(--gold);
@@ -467,10 +478,25 @@
   }
 
   @media (max-width: 768px) {
-    .site-header { padding: 10px 4%; }
+    .site-header { padding: 8px 12px; width: 100%; box-sizing: border-box; }
     .header-actions { gap: 6px; }
     .header-btn { padding: 5px 8px; font-size: 0.72rem; gap: 3px; }
-    .gallery-hero { padding: 40px 5% 24px; }
+    .glass-navbar {
+      width: calc(100% - 16px) !important;
+      max-width: calc(100% - 16px) !important;
+      margin: 8px auto 0 !important;
+      padding: 5px 8px !important;
+      box-sizing: border-box !important;
+    }
+    .glass-nav-links a {
+      font-size: 0.76rem !important;
+      padding: 4px 8px !important;
+    }
+    .glass-lang-btn {
+      font-size: 0.72rem !important;
+      padding: 3px 8px !important;
+    }
+    .gallery-hero { padding: 30px 4% 20px; }
     .gallery-grid {
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
