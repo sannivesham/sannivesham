@@ -409,14 +409,22 @@
     border-radius: 12px;
     padding: 12px 16px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
     margin-bottom: 16px;
   }
+  .detail-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+  }
   .upi-id-text {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   .upi-id-val {
     font-size: 1.05rem;
@@ -430,10 +438,10 @@
     background: linear-gradient(135deg, var(--gold) 0%, #B8860B 100%);
     border: none;
     color: #000;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 700;
-    padding: 7px 14px;
-    border-radius: 8px;
+    padding: 5px 12px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -505,21 +513,28 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   .bank-detail-item {
     background: rgba(0,0,0,0.45);
     border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 10px;
-    padding: 10px 14px;
+    border-radius: 12px;
+    padding: 12px 14px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
   }
   .bank-detail-item.highlight {
     border-color: var(--gold-bright);
     background: rgba(212,175,55,0.08);
+  }
+  .detail-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
   }
   .detail-label {
     font-size: 0.75rem;
@@ -532,33 +547,13 @@
     color: #FFF;
     font-weight: 700;
     letter-spacing: 0.3px;
+    word-break: break-word;
   }
   .detail-val.gold {
     color: var(--gold-bright);
     font-size: 1.05rem;
     font-family: monospace;
-  }
-  .btn-doc-link {
-    background: rgba(0, 128, 255, 0.12);
-    border: 1px solid rgba(0, 128, 255, 0.4);
-    color: #64B5F6;
-    text-decoration: none;
-    padding: 9px 14px;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: auto;
-  }
-  .btn-doc-link:hover {
-    background: rgba(0, 128, 255, 0.22);
-    border-color: #64B5F6;
-    color: #FFF;
+    letter-spacing: 0.5px;
   }
 
   /* DEVOTEE SEVA RECEIPT INTIMATION FORM */
@@ -790,11 +785,173 @@
     font-family: 'Mandali', 'Noto Sans Telugu', serif;
   }
 
+  /* RESPONSIVE & MOBILE POLISH */
   @media (max-width: 850px) {
-    .payment-methods-grid { grid-template-columns: 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
-    .hero-title { font-size: 1.75rem; }
+    .payment-methods-grid { grid-template-columns: 1fr; gap: 20px; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .hero-title { font-size: 1.85rem; }
     .receipt-section { padding: 24px 18px; }
+  }
+
+  @media (max-width: 600px) {
+    .site-header {
+      padding: 8px 12px;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .circle-logo {
+      width: 36px;
+      height: 36px;
+    }
+    .header-brand-text h1 {
+      font-size: 0.95rem;
+    }
+    .header-brand-text span {
+      font-size: 0.65rem;
+    }
+    .header-actions {
+      gap: 6px;
+    }
+    .header-btn {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 16px;
+    }
+    .glass-navbar {
+      width: calc(100% - 20px);
+      max-width: 100%;
+      margin: 8px auto 0;
+      padding: 6px 10px;
+    }
+    .glass-nav-links a {
+      font-size: 0.76rem;
+      padding: 4px 9px;
+    }
+    .glass-lang-btn {
+      padding: 3px 9px;
+      font-size: 0.72rem;
+    }
+    .donate-hero {
+      padding: 28px 14px 20px;
+    }
+    .hero-badge {
+      font-size: 0.72rem;
+      padding: 5px 14px;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 1.55rem;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .trust-pills {
+      gap: 6px;
+    }
+    .trust-pill {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+    }
+    .section-container {
+      padding: 10px 12px 40px;
+    }
+    .amount-selector-box {
+      padding: 16px 12px;
+      margin-bottom: 22px;
+    }
+    .amount-selector-title {
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+    }
+    .amount-chips {
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .amount-chip {
+      padding: 6px 13px;
+      font-size: 0.82rem;
+    }
+    .custom-amount-wrap {
+      max-width: 180px;
+      padding: 3px 12px;
+    }
+    .custom-amount-input {
+      font-size: 0.95rem;
+    }
+    .payment-card {
+      padding: 20px 14px;
+      border-radius: 16px;
+    }
+    .payment-card-title {
+      font-size: 1.2rem;
+    }
+    .payment-card-sub {
+      font-size: 0.78rem;
+      margin-bottom: 14px;
+    }
+    .qr-wrapper {
+      max-width: 210px;
+      padding: 10px;
+      margin-bottom: 14px;
+    }
+    .upi-id-box {
+      padding: 10px 12px;
+    }
+    .upi-id-val {
+      font-size: 0.95rem;
+    }
+    .btn-upi-mobile {
+      padding: 11px 14px;
+      font-size: 0.86rem;
+    }
+    .bank-details-list {
+      gap: 10px;
+      margin-bottom: 0;
+    }
+    .bank-detail-item {
+      padding: 10px 12px;
+    }
+    .detail-label {
+      font-size: 0.72rem;
+    }
+    .detail-val {
+      font-size: 0.88rem;
+    }
+    .detail-val.gold {
+      font-size: 0.98rem;
+    }
+    .btn-copy {
+      padding: 5px 10px;
+      font-size: 0.72rem;
+    }
+    .receipt-section {
+      padding: 20px 14px;
+      border-radius: 16px;
+    }
+    .receipt-header h3 {
+      font-size: 1.2rem;
+    }
+    .receipt-header p {
+      font-size: 0.78rem;
+    }
+    .form-input, .form-select {
+      font-size: 16px; /* Prevents auto-zoom on iOS */
+      padding: 9px 12px;
+    }
+    .form-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .btn-submit-wa, .btn-submit-direct {
+      width: 100%;
+      justify-content: center;
+      padding: 11px 16px;
+      font-size: 0.86rem;
+    }
   }
 </style>
 </head>
@@ -874,7 +1031,7 @@
     </div>
   </div>
 
-  <!-- 3. PAYMENT METHODS DUAL GRID -->
+  <!-- 2. PAYMENT METHODS DUAL GRID -->
   <div class="payment-methods-grid">
 
     <!-- METHOD A: UPI SCAN & PAY -->
@@ -894,17 +1051,17 @@
 
       <!-- UPI ID BOX -->
       <div class="upi-id-box">
-        <div>
-          <div class="upi-id-text">Official Verified UPI ID:</div>
-          <div class="upi-id-val" id="upiIdValue">44174507242@sbi</div>
+        <div class="detail-header-row">
+          <span class="upi-id-text">Official Verified UPI ID:</span>
+          <button type="button" class="btn-copy" onclick="copyText('44174507242@sbi', 'UPI ID Copied!')">
+            📋 Copy
+          </button>
         </div>
-        <button type="button" class="btn-copy" onclick="copyText('44174507242@sbi', 'UPI ID Copied!')">
-          📋 Copy
-        </button>
+        <div class="upi-id-val" id="upiIdValue">44174507242@sbi</div>
       </div>
 
       <!-- DIRECT MOBILE PAY BUTTON -->
-      <a href="upi://pay?pa=44174507242@sbi&pn=SRI+RADHA+MANOHAR+DAS+FOUNDATION&cu=INR&am=1116" id="upiDeepLink" class="btn-upi-mobile">
+      <a href="upi://pay?pa=44174507242@sbi&pn=SRI+RADHA+MANOHAR+DAS+FOUNDATION&cu=INR&am=1116&tn=Sanatana+Dharma+Daan" id="upiDeepLink" class="btn-upi-mobile">
         📱 Open in UPI App (GPay / PhonePe)
       </a>
 
@@ -935,60 +1092,56 @@
 
       <div class="bank-details-list">
         <div class="bank-detail-item">
-          <div>
-            <div class="detail-label">Account Holder Name</div>
-            <div class="detail-val" style="color:var(--gold-bright);">SRI RADHA MANOHAR DAS FOUNDATION</div>
+          <div class="detail-header-row">
+            <span class="detail-label">Account Holder Name</span>
+            <button type="button" class="btn-copy" onclick="copyText('SRI RADHA MANOHAR DAS FOUNDATION', 'Account Name Copied!')">📋 Copy</button>
           </div>
-          <button type="button" class="btn-copy" onclick="copyText('SRI RADHA MANOHAR DAS FOUNDATION', 'Account Name Copied!')">📋 Copy</button>
+          <div class="detail-val" style="color:var(--gold-bright);">SRI RADHA MANOHAR DAS FOUNDATION</div>
         </div>
 
         <div class="bank-detail-item highlight">
-          <div>
-            <div class="detail-label">Current Account Number</div>
-            <div class="detail-val gold" id="bankAccNo">44174507242</div>
+          <div class="detail-header-row">
+            <span class="detail-label">Current Account Number</span>
+            <button type="button" class="btn-copy" onclick="copyText('44174507242', 'Account Number Copied!')">📋 Copy</button>
           </div>
-          <button type="button" class="btn-copy" onclick="copyText('44174507242', 'Account Number Copied!')">📋 Copy</button>
+          <div class="detail-val gold" id="bankAccNo">44174507242</div>
         </div>
 
         <div class="bank-detail-item highlight">
-          <div>
-            <div class="detail-label">Branch IFSC Code</div>
-            <div class="detail-val gold" id="bankIfsc">SBIN0001008</div>
+          <div class="detail-header-row">
+            <span class="detail-label">Branch IFSC Code</span>
+            <button type="button" class="btn-copy" onclick="copyText('SBIN0001008', 'IFSC Code Copied!')">📋 Copy</button>
           </div>
-          <button type="button" class="btn-copy" onclick="copyText('SBIN0001008', 'IFSC Code Copied!')">📋 Copy</button>
+          <div class="detail-val gold" id="bankIfsc">SBIN0001008</div>
         </div>
 
         <div class="bank-detail-item">
-          <div>
-            <div class="detail-label">Branch Name</div>
-            <div class="detail-val">GOVERNORPET (VIJAYAWADA)</div>
+          <div class="detail-header-row">
+            <span class="detail-label">Branch Name</span>
+            <span style="font-size:0.75rem; color:#888;">Code: 01008</span>
           </div>
-          <span style="font-size:0.75rem; color:#888;">Code: 01008</span>
+          <div class="detail-val">GOVERNORPET (VIJAYAWADA)</div>
         </div>
 
         <div class="bank-detail-item">
-          <div>
-            <div class="detail-label">Branch Address & City</div>
-            <div class="detail-val" style="font-size:0.82rem; font-weight:500;">Alibaig Street, P.B. No. 319, Vijayawada, Krishna Dist., AP - 520002</div>
+          <div class="detail-header-row">
+            <span class="detail-label">Branch Address</span>
           </div>
+          <div class="detail-val" style="font-size:0.84rem; font-weight:500; line-height:1.4;">Alibaig Street, P.B. No. 319, Vijayawada, Krishna Dist., AP - 520002</div>
         </div>
 
         <div class="bank-detail-item">
-          <div>
-            <div class="detail-label">MICR Code & Toll Free</div>
-            <div class="detail-val" style="font-size:0.82rem;">MICR: 520002004 • Toll Free: 1800 1234</div>
+          <div class="detail-header-row">
+            <span class="detail-label">MICR Code & Toll Free</span>
           </div>
+          <div class="detail-val" style="font-size:0.84rem;">MICR: 520002004 • Toll Free: 1800 1234</div>
         </div>
       </div>
-
-      <a href="javascript:void(0)" onclick="openDocModal()" class="btn-doc-link">
-        📄 View Official SBI Account Confirmation Letter ➔
-      </a>
     </div>
 
   </div>
 
-  <!-- 4. DEVOTEE SEVA RECEIPT INTIMATION FORM -->
+  <!-- 3. DEVOTEE SEVA RECEIPT INTIMATION FORM -->
   <section class="receipt-section">
     <div class="receipt-header">
       <h3 data-en="Notify Foundation of Your Contribution" data-te="విరాళం అందించిన వివరాలను తెలియజేయండి">
@@ -1073,18 +1226,6 @@
   </div>
 </div>
 
-<!-- BANK DOC MODAL -->
-<div id="docModal" class="img-modal" onclick="closeDocModal()">
-  <div class="modal-inner" style="max-width:650px;" onclick="event.stopPropagation()">
-    <button class="modal-close-btn" onclick="closeDocModal()">&times;</button>
-    <h3 style="color:var(--gold-bright); margin-bottom:12px; font-family:var(--font-heading);">Official SBI Account Confirmation</h3>
-    <img src="assets/sbi-account-doc.png" alt="SBI Account Confirmation Letter">
-    <div style="font-size:0.8rem; color:var(--text-muted);">
-      State Bank of India • Governorpet Branch, Vijayawada • Account No: 44174507242
-    </div>
-  </div>
-</div>
-
 <!-- FOOTER -->
 <footer>
   <img src="assets/logo.png" alt="Abhay Hindu Sena Crest" class="footer-logo">
@@ -1162,13 +1303,6 @@
   }
   function closeQrModal() {
     document.getElementById('qrModal').classList.remove('active');
-  }
-
-  function openDocModal() {
-    document.getElementById('docModal').classList.add('active');
-  }
-  function closeDocModal() {
-    document.getElementById('docModal').classList.remove('active');
   }
 
   // Handle Form Submission
