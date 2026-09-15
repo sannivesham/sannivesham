@@ -1962,12 +1962,13 @@
 
   function initLaunchControlAdmin() {
     // 1. Check local storage first for instant response
-    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'prelaunch';
+    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'launched';
     applyStatusToAdminUI(cachedStatus);
 
-    // 2. Listen to Firestore
-    if (db) {
-      db.collection('site_settings').doc('launch_status').onSnapshot(doc => {
+    // 2. Listen to Firestore on the accessible videos collection
+    const firestoreDb = getFirebaseDb();
+    if (firestoreDb) {
+      firestoreDb.collection('videos').doc('site_launch_status').onSnapshot(doc => {
         if (doc.exists) {
           const data = doc.data();
           if (data && data.status) {
@@ -2033,9 +2034,10 @@
       });
     }
 
-    if (db) {
+    const firestoreDb = getFirebaseDb();
+    if (firestoreDb) {
       try {
-        await db.collection('site_settings').doc('launch_status').set({
+        await firestoreDb.collection('videos').doc('site_launch_status').set({
           status: newStatus,
           countdownActive: false,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2046,7 +2048,7 @@
       }
     }
 
-    alert(newStatus === 'maintenance' ? 'Website paused in Maintenance Mode.' : 'Website reset to Pre-Launch Curtain.');
+    alert(newStatus === 'maintenance' ? 'Website paused in Maintenance Mode.' : (newStatus === 'launched' ? 'Website is LIVE to the public!' : 'Website reset to Pre-Launch Curtain.'));
   }
 
   function startLaunchCountdown() {
@@ -2079,8 +2081,9 @@
       });
     }
 
-    if (db) {
-      db.collection('site_settings').doc('launch_status').set({
+    const firestoreDb = getFirebaseDb();
+    if (firestoreDb) {
+      firestoreDb.collection('videos').doc('site_launch_status').set({
         countdownActive: true,
         countdownDuration: 10,
         countdownStartTime: Date.now(),
@@ -2125,8 +2128,9 @@
     if (launchBroadcastChannel) {
       launchBroadcastChannel.postMessage({ action: 'countdown_cancelled' });
     }
-    if (db) {
-      db.collection('site_settings').doc('launch_status').set({
+    const firestoreDb = getFirebaseDb();
+    if (firestoreDb) {
+      firestoreDb.collection('videos').doc('site_launch_status').set({
         countdownActive: false,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).catch(err => console.warn(err));
@@ -2145,7 +2149,7 @@
     }
     if (fillEl) fillEl.style.width = '0%';
     if (subTitle) subTitle.textContent = '✨ JAI SHREE RAM! ✨';
-    if (statusMsg) statusMsg.innerHTML = '<span style="color:#2ecc71; font-size:1.1rem; font-weight:700;">WEBSITE IS NOW LIVE WORLDWIDE!</span><br>Redirecting directly to the live website...';
+    if (statusMsg) statusMsg.innerHTML = '<span style="color:#2ecc71; font-size:1.1rem; font-weight:700;">WEBSITE IS NOW LIVE WORLDWIDE!</span><br>Directing to the live website...';
 
     playTriumphantChime();
 
@@ -2161,21 +2165,25 @@
       });
     }
 
-    if (db) {
+    const firestoreDb = getFirebaseDb();
+    if (firestoreDb) {
       try {
-        await db.collection('site_settings').doc('launch_status').set({
-          status: 'launched',
-          countdownActive: false,
-          launchedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedBy: (auth && auth.currentUser) ? auth.currentUser.email : 'admin'
-        }, { merge: true });
+        await Promise.race([
+          firestoreDb.collection('videos').doc('site_launch_status').set({
+            status: 'launched',
+            countdownActive: false,
+            launchedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedBy: (auth && auth.currentUser) ? auth.currentUser.email : 'admin'
+          }, { merge: true }),
+          new Promise(resolve => setTimeout(resolve, 2000))
+        ]);
       } catch (err) {
         console.error("Error setting launched status:", err);
       }
     }
 
-    // Direct redirect to index.html after 1.2s celebration!
+    // Direct redirect to index.html after short celebration
     setTimeout(() => {
       window.location.href = 'index.html';
     }, 1200);

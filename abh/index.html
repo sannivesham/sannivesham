@@ -3207,7 +3207,11 @@
     db.collection('videos').orderBy('createdAt', 'desc').limit(3).onSnapshot(snapshot => {
       if (!snapshot.empty) {
         const docs = [];
-        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+        snapshot.forEach(doc => {
+          if (doc.id !== 'site_launch_status' && doc.data().videoId) {
+            docs.push({ id: doc.id, ...doc.data() });
+          }
+        });
         if (docs.length > 0) {
           updateHomeVideoCards(docs);
         }
@@ -3414,13 +3418,13 @@
       return;
     }
 
-    // Check local storage for initial fast render (defaults to prelaunch if not yet launched)
-    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'prelaunch';
+    // Default status: 'launched' (website is open and live for public worldwide!)
+    const cachedStatus = localStorage.getItem('ahs_launch_status') || 'launched';
     applyVisitorStatus(cachedStatus);
 
-    // Listen on Firestore
+    // Listen on Firestore using the publicly accessible 'videos/site_launch_status' document
     if (db) {
-      db.collection('site_settings').doc('launch_status').onSnapshot(doc => {
+      db.collection('videos').doc('site_launch_status').onSnapshot(doc => {
         if (doc.exists) {
           const data = doc.data();
           if (data) {
