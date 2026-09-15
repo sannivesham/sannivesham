@@ -1657,28 +1657,83 @@
     measurementId: "G-T2C9DQN7E2"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  // Firebase Safe Initialization
+  var auth = null;
+  var db = null;
+
+  function getFirebaseAuth() {
+    if (!auth && typeof firebase !== 'undefined') {
+      try {
+        if (!firebase.apps || !firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        auth = firebase.auth();
+      } catch (e) {
+        console.warn("getFirebaseAuth error:", e);
+      }
+    }
+    return auth;
+  }
+
+  function getFirebaseDb() {
+    if (!db && typeof firebase !== 'undefined') {
+      try {
+        if (!firebase.apps || !firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+      } catch (e) {
+        console.warn("getFirebaseDb error:", e);
+      }
+    }
+    return db;
+  }
+
+  // Initial attempt
+  try {
+    if (typeof firebase !== 'undefined') {
+      if (!firebase.apps || !firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      auth = firebase.auth();
+      db = firebase.firestore();
+    }
+  } catch (err) {
+    console.warn("Initial Firebase setup warning:", err);
+    try {
+      if (typeof firebase !== 'undefined') {
+        auth = firebase.auth();
+        db = firebase.firestore();
+      }
+    } catch (e) {}
+  }
 
   // Listen to Authentication State
-  auth.onAuthStateChanged((user) => {
-    const overlay = document.getElementById('loginOverlay');
-    const badge = document.getElementById('userEmailBadge');
-    if (user) {
-      localStorage.setItem('ahs_admin_token', 'true');
-      overlay.style.display = 'none';
-      if (badge) {
-        badge.textContent = '👤 ' + user.email;
-        badge.style.display = 'inline-block';
-      }
-      initDashboard();
+  function attachAuthListener() {
+    const authInst = getFirebaseAuth();
+    if (authInst && typeof authInst.onAuthStateChanged === 'function') {
+      authInst.onAuthStateChanged((user) => {
+        const overlay = document.getElementById('loginOverlay');
+        const badge = document.getElementById('userEmailBadge');
+        if (user) {
+          localStorage.setItem('ahs_admin_token', 'true');
+          if (overlay) overlay.style.display = 'none';
+          if (badge) {
+            badge.textContent = '👤 ' + user.email;
+            badge.style.display = 'inline-block';
+          }
+          initDashboard();
+        } else {
+          localStorage.removeItem('ahs_admin_token');
+          if (overlay) overlay.style.display = 'flex';
+          if (badge) badge.style.display = 'none';
+        }
+      });
     } else {
-      localStorage.removeItem('ahs_admin_token');
-      overlay.style.display = 'flex';
-      if (badge) badge.style.display = 'none';
+      setTimeout(attachAuthListener, 200);
     }
-  });
+  }
+  attachAuthListener();
 
   async function handleAdminLogin(e) {
     e.preventDefault();
@@ -1691,8 +1746,17 @@
     btn.disabled = true;
     btn.innerHTML = 'Verifying Account... ⏳';
 
+    const authInst = getFirebaseAuth();
+    if (!authInst || typeof authInst.signInWithEmailAndPassword !== 'function') {
+      errDiv.textContent = "Firebase Authentication is connecting. Please wait 2 seconds and try again.";
+      errDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In to Dashboard ➔';
+      return;
+    }
+
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await authInst.signInWithEmailAndPassword(email, password);
     } catch (err) {
       console.error("Auth Error:", err);
       let msg = "Invalid login credentials. Please verify your email & password in Firebase Console.";
@@ -1716,10 +1780,12 @@
   async function handleLogout() {
     try {
       localStorage.removeItem('ahs_admin_token');
-      await auth.signOut();
+      const authInst = getFirebaseAuth();
+      if (authInst) await authInst.signOut();
       window.location.reload();
     } catch (e) {
       console.error(e);
+      window.location.reload();
     }
   }
 
