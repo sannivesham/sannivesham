@@ -286,22 +286,35 @@ document.querySelectorAll(".bg-upload-btn").forEach((btn) => {
           },
           { merge: true }
         );
+        try { localStorage.removeItem("sannivesham_theme_bg_cache"); } catch (e) {}
         alert(`✅ Global ${key} background saved successfully!`);
       } else {
-        const themeUpdates = { [key]: url };
-        if (key === "homePc") themeUpdates.pc = url;
-        if (key === "homeMobile") themeUpdates.mobile = url;
+        const updates = {
+          [`themes.${currentTheme}.${key}`]: url,
+          updatedAt: serverTimestamp()
+        };
+        if (key === "homePc") updates[`themes.${currentTheme}.pc`] = url;
+        if (key === "homeMobile") updates[`themes.${currentTheme}.mobile`] = url;
 
-        await setDoc(
-          doc(db, "settings", "backgrounds"),
-          {
-            themes: {
-              [currentTheme]: themeUpdates
+        try {
+          await updateDoc(doc(db, "settings", "backgrounds"), updates);
+        } catch (updateErr) {
+          await setDoc(
+            doc(db, "settings", "backgrounds"),
+            {
+              themes: {
+                [currentTheme]: {
+                  [key]: url,
+                  ...(key === "homePc" ? { pc: url } : {}),
+                  ...(key === "homeMobile" ? { mobile: url } : {})
+                }
+              },
+              updatedAt: serverTimestamp()
             },
-            updatedAt: serverTimestamp()
-          },
-          { merge: true }
-        );
+            { merge: true }
+          );
+        }
+        try { localStorage.removeItem("sannivesham_theme_bg_cache"); } catch (e) {}
         alert(`✅ ${currentTheme.toUpperCase()} - ${key} background saved successfully!`);
       }
 

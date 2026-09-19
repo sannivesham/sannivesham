@@ -148,8 +148,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <script src="theme.js?v=20260905f"></script>
-  <link rel="stylesheet" href="style.css?v=20260905f">
+  <script src="theme.js?v=20260919f"></script>
+  <link rel="stylesheet" href="style.css?v=20260919f">
   <link rel="stylesheet" href="peacock.css?v=20260919e">
   <style>
     .games-grid {
@@ -979,53 +979,35 @@
       try {
         let snap;
         try {
-          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
-        } catch (e) {
           snap = await getDoc(doc(db, "settings", "backgrounds"));
+        } catch (e) {
+          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
         }
+        if (!snap || !snap.exists()) return;
+
+        const data = snap.data();
+        const themesData = data.themes || {};
+
+        // Cache theme backgrounds locally for instant zero-flash rendering on next visit
+        try {
+          localStorage.setItem("sannivesham_theme_bg_cache", JSON.stringify(themesData));
+        } catch (e) {}
+
         const currentTheme = window.SanniveshamTheme ? window.SanniveshamTheme.getTheme() : "ramayanam";
-        const bg = document.querySelector(".home-bg");
-        if (!bg) return;
+        const themeConfig = themesData[currentTheme] || (data[currentTheme] && typeof data[currentTheme] === "object" ? data[currentTheme] : null);
 
-        let themePc = "";
-        let themeMobile = "";
-
-        if (snap && snap.exists()) {
-          const data = snap.data();
-          const themeConfig = (data.themes && data.themes[currentTheme]) || data[currentTheme];
-          if (themeConfig) {
-            themePc = themeConfig.homePc || themeConfig.pc || "";
-            themeMobile = themeConfig.homeMobile || themeConfig.mobile || "";
-          }
-          if (!themePc) themePc = data.homePc || "";
-          if (!themeMobile) themeMobile = data.homeMobile || "";
-        }
-
-        // Local fallback defaults per theme
-        if (!themePc) {
-          if (currentTheme === "ramayanam") themePc = "images/ramayanam-bg.jpg";
-          else if (currentTheme === "mahabharatam") themePc = "images/homebg.jpg";
-          else if (currentTheme === "light") themePc = "images/homebg.jpg";
-          else themePc = "images/homebg.jpg";
-        }
-        if (!themeMobile) {
-          if (currentTheme === "ramayanam") themeMobile = "images/ramayanam-mobile.jpg";
-          else themeMobile = "images/homebg-mobile.jpg";
+        let customPc = "";
+        let customMobile = "";
+        if (themeConfig) {
+          customPc = themeConfig.homePc || themeConfig.pc || "";
+          customMobile = themeConfig.homeMobile || themeConfig.mobile || "";
         }
 
         const isMobile = window.innerWidth <= 700;
-        const chosenUrl = isMobile && themeMobile ? themeMobile : themePc;
+        const chosenCustomUrl = isMobile ? (customMobile || customPc) : (customPc || customMobile);
 
-        if (chosenUrl) {
-          if (currentTheme === "light") {
-            bg.style.backgroundImage = `linear-gradient(rgba(255,250,242,0.85),rgba(255,248,235,0.88)),url("${chosenUrl}")`;
-          } else if (currentTheme === "ramayanam") {
-            bg.style.backgroundImage = `linear-gradient(rgba(38,14,4,0.65),rgba(22,7,2,0.72)),url("${chosenUrl}")`;
-          } else if (currentTheme === "mahabharatam") {
-            bg.style.backgroundImage = `linear-gradient(rgba(4,14,32,0.68),rgba(2,8,20,0.75)),url("${chosenUrl}")`;
-          } else {
-            bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60),rgba(10,5,0,0.68)),url("${chosenUrl}")`;
-          }
+        if (window.SanniveshamTheme && window.SanniveshamTheme.applyThemeBackground) {
+          window.SanniveshamTheme.applyThemeBackground(currentTheme, chosenCustomUrl || "");
         }
       } catch (e) {
         console.log("Background load error:", e);

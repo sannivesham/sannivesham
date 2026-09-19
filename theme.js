@@ -3,7 +3,15 @@
 
 (function () {
   const STORAGE_KEY = "sannivesham_theme";
+  const THEME_BG_STORAGE_KEY = "sannivesham_theme_bg_cache";
   const DEFAULT_THEME = "ramayanam";
+
+  const THEME_OVERLAYS = {
+    ramayanam: "linear-gradient(rgba(38,14,4,0.65),rgba(22,7,2,0.72))",
+    mahabharatam: "linear-gradient(rgba(4,14,32,0.68),rgba(2,8,20,0.75))",
+    light: "linear-gradient(rgba(255,250,242,0.85),rgba(255,248,235,0.88))",
+    dark: "linear-gradient(rgba(10,5,0,0.70),rgba(10,5,0,0.78))"
+  };
 
   function getTheme() {
     return localStorage.getItem(STORAGE_KEY) || DEFAULT_THEME;
@@ -11,6 +19,59 @@
 
   function hasUserChosenTheme() {
     return localStorage.getItem(STORAGE_KEY) !== null;
+  }
+
+  function getCachedThemeBgUrl(theme) {
+    try {
+      const cachedStr = localStorage.getItem(THEME_BG_STORAGE_KEY);
+      if (!cachedStr) return "";
+      const cached = JSON.parse(cachedStr);
+      const themeConfig = cached && (cached[theme] || (cached.themes && cached.themes[theme]));
+      if (!themeConfig) return "";
+      const isMobile = window.innerWidth <= 700;
+      return isMobile
+        ? (themeConfig.homeMobile || themeConfig.mobile || themeConfig.homePc || themeConfig.pc || "")
+        : (themeConfig.homePc || themeConfig.pc || themeConfig.homeMobile || themeConfig.mobile || "");
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function applyThemeBackground(theme, customUrl) {
+    const validThemes = ["ramayanam", "mahabharatam", "light", "dark"];
+    if (!validThemes.includes(theme)) theme = DEFAULT_THEME;
+
+    const url = customUrl !== undefined ? customUrl : getCachedThemeBgUrl(theme);
+    const overlay = THEME_OVERLAYS[theme] || THEME_OVERLAYS.ramayanam;
+
+    let styleEl = document.getElementById("sanniveshamThemeBgStyle");
+    if (!styleEl && document.head) {
+      styleEl = document.createElement("style");
+      styleEl.id = "sanniveshamThemeBgStyle";
+      document.head.appendChild(styleEl);
+    }
+
+    if (!url) {
+      // No custom image uploaded for this theme -> clear custom style so theme's default in style.css takes over cleanly
+      if (styleEl) styleEl.textContent = "";
+      const bg = document.querySelector(".home-bg");
+      if (bg) bg.style.backgroundImage = "";
+      return;
+    }
+
+    if (styleEl) {
+      styleEl.textContent = `
+        html[data-theme="${theme}"] .home-bg,
+        body[data-theme="${theme}"] .home-bg {
+          background-image: ${overlay}, url("${url}") !important;
+        }
+      `;
+    }
+
+    const bg = document.querySelector(".home-bg");
+    if (bg) {
+      bg.style.backgroundImage = `${overlay}, url("${url}")`;
+    }
   }
 
   function setTheme(theme) {
@@ -22,6 +83,7 @@
     if (document.body) document.body.setAttribute("data-theme", theme);
 
     updateThemeActiveCards(theme);
+    applyThemeBackground(theme);
 
     // Dispatch event so other components (e.g. background loader) can react
     window.dispatchEvent(new CustomEvent("sannivesham_theme_changed", { detail: { theme } }));
@@ -53,9 +115,11 @@
   // Immediate execution to prevent Flash of Unstyled Content (FOUC)
   const initialTheme = getTheme();
   document.documentElement.setAttribute("data-theme", initialTheme);
+  applyThemeBackground(initialTheme);
 
   function init() {
     if (document.body) document.body.setAttribute("data-theme", getTheme());
+    applyThemeBackground(getTheme());
 
     // Theme toggle button in navbar
     const toggleBtn = document.getElementById("themeToggleBtn");
@@ -110,6 +174,10 @@
     init();
   }
 
+  window.addEventListener("resize", () => {
+    applyThemeBackground(getTheme());
+  });
+
   // Auto-dismiss creative preloader gracefully
   function dismissLoader() {
     const loader = document.getElementById("loader") || document.querySelector(".creative-loader");
@@ -147,9 +215,11 @@
       if (!mobileUrl) mobileUrl = themeObj.mobile || "";
     }
 
-    // Fall back to global document level
-    if (!pcUrl) pcUrl = data[sectionKey + "Pc"] || "";
-    if (!mobileUrl) mobileUrl = data[sectionKey + "Mobile"] || "";
+    // Fall back to global document level only for non-home sections
+    if (sectionKey !== "home") {
+      if (!pcUrl) pcUrl = data[sectionKey + "Pc"] || "";
+      if (!mobileUrl) mobileUrl = data[sectionKey + "Mobile"] || "";
+    }
 
     const chosen = (isMobile && mobileUrl) ? mobileUrl : (pcUrl || mobileUrl || "");
 
@@ -169,6 +239,7 @@
     hasUserChosenTheme,
     openThemeModal,
     closeThemeModal,
+    applyThemeBackground,
     resolveBackground,
     resolveHomeCard
   };

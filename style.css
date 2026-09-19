@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    RESET + GLOBAL
 ========================= */
 
@@ -23,15 +23,7 @@ body {
 
   overflow-x: hidden;
 
-  background:
-    linear-gradient(rgba(43, 18, 8, 0.70),
-      rgba(43, 18, 8, 0.70)),
-    url("images/homebg.jpg");
-
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: #120703;
 
   color: #fff;
 }
@@ -1775,35 +1767,74 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-
   width: 100vw;
   height: 100vh;
-
   z-index: -999;
   pointer-events: none;
-
-  background:
-    linear-gradient(rgba(43, 18, 8, 0.72),
-      rgba(43, 18, 8, 0.72)),
-    url("images/homebg.jpg");
-
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
+  background-color: #120703;
+  transition: opacity 0.3s ease;
 }
 
+/* 1. Ramayanam Theme (Default Theme) */
+html[data-theme="ramayanam"] .home-bg,
+body[data-theme="ramayanam"] .home-bg {
+  background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-bg.jpg");
+}
 @media (max-width: 700px) {
-  .home-bg {
-    height: 100vh;
+  html[data-theme="ramayanam"] .home-bg,
+  body[data-theme="ramayanam"] .home-bg {
+    background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-mobile.jpg");
+  }
+}
 
-    background:
-      linear-gradient(rgba(10, 5, 0, 0.45),
-        rgba(10, 5, 0, 0.45)),
-      url("images/homebg-mobile.jpg");
+/* 2. Mahabharatam Theme */
+html[data-theme="mahabharatam"] .home-bg,
+body[data-theme="mahabharatam"] .home-bg {
+  background-image: linear-gradient(rgba(4, 14, 32, 0.68), rgba(2, 8, 20, 0.75)), url("images/homebg.jpg");
+}
+@media (max-width: 700px) {
+  html[data-theme="mahabharatam"] .home-bg,
+  body[data-theme="mahabharatam"] .home-bg {
+    background-image: linear-gradient(rgba(4, 14, 32, 0.68), rgba(2, 8, 20, 0.75)), url("images/homebg-mobile.jpg");
+  }
+}
 
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
+/* 3. Satvik Light Theme */
+html[data-theme="light"] .home-bg,
+body[data-theme="light"] .home-bg {
+  background-image: linear-gradient(rgba(255, 250, 242, 0.85), rgba(255, 248, 235, 0.88)), url("images/homebg.jpg");
+}
+@media (max-width: 700px) {
+  html[data-theme="light"] .home-bg,
+  body[data-theme="light"] .home-bg {
+    background-image: linear-gradient(rgba(255, 250, 242, 0.85), rgba(255, 248, 235, 0.88)), url("images/homebg-mobile.jpg");
+  }
+}
+
+/* 4. Traditional Dark Theme */
+html[data-theme="dark"] .home-bg,
+body[data-theme="dark"] .home-bg {
+  background-image: linear-gradient(rgba(10, 5, 0, 0.70), rgba(10, 5, 0, 0.78)), url("images/homebg.jpg");
+}
+@media (max-width: 700px) {
+  html[data-theme="dark"] .home-bg,
+  body[data-theme="dark"] .home-bg {
+    background-image: linear-gradient(rgba(10, 5, 0, 0.70), rgba(10, 5, 0, 0.78)), url("images/homebg-mobile.jpg");
+  }
+}
+
+/* Fallback if data-theme is not yet attached */
+html:not([data-theme]) .home-bg,
+body:not([data-theme]) .home-bg {
+  background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-bg.jpg");
+}
+@media (max-width: 700px) {
+  html:not([data-theme]) .home-bg,
+  body:not([data-theme]) .home-bg {
+    background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-mobile.jpg");
   }
 }
 
