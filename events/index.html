@@ -3,14 +3,15 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>కార్యక్రమాలు (Events) - సన్నివేశం | Sannivesham</title>
   <meta name="description" content="సన్నివేశం సాంస్కృతిక కార్యక్రమాలు, పాఠశాలల సందర్శనలు, క్విజ్ పోటీలు మరియు ఆధ్యాత్మిక వేడుకలు.">
-  <link rel="canonical" href="https://sannivesham.com/events.html">
+  <link rel="canonical" href="https://sannivesham.com/events/">
+  <link rel="icon" type="image/png" href="../images/logo.png">
   <meta property="og:title" content="కార్యక్రమాలు (Events) - సన్నివేశం">
   <meta property="og:description" content="సన్నివేశం సాంస్కృతిక కార్యక్రమాలు, పోటీలు మరియు వేడుకలు.">
   <meta property="og:image" content="https://sannivesham.com/images/events.png">
-  <meta property="og:url" content="https://sannivesham.com/events.html">
+  <meta property="og:url" content="https://sannivesham.com/events/">
   <meta property="og:type" content="website">
 
   <script type="application/ld+json">
@@ -19,13 +20,14 @@
     "@type": "WebPage",
     "name": "కార్యక్రమాలు (Events) - సన్నివేశం",
     "description": "సన్నివేశం సాంస్కృతిక కార్యక్రమాలు మరియు వేడుకలు",
-    "url": "https://sannivesham.com/events.html"
+    "url": "https://sannivesham.com/events/"
   }
   </script>
-  <script src="../theme.js?v=20260904b"></script>
-  <link rel="stylesheet" href="../style.css?v=20260904b">
+  <script src="../theme.js?v=20260919f"></script>
+  <link rel="stylesheet" href="../style.css?v=20260919g">
+  <link rel="stylesheet" href="events.css?v=20260919a">
   <style>
-    /* Fix for music button - stays pinned to screen on scroll, including mobile */
+    /* Music toggle button - fixed overlay */
     .music-btn {
       position: fixed !important;
       bottom: 20px;
@@ -34,15 +36,25 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: none;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      background: rgba(18, 7, 2, 0.85);
+      color: #ffd166;
       font-size: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
       -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+      background: rgba(38, 14, 4, 0.95);
+      border-color: #ffd166;
     }
 
     @media (max-width: 700px) {
@@ -56,6 +68,7 @@
 
 <body class="events-body">
   <div class="events-bg"></div>
+
   <!-- CREATIVE DIVINE PRELOADER -->
   <style>
     #loader {
@@ -204,8 +217,8 @@
         </div>
       </div>
     </div>
-    <h1 class="loader-title">&#3128;&#3112;&#3149;&#3112;&#3135;&#3125;&#3143;&#3126;&#3074;</h1>
-    <p class="loader-tagline">&#10024; &#3128;&#3074;&#3128;&#3149;&#3093;&#3139;&#3108;&#3135; &bull; &#3128;&#3074;&#3114;&#3149;&#3120;&#3110;&#3134;&#3119;&#3074; &bull; &#3128;&#3074;&#3117;&#3134;&#3127;&#3107; &#10024;</p>
+    <h1 class="loader-title">సన్నివేశం</h1>
+    <p class="loader-tagline">✨ సంస్కృతి • సంప్రదాయం • సంభాషణ ✨</p>
     <div class="loader-pearls">
       <span></span>
       <span></span>
@@ -232,53 +245,77 @@
     })();
   </script>
 
-  
-
   <nav class="glass-navbar">
     <a href="../index.html#categories">← వెనుకకు</a>
     <a href="../index.html">ప్రారంభం</a>
     <a href="./">కార్యక్రమాలు</a>
   </nav>
 
-  <section class="events-page">
-
-    <h1>మా కార్యక్రమాలు</h1>
-
-    <div class="events-list">
-      <!-- Events are loaded dynamically here by events.js -->
+  <main class="events-page">
+    <!-- HERO HEADER -->
+    <div class="events-hero">
+      <div class="events-hero-badge">
+        <span>🪔</span>
+        <span>సన్నివేశం సాంస్కృతిక వేదిక</span>
+      </div>
+      <h1 class="events-hero-title">మా కార్యక్రమాలు</h1>
+      <p class="events-hero-subtitle">
+        తెలుగు సంస్కృతి, సనాతన సంప్రదాయాలు మరియు ఆధ్యాత్మిక జ్ఞానాన్ని భావితరాలకు అందించే మా ప్రత్యేక కార్యక్రమాలు, పాఠశాలల సందర్శనలు మరియు పోటీల సంగ్రహం.
+      </p>
+      <div class="events-stats-bar">
+        <span>✨ కార్యక్రమాల సంఖ్య:</span>
+        <span class="stat-count" id="eventsCountStat">లోడ్ అవుతోంది...</span>
+      </div>
     </div>
 
-  </section>
+    <!-- DYNAMIC EVENTS LIST -->
+    <div class="events-list">
+      <!-- Events and skeletons are loaded dynamically here by events.js -->
+    </div>
+  </main>
 
-  <div id="imageModal" class="image-modal">
-    <span class="close-btn" onclick="closeImage()">✕</span>
+  <!-- CINEMATIC SWIPEABLE FULL-SCREEN LIGHTBOX MODAL -->
+  <div id="eventLightboxModal" class="event-lightbox-modal" role="dialog" aria-modal="true" aria-label="ఈవెంట్ ఫోటో గ్యాలరీ">
+    <div class="lightbox-header">
+      <div class="lightbox-title-box">
+        <span class="lightbox-counter-badge" id="lightboxCounter">1 / 1</span>
+        <span class="lightbox-event-title" id="lightboxEventTitle">కార్యక్రమం</span>
+      </div>
+      <div class="lightbox-controls">
+        <button class="lightbox-btn" id="lightboxZoomBtn" title="జూమ్ చేయండి (Zoom)" aria-label="జూమ్ చేయండి">🔍</button>
+        <button class="lightbox-btn close-btn" id="lightboxCloseBtn" title="మూసివేయండి (Close)" aria-label="మూసివేయండి">✕</button>
+      </div>
+    </div>
 
-    <button class="modal-arrow left-arrow" onclick="prevImage()">‹</button>
+    <button class="lightbox-arrow left-arrow" id="lightboxPrevBtn" title="మునుపటి చిత్రం (Previous)" aria-label="మునుపటి చిత్రం">‹</button>
 
-    <img id="popupImage">
+    <div class="lightbox-stage">
+      <div class="lightbox-image-wrap" id="lightboxImgWrap">
+        <img id="lightboxMainImg" src="" alt="Event expanded photo">
+      </div>
+    </div>
 
-    <button class="modal-arrow right-arrow" onclick="nextImage()">›</button>
+    <button class="lightbox-arrow right-arrow" id="lightboxNextBtn" title="తరువాతి చిత్రం (Next)" aria-label="తరువాతి చిత్రం">›</button>
+
+    <div class="lightbox-bottom">
+      <div class="lightbox-thumbnails" id="lightboxThumbsList">
+        <!-- Thumbnail strip dynamically populated -->
+      </div>
+      <div class="lightbox-swipe-hint">
+        <span>👈👉 స్వైప్ చేయండి • ESC లేదా కిందకు లాగండి మూసివేయడానికి</span>
+      </div>
+    </div>
   </div>
 
   <footer class="simple-footer">
-
     <script type="module" src="../social-links.js"></script>
-
-    <p>
-      © 2026 సన్నివేశం • తెలుగు సంస్కృతి మరియు సంప్రదాయం
-    </p>
-
+    <p>© 2026 సన్నివేశం • తెలుగు సంస్కృతి మరియు సంప్రదాయం</p>
   </footer>
 
-  <script src="../script.js"></script>
-  <script type="module" src="events.js"></script>
+  <script type="module" src="events.js?v=20260919a"></script>
   <script type="module">
     import { db } from "../firebase-config.js";
-
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     async function loadEventsBackground() {
       try {
@@ -310,7 +347,7 @@
     <source src="../music/traditional.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="musicBtn" class="music-btn">
+  <button id="musicBtn" class="music-btn" aria-label="సంగీతం మ్యూట్ / ప్లే చేయండి">
     🔊
   </button>
 
@@ -318,4 +355,3 @@
 </body>
 
 </html>
-
