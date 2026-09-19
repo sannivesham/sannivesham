@@ -1,21 +1,22 @@
 /**
  * ==============================================================================
- * SANNIVESHAM — PHOTOREALISTIC SCROLL-TRAVELLING PEACOCK
- * True Photorealistic Assets, Instant Perch on Scroll Stop & Wide Lateral Travel
+ * SANNIVESHAM — PHOTOREALISTIC DUAL-FRAME WINGBEAT PEACOCK
+ * Realistic Flapping Wings, Consistent Facing & Immediate Perch on Scroll Stop
  * ==============================================================================
  */
 
 (function () {
   'use strict';
 
-  if (window.__SanniveshamPhotorealPeacock) return;
-  window.__SanniveshamPhotorealPeacock = true;
+  if (window.__SanniveshamDualWingPeacock) return;
+  window.__SanniveshamDualWingPeacock = true;
 
   const AI_DESTINATION = 'ai/';
   const IMG_PERCHED = 'images/peacock-perched.png';
-  const IMG_FLYING = 'images/peacock-flying.png';
+  const IMG_WING_UP = 'images/peacock-wing-up.png';
+  const IMG_WING_DOWN = 'images/peacock-wing-down.png';
 
-  class PhotorealTravellingPeacock {
+  class DualWingTravellingPeacock {
     constructor() {
       this.root = null;
       this.innerWrap = null;
@@ -29,7 +30,7 @@
       this.targetDocX = 0;
       this.targetDocY = 0;
       this.angle = 0;
-      this.facing = 1; // 1 = right, -1 = left
+      this.facing = 1; // 1 = right, -1 = left (Consistent across perched & flying)
 
       // Scrolling and State
       this.isScrolling = false;
@@ -62,7 +63,7 @@
         const lm0 = this.landmarks[0];
         this.docX = this.targetDocX = lm0.docX;
         this.docY = this.targetDocY = lm0.docY;
-        this.facing = lm0.facing || -1;
+        this.facing = -1; // Initial perch facing inward (towards the left content)
         this.renderPosition();
       }
 
@@ -85,10 +86,14 @@
           <span>➜</span>
         </div>
         <div class="peacock-inner-wrap">
-          <!-- Photorealistic Sitting Peacock (Wings folded against body) -->
+          <!-- 1. Photorealistic Sitting Peacock (Wings completely folded against body) -->
           <img src="${IMG_PERCHED}" alt="Sannivesham Peacock Perched" class="peacock-img-layer peacock-img-perched" loading="eager" decoding="async">
-          <!-- Photorealistic Flying Peacock (Wings spread in full flight) -->
-          <img src="${IMG_FLYING}" alt="Sannivesham Peacock Flying" class="peacock-img-layer peacock-img-flying" loading="eager" decoding="async">
+          
+          <!-- 2. Photorealistic Wing Up Stroke (Active only while flying) -->
+          <img src="${IMG_WING_UP}" alt="Sannivesham Peacock Wing Up" class="peacock-img-layer peacock-img-wing-up" loading="eager" decoding="async">
+          
+          <!-- 3. Photorealistic Wing Down Stroke (Alternating flight stroke) -->
+          <img src="${IMG_WING_DOWN}" alt="Sannivesham Peacock Wing Down" class="peacock-img-layer peacock-img-wing-down" loading="eager" decoding="async">
         </div>
         <div class="peacock-click-aura"></div>
       `;
@@ -110,7 +115,6 @@
       const scrollY = window.scrollY || window.pageYOffset;
       const winW = window.innerWidth;
 
-      // Real physical surfaces on the Sannivesham website
       const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
       const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
       const rightCardElem = document.querySelector('a[href="festivals/"]') || document.querySelector('a[href="temples/"]');
@@ -125,48 +129,42 @@
           label: 'Hero (Right)',
           side: 'right',
           pctX: isMobile ? 0.74 : 0.72,
-          offsetY: isMobile ? -62 : -78,
-          facing: -1
+          offsetY: isMobile ? -62 : -78
         },
         {
           elem: introElem,
           label: 'Culture (Far Left)',
           side: 'left',
           pctX: isMobile ? 0.16 : 0.20,
-          offsetY: isMobile ? -60 : -76,
-          facing: 1
+          offsetY: isMobile ? -60 : -76
         },
         {
           elem: rightCardElem,
           label: 'Temples (Far Right)',
           side: 'right',
           pctX: isMobile ? 0.78 : 0.76,
-          offsetY: isMobile ? -60 : -76,
-          facing: -1
+          offsetY: isMobile ? -60 : -76
         },
         {
           elem: leftCardElem,
           label: 'Library (Far Left)',
           side: 'left',
           pctX: isMobile ? 0.16 : 0.22,
-          offsetY: isMobile ? -60 : -76,
-          facing: 1
+          offsetY: isMobile ? -60 : -76
         },
         {
           elem: shlokaElem,
           label: 'Wisdom (Far Right)',
           side: 'right',
           pctX: isMobile ? 0.78 : 0.75,
-          offsetY: isMobile ? -60 : -78,
-          facing: -1
+          offsetY: isMobile ? -60 : -78
         },
         {
           elem: footerElem,
           label: 'Footer (Left-Center)',
           side: 'left',
           pctX: isMobile ? 0.26 : 0.30,
-          offsetY: isMobile ? -55 : -72,
-          facing: 1
+          offsetY: isMobile ? -55 : -72
         }
       ];
 
@@ -193,8 +191,7 @@
           side: c.side,
           docX,
           docY,
-          triggerScroll,
-          facing: c.facing
+          triggerScroll
         };
       });
 
@@ -250,8 +247,8 @@
       const scrollDelta = Math.abs(currentScrollY - this.lastScrollY);
       this.lastScrollY = currentScrollY;
 
-      // User is actively scrolling -> Wake up and take flight
-      if (scrollDelta > 0.5) {
+      // User is actively moving page -> Wake up and start flapping wings
+      if (scrollDelta > 0.4) {
         this.isScrolling = true;
         if (this.state === 'perched') {
           this.setState('takeoff');
@@ -268,8 +265,8 @@
           if (!this.isScrolling) {
             this.setState('perched');
           }
-        }, 120);
-      }, 90);
+        }, 110);
+      }, 85);
     }
 
     setState(newState) {
@@ -279,14 +276,14 @@
     }
 
     /**
-     * Compute Dynamic Lateral (Left-to-Right) Flight Trajectory
+     * Compute Dynamic Lateral (Left-to-Right) Flight Trajectory & Direction
      */
     evaluateTrajectory(currentScrollY) {
       const n = this.landmarks.length;
-      if (n === 0) return { docX: 100, docY: 100, facing: 1, angle: 0 };
+      if (n === 0) return { docX: 100, docY: 100, angle: 0 };
       if (n === 1) {
         const lm = this.landmarks[0];
-        return { docX: lm.docX, docY: lm.docY, facing: lm.facing, angle: 0 };
+        return { docX: lm.docX, docY: lm.docY, angle: 0 };
       }
 
       let seg = 0;
@@ -334,7 +331,7 @@
       const sideSwing = Math.sin(u * Math.PI) * (isMobile ? 28 : 60) * (seg % 2 === 0 ? -1 : 1);
       docX += sideSwing;
 
-      // Velocity tangent for banking angle
+      // Velocity tangent for banking angle and direction
       const du = 0.02;
       const nextU = Math.min(u + du, 1);
       const nu1 = 1 - nextU;
@@ -344,26 +341,24 @@
       const vx = nextX - docX;
       const vy = nextY - docY;
 
-      let facing = p0.facing;
-      if (Math.abs(vx) > 0.8) {
-        facing = vx >= 0 ? 1 : -1;
-      } else if (u > 0.82) {
-        facing = p1.facing;
+      // Update facing strictly according to travel direction (1 = right, -1 = left)
+      if (Math.abs(vx) > 0.6) {
+        this.facing = (vx >= 0) ? 1 : -1;
       }
 
       let angle = (Math.atan2(vy, vx) * 180) / Math.PI;
-      if (facing === -1) {
+      if (this.facing === -1) {
         angle = angle - 180;
         if (angle < -180) angle += 360;
       }
       angle = Math.max(Math.min(angle * 0.45, 26), -26);
 
-      // When resting/sitting, angle must be perfectly 0
+      // When resting/sitting, angle must be perfectly level (0)
       if (!this.isScrolling) {
         angle = 0;
       }
 
-      return { docX, docY, facing, angle };
+      return { docX, docY, angle };
     }
 
     emitEmber(x, y, isBurst = false) {
@@ -412,7 +407,7 @@
       this.checkPerformance(time);
 
       if (this.reducedMotion) {
-        const lm = this.landmarks[0] || { docX: 200, docY: 200, facing: 1 };
+        const lm = this.landmarks[0] || { docX: 200, docY: 200 };
         this.root.style.transform = `translate3d(${lm.docX - 70}px, ${lm.docY - 70}px, 0)`;
         requestAnimationFrame(this.tick.bind(this));
         return;
@@ -439,7 +434,6 @@
 
       const targetAngle = this.isScrolling ? trajectory.angle : 0;
       this.angle += (targetAngle - this.angle) * 0.16;
-      this.facing = trajectory.facing;
 
       // CRITICAL: WINGS FLAP ONLY WHILE SCROLLING; SIT IMMEDIATELY WHEN STOPPED
       if (this.isScrolling) {
@@ -466,6 +460,8 @@
     renderPosition() {
       this.root.style.transform = `translate3d(${this.docX}px, ${this.docY}px, 0)`;
 
+      // Both images have identical natural orientation (+1 = right, -1 = left)
+      // Facing never flips unexpectedly upon landing!
       if (this.innerWrap) {
         this.innerWrap.style.transform = `scaleX(${this.facing}) rotate(${this.angle}deg)`;
       }
@@ -473,8 +469,8 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new PhotorealTravellingPeacock());
+    document.addEventListener('DOMContentLoaded', () => new DualWingTravellingPeacock());
   } else {
-    new PhotorealTravellingPeacock();
+    new DualWingTravellingPeacock();
   }
 })();
