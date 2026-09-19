@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    RESET + GLOBAL
 ========================= */
 
@@ -1140,17 +1140,7 @@ body {
 @media (max-width: 700px) {
 
   body:not(.events-body) {
-    background:
-      linear-gradient(rgba(10, 5, 0, 0.45),
-        rgba(10, 5, 0, 0.45)),
-      url("images/homebg-mobile.jpg");
-
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-attachment: scroll;
-
-    background-color: #160804;
+    background: transparent !important;
   }
 
   .glass-navbar {
@@ -1265,8 +1255,19 @@ body {
 
   .category-title {
     text-align: center;
+    font-size: 20px;
+    padding: 12px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    font-size: 24px;
+  .category-title-long,
+  .category-card[href*="festival-counter"] .category-title {
+    font-size: 16.5px !important;
+    padding: 12px 3px !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.3px !important;
   }
 
   .about-card {
@@ -6128,6 +6129,36 @@ button[class*="delete"] {
   }
   .ribbon-cta {
     align-self: flex-end;
+  }
+}
+
+/* Responsive adjustments for Section 11 Pandugala Ganakam on mobile screens */
+@media (max-width: 420px) {
+  .category-title {
+    font-size: 18px !important;
+    padding: 10px 4px !important;
+  }
+  .category-title-long,
+  .category-card[href*="festival-counter"] .category-title {
+    font-size: 15px !important;
+    padding: 10px 2px !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.35px !important;
+  }
+  .category-card-badge {
+    font-size: 0.70rem !important;
+    padding: 2px 6px !important;
+    top: 8px !important;
+    left: 8px !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .category-title-long,
+  .category-card[href*="festival-counter"] .category-title {
+    font-size: 13.5px !important;
+    letter-spacing: -0.45px !important;
   }
 }
 
