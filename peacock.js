@@ -126,7 +126,7 @@
       const heroElem = document.querySelector('.top-brand');
       const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
       const catElem = document.querySelector('#categories') || document.querySelector('.category-section');
-      const shlokaElem = document.querySelector('.shloka-section') || document.querySelector('#shlokaFlipCard');
+      const aboutElem = document.querySelector('#about') || document.querySelector('.about-card');
       const footerElem = document.querySelector('#contact') || document.querySelector('.home-footer');
 
       // 1. Hero (Right side, comfortably BELOW navbar, clear of brand text)
@@ -159,15 +159,15 @@
       }
       catX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
 
-      // 4. Shloka Section (Left side gutter, clear of shloka text)
-      let shlokaX, shlokaY;
-      if (shlokaElem) {
-        const r = shlokaElem.getBoundingClientRect();
-        shlokaY = r.top + scrollY + (isMobile ? 24 : 32);
+      // 4. About Section (Left side gutter, clear of about card)
+      let aboutX, aboutY;
+      if (aboutElem) {
+        const r = aboutElem.getBoundingClientRect();
+        aboutY = r.top + scrollY + (isMobile ? 24 : 32);
       } else {
-        shlokaY = catY + 650;
+        aboutY = catY + 650;
       }
-      shlokaX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
+      aboutX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
 
       // 5. Footer (Right side gutter, clear of links)
       let footerX, footerY;
@@ -175,7 +175,7 @@
         const r = footerElem.getBoundingClientRect();
         footerY = r.top + scrollY + (isMobile ? 24 : 30);
       } else {
-        footerY = shlokaY + 600;
+        footerY = aboutY + 600;
       }
       footerX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
 
@@ -183,7 +183,7 @@
         { label: 'Hero (Right)', side: 'right', docX: heroX, docY: heroY },
         { label: 'Intro (Left)', side: 'left', docX: introX, docY: introY },
         { label: 'Categories (Right)', side: 'right', docX: catX, docY: catY },
-        { label: 'Shloka (Left)', side: 'left', docX: shlokaX, docY: shlokaY },
+        { label: 'About (Left)', side: 'left', docX: aboutX, docY: aboutY },
         { label: 'Footer (Right)', side: 'right', docX: footerX, docY: footerY }
       ];
 

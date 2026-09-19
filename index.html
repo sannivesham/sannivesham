@@ -802,33 +802,7 @@
       </div>
     </section>
 
-    <!-- 3D WISDOM FLIP CARD: నేటి సుభాషితం / శ్లోకం -->
-    <section class="shloka-section">
-      <h2 class="shloka-section-heading">✨ నేటి సుభాషితం (Daily Wisdom)</h2>
-      <div class="shloka-3d-card-wrap" id="shlokaFlipCard">
-        <div class="shloka-3d-card" id="shlokaCardInner">
-          <!-- Front Face -->
-          <div class="shloka-card-face shloka-card-front">
-            <span style="font-size:1.8rem;margin-bottom:8px;">🪔</span>
-            <div class="shloka-verse-text" id="shlokaVerse">
-              "యతో ధర్మస్తతో జయః"<br>
-              "సత్యమేవ జయతే నానృతం"
-            </div>
-            <span class="shloka-source-tag" id="shlokaSource">— మహాభారతం & ముండకోపనిషత్</span>
-            <span class="shloka-flip-hint">👉 తాకండి - భావం చూడండి (Tap to flip) 🔄</span>
-          </div>
-          <!-- Back Face -->
-          <div class="shloka-card-face shloka-card-back">
-            <span style="font-size:1.8rem;margin-bottom:8px;">📖</span>
-            <h3 style="color:#ffd166;margin-bottom:8px;font-size:1.15rem;">తాత్పర్యం & జీవన సందేశం:</h3>
-            <div class="shloka-meaning-text" id="shlokaMeaning">
-              ధర్మం ఎక్కడ ఉంటుందో అక్కడ విజయం తథ్యము. ఎన్ని ఆటంకాలు ఎదురైనా సత్య మార్గాన్ని వీడరాదు. ధర్మబద్ధమైన జీవితమే శాశ్వత శాంతికి మరియు గౌరవానికి మూలం.
-            </div>
-            <span class="shloka-flip-hint">🔄 వెనుకకు తిప్పండి (Tap to flip back)</span>
-          </div>
-        </div>
-      </div>
-    </section>
+
 
     <a href="about/" id="about" class="about-card">
       <div class="about-overlay"></div>
@@ -895,7 +869,7 @@
   <script src="script.js?v=2"></script>
   <script src="i18n.js"></script>
   <script src="panchang-engine.js"></script>
-  <script src="peacock.js?v=20260919f"></script>
+  <script src="peacock.js?v=20260919g"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
@@ -1485,67 +1459,6 @@
         }
       }
 
-      /* --- 6. 3D WISDOM FLIP CARD ROTATION --- */
-      function initShlokaFlip() {
-        const wrap = document.getElementById("shlokaFlipCard");
-        const inner = document.getElementById("shlokaCardInner");
-        if (!wrap || !inner) return;
-
-        const shlokas = [
-          {
-            verse: '"యతో ధర్మస్తతో జయః"<br>"సత్యమేవ జయతే నానృతం"',
-            source: "— మహాభారతం & ముండకోపనిషత్",
-            meaning: "ధర్మం ఎక్కడ ఉంటుందో అక్కడ విజయం తథ్యము. ఎన్ని ఆటంకాలు ఎదురైనా సత్య మార్గాన్ని వీడరాదు. ధర్మబద్ధమైన జీవితమే శాశ్వత శాంతికి మరియు గౌరవానికి మూలం.",
-            verseEn: '"Yato Dharmastato Jayah"<br>"Satyameva Jayate Nanritam"',
-            meaningEn: "Where there is righteousness (Dharma), there is victory. Truth alone triumphs, never untruth. A righteous and ethical life is the foundation of enduring peace and honour."
-          },
-          {
-            verse: '"కర్మణ్యేవాధికారస్తే మా ఫలేషు కదాచన"<br>"మా కర్మఫలహేతుర్భూర్మా తే సఙ్గోత్స్వకర్మణి"',
-            source: "— శ్రీమద్భగవద్గీత (2.47)",
-            meaning: "నీ విధి కర్మలను నిష్కామంగా ఆచరించడమే నీ కర్తవ్యం. ఫలితాలపై వ్యామోహం పెట్టుకోకు. కర్మఫలాలకు నీవు కారణమని భావించకు, అలాగని కర్మలను విడిచిపెట్టకు.",
-            verseEn: '"Karmanye Vadhikaraste Ma Phaleshu Kadachana"<br>"Ma Karma-phala-hetur Bhurma Te Sango Stvakarmani"',
-            meaningEn: "You have a right only to perform your duties, but never to the fruits thereof. Never let the fruits of action be your motive, nor should you have an attachment to inaction."
-          },
-          {
-            verse: '"విద్యా దదాతి వినయం వినయాద్ యాతి పాత్రతామ్"<br>"పాత్రత్వాత్ ధనమాప్నోతి ధనాత్ ధర్మం తతః సుఖమ్"',
-            source: "— హితోపదేశం",
-            meaning: "విద్య వినయాన్ని ఇస్తుంది, వినయం వల్ల అర్హత లభిస్తుంది, అర్హతతో ధనం, ధనంతో ధర్మ కార్యాలు, ధర్మంతో శాశ్వత సుఖసంతోషాలు లభిస్తాయి.",
-            verseEn: '"Vidya Dadati Vinayam, Vinayad Yati Patratam"<br>"Patratvat Dhanam Apnoti, Dhanad Dharmam Tatah Sukham"',
-            meaningEn: "True knowledge bestows humility; humility leads to worthiness; worthiness brings wealth; wealth directed towards righteousness brings lasting fulfillment."
-          },
-          {
-            verse: '"ఉద్యమేన హి సిధ్యంతి కార్యాణి న మనోరథైః"<br>"న హి సుప్తస్య సింహస్య ప్రవిశంతి ముఖే మృగాః"',
-            source: "— పంచతంత్రం",
-            meaning: "ప్రయత్నం మరియు శ్రమ ద్వారానే కార్యాలు సిద్ధించును కానీ కేవలం కోరికలతో కాదు. నిద్రిస్తున్న సింహం నోట్లోకి జంతువులు వాటంతట అవే వచ్చి చేరవు కదా!",
-            verseEn: '"Udyamena Hi Sidhyanti Karyani Na Manorathaih"<br>"Na Hi Suptasya Simhasya Pravishanti Mukhe Mrigah"',
-            meaningEn: "Goals are achieved only through diligent endeavor and purposeful work, not through wishful daydreaming. Sleeping lions do not have prey walking directly into their mouth."
-          }
-        ];
-
-        const todayDay = new Date().getDate();
-        const cur = shlokas[todayDay % shlokas.length];
-
-        const verseEl = document.getElementById("shlokaVerse");
-        const sourceEl = document.getElementById("shlokaSource");
-        const meaningEl = document.getElementById("shlokaMeaning");
-
-        if (verseEl) {
-          verseEl.dataset.en = cur.verseEn;
-          verseEl.dataset.teOriginal = cur.verse;
-          verseEl.innerHTML = localStorage.getItem("sannivesham_lang") === "en" ? cur.verseEn : cur.verse;
-        }
-        if (sourceEl) sourceEl.innerText = cur.source;
-        if (meaningEl) {
-          meaningEl.dataset.en = cur.meaningEn;
-          meaningEl.dataset.teOriginal = cur.meaning;
-          meaningEl.innerText = localStorage.getItem("sannivesham_lang") === "en" ? cur.meaningEn : cur.meaning;
-        }
-
-        wrap.addEventListener("click", () => {
-          inner.classList.toggle("is-flipped");
-        });
-      }
-
       function initNavbarScroll() {
         const nl = document.querySelector('.nav-links');
         if (nl) {
@@ -1561,7 +1474,6 @@
           init3DCardTilt();
           initTimeGreeting();
           initPanchangamRibbon();
-          initShlokaFlip();
         });
       } else {
         initNavbarScroll();
@@ -1570,7 +1482,6 @@
         init3DCardTilt();
         initTimeGreeting();
         initPanchangamRibbon();
-        initShlokaFlip();
       }
     })();
   </script>
