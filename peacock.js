@@ -58,12 +58,17 @@
       this.updateLandmarks();
       this.bindEvents();
 
-      // Initial placement at Landmark 0 (Hero Right)
+      // Initial placement at Landmark 0 (Hero Right, safe below navbar)
       if (this.landmarks.length > 0) {
+        const isMobile = window.innerWidth < 768;
+        const peacockSize = isMobile ? 70 : 108;
+        const halfSize = peacockSize / 2;
+        const minClearanceY = isMobile ? 100 : 124;
+
         const lm0 = this.landmarks[0];
-        this.docX = this.targetDocX = lm0.docX;
-        this.docY = this.targetDocY = lm0.docY;
-        this.facing = -1; // Initial perch facing inward (towards the left content)
+        this.docX = this.targetDocX = lm0.docX - halfSize;
+        this.docY = this.targetDocY = Math.max(minClearanceY, lm0.docY - halfSize);
+        this.facing = -1; // Initial perch facing inward toward hero content
         this.renderPosition();
       }
 
@@ -108,89 +113,88 @@
     }
 
     /**
-     * Alternating Left-and-Right Landing Positions Across Real Cards
+     * Safe Lateral Landing Positions Outside Text Content
      */
     updateLandmarks() {
       const isMobile = window.innerWidth < 768;
       const scrollY = window.scrollY || window.pageYOffset;
       const winW = window.innerWidth;
+      const peacockSize = isMobile ? 70 : 108;
+      const halfSize = peacockSize / 2;
+      const minClearanceY = isMobile ? 100 : 124;
 
-      const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
+      const heroElem = document.querySelector('.top-brand');
       const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
-      const rightCardElem = document.querySelector('a[href="festivals/"]') || document.querySelector('a[href="temples/"]');
-      const leftCardElem = document.querySelector('a[href="library/"]') || document.querySelector('a[href="quiz/"]');
+      const catElem = document.querySelector('#categories') || document.querySelector('.category-section');
       const shlokaElem = document.querySelector('.shloka-section') || document.querySelector('#shlokaFlipCard');
-      const footerElem = document.querySelector('.home-footer') || document.querySelector('#contact');
+      const footerElem = document.querySelector('#contact') || document.querySelector('.home-footer');
 
-      // Alternating sequence: RIGHT -> LEFT -> RIGHT -> LEFT -> RIGHT -> LEFT
-      const config = [
-        {
-          elem: heroElem,
-          label: 'Hero (Right)',
-          side: 'right',
-          pctX: isMobile ? 0.74 : 0.72,
-          offsetY: isMobile ? -62 : -78
-        },
-        {
-          elem: introElem,
-          label: 'Culture (Far Left)',
-          side: 'left',
-          pctX: isMobile ? 0.16 : 0.20,
-          offsetY: isMobile ? -60 : -76
-        },
-        {
-          elem: rightCardElem,
-          label: 'Temples (Far Right)',
-          side: 'right',
-          pctX: isMobile ? 0.78 : 0.76,
-          offsetY: isMobile ? -60 : -76
-        },
-        {
-          elem: leftCardElem,
-          label: 'Library (Far Left)',
-          side: 'left',
-          pctX: isMobile ? 0.16 : 0.22,
-          offsetY: isMobile ? -60 : -76
-        },
-        {
-          elem: shlokaElem,
-          label: 'Wisdom (Far Right)',
-          side: 'right',
-          pctX: isMobile ? 0.78 : 0.75,
-          offsetY: isMobile ? -60 : -78
-        },
-        {
-          elem: footerElem,
-          label: 'Footer (Left-Center)',
-          side: 'left',
-          pctX: isMobile ? 0.26 : 0.30,
-          offsetY: isMobile ? -55 : -72
-        }
+      // 1. Hero (Right side, comfortably BELOW navbar, clear of brand text)
+      let heroX, heroY;
+      if (heroElem) {
+        const r = heroElem.getBoundingClientRect();
+        heroY = Math.max(minClearanceY + halfSize, r.top + scrollY + (isMobile ? 36 : 48));
+      } else {
+        heroY = minClearanceY + halfSize + 10;
+      }
+      heroX = isMobile ? (winW - halfSize - 8) : Math.min(winW - halfSize - 20, Math.max(winW * 0.88, winW - 130));
+
+      // 2. Intro Section (Left side gutter / outer shoulder, clear of paragraphs)
+      let introX, introY;
+      if (introElem) {
+        const r = introElem.getBoundingClientRect();
+        introY = r.top + scrollY + (isMobile ? 22 : 30);
+      } else {
+        introY = heroY + 680;
+      }
+      introX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
+
+      // 3. Categories (Right side gutter, clear of cards and headings)
+      let catX, catY;
+      if (catElem) {
+        const r = catElem.getBoundingClientRect();
+        catY = r.top + scrollY + (isMobile ? 34 : 48);
+      } else {
+        catY = introY + 700;
+      }
+      catX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
+
+      // 4. Shloka Section (Left side gutter, clear of shloka text)
+      let shlokaX, shlokaY;
+      if (shlokaElem) {
+        const r = shlokaElem.getBoundingClientRect();
+        shlokaY = r.top + scrollY + (isMobile ? 24 : 32);
+      } else {
+        shlokaY = catY + 650;
+      }
+      shlokaX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
+
+      // 5. Footer (Right side gutter, clear of links)
+      let footerX, footerY;
+      if (footerElem) {
+        const r = footerElem.getBoundingClientRect();
+        footerY = r.top + scrollY + (isMobile ? 24 : 30);
+      } else {
+        footerY = shlokaY + 600;
+      }
+      footerX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
+
+      const rawLandmarks = [
+        { label: 'Hero (Right)', side: 'right', docX: heroX, docY: heroY },
+        { label: 'Intro (Left)', side: 'left', docX: introX, docY: introY },
+        { label: 'Categories (Right)', side: 'right', docX: catX, docY: catY },
+        { label: 'Shloka (Left)', side: 'left', docX: shlokaX, docY: shlokaY },
+        { label: 'Footer (Right)', side: 'right', docX: footerX, docY: footerY }
       ];
 
-      this.landmarks = config.map((c, i) => {
-        let docX = winW * c.pctX;
-        let docY = i * 720;
-
-        if (c.elem) {
-          const rect = c.elem.getBoundingClientRect();
-          docY = rect.top + scrollY + c.offsetY;
-
-          if (c.side === 'left') {
-            docX = Math.max(18, Math.min(rect.left + window.scrollX + (isMobile ? 24 : 50), winW * 0.35));
-          } else {
-            docX = Math.min(winW - (isMobile ? 120 : 160), Math.max(rect.right + window.scrollX - (isMobile ? 50 : 80), winW * 0.65));
-          }
-        }
-
-        const triggerScroll = Math.max(0, docY - window.innerHeight * 0.44);
-
+      this.landmarks = rawLandmarks.map((lm, i) => {
+        const triggerScroll = Math.max(0, lm.docY - window.innerHeight * 0.45);
         return {
           index: i,
-          label: c.label,
-          side: c.side,
-          docX,
-          docY,
+          label: lm.label,
+          side: lm.side,
+          docX: lm.docX,
+          docY: lm.docY,
           triggerScroll
         };
       });
@@ -280,10 +284,10 @@
      */
     evaluateTrajectory(currentScrollY) {
       const n = this.landmarks.length;
-      if (n === 0) return { docX: 100, docY: 100, angle: 0 };
+      if (n === 0) return { docX: 100, docY: 100, angle: 0, currentSide: 'right' };
       if (n === 1) {
         const lm = this.landmarks[0];
-        return { docX: lm.docX, docY: lm.docY, angle: 0 };
+        return { docX: lm.docX, docY: lm.docY, angle: 0, currentSide: lm.side || 'right' };
       }
 
       let seg = 0;
@@ -299,17 +303,18 @@
       const scrollSpan = Math.max(p1.triggerScroll - p0.triggerScroll, 160);
       const rawU = (currentScrollY - p0.triggerScroll) / scrollSpan;
       const u = Math.max(0, Math.min(rawU, 1));
+      const currentSide = (u < 0.5) ? p0.side : p1.side;
 
-      // Strong Lateral Traversal (Left <-> Right)
+      // Lateral Traversal (Left <-> Right)
       const dx = p1.docX - p0.docX;
       const dy = p1.docY - p0.docY;
 
       const winW = window.innerWidth;
       const isMobile = winW < 768;
 
-      const lateralBulge = (dx >= 0 ? 1 : -1) * (isMobile ? 42 : 85);
+      const lateralBulge = (dx >= 0 ? 1 : -1) * (isMobile ? 22 : 48);
       const cp1X = p0.docX + dx * 0.20 + lateralBulge;
-      const cp1Y = p0.docY + dy * 0.12 - (isMobile ? 55 : 85);
+      const cp1Y = p0.docY + dy * 0.12 - (isMobile ? 32 : 52);
 
       const cp2X = p0.docX + dx * 0.80 - lateralBulge * 0.3;
       const cp2Y = p0.docY + dy * 0.88;
@@ -328,21 +333,21 @@
                  u * u * u * p1.docY;
 
       // Harmonious horizontal S-curve swing
-      const sideSwing = Math.sin(u * Math.PI) * (isMobile ? 28 : 60) * (seg % 2 === 0 ? -1 : 1);
+      const sideSwing = Math.sin(u * Math.PI) * (isMobile ? 18 : 36) * (seg % 2 === 0 ? -1 : 1);
       docX += sideSwing;
 
       // Velocity tangent for banking angle and direction
       const du = 0.02;
       const nextU = Math.min(u + du, 1);
       const nu1 = 1 - nextU;
-      const nextX = nu1 * nu1 * nu1 * p0.docX + 3 * nu1 * nu1 * nextU * cp1X + 3 * nu1 * nextU * nextU * cp2X + nextU * nextU * nextU * p1.docX + Math.sin(nextU * Math.PI) * (isMobile ? 28 : 60) * (seg % 2 === 0 ? -1 : 1);
+      const nextX = nu1 * nu1 * nu1 * p0.docX + 3 * nu1 * nu1 * nextU * cp1X + 3 * nu1 * nextU * nextU * cp2X + nextU * nextU * nextU * p1.docX + Math.sin(nextU * Math.PI) * (isMobile ? 18 : 36) * (seg % 2 === 0 ? -1 : 1);
       const nextY = nu1 * nu1 * nu1 * p0.docY + 3 * nu1 * nu1 * nextU * cp1Y + 3 * nu1 * nextU * nextU * cp2Y + nextU * nextU * nextU * p1.docY;
 
       const vx = nextX - docX;
       const vy = nextY - docY;
 
       // Update facing strictly according to travel direction (1 = right, -1 = left)
-      if (Math.abs(vx) > 0.6) {
+      if (Math.abs(vx) > 0.4) {
         this.facing = (vx >= 0) ? 1 : -1;
       }
 
@@ -351,14 +356,14 @@
         angle = angle - 180;
         if (angle < -180) angle += 360;
       }
-      angle = Math.max(Math.min(angle * 0.45, 26), -26);
+      angle = Math.max(Math.min(angle * 0.42, 24), -24);
 
       // When resting/sitting, angle must be perfectly level (0)
       if (!this.isScrolling) {
         angle = 0;
       }
 
-      return { docX, docY, angle };
+      return { docX, docY, angle, currentSide };
     }
 
     emitEmber(x, y, isBurst = false) {
@@ -367,7 +372,7 @@
       const ember = document.createElement('div');
       ember.className = 'peacock-particle-ember';
 
-      const size = Math.random() * (isBurst ? 10 : 5) + 3.5;
+      const size = Math.random() * (isBurst ? 8 : 4.5) + 2.5;
       ember.style.width = `${size}px`;
       ember.style.height = `${size}px`;
       ember.style.left = `${x}px`;
@@ -376,9 +381,9 @@
       document.body.appendChild(ember);
 
       const angle = Math.random() * Math.PI * 2;
-      const dist = isBurst ? Math.random() * 70 + 20 : Math.random() * 24 + 6;
+      const dist = isBurst ? Math.random() * 55 + 16 : Math.random() * 20 + 5;
       const tx = Math.cos(angle) * dist;
-      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 12);
+      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 10);
 
       requestAnimationFrame(() => {
         ember.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`;
@@ -387,7 +392,7 @@
 
       setTimeout(() => {
         if (ember.parentNode) ember.parentNode.removeChild(ember);
-      }, 650);
+      }, 600);
     }
 
     checkPerformance(time) {
@@ -408,7 +413,7 @@
 
       if (this.reducedMotion) {
         const lm = this.landmarks[0] || { docX: 200, docY: 200 };
-        this.root.style.transform = `translate3d(${lm.docX - 70}px, ${lm.docY - 70}px, 0)`;
+        this.root.style.transform = `translate3d(${lm.docX - 35}px, ${lm.docY - 35}px, 0)`;
         requestAnimationFrame(this.tick.bind(this));
         return;
       }
@@ -419,16 +424,38 @@
       const trajectory = this.evaluateTrajectory(this.smoothedScrollY);
 
       const isMobile = window.innerWidth < 768;
-      const halfSize = isMobile ? 58 : 77;
+      const peacockSize = isMobile ? 70 : 108;
+      const halfSize = peacockSize / 2;
+      const winW = window.innerWidth;
+      const minClearanceY = isMobile ? 100 : 124;
 
-      this.targetDocX = trajectory.docX - halfSize;
-      this.targetDocY = trajectory.docY - halfSize;
+      if (this.isScrolling) {
+        this.targetDocX = trajectory.docX - halfSize;
+        this.targetDocY = trajectory.docY - halfSize;
+      } else {
+        // When perched, smoothly settle to safe lateral margin to ensure ZERO text blocking
+        let safeX;
+        if (trajectory.currentSide === 'left') {
+          safeX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
+          this.facing = 1; // Face inward toward content
+        } else {
+          safeX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
+          this.facing = -1; // Face inward toward content
+        }
+        this.targetDocX = safeX - halfSize;
+        this.targetDocY = trajectory.docY - halfSize;
+      }
 
-      const maxX = document.documentElement.clientWidth - (halfSize * 2 - 8);
-      this.targetDocX = Math.max(6, Math.min(this.targetDocX, maxX));
+      // Ensure peacock never sits behind the navbar at the top of the page
+      if (currentScrollY < 120) {
+        this.targetDocY = Math.max(minClearanceY, this.targetDocY);
+      }
+
+      const maxX = document.documentElement.clientWidth - (halfSize * 2 + 4);
+      this.targetDocX = Math.max(4, Math.min(this.targetDocX, maxX));
 
       // Damping
-      const lerpFactor = this.isScrolling ? 0.16 : 0.10;
+      const lerpFactor = this.isScrolling ? 0.16 : 0.11;
       this.docX += (this.targetDocX - this.docX) * lerpFactor;
       this.docY += (this.targetDocY - this.docY) * lerpFactor;
 

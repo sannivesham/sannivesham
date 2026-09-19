@@ -7,8 +7,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 155px;
-  height: 155px;
+  width: 108px;
+  height: 108px;
   pointer-events: auto;
   cursor: pointer;
   z-index: 930;
@@ -16,20 +16,21 @@
   transform-origin: center bottom;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
   display: block;
 }
 
 /* Contact Ground Shadow */
 .peacock-ground-shadow {
   position: absolute;
-  bottom: 8px;
+  bottom: 5px;
   left: 50%;
-  width: 78px;
-  height: 18px;
+  width: 58px;
+  height: 14px;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(12, 4, 1, 0.88) 0%, rgba(22, 7, 2, 0.45) 50%, transparent 75%);
   transform: translateX(-50%) scale(1);
-  filter: blur(2.5px);
+  filter: blur(2.2px);
   pointer-events: none;
   transition: transform 0.22s ease, opacity 0.22s ease;
   z-index: 1;
@@ -285,19 +286,20 @@
    ------------------------------------------------------------- */
 @media (max-width: 768px) {
   #flyingPeacockRoot {
-    width: 118px;
-    height: 118px;
+    width: 70px;
+    height: 70px;
   }
 
   .peacock-ground-shadow {
-    width: 58px;
-    height: 14px;
-    bottom: 5px;
+    width: 38px;
+    height: 9px;
+    bottom: 3px;
   }
 
   .peacock-ai-tooltip {
-    font-size: 0.78rem;
-    padding: 5px 13px;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    bottom: calc(100% + 4px);
   }
 }
 
