@@ -1,230 +1,276 @@
 /**
- * ====================================================================
- * SANNIVESHAM — SIGNATURE INTERACTIVE FLYING PEACOCK
- * High-performance scroll-linked flight system & Sannivesham AI portal
- * ====================================================================
+ * ==========================================================================
+ * SANNIVESHAM — REALISTIC SCROLL-TRAVELLING PEACOCK (DOCUMENT SPACE ENGINE)
+ * Multi-state realistic Indian peacock travelling through the entire webpage
+ * ==========================================================================
  */
 
 (function () {
   'use strict';
 
-  // Prevent multiple initializations
-  if (window.__SanniveshamPeacock) return;
-  window.__SanniveshamPeacock = true;
+  if (window.__SanniveshamRealisticPeacock) return;
+  window.__SanniveshamRealisticPeacock = true;
 
   const AI_DESTINATION = 'ai/';
 
-  // 1. High-Detail Majestic Royal Indian Peacock SVG
-  const PEACOCK_SVG = `
+  // ------------------------------------------------------------------------
+  // High-Fidelity Semi-Realistic Indian Peacock (*Pavo cristatus*) SVG Model
+  // Detailed plumage, micro-feather texturing, realistic eyes, articulated wings
+  // ------------------------------------------------------------------------
+  const REALISTIC_PEACOCK_SVG = `
   <svg viewBox="0 0 160 160" class="peacock-svg" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Gradients -->
-      <linearGradient id="pBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#0984e3"/>
-        <stop offset="40%" stop-color="#0d3b84"/>
-        <stop offset="85%" stop-color="#041a4a"/>
-        <stop offset="100%" stop-color="#020c24"/>
+      <!-- Iridescent Royal Blue Neck & Breast Shading -->
+      <linearGradient id="rpNeckGrad" x1="15%" y1="0%" x2="85%" y2="100%">
+        <stop offset="0%" stop-color="#00cec9"/>
+        <stop offset="22%" stop-color="#0984e3"/>
+        <stop offset="60%" stop-color="#0c2461"/>
+        <stop offset="90%" stop-color="#061230"/>
+        <stop offset="100%" stop-color="#020817"/>
       </linearGradient>
 
-      <linearGradient id="pNeckGrad" x1="20%" y1="0%" x2="80%" y2="100%">
-        <stop offset="0%" stop-color="#00cec9"/>
-        <stop offset="35%" stop-color="#0984e3"/>
-        <stop offset="80%" stop-color="#1e3799"/>
+      <!-- Volumetric 3D Torso Gradient -->
+      <radialGradient id="rpBodyGrad" cx="45%" cy="45%" r="55%">
+        <stop offset="0%" stop-color="#0d3b84"/>
+        <stop offset="45%" stop-color="#082252"/>
+        <stop offset="85%" stop-color="#04122e"/>
+        <stop offset="100%" stop-color="#010714"/>
+      </radialGradient>
+
+      <!-- Folded Wing Coverts: Bronze, Copper, Emerald Plumage -->
+      <linearGradient id="rpCovertsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffd166"/>
+        <stop offset="28%" stop-color="#d35400"/>
+        <stop offset="55%" stop-color="#218c74"/>
+        <stop offset="82%" stop-color="#0652dd"/>
         <stop offset="100%" stop-color="#0c2461"/>
       </linearGradient>
 
-      <linearGradient id="pWingCovert" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#ffd166"/>
-        <stop offset="25%" stop-color="#e17055"/>
-        <stop offset="60%" stop-color="#05c46b"/>
-        <stop offset="100%" stop-color="#0984e3"/>
-      </linearGradient>
-
-      <linearGradient id="pFlightFeather" x1="0%" y1="0%" x2="100%" y2="100%">
+      <!-- Primary & Secondary Flight Feathers -->
+      <linearGradient id="rpFlightFeathers" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#0fbcf9"/>
-        <stop offset="50%" stop-color="#0d3b84"/>
+        <stop offset="35%" stop-color="#006266"/>
+        <stop offset="70%" stop-color="#0a3d62"/>
         <stop offset="100%" stop-color="#1e272e"/>
       </linearGradient>
 
-      <radialGradient id="pEyeGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffeaa7"/>
-        <stop offset="70%" stop-color="#e67e22"/>
-        <stop offset="100%" stop-color="#2d3436"/>
+      <!-- Ocellus (Tail Eye / Chandrika) Concentric Iridescence -->
+      <radialGradient id="rpOcellusOuter" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#00cec9"/>
+        <stop offset="30%" stop-color="#0984e3"/>
+        <stop offset="60%" stop-color="#05c46b"/>
+        <stop offset="80%" stop-color="#e67e22"/>
+        <stop offset="95%" stop-color="#d35400"/>
+        <stop offset="100%" stop-color="#1e272e"/>
       </radialGradient>
 
-      <radialGradient id="ocellusGrad" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#00cec9"/>
-        <stop offset="35%" stop-color="#0984e3"/>
-        <stop offset="65%" stop-color="#05c46b"/>
-        <stop offset="85%" stop-color="#ffd166"/>
-        <stop offset="100%" stop-color="#803808"/>
+      <!-- Piercing Realistic Eye with Dark Iris & Specular Highlight -->
+      <radialGradient id="rpEyeGrad" cx="45%" cy="40%" r="55%">
+        <stop offset="0%" stop-color="#ffeaa7"/>
+        <stop offset="45%" stop-color="#e67e22"/>
+        <stop offset="85%" stop-color="#803808"/>
+        <stop offset="100%" stop-color="#1e272e"/>
       </radialGradient>
+
+      <!-- Soft Plumage Texture Pattern -->
+      <pattern id="rpPlumagePattern" width="10" height="10" patternUnits="userSpaceOnUse">
+        <path d="M0 5 Q5 0 10 5 Q5 10 0 5" fill="none" stroke="rgba(0, 206, 201, 0.28)" stroke-width="0.8"/>
+      </pattern>
     </defs>
 
-    <!-- Divine Golden Aura / Glow -->
-    <circle cx="80" cy="80" r="68" fill="rgba(255, 209, 102, 0.08)" filter="drop-shadow(0 0 12px rgba(255, 209, 102, 0.4))"/>
+    <!-- Divine Golden Aura Glow Filter -->
+    <circle cx="80" cy="80" r="70" fill="rgba(255, 209, 102, 0.06)" filter="drop-shadow(0 0 14px rgba(255, 209, 102, 0.35))"/>
 
-    <!-- FEET & CLAWS (Tucked when flying, gripping when perched) -->
-    <g class="peacock-feet">
-      <path d="M72 108 L72 118 M72 118 L67 122 M72 118 L72 124 M72 118 L77 122" stroke="#d49438" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M80 108 L80 118 M80 118 L75 122 M80 118 L80 124 M80 118 L85 122" stroke="#d49438" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- ANATOMICAL LEGS & TALONS (Gripping Card Surface When Perched) -->
+    <g class="peacock-feet-group">
+      <!-- Left Leg -->
+      <path d="M72 106 L72 118 M72 118 L66 123 M72 118 L72 125 M72 118 L78 123 M72 118 L74 114" 
+            stroke="#a67c38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right Leg -->
+      <path d="M80 106 L80 118 M80 118 L74 123 M80 118 L80 125 M80 118 L86 123 M80 118 L82 114" 
+            stroke="#b88b42" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Claws -->
+      <circle cx="66" cy="123" r="1.1" fill="#4a3717"/>
+      <circle cx="72" cy="125" r="1.1" fill="#4a3717"/>
+      <circle cx="78" cy="123" r="1.1" fill="#4a3717"/>
+      <circle cx="74" cy="123" r="1.1" fill="#4a3717"/>
+      <circle cx="80" cy="125" r="1.1" fill="#4a3717"/>
+      <circle cx="86" cy="123" r="1.1" fill="#4a3717"/>
     </g>
 
-    <!-- TAIL TRAIN (Cascading peacock feathers with golden eyes) -->
-    <g class="peacock-tail-group">
-      <!-- Outer/under feathers -->
-      <path d="M78 95 C 95 105, 125 118, 140 142 C 120 135, 95 115, 74 98 Z" fill="#04201e" opacity="0.8"/>
-      <path d="M82 92 C 105 102, 138 122, 148 148 C 126 138, 102 114, 80 94 Z" fill="#05332b" opacity="0.9"/>
+    <!-- ELONGATED TAIL TRAIN (Cascading Retrices with Detailed Ocelli) -->
+    <g class="peacock-tail-train">
+      <!-- Under-Tail Coverts & Dark Base -->
+      <path d="M78 94 C 98 104, 130 118, 144 144 C 122 136, 96 114, 74 97 Z" fill="#041f1c" opacity="0.85"/>
+      <path d="M82 92 C 108 102, 140 124, 150 150 C 128 140, 104 114, 80 94 Z" fill="#05362e" opacity="0.9"/>
 
-      <!-- Main Train Feathers -->
-      <path d="M84 92 C 110 105, 142 128, 150 152 C 132 142, 106 120, 82 95 Z" fill="#055e4b"/>
-      <path d="M78 92 C 96 112, 118 138, 128 158 C 112 144, 94 122, 76 95 Z" fill="#056350"/>
+      <!-- Main Shimmering Train Plumage -->
+      <path d="M84 92 C 112 106, 145 130, 152 154 C 134 144, 108 120, 82 95 Z" fill="#065f4c"/>
+      <path d="M78 92 C 98 114, 120 140, 130 160 C 114 146, 96 122, 76 95 Z" fill="#066955"/>
 
-      <!-- Ocelli / Chandrakas (Tail Eyes) -->
-      <!-- Ocellus 1 -->
-      <g transform="translate(142, 144) scale(0.68)">
-        <ellipse cx="0" cy="0" rx="14" ry="17" fill="url(#ocellusGrad)"/>
-        <ellipse cx="0" cy="1" rx="8" ry="10" fill="#041226"/>
-        <circle cx="0" cy="-1" r="5" fill="#00cec9"/>
-        <circle cx="0" cy="-2" r="2.5" fill="#ffd166"/>
+      <!-- Realistic Ocelli (Chandrakas) with Concentric Eye Rings -->
+      <!-- Ocellus 1: Far Outer Top -->
+      <g transform="translate(144, 146) scale(0.72)">
+        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#rpOcellusOuter)"/>
+        <ellipse cx="0" cy="1" rx="9" ry="11" fill="#031024"/>
+        <circle cx="0" cy="-1" r="5.5" fill="#00cec9"/>
+        <circle cx="0" cy="-2" r="2.8" fill="#ffd166"/>
+        <path d="M-12 0 Q0 -6 12 0 M-10 6 Q0 12 10 6" stroke="#d35400" stroke-width="0.8" fill="none" opacity="0.7"/>
       </g>
-      <!-- Ocellus 2 -->
-      <g transform="translate(122, 150) scale(0.62)">
-        <ellipse cx="0" cy="0" rx="14" ry="17" fill="url(#ocellusGrad)"/>
-        <ellipse cx="0" cy="1" rx="8" ry="10" fill="#041226"/>
-        <circle cx="0" cy="-1" r="5" fill="#00cec9"/>
-        <circle cx="0" cy="-2" r="2.5" fill="#ffd166"/>
+
+      <!-- Ocellus 2: Central Flowing -->
+      <g transform="translate(124, 152) scale(0.66)">
+        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#rpOcellusOuter)"/>
+        <ellipse cx="0" cy="1" rx="9" ry="11" fill="#031024"/>
+        <circle cx="0" cy="-1" r="5.5" fill="#00cec9"/>
+        <circle cx="0" cy="-2" r="2.8" fill="#ffd166"/>
       </g>
-      <!-- Ocellus 3 -->
-      <g transform="translate(132, 126) scale(0.56)">
-        <ellipse cx="0" cy="0" rx="14" ry="17" fill="url(#ocellusGrad)"/>
-        <ellipse cx="0" cy="1" rx="8" ry="10" fill="#041226"/>
-        <circle cx="0" cy="-1" r="5" fill="#00cec9"/>
-        <circle cx="0" cy="-2" r="2.5" fill="#ffd166"/>
+
+      <!-- Ocellus 3: Mid Lateral -->
+      <g transform="translate(134, 128) scale(0.58)">
+        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#rpOcellusOuter)"/>
+        <ellipse cx="0" cy="1" rx="9" ry="11" fill="#031024"/>
+        <circle cx="0" cy="-1" r="5.5" fill="#00cec9"/>
+        <circle cx="0" cy="-2" r="2.8" fill="#ffd166"/>
       </g>
-      <!-- Ocellus 4 -->
-      <g transform="translate(108, 134) scale(0.52)">
-        <ellipse cx="0" cy="0" rx="14" ry="17" fill="url(#ocellusGrad)"/>
-        <ellipse cx="0" cy="1" rx="8" ry="10" fill="#041226"/>
-        <circle cx="0" cy="-1" r="5" fill="#00cec9"/>
-        <circle cx="0" cy="-2" r="2.5" fill="#ffd166"/>
+
+      <!-- Ocellus 4: Inner Lower -->
+      <g transform="translate(110, 136) scale(0.54)">
+        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#rpOcellusOuter)"/>
+        <ellipse cx="0" cy="1" rx="9" ry="11" fill="#031024"/>
+        <circle cx="0" cy="-1" r="5.5" fill="#00cec9"/>
+        <circle cx="0" cy="-2" r="2.8" fill="#ffd166"/>
       </g>
     </g>
 
-    <!-- PEACOCK TORSO / MAIN BODY -->
-    <g class="peacock-body">
-      <!-- Breast & Torso -->
-      <path d="M62 72 C 60 88, 68 106, 82 106 C 96 106, 98 88, 92 76 C 88 68, 76 66, 68 68 Z" fill="url(#pBodyGrad)"/>
+    <!-- VOLUMETRIC BODY & SCAPULAR BACK -->
+    <g class="peacock-body-group">
+      <!-- Breast & Abdomen -->
+      <path d="M62 70 C 60 88, 68 106, 82 106 C 96 106, 98 88, 92 74 C 88 66, 76 64, 68 66 Z" fill="url(#rpBodyGrad)"/>
+      <path d="M62 70 C 60 88, 68 106, 82 106 C 96 106, 98 88, 92 74 C 88 66, 76 64, 68 66 Z" fill="url(#rpPlumagePattern)" opacity="0.45"/>
       
-      <!-- Breast Feather Plumage Texture -->
+      <!-- Breast Scale Striations -->
       <path d="M68 76 Q 74 84 80 76 M72 82 Q 78 90 84 82 M66 85 Q 74 94 82 86 M72 92 Q 78 98 84 92" 
-            stroke="#00cec9" stroke-width="1.2" fill="none" opacity="0.6"/>
+            stroke="#00cec9" stroke-width="1.2" fill="none" opacity="0.7"/>
     </g>
 
-    <!-- FOLDED WING (Visible when perched) -->
-    <g class="wing-folded">
-      <path d="M72 74 C 70 82, 74 96, 86 102 C 94 98, 98 88, 94 76 C 90 68, 80 68, 72 74 Z" fill="url(#pWingCovert)"/>
-      <!-- Scapular feather barbs -->
-      <path d="M76 78 C 82 86, 92 88, 92 82 M78 84 C 84 92, 94 92, 90 88 M80 90 C 86 98, 92 98, 90 94" 
-            stroke="#ffd166" stroke-width="1.3" fill="none" opacity="0.8"/>
+    <!-- FOLDED WING COVERTS (Visible when perched on cards) -->
+    <g class="wing-folded-layer">
+      <!-- Scapulars & Greater Coverts -->
+      <path d="M72 72 C 70 82, 74 96, 86 102 C 94 98, 98 88, 94 74 C 90 66, 80 66, 72 72 Z" fill="url(#rpCovertsGrad)"/>
+      <!-- Detailed Rachis & Feather Strands -->
+      <path d="M76 76 C 82 84, 92 86, 92 80 M78 82 C 84 90, 94 90, 90 86 M80 88 C 86 96, 92 96, 90 92" 
+            stroke="#ffd166" stroke-width="1.3" fill="none" opacity="0.85"/>
+      <path d="M74 74 L88 88 M78 78 L92 92 M82 82 L90 98" stroke="rgba(255, 209, 102, 0.4)" stroke-width="0.9"/>
     </g>
 
-    <!-- FLIGHT WINGS (Visible during flight) -->
-    <!-- Left Wing (Upper/Background Flight Stroke) -->
-    <g class="wing-flight-left">
-      <path d="M70 72 C 55 50, 30 32, 16 38 C 14 44, 22 56, 38 68 C 48 76, 62 76, 70 72 Z" fill="url(#pFlightFeather)"/>
-      <path d="M68 72 C 54 54, 34 42, 22 46 C 24 54, 38 66, 52 74 Z" fill="#00cec9" opacity="0.7"/>
-      <!-- Wing feather tips -->
-      <path d="M16 38 L24 48 M22 42 L32 54 M30 48 L42 62 M40 56 L54 68" stroke="#ffd166" stroke-width="1.4" opacity="0.85"/>
+    <!-- ARTICULATED FLIGHT WINGS (Visible during flight & takeoff) -->
+    <!-- Left Wing (Background Stroke) -->
+    <g class="wing-flight-primary-left">
+      <path d="M70 70 C 54 48, 28 30, 14 36 C 12 42, 20 54, 36 66 C 46 74, 60 74, 70 70 Z" fill="url(#rpFlightFeathers)"/>
+      <path d="M68 70 C 53 52, 32 40, 20 44 C 22 52, 36 64, 50 72 Z" fill="#00cec9" opacity="0.75"/>
+      <!-- Flight Feathers Rachis -->
+      <path d="M14 36 L22 46 M20 40 L30 52 M28 46 L40 60 M38 54 L52 66" stroke="#ffd166" stroke-width="1.5" opacity="0.9"/>
     </g>
 
-    <!-- Right Wing (Foreground Flight Stroke) -->
-    <g class="wing-flight-right">
-      <path d="M78 72 C 95 48, 122 30, 138 34 C 140 40, 132 54, 114 68 C 102 76, 88 76, 78 72 Z" fill="url(#pFlightFeather)"/>
-      <path d="M80 72 C 96 52, 118 40, 130 44 C 128 52, 112 66, 96 74 Z" fill="#05c46b" opacity="0.7"/>
-      <path d="M80 72 C 92 60, 108 52, 116 56 C 114 62, 102 72, 90 76 Z" fill="#ffd166" opacity="0.6"/>
-      <!-- Wing feather tips -->
-      <path d="M138 34 L128 46 M132 40 L120 52 M122 48 L110 60 M112 56 L98 68" stroke="#ffd166" stroke-width="1.4" opacity="0.85"/>
+    <!-- Right Wing (Foreground Stroke with Full Feather Span) -->
+    <g class="wing-flight-primary-right">
+      <path d="M78 70 C 96 46, 124 28, 140 32 C 142 38, 134 52, 116 66 C 104 74, 90 74, 78 70 Z" fill="url(#rpFlightFeathers)"/>
+      <path d="M80 70 C 97 50, 120 38, 132 42 C 130 50, 114 64, 98 72 Z" fill="#05c46b" opacity="0.75"/>
+      <path d="M80 70 C 93 58, 110 50, 118 54 C 116 60, 104 70, 92 74 Z" fill="#ffd166" opacity="0.65"/>
+      <!-- Flight Feathers Rachis -->
+      <path d="M140 32 L130 44 M134 38 L122 50 M124 46 L112 58 M114 54 L100 66" stroke="#ffd166" stroke-width="1.5" opacity="0.9"/>
     </g>
 
-    <!-- PEACOCK NECK, HEAD & CROWN CREST -->
-    <g class="peacock-head-group">
-      <!-- Elegant Royal Blue S-Curve Neck -->
-      <path d="M68 72 C 65 62, 60 52, 64 42 C 66 36, 72 32, 70 26 C 68 22, 64 22, 60 25 C 56 28, 54 36, 56 46 C 58 56, 62 66, 68 72 Z" fill="url(#pNeckGrad)"/>
+    <!-- SLENDER ROYAL BLUE S-NECK, HEAD & CROWN CREST -->
+    <g class="peacock-neck-head">
+      <!-- S-Curved Neck with Volumetric 3D Shading -->
+      <path d="M68 70 C 65 60, 59 50, 64 40 C 66 34, 72 30, 70 24 C 68 20, 64 20, 60 23 C 55 26, 53 34, 55 44 C 57 54, 61 64, 68 70 Z" fill="url(#rpNeckGrad)"/>
 
-      <!-- Head & Beak -->
-      <!-- Beak -->
-      <path d="M57 24 L46 27 C 50 30, 56 31, 58 30 Z" fill="#d49438" stroke="#803808" stroke-width="0.8"/>
+      <!-- Facial Skin & Beak -->
+      <path d="M57 22 L45 25 C 49 28, 55 29, 58 28 Z" fill="#d49438" stroke="#70360a" stroke-width="0.9"/>
+      <!-- White Cheek / Orbital Patch -->
+      <path d="M57 23 C 58 20, 64 21, 64 25 C 64 28, 59 27, 57 23 Z" fill="#ffffff" opacity="0.92"/>
       
-      <!-- Eye Area -->
-      <ellipse cx="61" cy="26" rx="4" ry="4.5" fill="#ffffff" opacity="0.95"/>
-      <ellipse cx="60.5" cy="26" rx="2.5" ry="3" fill="url(#pEyeGlow)"/>
-      <circle cx="60.2" cy="25.5" r="1.4" fill="#000000"/>
-      <circle cx="59.6" cy="24.8" r="0.6" fill="#ffffff"/> <!-- Specular Catchlight -->
+      <!-- Realistic Eye: Amber Iris + Specular Reflection -->
+      <ellipse cx="61" cy="24" rx="3.8" ry="4.2" fill="#1e272e"/>
+      <ellipse cx="60.6" cy="24" rx="2.4" ry="2.8" fill="url(#rpEyeGrad)"/>
+      <circle cx="60.3" cy="23.6" r="1.3" fill="#000000"/>
+      <circle cx="59.7" cy="22.9" r="0.65" fill="#ffffff"/> <!-- Primary Specular Glint -->
+      <circle cx="61.2" cy="24.8" r="0.35" fill="#ffffff" opacity="0.7"/> <!-- Secondary Bounce Light -->
 
-      <!-- Head Crest / Kalangi (Crown) -->
-      <g class="peacock-crest">
-        <!-- Shafts -->
-        <path d="M64 22 Q 62 14 56 8" stroke="#ffd166" stroke-width="1.1" fill="none"/>
-        <path d="M65 21 Q 65 12 62 6" stroke="#ffd166" stroke-width="1.1" fill="none"/>
-        <path d="M66 21 Q 68 12 68 6" stroke="#ffd166" stroke-width="1.1" fill="none"/>
-        <path d="M67 22 Q 72 13 75 8" stroke="#ffd166" stroke-width="1.1" fill="none"/>
-        <path d="M67 23 Q 75 16 80 12" stroke="#ffd166" stroke-width="1.1" fill="none"/>
+      <!-- Ornate Crown Crest / Kalangi (Aigrette) -->
+      <g class="peacock-crest-group">
+        <!-- Wire Shafts -->
+        <path d="M64 20 Q 61 12 55 6" stroke="#ffd166" stroke-width="1.1" fill="none"/>
+        <path d="M65 19 Q 64 10 61 4" stroke="#ffd166" stroke-width="1.1" fill="none"/>
+        <path d="M66 19 Q 67 10 67 4" stroke="#ffd166" stroke-width="1.1" fill="none"/>
+        <path d="M67 20 Q 71 11 74 6" stroke="#ffd166" stroke-width="1.1" fill="none"/>
+        <path d="M67 21 Q 74 14 79 10" stroke="#ffd166" stroke-width="1.1" fill="none"/>
 
-        <!-- Fan plume tips -->
-        <ellipse cx="56" cy="7" rx="2.5" ry="3" fill="#00cec9" stroke="#ffd166" stroke-width="0.7"/>
-        <ellipse cx="62" cy="5" rx="2.5" ry="3" fill="#0984e3" stroke="#ffd166" stroke-width="0.7"/>
-        <ellipse cx="68" cy="5" rx="2.5" ry="3" fill="#00cec9" stroke="#ffd166" stroke-width="0.7"/>
-        <ellipse cx="75" cy="7" rx="2.5" ry="3" fill="#0984e3" stroke="#ffd166" stroke-width="0.7"/>
-        <ellipse cx="80" cy="11" rx="2.5" ry="3" fill="#00cec9" stroke="#ffd166" stroke-width="0.7"/>
+        <!-- Fan Plume Tips with Glowing Emerald & Turquoise Eyes -->
+        <ellipse cx="55" cy="5" rx="2.4" ry="3.2" fill="#00cec9" stroke="#ffd166" stroke-width="0.8"/>
+        <ellipse cx="61" cy="3" rx="2.4" ry="3.2" fill="#0984e3" stroke="#ffd166" stroke-width="0.8"/>
+        <ellipse cx="67" cy="3" rx="2.4" ry="3.2" fill="#00cec9" stroke="#ffd166" stroke-width="0.8"/>
+        <ellipse cx="74" cy="5" rx="2.4" ry="3.2" fill="#0984e3" stroke="#ffd166" stroke-width="0.8"/>
+        <ellipse cx="79" cy="9" rx="2.4" ry="3.2" fill="#00cec9" stroke="#ffd166" stroke-width="0.8"/>
       </g>
     </g>
   </svg>
   `;
 
-  class FlyingPeacock {
+  class RealisticTravellingPeacock {
     constructor() {
       this.root = null;
       this.innerWrap = null;
+      this.groundShadow = null;
+      this.clickAura = null;
       this.tooltip = null;
-      this.clickRing = null;
 
-      // Current physics state
-      this.currX = 0;
-      this.currY = 0;
-      this.targetX = 0;
-      this.targetY = 0;
-      this.currAngle = 0;
-      this.currFacing = 1; // 1 = right, -1 = left
-      this.state = 'perched'; // 'perched' | 'flying' | 'landing'
+      // Document coordinates (where peacock actually lives in page space)
+      this.docX = 0;
+      this.docY = 0;
+      this.targetDocX = 0;
+      this.targetDocY = 0;
+      this.angle = 0;
+      this.facing = 1; // 1 = right, -1 = left
 
-      // Scroll state
-      this.lastScrollY = window.scrollY || window.pageYOffset;
-      this.scrollProgress = 0;
-      this.isScrolling = false;
+      // State machine: 'perched' | 'takeoff' | 'flying' | 'landing'
+      this.state = 'perched';
+      this.activeLandmarkIndex = 0;
+
+      // Scroll & Physics Tracking
+      this.smoothedScrollY = window.scrollY || 0;
+      this.lastScrollY = window.scrollY || 0;
+      this.scrollVelocity = 0;
       this.scrollStopTimer = null;
-      this.lastSparkleTime = 0;
+      this.lastEmberTime = 0;
 
-      // Waypoints configuration
-      this.waypoints = [];
+      // Slow Device / Performance monitoring
+      this.isLowPerformance = false;
+      this.frameCount = 0;
+      this.lastFpsCheck = performance.now();
+
+      // Landmarks spanning the entire homepage
+      this.landmarks = [];
 
       this.init();
     }
 
     init() {
-      // Check reduced motion preference
+      // Reduced motion check
       this.reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       this.createDOM();
-      this.updateWaypoints();
+      this.updateLandmarks();
       this.bindEvents();
 
-      // Initial position at Waypoint 0 (Hero)
-      if (this.waypoints.length > 0) {
-        const wp0 = this.waypoints[0];
-        this.currX = this.targetX = wp0.screenX;
-        this.currY = this.targetY = wp0.screenY;
-        this.currFacing = wp0.facing || 1;
+      // Initial placement at Landmark 0 (Hero)
+      if (this.landmarks.length > 0) {
+        const lm0 = this.landmarks[0];
+        this.docX = this.targetDocX = lm0.docX;
+        this.docY = this.targetDocY = lm0.docY;
+        this.facing = lm0.facing || 1;
         this.renderPosition();
       }
 
@@ -241,157 +287,188 @@
       container.setAttribute('tabindex', '0');
 
       container.innerHTML = `
+        <div class="peacock-ground-shadow"></div>
         <div class="peacock-ai-tooltip">
           <span>🦚</span>
           <span>సన్నివేశం మేధ • Sannivesham AI</span>
           <span>➜</span>
         </div>
         <div class="peacock-inner-wrap">
-          ${PEACOCK_SVG}
+          ${REALISTIC_PEACOCK_SVG}
         </div>
-        <div class="peacock-click-ring"></div>
+        <div class="peacock-click-aura"></div>
       `;
 
+      // Mount into document body so it physically exists in the webpage space
       document.body.appendChild(container);
 
       this.root = container;
       this.innerWrap = container.querySelector('.peacock-inner-wrap');
+      this.groundShadow = container.querySelector('.peacock-ground-shadow');
+      this.clickAura = container.querySelector('.peacock-click-aura');
       this.tooltip = container.querySelector('.peacock-ai-tooltip');
-      this.clickRing = container.querySelector('.peacock-click-ring');
     }
 
     /**
-     * Finds landmarks on the Sannivesham website and establishes waypoints
+     * Map real physical surfaces on the Sannivesham homepage
      */
-    updateWaypoints() {
-      const w = window.innerWidth;
-      const isMobile = w < 768;
+    updateLandmarks() {
+      const isMobile = window.innerWidth < 768;
+      const scrollY = window.scrollY || window.pageYOffset;
 
-      // Target landmarks in narrative order
-      // 1. Hero: Top Brand Logo wrap
-      const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand') || document.querySelector('#home');
-      // 2. Intro: Cultural Introduction section
+      // 1. Hero: Logo Halo / Diya mount
+      const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
+      // 2. Culture: Intro Box top ledge
       const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
-      // 3. Granthalayam / Stories: Library Card
-      const libraryElem = document.querySelector('a[href="library/"]') || document.querySelector('#storiesCardImg');
-      // 4. Temples / Festivals Card
+      // 3. Literature: Granthalayam / Library Card top border
+      const libraryElem = document.querySelector('a[href="library/"]');
+      // 4. Temples / Festivals: Temples Card top border
       const templeElem = document.querySelector('a[href="temples/"]') || document.querySelector('a[href="festivals/"]');
-      // 5. Wisdom: Shloka section / Daily verse
-      const shlokaElem = document.querySelector('.shloka-section') || document.querySelector('#shlokaFlipCard') || document.querySelector('#about');
-      // 6. Footer / Lower section
+      // 5. Daily Wisdom: Shloka 3D card top ledge
+      const shlokaElem = document.querySelector('.shloka-section') || document.querySelector('#shlokaFlipCard');
+      // 6. Footer Realm: Home Footer top golden quote frame
       const footerElem = document.querySelector('.home-footer') || document.querySelector('#contact');
 
-      const landmarks = [
-        { elem: heroElem, offsetX: isMobile ? 38 : 56, offsetY: isMobile ? -24 : -32, facing: -1, label: 'Hero' },
-        { elem: introElem, offsetX: isMobile ? 20 : 45, offsetY: isMobile ? -15 : -25, facing: 1, label: 'Culture' },
-        { elem: libraryElem, offsetX: isMobile ? 15 : 25, offsetY: isMobile ? -20 : -30, facing: -1, label: 'Library' },
-        { elem: templeElem, offsetX: isMobile ? -10 : -25, offsetY: isMobile ? -20 : -30, facing: 1, label: 'Temples' },
-        { elem: shlokaElem, offsetX: isMobile ? 25 : 55, offsetY: isMobile ? -18 : -26, facing: -1, label: 'Wisdom' },
-        { elem: footerElem, offsetX: isMobile ? 0 : 30, offsetY: isMobile ? -20 : -35, facing: 1, label: 'Footer' }
+      const config = [
+        {
+          elem: heroElem,
+          label: 'Hero',
+          offsetX: isMobile ? 32 : 55,
+          offsetY: isMobile ? -58 : -72,
+          facing: -1
+        },
+        {
+          elem: introElem,
+          label: 'Culture',
+          offsetX: isMobile ? 35 : 85,
+          offsetY: isMobile ? -56 : -70,
+          facing: 1
+        },
+        {
+          elem: libraryElem,
+          label: 'Library',
+          offsetX: isMobile ? 12 : 28,
+          offsetY: isMobile ? -55 : -70,
+          facing: -1
+        },
+        {
+          elem: templeElem,
+          label: 'Temples',
+          offsetX: isMobile ? -14 : -30,
+          offsetY: isMobile ? -55 : -70,
+          facing: 1
+        },
+        {
+          elem: shlokaElem,
+          label: 'Wisdom',
+          offsetX: isMobile ? 30 : 65,
+          offsetY: isMobile ? -55 : -72,
+          facing: -1
+        },
+        {
+          elem: footerElem,
+          label: 'Footer',
+          offsetX: isMobile ? 0 : 40,
+          offsetY: isMobile ? -50 : -68,
+          facing: 1
+        }
       ];
 
-      this.waypoints = landmarks.map((lm, idx) => {
-        let pageX = w * 0.5;
-        let pageY = idx * 600;
+      this.landmarks = config.map((c, i) => {
+        let docX = window.innerWidth * 0.5;
+        let docY = i * 700;
 
-        if (lm.elem) {
-          const rect = lm.elem.getBoundingClientRect();
-          const docScroll = window.scrollY || window.pageYOffset;
-          pageX = rect.left + rect.width * 0.5 + lm.offsetX;
-          pageY = rect.top + docScroll + lm.offsetY;
+        if (c.elem) {
+          const rect = c.elem.getBoundingClientRect();
+          docX = rect.left + window.scrollX + rect.width * 0.5 + c.offsetX;
+          docY = rect.top + scrollY + c.offsetY;
         }
 
-        const halfSize = isMobile ? 52 : 70;
+        // Trigger scroll position: when this landmark enters mid-viewport
+        const triggerScroll = Math.max(0, docY - window.innerHeight * 0.42);
+
         return {
-          idx,
-          label: lm.label,
-          pageX,
-          pageY,
-          facing: lm.facing,
-          // Will be dynamically projected to viewport coords each frame
-          screenX: pageX - halfSize,
-          screenY: pageY - (window.scrollY || 0) - halfSize
+          index: i,
+          label: c.label,
+          docX,
+          docY,
+          triggerScroll,
+          facing: c.facing
         };
       });
+
+      // Sort landmarks by docY to ensure monotonic scroll progression
+      this.landmarks.sort((a, b) => a.docY - b.docY);
     }
 
     bindEvents() {
-      // 1. Click Interaction -> ALWAYS opens Sannivesham AI
-      const navigateToAI = (e) => {
-        if (e) e.preventDefault();
-
-        // Trigger click burst animation
-        if (this.clickRing) {
-          this.clickRing.classList.remove('active');
-          void this.clickRing.offsetWidth; // Reflow
-          this.clickRing.classList.add('active');
+      // 1. Single interactive destination: Sannivesham AI
+      const handlePeacockClick = (e) => {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
         }
 
-        // Animate peacock flourish
+        // Click aura burst
+        if (this.clickAura) {
+          this.clickAura.classList.remove('active');
+          void this.clickAura.offsetWidth; // Force reflow
+          this.clickAura.classList.add('active');
+        }
+
+        // Proud peacock flourish
         if (this.innerWrap) {
-          this.innerWrap.style.transform = 'scale(1.28) rotate(-8deg)';
+          this.innerWrap.style.transform = `scale(1.24) scaleX(${this.facing}) rotate(-6deg)`;
         }
 
-        // Emit golden stardust burst
-        for (let i = 0; i < 18; i++) {
-          this.emitSparkle(this.currX + 60, this.currY + 60, true);
+        // Stardust burst
+        for (let i = 0; i < 20; i++) {
+          this.emitEmber(this.docX + 60, this.docY + 60, true);
         }
 
-        // Smooth transition to AI page
+        // Seamless navigation to Sannivesham AI
         setTimeout(() => {
           window.location.href = AI_DESTINATION;
         }, 320);
       };
 
-      this.root.addEventListener('click', navigateToAI);
+      this.root.addEventListener('click', handlePeacockClick);
       this.root.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          navigateToAI(e);
-        }
+        if (e.key === 'Enter' || e.key === ' ') handlePeacockClick(e);
       });
 
-      // 2. Scroll tracking
+      // 2. Scroll listener
       window.addEventListener('scroll', () => {
         this.onScroll();
       }, { passive: true });
 
-      // 3. Resize handling (recalculate landmarks)
+      // 3. Resize listener (re-compute real physical card surfaces)
       window.addEventListener('resize', () => {
-        this.updateWaypoints();
+        this.updateLandmarks();
       });
 
-      // Periodic check in case images loaded and shifted layout
-      setTimeout(() => this.updateWaypoints(), 1000);
-      setTimeout(() => this.updateWaypoints(), 3000);
+      // Delayed updates to account for late font/image rendering
+      setTimeout(() => this.updateLandmarks(), 1000);
+      setTimeout(() => this.updateLandmarks(), 3000);
     }
 
     onScroll() {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      this.scrollProgress = docHeight > 0 ? Math.min(Math.max(scrollY / docHeight, 0), 1) : 0;
+      const currentScrollY = window.scrollY || window.pageYOffset;
+      this.scrollVelocity = Math.abs(currentScrollY - this.lastScrollY);
+      this.lastScrollY = currentScrollY;
 
-      this.isScrolling = true;
-
-      // If scrolling resumes, transition into flight
-      if (this.state === 'perched') {
-        this.setState('flying');
-      }
-
-      // Clear scroll stop timer
+      // Cancel resting timer
       if (this.scrollStopTimer) clearTimeout(this.scrollStopTimer);
 
-      // Settle/land when user stops scrolling
+      // When user stops scrolling, settle smoothly onto current landmark/surface
       this.scrollStopTimer = setTimeout(() => {
-        this.isScrolling = false;
-        this.setState('landing');
-        setTimeout(() => {
-          if (!this.isScrolling) {
+        if (this.state === 'flying' || this.state === 'takeoff') {
+          this.setState('landing');
+          setTimeout(() => {
             this.setState('perched');
-          }
-        }, 260);
-      }, 240);
-
-      this.lastScrollY = scrollY;
+          }, 320);
+        }
+      }, 250);
     }
 
     setState(newState) {
@@ -401,168 +478,205 @@
     }
 
     /**
-     * Evaluates continuous Bézier spline trajectory across waypoints
+     * Compute current flight trajectory through the page based on scroll progress
      */
-    evaluatePath(t) {
-      const n = this.waypoints.length;
-      if (n === 0) return { x: 100, y: 100, facing: 1, angle: 0 };
+    evaluateTrajectory(currentScrollY) {
+      const n = this.landmarks.length;
+      if (n === 0) return { docX: 100, docY: 100, facing: 1, angle: 0, state: 'perched' };
       if (n === 1) {
-        const wp = this.waypoints[0];
-        return { x: wp.pageX, y: wp.pageY, facing: wp.facing, angle: 0 };
+        const lm = this.landmarks[0];
+        return { docX: lm.docX, docY: lm.docY, facing: lm.facing, angle: 0, state: 'perched' };
       }
 
-      // Map global progress t in [0, 1] across (n - 1) segments
-      const scaledT = t * (n - 1);
-      const segIndex = Math.min(Math.floor(scaledT), n - 2);
-      const localU = scaledT - segIndex;
+      // Find current active segment between landmarks
+      let seg = 0;
+      for (let i = 0; i < n - 1; i++) {
+        if (currentScrollY >= this.landmarks[i].triggerScroll) {
+          seg = i;
+        }
+      }
 
-      const p0 = this.waypoints[segIndex];
-      const p1 = this.waypoints[segIndex + 1];
+      const p0 = this.landmarks[seg];
+      const p1 = this.landmarks[seg + 1];
 
-      // Dynamic swoop curve: arching Bézier control points
-      const dx = p1.pageX - p0.pageX;
-      const dy = p1.pageY - p0.pageY;
+      const scrollSpan = Math.max(p1.triggerScroll - p0.triggerScroll, 150);
+      const rawU = (currentScrollY - p0.triggerScroll) / scrollSpan;
+      const u = Math.max(0, Math.min(rawU, 1));
 
-      // Swoop arc: lateral and upward billowing flight curve
-      const arcSweep = (segIndex % 2 === 0 ? 1 : -1) * Math.min(Math.abs(dx) * 0.4 + 90, 260);
-      const cp1X = p0.pageX + dx * 0.25 + arcSweep;
-      const cp1Y = p0.pageY + dy * 0.15 - 60; // Upward liftoff impulse
+      // Determine state along segment
+      let calculatedState = 'flying';
+      if (u <= 0.05) {
+        calculatedState = 'perched';
+      } else if (u < 0.16) {
+        calculatedState = 'takeoff';
+      } else if (u > 0.86 && u < 0.96) {
+        calculatedState = 'landing';
+      } else if (u >= 0.96) {
+        calculatedState = 'perched';
+      }
 
-      const cp2X = p0.pageX + dx * 0.75 - arcSweep * 0.3;
-      const cp2Y = p0.pageY + dy * 0.85;
+      // Smooth Bézier Arc through document space
+      const dx = p1.docX - p0.docX;
+      const dy = p1.docY - p0.docY;
 
-      // Cubic Bézier calculation
-      const u = localU;
+      // Lateral and vertical flight curve
+      const lateralSwoop = (seg % 2 === 0 ? 1 : -1) * Math.min(Math.abs(dx) * 0.45 + 110, 280);
+      const cp1X = p0.docX + dx * 0.22 + lateralSwoop;
+      const cp1Y = p0.docY + dy * 0.12 - 70; // Liftoff upwards
+
+      const cp2X = p0.docX + dx * 0.78 - lateralSwoop * 0.25;
+      const cp2Y = p0.docY + dy * 0.88;
+
       const u1 = 1 - u;
 
-      const pageX = u1 * u1 * u1 * p0.pageX +
-                    3 * u1 * u1 * u * cp1X +
-                    3 * u1 * u * u * cp2X +
-                    u * u * u * p1.pageX;
+      const docX = u1 * u1 * u1 * p0.docX +
+                   3 * u1 * u1 * u * cp1X +
+                   3 * u1 * u * u * cp2X +
+                   u * u * u * p1.docX;
 
-      const pageY = u1 * u1 * u1 * p0.pageY +
-                    3 * u1 * u1 * u * cp1Y +
-                    3 * u1 * u * u * cp2Y +
-                    u * u * u * p1.pageY;
+      const docY = u1 * u1 * u1 * p0.docY +
+                   3 * u1 * u1 * u * cp1Y +
+                   3 * u1 * u * u * cp2Y +
+                   u * u * u * p1.docY;
 
-      // Velocity tangent for banking & angle
+      // Tangent direction for banking
       const du = 0.02;
       const nextU = Math.min(u + du, 1);
       const nu1 = 1 - nextU;
-      const nextX = nu1 * nu1 * nu1 * p0.pageX + 3 * nu1 * nu1 * nextU * cp1X + 3 * nu1 * nextU * nextU * cp2X + nextU * nextU * nextU * p1.pageX;
-      const nextY = nu1 * nu1 * nu1 * p0.pageY + 3 * nu1 * nu1 * nextU * cp1Y + 3 * nu1 * nextU * nextU * cp2Y + nextU * nextU * nextU * p1.pageY;
+      const nextX = nu1 * nu1 * nu1 * p0.docX + 3 * nu1 * nu1 * nextU * cp1X + 3 * nu1 * nextU * nextU * cp2X + nextU * nextU * nextU * p1.docX;
+      const nextY = nu1 * nu1 * nu1 * p0.docY + 3 * nu1 * nu1 * nextU * cp1Y + 3 * nu1 * nextU * nextU * cp2Y + nextU * nextU * nextU * p1.docY;
 
-      const vx = nextX - pageX;
-      const vy = nextY - pageY;
+      const vx = nextX - docX;
+      const vy = nextY - docY;
 
-      // Facing direction (flip SVG horizontally when flying left or right)
       let facing = p0.facing;
       if (Math.abs(vx) > 1.2) {
         facing = vx >= 0 ? 1 : -1;
+      } else if (u > 0.8) {
+        facing = p1.facing;
       }
 
-      // Banking angle (subtle aerodynamic tilt)
       let angle = (Math.atan2(vy, vx) * 180) / Math.PI;
-      // Normalize angle for facing
       if (facing === -1) {
         angle = angle - 180;
         if (angle < -180) angle += 360;
       }
-      // Damp angle to prevent wild spinning
-      angle = Math.max(Math.min(angle * 0.45, 25), -25);
+      angle = Math.max(Math.min(angle * 0.45, 26), -26);
 
-      return { pageX, pageY, facing, angle };
+      // Settle angle to 0 when perched
+      if (calculatedState === 'perched') {
+        angle = 0;
+      }
+
+      return { docX, docY, facing, angle, state: calculatedState };
     }
 
-    emitSparkle(x, y, isBurst = false) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'peacock-sparkle';
+    emitEmber(x, y, isBurst = false) {
+      if (this.isLowPerformance) return;
 
-      const size = Math.random() * (isBurst ? 10 : 6) + 4;
-      sparkle.style.width = `${size}px`;
-      sparkle.style.height = `${size}px`;
-      sparkle.style.left = `${x}px`;
-      sparkle.style.top = `${y}px`;
+      const ember = document.createElement('div');
+      ember.className = 'peacock-particle-ember';
 
-      document.body.appendChild(sparkle);
+      const size = Math.random() * (isBurst ? 10 : 5) + 3.5;
+      ember.style.width = `${size}px`;
+      ember.style.height = `${size}px`;
+      ember.style.left = `${x}px`;
+      ember.style.top = `${y}px`;
 
-      // Animate drift & fade
+      document.body.appendChild(ember);
+
       const angle = Math.random() * Math.PI * 2;
-      const dist = isBurst ? Math.random() * 70 + 20 : Math.random() * 25 + 5;
+      const dist = isBurst ? Math.random() * 65 + 20 : Math.random() * 22 + 5;
       const tx = Math.cos(angle) * dist;
-      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 15);
+      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 12);
 
       requestAnimationFrame(() => {
-        sparkle.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`;
-        sparkle.style.opacity = '0';
+        ember.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`;
+        ember.style.opacity = '0';
       });
 
       setTimeout(() => {
-        if (sparkle.parentNode) sparkle.parentNode.removeChild(sparkle);
+        if (ember.parentNode) ember.parentNode.removeChild(ember);
       }, 650);
     }
 
+    checkPerformance(time) {
+      this.frameCount++;
+      if (time - this.lastFpsCheck > 1000) {
+        const fps = (this.frameCount * 1000) / (time - this.lastFpsCheck);
+        if (fps < 28 && !this.isLowPerformance) {
+          this.isLowPerformance = true;
+          document.body.classList.add('peacock-lightweight-mode');
+        }
+        this.frameCount = 0;
+        this.lastFpsCheck = time;
+      }
+    }
+
     tick(time) {
-      // If reduced motion is requested, keep parked at current waypoint
+      this.checkPerformance(time);
+
+      // Reduced motion: park gently at current landmark
       if (this.reducedMotion) {
-        const wp = this.waypoints[0] || { pageX: 200, pageY: 150, facing: 1 };
-        const screenY = wp.pageY - (window.scrollY || 0);
-        this.root.style.transform = `translate3d(${wp.pageX - 70}px, ${screenY - 70}px, 0)`;
+        const lm = this.landmarks[0] || { docX: 200, docY: 200, facing: 1 };
+        this.root.style.transform = `translate3d(${lm.docX - 70}px, ${lm.docY - 70}px, 0)`;
         requestAnimationFrame(this.tick.bind(this));
         return;
       }
 
-      // Calculate path coords based on scroll progress
-      const pathPoint = this.evaluatePath(this.scrollProgress);
-      const scrollY = window.scrollY || window.pageYOffset;
+      const currentScrollY = window.scrollY || window.pageYOffset;
+      // Smooth exponential scroll tracker
+      this.smoothedScrollY += (currentScrollY - this.smoothedScrollY) * 0.14;
+
+      const trajectory = this.evaluateTrajectory(this.smoothedScrollY);
+
       const isMobile = window.innerWidth < 768;
-      const halfSize = isMobile ? 52 : 70;
+      const halfSize = isMobile ? 49 : 70;
 
-      // Convert page coordinates to fixed viewport coordinates
-      this.targetX = pathPoint.pageX - halfSize;
-      this.targetY = pathPoint.pageY - scrollY - halfSize;
+      this.targetDocX = trajectory.docX - halfSize;
+      this.targetDocY = trajectory.docY - halfSize;
 
-      // Keep comfortably inside viewport boundaries
-      const maxX = window.innerWidth - (halfSize * 2 - 10);
-      const maxY = window.innerHeight - (halfSize * 2 - 10);
-      this.targetX = Math.max(10, Math.min(this.targetX, maxX));
-      this.targetY = Math.max(10, Math.min(this.targetY, maxY));
+      // Keep within page horizontal bounds safely
+      const maxX = document.documentElement.clientWidth - (halfSize * 2 - 8);
+      this.targetDocX = Math.max(8, Math.min(this.targetDocX, maxX));
 
-      // Smooth lerp for silky 60fps interpolation
-      const lerpFactor = this.isScrolling ? 0.14 : 0.09;
-      this.currX += (this.targetX - this.currX) * lerpFactor;
-      this.currY += (this.targetY - this.currY) * lerpFactor;
+      // Silky 60fps damping
+      const lerpFactor = this.state === 'flying' ? 0.16 : 0.10;
+      this.docX += (this.targetDocX - this.docX) * lerpFactor;
+      this.docY += (this.targetDocY - this.docY) * lerpFactor;
 
-      const targetAngle = this.isScrolling ? pathPoint.angle : 0;
-      this.currAngle += (targetAngle - this.currAngle) * 0.12;
-      this.currFacing = pathPoint.facing;
+      this.angle += (trajectory.angle - this.angle) * 0.14;
+      this.facing = trajectory.facing;
+
+      if (trajectory.state) {
+        this.setState(trajectory.state);
+      }
 
       this.renderPosition();
 
-      // Emit subtle golden stardust trail while flying
-      if (this.isScrolling && time - this.lastSparkleTime > 120) {
-        this.emitSparkle(this.currX + 70, this.currY + 70);
-        this.lastSparkleTime = time;
+      // Emit stardust trail while flying
+      if (this.state === 'flying' && time - this.lastEmberTime > 140) {
+        this.emitEmber(this.docX + halfSize, this.docY + halfSize);
+        this.lastEmberTime = time;
       }
 
       requestAnimationFrame(this.tick.bind(this));
     }
 
     renderPosition() {
-      // GPU accelerated translate3d
-      this.root.style.transform = `translate3d(${this.currX}px, ${this.currY}px, 0)`;
+      // Direct document-space 3D transform (travels with the page!)
+      this.root.style.transform = `translate3d(${this.docX}px, ${this.docY}px, 0)`;
 
-      // Apply facing flip and banking angle on inner wrapper
       if (this.innerWrap) {
-        this.innerWrap.style.transform = `scaleX(${this.currFacing}) rotate(${this.currAngle}deg)`;
+        this.innerWrap.style.transform = `scaleX(${this.facing}) rotate(${this.angle}deg)`;
       }
     }
   }
 
   // Initialize once DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new FlyingPeacock());
+    document.addEventListener('DOMContentLoaded', () => new RealisticTravellingPeacock());
   } else {
-    new FlyingPeacock();
+    new RealisticTravellingPeacock();
   }
 })();
