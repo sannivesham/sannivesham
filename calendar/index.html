@@ -60,8 +60,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <script src="../theme.js?v=20260904b"></script>
-  <link rel="stylesheet" href="../style.css?v=20260904b">
+  <script src="../theme.js?v=20260919f"></script>
+  <link rel="stylesheet" href="../style.css?v=20260919g">
 
   <style>
     .panchang-page {
@@ -551,28 +551,6 @@
       gap: 12px;
     }
 
-    @media (max-width: 600px) {
-      .day-modal-details-grid {
-        grid-template-columns: 1fr;
-      }
-      .cal-day-cell {
-        min-height: 82px;
-        padding: 5px;
-      }
-      .cell-tithi-main {
-        font-size: 0.85rem;
-      }
-      .cell-greg-date {
-        font-size: 0.72rem;
-      }
-      .cell-nakshatra {
-        display: none;
-      }
-      .cell-paksha-pill {
-        font-size: 0.58rem;
-        padding: 1px 4px;
-      }
-    }
     /* LOCATION PICKER */
     .location-bar {
       display: flex;
@@ -588,6 +566,11 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       max-width: 700px;
+    }
+    .location-bar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .location-detect-btn {
       background: linear-gradient(135deg, #d4af37, #ffd166);
@@ -640,6 +623,315 @@
       animation: loc-spin 0.7s linear infinite;
     }
     @keyframes loc-spin { to { transform: rotate(360deg); } }
+
+    .month-nav-btns-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .cell-greg-num {
+      display: none;
+    }
+    .cell-top-right {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .paksha-short {
+      display: none;
+    }
+    .paksha-full {
+      display: inline;
+    }
+
+    /* ============================================================
+       COMPREHENSIVE MOBILE RESPONSIVE TUNING (ZERO ALIGNMENT ISSUES)
+       ============================================================ */
+    @media (max-width: 650px) {
+      .panchang-page {
+        padding: 12px 6px 60px;
+      }
+      .panchang-hero {
+        margin: 12px auto 20px;
+      }
+      .panchang-hero h1 {
+        font-size: 1.6rem;
+      }
+      .panchang-hero p {
+        font-size: 0.85rem;
+        line-height: 1.45;
+        padding: 0 4px;
+      }
+
+      /* Location Bar Mobile */
+      .location-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 8px;
+        border-radius: 14px;
+        margin: 0 auto 18px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .location-bar-controls {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+      }
+      .location-detect-btn {
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+        padding: 8px 6px;
+        font-size: 0.78rem;
+        border-radius: 16px;
+      }
+      .location-city-select {
+        flex: 1.15;
+        min-width: 0;
+        padding: 8px 6px;
+        font-size: 0.78rem;
+        border-radius: 16px;
+      }
+      .location-pill {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.76rem;
+        padding: 5px 8px;
+        border-radius: 12px;
+      }
+
+      /* View Mode Tabs Mobile */
+      .cal-tabs-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        margin: 14px auto 20px;
+        width: 100%;
+        padding: 0;
+      }
+      .cal-tab-btn {
+        padding: 8px 3px;
+        font-size: 0.74rem;
+        border-radius: 14px;
+        justify-content: center;
+        text-align: center;
+        gap: 3px;
+      }
+      .cal-tab-btn .tab-icon {
+        font-size: 0.88rem;
+      }
+
+      /* Today's Panchang Mobile */
+      .panchang-card {
+        padding: 16px 10px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+      }
+      .panchang-header {
+        padding-bottom: 12px;
+        margin-bottom: 14px;
+      }
+      .panchang-year {
+        font-size: 1.12rem;
+      }
+      .panchang-today-date {
+        font-size: 0.88rem;
+        line-height: 1.4;
+      }
+      .panchang-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .panchang-item {
+        padding: 10px 12px;
+        border-radius: 10px;
+        gap: 4px;
+      }
+      .panchang-label {
+        font-size: 0.80rem;
+      }
+      .panchang-val {
+        font-size: 1.02rem;
+      }
+      .panchang-sub {
+        font-size: 0.75rem;
+      }
+
+      /* Monthly Calendar Container Mobile */
+      .calendar-month-box {
+        padding: 12px 5px 16px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+      }
+      .month-nav-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+      }
+      .month-nav-title {
+        width: 100%;
+        text-align: center;
+        font-size: 1.12rem;
+      }
+      .month-nav-sub {
+        font-size: 0.76rem;
+        margin-top: 2px;
+      }
+      .month-nav-btns-row {
+        display: grid;
+        grid-template-columns: 1fr 0.9fr 1fr;
+        gap: 5px;
+        width: 100%;
+      }
+      .month-nav-btn {
+        padding: 7px 4px;
+        font-size: 0.76rem;
+        text-align: center;
+        justify-content: center;
+        border-radius: 12px;
+        white-space: nowrap;
+      }
+
+      /* 7-Day Grid Header Mobile */
+      .cal-grid-header {
+        gap: 3px;
+        margin-bottom: 4px;
+      }
+      .cal-day-name {
+        padding: 5px 1px;
+        font-size: 0.74rem;
+        border-radius: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      /* 7-Day Grid Cells Mobile */
+      .cal-grid-days {
+        gap: 3px;
+      }
+      .cal-day-cell {
+        min-height: 64px;
+        max-height: 76px;
+        padding: 3px 2px;
+        border-radius: 7px;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+      .cell-top-bar {
+        width: 100%;
+        padding: 0 1px;
+        margin-bottom: 1px;
+      }
+      .cell-greg-num {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: #ffd166;
+        line-height: 1;
+      }
+      .cell-top-right {
+        gap: 2px;
+      }
+      .paksha-full {
+        display: none;
+      }
+      .paksha-short {
+        display: inline;
+        font-size: 0.52rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .cell-paksha-pill {
+        font-size: 0.52rem;
+        padding: 0 2px;
+        border-radius: 3px;
+        line-height: 1.1;
+      }
+      .cell-moon-icon {
+        font-size: 0.68rem;
+        line-height: 1;
+      }
+      .cell-tithi-main {
+        font-size: 0.65rem;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #fff;
+        margin: 1px 0;
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cell-fest-badge {
+        font-size: 0.54rem;
+        padding: 1px 2px;
+        border-radius: 3px;
+        margin: 0;
+        max-width: 98%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.1;
+      }
+      .cell-bottom-bar {
+        display: none !important;
+      }
+
+      /* Day Detail Modal Mobile */
+      .day-modal {
+        padding: 8px;
+      }
+      .day-modal-box {
+        padding: 18px 12px;
+        border-radius: 16px;
+        max-width: 100%;
+        max-height: 88vh;
+      }
+      .day-modal-title {
+        font-size: 1.12rem;
+      }
+      .day-modal-sub {
+        font-size: 0.82rem;
+        margin-bottom: 12px;
+      }
+      .day-modal-details-grid {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+      .day-modal-close {
+        top: 10px;
+        right: 12px;
+      }
+
+      /* Festivals List Mobile */
+      .festivals-list-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .fest-card {
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 12px;
+      }
+      .fest-card-badge {
+        font-size: 1.3rem;
+      }
+      .fest-card-info h4 {
+        font-size: 0.94rem;
+      }
+      .fest-card-info p {
+        font-size: 0.78rem;
+      }
+    }
   </style>
 </head>
 <body data-en-title="Panchangam & Calendar - Sannivesham">
@@ -710,45 +1002,47 @@
 
     <!-- LOCATION PICKER BAR -->
     <div class="location-bar">
-      <button id="autoDetectBtn" class="location-detect-btn" data-en="📍 Auto-detect Location">📍 స్వయంచాలక స్థానం</button>
-      <select id="citySelect" class="location-city-select">
-        <option value="">🏙️ నగరం ఎంచుకోండి</option>
-        <option value="17.3850,78.4867">హైదరాబాద్ | Hyderabad</option>
-        <option value="13.0827,80.2707">చెన్నై | Chennai</option>
-        <option value="12.9716,77.5946">బెంగళూరు | Bengaluru</option>
-        <option value="28.6139,77.2090">ఢిల్లీ | Delhi</option>
-        <option value="19.0760,72.8777">ముంబై | Mumbai</option>
-        <option value="22.5726,88.3639">కోల్‌కతా | Kolkata</option>
-        <option value="17.6868,83.2185">విశాఖపట్నం | Visakhapatnam</option>
-        <option value="16.5062,80.6480">విజయవాడ | Vijayawada</option>
-        <option value="14.4673,78.8242">కర్నూలు | Kurnool</option>
-        <option value="18.4386,79.1288">కరీంనగర్ | Karimnagar</option>
-        <option value="17.9784,79.5941">వరంగల్ | Warangal</option>
-        <option value="11.0168,76.9558">కోయంబత్తూరు | Coimbatore</option>
-        <option value="9.9252,78.1198">మధురై | Madurai</option>
-        <option value="23.0225,72.5714">అహ్మదాబాద్ | Ahmedabad</option>
-        <option value="18.5204,73.8567">పూణే | Pune</option>
-        <option value="26.8467,80.9462">లక్నో | Lucknow</option>
-        <option value="25.3176,82.9739">వారణాసి | Varanasi</option>
-        <option value="26.9124,75.7873">జైపూర్ | Jaipur</option>
-        <option value="23.2599,77.4126">భోపాల్ | Bhopal</option>
-        <option value="20.2961,85.8245">భువనేశ్వర్ | Bhubaneswar</option>
-        <option value="8.5241,76.9366">తిరువనంతపురం | Thiruvananthapuram</option>
-        <option value="30.7333,76.7794">చండీగఢ్ | Chandigarh</option>
-      </select>
+      <div class="location-bar-controls">
+        <button id="autoDetectBtn" class="location-detect-btn" data-en="📍 Auto-detect Location">📍 స్వయంచాలక స్థానం</button>
+        <select id="citySelect" class="location-city-select">
+          <option value="">🏙️ నగరం ఎంచుకోండి</option>
+          <option value="17.3850,78.4867">హైదరాబాద్ | Hyderabad</option>
+          <option value="13.0827,80.2707">చెన్నై | Chennai</option>
+          <option value="12.9716,77.5946">బెంగళూరు | Bengaluru</option>
+          <option value="28.6139,77.2090">ఢిల్లీ | Delhi</option>
+          <option value="19.0760,72.8777">ముంబై | Mumbai</option>
+          <option value="22.5726,88.3639">కోల్‌కతా | Kolkata</option>
+          <option value="17.6868,83.2185">విశాఖపట్నం | Visakhapatnam</option>
+          <option value="16.5062,80.6480">విజయవాడ | Vijayawada</option>
+          <option value="14.4673,78.8242">కర్నూలు | Kurnool</option>
+          <option value="18.4386,79.1288">కరీంనగర్ | Karimnagar</option>
+          <option value="17.9784,79.5941">వరంగల్ | Warangal</option>
+          <option value="11.0168,76.9558">కోయంబత్తూరు | Coimbatore</option>
+          <option value="9.9252,78.1198">మధురై | Madurai</option>
+          <option value="23.0225,72.5714">అహ్మదాబాద్ | Ahmedabad</option>
+          <option value="18.5204,73.8567">పూణే | Pune</option>
+          <option value="26.8467,80.9462">లక్నో | Lucknow</option>
+          <option value="25.3176,82.9739">వారణాసి | Varanasi</option>
+          <option value="26.9124,75.7873">జైపూర్ | Jaipur</option>
+          <option value="23.2599,77.4126">భోపాల్ | Bhopal</option>
+          <option value="20.2961,85.8245">భువనేశ్వర్ | Bhubaneswar</option>
+          <option value="8.5241,76.9366">తిరువనంతపురం | Thiruvananthapuram</option>
+          <option value="30.7333,76.7794">చండీగఢ్ | Chandigarh</option>
+        </select>
+      </div>
       <div class="location-pill" id="locationPill">📍 హైదరాబాద్ (డిఫాల్ట్)</div>
     </div>
 
     <!-- VIEW MODE SWITCHER TABS -->
     <div class="cal-tabs-container">
       <button id="tabToday" class="cal-tab-btn active" data-en="☀️ Today's Panchangam">
-        ☀️ నేటి పంచాంగం
+        <span class="tab-icon">☀️</span> <span class="tab-text">నేటి పంచాంగం</span>
       </button>
       <button id="tabMonth" class="cal-tab-btn" data-en="🗓️ Monthly Calendar">
-        🗓️ సంపూర్ణ మాస క్యాలెండర్
+        <span class="tab-icon">🗓️</span> <span class="tab-text">మాస క్యాలెండర్</span>
       </button>
       <button id="tabFestivals" class="cal-tab-btn" data-en="🎉 Monthly Festivals">
-        🎉 ఈ నెల పండుగలు
+        <span class="tab-icon">🎉</span> <span class="tab-text">ఈ నెల పండుగలు</span>
       </button>
     </div>
 
@@ -767,14 +1061,14 @@
     <!-- TAB 2: MONTHLY INTERACTIVE CALENDAR -->
     <section id="sectionMonth" class="calendar-month-box" style="display:none;">
       <div class="month-nav-bar">
-        <button id="prevMonthBtn" class="month-nav-btn" data-en="◀ Prev Month">◀ మునుపటి మాసం</button>
         <div class="month-nav-title" id="monthNavTitle">
           <span id="teluguMonthTitle">లోడ్ అవుతోంది...</span>
           <span class="month-nav-sub" id="gregDateRangeSub"></span>
         </div>
-        <div style="display:flex;gap:8px;">
+        <div class="month-nav-btns-row">
+          <button id="prevMonthBtn" class="month-nav-btn" data-en="◀ Prev Month">◀ మునుపటి</button>
           <button id="todayJumpBtn" class="month-nav-btn" data-en="Current Month">ఈ మాసం</button>
-          <button id="nextMonthBtn" class="month-nav-btn" data-en="Next Month ▶">తదుపరి మాసం ▶</button>
+          <button id="nextMonthBtn" class="month-nav-btn" data-en="Next Month ▶">తదుపరి ▶</button>
         </div>
       </div>
 
@@ -981,8 +1275,23 @@
           const fh = day.festivals.length>0 ? `<span class="cell-fest-badge" title="${isEn?day.festivals[0].titleEn:day.festivals[0].titleTe}">${day.festivals[0].badge}</span>` : "";
           const pp = day.isShukla?"shukla":"krishna";
           const pt = isEn?(day.isShukla?"Shukla":"Krishna"):(day.isShukla?"శుక్ల":"బహుళ");
+          const ptShort = isEn?(day.isShukla?"Sh":"Kr"):(day.isShukla?"శు":"బ");
           const mi = isPurnima?'<span class="cell-moon-icon">🌕</span>':isAmavasya?'<span class="cell-moon-icon">🌑</span>':"";
-          cell.innerHTML = `<div class="cell-top-bar"><span class="cell-paksha-pill ${pp}">${pt}</span>${mi}</div><div class="cell-tithi-main">${isEn?day.tithiNameEn:day.tithiNameTe}</div>${fh}<div class="cell-bottom-bar"><span class="cell-greg-date">${day.gregDateShort}</span><span class="cell-nakshatra">${isEn?day.nakshatraEn:day.nakshatraTe}</span></div>`;
+          cell.innerHTML = `
+            <div class="cell-top-bar">
+              <span class="cell-greg-num">${day.dateNum}</span>
+              <div class="cell-top-right">
+                <span class="cell-paksha-pill ${pp}"><span class="paksha-full">${pt}</span><span class="paksha-short">${ptShort}</span></span>
+                ${mi}
+              </div>
+            </div>
+            <div class="cell-tithi-main" title="${isEn?day.tithiNameEn:day.tithiNameTe}">${isEn?day.tithiNameEn:day.tithiNameTe}</div>
+            ${fh}
+            <div class="cell-bottom-bar">
+              <span class="cell-greg-date">${day.gregDateShort}</span>
+              <span class="cell-nakshatra">${isEn?day.nakshatraEn:day.nakshatraTe}</span>
+            </div>
+          `;
           cell.addEventListener("click", () => openModal(day));
           daysGrid.appendChild(cell);
         });

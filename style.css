@@ -6125,10 +6125,30 @@ button[class*="delete"] {
   .panchangam-ribbon {
     flex-direction: column;
     align-items: flex-start;
-    padding: 14px 16px;
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .ribbon-left {
+    width: 100%;
+    gap: 10px;
+  }
+  .ribbon-title {
+    font-size: 0.92rem;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ribbon-details {
+    font-size: 0.80rem;
+    line-height: 1.35;
+    margin-top: 2px;
   }
   .ribbon-cta {
     align-self: flex-end;
+    font-size: 0.80rem;
+    padding: 4px 12px;
+    border-radius: 14px;
+    background: rgba(255, 209, 102, 0.15);
+    border: 1px solid rgba(255, 209, 102, 0.35);
   }
 }
 
