@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>సన్నివేశం మేధ — Sannivesham AI | త్వరలో రాబోతోంది</title>
+  <meta name="description" content="సన్నివేశం మేధ (Sannivesham AI) — మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. భారతీయ సంస్కృతి మరియు తెలుగు విజ్ఞానాన్ని అందించే విశిష్ట కృత్రిమ మేధస్సు.">
+  <link rel="canonical" href="https://sannivesham.com/ai/">
+  <link rel="icon" type="image/png" href="../images/logo.png">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="సన్నివేశం మేధ — Sannivesham AI">
+  <meta property="og:description" content="మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. త్వరలో రాబోతోంది.">
+  <meta property="og:image" content="https://sannivesham.com/images/logo.png">
+  <meta property="og:url" content="https://sannivesham.com/ai/">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700;800&family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=20260919">
+</head>
+
+<body>
+  <!-- Background Aura & Particles -->
+  <div class="medha-bg"></div>
+  <div class="medha-glow-orb orb-1"></div>
+  <div class="medha-glow-orb orb-2"></div>
+  <div class="medha-glow-orb orb-3"></div>
+  <canvas id="medhaCanvas"></canvas>
+
+  <!-- Top Glass Bar -->
+  <header class="medha-nav">
+    <a href="../" class="nav-back-link">
+      <span class="back-arrow">←</span>
+      <span data-en="Back to Sannivesham">సన్నివేశం ముఖచిత్రం</span>
+    </a>
+    <div class="nav-brand">
+      <img src="../images/logo.png" alt="Sannivesham Logo" class="brand-mini-logo">
+      <span class="brand-mini-name">సన్నివేశం</span>
+    </div>
+    <div class="nav-lang-badge">
+      <span>🦚 మేధ • AI</span>
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main class="medha-container">
+    <div class="medha-hero">
+      <!-- Sacred Mandala Ring with Mystical Peacock Emblem -->
+      <div class="medha-emblem-wrap">
+        <div class="mandala-ring outer-ring"></div>
+        <div class="mandala-ring middle-ring"></div>
+        <div class="mandala-ring inner-ring"></div>
+        <div class="peacock-divine-icon">
+          <!-- Stylized Divine Peacock Eye / Lamp Icon -->
+          <svg viewBox="0 0 120 120" class="feather-divine-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="featherGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd166" />
+                <stop offset="35%" stop-color="#05c46b" />
+                <stop offset="70%" stop-color="#0fbcf9" />
+                <stop offset="100%" stop-color="#3c40c6" />
+              </linearGradient>
+              <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffd166" stop-opacity="1" />
+                <stop offset="45%" stop-color="#ff9f1a" stop-opacity="0.8" />
+                <stop offset="75%" stop-color="#0fbcf9" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="#1e272e" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <ellipse cx="60" cy="55" rx="36" ry="46" fill="none" stroke="url(#featherGrad)" stroke-width="3.5" opacity="0.9" />
+            <circle cx="60" cy="52" r="28" fill="url(#eyeGlow)" />
+            <circle cx="60" cy="50" r="16" fill="#041226" stroke="#ffd166" stroke-width="2" />
+            <circle cx="60" cy="48" r="8" fill="#ffd166" />
+            <path d="M60 85 Q60 110 60 118" stroke="#ffd166" stroke-width="3" stroke-linecap="round" />
+            <path d="M60 90 Q50 96 42 102" stroke="#05c46b" stroke-width="2" stroke-linecap="round" />
+            <path d="M60 90 Q70 96 78 102" stroke="#05c46b" stroke-width="2" stroke-linecap="round" />
+            <path d="M60 98 Q48 106 38 114" stroke="#0fbcf9" stroke-width="2" stroke-linecap="round" />
+            <path d="M60 98 Q72 106 82 114" stroke="#0fbcf9" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="divine-pulse"></div>
+      </div>
+
+      <!-- Live Teaser Badge -->
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span class="status-text">సృష్టి నిర్మాణంలో ఉంది • UNDER DEVELOPMENT</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="medha-title">
+        <span class="title-telugu">సన్నివేశం మేధ</span>
+        <span class="title-english">SANNIVESHAM AI</span>
+      </h1>
+
+      <p class="medha-tagline">
+        మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు.
+      </p>
+
+      <p class="medha-lead">
+        భారతీయ సనాతన ధర్మం, వేదాలు, ఇతిహాసాలు, తెలుగు సాహిత్య గ్రంథాలు మరియు పుణ్యక్షేత్రాల దివ్య విజ్ఞానాన్ని మీ చేతుల్లోకి తెచ్చే అత్యున్నత సాంస్కృతిక మేధస్సు త్వరలోనే మీ ముందుకు రాబోతోంది.
+      </p>
+
+      <!-- Coming Soon Golden Ribbon -->
+      <div class="coming-soon-banner">
+        <div class="sparkle-star">✦</div>
+        <div class="cs-badge">COMING SOON</div>
+        <div class="cs-sub">నూతన సాంస్కృతిక విప్లవం ఆరంభం కాబోతోంది</div>
+        <div class="sparkle-star">✦</div>
+      </div>
+
+      <!-- Feature Teaser Grid -->
+      <section class="features-preview">
+        <h2 class="features-heading">సన్నివేశం మేధ ప్రత్యేకతలు</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📜</div>
+            <h3>ఇతిహాస & వేద జ్ఞానం</h3>
+            <p>రామాయణం, మహాభారతం, భాగవతం మరియు పురాణాల కథలు, ధర్మ సందేహాలు మరియు అంతరార్థాలను లోతుగా విశ్లేషించే జ్ఞాన భాండాగారం.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🛕</div>
+            <h3>క్షేత్ర చరిత్ర & దేవాలయ విశేషాలు</h3>
+            <p>భారతదేశంలోని వేలాది ప్రాచీన దేవాలయాల నిర్మాణ శైలి, క్షేత్ర మహత్యం, పూజా సమయాలు మరియు పవిత్ర సంప్రదాయాల సమగ్ర దర్శనం.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h3>అచ్చ తెలుగు సాహిత్య సంభాషణ</h3>
+            <p>పద్యాలు, శతకాలు, సామెతలు, పొడుపు కథలు మరియు ప్రాచీన కావ్యాల అమృత రసాన్ని సరళమైన సమకాలీన తెలుగులో వివరించే అక్షర మిత్రుడు.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🪔</div>
+            <h3>నిత్య ధర్మ & పండుగల మార్గదర్శి</h3>
+            <p>రోజూ పాటించవలసిన తిథులు, నక్షత్రాలు, పూజా విధానాలు, పండుగల వెనుక ఉన్న శాస్త్రీయ కారణాలను అందించే ఆధ్యాత్మిక నేస్తం.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Express Interest / Notify Me Box -->
+      <div class="notify-card">
+        <div class="notify-header">
+          <span class="notify-bell">🔔</span>
+          <div>
+            <h3>మేధస్సు విడుదల సమాచారం పొందండి</h3>
+            <p>సన్నివేశం మేధ లైవ్‌లోకి రాగానే ముందస్తుగా ఆహ్వానం అందుకోండి.</p>
+          </div>
+        </div>
+        <form id="notifyForm" class="notify-form">
+          <input type="email" id="notifyEmail" placeholder="మీ ఇమెయిల్ చిరునామా (Enter your email)..." required autocomplete="email">
+          <button type="submit" id="notifySubmitBtn" class="notify-btn">
+            <span>ఆహ్వానం పొందండి</span>
+            <span class="btn-arrow">➜</span>
+          </button>
+        </form>
+        <div id="notifyMessage" class="notify-msg" style="display:none;"></div>
+      </div>
+
+      <!-- Return Button -->
+      <div class="return-wrap">
+        <a href="../" class="return-home-btn">
+          <span>← సన్నివేశం హోమ్ పేజీకి తిరిగి వెళ్ళండి</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="medha-footer">
+    <p class="footer-shloka">“సత్యమేవ జయతే నానృతం • సత్యేన పంథా వితతో దేవయానః”</p>
+    <p class="footer-copy">© 2026 సన్నివేశం (Sannivesham). సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
