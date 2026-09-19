@@ -105,6 +105,12 @@
 
       document.body.appendChild(container);
 
+      const emberLayer = document.createElement('div');
+      emberLayer.id = 'peacockEmberLayer';
+      emberLayer.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:925;max-width:100vw;';
+      document.body.appendChild(emberLayer);
+      this.emberLayer = emberLayer;
+
       this.root = container;
       this.innerWrap = container.querySelector('.peacock-inner-wrap');
       this.groundShadow = container.querySelector('.peacock-ground-shadow');
@@ -124,20 +130,27 @@
       const minClearanceY = isMobile ? 100 : 124;
 
       const heroElem = document.querySelector('.top-brand');
+      const greetingElem = document.getElementById('timeGreetingBadge');
       const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
       const catElem = document.querySelector('#categories') || document.querySelector('.category-section');
       const aboutElem = document.querySelector('#about') || document.querySelector('.about-card');
       const footerElem = document.querySelector('#contact') || document.querySelector('.home-footer');
 
-      // 1. Hero (Right side, comfortably BELOW navbar, clear of brand text)
+      // 1. Hero (Right side, comfortably BELOW navbar and greeting badge, beside the Swan Mandala)
       let heroX, heroY;
+      let greetingBottom = 0;
+      if (greetingElem) {
+        const gr = greetingElem.getBoundingClientRect();
+        greetingBottom = gr.bottom + scrollY;
+      }
       if (heroElem) {
         const r = heroElem.getBoundingClientRect();
-        heroY = Math.max(minClearanceY + halfSize, r.top + scrollY + (isMobile ? 36 : 48));
+        const baseHeroY = r.top + scrollY + (isMobile ? 85 : 95);
+        heroY = Math.max(greetingBottom + halfSize + 16, minClearanceY + halfSize, baseHeroY);
       } else {
-        heroY = minClearanceY + halfSize + 10;
+        heroY = Math.max(greetingBottom + halfSize + 16, minClearanceY + halfSize + 20);
       }
-      heroX = isMobile ? (winW - halfSize - 8) : Math.min(winW - halfSize - 20, Math.max(winW * 0.88, winW - 130));
+      heroX = isMobile ? (winW - halfSize - 12) : Math.min(winW - halfSize - 20, Math.max(winW * 0.88, winW - 130));
 
       // 2. Intro Section (Left side gutter / outer shoulder, clear of paragraphs)
       let introX, introY;
@@ -375,15 +388,25 @@
       const size = Math.random() * (isBurst ? 8 : 4.5) + 2.5;
       ember.style.width = `${size}px`;
       ember.style.height = `${size}px`;
-      ember.style.left = `${x}px`;
-      ember.style.top = `${y}px`;
 
-      document.body.appendChild(ember);
+      const scrollX = window.scrollX || window.pageXOffset || 0;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const clientX = Math.max(12, Math.min(x - scrollX, window.innerWidth - 12));
+      const clientY = y - scrollY;
+
+      ember.style.left = `${clientX}px`;
+      ember.style.top = `${clientY}px`;
+
+      if (this.emberLayer) {
+        this.emberLayer.appendChild(ember);
+      } else {
+        document.body.appendChild(ember);
+      }
 
       const angle = Math.random() * Math.PI * 2;
-      const dist = isBurst ? Math.random() * 55 + 16 : Math.random() * 20 + 5;
+      const dist = isBurst ? Math.random() * 45 + 12 : Math.random() * 18 + 5;
       const tx = Math.cos(angle) * dist;
-      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 10);
+      const ty = Math.sin(angle) * dist + (isBurst ? 0 : 8);
 
       requestAnimationFrame(() => {
         ember.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`;
@@ -436,23 +459,29 @@
         // When perched, smoothly settle to safe lateral margin to ensure ZERO text blocking
         let safeX;
         if (trajectory.currentSide === 'left') {
-          safeX = isMobile ? (halfSize + 6) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
+          safeX = isMobile ? (halfSize + 10) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
           this.facing = 1; // Face inward toward content
         } else {
-          safeX = isMobile ? (winW - halfSize - 6) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
+          safeX = isMobile ? (winW - halfSize - 12) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
           this.facing = -1; // Face inward toward content
         }
         this.targetDocX = safeX - halfSize;
         this.targetDocY = trajectory.docY - halfSize;
       }
 
-      // Ensure peacock never sits behind the navbar at the top of the page
-      if (currentScrollY < 120) {
-        this.targetDocY = Math.max(minClearanceY, this.targetDocY);
+      // Ensure peacock never sits behind the navbar or over the greeting badge at the top
+      if (currentScrollY < 140) {
+        const greetingElem = document.getElementById('timeGreetingBadge');
+        let safeTopY = minClearanceY;
+        if (greetingElem) {
+          const gr = greetingElem.getBoundingClientRect();
+          safeTopY = Math.max(safeTopY, gr.bottom + currentScrollY + 16);
+        }
+        this.targetDocY = Math.max(safeTopY, this.targetDocY);
       }
 
-      const maxX = document.documentElement.clientWidth - (halfSize * 2 + 4);
-      this.targetDocX = Math.max(4, Math.min(this.targetDocX, maxX));
+      const maxX = document.documentElement.clientWidth - (peacockSize + 8);
+      this.targetDocX = Math.max(6, Math.min(this.targetDocX, maxX));
 
       // Damping
       const lerpFactor = this.isScrolling ? 0.16 : 0.11;

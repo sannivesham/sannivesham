@@ -149,9 +149,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
   <script src="theme.js?v=20260919f"></script>
-  <link rel="stylesheet" href="style.css?v=20260919g">
-  <link rel="stylesheet" href="peacock.css?v=20260919f">
+  <link rel="stylesheet" href="style.css?v=20260919h">
+  <link rel="stylesheet" href="peacock.css?v=20260919g">
   <style>
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      overflow-x: clip !important;
+      overscroll-behavior-x: none !important;
+      touch-action: pan-y;
+    }
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -320,6 +328,7 @@
         overflow: hidden !important;
         gap: 6px !important;
         box-sizing: border-box !important;
+        touch-action: pan-y !important;
       }
       .glass-navbar::before, .glass-navbar::after {
         display: none !important;
@@ -335,7 +344,8 @@
         overflow-y: hidden !important;
         scrollbar-width: none !important;
         -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-x !important;
+        touch-action: pan-y pan-x !important;
+        scroll-snap-type: x mandatory !important;
         flex: 1 1 0% !important;
         min-width: 0 !important;
         gap: 4px !important;
@@ -344,8 +354,9 @@
       .nav-links a {
         flex: 0 0 auto !important;
         white-space: nowrap !important;
-        font-size: 0.86rem !important;
-        padding: 5px 8px !important;
+        font-size: 0.82rem !important;
+        padding: 5px 7px !important;
+        scroll-snap-align: start !important;
       }
       .nav-divider {
         height: 18px !important;
@@ -869,7 +880,7 @@
   <script src="script.js?v=2"></script>
   <script src="i18n.js"></script>
   <script src="panchang-engine.js"></script>
-  <script src="peacock.js?v=20260919g"></script>
+  <script src="peacock.js?v=20260919h"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
@@ -1463,6 +1474,15 @@
         const nl = document.querySelector('.nav-links');
         if (nl) {
           nl.scrollLeft = 0;
+          let navResetTimer;
+          window.addEventListener('scroll', () => {
+            if (nl.scrollLeft > 0) {
+              clearTimeout(navResetTimer);
+              navResetTimer = setTimeout(() => {
+                nl.scrollTo({ left: 0, behavior: 'smooth' });
+              }, 150);
+            }
+          }, { passive: true });
         }
       }
 

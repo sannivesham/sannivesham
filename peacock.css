@@ -300,6 +300,15 @@
     font-size: 0.72rem;
     padding: 4px 10px;
     bottom: calc(100% + 4px);
+    left: auto;
+    right: 0;
+    transform: translateY(6px);
+    max-width: 80vw;
+  }
+
+  .peacock-ai-tooltip::after {
+    left: auto;
+    right: 20px;
   }
 }
 
