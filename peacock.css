@@ -1,15 +1,14 @@
 /* ==========================================================================
-   SANNIVESHAM — CINEMATIC REALISTIC FLYING PEACOCK (ULTRA-HIGH GRAPHICS)
-   Document-Space Lateral Flight Engine & Photorealistic Indian Peacock Rig
+   SANNIVESHAM — PHOTOREALISTIC SCROLL-TRAVELLING PEACOCK
+   Photorealistic Assets, Instant Perch on Scroll Stop & Wide Lateral Flight
    ========================================================================== */
 
-/* Master Peacock Container in Document Space */
 #flyingPeacockRoot {
   position: absolute;
   top: 0;
   left: 0;
-  width: 145px;
-  height: 145px;
+  width: 155px;
+  height: 155px;
   pointer-events: auto;
   cursor: pointer;
   z-index: 930;
@@ -20,51 +19,46 @@
   display: block;
 }
 
-/* Dynamic Contact Shadow that grounds the peacock on cards */
+/* Contact Ground Shadow */
 .peacock-ground-shadow {
   position: absolute;
-  bottom: 6px;
+  bottom: 8px;
   left: 50%;
-  width: 72px;
-  height: 16px;
+  width: 78px;
+  height: 18px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(12, 4, 1, 0.88) 0%, rgba(24, 8, 3, 0.45) 50%, transparent 75%);
+  background: radial-gradient(ellipse at center, rgba(12, 4, 1, 0.88) 0%, rgba(22, 7, 2, 0.45) 50%, transparent 75%);
   transform: translateX(-50%) scale(1);
   filter: blur(2.5px);
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, filter 0.3s ease;
+  transition: transform 0.22s ease, opacity 0.22s ease;
   z-index: 1;
 }
 
-/* Airborne Shadow vs Perched Shadow */
+/* Shadow when airborne vs perched */
 .is-flying .peacock-ground-shadow {
   opacity: 0.15;
-  transform: translateX(-50%) translateY(36px) scale(0.6);
+  transform: translateX(-50%) translateY(38px) scale(0.65);
   filter: blur(8px);
 }
 
 .is-takeoff .peacock-ground-shadow {
-  opacity: 0.45;
-  transform: translateX(-50%) translateY(14px) scale(0.8);
+  opacity: 0.5;
+  transform: translateX(-50%) translateY(14px) scale(0.85);
   filter: blur(4px);
 }
 
-.is-landing .peacock-ground-shadow {
-  opacity: 0.75;
-  transform: translateX(-50%) translateY(5px) scale(0.92);
-  filter: blur(3px);
-}
-
+.is-landing .peacock-ground-shadow,
 .is-perched .peacock-ground-shadow {
   opacity: 0.95;
   transform: translateX(-50%) translateY(0) scale(1);
   filter: blur(2px);
 }
 
-/* Interactive Tooltip Badge */
+/* Tooltip Badge for Sannivesham AI */
 .peacock-ai-tooltip {
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(8px);
   background: linear-gradient(135deg, rgba(28, 10, 4, 0.96), rgba(18, 6, 2, 0.98));
@@ -81,7 +75,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 209, 102, 0.4);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -109,144 +103,71 @@
   height: 100%;
   position: relative;
   transform-origin: center center;
-  transition: filter 0.3s ease;
+  transition: filter 0.25s ease;
 }
 
 #flyingPeacockRoot:hover .peacock-inner-wrap {
   filter: drop-shadow(0 0 20px rgba(255, 209, 102, 0.85)) drop-shadow(0 0 35px rgba(15, 188, 249, 0.55));
 }
 
-/* Master SVG Canvas */
-.peacock-svg {
+/* -------------------------------------------------------------
+   PHOTOREALISTIC PEACOCK IMAGE LAYERS
+   ------------------------------------------------------------- */
+.peacock-img-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7));
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
 }
 
-/* -------------------------------------------------------------
-   CINEMATIC MULTI-STATE ANIMATIONS (PHYSICALLY GROUNDED)
-   ------------------------------------------------------------- */
-
-/* 1. PERCHED / RESTING STATE */
-.is-perched .peacock-body-rig {
-  animation: realisticBreathe 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-  transform-origin: 50% 65%;
-}
-
-.is-perched .peacock-neck-head-rig {
-  animation: realisticHeadLook 6.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  transform-origin: 45% 42%;
-}
-
-.is-perched .peacock-crest-rig {
-  animation: realisticCrestSway 3.6s ease-in-out infinite alternate;
-  transform-origin: 36% 16%;
-}
-
-.is-perched .peacock-tail-rig {
-  animation: realisticTailDrape 5.8s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
-  transform-origin: 65% 72%;
-}
-
-.is-perched .wing-folded-rig {
+/* SITTING / PERCHED STATE (WINGS COMPLETELY FOLDED, ZERO FLAPPING) */
+.is-perched .peacock-img-perched {
   display: block;
-  animation: wingCovertShift 7.5s ease-in-out infinite;
+  animation: photorealBreathe 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  transform-origin: 50% 68%;
+}
+
+.is-perched .peacock-img-flying {
+  display: none !important;
+}
+
+/* TAKEOFF STATE */
+.is-takeoff .peacock-img-perched {
+  display: none !important;
+}
+
+.is-takeoff .peacock-img-flying {
+  display: block;
+  animation: photorealTakeoff 0.28s ease-out infinite alternate;
   transform-origin: 50% 50%;
 }
 
-.is-perched .wing-flight-left-rig,
-.is-perched .wing-flight-right-rig {
-  display: none;
+/* FULL FLIGHT STATE (WINGS ACTIVE ONLY WHILE SCROLLING) */
+.is-flying .peacock-img-perched {
+  display: none !important;
 }
 
-.is-perched .peacock-talons-rig {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 2. TAKEOFF PREPARATION */
-.is-takeoff .peacock-body-rig {
-  animation: bodyCrouchSpring 0.32s ease-out forwards;
-  transform-origin: 50% 70%;
-}
-
-.is-takeoff .wing-folded-rig {
-  display: none;
-}
-
-.is-takeoff .wing-flight-left-rig,
-.is-takeoff .wing-flight-right-rig {
+.is-flying .peacock-img-flying {
   display: block;
-  animation: wingOpenStroke 0.26s cubic-bezier(0.2, 0.85, 0.4, 1) infinite alternate;
+  animation: photorealWingFlap 0.26s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  transform-origin: 50% 50%;
 }
 
-.is-takeoff .peacock-talons-rig {
-  transform: translateY(3px);
-  transition: transform 0.2s ease;
-}
-
-/* 3. FULL FLIGHT STATE WITH NATURAL WINGBEAT */
-.is-flying .wing-folded-rig {
-  display: none;
-}
-
-.is-flying .wing-flight-left-rig {
+/* LANDING TOUCHDOWN STATE */
+.is-landing .peacock-img-perched {
   display: block;
-  animation: fluidWingbeatLeft 0.22s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-  transform-origin: 42% 44%;
+  animation: photorealLandingSettle 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.is-flying .wing-flight-right-rig {
-  display: block;
-  animation: fluidWingbeatRight 0.22s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-  transform-origin: 56% 46%;
+.is-landing .peacock-img-flying {
+  display: none !important;
 }
 
-.is-flying .peacock-body-rig {
-  animation: flightBodyThrust 0.22s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-  transform-origin: 50% 55%;
-}
-
-.is-flying .peacock-tail-rig {
-  animation: flightTailRippling 0.44s ease-in-out infinite alternate;
-  transform-origin: 62% 66%;
-}
-
-.is-flying .peacock-talons-rig {
-  opacity: 0.35;
-  transform: translateY(-10px) scaleY(0.7) skewX(8deg);
-  transition: transform 0.22s ease, opacity 0.22s ease;
-}
-
-/* 4. BRAKING & APPROACH */
-.is-landing .wing-folded-rig {
-  display: none;
-}
-
-.is-landing .wing-flight-left-rig {
-  display: block;
-  animation: wingBrakingFlutter 0.14s cubic-bezier(0.2, 0.9, 0.3, 1) infinite alternate;
-  transform-origin: 42% 44%;
-}
-
-.is-landing .wing-flight-right-rig {
-  display: block;
-  animation: wingBrakingFlutter 0.14s cubic-bezier(0.2, 0.9, 0.3, 1) infinite alternate;
-  transform-origin: 56% 46%;
-}
-
-.is-landing .peacock-talons-rig {
-  opacity: 1;
-  transform: translateY(4px);
-  transition: transform 0.14s ease;
-}
-
-.is-landing .peacock-inner-wrap {
-  animation: landingSettlingBounce 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* 5. CLICK GLOW BURST */
+/* CLICK GLOW BURST */
 .peacock-click-aura {
   position: absolute;
   top: 50%;
@@ -265,7 +186,7 @@
   animation: divineClickFlare 0.62s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
 }
 
-/* Divine Golden Stardust Embers */
+/* Stardust Embers */
 .peacock-particle-ember {
   position: absolute;
   pointer-events: none;
@@ -279,86 +200,47 @@
 }
 
 /* -------------------------------------------------------------
-   KEYFRAME DEFINITIONS
+   KEYFRAME ANIMATIONS
    ------------------------------------------------------------- */
-@keyframes realisticBreathe {
-  0% { transform: scale(1) translateY(0); }
-  100% { transform: scale(1.025, 0.985) translateY(-2px); }
-}
-
-@keyframes realisticHeadLook {
-  0%, 100% { transform: rotate(0deg); }
-  22% { transform: rotate(4deg); }
-  48% { transform: rotate(-2deg); }
-  72% { transform: rotate(2.5deg); }
-}
-
-@keyframes realisticCrestSway {
-  0% { transform: rotate(-3deg); }
-  100% { transform: rotate(3.5deg); }
-}
-
-@keyframes realisticTailDrape {
-  0% { transform: rotate(0deg) skewX(0deg); }
-  100% { transform: rotate(2.2deg) skewX(-1.5deg); }
-}
-
-@keyframes wingCovertShift {
-  0%, 100% { transform: rotate(0deg); }
-  42% { transform: rotate(0.6deg); }
-  46% { transform: rotate(-1.4deg) scaleY(0.97); }
-  50% { transform: rotate(0deg); }
-}
-
-@keyframes bodyCrouchSpring {
-  0% { transform: translateY(0) scaleY(1); }
-  35% { transform: translateY(5px) scaleY(0.94); }
-  100% { transform: translateY(-7px) scaleY(1.05); }
-}
-
-@keyframes wingOpenStroke {
-  0% { transform: rotate(-18deg) scaleY(0.82); }
-  100% { transform: rotate(28deg) scaleY(1.06); }
-}
-
-@keyframes fluidWingbeatLeft {
+@keyframes photorealBreathe {
   0% {
-    transform: rotate(-42deg) scaleY(0.68) skewX(16deg);
+    transform: scale(1) translateY(0);
   }
   100% {
-    transform: rotate(35deg) scaleY(1.15) skewX(-10deg);
+    transform: scale(1.02, 0.985) translateY(-2.2px);
   }
 }
 
-@keyframes fluidWingbeatRight {
+@keyframes photorealTakeoff {
   0% {
-    transform: rotate(38deg) scaleY(0.64) skewX(-14deg);
+    transform: scale(0.96) translateY(2px);
   }
   100% {
-    transform: rotate(-32deg) scaleY(1.12) skewX(8deg);
+    transform: scale(1.04) translateY(-4px);
   }
 }
 
-@keyframes flightBodyThrust {
-  0% { transform: translateY(-2.5px); }
-  100% { transform: translateY(2.8px); }
+@keyframes photorealWingFlap {
+  0% {
+    /* Up-stroke: wings beat upward, body flexes */
+    transform: scale(1.05, 0.92) rotate(-3deg) translateY(-2.5px);
+  }
+  100% {
+    /* Down-stroke: wings power down, body lifts */
+    transform: scale(0.95, 1.08) rotate(3deg) translateY(2.5px);
+  }
 }
 
-@keyframes flightTailRippling {
-  0% { transform: rotate(-5.5deg) skewX(-4deg) scaleY(0.94); }
-  100% { transform: rotate(6.5deg) skewX(5deg) scaleY(1.03); }
-}
-
-@keyframes wingBrakingFlutter {
-  0% { transform: rotate(-48deg) scaleY(0.85); }
-  100% { transform: rotate(42deg) scaleY(1.18); }
-}
-
-@keyframes landingSettlingBounce {
-  0% { transform: translateY(-9px); }
-  45% { transform: translateY(3px); }
-  72% { transform: translateY(-1.5px); }
-  100% { transform: translateY(0); }
+@keyframes photorealLandingSettle {
+  0% {
+    transform: translateY(-8px) scale(0.96);
+  }
+  60% {
+    transform: translateY(2px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes divineClickFlare {
@@ -381,14 +263,14 @@
    ------------------------------------------------------------- */
 @media (max-width: 768px) {
   #flyingPeacockRoot {
-    width: 108px;
-    height: 108px;
+    width: 116px;
+    height: 116px;
   }
 
   .peacock-ground-shadow {
-    width: 54px;
-    height: 12px;
-    bottom: 4px;
+    width: 58px;
+    height: 14px;
+    bottom: 5px;
   }
 
   .peacock-ai-tooltip {
@@ -406,20 +288,14 @@
     animation: none !important;
   }
 
-  .is-perched .peacock-body-rig,
-  .is-perched .peacock-neck-head-rig,
-  .is-perched .peacock-crest-rig,
-  .is-perched .peacock-tail-rig,
-  .is-flying .wing-flight-left-rig,
-  .is-flying .wing-flight-right-rig,
-  .is-flying .peacock-body-rig,
-  .is-flying .peacock-tail-rig {
+  .is-perched .peacock-img-perched,
+  .is-flying .peacock-img-flying {
     animation: none !important;
   }
 }
 
 .peacock-lightweight-mode #flyingPeacockRoot {
-  transition: transform 0.35s ease-out !important;
+  transition: transform 0.3s ease-out !important;
 }
 
 .peacock-lightweight-mode .peacock-particle-ember {
