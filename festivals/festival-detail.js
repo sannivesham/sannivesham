@@ -42,7 +42,7 @@ async function loadFestival() {
   if (!queryParam) {
     festivalTitle.innerText = "పండుగ లభించలేదు";
     festivalSubtitle.innerText = "దయచేసి పండుగల జాబితాకు వెళ్ళండి.";
-    detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="/festivals/" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
     return;
   }
 
@@ -92,7 +92,7 @@ async function loadFestival() {
     if (!festival) {
       festivalTitle.innerText = "పండుగ లభించలేదు";
       festivalSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
-      detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="/festivals/" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
       return;
     }
 
@@ -176,7 +176,7 @@ async function loadFestival() {
 if (window.history && window.history.pushState) {
   window.history.pushState({ page: "festival-detail" }, "", window.location.href);
   window.addEventListener("popstate", () => {
-    window.location.replace("./");
+    window.location.replace("/festivals/");
   });
 }
 
@@ -185,7 +185,7 @@ const readerBackBtn = document.querySelector(".reader-back-btn");
 if (readerBackBtn) {
   readerBackBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    window.location.href = "./";
+    window.location.href = "/festivals/";
   });
 }
 

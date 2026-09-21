@@ -40,7 +40,9 @@ const templeBreadcrumb = document.getElementById("templeBreadcrumb");
 const templeOrnament = document.getElementById("templeOrnament");
 
 if (catId) {
-  backToListLink.href = `temple-list.html?cat=${catId}`;
+  backToListLink.href = `/temples/temple-list.html?cat=${catId}`;
+} else {
+  backToListLink.href = "/temples/";
 }
 
 async function loadTemple() {
@@ -48,7 +50,7 @@ async function loadTemple() {
   if (!queryParam) {
     templeTitle.innerText = "దేవాలయం లభించలేదు";
     templeSubtitle.innerText = "దయచేసి దేవాలయాల జాబితాకు వెళ్ళండి.";
-    detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="/temples/" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
     return;
   }
 
@@ -98,12 +100,12 @@ async function loadTemple() {
     if (!temple) {
       templeTitle.innerText = "దేవాలయం లభించలేదు";
       templeSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
-      detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="/temples/" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
       return;
     }
 
     if (!catId && temple.categoryId) {
-      backToListLink.href = `temple-list.html?cat=${temple.categoryId}`;
+      backToListLink.href = `/temples/temple-list.html?cat=${temple.categoryId}`;
     }
 
     // Render Title & Subtitle
@@ -187,9 +189,9 @@ if (window.history && window.history.pushState) {
   window.history.pushState({ page: "temple-detail" }, "", window.location.href);
   window.addEventListener("popstate", () => {
     if (catId) {
-      window.location.replace(`temple-list.html?cat=${catId}`);
+      window.location.replace(`/temples/temple-list.html?cat=${catId}`);
     } else {
-      window.location.replace("./");
+      window.location.replace("/temples/");
     }
   });
 }
@@ -199,9 +201,9 @@ if (backToListLink) {
   backToListLink.addEventListener("click", (e) => {
     e.preventDefault();
     if (catId) {
-      window.location.href = `temple-list.html?cat=${catId}`;
+      window.location.href = `/temples/temple-list.html?cat=${catId}`;
     } else {
-      window.location.href = "./";
+      window.location.href = "/temples/";
     }
   });
 }

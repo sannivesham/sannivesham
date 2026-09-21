@@ -193,20 +193,6 @@ async function loadContent() {
     const canonicalSlug = existingSlug || slugify(displayTitle) || (isSubcategoryCollection ? subcategoryData.id : foundItem.id);
     const cleanUrl = `https://sannivesham.com/library/${canonicalSlug}`;
 
-    // Rewrite browser address bar to the clean SEO friendly slug URL
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `/library/${canonicalSlug}`);
-    }
-
-    // Auto-heal: If document was created in the past without a slug, save the generated slug to Firestore!
-    if (!existingSlug && canonicalSlug) {
-      const col = isSubcategoryCollection ? "librarySubcategories" : "libraryContent";
-      const docId = isSubcategoryCollection ? subcategoryData.id : foundItem.id;
-      updateDoc(doc(db, col, docId), { slug: canonicalSlug }).catch(err => {
-        console.warn("Auto-heal slug error:", err);
-      });
-    }
-
     // Initialize Sacred Reader Controls
     new SacredReader({
       type: "library",
@@ -228,6 +214,23 @@ async function loadContent() {
     readerTitle.innerText = "లోడ్ చేయడంలో సమస్య ఏర్పడింది";
     readerSubtitle.innerText = "దయచేసి పేజీని రీఫ్రెష్ చేయండి.";
   }
+}
+
+// Hardware / gesture phone back button: ensure pressing phone back ALWAYS takes user to library page
+if (window.history && window.history.pushState) {
+  window.history.pushState({ page: "library-read" }, "", window.location.href);
+  window.addEventListener("popstate", () => {
+    window.location.replace("/library/");
+  });
+}
+
+// In-page toolbar back button handler
+const readerBackBtn = document.getElementById("readerBackBtn");
+if (readerBackBtn) {
+  readerBackBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "/library/";
+  });
 }
 
 loadContent();
