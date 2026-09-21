@@ -159,34 +159,7 @@
       overflow-x: clip !important;
       overscroll-behavior-x: none !important;
     }
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-    .game-sub-card {
-      background: rgba(237, 227, 200, 0.05);
-      border: 1px solid rgba(201, 162, 75, 0.3);
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .game-sub-card:hover {
-      transform: translateY(-3px);
-      border-color: #C9A24B;
-    }
-    .game-sub-icon {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-    .game-sub-title {
-      font-size: 1rem;
-      font-weight: 500;
-    }
+
 
     .auth-modal {
       position: fixed !important;
@@ -511,49 +484,7 @@
     </div>
   </div>
 
-  <!-- GAMES MODAL -->
-  <div id="gamesModal" class="auth-modal">
-    <div class="auth-modal-box">
-      <button class="auth-close-btn" id="gamesCloseBtn">×</button>
-      <h2 data-en="🎮 Games">🎮 ఆటల విభాగం</h2>
-      <p style="font-size: 0.9rem; color: var(--parchment-dim); margin-top: 4px;" data-en="Choose a game and track your progress.">ఆటను ఎంచుకుని మీ ప్రగతిని నమోదు చేయండి.</p>
-      <div class="games-grid">
-        <a href="games/word-search/" class="game-sub-card">
-          <div class="game-sub-icon">🔍</div>
-          <div class="game-sub-title" data-en="Word Search">పద శోధన</div>
-        </a>
-        <a href="games/Sliding-Puzzle/" class="game-sub-card">
-          <div class="game-sub-icon">🧩</div>
-          <div class="game-sub-title" data-en="Sliding Puzzle">చిత్ర గడులు</div>
-        </a>
-        <a href="games/sudoko/" class="game-sub-card">
-          <div class="game-sub-icon">🔢</div>
-          <div class="game-sub-title" data-en="Sudoku">సుడోకు</div>
-        </a>
-        <a href="games/connect-dots/" class="game-sub-card">
-          <div class="game-sub-icon">📍</div>
-          <div class="game-sub-title" data-en="Connect the Dots">జతపరుచు</div>
-        </a>
-        <a href="games/maze/" class="game-sub-card">
-          <div class="game-sub-icon">🌀</div>
-          <div class="game-sub-title" data-en="Maze">చిట్టడవి</div>
-        </a>
-        <a href="games/fisheye/" class="game-sub-card">
-          <div class="game-sub-icon">🏹</div>
-          <div class="game-sub-title" data-en="Fish-Eye Test">మత్స్యవేధం</div>
-        </a>
-        <a href="games/chitravela/" class="game-sub-card">
-          <div class="game-sub-icon">🎨</div>
-          <div class="game-sub-title" data-en="Chitravela">చిత్రవేల</div>
-        </a>
-      </div>
-      <div style="margin-top: 18px; text-align: center;">
-        <a href="games/" style="color: #ffd166; font-size: 0.95rem; text-decoration: underline; font-weight: 600;">
-          🎮 ప్రత్యేక ఆటల పేజీని తెరవండి (Open Full Games Page) ➜
-        </a>
-      </div>
-    </div>
-  </div>
+
 
   <nav class="glass-navbar">
     <div class="nav-links">
@@ -737,7 +668,7 @@
           </div>
         </a>
 
-        <a href="games/" id="gamesCardTrigger" class="category-card" data-tilt>
+        <a href="games/" class="category-card" data-tilt>
           <span class="category-card-badge">🎮 7+ ఆటలు</span>
           <div class="category-card-inner">
             <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు" loading="lazy">
@@ -901,11 +832,7 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
-    document.getElementById("gamesCardTrigger").addEventListener("click", (e) => {
-      e.preventDefault();
-      showModal("gamesModal");
-    });
-    document.getElementById("gamesCloseBtn").addEventListener("click", () => hideModal("gamesModal"));
+
 
     loadQuestionOfDay();
     loadWordOfDay();
