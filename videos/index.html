@@ -282,35 +282,7 @@
       pointer-events: none;
     }
 
-    /* Category Filter Pills */
-    .vc-categories-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      max-width: 800px;
-    }
 
-    .vc-cat-pill {
-      padding: 8px 18px;
-      border-radius: 999px;
-      background: rgba(255, 209, 102, 0.08);
-      border: 1px solid rgba(255, 209, 102, 0.24);
-      color: var(--vc-text-muted);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      user-select: none;
-    }
-
-    .vc-cat-pill:hover, .vc-cat-pill.active {
-      background: linear-gradient(135deg, rgba(255, 159, 28, 0.3), rgba(255, 209, 102, 0.25));
-      border-color: #ffd166;
-      color: #ffd166;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(255, 159, 28, 0.25);
-    }
 
     /* Videos Grid */
     .vc-videos-grid {
@@ -414,22 +386,7 @@
       transform: scale(1.15);
     }
 
-    /* Duration / Category Badge on thumbnail */
-    .vc-thumb-badge {
-      position: absolute;
-      bottom: 10px;
-      right: 12px;
-      padding: 3px 10px;
-      background: rgba(0, 0, 0, 0.78);
-      border: 1px solid rgba(255, 209, 102, 0.3);
-      border-radius: 6px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: #ffd166;
-      font-family: "Outfit", sans-serif;
-      backdrop-filter: blur(4px);
-      z-index: 2;
-    }
+
 
     /* Card Details */
     .vc-card-body {
@@ -533,8 +490,6 @@
       .vc-navbar { padding: 8px 12px; margin-bottom: 20px; }
       .vc-videos-grid { grid-template-columns: 1fr; gap: 18px; }
       .vc-title { font-size: 2rem; }
-      .vc-categories-row { gap: 6px; }
-      .vc-cat-pill { padding: 6px 14px; font-size: 0.82rem; }
     }
   </style>
 </head>
@@ -579,21 +534,12 @@
       </div>
     </header>
 
-    <!-- Search & Filter Controls -->
+    <!-- Search Controls -->
     <div class="vc-controls-panel">
       <!-- Search Input -->
       <div class="vc-search-wrapper">
         <span class="vc-search-icon">🔍</span>
         <input type="text" id="videoSearchInput" class="vc-search-input" placeholder="దృశ్యచిత్రాల శీర్షికతో వెతకండి...">
-      </div>
-
-      <!-- Category Filter Pills -->
-      <div class="vc-categories-row" id="categoriesRow">
-        <button class="vc-cat-pill active" data-cat="all">అన్నీ (All)</button>
-        <button class="vc-cat-pill" data-cat="దేవాలయాలు">🛕 దేవాలయాలు</button>
-        <button class="vc-cat-pill" data-cat="పురాణాలు">📜 పురాణాలు</button>
-        <button class="vc-cat-pill" data-cat="పండుగలు">🪔 పండుగలు</button>
-        <button class="vc-cat-pill" data-cat="భక్తి">🙏 భక్తి & ధ్యానం</button>
       </div>
     </div>
 
@@ -802,7 +748,6 @@
     ];
 
     let allVideosList = [];
-    let currentCategory = "all";
 
     const videosGrid = document.getElementById("videosGrid");
     const videoCountText = document.getElementById("videoCountText");
@@ -835,7 +780,6 @@
             title: data.title || data.videoTitle || "దృశ్యచిత్రం",
             cardImage: image,
             videoUrl: data.videoUrl || "",
-            category: data.category || "భక్తి",
             createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null
           });
         });
@@ -859,9 +803,7 @@
       const queryStr = (searchInput?.value || "").toLowerCase().trim();
 
       const filtered = allVideosList.filter(v => {
-        const matchesQuery = !queryStr || v.title.toLowerCase().includes(queryStr);
-        const matchesCat = (currentCategory === "all") || (v.category && v.category.includes(currentCategory)) || v.title.includes(currentCategory);
-        return matchesQuery && matchesCat;
+        return !queryStr || v.title.toLowerCase().includes(queryStr);
       });
 
       videoCountText.textContent = `మొత్తం దృశ్యచిత్రాలు: ${filtered.length}`;
@@ -872,7 +814,7 @@
           <div class="vc-empty-box">
             <div class="vc-empty-icon">🔍</div>
             <h3 class="vc-empty-title">ఎలాంటి దృశ్యచిత్రాలు కనుగొనబడలేదు</h3>
-            <p class="vc-empty-desc">మీ శోధన పదాలను మార్చి మళ్ళీ ప్రయత్నించండి లేదా ఇతర వర్గాలను ఎంచుకోండి.</p>
+            <p class="vc-empty-desc">మీ శోధన పదాలను మార్చి మళ్ళీ ప్రయత్నించండి.</p>
           </div>
         `;
         return;
@@ -894,7 +836,6 @@
             <div class="vc-play-overlay">
               <span class="vc-play-icon">▶</span>
             </div>
-            <span class="vc-thumb-badge">${v.category || "దృశ్యం"}</span>
           </div>
           <div class="vc-card-body">
             <h3 class="vc-video-title">${v.title}</h3>
@@ -910,16 +851,6 @@
 
     // Search Input Event
     searchInput?.addEventListener("input", renderVideos);
-
-    // Category Filter Event
-    document.querySelectorAll(".vc-cat-pill").forEach(pill => {
-      pill.addEventListener("click", () => {
-        document.querySelectorAll(".vc-cat-pill").forEach(p => p.classList.remove("active"));
-        pill.classList.add("active");
-        currentCategory = pill.dataset.cat;
-        renderVideos();
-      });
-    });
 
     loadVideos();
   </script>
