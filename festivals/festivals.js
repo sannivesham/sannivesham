@@ -422,5 +422,10 @@ window.addEventListener("popstate", () => {
 /* ══════════════════════════════════════
    8. INITIALIZATION
 ══════════════════════════════════════ */
+// 1. Immediately render Ekadashis synchronously from memory so there is zero latency
+renderEkadashis();
+handleInitialRoute();
+
+// 2. Load Firestore festivals & any custom overrides in background
 loadFestivals();
-loadEkadashis().then(handleInitialRoute);
+loadEkadashis();
