@@ -42,7 +42,7 @@ async function loadFestival() {
   if (!queryParam) {
     festivalTitle.innerText = "పండుగ లభించలేదు";
     festivalSubtitle.innerText = "దయచేసి పండుగల జాబితాకు వెళ్ళండి.";
-    detailBox.innerHTML = `<p style="text-align:center;"><a href="festivals.html" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
     return;
   }
 
@@ -92,7 +92,7 @@ async function loadFestival() {
     if (!festival) {
       festivalTitle.innerText = "పండుగ లభించలేదు";
       festivalSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
-      detailBox.innerHTML = `<p style="text-align:center;"><a href="festivals.html" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← పండుగల జాబితా</a></p>`;
       return;
     }
 
@@ -141,12 +141,9 @@ async function loadFestival() {
       footerQuote.innerText = `✨ ${festival.footerQuote} ✨`;
     }
 
-    // Set clean URL in address bar with canonical slug
+    // Canonical URL for SEO
     const canonicalSlug = festival.slug || slugify(festival.title) || currentDocId;
     const cleanUrl = `https://sannivesham.com/festivals/${canonicalSlug}`;
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `/festivals/${canonicalSlug}`);
-    }
 
     // Auto-heal missing slug in Firestore
     if (!festival.slug && canonicalSlug) {
@@ -173,6 +170,23 @@ async function loadFestival() {
     console.error("Festival load error:", err);
     festivalTitle.innerText = "లోడ్ చేయడంలో సమస్య ఏర్పడింది";
   }
+}
+
+// Hardware / gesture phone back button: ensure pressing phone back ALWAYS takes user to all festivals page
+if (window.history && window.history.pushState) {
+  window.history.pushState({ page: "festival-detail" }, "", window.location.href);
+  window.addEventListener("popstate", () => {
+    window.location.replace("./");
+  });
+}
+
+// In-page toolbar back button handler
+const readerBackBtn = document.querySelector(".reader-back-btn");
+if (readerBackBtn) {
+  readerBackBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "./";
+  });
 }
 
 loadFestival();

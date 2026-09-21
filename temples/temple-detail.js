@@ -48,7 +48,7 @@ async function loadTemple() {
   if (!queryParam) {
     templeTitle.innerText = "దేవాలయం లభించలేదు";
     templeSubtitle.innerText = "దయచేసి దేవాలయాల జాబితాకు వెళ్ళండి.";
-    detailBox.innerHTML = `<p style="text-align:center;"><a href="temples.html" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
+    detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
     return;
   }
 
@@ -98,7 +98,7 @@ async function loadTemple() {
     if (!temple) {
       templeTitle.innerText = "దేవాలయం లభించలేదు";
       templeSubtitle.innerText = `"${queryParam}" కు సంబంధించిన వివరాలు కనుగొనబడలేదు.`;
-      detailBox.innerHTML = `<p style="text-align:center;"><a href="temples.html" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
+      detailBox.innerHTML = `<p style="text-align:center;"><a href="./" class="reader-back-btn">← దేవాలయాల జాబితా</a></p>`;
       return;
     }
 
@@ -151,12 +151,9 @@ async function loadTemple() {
       footerQuote.innerText = `✨ ${temple.footerQuote} ✨`;
     }
 
-    // Set clean URL in address bar with canonical slug
+    // Canonical URL for SEO
     const canonicalSlug = temple.slug || slugify(temple.title) || currentDocId;
     const cleanUrl = `https://sannivesham.com/temples/${canonicalSlug}`;
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `/temples/${canonicalSlug}`);
-    }
 
     // Auto-heal missing slug in Firestore
     if (!temple.slug && canonicalSlug) {
@@ -183,6 +180,30 @@ async function loadTemple() {
     console.error("Temple load error:", err);
     templeTitle.innerText = "లోడ్ చేయడంలో సమస్య ఏర్పడింది";
   }
+}
+
+// Hardware / gesture phone back button: ensure pressing phone back ALWAYS returns to the list
+if (window.history && window.history.pushState) {
+  window.history.pushState({ page: "temple-detail" }, "", window.location.href);
+  window.addEventListener("popstate", () => {
+    if (catId) {
+      window.location.replace(`temple-list.html?cat=${catId}`);
+    } else {
+      window.location.replace("./");
+    }
+  });
+}
+
+// In-page toolbar back button handler
+if (backToListLink) {
+  backToListLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (catId) {
+      window.location.href = `temple-list.html?cat=${catId}`;
+    } else {
+      window.location.href = "./";
+    }
+  });
 }
 
 loadTemple();
