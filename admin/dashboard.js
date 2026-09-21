@@ -4,6 +4,8 @@ import {
   collection, addDoc, getDocs, getDoc, updateDoc,
   setDoc, deleteDoc, doc, serverTimestamp, query, orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { EKADASHI_LIST } from "../festivals/ekadashi-data.js";
+import { slugify } from "../library/reader.js";
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -730,6 +732,344 @@ async function openFestivalInlineEditor(id) {
   });
 }
 loadAdminFestivals();
+
+/* ══════════════════════════════════════
+   🪷 EKADASHI CMS
+══════════════════════════════════════ */
+
+const seedEkadashisBtn = document.getElementById("seedEkadashisBtn");
+const seedEkadashisMsg = document.getElementById("seedEkadashisMsg");
+const saveEkadashiBtn = document.getElementById("saveEkadashiBtn");
+const cancelEkadashiEditBtn = document.getElementById("cancelEkadashiEditBtn");
+const ekadashiMsg = document.getElementById("ekadashiMsg");
+const ekadashiFormTitle = document.getElementById("ekadashiFormTitle");
+const editingEkadashiId = document.getElementById("editingEkadashiId");
+
+const ekadashiTitleInput = document.getElementById("ekadashiTitle");
+const ekadashiTitleEnInput = document.getElementById("ekadashiTitleEn");
+const ekadashiSlugInput = document.getElementById("ekadashiSlug");
+const ekadashiMasamSelect = document.getElementById("ekadashiMasam");
+const ekadashiPakshamSelect = document.getElementById("ekadashiPaksham");
+const ekadashiDeityInput = document.getElementById("ekadashiDeity");
+const ekadashiIsMajorCheckbox = document.getElementById("ekadashiIsMajor");
+const ekadashiCardImageInput = document.getElementById("ekadashiCardImage");
+const ekadashiImageUploadBox = document.getElementById("ekadashiImageUploadBox");
+const ekadashiSummaryInput = document.getElementById("ekadashiSummary");
+const ekadashiStoryInput = document.getElementById("ekadashiStory");
+const ekadashiVidhanamInput = document.getElementById("ekadashiVidhanam");
+const ekadashiPhalamInput = document.getElementById("ekadashiPhalam");
+
+const adminEkadashiCount = document.getElementById("adminEkadashiCount");
+const adminEkadashisList = document.getElementById("adminEkadashisList");
+const adminEkadashiSearch = document.getElementById("adminEkadashiSearch");
+const adminEkadashiFilterPaksha = document.getElementById("adminEkadashiFilterPaksha");
+
+let adminEkadashiCache = [];
+
+// Image upload for Ekadashi
+if (ekadashiImageUploadBox) {
+  ekadashiImageUploadBox.addEventListener("click", async () => {
+    try {
+      const url = await uploadImage();
+      if (url) {
+        ekadashiCardImageInput.value = url;
+        ekadashiImageUploadBox.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
+      }
+    } catch (e) {
+      console.warn("Upload error:", e);
+    }
+  });
+}
+
+// Auto-generate slug from English title or Telugu title
+ekadashiTitleEnInput?.addEventListener("input", () => {
+  if (!editingEkadashiId.value && ekadashiTitleEnInput.value) {
+    ekadashiSlugInput.value = slugify(ekadashiTitleEnInput.value);
+  }
+});
+
+// Load Ekadashis in Admin
+async function loadAdminEkadashis() {
+  if (!adminEkadashisList) return;
+
+  try {
+    const snap = await getDocs(collection(db, "ekadashis"));
+    let items = [];
+
+    if (!snap.empty) {
+      snap.forEach((d) => {
+        items.push({ docId: d.id, ...d.data() });
+      });
+    } else {
+      // If Firestore collection is empty, display canonical pre-seeded data as ready-to-sync
+      items = EKADASHI_LIST.map((item) => ({ docId: item.slug, ...item, isLocalDefault: true }));
+    }
+
+    adminEkadashiCache = items;
+    renderAdminEkadashis();
+  } catch (err) {
+    console.error("Error loading admin ekadashis:", err);
+    // Fallback to built-in list
+    adminEkadashiCache = EKADASHI_LIST.map((item) => ({ docId: item.slug, ...item, isLocalDefault: true }));
+    renderAdminEkadashis();
+  }
+}
+
+function renderAdminEkadashis() {
+  if (!adminEkadashisList) return;
+
+  const searchTerm = (adminEkadashiSearch?.value || "").toLowerCase().trim();
+  const selectedPaksha = adminEkadashiFilterPaksha?.value || "";
+
+  const filtered = adminEkadashiCache.filter((item) => {
+    if (selectedPaksha && !item.paksham?.includes(selectedPaksha)) return false;
+    if (searchTerm) {
+      const t = (item.title || "").toLowerCase();
+      const te = (item.titleEn || "").toLowerCase();
+      const m = (item.masam || "").toLowerCase();
+      const d = (item.deity || "").toLowerCase();
+      if (!t.includes(searchTerm) && !te.includes(searchTerm) && !m.includes(searchTerm) && !d.includes(searchTerm)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  if (adminEkadashiCount) {
+    adminEkadashiCount.innerText = filtered.length;
+  }
+
+  adminEkadashisList.innerHTML = "";
+
+  if (filtered.length === 0) {
+    adminEkadashisList.innerHTML = `<p style="padding:20px;text-align:center;color:rgba(255,255,255,0.6);">ఎటువంటి ఏకాదశి వివరాలు లభించలేదు.</p>`;
+    return;
+  }
+
+  filtered.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "admin-event-card";
+    card.style.position = "relative";
+
+    const isShukla = item.paksham?.includes("శుక్ల");
+    const pakshaColor = isShukla ? "#ffd166" : "#a8dadc";
+
+    card.innerHTML = `
+      <img src="${item.cardImage || 'https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?w=700&auto=format&fit=crop&q=80'}" alt="${item.title}">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <h3 style="margin:0;color:#ffd166;">${item.title}</h3>
+          ${item.isMajor ? `<span style="background:#e63946;color:#fff;font-size:0.75rem;padding:2px 8px;border-radius:10px;font-weight:bold;">⭐ ముఖ్యమైనది</span>` : ""}
+          ${item.isLocalDefault ? `<span style="background:rgba(255,209,102,0.15);color:#ffd166;font-size:0.75rem;padding:2px 8px;border-radius:10px;">⚡ ప్రీ-సీడెడ్</span>` : `<span style="background:rgba(76,175,80,0.2);color:#81c784;font-size:0.75rem;padding:2px 8px;border-radius:10px;">✓ ఫైర్‌స్టోర్</span>`}
+        </div>
+        <p style="margin:2px 0 6px;color:rgba(255,255,255,0.7);font-size:0.9rem;">
+          <strong>${item.titleEn || ""}</strong> | 📅 ${item.masam} • <span style="color:${pakshaColor};font-weight:bold;">${item.paksham}</span>
+        </p>
+        <p style="margin:2px 0 8px;color:#ffe484;font-size:0.86rem;">
+          🙏 అధిష్టాన దైవం: <strong>${item.deity || "శ్రీ మహావిష్ణువు"}</strong>
+        </p>
+        <p style="margin:0 0 12px;color:rgba(255,255,255,0.8);font-size:0.88rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+          ${item.summary || item.story?.slice(0, 120) || ""}...
+        </p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="edit-ekadashi-btn" data-id="${item.docId}" style="background:#ffd166;color:#1a0c02;border:none;padding:6px 16px;border-radius:12px;font-weight:700;cursor:pointer;">
+            ✏️ సవరించండి (Edit)
+          </button>
+          <button class="delete-ekadashi-btn" data-id="${item.docId}" data-name="${item.title}" style="background:rgba(230,57,70,0.85);color:#fff;border:none;padding:6px 14px;border-radius:12px;font-weight:700;cursor:pointer;">
+            🗑️ డిలీట్
+          </button>
+          <a href="../festivals/?category=ekadashi&ekadashi=${item.slug}" target="_blank" style="color:#ffd166;text-decoration:none;font-size:0.88rem;font-weight:600;display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:rgba(255,255,255,0.06);border-radius:10px;">
+            🔗 వెబ్‌సైట్‌లో చూడండి ↗
+          </a>
+        </div>
+      </div>
+    `;
+
+    adminEkadashisList.appendChild(card);
+  });
+
+  // Attach Edit and Delete Handlers
+  document.querySelectorAll(".edit-ekadashi-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = adminEkadashiCache.find((e) => e.docId === btn.dataset.id);
+      if (item) openEkadashiEdit(item);
+    });
+  });
+
+  document.querySelectorAll(".delete-ekadashi-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const docId = btn.dataset.id;
+      const name = btn.dataset.name;
+      if (!confirm(`మీరు ఖచ్చితంగా "${name}" ఏకాదశిని తొలగించాలనుకుంటున్నారా?`)) return;
+
+      try {
+        await deleteDoc(doc(db, "ekadashis", docId));
+        alert(`"${name}" విజయవంతంగా తొలగించబడింది.`);
+        loadAdminEkadashis();
+      } catch (err) {
+        alert("తొలగించడంలో సమస్య: " + err.message);
+      }
+    });
+  });
+}
+
+adminEkadashiSearch?.addEventListener("input", renderAdminEkadashis);
+adminEkadashiFilterPaksha?.addEventListener("change", renderAdminEkadashis);
+
+// Populate Form for Editing
+function openEkadashiEdit(item) {
+  editingEkadashiId.value = item.docId;
+  ekadashiFormTitle.innerText = `ఏకాదశి సవరణ: ${item.title}`;
+
+  ekadashiTitleInput.value = item.title || "";
+  ekadashiTitleEnInput.value = item.titleEn || "";
+  ekadashiSlugInput.value = item.slug || item.docId || "";
+  if (ekadashiMasamSelect) ekadashiMasamSelect.value = item.masam || "చైత్ర మాసం";
+  if (ekadashiPakshamSelect) ekadashiPakshamSelect.value = item.paksham || "శుక్ల పక్షం";
+  ekadashiDeityInput.value = item.deity || "";
+  ekadashiIsMajorCheckbox.checked = !!item.isMajor;
+  ekadashiCardImageInput.value = item.cardImage || "";
+  ekadashiSummaryInput.value = item.summary || "";
+  ekadashiStoryInput.value = item.story || "";
+  ekadashiVidhanamInput.value = item.vidhanam || "";
+  ekadashiPhalamInput.value = item.phalam || "";
+
+  if (item.cardImage && ekadashiImageUploadBox) {
+    ekadashiImageUploadBox.innerHTML = `<img src="${item.cardImage}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
+  }
+
+  saveEkadashiBtn.innerText = "మార్పులను భద్రపరచండి (Update Changes)";
+  if (cancelEkadashiEditBtn) cancelEkadashiEditBtn.style.display = "inline-block";
+
+  document.getElementById("ekadashiFormContainer")?.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetEkadashiForm() {
+  editingEkadashiId.value = "";
+  ekadashiFormTitle.innerText = "కొత్త ఏకాదశి జోడించండి / సవరించండి";
+
+  ekadashiTitleInput.value = "";
+  ekadashiTitleEnInput.value = "";
+  ekadashiSlugInput.value = "";
+  if (ekadashiMasamSelect) ekadashiMasamSelect.selectedIndex = 0;
+  if (ekadashiPakshamSelect) ekadashiPakshamSelect.selectedIndex = 0;
+  ekadashiDeityInput.value = "";
+  ekadashiIsMajorCheckbox.checked = false;
+  ekadashiCardImageInput.value = "";
+  if (ekadashiImageUploadBox) {
+    ekadashiImageUploadBox.innerHTML = "<span>＋ Ekadashi Image Upload</span>";
+  }
+  ekadashiSummaryInput.value = "";
+  ekadashiStoryInput.value = "";
+  ekadashiVidhanamInput.value = "";
+  ekadashiPhalamInput.value = "";
+
+  saveEkadashiBtn.innerText = "ఏకాదశి వివరాలు సేవ్ చేయండి (Save Ekadashi)";
+  if (cancelEkadashiEditBtn) cancelEkadashiEditBtn.style.display = "none";
+}
+
+cancelEkadashiEditBtn?.addEventListener("click", resetEkadashiForm);
+
+// Save or Update Ekadashi
+saveEkadashiBtn?.addEventListener("click", async () => {
+  const title = ekadashiTitleInput.value.trim();
+  const titleEn = ekadashiTitleEnInput.value.trim();
+  let slug = ekadashiSlugInput.value.trim() || slugify(titleEn || title);
+  const masam = ekadashiMasamSelect.value;
+  const paksham = ekadashiPakshamSelect.value;
+  const deity = ekadashiDeityInput.value.trim();
+  const isMajor = ekadashiIsMajorCheckbox.checked;
+  const cardImage = ekadashiCardImageInput.value.trim() || "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?w=700&auto=format&fit=crop&q=80";
+  const summary = ekadashiSummaryInput.value.trim();
+  const story = ekadashiStoryInput.value.trim();
+  const vidhanam = ekadashiVidhanamInput.value.trim();
+  const phalam = ekadashiPhalamInput.value.trim();
+
+  if (!title) {
+    alert("దయచేసి ఏకాదశి పేరు నమోదు చేయండి.");
+    return;
+  }
+
+  saveEkadashiBtn.disabled = true;
+  saveEkadashiBtn.innerText = "సేవ్ అవుతోంది...";
+  ekadashiMsg.innerText = "";
+
+  const ekadashiData = {
+    title,
+    titleEn,
+    slug,
+    masam,
+    paksham,
+    tithi: "ఏకాదశి",
+    deity,
+    isMajor,
+    cardImage,
+    summary,
+    story,
+    vidhanam,
+    phalam,
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    const editId = editingEkadashiId.value;
+    if (editId) {
+      await updateDoc(doc(db, "ekadashis", editId), ekadashiData);
+      ekadashiMsg.innerHTML = `<span style="color:#81c784;">✓ "${title}" విజయవంతంగా నవీకరించబడింది!</span>`;
+    } else {
+      ekadashiData.createdAt = serverTimestamp();
+      await setDoc(doc(db, "ekadashis", slug), ekadashiData);
+      ekadashiMsg.innerHTML = `<span style="color:#81c784;">✓ "${title}" కొత్త ఏకాదశిగా సేవ్ చేయబడింది!</span>`;
+    }
+
+    resetEkadashiForm();
+    await loadAdminEkadashis();
+  } catch (err) {
+    console.error("Save error:", err);
+    ekadashiMsg.innerHTML = `<span style="color:#e63946;">Error: ${err.message}</span>`;
+  } finally {
+    saveEkadashiBtn.disabled = false;
+  }
+});
+
+// Seed All 26 Ekadashis to Firestore
+seedEkadashisBtn?.addEventListener("click", async () => {
+  if (!confirm("మొత్తం 26 పవిత్ర ఏకాదశుల ప్రామాణిక వివరాలను ఫైర్‌స్టోర్ డేటాబేస్‌కు సీడ్ (అప్‌లోడ్) చేయాలా?")) {
+    return;
+  }
+
+  seedEkadashisBtn.disabled = true;
+  seedEkadashisBtn.innerText = "⚡ సీడ్ అవుతోంది... (0 / 26)";
+  seedEkadashisMsg.innerHTML = "";
+
+  try {
+    let count = 0;
+    for (const item of EKADASHI_LIST) {
+      await setDoc(doc(db, "ekadashis", item.slug), {
+        ...item,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      count++;
+      seedEkadashisBtn.innerText = `⚡ సీడ్ అవుతోంది... (${count} / 26)`;
+    }
+
+    seedEkadashisMsg.innerHTML = `<span style="color:#81c784;">🎉 అద్భుతం! మొత్తం 26 ఏకాదశులు విజయవంతంగా ఫైర్‌స్టోర్ డేటాబేస్‌లో నిక్షిప్తమైనవి. ఇప్పుడు మీరు ప్రతి ఏకాదశిని ఇక్కడినుండే ఎడిట్ చేయవచ్చు!</span>`;
+    alert("🎉 మొత్తం 26 ఏకాదశులు విజయవంతంగా ఫైర్‌స్టోర్ డేటాబేస్‌కు అప్‌లోడ్ చేయబడ్డాయి!");
+    await loadAdminEkadashis();
+  } catch (err) {
+    console.error("Seeding error:", err);
+    seedEkadashisMsg.innerHTML = `<span style="color:#e63946;">సీడింగ్ లోపం: ${err.message}</span>`;
+    alert("సీడింగ్ లోపం: " + err.message);
+  } finally {
+    seedEkadashisBtn.disabled = false;
+    seedEkadashisBtn.innerText = "⚡ Seed All 26 Ekadashis to Firestore";
+  }
+});
+
+// Initialize Ekadashi CMS
+loadAdminEkadashis();
+
 
 
 /* ══════════════════════════════════════

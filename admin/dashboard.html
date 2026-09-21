@@ -19,6 +19,7 @@
         <button class="dash-btn" data-section="newQuizSection">Quiz CMS</button>
         <button class="dash-btn active" data-section="eventsSection">Events</button>
         <button class="dash-btn" data-section="festivalsSection">Festivals</button>
+        <button class="dash-btn" data-section="ekadashiSection">🪷 ఏకాదశి CMS</button>
         <button class="dash-btn" data-section="templesSection">Temples</button>
         <button class="dash-btn" data-section="librarySection">Library</button>
         <button class="dash-btn" data-section="videosSection">Videos</button>
@@ -292,6 +293,141 @@
   </div>
   <h2 class="admin-section-title">అన్ని పండుగలు</h2>
   <div id="adminFestivalsList"></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     🪷 EKADASHI CMS SECTION
+═══════════════════════════════════ -->
+<div id="ekadashiSection" class="dash-section">
+  <h2 class="admin-section-title">🪷 ఏకాదశి వ్రతాలు (Ekadashi CMS)</h2>
+
+  <!-- SEED & QUICK ACTIONS BANNER -->
+  <div class="add-event-box" style="border:1px solid #ffd166;background:rgba(255,209,102,0.06);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h2 style="margin:0 0 6px;color:#ffd166;">⚡ ఆటోమేటిక్ డేటాబేస్ సీడింగ్ (Database Seeding)</h2>
+        <p style="margin:0;color:rgba(255,255,255,0.75);font-size:0.92rem;">
+          మొత్తం 26 పవిత్ర ఏకాదశుల సంపూర్ణ సమాచారాన్ని (పురాణ గాథలు, పూజా విధానం, ఫలితం) ఒకే క్లిక్‌తో ఫైర్‌స్టోర్ డేటాబేస్‌కు అప్‌లోడ్ చేయండి.
+        </p>
+      </div>
+      <button id="seedEkadashisBtn" style="background:linear-gradient(135deg,#ffd166,#e67e22);color:#1a0c02;font-weight:800;border:none;padding:12px 24px;border-radius:24px;cursor:pointer;">
+        ⚡ Seed All 26 Ekadashis to Firestore
+      </button>
+    </div>
+    <p id="seedEkadashisMsg" style="margin-top:10px;font-weight:700;"></p>
+  </div>
+
+  <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+  <!-- ADD / EDIT EKADASHI FORM -->
+  <div class="add-event-box" id="ekadashiFormContainer">
+    <h2 id="ekadashiFormTitle">కొత్త ఏకాదశి జోడించండి / సవరించండి</h2>
+    <input type="hidden" id="editingEkadashiId" value="">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;">
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">ఏకాదశి పేరు (తెలుగు):</label>
+        <input type="text" id="ekadashiTitle" placeholder="ఉదా: వైకుంఠ ఏకాదశి (మోక్షదా ఏకాదశి)">
+      </div>
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">English Name:</label>
+        <input type="text" id="ekadashiTitleEn" placeholder="e.g. Vaikuntha / Mokshada Ekadashi">
+      </div>
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">Slug / Clean URL:</label>
+        <input type="text" id="ekadashiSlug" placeholder="e.g. vaikuntha-ekadashi">
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:10px;">
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">చాంద్రమానం (మాసం):</label>
+        <select id="ekadashiMasam" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <option value="చైత్ర మాసం">చైత్ర మాసం</option>
+          <option value="వైశాఖ మాసం">వైశాఖ మాసం</option>
+          <option value="జ్యేష్ఠ మాసం">జ్యేష్ఠ మాసం</option>
+          <option value="ఆషాఢ మాసం">ఆషాఢ మాసం</option>
+          <option value="శ్రావణ మాసం">శ్రావణ మాసం</option>
+          <option value="భాద్రపద మాసం">భాద్రపద మాసం</option>
+          <option value="ఆశ్వయుజ మాసం">ఆశ్వయుజ మాసం</option>
+          <option value="కార్తీక మాసం">కార్తీక మాసం</option>
+          <option value="మార్గశిర మాసం">మార్గశిర మాసం</option>
+          <option value="పుష్య మాసం">పుష్య మాసం</option>
+          <option value="మాఘ మాసం">మాఘ మాసం</option>
+          <option value="ఫాల్గుణ మాసం">ఫాల్గుణ మాసం</option>
+          <option value="అధిక మాసం (పురుషోత్తమ మాసం)">అధిక మాసం (పురుషోత్తమ మాసం)</option>
+        </select>
+      </div>
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">పక్షం:</label>
+        <select id="ekadashiPaksham" style="width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          <option value="శుక్ల పక్షం">శుక్ల పక్షం</option>
+          <option value="కృష్ణ పక్షం">కృష్ణ పక్షం</option>
+        </select>
+      </div>
+      <div>
+        <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">అధిష్టాన దైవం (Deity):</label>
+        <input type="text" id="ekadashiDeity" placeholder="ఉదా: శ్రీ వైకుంఠ నారాయణుడు">
+      </div>
+      <div style="display:flex;align-items:center;padding-top:20px;">
+        <label style="display:flex;align-items:center;gap:8px;color:#ffd166;font-weight:700;cursor:pointer;">
+          <input type="checkbox" id="ekadashiIsMajor" style="width:18px;height:18px;">
+          ⭐ ముఖ్యమైన ఏకాదశి (Highlight)
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">కార్డ్ ఇమేజ్ (Card Image URL):</label>
+      <input type="text" id="ekadashiCardImage" placeholder="https://images.unsplash.com/photo-...">
+      <div id="ekadashiImageUploadBox" class="festival-card-upload-box" style="margin-top:8px;">
+        <span>＋ Ekadashi Image Upload</span>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">సంక్షిప్త పరిచయం (Summary / One-liner):</label>
+      <textarea id="ekadashiSummary" rows="2" placeholder="ముక్కోటి ఏకాదశి, వైకుంఠ ద్వారాలు తెరుచుకునే అత్యంత పరమ పవిత్ర దినం..."></textarea>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">📖 పవిత్ర పురాణ గాథ & విశిష్టత (Puranic Story):</label>
+      <textarea id="ekadashiStory" rows="6" placeholder="ఈ ఏకాదశి గురించిన పురాణ కథ, మహత్యం..."></textarea>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">🪔 ఉపవాస, జాగరణ & పూజా విధానం (Fasting & Puja Rules):</label>
+      <textarea id="ekadashiVidhanam" rows="5" placeholder="1. ఉదయమే తలస్నానం...\n2. పూజా విధానం...\n3. ఉపవాస నియమాలు..."></textarea>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="color:#ffd166;font-size:0.85rem;font-weight:600;">✨ వ్రత ఫలం & మోక్ష విశేషం (Phala Shruti):</label>
+      <textarea id="ekadashiPhalam" rows="3" placeholder="ఈ వ్రతం ఆచరించడం వల్ల లభించే పుణ్యఫలం..."></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:16px;">
+      <button id="saveEkadashiBtn" style="flex:1;">ఏకాదశి వివరాలు సేవ్ చేయండి (Save Ekadashi)</button>
+      <button id="cancelEkadashiEditBtn" type="button" style="display:none;background:rgba(255,255,255,0.15);border:none;color:white;padding:12px 20px;border-radius:14px;cursor:pointer;">రద్దు చేయండి (Cancel)</button>
+    </div>
+    <p id="ekadashiMsg" style="margin-top:8px;font-weight:700;"></p>
+  </div>
+
+  <hr style="border-color:rgba(255,255,255,0.08);margin:30px 0;">
+
+  <!-- EKADASHIS LIST IN ADMIN -->
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+    <h2 class="admin-section-title" style="margin:0;">ఏకాదశుల జాబితా (<span id="adminEkadashiCount">0</span>)</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input type="text" id="adminEkadashiSearch" placeholder="జాబితాలో వెతకండి..." style="padding:8px 14px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;font-size:0.9rem;">
+      <select id="adminEkadashiFilterPaksha" style="padding:8px 14px;border-radius:14px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;font-size:0.9rem;">
+        <option value="">అన్ని పక్షాలు</option>
+        <option value="శుక్ల">శుక్ల పక్షం</option>
+        <option value="కృష్ణ">కృష్ణ పక్షం</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="adminEkadashisList" class="cms-list"></div>
 </div>
 
 <!-- ═══════════════════════════════════

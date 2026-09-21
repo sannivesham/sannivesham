@@ -9,6 +9,7 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { SacredReader, slugify } from "../library/reader.js";
+import { EKADASHI_LIST } from "./ekadashi-data.js";
 
 const params = new URLSearchParams(window.location.search);
 let festivalId = params.get("id");
@@ -86,6 +87,23 @@ async function loadFestival() {
           }
           break;
         }
+      }
+    // 4. Fallback: Search in Ekadashis
+    if (!festival && queryParam) {
+      const ekadashi = EKADASHI_LIST.find(
+        e => e.slug === queryParam || e.id === queryParam || slugify(e.title) === queryParam
+      );
+      if (ekadashi) {
+        festival = {
+          title: ekadashi.title,
+          footerQuote: `${ekadashi.masam} - ${ekadashi.paksham} | అధిష్టాన దైవం: ${ekadashi.deity}`,
+          cardImage: ekadashi.cardImage,
+          sections: [
+            { title: "📖 పవిత్ర పురాణ గాథ & విశిష్టత", content: ekadashi.story },
+            { title: "🪔 ఉపవాస, జాగరణ & పూజా విధానం", content: ekadashi.vidhanam },
+            { title: "✨ వ్రత ఫలం & మోక్ష విశేషం", content: ekadashi.phalam }
+          ]
+        };
       }
     }
 

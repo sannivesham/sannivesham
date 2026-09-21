@@ -227,11 +227,93 @@
             </p>
         </div>
 
-        <!-- FESTIVALS GRID -->
-        <div class="festivals-grid">
+        <!-- CATEGORY TABS -->
+        <div class="festival-category-tabs">
+            <button class="cat-tab-btn active" id="tabMainFestivals" data-tab="festivals">
+                <span>🏮</span> ప్రధాన పండుగలు
+            </button>
+            <button class="cat-tab-btn" id="tabEkadashi" data-tab="ekadashi">
+                <span>🪷</span> ఏకాదశి వ్రతాలు <span class="tab-count-badge">26</span>
+            </button>
+        </div>
 
-          
+        <!-- MAIN FESTIVALS VIEW -->
+        <div class="festivals-view-wrap" id="mainFestivalsView">
+            <div class="festivals-grid"></div>
+        </div>
 
+        <!-- EKADASHI SECTION VIEW -->
+        <div class="ekadashi-view-wrap" id="ekadashiSectionView" style="display:none;">
+            <div class="ekadashi-intro-card">
+                <div class="ekadashi-intro-badge">✨ పద్మ పురాణ & స్కాంద పురాణోక్తం ✨</div>
+                <h2 class="ekadashi-intro-heading">పవిత్ర 26 ఏకాదశి వ్రతాలు</h2>
+                <p class="ekadashi-intro-text">
+                    చాంద్రమాన సంవత్సరంలోని 12 మాసాలలో వచ్చే 24 ఏకాదశులు మరియు అధిక మాసంలో వచ్చే 2 ఏకాదశులు — సమస్త ఏకాదశుల పురాణ గాథలు, ఉపవాస, జాగరణ నియమాలు మరియు ఫలశ్రుతి.
+                </p>
+
+                <div class="ekadashi-toolbar">
+                    <div class="ekadashi-search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="ekadashiSearchInput" placeholder="ఏకాదశి పేరు, మాసం లేదా ఫలితం వెతకండి... (ఉదా: వైకుంఠ, తొలి, భీష్మ)" autocomplete="off">
+                        <button id="ekadashiClearSearch" class="clear-search-btn" style="display:none;" title="వెతుకులాట తొలగించండి">✕</button>
+                    </div>
+
+                    <div class="ekadashi-filter-pills">
+                        <button class="ekadashi-pill active" data-filter="all">అన్నీ (26)</button>
+                        <button class="ekadashi-pill" data-filter="major">⭐ ముఖ్యమైనవి</button>
+                        <button class="ekadashi-pill" data-filter="shukla">🌕 శుక్ల పక్షం</button>
+                        <button class="ekadashi-pill" data-filter="krishna">🌑 కృష్ణ పక్షం</button>
+                        <select id="ekadashiMonthFilter" class="ekadashi-month-dropdown">
+                            <option value="">అన్ని మాసాలు (All Months)</option>
+                            <option value="చైత్ర">చైత్ర మాసం</option>
+                            <option value="వైశాఖ">వైశాఖ మాసం</option>
+                            <option value="జ్యేష్ఠ">జ్యేష్ఠ మాసం</option>
+                            <option value="ఆషాఢ">ఆషాఢ మాసం</option>
+                            <option value="శ్రావణ">శ్రావణ మాసం</option>
+                            <option value="భాద్రపద">భాద్రపద మాసం</option>
+                            <option value="ఆశ్వయుజ">ఆశ్వయుజ మాసం</option>
+                            <option value="కార్తీక">కార్తీక మాసం</option>
+                            <option value="మార్గశిర">మార్గశిర మాసం</option>
+                            <option value="పుష్య">పుష్య మాసం</option>
+                            <option value="మాఘ">మాఘ మాసం</option>
+                            <option value="ఫాల్గుణ">ఫాల్గుణ మాసం</option>
+                            <option value="అధిక">అధిక మాసం (పురుషోత్తమ)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ekadashi-grid" id="ekadashiGrid"></div>
+
+            <div id="ekadashiEmptyState" class="ekadashi-empty-state" style="display:none;">
+                <div class="empty-icon">🪷</div>
+                <h3>ఎటువంటి ఏకాదశి లభించలేదు</h3>
+                <p>మీరు వెతికిన పదానికి సరిపోలిన ఏకాదశి వివరాలు లేవు. దయచేసి వేరొక పదం ప్రయత్నించండి.</p>
+                <button id="resetEkadashiFilterBtn" class="reset-filter-btn">అన్ని ఏకాదశులను చూపించు</button>
+            </div>
+        </div>
+
+        <!-- EKADASHI READER MODAL -->
+        <div class="ekadashi-reader-modal" id="ekadashiReaderModal" style="display:none;">
+            <div class="ekadashi-reader-backdrop" id="ekadashiReaderBackdrop"></div>
+            <div class="ekadashi-reader-dialog" id="ekadashiReaderDialog">
+                <header class="ekadashi-modal-toolbar">
+                    <button class="ekadashi-modal-back-btn" id="closeEkadashiReaderBtn">
+                        ← వెనుకకు
+                    </button>
+                    <div class="ekadashi-modal-actions">
+                        <button class="ekadashi-tool-btn" id="ekadashiFontMinusBtn" title="అక్షరాల సైజు తగ్గించండి">A-</button>
+                        <span id="ekadashiFontSizeDisplay">20px</span>
+                        <button class="ekadashi-tool-btn" id="ekadashiFontPlusBtn" title="అక్షరాల సైజు పెంచండి">A+</button>
+                        <button class="ekadashi-tool-btn" id="ekadashiThemeBtn" title="థీమ్ మార్చండి">🎨 థీమ్</button>
+                        <button class="ekadashi-tool-btn" id="ekadashiCopyBtn" title="వివరాలు కాపీ చేయండి">📋 కాపీ</button>
+                        <button class="ekadashi-tool-btn share-wa" id="ekadashiShareBtn" title="వాట్సాప్‌లో షేర్ చేయండి">📲 షేర్</button>
+                    </div>
+                </header>
+                <div class="ekadashi-modal-body" id="ekadashiModalBody">
+                    <!-- Dynamic reader content -->
+                </div>
+            </div>
         </div>
 
     </section>
