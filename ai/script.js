@@ -26,6 +26,26 @@ const BACKEND_ENDPOINT = "https://us-central1-sannivesham-b4231.cloudfunctions.n
 const ONE_HOUR_MS = 60 * 60 * 1000;
 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
+// Gemini Model Configuration
+const GEMINI_MODEL = "gemini-2.5-flash";
+const SANNIVESHAM_SYSTEM_INSTRUCTION = `You are "సన్నివేశం మేధ" (Sannivesham AI), a deeply knowledgeable, respectful, and culturally grounded AI guide created for the Sannivesham (సన్నివేశం) platform.
+Your sole purpose is to explore, teach, and answer questions regarding:
+- Telugu language (తెలుగు భాష), grammar, sandhulu, samasalu, proverbs.
+- Telugu literature (సాహిత్యం), poetry (పద్యాలు), shatakams, epics, kavya.
+- Revered poets (Nannaya, Tikkana, Errana, Pothana, Vemana, Sri Sri, Gurajada, Annamayya, Tyagaraja, Ramadasu, etc.).
+- Sanatana Dharma (సనాతన ధర్మం), Hindu philosophy, Ramayana, Mahabharata, Bhagavatam, Bhagavad Gita, Puranas, Upanishads.
+- Devotional literature: Stotras, Mantras, Sahasranamas, Chalisa, Keertanas.
+- Sacred Temples and traditions across Andhra Pradesh, Telangana, and India.
+- Festivals (Ugadi, Sankranti, Deepavali, Dasara, Shivaratri, etc.).
+
+Strict Boundary:
+You are NOT a general-purpose bot, coding assistant, or medical/legal advisor. If asked off-topic questions (coding, crypto, modern gadgets, dating, medicine), politely decline and redirect the user to Telugu/Indian culture.
+
+Language & Style:
+- If user asks in Telugu, respond in elegant Telugu with authentic verses and clear meanings.
+- If user asks in English, respond in articulate English with scriptural citations.
+- Always provide 2-3 interactive follow-up questions at the very end of your response.`;
+
 // Prompt injection & safety patterns
 const PROMPT_INJECTION_PATTERNS = [
   /(ignore|disregard|forget|bypass)\s+.*(instructions|rules|prompt|identity|filters|guardrails|moderation)/i,
@@ -133,8 +153,12 @@ class SanniveshamAIChat {
     this.restrictionBanner = document.getElementById("restrictionBanner");
     this.restrictionDesc = document.getElementById("restrictionDesc");
 
+    this.geminiApiKey = localStorage.getItem("sannivesham_gemini_key") || "";
+    this.firestoreApiKey = "";
+
     this.initAuth();
     this.initEventListeners();
+    this.initApiKeyControls();
     this.initCanvas();
     this.checkRestriction();
   }
@@ -148,7 +172,20 @@ class SanniveshamAIChat {
     return id;
   }
 
-  initAuth() {
+  async initAuth() {
+    // Check Firestore for central config
+    try {
+      if (db) {
+        const cfgSnap = await getDoc(doc(db, "config", "gemini"));
+        if (cfgSnap.exists() && cfgSnap.data().apiKey) {
+          this.firestoreApiKey = cfgSnap.data().apiKey;
+          this.updateKeyBadge();
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user && user.uid) {
         this.userId = user.uid;
@@ -234,6 +271,123 @@ class SanniveshamAIChat {
     this.chatInput.placeholder = isEn
       ? "Ask about Telugu language, culture, epics, temples, or Dharma..."
       : "తెలుగు లేదా భారతీయ సంస్కృతి, సాహిత్యం, ధర్మం గురించి అడగండి...";
+  }
+
+  initApiKeyControls() {
+    this.apiKeyBtn = document.getElementById("apiKeyBtn");
+    this.apiKeyModal = document.getElementById("apiKeyModal");
+    this.closeApiKeyModalBtn = document.getElementById("closeApiKeyModalBtn");
+    this.geminiKeyInput = document.getElementById("geminiKeyInput");
+    this.toggleKeyVisibilityBtn = document.getElementById("toggleKeyVisibilityBtn");
+    this.clearKeyBtn = document.getElementById("clearKeyBtn");
+    this.saveKeyBtn = document.getElementById("saveKeyBtn");
+    this.keyFeedback = document.getElementById("keyFeedback");
+    this.keyStatusIcon = document.getElementById("keyStatusIcon");
+
+    if (this.apiKeyBtn && this.apiKeyModal) {
+      this.apiKeyBtn.addEventListener("click", () => {
+        this.geminiKeyInput.value = this.geminiApiKey || "";
+        this.keyFeedback.innerText = "";
+        this.apiKeyModal.style.display = "flex";
+      });
+
+      this.closeApiKeyModalBtn.addEventListener("click", () => {
+        this.apiKeyModal.style.display = "none";
+      });
+
+      this.apiKeyModal.addEventListener("click", (e) => {
+        if (e.target === this.apiKeyModal) {
+          this.apiKeyModal.style.display = "none";
+        }
+      });
+
+      if (this.toggleKeyVisibilityBtn) {
+        this.toggleKeyVisibilityBtn.addEventListener("click", () => {
+          const isPass = this.geminiKeyInput.type === "password";
+          this.geminiKeyInput.type = isPass ? "text" : "password";
+          this.toggleKeyVisibilityBtn.innerText = isPass ? "🙈" : "👁️";
+        });
+      }
+
+      if (this.clearKeyBtn) {
+        this.clearKeyBtn.addEventListener("click", () => {
+          this.geminiApiKey = "";
+          localStorage.removeItem("sannivesham_gemini_key");
+          this.geminiKeyInput.value = "";
+          this.keyFeedback.innerText = "కీ తొలగించబడింది. డిఫాల్ట్ సాంస్కృతిక విజ్ఞాన ఇంజిన్ సక్రియంలో ఉంది.";
+          this.keyFeedback.style.color = "#ffd166";
+          this.updateKeyBadge();
+        });
+      }
+
+      if (this.saveKeyBtn) {
+        this.saveKeyBtn.addEventListener("click", async () => {
+          const key = this.geminiKeyInput.value.trim();
+          if (!key) {
+            this.keyFeedback.innerText = "దయచేసి సరైన API కీని నమోదు చేయండి.";
+            this.keyFeedback.style.color = "#e74c3c";
+            return;
+          }
+
+          this.saveKeyBtn.disabled = true;
+          this.keyFeedback.innerText = "కీని ధృవీకరిస్తున్నాము (Verifying)...";
+          this.keyFeedback.style.color = "#ffd166";
+
+          try {
+            const ok = await this.testGeminiKey(key);
+            if (ok) {
+              this.geminiApiKey = key;
+              localStorage.setItem("sannivesham_gemini_key", key);
+              this.keyFeedback.innerText = "✅ కీ విజయవంతంగా ధృవీకరించబడింది! Gemini 2.5 Flash లైవ్ మోడ్ సక్రియం అయ్యింది.";
+              this.keyFeedback.style.color = "#2ecc71";
+              this.updateKeyBadge();
+              setTimeout(() => {
+                this.apiKeyModal.style.display = "none";
+              }, 1200);
+            } else {
+              this.keyFeedback.innerText = "⚠️ కీ తో Gemini API కనెక్ట్ కాలేదు. దయచేసి API సక్రియంగా ఉందో లేదో సరిచూసుకోండి.";
+              this.keyFeedback.style.color = "#e74c3c";
+            }
+          } catch (err) {
+            this.keyFeedback.innerText = "ధృవీకరణ లోపం: " + (err.message || "నెట్‌వర్క్ అంతరాయం");
+            this.keyFeedback.style.color = "#e74c3c";
+          } finally {
+            this.saveKeyBtn.disabled = false;
+          }
+        });
+      }
+
+      this.updateKeyBadge();
+    }
+  }
+
+  updateKeyBadge() {
+    const activeKey = this.geminiApiKey || this.firestoreApiKey;
+    if (this.apiKeyBtn) {
+      if (activeKey) {
+        this.apiKeyBtn.classList.add("active");
+        if (this.keyStatusIcon) this.keyStatusIcon.innerText = "🟢";
+      } else {
+        this.apiKeyBtn.classList.remove("active");
+        if (this.keyStatusIcon) this.keyStatusIcon.innerText = "⚡";
+      }
+    }
+  }
+
+  async testGeminiKey(key) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: "Hello" }] }]
+        })
+      });
+      return resp.ok;
+    } catch {
+      return false;
+    }
   }
 
   async checkRestriction() {
@@ -446,8 +600,72 @@ class SanniveshamAIChat {
     this.sendBtn.disabled = isGen || this.chatInput.value.trim().length === 0;
   }
 
+  async callGeminiAPI(apiKey, userMessage) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
+    const contents = [];
+    for (const msg of this.conversationHistory.slice(-6)) {
+      contents.push({
+        role: msg.role === "user" ? "user" : "model",
+        parts: [{ text: msg.content }]
+      });
+    }
+    contents.push({
+      role: "user",
+      parts: [{ text: userMessage }]
+    });
+
+    const body = {
+      systemInstruction: {
+        parts: [{ text: SANNIVESHAM_SYSTEM_INSTRUCTION }]
+      },
+      contents: contents,
+      generationConfig: {
+        temperature: 0.6,
+        maxOutputTokens: 1200
+      }
+    };
+
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+      const errJson = await resp.json().catch(() => ({}));
+      throw new Error(errJson.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const candidate = data.candidates && data.candidates[0];
+    if (candidate && candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+      const text = candidate.content.parts[0].text;
+      return {
+        message: text,
+        followUps: this.extractFollowUps(text)
+      };
+    }
+
+    throw new Error("No response content from Gemini model.");
+  }
+
   async callAIBackend(userMessage) {
-    // Attempt backend Cloud Function first
+    const activeKey = this.geminiApiKey || this.firestoreApiKey;
+
+    // 1. Direct Gemini API if key is available
+    if (activeKey) {
+      try {
+        const geminiRes = await this.callGeminiAPI(activeKey, userMessage);
+        if (geminiRes && geminiRes.message) {
+          return geminiRes;
+        }
+      } catch (geminiErr) {
+        console.warn("Direct Gemini API error:", geminiErr);
+      }
+    }
+
+    // 2. Attempt backend Cloud Function if deployed
     try {
       const resp = await fetch(BACKEND_ENDPOINT, {
         method: "POST",
@@ -473,11 +691,10 @@ class SanniveshamAIChat {
         }
       }
     } catch (netErr) {
-      // Backend function offline / fallback
-      console.log("Cloud function offline, activating intelligent cultural knowledge fallback engine.");
+      // Backend function offline
     }
 
-    // Intelligent cultural fallback resolver
+    // 3. Comprehensive Cultural Knowledge Engine
     return this.resolveCulturalKnowledge(userMessage);
   }
 
@@ -485,50 +702,122 @@ class SanniveshamAIChat {
     const q = query.toLowerCase();
     const isTe = this.detectLang(query) !== "english";
 
-    // Pothana Bhagavatam
+    // 1. Srimad Ramayana
+    if (q.includes("రామాయణ") || q.includes("రాముడు") || q.includes("ramayan") || q.includes("rama") || q.includes("sita") || q.includes("సీత") || q.includes("లక్ష్మణ") || q.includes("హనుమంతు") || q.includes("సుందరకాండ") || q.includes("వాల్మీకి") || q.includes("valmiki")) {
+      return {
+        message: isTe
+          ? `### శ్రీమద్రామాయణమ్ — ధర్మ స్వరూపం & దివ్య సారాంశం\n\nవాల్మీకి మహర్షి రచించిన **శ్రీమద్రామాయణం** సనాతన ధర్మంలో 'ఆదికావ్యం'. ఇది మానవ ధర్మం, సత్యం, కర్తవ్యం మరియు ఆదర్శ సంబంధాలకు పరమోన్నత నిదర్శనం.\n\n> **"రామో విగ్రహవాన్ ధర్మః, సాధుః సత్యపరాక్రమః | రాజా సర్వస్య లోకస్య, దేవానామివ వాసవః ||"**\n*(భావం: శ్రీరాముడు ధర్మానికే సాక్షాత్ ప్రతిరూపం; సద్గుణ సంపన్నుడు, సత్యపరాక్రముడు.)*\n\n**శ్రీమద్రామాయణంలోని 7 కాండలు:**\n1. **బాలకాండ:** శ్రీరామ జననం, తాటక వధ, విశ్వామిత్ర యాగ సంరక్షణ, సీతారామ దివ్య కళ్యాణం.\n2. **అయోధ్యకాండ:** శ్రీరామ పట్టాభిషేక సన్నాహం, కైకేయి వరాలు, పితృవాక్య పరిపాలనకై వనవాస గమనం.\n3. **అరణ్యకాండ:** దండకారణ్య ముని దర్శనాలు, శూర్పణఖ ఘట్టం, మారీచ మాయ, రావణుడు సీతాదేవిని అపహరించడం.\n4. **కిష్కింధాకాండ:** సుగ్రీవ మైత్రి, వాలి వధ, సీతాన్వేషణకై వానర సేనల పయనం.\n5. **సుందరకాండ:** హనుమంతుని సముద్ర లంఘనం, లంకా ప్రవేశం, అశోకవన సీతా దర్శనం, లంకా దహనం.\n6. **యుద్ధకాండ:** రామసేతు నిర్మాణం, విభీషణ శరణాగతి, కుంభకర్ణ-రావణ సంహారం, అయోధ్యా పట్టాభిషేకం.\n7. **ఉత్తరకాండ:** రామరాజ్య పరిపాలన, లవకుశుల గానం, సీతాదేవి భూప్రవేశం.\n\n**ముఖ్య సందేశం:** సత్యం మరియు ధర్మం ఎన్నటికీ ఓడిపోవు. కష్టాలు వచ్చినా ధర్మపథం వీడరాదన్నదే శ్రీరాముని జీవన సందేశం.\n\nమీరు సుందరకాండ విశేషాలు, శ్రీరామ నవమి ప్రాముఖ్యత లేదా రామరాజ్య భావన గురించి మరింత తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Srimad Ramayana — The Epic of Righteousness\n\nComposed by Sage Valmiki (the *Adi Kavi*), **Srimad Ramayana** consists of 24,000 verses arranged into 7 Kandas (Books). It depicts the ideal human life founded upon absolute truth (*Satya*) and righteousness (*Dharma*).\n\n> **"Ramo Vigrahavan Dharmah, Sadhu Satya-Parakramah"**\n*(Meaning: Sri Rama is the living embodiment of Dharma; virtuous and steadfast in truth.)*\n\n**The Seven Sacred Kandas:**\n1. **Bala Kanda:** The birth of Rama and his brothers, sage Vishwamitra's yagna protection, and marriage to Sita Devi in Mithila.\n2. **Ayodhya Kanda:** Preparations for coronation, Kaikeyi's boons, and Rama's departure to the forest to honor his father's word (*Pitru Vakya Paripalana*).\n3. **Aranya Kanda:** Hermitage life in Dandakaranya, Surpanakha's wrath, golden deer illusion, and Sita Devi's abduction by Ravana.\n4. **Kishkindha Kanda:** Alliance with Sugriva, liberation of Vali, and deployment of search teams.\n5. **Sundara Kanda:** Hanuman's ocean leap, finding Sita in Ashoka Vatika, Lanka Dahanam, and conveying Rama's ring.\n6. **Yuddha Kanda:** Rama Setu bridge construction, Vibhishana's surrender (*Sharanagati*), destruction of Ravana, and grand Ayodhya Pattabhishekam.\n7. **Uttara Kanda:** The righteous reign of Rama Rajya and the ascension of the divine.\n\n**Core Spiritual Lesson:** Truth and righteousness inevitably triumph over arrogance and injustice.\n\nWould you like to explore Sundara Kanda significance, Sri Rama Navami traditions, or the principles of Rama Rajya?`,
+        followUps: isTe
+          ? ["సుందరకాండ విశిష్టత & పారాయణ ఫలం", "శ్రీరామ పట్టాభిషేకం & రామరాజ్యం", "రామాయణంలో విభీషణ శరణాగతి తత్త్వం"]
+          : ["Sundara Kanda significance", "Principles of Rama Rajya", "Vibhishana Sharanagati doctrine"]
+      };
+    }
+
+    // 2. Mahabharata & Kurukshetra
+    if (q.includes("మహాభారత") || q.includes("పాండవ") || q.includes("కౌరవ") || q.includes("కురుక్షేత్ర") || q.includes("mahabharat") || q.includes("pandava") || q.includes("kaurava") || q.includes("kurukshetra") || q.includes("కర్ణ") || q.includes("భీష్మ") || q.includes("ద్రౌపది")) {
+      return {
+        message: isTe
+          ? `### శ్రీ మహాభారతం — పంచమ వేదం & ధర్మ సంగ్రామం\n\nవ్యాస మహర్షి ప్రసాదించిన **మహాభారతం** లక్ష శ్లోకాలతో కూడిన విశ్వ సాహిత్యంలో అతిపెద్ద ఇతిహాసం. దీనిని 'పంచమ వేదం' అని కూడా పిలుస్తారు.\n\n> **"యతో ధర్మస్తతో జయః"** — *ఎక్కడ ధర్మముండునో, అక్కడనే విజయం లభించును.*\n\n**ముఖ్య విశేషాలు:**\n1. **18 పర్వాలు:** ఆది, సభ, అరణ్య, విరాట, ఉద్యోగ, భీష్మ (గీతా ప్రబోధం), ద్రోణ, కర్ణ, శల్య, సౌప్తిక, స్త్రీ, శాంతి, అనుశాసనిక, అశ్వమేధిక, ఆశ్రమవాసిక, మౌసల, మహాప్రస్థానిక, స్వర్గారోహణ పర్వాలు.\n2. **కురుక్షేత్ర మహాసంగ్రామం:** 18 రోజుల పాటు సాగిన ఈ యుద్ధంలో అధర్మాన్ని నమ్ముకున్న కౌరవులు నశించగా, శ్రీకృష్ణుని ఆశ్రయించిన ధర్మపరులైన పాండవులు విజయం సాధించారు.\n3. **జీవిత సత్యాలు:** భీష్ముని ప్రతిజ్ఞ, కర్ణుని దానగుణం, ధర్మరాజు సత్యసంధత, ద్రౌపది మానసంరక్షణ, విదుర నీతి వంటి అనేక జీవిత పాఠాలు ఇందులో ఉన్నాయి.\n\nమీరు భగవద్గీత ఆవిర్భావం, భీష్ముని శాంతిపర్వం లేదా కర్ణుని పాత్ర విశేషాలు తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Sri Mahabharata — The Epic of Duty and Destiny\n\nComposed by Sage Veda Vyasa, the **Mahabharata** is the world's longest epic poem, comprising 100,000 shlokas across 18 Parvas (Books).\n\n> **"Yato Dharmastato Jayah"** — *Where there is Dharma, there is Victory.*\n\n**Key Highlights:**\n1. **18 Sacred Parvas:** Beginning from Adi Parva to Swargarohana Parva, tracing the cosmic clash between righteousness (Pandavas) and greed/hubris (Kauravas).\n2. **The Battle of Kurukshetra:** Fought for 18 days on the plains of Kurukshetra, sanctified forever by Bhagavad Gita.\n3. **Timeless Archetypes:** Bhishma's unwavering vows, Karna's peerless generosity, Vidura's ethical counsel (*Vidura Niti*), and Krishna's divine guidance.\n\nWould you like to explore the origins of the Bhagavad Gita, the teachings of Shanti Parva, or Karna's character?`,
+        followUps: isTe
+          ? ["కురుక్షేత్ర యుద్ధం 18 రోజుల విశేషాలు", "భీష్ముని విష్ణు సహస్రనామ బోధ", "విదుర నీతి ముఖ్య సూత్రాలు"]
+          : ["Kurukshetra battle breakdown", "Bhishma's Vishnu Sahasranama sermon", "Vidura Niti wisdom"]
+      };
+    }
+
+    // 3. Srimad Bhagavad Gita
+    if (q.includes("భగవద్గీత") || q.includes("గీత") || q.includes("gita") || q.includes("bhagavad") || q.includes("కర్మయోగ") || q.includes("సాంఖ్యయోగ") || q.includes("కర్మణ్యేవాధికారస్తే")) {
+      return {
+        message: isTe
+          ? `### శ్రీమద్భగవద్గీత — జగద్గురు శ్రీకృష్ణుని దివ్యబోధ\n\nకురుక్షేత్ర యుద్ధరంగంలో కర్తవ్యవిమూఢుడైన అర్జునునికి శ్రీకృష్ణ పరమాత్మ బోధించిన 700 శ్లోకాల పరమ పవిత్ర జ్ఞానభాండాగారం **భగవద్గీత**.\n\n> **"కర్మణ్యేవాధికారస్తే మా ఫలేషు కదాచన | మా కర్మఫలహేతుర్భూర్మా తే సఙ్గోత్స్వకర్మణి ||"** (2.47)\n*(భావం: కర్మ చేయుట యందే నీకు అధికారము కలదు, ఫలితముపై ఎన్నడూ లేదు. ప్రతిఫలాపేక్షతో కర్మ చేయవద్దు, అలాగని కర్మలను విడిచిపెట్టవద్దు.)*\n\n**గీతా త్రివేణీ సంగమం:**\n1. **కర్మయోగం (1-6 అధ్యాయాలు):** నిష్కామ కర్మ ద్వారా చిత్తశుద్ధిని పొందడం.\n2. **భక్తియోగం (7-12 అధ్యాయాలు):** సమస్త కర్మలను భగవదర్పణం చేసి ప్రేమతో శరణాగతి పొందడం.\n3. **జ్ఞానయోగం (13-18 అధ్యాయాలు):** క్షేత్ర-క్షేత్రజ్ఞ వివేకం, గుణత్రయ విభాగం, ఆత్మసాక్షాత్కారం.\n\nమీరు గీతా రెండవ అధ్యాయం (సాంఖ్యయోగం), విశ్వరూప సందర్శనం లేదా నిష్కామ కర్మ సూత్రం గురించి తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Srimad Bhagavad Gita — The Divine Song of Sri Krishna\n\nDelivered by Lord Sri Krishna to Arjuna amidst the battlefield of Kurukshetra (Bhishma Parva), the **Bhagavad Gita** contains 700 verses across 18 chapters.\n\n> **"Karmanyevadhikaraste Ma Phaleshu Kadachana | Ma Karmaphalaheturbhurma Te Sango'stvakarmani"** (2.47)\n*(Meaning: You have a right to perform your prescribed duty, but you are not entitled to the fruits of action. Never consider yourself the cause of results, nor be attached to inaction.)*\n\n**The Three Great Paths:**\n1. **Karma Yoga (Chapters 1-6):** Selfless action performed without clinging to outcomes.\n2. **Bhakti Yoga (Chapters 7-12):** Loving devotion and surrender to the Supreme Divine.\n3. **Jnana Yoga (Chapters 13-18):** Discriminative wisdom discerning the eternal Self (*Atman*) from the transient body (*Prakriti*).\n\nWould you like to explore Sankhya Yoga, the Cosmic Form (*Vishwaroopa Darshanam*), or meditation principles?`,
+        followUps: isTe
+          ? ["కర్మయోగం ముఖ్య శ్లోకాలు & వివరణ", "విశ్వరూప సందర్శన యోగం విశేషాలు", "స్థితప్రజ్ఞుని లక్షణాలు ఏమిటి?"]
+          : ["Core verses of Karma Yoga", "Vishwaroopa Darshana meaning", "Qualities of a Sthitaprajna"]
+      };
+    }
+
+    // 4. Lord Shiva & Shaivism
+    if (q.includes("శివ") || q.includes("శివుడు") || q.includes("shiva") || q.includes("లింగ") || q.includes("నంది") || q.includes("కైలాస") || q.includes("శివరాత్రి")) {
+      return {
+        message: isTe
+          ? `### పరమశివుడు — సచ్చిదానంద స్వరూపం & శివతత్త్వం\n\nమహాదేవుడు, బోళాశంకరుడు అయిన **పరమశివుడు** లయకారుడు మరియు జ్ఞానప్రదాత. లింగ రూపంలో ఆయన నిరాకార పరబ్రహ్మ తత్త్వాన్ని సూచిస్తాడు.\n\n> **"నమః శంభవే చ మయోభవే చ నమః శంకరాయ చ మయస్కరాయ చ నమః శివాయ చ శివతరాయ చ"**\n\n**శివతత్త్వ రహస్యాలు:**\n1. **గంగాధరుడు & చంద్రశేఖరుడు:** అహంకారాన్ని చల్లార్చే గంగ, మనఃప్రశాంతతనిచ్చే చంద్రకళ.\n2. **నీలకంఠుడు:** లోక రక్షణార్థం హాలాహలాన్ని గొంతులోనే బంధించిన త్యాగమూర్తి.\n3. **ద్వాదశ జ్యోతిర్లింగాలు:** సోమనాథ్, మల్లికార్జున (శ్రీశైలం), మహాకాళేశ్వర్, ఓంకారేశ్వర్, కేదార్‌నాథ్, భీమశంకర్, కాశీ విశ్వనాథ్, త్రయంబకేశ్వర్, వైద్యనాథ్, నాగేశ్వర్, రామేశ్వరం, ఘృష్ణేశ్వర్.\n\nమీరు మహాశివరాత్రి లింగోద్భవ కాలం, శ్రీశైల మల్లికార్జున క్షేత్రం లేదా మహా మృత్యుంజయ మంత్ర విశేషాలు తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Lord Shiva — The Auspicious Cosmic Consciousness\n\nRevered as Mahadeva, Lord Shiva embodies transcendence, ascetic mastery, and auspicious transformation.\n\n> **"Om Namah Shivaya"** — The Panchakshari Mantra invoking the 5 cosmic elements.\n\n**Spiritual Symbolism:**\n1. **The Shivalinga:** Represents the formless, infinite pillar of cosmic light (*Jyotirlinga*).\n2. **Neelakantha:** The compassionate savior who consumed Halahala poison during the churning of the ocean to save creation.\n3. **12 Jyotirlingas:** Sacred sanctuaries including Srisailam Mallikarjuna (Andhra Pradesh), Kashi Vishwanath, Somnath, and Rameswaram.\n\nWould you like to explore Maha Shivaratri observances, Srisailam Jyotirlinga, or the Maha Mrityunjaya Mantra?`,
+        followUps: isTe
+          ? ["మహా మృత్యుంజయ మంత్రం అర్థం", "ద్వాదశ జ్యోతిర్లింగాల క్షేత్రాలు", "మహాశివరాత్రి జాగరణ ఫలితం"]
+          : ["Maha Mrityunjaya Mantra meaning", "12 Jyotirlinga locations", "Significance of Shivaratri vigil"]
+      };
+    }
+
+    // 5. Lord Hanuman
+    if (q.includes("హనుమాన్") || q.includes("hanuman") || q.includes("ఆంజనేయ") || q.includes("చాలీసా") || q.includes("chalisa")) {
+      return {
+        message: isTe
+          ? `### శ్రీ ఆంజనేయ స్వామి & హనుమాన్ చాలీసా వైభవం\n\nస్వామి భక్తికి, బలానికి, బుద్ధికి మరియు అచంచల శరణాగతికి ప్రతీక **శ్రీ హనుమంతుడు**.\n\n> **"బుద్ధిర్బలం యశోధైర్యం నిర్భయత్వమరోగతా | అజాడ్యం వాక్పటుత్వంచ హనూమత్ స్మరణాద్భవేత్ ||"**\n*(హనుమంతుని స్మరించడం వల్ల బుద్ధి, బలం, కీర్తి, ధైర్యం, నిర్భయత్వం, ఆరోగ్యం మరియు వాక్చాతుర్యం కలుగుతాయి.)*\n\n**హనుమాన్ చాలీసా విశేషాలు:**\n- గోస్వామి తులసీదాస్ రచించిన 40 చౌపాయిల దివ్య స్తోత్రం.\n- నిత్యం చాలీసా పారాయణ చేయడం వల్ల గ్రహపీడలు, భయాలు మరియు శారీరక మానసిక రుగ్మతలు నశిస్తాయని విశ్వాసం.\n\nమీరు హనుమాన్ చాలీసా పారాయణ విధానం, సుందరకాండలో హనుమ పరాక్రమం లేదా సింధూర ధారణ కథ గురించి తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Lord Hanuman & The Splendor of Hanuman Chalisa\n\nLord Hanuman represents the zenith of devotion (*Bhakti*), humility (*Vinaya*), and spiritual strength (*Shakti*).\n\n> **"Buddhir Balam Yasho Dhairyam Nirbhayatvam Arogata"**\n*(By meditating upon Hanuman, one is blessed with intellect, strength, fame, fearlessness, and health.)*\n\n**Hanuman Chalisa Highlights:**\n- Composed by Goswami Tulsidas, comprising 40 poetic chaupais in Awadhi.\n- Celebrated for banishing anxiety, negative energies, and fear.\n\nWould you like to explore the meaning of the Chalisa chaupais or Hanuman's leap across the ocean?`,
+        followUps: isTe
+          ? ["హనుమాన్ చాలీసా నిత్య పారాయణ ఫలితం", "ఆంజనేయ స్వామికి సింధూరం ఎందుకు ఇష్టం?", "సుందరకాండలో లంకా దహనం ఘట్టం"]
+          : ["Benefits of Hanuman Chalisa", "Significance of Sindhooram for Hanuman", "Hanuman's feats in Sundara Kanda"]
+      };
+    }
+
+    // 6. Pothana & Andhra Mahabhagavatam
     if (q.includes("పోతన") || q.includes("భాగవత") || q.includes("pothana") || q.includes("bhagavatam")) {
       return {
         message: isTe
-          ? `### బమ్మెర పోతన & ఆంధ్ర మహాభాగవతం విశిష్టత\n\nబమ్మెర పోతన (15వ శతాబ్దం) తెలుగు సాహిత్యంలో భక్తి రసాన్ని పరమోన్నత శిఖరాలకు చేర్చిన సహజ పండితుడు.\n\n> **"పలికెడిది భాగవతమట, పలికించెడువాడు రామభద్రుండట, నే పలికిన భవహరమగునట, పలికెద వేరొండు గాథ పలుకగనేలా!"**\n\n**ప్రధాన విశేషాలు:**\n1. **మధుర భక్తి & శబ్దం:** పోతన పద్యాల్లో అంత్యప్రాసలు, అనుప్రాసలు, సంగీతాత్మక శైలి అద్భుతంగా ఉంటాయి.\n2. **నరస్తుతి నిరాకరణ:** సర్వజ్ఞ సింగభూపాలుడు వంటి రాజులు కోరినా తన కావ్యాన్ని మానవులకు అంకితం చేయక, శ్రీరామునికే అర్పించిన నిస్వార్థ భక్తుడు.\n3. **ప్రసిద్ధ ఘట్టాలు:** గజేంద్ర మోక్షం, రుక్మిణీ కళ్యాణం, ప్రహ్లాద చరిత్ర, వామన చరిత్రలు తెలుగువారి ఇంట నిత్య పారాయణ రత్నాలుగా నిలిచాయి.\n\nమీరు గజేంద్ర మోక్షం పద్యాలు, ప్రహ్లాద చరిత్ర లేదా రుక్మిణీ కళ్యాణం విశేషాలు తెలుసుకోవాలనుకుంటున్నారా?`
-          : `### Bammera Pothana & Andhra Mahabhagavatam\n\nBammera Pothana (15th century) is celebrated as the *Sahaja Panditha* (natural scholar) of Telugu literature, renowned for translating Vyasa's Sanskrit Bhagavata Purana into Telugu with peerless poetic sweetness.\n\n**Key Highlights:**\n1. **Supreme Devotion (*Bhakti*):** Pothana refused royal patronage from King Singabhupala, declaring he would dedicate his immortal poetry solely to Sri Rama.\n2. **Celebrated Episodes:** The *Gajendra Moksham*, *Prahlada Charitra*, and *Rukmini Kalyanam* remain timeless cornerstones of Telugu devotional literature.\n\nWould you like to explore verses from Gajendra Moksham, Prahlada's story, or Rukmini's wedding?`,
+          ? `### బమ్మెర పోతన & ఆంధ్ర మహాభాగవతం విశిష్టత\n\nబమ్మెర పోతన (15వ శతాబ్దం) తెలుగు సాహిత్యంలో భక్తి రసాన్ని పరమోన్నత శిఖరాలకు చేర్చిన సహజ పండితుడు.\n\n> **"పలికెడిది భాగవతమట, పలికించెడువాడు రామభద్రుండట, నే పలికిన భవహరమగునట, పలికెద వేరొండు గాథ పలుకగనేలా!"**\n\n**ప్రధాన విశేషాలు:**\n1. **మధుర భక్తి & శబ్దం:** పోతన పద్యాల్లో అంత్యప్రాసలు, అనుప్రాసలు, సంగీతాత్మక శైలి అద్భుతంగా ఉంటాయి.\n2. **నరస్తుతి నిరాకరణ:** సర్వజ్ఞ సింగభూపాలుడు వంటి రాజులు కోరినా తన కావ్యాన్ని మానవులకు అంకితం చేయక, శ్రీరామునికే అర్పించిన నిస్వార్థ భక్తుడు.\n3. **ప్రసిద్ధ ఘట్టాలు:** గజేంద్ర మోక్షం, రుక్మిణీ కళ్యాణం, ప్రహ్లాద చరిత్ర, వామన చరిత్రలు తెలుగువారి ఇంట నిత్య పారాయణ రత్నాలు.\n\nమీరు గజేంద్ర మోక్షం పద్యాలు, ప్రహ్లాద చరిత్ర లేదా రుక్మిణీ కళ్యాణం విశేషాలు తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Bammera Pothana & Andhra Mahabhagavatam\n\nBammera Pothana (15th century) is celebrated as the *Sahaja Panditha* of Telugu literature for rendering Vyasa's Bhagavata Purana into immortal Telugu poetry.\n\n**Key Highlights:**\n1. **Immortal Dedication:** Rejected royal gifts and dedicated his sacred scripture solely to Lord Sri Rama.\n2. **Celebrated Episodes:** *Gajendra Moksham*, *Prahlada Charitra*, and *Rukmini Kalyanam* remain crown jewels of Telugu devotional poetry.\n\nWould you like to explore verses from Gajendra Moksham, Prahlada's story, or Rukmini's wedding?`,
         followUps: isTe
           ? ["గజేంద్ర మోక్షం పద్యం వివరణ", "రుక్మిణీ కళ్యాణం కథ", "పోతన గురించిన విశేషాలు"]
           : ["Gajendra Moksham verses", "Rukmini Kalyanam story", "Prahlada's devotion"]
       };
     }
 
-    // Ugadi
-    if (q.includes("ఉగాది") || q.includes("ugadi")) {
+    // 7. Vemana & Shataka Literature
+    if (q.includes("వేమన") || q.includes("vemana") || q.includes("శతక") || q.includes("విశ్వదాభిరామ")) {
       return {
         message: isTe
-          ? `### ఉగాది పండుగ & షడ్రుచుల అంతరార్థం\n\n'యుగము + ఆది = యుగాది (ఉగాది)' అనగా నూతన సంవత్సర ఆరంభం. చైత్ర శుద్ధ పాడ్యమి నాడు వసంత రుతువు రాకతో ఉగాదిని జరుపుకుంటాం.\n\n**షడ్రుచుల పచ్చడి అంతరార్థం (జీవిత సత్యాలు):**\n- **చేదు (వేపపువ్వు):** జీవితంలో ఎదురయ్యే బాధలు, కష్టాలు.\n- **తీపి (బెల్లం/చెరకు):** ఆనందం, విజయాలు మరియు సుఖాలు.\n- **కారం (మిరప/మిరియాలు):** కోపం లేదా చురుకుదనం.\n- **ఉప్పు:** జీవితానికి అవసరమైన ఉత్సాహం మరియు రుచి.\n- **పులుపు (చింతపండు):** ఓర్పుతో వ్యవహరించాల్సిన సంక్లిష్ట పరిస్థితులు.\n- **వగరు (మామిడి పిందెలు):** కొత్త అనుభవాలు, ఆశ్చర్యాలు.\n\nసుఖదుఃఖాలు రెండింటినీ సమభావంతో స్వీకరించడమే ఉగాది ఇచ్చే దివ్య సందేశం.\n\nమీరు ఉగాది పంచాంగ శ్రవణం లేదా ఉగాది ఆచారాల గురించి మరింత తెలుసుకోవాలనుకుంటున్నారా?`
-          : `### Significance of Ugadi & The Six Tastes\n\nUgadi marks the commencement of the Hindu lunar new year on *Chaitra Shuddha Padyami*.\n\n**The Philosophy of *Ugadi Pachadi* (Six Tastes):**\n- **Bitter (Neem flowers):** Sadness & hardships to be accepted.\n- **Sweet (Jaggery):** Joy & happiness.\n- **Spicy (Chili/Pepper):** Energy & anger.\n- **Salty (Salt):** Essence & taste of living.\n- **Sour (Tamarind):** Challenges demanding patience.\n- **Tangy (Raw Mango):** Surprises & unexpected turns.\n\nUgadi teaches equanimity (*Samatvam*) in the face of life's dualities.\n\nWould you like to explore Panchanga Sravanam or traditional rituals of Ugadi?`,
+          ? `### యోగి వేమన & ప్రజా నీతి పద్యాలు\n\nతెలుగు వారిలో సామాజిక స్పృహ, ఆధ్యాత్మిక సత్యాలు మరియు నీతి మార్గాన్ని సరళమైన ఆటవెలది పద్యాల్లో అందించిన యుగద్రష్ట **యోగి వేమన**.\n\n> **"ఉప్పు కప్పురంబు నొక్క పోలిక నుండు | చూడ చూడ రుచుల జాడ వేరు |\n> పురుషులందు పుణ్యపురుషులు వేరయా | విశ్వదాభిరామ వినుర వేమ!"**\n\n**వేమన శతక విశేషాలు:**\n- బాహ్య డాంబికాలను నిరసించి అంతఃశుద్ధిని ప్రబోధించిన యోగి.\n- సి.పి. బ్రౌన్ (C.P. Brown) వేమన పద్యాలను సేకరించి ఆంగ్లంలోకి అనువదించి ప్రపంచ ఖ్యాతి తెచ్చారు.\n\nమీరు వేమన పద్యాల నీతి సూత్రాలు లేదా సి.పి. బ్రౌన్ సేవలు గురించి తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Yogi Vemana — The People's Philosopher\n\nYogi Vemana composed accessible moral verses (*Aata Veladi* meter) emphasizing social reform, inner purity, and practical wisdom, ending with the signature refrain *Viswadabhirama Vinura Vema*.\n\n> **"Uppu Kappurambu Nokka Polika Nundu..."**\n*(Salt and camphor look alike; upon tasting, their true essence is revealed. Likewise, virtuous souls are recognized by their deeds, not appearance.)*\n\nWould you like to explore more Vemana poems, moral teachings, or C.P. Brown's English translations?`,
         followUps: isTe
-          ? ["ఉగాది పంచాంగ శ్రవణం విశేషాలు", "శ్రీరామ నవమి ప్రాముఖ్యత", "వసంత నవరాత్రులు"]
-          : ["Panchanga Sravanam tradition", "Sri Rama Navami significance", "Spring festivals"]
+          ? ["వేమన పద్యాల అంతరార్థం", "సి.పి. బ్రౌన్ తెలుగు సాహిత్య సేవ", "సుమతీ శతక పద్యాలు"]
+          : ["Vemana moral principles", "C.P. Brown's literary contributions", "Sumathi Shatakam verses"]
       };
     }
 
-    // Tirumala Venkateswara
-    if (q.includes("తిరుమల") || q.includes("వేంకటేశ్వర") || q.includes("tirumala") || q.includes("tirupati")) {
+    // 8. Tirumala Venkateswara Swamy
+    if (q.includes("తిరుమల") || q.includes("వేంకటేశ్వర") || q.includes("tirumala") || q.includes("tirupati") || q.includes("బాలాజీ")) {
       return {
         message: isTe
-          ? `### తిరుమల శ్రీ వేంకటేశ్వర క్షేత్ర వైభవం\n\nతిరుమల సప్తగిరులు (శేషాద్రి, నీలాద్రి, గరుడాద్రి, అంజనాద్రి, వృషభాద్రి, వృషాద్రి, వేంకటాద్రి) పై కొలువైన కలియుగ ప్రత్యక్ష దైవం శ్రీనివాసుడు.\n\n**క్షేత్ర విశేషాలు:**\n1. **వేంకటాద్రి మహత్యం:** 'వేం' అనగా పాపాలు, 'కట' అనగా దహించివేయునది — పాపాలను భస్మం చేసే పవిత్ర క్షేత్రం.\n2. **ఆనంద నిలయం:** స్వామివారి గర్భాలయంపై ఉన్న బంగారు గోపుర విమానం భక్తులకు అనిర్వచనీయమైన శాంతిని ప్రసాదిస్తుంది.\n3. **నిత్య కల్యాణ క్షేత్రం:** తోమాల సేవ, అర్చన, నివేదన, సుప్రభాతం తదితర వైఖానస ఆగమ పూజా విధానాలు నిత్యం భక్తిశ్రద్ధలతో జరుగుతాయి.\n\nమీరు తిరుమల సేవల వివరాలు, శ్రీనివాస కళ్యాణం కథ లేదా బ్రహ్మోత్సవాల గురించి తెలుసుకోవాలనుకుంటున్నారా?`
-          : `### Divine Glory of Tirumala Sri Venkateswara Swamy\n\nPerched atop the sacred Seven Hills of the Eastern Ghats, Tirumala is revered as the abode of Lord Srinivasa, the manifest savior of Kali Yuga.\n\n**Spiritual Highlights:**\n1. **The Name Venkatadri:** 'Vem' (sin) + 'Kata' (destroyer) — the hill that dissolves all spiritual impediments.\n2. **Ananda Nilayam:** The gilded sanctum sanctorum radiating timeless tranquility.\n3. **Vaikhanasa Agama:** Ancient ritual traditions strictly followed everyday from Suprabhatam to Ekantha Seva.\n\nWould you like to learn about Brahmotsavams, Srinivasa Kalyanam, or daily temple sevas?`,
+          ? `### తిరుమల శ్రీ వేంకటేశ్వర క్షేత్ర వైభవం\n\nతిరుమల సప్తగిరులు (శేషాద్రి, నీలాద్రి, గరుడాద్రి, అంజనాద్రి, వృషభాద్రి, వృషాద్రి, వేంకటాద్రి) పై కొలువైన కలియుగ ప్రత్యక్ష దైవం శ్రీనివాసుడు.\n\n**క్షేత్ర విశేషాలు:**\n1. **వేంకటాద్రి మహత్యం:** 'వేం' అనగా పాపాలు, 'కట' అనగా దహించివేయునది — సర్వ పాపాలను భస్మం చేసే పవిత్ర క్షేత్రం.\n2. **ఆనంద నిలయం:** స్వామివారి గర్భాలయంపై ఉన్న స్వర్ణ విమాన గోపురం.\n3. **వైఖానస ఆగమం:** తోమాల, సుప్రభాతం, అర్చన, నివేదన వంటి నిత్య సేవలు ప్రాచీన వైఖానస సంప్రదాయంలో జరుగుతాయి.\n\nమీరు తిరుమల బ్రహ్మోత్సవాలు లేదా శ్రీనివాస కళ్యాణం కథ గురించి తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Divine Glory of Tirumala Sri Venkateswara Swamy\n\nPerched on the sacred Seven Hills of the Eastern Ghats, Tirumala is the eternal abode of Lord Srinivasa, the manifest savior of Kali Yuga.\n\n**Spiritual Highlights:**\n1. **The Name Venkatadri:** 'Vem' (sin) + 'Kata' (destroyer) — the hill that burns away all karmic blemish.\n2. **Ananda Nilayam:** The golden sanctum sanctorum radiating timeless serenity.\n3. **Vaikhanasa Agama:** Ancient rituals unbroken for centuries from morning Suprabhatam to night Ekantha Seva.\n\nWould you like to learn about Brahmotsavams, Srinivasa Kalyanam, or daily temple sevas?`,
         followUps: isTe
           ? ["తిరుమల బ్రహ్మోత్సవాల ప్రాముఖ్యత", "శ్రీనివాస కళ్యాణం కథ", "సుప్రభాతం విశేషాలు"]
           : ["Brahmotsavam significance", "Srinivasa Kalyanam history", "Vaikhanasa traditions"]
       };
     }
 
+    // 9. Festivals (Ugadi, Sankranti, Deepavali)
+    if (q.includes("ఉగాది") || q.includes("ugadi") || q.includes("సంక్రాంతి") || q.includes("sankranti") || q.includes("దీపావళి") || q.includes("deepavali") || q.includes("పండుగ")) {
+      return {
+        message: isTe
+          ? `### భారతీయ పండుగలు & వాటి ఆధ్యాత్మిక అంతరార్థం\n\nమన పండుగలు కేవలం సంబరాలు మాత్రమే కాదు; అవి ప్రకృతితో మానవ జీవన సమన్వయాన్ని, సమాజ శ్రేయస్సును మరియు ఆత్మశుద్ధిని కలిగించే పవిత్ర సందర్భాలు.\n\n- **ఉగాది:** తెలుగు నూతన సంవత్సరం. షడ్రుచుల పచ్చడి ద్వారా జీవితంలోని సుఖదుఃఖాలను సమభావంతో స్వీకరించాలని సందేశం ఇస్తుంది.\n- **సంక్రాంతి:** పంటల పండుగ. భోగి, సంక్రాంతి, కనుమ మూడు రోజులు సూర్యుని ఉత్తరాయణ ప్రవేశాన్ని స్వాగతిస్తూ ఆనందోత్సాహాలతో జరుపుకుంటారు.\n- **దీపావళి:** చీకటిపై వెలుగు, అధర్మంపై ధర్మం సాధించిన విజయానికి ప్రతీకగా దీపాలు వెలిగిస్తారు.\n\nమీరు నిర్దిష్ట పండుగ పూజా విధానం లేదా పౌరాణిక విశేషాలు తెలుసుకోవాలనుకుంటున్నారా?`
+          : `### Traditional Indian Festivals & Their Spiritual Philosophy\n\nEvery festival in Sanatana Dharma aligns human life with nature's cosmic rhythms and moral harmony.\n\n- **Ugadi:** Telugu Lunar New Year celebrated with *Ugadi Pachadi* (six tastes symbolizing life's diverse experiences).\n- **Makara Sankranti:** Three-day harvest festival marking the Sun's transit into Capricorn (*Uttarayana*).\n- **Deepavali:** Festival of Lights symbolizing inner awakening and the conquest of darkness by divine light.\n\nWhich festival would you like to explore in detail?`,
+        followUps: isTe
+          ? ["ఉగాది షడ్రుచుల అంతరార్థం", "సంక్రాంతి మూడు రోజుల విశేషాలు", "దీపావళి నరకాసుర వధ కథ"]
+          : ["Ugadi six tastes philosophy", "Sankranti 3-day customs", "Deepavali spiritual roots"]
+      };
+    }
+
     // Default culturally grounded response
     return {
       message: isTe
-        ? `### సాంస్కృతిక సమాధానం\n\nమీ ప్రశ్న భారతీయ సంస్కృతి మరియు ఆధ్యాత్మిక వారసత్వానికి సంబంధించినది. సన్నివేశం మేధ ద్వారా మీరు తెలుగు భాషా విశేషాలు, పురాణాలు, పద్యాలు, దేవాలయ క్షేత్ర చరిత్రలు మరియు పండుగల వెనుక ఉన్న అంతరార్థాలను నిస్సందేహంగా అన్వేషించవచ్చు.\n\nఈ అంశంపై మీకు నిర్దిష్టమైన పద్యం, కథ లేదా శాస్త్రీయ కారణం కావాలా? దయచేసి వివరంగా అడగండి.`
-        : `### Cultural & Educational Insights\n\nYour question explores the rich tapestry of Indian cultural and Telugu heritage. Sannivesham AI helps you understand authentic scripture meanings, historical literature, temple lore, and Vedic philosophy.\n\nWould you like more details regarding a specific verse, mythological episode, or historical practice?`,
+        ? `### సన్నివేశం సాంస్కృతిక సమాధానం\n\nమీరు అడిగిన ప్రశ్న భారతీయ సంస్కృతి మరియు ఆధ్యాత్మిక వారసత్వానికి చెందినది. సన్నివేశం మేధ ద్వారా మీరు ఈ క్రింది అంశాలను మరింత లోతుగా తెలుసుకోవచ్చు:\n\n1. **ఇతిహాసాలు:** శ్రీమద్రామాయణమ్, మహాభారతం, శ్రీమద్భాగవతం, భగవద్గీత.\n2. **సాహిత్యం & కవులు:** బమ్మెర పోతన, వేమన, కవిత్రయం (నన్నయ, తిక్కన, ఎర్రన), శ్రీశ్రీ, గురజాడ, అన్నమయ్య, త్యాగరాజు.\n3. **పుణ్యక్షేత్రాలు:** తిరుమల, శ్రీశైలం, ద్రాక్షారామం, సింహాచలం, వరంగల్ వేయిస్తంభాల గుడి.\n4. **భాష & వ్యాకరణం:** సంధులు, సమాసాలు, తెలుగు సామెతలు మరియు పదాల అర్థాలు.\n\nకింది ఎంపికల్లో ఒకదాన్ని ఎంచుకోండి లేదా మీ ప్రశ్నను మరింత వివరంగా అడగండి:`
+        : `### Sannivesham Cultural Guide\n\nYour question touches upon Indian culture and heritage. Through Sannivesham AI, you can explore:\n\n1. **Epics & Scriptures:** Srimad Ramayana, Mahabharata, Bhagavad Gita, and Bhagavata Purana.\n2. **Literature & Poets:** Bammera Pothana, Yogi Vemana, Kavitrayam, Sri Sri, Gurajada, and Saint Annamacharya.\n3. **Sacred Temples:** Tirumala Venkateswara, Srisailam Mallikarjuna, Warangal Thousand Pillar temple, and Draksharamam.\n4. **Telugu Language & Grammar:** Sandhi, Samasam, proverbs, and classical vocabulary.\n\nPlease choose a topic below or refine your question with specific details:`,
       followUps: isTe
-        ? ["రామాయణ విశేషాలు", "భగవద్గీత శ్లోకాలు", "తెలుగు సాహిత్య కవులు"]
-        : ["Ramayana teachings", "Bhagavad Gita verses", "Telugu classical poets"]
+        ? ["శ్రీమద్రామాయణం సంక్షిప్త కథ", "భగవద్గీత ముఖ్య సందేశం", "తిరుమల క్షేత్ర చరిత్ర", "పోతన భాగవత పద్యాలు"]
+        : ["Tell about Ramayana", "Core teachings of Bhagavad Gita", "Tirumala Venkateswara lore", "Famous Telugu classical poets"]
     };
   }
 
