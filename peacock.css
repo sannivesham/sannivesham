@@ -4,7 +4,7 @@
    ========================================================================== */
 
 #flyingPeacockRoot {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 104px;
@@ -97,6 +97,37 @@
 #flyingPeacockRoot:focus-visible .peacock-ai-tooltip {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Edge-Safe Tooltip Placement for Side Gutters */
+#flyingPeacockRoot.on-left .peacock-ai-tooltip {
+  left: 0;
+  right: auto;
+  transform: translateX(0) translateY(8px);
+}
+#flyingPeacockRoot.on-left .peacock-ai-tooltip::after {
+  left: 24px;
+  right: auto;
+  transform: none;
+}
+#flyingPeacockRoot.on-left:hover .peacock-ai-tooltip,
+#flyingPeacockRoot.on-left:focus-visible .peacock-ai-tooltip {
+  transform: translateX(0) translateY(0);
+}
+
+#flyingPeacockRoot.on-right .peacock-ai-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(8px);
+}
+#flyingPeacockRoot.on-right .peacock-ai-tooltip::after {
+  left: auto;
+  right: 24px;
+  transform: none;
+}
+#flyingPeacockRoot.on-right:hover .peacock-ai-tooltip,
+#flyingPeacockRoot.on-right:focus-visible .peacock-ai-tooltip {
+  transform: translateX(0) translateY(0);
 }
 
 .peacock-inner-wrap {
@@ -304,15 +335,35 @@
     font-size: 0.72rem;
     padding: 4px 10px;
     bottom: calc(100% + 4px);
+    max-width: 76vw;
+  }
+
+  #flyingPeacockRoot.on-left .peacock-ai-tooltip {
+    left: 0;
+    right: auto;
+    transform: translateY(6px);
+  }
+  #flyingPeacockRoot.on-left .peacock-ai-tooltip::after {
+    left: 16px;
+    right: auto;
+  }
+  #flyingPeacockRoot.on-left:hover .peacock-ai-tooltip,
+  #flyingPeacockRoot.on-left:focus-visible .peacock-ai-tooltip {
+    transform: translateY(0);
+  }
+
+  #flyingPeacockRoot.on-right .peacock-ai-tooltip {
     left: auto;
     right: 0;
     transform: translateY(6px);
-    max-width: 80vw;
   }
-
-  .peacock-ai-tooltip::after {
+  #flyingPeacockRoot.on-right .peacock-ai-tooltip::after {
     left: auto;
-    right: 20px;
+    right: 16px;
+  }
+  #flyingPeacockRoot.on-right:hover .peacock-ai-tooltip,
+  #flyingPeacockRoot.on-right:focus-visible .peacock-ai-tooltip {
+    transform: translateY(0);
   }
 }
 
@@ -330,10 +381,6 @@
   .is-flying .peacock-img-wing-down {
     animation: none !important;
   }
-}
-
-.peacock-lightweight-mode #flyingPeacockRoot {
-  transition: transform 0.3s ease-out !important;
 }
 
 .peacock-lightweight-mode .peacock-particle-ember {

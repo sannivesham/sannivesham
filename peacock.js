@@ -1,7 +1,7 @@
 /**
  * ==============================================================================
  * SANNIVESHAM — PHOTOREALISTIC DUAL-FRAME WINGBEAT PEACOCK
- * Ultra-Responsive, Zero-Lag, Full-Page Downward Travel to Footer
+ * Ultra-Responsive Viewport-Pinned Flight Engine (Zero Lag, 100% On-Screen)
  * ==============================================================================
  */
 
@@ -25,31 +25,44 @@
       this.tooltip = null;
       this.emberLayer = null;
 
-      // Position in document coordinates
-      this.docX = 0;
-      this.docY = 0;
-      this.targetDocX = 0;
-      this.targetDocY = 0;
+      // Viewport Coordinates (Fixed Positioning)
+      this.screenX = 0;
+      this.screenY = 0;
+      this.targetScreenX = 0;
+      this.targetScreenY = 0;
       this.angle = 0;
-      this.facing = 1; // 1 = right, -1 = left
+      this.facing = -1; // 1 = right, -1 = left
 
-      // Scrolling and State
+      // Hero starting coordinates
+      this.heroScreenX = 0;
+      this.heroScreenY = 160;
+
+      // Scrolling & Animation State
       this.isScrolling = false;
-      this.state = 'perched'; // 'perched' | 'takeoff' | 'flying' | 'landing'
+      this.state = 'perched'; // 'perched' | 'flying' | 'takeoff' | 'landing'
       this.lastScrollTime = 0;
       this.lastScrollY = window.scrollY || window.pageYOffset || 0;
+      this.scrollDirection = 1; // 1 = down, -1 = up
+      this.isTicking = false;
       this.lastEmberTime = 0;
 
-      // Cached Clearance Floor
-      this.safeTopFloorY = 120;
+      // Dimensions & Gutters
+      this.winW = window.innerWidth;
+      this.winH = window.innerHeight;
+      this.maxScroll = 1;
+      this.isMobile = window.innerWidth < 768;
+      this.peacockSize = this.isMobile ? 68 : 104;
 
-      // Performance
-      this.isLowPerformance = false;
-      this.frameCount = 0;
-      this.lastFpsCheck = performance.now();
-
-      // 7 Alternating Left-and-Right Waypoints from Hero to Footer
-      this.landmarks = [];
+      // 7 Natural Alternating Journey Waypoints from Top to Footer
+      this.waypoints = [
+        { p: 0.00, side: 'right', label: 'Hero' },
+        { p: 0.18, side: 'left',  label: 'Intro' },
+        { p: 0.36, side: 'right', label: 'Categories' },
+        { p: 0.54, side: 'left',  label: 'Festivals' },
+        { p: 0.72, side: 'right', label: 'About' },
+        { p: 0.88, side: 'left',  label: 'Contact' },
+        { p: 1.00, side: 'right', label: 'Footer' }
+      ];
 
       this.init();
     }
@@ -58,29 +71,23 @@
       this.reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       this.createDOM();
-      this.updateLandmarks();
+      this.updateDimensions();
       this.bindEvents();
 
-      // Initial placement at Landmark 0 (Hero Right, beside Swan Mandala)
-      if (this.landmarks.length > 0) {
-        const isMobile = window.innerWidth < 768;
-        const peacockSize = isMobile ? 68 : 104;
-        const halfSize = peacockSize / 2;
+      // Initial placement at Hero (Right gutter, safely below greeting badge and navbar)
+      this.screenX = this.targetScreenX = this.heroScreenX;
+      this.screenY = this.targetScreenY = this.heroScreenY;
+      this.facing = -1; // Face inward toward Sannivesham logo
+      this.renderPosition();
 
-        const lm0 = this.landmarks[0];
-        this.docX = this.targetDocX = lm0.docX - halfSize;
-        this.docY = this.targetDocY = lm0.docY - halfSize;
-        this.facing = -1; // Initial perch facing inward toward hero content
-        this.renderPosition();
-      }
-
-      requestAnimationFrame(this.tick.bind(this));
+      // Start initial settle loop
+      this.startLoop();
     }
 
     createDOM() {
       const container = document.createElement('div');
       container.id = 'flyingPeacockRoot';
-      container.className = 'is-perched';
+      container.className = 'is-perched on-right';
       container.setAttribute('role', 'button');
       container.setAttribute('aria-label', 'సన్నివేశం మేధ — Sannivesham AI తెరవండి');
       container.setAttribute('tabindex', '0');
@@ -121,111 +128,32 @@
       this.tooltip = container.querySelector('.peacock-ai-tooltip');
     }
 
-    /**
-     * Pre-calculate and Cache 7 Natural Waypoints down the ENTIRE document
-     */
-    updateLandmarks() {
-      const isMobile = window.innerWidth < 768;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      const winW = window.innerWidth;
-      const peacockSize = isMobile ? 68 : 104;
-      const halfSize = peacockSize / 2;
-      const minClearanceY = isMobile ? 96 : 120;
+    updateDimensions() {
+      this.winW = window.innerWidth;
+      this.winH = window.innerHeight;
+      this.isMobile = this.winW < 768;
+      this.peacockSize = this.isMobile ? 68 : 104;
 
-      const heroElem = document.querySelector('.top-brand');
-      const greetingElem = document.getElementById('timeGreetingBadge');
-      const introElem = document.querySelector('#intro') || document.querySelector('.intro-box');
-      const catElem = document.querySelector('#categories') || document.querySelector('.category-section');
-      const ganakamElem = document.querySelector('.ganakam-card') || document.querySelector('[href*="festival-counter"]');
-      const aboutElem = document.querySelector('#about') || document.querySelector('.about-card');
-      const contactElem = document.querySelector('#contact') || document.querySelector('.contact-section');
-      const footerElem = document.querySelector('.home-footer');
+      const docEl = document.documentElement;
+      const body = document.body;
+      const fullHeight = Math.max(docEl.scrollHeight, body.scrollHeight, 1200);
+      this.maxScroll = Math.max(1, fullHeight - this.winH);
 
-      const leftX = isMobile ? (halfSize + 8) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
-      const rightX = isMobile ? (winW - halfSize - 10) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
+      // Safe lateral gutters
+      this.leftGutterX = this.isMobile ? 8 : Math.max(16, Math.min(this.winW * 0.05, 70));
+      this.rightGutterX = this.isMobile ? (this.winW - this.peacockSize - 8) : (this.winW - this.peacockSize - Math.max(16, Math.min(this.winW * 0.05, 70)));
 
-      let greetingBottom = 0;
-      if (greetingElem) {
-        const gr = greetingElem.getBoundingClientRect();
-        greetingBottom = gr.bottom + scrollY;
-        this.safeTopFloorY = greetingBottom + halfSize + 14;
-      } else {
-        this.safeTopFloorY = minClearanceY + halfSize + 14;
-      }
-
-      // 1. Hero (Right side, beside Swan Mandala, strictly below greeting badge)
-      let heroY;
+      // Hero starting Y: below greeting badge and navbar
+      const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
+      let heroY = this.isMobile ? 152 : 200;
       if (heroElem) {
-        const r = heroElem.getBoundingClientRect();
-        heroY = Math.max(this.safeTopFloorY, r.top + scrollY + (isMobile ? 80 : 92));
-      } else {
-        heroY = this.safeTopFloorY;
+        const hr = heroElem.getBoundingClientRect();
+        const currentScrollY = window.scrollY || window.pageYOffset || 0;
+        const elemDocTop = hr.top + currentScrollY;
+        heroY = Math.max(this.isMobile ? 142 : 180, elemDocTop + (this.isMobile ? 20 : 35));
       }
-
-      // 2. Intro Section (Left side gutter)
-      let introY;
-      if (introElem) {
-        const r = introElem.getBoundingClientRect();
-        introY = r.top + scrollY + (isMobile ? 26 : 38);
-      } else {
-        introY = heroY + 650;
-      }
-
-      // 3. Categories Upper (Right side gutter)
-      let catY;
-      if (catElem) {
-        const r = catElem.getBoundingClientRect();
-        catY = r.top + scrollY + (isMobile ? 32 : 48);
-      } else {
-        catY = introY + 650;
-      }
-
-      // 4. Ganakam / Festivals Counter Lower Categories (Left side gutter)
-      let ganakamY;
-      if (ganakamElem) {
-        const r = ganakamElem.getBoundingClientRect();
-        ganakamY = r.top + scrollY + (isMobile ? 24 : 32);
-      } else {
-        ganakamY = catY + 600;
-      }
-
-      // 5. About Us (Right side gutter)
-      let aboutY;
-      if (aboutElem) {
-        const r = aboutElem.getBoundingClientRect();
-        aboutY = r.top + scrollY + (isMobile ? 28 : 36);
-      } else {
-        aboutY = ganakamY + 550;
-      }
-
-      // 6. Contact Section (Left side gutter)
-      let contactY;
-      if (contactElem) {
-        const r = contactElem.getBoundingClientRect();
-        contactY = r.top + scrollY + (isMobile ? 30 : 40);
-      } else {
-        contactY = aboutY + 550;
-      }
-
-      // 7. Footer (Right side gutter, near bottom of the document)
-      let footerY;
-      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 4000;
-      if (footerElem) {
-        const r = footerElem.getBoundingClientRect();
-        footerY = Math.min(scrollHeight - halfSize - (isMobile ? 24 : 36), r.top + scrollY + (isMobile ? 18 : 24));
-      } else {
-        footerY = scrollHeight - halfSize - (isMobile ? 50 : 70);
-      }
-
-      this.landmarks = [
-        { label: 'Hero (Right)', side: 'right', docX: rightX, docY: heroY },
-        { label: 'Intro (Left)', side: 'left', docX: leftX, docY: introY },
-        { label: 'Categories (Right)', side: 'right', docX: rightX, docY: catY },
-        { label: 'Ganakam (Left)', side: 'left', docX: leftX, docY: ganakamY },
-        { label: 'About (Right)', side: 'right', docX: rightX, docY: aboutY },
-        { label: 'Contact (Left)', side: 'left', docX: leftX, docY: contactY },
-        { label: 'Footer (Right)', side: 'right', docX: rightX, docY: footerY }
-      ];
+      this.heroScreenX = this.rightGutterX;
+      this.heroScreenY = heroY;
     }
 
     bindEvents() {
@@ -246,9 +174,9 @@
           this.innerWrap.style.transform = `scale(1.2) scaleX(${this.facing}) rotate(-6deg)`;
         }
 
-        if (window.innerWidth >= 768) {
-          for (let i = 0; i < 18; i++) {
-            this.emitEmber(this.docX + 50, this.docY + 50, true);
+        if (!this.isMobile) {
+          for (let i = 0; i < 16; i++) {
+            this.emitEmber(this.screenX + 50, this.screenY + 50, true);
           }
         }
 
@@ -262,93 +190,144 @@
         if (e.key === 'Enter' || e.key === ' ') handlePeacockClick(e);
       });
 
-      // Ultra-lightweight scroll listener: 0 timers, 0 layout reflows
+      // Passive scroll listener (0 timers, 0 reflows)
       window.addEventListener('scroll', () => {
         this.onScroll();
       }, { passive: true });
 
       window.addEventListener('resize', () => {
-        this.updateLandmarks();
+        this.updateDimensions();
+        this.startLoop();
       }, { passive: true });
 
-      // Refresh landmark measurements once images and fonts settle
-      setTimeout(() => this.updateLandmarks(), 800);
-      setTimeout(() => this.updateLandmarks(), 2500);
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          this.updateDimensions();
+          this.startLoop();
+        }, 200);
+      }, { passive: true });
+
+      // Refresh measurements when layout finishes rendering
+      setTimeout(() => {
+        this.updateDimensions();
+        this.startLoop();
+      }, 700);
     }
 
     onScroll() {
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      const delta = currentScrollY - this.lastScrollY;
+
+      if (Math.abs(delta) > 0.4) {
+        this.scrollDirection = delta > 0 ? 1 : -1;
+      }
+      this.lastScrollY = currentScrollY;
       this.lastScrollTime = performance.now();
+
       if (!this.isScrolling) {
         this.isScrolling = true;
         this.setState('flying');
+      }
+
+      this.startLoop();
+    }
+
+    startLoop() {
+      if (!this.isTicking) {
+        this.isTicking = true;
+        requestAnimationFrame(this.tick.bind(this));
       }
     }
 
     setState(newState) {
       if (this.state === newState) return;
       this.state = newState;
-      this.root.className = `is-${newState}`;
+      this.root.className = `is-${newState} ${this.screenX < this.winW / 2 ? 'on-left' : 'on-right'}`;
     }
 
     /**
-     * Compute Dynamic Flight Trajectory with 100% Page Coverage from Top to Bottom
+     * Compute Dynamic Flight Coordinates in Viewport Space (Always 100% on Screen)
      */
-    evaluateTrajectory(currentScrollY) {
-      const n = this.landmarks.length;
-      if (n === 0) return { docX: 100, docY: 100, angle: 0, currentSide: 'right' };
-      if (n === 1) {
-        return { docX: this.landmarks[0].docX, docY: this.landmarks[0].docY, angle: 0, currentSide: 'right' };
+    evaluateFlight(currentScrollY) {
+      const progress = Math.max(0, Math.min(1, currentScrollY / this.maxScroll));
+
+      // Find current flight segment
+      let seg = 0;
+      for (let i = 0; i < this.waypoints.length - 1; i++) {
+        if (progress >= this.waypoints[i].p && progress <= this.waypoints[i + 1].p) {
+          seg = i;
+          break;
+        }
       }
+      if (progress >= 1) seg = this.waypoints.length - 2;
 
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const progress = Math.max(0, Math.min(1, currentScrollY / maxScroll));
+      const w0 = this.waypoints[seg];
+      const w1 = this.waypoints[seg + 1];
+      const segRange = Math.max(0.0001, w1.p - w0.p);
+      const u = Math.max(0, Math.min(1, (progress - w0.p) / segRange));
 
-      const totalSegments = n - 1;
-      const scaled = progress * totalSegments;
-      const seg = Math.min(Math.floor(scaled), totalSegments - 1);
-      const u = Math.max(0, Math.min(1, scaled - seg));
-
-      const p0 = this.landmarks[seg];
-      const p1 = this.landmarks[seg + 1];
-
-      const currentSide = (u < 0.5) ? p0.side : p1.side;
-
-      // Smooth hermite ease for organic natural travel
+      // Smooth Hermite easing across segment
       const easeU = u * u * (3 - 2 * u);
 
-      const dx = p1.docX - p0.docX;
-      const dy = p1.docY - p0.docY;
+      const startX = (w0.side === 'left') ? this.leftGutterX : this.rightGutterX;
+      const endX = (w1.side === 'left') ? this.leftGutterX : this.rightGutterX;
 
-      // Natural lateral arc during flight across the screen
-      const isMobile = window.innerWidth < 768;
-      const arc = Math.sin(u * Math.PI) * (isMobile ? 14 : 26) * (p0.side === 'right' ? -1 : 1);
+      // Lateral banking arc across the screen
+      const arcDir = (w0.side === 'right') ? -1 : 1;
+      const arcAmp = (this.isMobile ? 18 : 32);
+      const arcX = Math.sin(u * Math.PI) * arcAmp * arcDir;
 
-      const docX = p0.docX + dx * easeU + arc;
-      const docY = p0.docY + dy * easeU;
+      let targetX = startX + (endX - startX) * easeU + arcX;
 
-      // Banking angle
-      let angle = 0;
+      // Natural cruising altitude in viewport
+      const downCruiseY = this.winH * (this.isMobile ? 0.36 : 0.40);
+      const upCruiseY = this.winH * (this.isMobile ? 0.46 : 0.48);
+      const cruiseY = this.scrollDirection === 1 ? downCruiseY : upCruiseY;
+
+      let targetY;
+      if (progress < 0.12) {
+        // Blending smoothly out of Hero starting perch
+        const blend = progress / 0.12;
+        targetY = this.heroScreenY + (cruiseY - this.heroScreenY) * (blend * blend);
+      } else if (progress > 0.90) {
+        // Blending smoothly into Footer bottom perch
+        const footerPerchY = this.winH - this.peacockSize - (this.isMobile ? 22 : 36);
+        const blend = (progress - 0.90) / 0.10;
+        targetY = cruiseY + (footerPerchY - cruiseY) * (blend * blend);
+      } else {
+        // Gentle soaring undulation during middle flight
+        const wave = Math.sin(u * Math.PI * 2) * (this.isMobile ? 12 : 20);
+        targetY = cruiseY + wave;
+      }
+
+      // Determine facing strictly according to flight travel direction
+      let targetFacing = this.facing;
+      let targetAngle = 0;
+
       if (this.isScrolling) {
-        const velX = dx * (6 * u * (1 - u)) + Math.cos(u * Math.PI) * (isMobile ? 14 : 26) * (p0.side === 'right' ? -1 : 1) * Math.PI;
-        const velY = dy;
-        angle = (Math.atan2(velY * 0.16, velX) * 180) / Math.PI;
-        if (this.facing === -1) {
-          angle = angle - 180;
-          if (angle < -180) angle += 360;
+        // When actively flying:
+        if (this.scrollDirection === 1) {
+          // Scrolling down: travelling from w0 to w1
+          const movingRight = endX > startX;
+          targetFacing = movingRight ? 1 : -1;
+          targetAngle = movingRight ? 8 : -8;
+        } else {
+          // Scrolling up: travelling from w1 back to w0
+          const movingRight = startX > endX;
+          targetFacing = movingRight ? 1 : -1;
+          targetAngle = movingRight ? -6 : 6;
         }
-        angle = Math.max(-18, Math.min(18, angle * 0.32));
+      } else {
+        // When perched (stopped), face inward toward content:
+        targetFacing = (targetX < this.winW / 2) ? 1 : -1;
+        targetAngle = 0;
       }
 
-      // Update facing based on travel direction
-      if (Math.abs(dx) > 10) {
-        this.facing = dx > 0 ? 1 : -1;
-      }
-
-      return { docX, docY, angle, currentSide };
+      return { targetX, targetY, targetFacing, targetAngle };
     }
 
-    emitEmber(x, y, isBurst = false) {
-      if (this.isLowPerformance || window.innerWidth < 768) return;
+    emitEmber(clientX, clientY, isBurst = false) {
+      if (this.isMobile || !this.emberLayer) return;
 
       const ember = document.createElement('div');
       ember.className = 'peacock-particle-ember';
@@ -357,19 +336,10 @@
       ember.style.width = `${size}px`;
       ember.style.height = `${size}px`;
 
-      const scrollX = window.scrollX || window.pageXOffset || 0;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      const clientX = Math.max(12, Math.min(x - scrollX, window.innerWidth - 12));
-      const clientY = y - scrollY;
-
       ember.style.left = `${clientX}px`;
       ember.style.top = `${clientY}px`;
 
-      if (this.emberLayer) {
-        this.emberLayer.appendChild(ember);
-      } else {
-        document.body.appendChild(ember);
-      }
+      this.emberLayer.appendChild(ember);
 
       const angle = Math.random() * Math.PI * 2;
       const dist = isBurst ? Math.random() * 40 + 10 : Math.random() * 16 + 4;
@@ -386,94 +356,67 @@
       }, 550);
     }
 
-    checkPerformance(time) {
-      this.frameCount++;
-      if (time - this.lastFpsCheck > 1200) {
-        const fps = (this.frameCount * 1000) / (time - this.lastFpsCheck);
-        if (fps < 26 && !this.isLowPerformance) {
-          this.isLowPerformance = true;
-          document.body.classList.add('peacock-lightweight-mode');
-        }
-        this.frameCount = 0;
-        this.lastFpsCheck = time;
-      }
-    }
-
     tick(time) {
-      this.checkPerformance(time);
-
       if (this.reducedMotion) {
-        const lm = this.landmarks[0] || { docX: 200, docY: 200 };
-        this.root.style.transform = `translate3d(${lm.docX - 35}px, ${lm.docY - 35}px, 0)`;
-        requestAnimationFrame(this.tick.bind(this));
+        this.root.style.transform = `translate3d(${this.heroScreenX}px, ${this.heroScreenY}px, 0)`;
+        this.isTicking = false;
         return;
       }
 
-      // Check if scrolling stopped: instantly sit down
-      if (this.isScrolling && time - this.lastScrollTime > 95) {
+      // Check if scrolling has paused
+      if (this.isScrolling && time - this.lastScrollTime > 110) {
         this.isScrolling = false;
         this.setState('perched');
       }
 
       const currentScrollY = window.scrollY || window.pageYOffset || 0;
-      const trajectory = this.evaluateTrajectory(currentScrollY);
+      const { targetX, targetY, targetFacing, targetAngle } = this.evaluateFlight(currentScrollY);
 
-      const isMobile = window.innerWidth < 768;
-      const peacockSize = isMobile ? 68 : 104;
-      const halfSize = peacockSize / 2;
-      const winW = window.innerWidth;
+      this.facing = targetFacing;
 
-      if (this.isScrolling) {
-        this.targetDocX = trajectory.docX - halfSize;
-        this.targetDocY = trajectory.docY - halfSize;
-      } else {
-        // When perched, settle to the safe lateral margin facing inward toward content
-        let safeX;
-        if (trajectory.currentSide === 'left') {
-          safeX = isMobile ? (halfSize + 8) : Math.max(halfSize + 16, Math.min(winW * 0.07, 120));
-          this.facing = 1;
-        } else {
-          safeX = isMobile ? (winW - halfSize - 10) : Math.min(winW - halfSize - 16, Math.max(winW * 0.93, winW - 120));
-          this.facing = -1;
-        }
-        this.targetDocX = safeX - halfSize;
-        this.targetDocY = trajectory.docY - halfSize;
-      }
-
-      // Enforce safe clearance floor at top using CACHED safeTopFloorY (zero reflow)
-      if (currentScrollY < 140 && this.safeTopFloorY) {
-        this.targetDocY = Math.max(this.safeTopFloorY - halfSize, this.targetDocY);
-      }
-
-      const maxX = document.documentElement.clientWidth - (peacockSize + 6);
-      this.targetDocX = Math.max(4, Math.min(this.targetDocX, maxX));
-
-      // Snappy, real-time vertical response (ZERO lag) + graceful lateral banking
-      const lerpY = this.isScrolling ? 0.44 : 0.22;
-      const lerpX = this.isScrolling ? 0.26 : 0.16;
-      this.docY += (this.targetDocY - this.docY) * lerpY;
-      this.docX += (this.targetDocX - this.docX) * lerpX;
-
-      const targetAngle = this.isScrolling ? trajectory.angle : 0;
+      // Snappy and responsive lerp in viewport space
+      const lerpFactor = this.isScrolling ? 0.32 : 0.20;
+      this.screenX += (targetX - this.screenX) * lerpFactor;
+      this.screenY += (targetY - this.screenY) * lerpFactor;
       this.angle += (targetAngle - this.angle) * 0.22;
 
       this.renderPosition();
 
       // Emit stardust trail only on desktop while actively flying
-      if (!isMobile && this.isScrolling && time - this.lastEmberTime > 140) {
-        this.emitEmber(this.docX + halfSize, this.docY + halfSize);
+      if (!this.isMobile && this.isScrolling && time - this.lastEmberTime > 130) {
+        this.emitEmber(this.screenX + this.peacockSize / 2, this.screenY + this.peacockSize / 2);
         this.lastEmberTime = time;
+      }
+
+      // Sleep RAF when perched and settled within 0.25px to save 100% mobile CPU
+      const dx = Math.abs(targetX - this.screenX);
+      const dy = Math.abs(targetY - this.screenY);
+      const da = Math.abs(targetAngle - this.angle);
+
+      if (!this.isScrolling && dx < 0.25 && dy < 0.25 && da < 0.2) {
+        this.screenX = targetX;
+        this.screenY = targetY;
+        this.angle = 0;
+        this.renderPosition();
+        this.isTicking = false;
+        return;
       }
 
       requestAnimationFrame(this.tick.bind(this));
     }
 
     renderPosition() {
-      this.root.style.transform = `translate3d(${this.docX}px, ${this.docY}px, 0)`;
+      this.root.style.transform = `translate3d(${this.screenX}px, ${this.screenY}px, 0)`;
 
-      // Both images have identical natural orientation (+1 = right, -1 = left)
       if (this.innerWrap) {
         this.innerWrap.style.transform = `scaleX(${this.facing}) rotate(${this.angle}deg)`;
+      }
+
+      // Update tooltip alignment class
+      const sideClass = this.screenX < this.winW / 2 ? 'on-left' : 'on-right';
+      if (!this.root.classList.contains(sideClass)) {
+        this.root.classList.remove('on-left', 'on-right');
+        this.root.classList.add(sideClass);
       }
     }
   }
