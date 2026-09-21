@@ -51,11 +51,7 @@
       </div>
     </div>
 
-      <button id="apiKeyBtn" class="nav-action-pill key-pill" title="Gemini AI కీ అమరికలు (Live AI Settings)" aria-label="Configure Gemini API Key">
-        <span id="keyStatusIcon">⚡</span>
-        <span class="control-label" data-en="AI Key">AI కీ</span>
-      </button>
-
+    <div class="nav-controls">
       <button id="clearChatBtn" class="nav-action-pill" title="కొత్త సంభాషణ ప్రారంభించండి" aria-label="New Conversation">
         <span>🔄</span>
         <span class="control-label" data-en="New Chat">కొత్త ప్రశ్న</span>
@@ -191,34 +187,8 @@
     </div>
   </footer>
 
-  <!-- API KEY MODAL -->
-  <div id="apiKeyModal" class="medha-modal-backdrop" style="display:none;">
-    <div class="medha-modal-box">
-      <button id="closeApiKeyModalBtn" class="modal-close-btn" aria-label="Close">×</button>
-      <div class="modal-header">
-        <span class="modal-icon">⚡</span>
-        <h3 id="modalTitle">Gemini AI లైవ్ కనెక్టివిటీ</h3>
-      </div>
-      <p class="modal-desc">
-        Google Gemini 2.5 Flash ద్వారా ప్రత్యక్షంగా సంభాషించడానికి మీ ఉచిత API కీని ఇక్కడ నమోదు చేయండి.
-      </p>
-      <div class="modal-input-wrap">
-        <input type="password" id="geminiKeyInput" placeholder="AIzaSy..." autocomplete="off">
-        <button id="toggleKeyVisibilityBtn" type="button" class="key-vis-btn">👁️</button>
-      </div>
-      <div class="modal-hint">
-        కీ లేదా? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio లో ఉచితంగా తీసుకోండి ➜</a>
-      </div>
-      <div class="modal-actions">
-        <button id="clearKeyBtn" class="modal-btn modal-btn-secondary">తొలగించు</button>
-        <button id="saveKeyBtn" class="modal-btn modal-btn-primary">భద్రపరచండి</button>
-      </div>
-      <div id="keyFeedback" class="key-feedback-text"></div>
-    </div>
-  </div>
-
   <!-- Firebase Scripts -->
-  <script type="module" src="script.js?v=20260921_v3"></script>
+  <script type="module" src="script.js?v=20260921_v4"></script>
 </body>
 
 </html>
