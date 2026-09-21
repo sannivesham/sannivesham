@@ -149,8 +149,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
   <script src="theme.js?v=20260919f"></script>
-  <link rel="stylesheet" href="style.css?v=20260920a">
-  <link rel="stylesheet" href="peacock.css?v=20260921a">
+  <link rel="stylesheet" href="style.css?v=20260921b">
+  <link rel="stylesheet" href="peacock.css?v=20260921b">
   <style>
     html, body {
       width: 100%;
@@ -487,8 +487,8 @@
   <nav class="glass-navbar">
     <div class="nav-links">
       <a href="#home" data-en="Home">ప్రారంభం</a>
-      <a href="#intro" data-en="Intro">పరిచయం</a>
       <a href="#categories" data-en="Categories">విభాగాలు</a>
+      <a href="#intro" data-en="Intro">పరిచయం</a>
       <a href="#about" data-en="About Us">మా గురించి</a>
       <a href="#contact" data-en="Contact">సంప్రదించండి</a>
     </div>
@@ -530,16 +530,8 @@
         <p data-en="Culture • Tradition • Conversation">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
       </div>
 
-      <!-- INTERACTIVE 3D TEMPLE DIYA -->
-      <div id="hero3dDiya" class="hero-3d-diya-wrapper" title="స్పర్శించండి • దివ్య కాంతిని వెలిగించండి (Touch to light sparks)">
-        <div class="diya-3d-aura"></div>
-        <div class="diya-3d-lamp" id="diyaLampElem">
-          <div class="diya-3d-flame-wrap">
-            <div class="diya-3d-flame"></div>
-          </div>
-          <div class="diya-3d-base"></div>
-        </div>
-      </div>
+      <!-- HERO PEACOCK PERCH ANCHOR (Desktop starting position) -->
+      <div id="heroPeacockAnchor" class="hero-peacock-anchor" aria-hidden="true"></div>
     </div>
 
     <!-- LIVE DAILY PANCHANGAM GOLDEN RIBBON -->
@@ -557,37 +549,6 @@
         </div>
         <span class="ribbon-cta">పూర్తి పంచాంగం ➜</span>
       </a>
-    </div>
-
-    <!-- SPIRITUAL QUICK-ACTION DOCK -->
-    <div class="quick-dock-container">
-      <a href="library/" class="dock-pill-btn">
-        <span class="dock-icon">📖</span>
-        <span data-en="Library">గ్రంథాలయం</span>
-      </a>
-      <a href="festivals/" class="dock-pill-btn">
-        <span class="dock-icon">🪔</span>
-        <span data-en="Festivals">పండుగలు</span>
-      </a>
-      <a href="temples/" class="dock-pill-btn">
-        <span class="dock-icon">🛕</span>
-        <span data-en="Temples">దేవాలయాలు</span>
-      </a>
-      <a href="quiz/" class="dock-pill-btn">
-        <span class="dock-icon">🎯</span>
-        <span data-en="Quiz">ప్రశ్నావళి</span>
-      </a>
-    </div>
-
-    <div class="impact-box">
-      <div class="impact-card">
-        <span id="schoolCount">10</span>
-        <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
-      </div>
-      <div class="impact-card">
-        <span id="studentCount">2000+</span>
-        <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
-      </div>
     </div>
 
     <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
@@ -609,21 +570,6 @@
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
     </div>
-
-    <section id="intro" class="intro-box">
-      <h2 data-en="About Sannivesham">సన్నివేశం గురించి</h2>
-      <p data-en="Sannivesham is a cultural platform dedicated to promoting the Telugu language, Telugu culture, and Indian traditions. Our primary goal is to pass on the wisdom of our ancestors, spirituality, epics, temple history, and the significance of festivals to the younger generation.">
-        సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
-        ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
-        ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
-        మా ప్రధాన లక్ష్యం.
-      </p>
-      <p data-en="Through this platform, our aim is to cultivate respect for Indian culture, love for the Telugu language, and awareness of our traditions among students and young people.">
-        ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
-        తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
-        మా ఆశయం.
-      </p>
-    </section>
 
     <section id="categories" class="category-section">
       <h2 class="category-heading" data-en="Categories">విభాగాలు</h2>
@@ -741,7 +687,31 @@
       </div>
     </section>
 
+    <section id="intro" class="intro-box">
+      <h2 data-en="About Sannivesham">సన్నివేశం గురించి</h2>
+      <p data-en="Sannivesham is a cultural platform dedicated to promoting the Telugu language, Telugu culture, and Indian traditions. Our primary goal is to pass on the wisdom of our ancestors, spirituality, epics, temple history, and the significance of festivals to the younger generation.">
+        సన్నివేశం అనేది తెలుగు భాష, తెలుగు సంస్కృతి మరియు భారతీయ సంప్రదాయాలను
+        ప్రోత్సహించే ఒక సాంస్కృతిక వేదిక. మన పూర్వీకుల జ్ఞానం, ఆధ్యాత్మికత,
+        ఇతిహాసాలు, దేవాలయ చరిత్ర మరియు పండుగల ప్రాముఖ్యతను యువతకు చేరవేయడం
+        మా ప్రధాన లక్ష్యం.
+      </p>
+      <p data-en="Through this platform, our aim is to cultivate respect for Indian culture, love for the Telugu language, and awareness of our traditions among students and young people.">
+        ఈ వేదిక ద్వారా విద్యార్థులు మరియు యువతలో భారతీయ సంస్కృతి పట్ల గౌరవం,
+        తెలుగు భాష పట్ల అభిమానం మరియు మన సంప్రదాయాల పట్ల అవగాహన పెంపొందించాలనేది
+        మా ఆశయం.
+      </p>
+    </section>
 
+    <div class="impact-box">
+      <div class="impact-card">
+        <span id="schoolCount">10</span>
+        <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
+      </div>
+      <div class="impact-card">
+        <span id="studentCount">2000+</span>
+        <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
+      </div>
+    </div>
 
     <a href="about/" id="about" class="about-card">
       <div class="about-overlay"></div>
@@ -808,7 +778,7 @@
   <script src="script.js?v=2"></script>
   <script src="i18n.js"></script>
   <script src="panchang-engine.js"></script>
-  <script src="peacock.js?v=20260921a"></script>
+  <script src="peacock.js?v=20260921b"></script>
 
   <script type="module">
     import { db, auth } from "./firebase-config.js";
@@ -1246,62 +1216,6 @@
         render();
       }
 
-      /* --- 2. INTERACTIVE 3D DIYA WITH SPARKS & TILT --- */
-      function init3DDiya() {
-        const diyaWrap = document.getElementById("hero3dDiya");
-        const lamp = document.getElementById("diyaLampElem");
-        if (!diyaWrap || !lamp) return;
-
-        diyaWrap.addEventListener("mousemove", (e) => {
-          const rect = diyaWrap.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const deltaX = (e.clientX - centerX) / (rect.width / 2);
-          const deltaY = (e.clientY - centerY) / (rect.height / 2);
-
-          const rotX = -deltaY * 16;
-          const rotY = deltaX * 16;
-          lamp.style.transform = `perspective(500px) rotateX(${rotX.toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg)`;
-        });
-
-        diyaWrap.addEventListener("mouseleave", () => {
-          lamp.style.transform = "perspective(500px) rotateX(10deg) rotateY(0deg)";
-        });
-
-        const sparkSymbols = ["✨", "🪔", "🌟", "💛", "🌸", "✨"];
-        function burstSparks() {
-          const count = 12;
-          for (let i = 0; i < count; i++) {
-            const spark = document.createElement("span");
-            spark.className = "diya-sparkle-burst";
-            spark.innerText = sparkSymbols[Math.floor(Math.random() * sparkSymbols.length)];
-
-            const angle = (i / count) * 2 * Math.PI + (Math.random() - 0.5) * 0.5;
-            const distance = Math.random() * 70 + 40;
-            const dx = Math.cos(angle) * distance;
-            const dy = Math.sin(angle) * distance - 25;
-            const rot = (Math.random() - 0.5) * 180;
-
-            spark.style.left = "50%";
-            spark.style.top = "40%";
-            spark.style.setProperty("--dx", `${dx.toFixed(1)}px`);
-            spark.style.setProperty("--dy", `${dy.toFixed(1)}px`);
-            spark.style.setProperty("--rot", `${rot.toFixed(1)}deg`);
-            spark.style.fontSize = `${(Math.random() * 0.6 + 0.9).toFixed(2)}rem`;
-
-            diyaWrap.appendChild(spark);
-            setTimeout(() => spark.remove(), 1200);
-          }
-
-          lamp.style.transform = "perspective(500px) scale(1.15) rotateX(12deg)";
-          setTimeout(() => {
-            lamp.style.transform = "perspective(500px) rotateX(10deg) rotateY(0deg)";
-          }, 300);
-        }
-
-        diyaWrap.addEventListener("click", burstSparks);
-      }
-
       /* --- 3. 3D PERSPECTIVE TILT ON CATEGORY CARDS --- */
       function init3DCardTilt() {
         const cards = document.querySelectorAll(".category-card[data-tilt]");
@@ -1414,7 +1328,6 @@
         document.addEventListener("DOMContentLoaded", () => {
           initNavbarScroll();
           initDivineParticles();
-          init3DDiya();
           init3DCardTilt();
           initTimeGreeting();
           initPanchangamRibbon();
@@ -1422,7 +1335,6 @@
       } else {
         initNavbarScroll();
         initDivineParticles();
-        init3DDiya();
         init3DCardTilt();
         initTimeGreeting();
         initPanchangamRibbon();

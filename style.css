@@ -363,6 +363,7 @@ body {
 
   text-align: center;
 
+  margin-top: 60px;
   margin-bottom: 40px;
 
   border: 1px solid rgba(255, 209, 102, 0.35);
@@ -5506,7 +5507,22 @@ button[class*="delete"] {
   }
 }
 
-/* 3. Interactive 3D Temple Diya (Hero Section) */
+/* 3. Hero Peacock Perch Anchor (Desktop starting position where Diya was) */
+.hero-peacock-anchor {
+  width: 104px;
+  height: 104px;
+  position: relative;
+  flex-shrink: 0;
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .hero-peacock-anchor {
+    display: none !important;
+  }
+}
+
 .hero-3d-diya-wrapper {
   display: flex;
   flex-direction: column;

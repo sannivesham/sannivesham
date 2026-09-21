@@ -55,11 +55,11 @@
 
       // 7 Natural Alternating Journey Waypoints from Top to Footer
       this.waypoints = [
-        { p: 0.00, side: 'right', label: 'Hero' },
-        { p: 0.18, side: 'left',  label: 'Intro' },
-        { p: 0.36, side: 'right', label: 'Categories' },
-        { p: 0.54, side: 'left',  label: 'Festivals' },
-        { p: 0.72, side: 'right', label: 'About' },
+        { p: 0.00, side: 'hero',  label: 'Hero' },
+        { p: 0.18, side: 'left',  label: 'Categories' },
+        { p: 0.36, side: 'right', label: 'CategoriesLower' },
+        { p: 0.54, side: 'left',  label: 'About' },
+        { p: 0.72, side: 'right', label: 'Impact' },
         { p: 0.88, side: 'left',  label: 'Contact' },
         { p: 1.00, side: 'right', label: 'Footer' }
       ];
@@ -74,7 +74,7 @@
       this.updateDimensions();
       this.bindEvents();
 
-      // Initial placement at Hero (Right gutter, safely below greeting badge and navbar)
+      // Initial placement at Hero (Where Diya was on desktop, Right gutter on mobile)
       this.screenX = this.targetScreenX = this.heroScreenX;
       this.screenY = this.targetScreenY = this.heroScreenY;
       this.facing = -1; // Face inward toward Sannivesham logo
@@ -143,17 +143,31 @@
       this.leftGutterX = this.isMobile ? 8 : Math.max(16, Math.min(this.winW * 0.05, 70));
       this.rightGutterX = this.isMobile ? (this.winW - this.peacockSize - 8) : (this.winW - this.peacockSize - Math.max(16, Math.min(this.winW * 0.05, 70)));
 
-      // Hero starting Y: below greeting badge and navbar
-      const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
-      let heroY = this.isMobile ? 152 : 200;
-      if (heroElem) {
-        const hr = heroElem.getBoundingClientRect();
+      // Hero starting coordinates:
+      // On desktop: locate #heroPeacockAnchor beside the title (where diya was)
+      const heroAnchor = document.getElementById('heroPeacockAnchor');
+      if (!this.isMobile && heroAnchor && heroAnchor.offsetWidth > 0) {
+        const ar = heroAnchor.getBoundingClientRect();
         const currentScrollY = window.scrollY || window.pageYOffset || 0;
-        const elemDocTop = hr.top + currentScrollY;
-        heroY = Math.max(this.isMobile ? 142 : 180, elemDocTop + (this.isMobile ? 20 : 35));
+        const currentScrollX = window.scrollX || window.pageXOffset || 0;
+        const elemDocTop = ar.top + currentScrollY;
+        const elemDocLeft = ar.left + currentScrollX;
+
+        this.heroScreenX = elemDocLeft + (ar.width - this.peacockSize) / 2;
+        this.heroScreenY = elemDocTop + (ar.height - this.peacockSize) / 2;
+      } else {
+        // Fallback or Mobile: Right gutter safe position (as requested: mobile stands on right as is)
+        const heroElem = document.querySelector('.top-brand .brand-logo-wrap') || document.querySelector('.top-brand');
+        let heroY = this.isMobile ? 152 : 200;
+        if (heroElem) {
+          const hr = heroElem.getBoundingClientRect();
+          const currentScrollY = window.scrollY || window.pageYOffset || 0;
+          const elemDocTop = hr.top + currentScrollY;
+          heroY = Math.max(this.isMobile ? 142 : 180, elemDocTop + (this.isMobile ? 20 : 35));
+        }
+        this.heroScreenX = this.rightGutterX;
+        this.heroScreenY = heroY;
       }
-      this.heroScreenX = this.rightGutterX;
-      this.heroScreenY = heroY;
     }
 
     bindEvents() {
@@ -208,8 +222,33 @@
       }, { passive: true });
 
       // Refresh measurements when layout finishes rendering
+      window.addEventListener('load', () => {
+        this.updateDimensions();
+        if (!this.isScrolling && (window.scrollY || window.pageYOffset || 0) < 10) {
+          this.screenX = this.targetScreenX = this.heroScreenX;
+          this.screenY = this.targetScreenY = this.heroScreenY;
+          this.renderPosition();
+        }
+        this.startLoop();
+      });
+
       setTimeout(() => {
         this.updateDimensions();
+        if (!this.isScrolling && (window.scrollY || window.pageYOffset || 0) < 10) {
+          this.screenX = this.targetScreenX = this.heroScreenX;
+          this.screenY = this.targetScreenY = this.heroScreenY;
+          this.renderPosition();
+        }
+        this.startLoop();
+      }, 250);
+
+      setTimeout(() => {
+        this.updateDimensions();
+        if (!this.isScrolling && (window.scrollY || window.pageYOffset || 0) < 10) {
+          this.screenX = this.targetScreenX = this.heroScreenX;
+          this.screenY = this.targetScreenY = this.heroScreenY;
+          this.renderPosition();
+        }
         this.startLoop();
       }, 700);
     }
@@ -269,11 +308,11 @@
       // Smooth Hermite easing across segment
       const easeU = u * u * (3 - 2 * u);
 
-      const startX = (w0.side === 'left') ? this.leftGutterX : this.rightGutterX;
-      const endX = (w1.side === 'left') ? this.leftGutterX : this.rightGutterX;
+      const startX = (w0.side === 'left') ? this.leftGutterX : ((w0.side === 'hero') ? this.heroScreenX : this.rightGutterX);
+      const endX = (w1.side === 'left') ? this.leftGutterX : ((w1.side === 'hero') ? this.heroScreenX : this.rightGutterX);
 
       // Lateral banking arc across the screen
-      const arcDir = (w0.side === 'right') ? -1 : 1;
+      const arcDir = (w0.side === 'left') ? 1 : -1;
       const arcAmp = (this.isMobile ? 18 : 32);
       const arcX = Math.sin(u * Math.PI) * arcAmp * arcDir;
 
