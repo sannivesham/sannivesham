@@ -58,16 +58,21 @@ async function loadFestivals() {
 
     festivalsGrid.innerHTML = "";
 
-    // Prominent Featured Entry Card for Ekadashis
+    // Prominent Featured Entry Card for Ekadashis (Divine Text & Motif Card)
     const featuredEkadashiCard = document.createElement("div");
     featuredEkadashiCard.className = "festival-card featured-ekadashi-card";
     featuredEkadashiCard.style.cursor = "pointer";
     featuredEkadashiCard.innerHTML = `
       <span class="featured-badge">🪷 26 వ్రతాలు</span>
-      <img src="https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?w=700&auto=format&fit=crop&q=80" alt="ఏకాదశి వ్రతాలు">
-      <div class="festival-overlay"></div>
-      <div class="festival-name" style="background:rgba(26,14,6,0.85);color:#ffd166;">
-        🪷 ఏకాదశి వ్రతాలు
+      <div class="featured-ekadashi-inner">
+        <div class="featured-ekadashi-om">ॐ</div>
+        <div class="featured-ekadashi-icon">🪷</div>
+        <h3 class="featured-ekadashi-title">ఏకాదశి వ్రతాలు</h3>
+        <p class="featured-ekadashi-desc">26 పవిత్ర ఏకాదశుల పురాణ కథలు, ఉపవాస నియమాలు &amp; ఫలశ్రుతి</p>
+        <div class="featured-ekadashi-cta">
+          <span>అన్ని ఏకాదశులు చూడండి</span>
+          <span class="arrow">→</span>
+        </div>
       </div>
     `;
     featuredEkadashiCard.addEventListener("click", () => {
@@ -173,22 +178,36 @@ function renderEkadashis() {
     const pakshaLabel = isShukla ? "🌕 శుక్ల పక్షం" : "🌑 కృష్ణ పక్షం";
 
     card.innerHTML = `
-      <div class="ekadashi-card-image-wrap">
-        <img src="${item.cardImage || 'https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?w=700&auto=format&fit=crop&q=80'}" alt="${item.title}" loading="lazy">
-        <div class="ekadashi-card-overlay"></div>
+      <div class="ekadashi-card-topbar">
         <span class="ekadashi-card-paksha-badge ${pakshaBadgeClass}">${pakshaLabel}</span>
+        <span class="ekadashi-card-month-tag">📅 ${item.masam}</span>
         ${item.isMajor ? `<span class="ekadashi-card-major-badge">⭐ ముఖ్యమైనది</span>` : ""}
-        <span class="ekadashi-card-month-tag">${item.masam}</span>
       </div>
+
+      <div class="ekadashi-card-ornament">
+        <span class="ornament-line"></span>
+        <span class="ornament-glyph">🪷</span>
+        <span class="ornament-line"></span>
+      </div>
+
       <div class="ekadashi-card-body">
         <h3 class="ekadashi-card-title">${item.title}</h3>
         <div class="ekadashi-card-subtitle">${item.titleEn || ""}</div>
+        
         <div class="ekadashi-card-deity">
-          <span>🙏</span> ${item.deity || "శ్రీ మహావిష్ణువు"}
+          <span class="deity-icon">🙏</span>
+          <span class="deity-label">అధిష్టాన దైవం:</span>
+          <strong class="deity-val">${item.deity || "శ్రీ మహావిష్ణువు"}</strong>
         </div>
+
+        <div class="ekadashi-card-divider">
+          <span>✦ ─── ॐ ─── ✦</span>
+        </div>
+
         <p class="ekadashi-card-summary">${item.summary || ""}</p>
+
         <div class="ekadashi-card-cta">
-          <span>వివరాలు చదవండి</span>
+          <span>పూర్తి వివరాలు చదవండి</span>
           <span class="arrow">→</span>
         </div>
       </div>
@@ -289,11 +308,9 @@ function openEkadashiReader(ekadashi) {
         <span class="meta-pill">🙏 ${ekadashi.deity || "శ్రీ మహావిష్ణువు"}</span>
       </div>
 
-      ${
-        ekadashi.cardImage
-          ? `<img src="${ekadashi.cardImage}" class="reader-hero-image" alt="${ekadashi.title}">`
-          : ""
-      }
+      <div class="reader-sacred-banner">
+        <span class="reader-sacred-mantra">✦ ఓం నమో భగవతే వాసుదేవాయ ✦</span>
+      </div>
     </header>
 
     <section class="reader-detail-section">

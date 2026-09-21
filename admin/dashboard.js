@@ -855,7 +855,10 @@ function renderAdminEkadashis() {
     const pakshaColor = isShukla ? "#ffd166" : "#a8dadc";
 
     card.innerHTML = `
-      <img src="${item.cardImage || 'https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?w=700&auto=format&fit=crop&q=80'}" alt="${item.title}">
+      <div style="width:72px;min-width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg, rgba(255,209,102,0.18), rgba(255,183,3,0.06));border:1.5px solid rgba(255,209,102,0.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:inset 0 0 10px rgba(255,209,102,0.08);">
+        <span style="font-size:1.6rem;line-height:1;">🪷</span>
+        <span style="font-size:0.68rem;color:#ffd166;font-weight:700;text-align:center;line-height:1.1;padding:0 3px;">${item.masam?.replace(' మాసం','') || 'ఏకాదశి'}</span>
+      </div>
       <div style="flex:1;">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
           <h3 style="margin:0;color:#ffd166;">${item.title}</h3>
