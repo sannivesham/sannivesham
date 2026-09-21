@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>సన్నివేశం మేధ — Sannivesham AI | త్వరలో రాబోతోంది</title>
-  <meta name="description" content="సన్నివేశం మేధ (Sannivesham AI) — మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. భారతీయ సంస్కృతి మరియు తెలుగు విజ్ఞానాన్ని అందించే విశిష్ట కృత్రిమ మేధస్సు.">
+  <title>సన్నివేశం మేధ — Sannivesham AI | సాంస్కృతిక & విద్యా మేధస్సు</title>
+  <meta name="description" content="సన్నివేశం మేధ (Sannivesham AI) — మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. తెలుగు భాష, సాహిత్యం, సంస్కృతి, దేవాలయాలు, పండుగలు మరియు సనాతన ధర్మం గురించిన నమ్మకమైన విజ్ఞాన వేదిక.">
   <link rel="canonical" href="https://sannivesham.com/ai/">
   <link rel="icon" type="image/png" href="../images/logo.png">
 
   <!-- Open Graph -->
   <meta property="og:title" content="సన్నివేశం మేధ — Sannivesham AI">
-  <meta property="og:description" content="మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. త్వరలో రాబోతోంది.">
+  <meta property="og:description" content="మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. తెలుగు మరియు భారతీయ సాంస్కృతిక విజ్ఞాన వేదిక.">
   <meta property="og:image" content="https://sannivesham.com/images/logo.png">
   <meta property="og:url" content="https://sannivesham.com/ai/">
   <meta property="og:type" content="website">
@@ -21,11 +21,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700;800&family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=20260919">
+  <link rel="stylesheet" href="style.css?v=20260921c">
 </head>
 
 <body>
-  <!-- Background Aura & Particles -->
+  <!-- Background Aura & Sacred Particles -->
   <div class="medha-bg"></div>
   <div class="medha-glow-orb orb-1"></div>
   <div class="medha-glow-orb orb-2"></div>
@@ -34,150 +34,157 @@
 
   <!-- Top Glass Bar -->
   <header class="medha-nav">
-    <a href="../" class="nav-back-link">
+    <a href="../" class="nav-back-link" title="సన్నివేశం ముఖచిత్రానికి వెళ్లండి">
       <span class="back-arrow">←</span>
-      <span data-en="Back to Sannivesham">సన్నివేశం ముఖచిత్రం</span>
+      <span class="back-text" data-en="Home">సన్నివేశం</span>
     </a>
+
     <div class="nav-brand">
       <img src="../images/logo.png" alt="Sannivesham Logo" class="brand-mini-logo">
-      <span class="brand-mini-name">సన్నివేశం</span>
+      <div class="brand-headings">
+        <span class="brand-mini-name">సన్నివేశం మేధ</span>
+        <span class="brand-mini-sub">SANNIVESHAM AI</span>
+      </div>
     </div>
-    <div class="nav-lang-badge">
-      <span>🦚 మేధ • AI</span>
+
+    <div class="nav-controls">
+      <button id="clearChatBtn" class="nav-action-pill" title="కొత్త సంభాషణ ప్రారంభించండి" aria-label="New Conversation">
+        <span>🔄</span>
+        <span class="control-label" data-en="New Chat">కొత్త ప్రశ్న</span>
+      </button>
+
+      <button id="langToggleBtn" class="nav-action-pill lang-pill" title="భాష మార్చండి (Toggle Language)" aria-label="Toggle Language">
+        <span id="langLabel">తెలుగు</span>
+      </button>
+
+      <a href="../profile/" class="nav-action-pill profile-pill" title="ఖాతా వివరాలు" aria-label="User Profile">
+        <span>👤</span>
+      </a>
     </div>
   </header>
 
-  <!-- Main Hero Section -->
+  <!-- Main AI Interaction Space -->
   <main class="medha-container">
-    <div class="medha-hero">
-      <!-- Sacred Mandala Ring with Mystical Peacock Emblem -->
+
+    <!-- WELCOME HERO (Visible when no messages yet) -->
+    <div id="welcomeHero" class="medha-hero">
       <div class="medha-emblem-wrap">
         <div class="mandala-ring outer-ring"></div>
         <div class="mandala-ring middle-ring"></div>
         <div class="mandala-ring inner-ring"></div>
-        <div class="peacock-divine-icon">
-          <!-- Stylized Divine Peacock Eye / Lamp Icon -->
-          <svg viewBox="0 0 120 120" class="feather-divine-svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="featherGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffd166" />
-                <stop offset="35%" stop-color="#05c46b" />
-                <stop offset="70%" stop-color="#0fbcf9" />
-                <stop offset="100%" stop-color="#3c40c6" />
-              </linearGradient>
-              <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ffd166" stop-opacity="1" />
-                <stop offset="45%" stop-color="#ff9f1a" stop-opacity="0.8" />
-                <stop offset="75%" stop-color="#0fbcf9" stop-opacity="0.5" />
-                <stop offset="100%" stop-color="#1e272e" stop-opacity="0" />
-              </radialGradient>
-            </defs>
-            <ellipse cx="60" cy="55" rx="36" ry="46" fill="none" stroke="url(#featherGrad)" stroke-width="3.5" opacity="0.9" />
-            <circle cx="60" cy="52" r="28" fill="url(#eyeGlow)" />
-            <circle cx="60" cy="50" r="16" fill="#041226" stroke="#ffd166" stroke-width="2" />
-            <circle cx="60" cy="48" r="8" fill="#ffd166" />
-            <path d="M60 85 Q60 110 60 118" stroke="#ffd166" stroke-width="3" stroke-linecap="round" />
-            <path d="M60 90 Q50 96 42 102" stroke="#05c46b" stroke-width="2" stroke-linecap="round" />
-            <path d="M60 90 Q70 96 78 102" stroke="#05c46b" stroke-width="2" stroke-linecap="round" />
-            <path d="M60 98 Q48 106 38 114" stroke="#0fbcf9" stroke-width="2" stroke-linecap="round" />
-            <path d="M60 98 Q72 106 82 114" stroke="#0fbcf9" stroke-width="2" stroke-linecap="round" />
-          </svg>
+        <div class="peacock-divine-avatar">
+          <img src="../images/peacock-perched.png" alt="సన్నివేశం మేధ మయూరం" class="hero-peacock-img">
         </div>
         <div class="divine-pulse"></div>
       </div>
 
-      <!-- Live Teaser Badge -->
       <div class="status-pill">
         <span class="status-dot"></span>
-        <span class="status-text">సృష్టి నిర్మాణంలో ఉంది • UNDER DEVELOPMENT</span>
+        <span class="status-text" data-en="CULTURAL & EDUCATIONAL AI COMPANION">సాంస్కృతిక & విద్యా మేధస్సు</span>
       </div>
 
-      <!-- Main Headline -->
       <h1 class="medha-title">
         <span class="title-telugu">సన్నివేశం మేధ</span>
         <span class="title-english">SANNIVESHAM AI</span>
       </h1>
 
-      <p class="medha-tagline">
+      <p class="medha-tagline" data-en="Your Culture • Your Questions • Authentic Answers">
         మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు.
       </p>
 
-      <p class="medha-lead">
-        భారతీయ సనాతన ధర్మం, వేదాలు, ఇతిహాసాలు, తెలుగు సాహిత్య గ్రంథాలు మరియు పుణ్యక్షేత్రాల దివ్య విజ్ఞానాన్ని మీ చేతుల్లోకి తెచ్చే అత్యున్నత సాంస్కృతిక మేధస్సు త్వరలోనే మీ ముందుకు రాబోతోంది.
+      <p class="medha-lead" data-en="Explore Telugu language, classical literature, temples, festivals, epics, Puranas, and Sanatana Dharma with verified cultural wisdom.">
+        తెలుగు భాష, కవులు, పురాణాలు, ఇతిహాసాలు, పవిత్ర దేవాలయాలు, పండుగల వెనుక ఉన్న ఆధ్యాత్మిక, శాస్త్రీయ విశేషాలను తెలుసుకోండి.
       </p>
 
-      <!-- Coming Soon Golden Ribbon -->
-      <div class="coming-soon-banner">
-        <div class="sparkle-star">✦</div>
-        <div class="cs-badge">COMING SOON</div>
-        <div class="cs-sub">నూతన సాంస్కృతిక విప్లవం ఆరంభం కాబోతోంది</div>
-        <div class="sparkle-star">✦</div>
-      </div>
-
-      <!-- Feature Teaser Grid -->
-      <section class="features-preview">
-        <h2 class="features-heading">సన్నివేశం మేధ ప్రత్యేకతలు</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📜</div>
-            <h3>ఇతిహాస & వేద జ్ఞానం</h3>
-            <p>రామాయణం, మహాభారతం, భాగవతం మరియు పురాణాల కథలు, ధర్మ సందేహాలు మరియు అంతరార్థాలను లోతుగా విశ్లేషించే జ్ఞాన భాండాగారం.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🛕</div>
-            <h3>క్షేత్ర చరిత్ర & దేవాలయ విశేషాలు</h3>
-            <p>భారతదేశంలోని వేలాది ప్రాచీన దేవాలయాల నిర్మాణ శైలి, క్షేత్ర మహత్యం, పూజా సమయాలు మరియు పవిత్ర సంప్రదాయాల సమగ్ర దర్శనం.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📖</div>
-            <h3>అచ్చ తెలుగు సాహిత్య సంభాషణ</h3>
-            <p>పద్యాలు, శతకాలు, సామెతలు, పొడుపు కథలు మరియు ప్రాచీన కావ్యాల అమృత రసాన్ని సరళమైన సమకాలీన తెలుగులో వివరించే అక్షర మిత్రుడు.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🪔</div>
-            <h3>నిత్య ధర్మ & పండుగల మార్గదర్శి</h3>
-            <p>రోజూ పాటించవలసిన తిథులు, నక్షత్రాలు, పూజా విధానాలు, పండుగల వెనుక ఉన్న శాస్త్రీయ కారణాలను అందించే ఆధ్యాత్మిక నేస్తం.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Express Interest / Notify Me Box -->
-      <div class="notify-card">
-        <div class="notify-header">
-          <span class="notify-bell">🔔</span>
-          <div>
-            <h3>మేధస్సు విడుదల సమాచారం పొందండి</h3>
-            <p>సన్నివేశం మేధ లైవ్‌లోకి రాగానే ముందస్తుగా ఆహ్వానం అందుకోండి.</p>
-          </div>
-        </div>
-        <form id="notifyForm" class="notify-form">
-          <input type="email" id="notifyEmail" placeholder="మీ ఇమెయిల్ చిరునామా (Enter your email)..." required autocomplete="email">
-          <button type="submit" id="notifySubmitBtn" class="notify-btn">
-            <span>ఆహ్వానం పొందండి</span>
-            <span class="btn-arrow">➜</span>
+      <!-- QUICK SUGGESTIONS GRID -->
+      <div class="suggestions-wrapper">
+        <div class="suggestions-title" data-en="✨ Suggested Topics to Explore:">✨ అన్వేషించదగిన అంశాలు:</div>
+        <div class="suggestions-grid">
+          <button class="prompt-chip" data-prompt="పోతన భాగవత పద్యాల విశిష్టత మరియు శైలి ఏమిటి?">
+            <span class="chip-icon">📖</span>
+            <span class="chip-text">పోతన భాగవత విశిష్టత</span>
           </button>
-        </form>
-        <div id="notifyMessage" class="notify-msg" style="display:none;"></div>
-      </div>
 
-      <!-- Return Button -->
-      <div class="return-wrap">
-        <a href="../" class="return-home-btn">
-          <span>← సన్నివేశం హోమ్ పేజీకి తిరిగి వెళ్ళండి</span>
-        </a>
+          <button class="prompt-chip" data-prompt="ఉగాది పండుగలో షడ్రుచుల పచ్చడి అంతరార్థం ఏమిటి?">
+            <span class="chip-icon">🪔</span>
+            <span class="chip-text">ఉగాది షడ్రుచుల అంతరార్థం</span>
+          </button>
+
+          <button class="prompt-chip" data-prompt="తిరుమల శ్రీ వేంకటేశ్వర స్వామి క్షేత్ర చరిత్ర మరియు విశేషాలు తెలపండి.">
+            <span class="chip-icon">🛕</span>
+            <span class="chip-text">తిరుమల క్షేత్ర చరిత్ర</span>
+          </button>
+
+          <button class="prompt-chip" data-prompt="భగవద్గీతలో శ్రీకృష్ణుడు ఉపదేశించిన కర్మయోగం ప్రాముఖ్యత ఏమిటి?">
+            <span class="chip-icon">🕉️</span>
+            <span class="chip-text">భగవద్గీత కర్మయోగం</span>
+          </button>
+
+          <button class="prompt-chip" data-prompt="ఏకాదశి వ్రత ప్రాముఖ్యత మరియు దాని వెనుక ఉన్న శాస్త్రీయ కారణాలు ఏమిటి?">
+            <span class="chip-icon">🌙</span>
+            <span class="chip-text">ఏకాదశి వ్రత విశిష్టత</span>
+          </button>
+
+          <button class="prompt-chip" data-prompt="తెలుగు భాషలో 'సంధి' అంటే ఏమిటి? ప్రధాన సంధుల రకాలను వివరించండి.">
+            <span class="chip-icon">✍️</span>
+            <span class="chip-text">తెలుగు వ్యాకరణం - సంధులు</span>
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- CHAT MESSAGES STREAM CONTAINER -->
+    <div id="chatMessages" class="chat-messages-container" style="display: none;"></div>
+
+    <!-- POLICY RESTRICTION / WARNING BANNER -->
+    <div id="restrictionBanner" class="restriction-banner" style="display: none;">
+      <span class="banner-icon">⚠️</span>
+      <div class="banner-content">
+        <div id="restrictionTitle" class="banner-title">ఖాతా పరిమితి గమనిక</div>
+        <div id="restrictionDesc" class="banner-desc"></div>
+      </div>
+    </div>
+
+    <!-- TYPING / GENERATION LOADER -->
+    <div id="typingIndicator" class="typing-indicator" style="display: none;">
+      <div class="indicator-avatar">🦚</div>
+      <div class="typing-bubble">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    </div>
+
   </main>
 
-  <footer class="medha-footer">
-    <p class="footer-shloka">“సత్యమేవ జయతే నానృతం • సత్యేన పంథా వితతో దేవయానః”</p>
-    <p class="footer-copy">© 2026 సన్నివేశం (Sannivesham). సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.</p>
+  <!-- BOTTOM STICKY INPUT DOCK -->
+  <footer class="medha-input-dock">
+    <div class="input-inner-wrap">
+      <div class="input-box-container">
+        <textarea 
+          id="chatInput" 
+          class="chat-textarea" 
+          rows="1" 
+          placeholder="తెలుగు లేదా భారతీయ సంస్కృతి, సాహిత్యం, ధర్మం గురించి అడగండి..." 
+          aria-label="Ask Sannivesham AI"
+          autocomplete="off"
+        ></textarea>
+        
+        <button id="sendBtn" class="send-action-btn" title="సందేశం పంపండి" aria-label="Send Message" disabled>
+          <svg viewBox="0 0 24 24" class="send-icon" aria-hidden="true">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="input-disclaimer" data-en="Sannivesham AI is dedicated exclusively to Telugu language, literature, traditions, and Indian cultural heritage.">
+        సన్నివేశం మేధ తెలుగు భాష, సంస్కృతి, సాహిత్యం మరియు సనాతన ధర్మ విజ్ఞానాన్ని అందించే సాంస్కృతిక వేదిక.
+      </div>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Firebase Scripts -->
+  <script type="module" src="script.js?v=20260921c"></script>
 </body>
 
 </html>
