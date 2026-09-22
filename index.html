@@ -581,42 +581,53 @@
       </a>
     </div>
 
-    <div id="qotdCarouselNav" class="qotd-carousel-nav" style="display:none;">
-      <button type="button" id="qotdNavBtn0" class="qotd-nav-pill active" onclick="window.goToQotdSlide && window.goToQotdSlide(0)" aria-label="Question of the day">
-        <span data-en="❓ Question">❓ నేటి ప్రశ్న</span>
-      </button>
-      <button type="button" id="qotdNavBtn1" class="qotd-nav-pill" onclick="window.goToQotdSlide && window.goToQotdSlide(1)" aria-label="Topic of the day">
-        <span data-en="💡 Topic">💡 నేటి అంశం</span>
-      </button>
-    </div>
-
-    <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
-      <div id="qotdCard" class="qotd-card" style="display:none;">
-        <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
-        <p id="qotdQuestionText" class="qotd-question-text"></p>
-        <div id="qotdOptions" class="qotd-options"></div>
-        <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-          <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
-        </div>
-        <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
-          <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
-            ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
-          </p>
-          <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
-            లాగిన్ అవ్వండి (Log In) ➜
-          </a>
-        </div>
-        <div class="qotd-swipe-hint-bar" id="qotdSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(1)">
-          <span class="swipe-hint-text" data-en="👉 Swipe for Today's Topic ➜">👉 నేటి అంశం కోసం స్వైప్ చేయండి ➜</span>
-        </div>
+    <div id="qotdContainerWrap" class="qotd-container-wrap">
+      <div id="qotdCarouselNav" class="qotd-carousel-nav" style="display:none;">
+        <button type="button" id="qotdNavBtn0" class="qotd-nav-pill active" onclick="window.goToQotdSlide && window.goToQotdSlide(0)" aria-label="Question of the day">
+          <span data-en="❓ Question">❓ నేటి ప్రశ్న</span>
+        </button>
+        <button type="button" id="qotdNavBtn1" class="qotd-nav-pill" onclick="window.goToQotdSlide && window.goToQotdSlide(1)" aria-label="Topic of the day">
+          <span data-en="💡 Topic">💡 నేటి అంశం</span>
+        </button>
       </div>
 
-      <div id="wordCard" class="word-card" style="display:none;">
-        <h3 data-en="Word of the Day">నేటి అంశం</h3>
-        <p id="wordOfDayText" class="word-of-day-text"></p>
-        <div class="word-swipe-hint-bar" id="wordSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(0)">
-          <span class="swipe-hint-text" data-en="⮌ Swipe back for Question">⮌ నేటి ప్రశ్న కోసం స్వైప్ చేయండి</span>
+      <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
+        <div id="qotdCard" class="qotd-card" style="display:none;">
+          <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
+          <p id="qotdQuestionText" class="qotd-question-text"></p>
+          <div id="qotdOptions" class="qotd-options"></div>
+          <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
+            <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
+            <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
+          </div>
+          <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
+            <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
+              ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
+            </p>
+            <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
+              లాగిన్ అవ్వండి (Log In) ➜
+            </a>
+          </div>
+          <div class="qotd-swipe-hint-bar" id="qotdSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(1)">
+            <span class="swipe-hint-text" data-en="👉 Swipe for Today's Topic ➜">👉 నేటి అంశం కోసం స్వైప్ చేయండి ➜</span>
+          </div>
+        </div>
+
+        <div id="wordCard" class="word-card" style="display:none;">
+          <h3 data-en="Word of the Day">నేటి అంశం</h3>
+          <p id="wordOfDayText" class="word-of-day-text"></p>
+
+          <!-- MARK AS READ CHECKBOX -->
+          <div class="topic-read-row">
+            <label class="topic-read-label" for="topicReadCheckbox">
+              <input type="checkbox" id="topicReadCheckbox" class="topic-read-checkbox">
+              <span class="topic-read-text" data-en="Mark as Read">పూర్తయినట్లు గుర్తించండి (Mark as read)</span>
+            </label>
+          </div>
+
+          <div class="word-swipe-hint-bar" id="wordSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(0)">
+            <span class="swipe-hint-text" data-en="⮌ Swipe back for Question">⮌ నేటి ప్రశ్న కోసం స్వైప్ చేయండి</span>
+          </div>
         </div>
       </div>
     </div>
@@ -771,6 +782,23 @@
             }
           }
 
+          var isColdQotdAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
+            (cachedQotdRaw && (localStorage.getItem("qotd_answered_" + (JSON.parse(cachedQotdRaw).key || localTodayKey)) === "true"));
+          var isColdTopicRead = (localStorage.getItem("topic_read_" + localTodayKey) === "true") ||
+            (cachedWordRaw && (localStorage.getItem("topic_read_" + (JSON.parse(cachedWordRaw).key || localTodayKey)) === "true"));
+
+          var qWrap = document.getElementById("qotdContainerWrap");
+          var catSec = document.getElementById("categories");
+          if (isColdQotdAnswered && isColdTopicRead && qWrap && catSec) {
+            catSec.parentNode.insertBefore(qWrap, catSec.nextSibling);
+            qWrap.classList.add("qotd-moved-bottom");
+          }
+
+          var topicCb = document.getElementById("topicReadCheckbox");
+          if (topicCb) {
+            topicCb.checked = isColdTopicRead;
+          }
+
           if (hasRendered) {
             var parentSec = document.getElementById("qotdWordSection");
             var nav = document.getElementById("qotdCarouselNav");
@@ -778,8 +806,7 @@
             if (nav && window.innerWidth <= 768) nav.style.display = "flex";
 
             if (window.innerWidth <= 768 && parentSec) {
-              var isAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
-                               (cachedQotdRaw && (localStorage.getItem("qotd_answered_" + (JSON.parse(cachedQotdRaw).key || localTodayKey)) === "true"));
+              var isAnswered = isColdQotdAnswered;
               if (isAnswered) {
                 setTimeout(function() {
                   if (window.goToQotdSlide) {
@@ -1213,6 +1240,7 @@
           optionsBox.appendChild(btn);
         });
 
+        window._activeQotdKey = activeKey;
         document.getElementById("qotdCard").style.display = "block";
         syncQotdWordDisplay(alreadyAnswered);
 
@@ -1233,6 +1261,7 @@
 
     async function handleQotdAnswer(selectedIndex, correctIndex, activeKey) {
       if (!activeKey) activeKey = todayKey;
+      window._activeQotdKey = activeKey;
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
@@ -1254,6 +1283,9 @@
         localStorage.setItem(`qotd_correct_${activeKey}`, "true");
         localStorage.setItem(`qotd_correct_${todayKey}`, "true");
       }
+
+      // If user answered QOD and also read the topic today, move box to bottom of 12 sections
+      window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
 
       // Auto-swipe to Today's Topic on mobile after 3.5 seconds
       if (window.innerWidth <= 768) {
@@ -1361,6 +1393,7 @@
           localStorage.setItem("sannivesham_cached_word", JSON.stringify({ key: activeKey, data: data }));
         } catch (e) {}
 
+        window._activeWordKey = activeKey;
         document.getElementById("wordOfDayText").innerText = data.text;
         document.getElementById("wordCard").style.display = "block";
         syncQotdWordDisplay();
@@ -1369,12 +1402,46 @@
       }
     }
 
+    window.checkAndPositionQotdSection = function() {
+      const qKey = window._activeQotdKey || todayKey;
+      const wKey = window._activeWordKey || todayKey;
+
+      const isQotdAnswered = (localStorage.getItem("qotd_answered_" + todayKey) === "true") ||
+                             (localStorage.getItem("qotd_answered_" + qKey) === "true");
+
+      const isTopicRead = (localStorage.getItem("topic_read_" + todayKey) === "true") ||
+                          (localStorage.getItem("topic_read_" + wKey) === "true");
+
+      const cb = document.getElementById("topicReadCheckbox");
+      if (cb) cb.checked = isTopicRead;
+
+      const qWrap = document.getElementById("qotdContainerWrap");
+      const catSec = document.getElementById("categories");
+      if (!qWrap || !catSec) return;
+
+      if (isQotdAnswered && isTopicRead) {
+        // Both conditions met: Move directly to bottom of the 12 sections
+        if (catSec.nextSibling !== qWrap) {
+          catSec.parentNode.insertBefore(qWrap, catSec.nextSibling);
+        }
+        qWrap.classList.add("qotd-moved-bottom");
+      } else {
+        // If either is not met, keep on top of the 12 sections
+        if (catSec.previousSibling !== qWrap) {
+          catSec.parentNode.insertBefore(qWrap, catSec);
+        }
+        qWrap.classList.remove("qotd-moved-bottom");
+      }
+    };
+
     let hasSetInitialMobileSlide = false;
     function syncQotdWordDisplay(knownAnswered) {
       const section = document.getElementById("qotdWordSection");
       const nav = document.getElementById("qotdCarouselNav");
       if (section) section.style.display = "flex";
       if (nav && window.innerWidth <= 768) nav.style.display = "flex";
+
+      window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
 
       if (window.innerWidth <= 768 && !hasSetInitialMobileSlide) {
         const qCard = document.getElementById("qotdCard");
@@ -1397,6 +1464,16 @@
           }
         }
       }
+    }
+
+    const topicCb = document.getElementById("topicReadCheckbox");
+    if (topicCb) {
+      topicCb.addEventListener("change", function() {
+        const wKey = window._activeWordKey || todayKey;
+        localStorage.setItem("topic_read_" + todayKey, this.checked ? "true" : "false");
+        localStorage.setItem("topic_read_" + wKey, this.checked ? "true" : "false");
+        window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
+      });
     }
   </script>
 
