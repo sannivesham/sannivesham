@@ -512,14 +512,7 @@
     </div>
   </div>
 
-  <!-- LEADERBOARD MODAL -->
-  <div id="leaderboardModal" class="auth-modal">
-    <div class="auth-modal-box">
-      <button class="auth-close-btn" id="leaderboardCloseBtn">×</button>
-      <h2 data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</h2>
-      <div id="leaderboardList" class="leaderboard-list"></div>
-    </div>
-  </div>
+
 
 
 
@@ -597,7 +590,7 @@
         <div id="qotdOptions" class="qotd-options"></div>
         <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
           <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-          <button id="qotdLeaderboardBtn" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</button>
+          <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
         </div>
         <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
           <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
@@ -614,6 +607,87 @@
         <p id="wordOfDayText" class="word-of-day-text"></p>
       </div>
     </div>
+
+    <!-- Instant Cold-Start Cache Rendering for Mobile (Zero-Delay Paint) -->
+    <script>
+      (function() {
+        try {
+          var now = new Date();
+          var yyyy = now.getFullYear();
+          var mm = String(now.getMonth() + 1).padStart(2, "0");
+          var dd = String(now.getDate()).padStart(2, "0");
+          var localTodayKey = yyyy + "-" + mm + "-" + dd;
+
+          var cachedQotdRaw = localStorage.getItem("sannivesham_cached_qotd");
+          var cachedWordRaw = localStorage.getItem("sannivesham_cached_word");
+          var hasRendered = false;
+
+          if (cachedQotdRaw) {
+            var cached = JSON.parse(cachedQotdRaw);
+            var qData = cached.data || cached;
+            var qKey = cached.key || localTodayKey;
+            if (qData && qData.question && Array.isArray(qData.options)) {
+              var qText = document.getElementById("qotdQuestionText");
+              var qBox = document.getElementById("qotdOptions");
+              var qCard = document.getElementById("qotdCard");
+              if (qText && qBox && qCard) {
+                qText.innerText = qData.question;
+                qBox.innerHTML = "";
+                var answered = (localStorage.getItem("qotd_answered_" + qKey) === "true") ||
+                               (localStorage.getItem("qotd_answered_" + localTodayKey) === "true");
+                var choice = localStorage.getItem("qotd_choice_" + qKey) ||
+                             localStorage.getItem("qotd_choice_" + localTodayKey);
+
+                qData.options.forEach(function(opt, idx) {
+                  var btn = document.createElement("button");
+                  btn.className = "qotd-option-btn";
+                  btn.type = "button";
+                  btn.innerText = opt;
+                  if (answered) {
+                    btn.classList.add("disabled-option");
+                    if (idx === qData.correct) {
+                      btn.classList.add("correct-option");
+                    } else if (choice !== null && parseInt(choice, 10) === idx) {
+                      btn.classList.add("wrong-option");
+                    }
+                  }
+                  qBox.appendChild(btn);
+                });
+
+                qCard.style.display = "block";
+                hasRendered = true;
+
+                if (answered && !localStorage.getItem("sannivesham_user_logged_in")) {
+                  var hint = document.getElementById("qotdLoginHint");
+                  if (hint) hint.style.display = "flex";
+                }
+              }
+            }
+          }
+
+          if (cachedWordRaw) {
+            var cachedW = JSON.parse(cachedWordRaw);
+            var wData = cachedW.data || cachedW;
+            if (wData && wData.text) {
+              var wText = document.getElementById("wordOfDayText");
+              var wCard = document.getElementById("wordCard");
+              if (wText && wCard) {
+                wText.innerText = wData.text;
+                wCard.style.display = "block";
+                hasRendered = true;
+              }
+            }
+          }
+
+          if (hasRendered) {
+            var parentSec = document.getElementById("qotdWordSection");
+            if (parentSec) parentSec.style.display = "flex";
+          }
+        } catch (err) {
+          console.warn("Instant cache error:", err);
+        }
+      })();
+    </script>
 
     <section id="categories" class="category-section">
       <h2 class="category-heading" data-en="Categories">విభాగాలు</h2>
@@ -828,7 +902,7 @@
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, getDocs, collection, updateDoc, arrayUnion, increment
+      doc, getDoc, getDocFromServer, getDocs, collection, setDoc, updateDoc, arrayUnion, increment, query, orderBy, limit
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
@@ -844,8 +918,6 @@
       return `${yyyy}-${mm}-${dd}`;
     }
 
-
-
     loadQuestionOfDay();
     loadWordOfDay();
 
@@ -855,33 +927,42 @@
       currentUser = user;
       const profileBtn = document.getElementById("profileBtn");
       if (user) {
+        localStorage.setItem("sannivesham_user_logged_in", "true");
         profileBtn.innerText = "😊";
         const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          const serverAnswered = (userData.answeredDates || []).includes(todayKey);
-          const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
-          const guestCorrect = localStorage.getItem(`qotd_correct_${todayKey}`) === "true";
+        let userData = {};
+        try {
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) userData = userSnap.data();
+        } catch (e) {}
 
-          if (guestAnswered && !serverAnswered) {
-            const updateData = { answeredDates: arrayUnion(todayKey) };
-            if (guestCorrect) {
-              updateData.score = increment(1);
-              updateData.correctDates = arrayUnion(todayKey);
-            }
-            try {
-              await updateDoc(userRef, updateData);
-              const updatedSnap = await getDoc(userRef);
-              if (updatedSnap.exists()) updateQotdScoreRow(updatedSnap.data());
-            } catch (err) {
-              updateQotdScoreRow(userData);
-            }
-          } else {
+        const serverAnswered = (userData.answeredDates || []).includes(todayKey);
+        const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
+        const guestCorrect = localStorage.getItem(`qotd_correct_${todayKey}`) === "true";
+
+        if (guestAnswered && !serverAnswered) {
+          const resolvedName = userData.name || user.displayName || (user.email ? user.email.split("@")[0] : "") || "జ్ఞాన సాధకుడు";
+          const updateData = {
+            answeredDates: arrayUnion(todayKey),
+            name: resolvedName,
+            lastUpdated: new Date().toISOString()
+          };
+          if (guestCorrect) {
+            updateData.score = increment(1);
+            updateData.correctDates = arrayUnion(todayKey);
+          }
+          try {
+            await setDoc(userRef, updateData, { merge: true });
+            const updatedSnap = await getDoc(userRef);
+            if (updatedSnap.exists()) updateQotdScoreRow(updatedSnap.data());
+          } catch (err) {
             updateQotdScoreRow(userData);
           }
+        } else {
+          updateQotdScoreRow(userData);
         }
       } else {
+        localStorage.removeItem("sannivesham_user_logged_in");
         profileBtn.innerText = "👤";
         const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
         if (guestAnswered) {
@@ -895,11 +976,13 @@
 
     function showModal(id) {
       document.querySelectorAll(".auth-modal").forEach(m => m.style.display = "none");
-      document.getElementById(id).style.display = "flex";
+      const target = document.getElementById(id);
+      if (target) target.style.display = "flex";
     }
-    function hideModal(id) { document.getElementById(id).style.display = "none"; }
-
-    document.getElementById("leaderboardCloseBtn").addEventListener("click", () => hideModal("leaderboardModal"));
+    function hideModal(id) {
+      const target = document.getElementById(id);
+      if (target) target.style.display = "none";
+    }
 
     document.querySelectorAll(".auth-modal").forEach(modal => {
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
@@ -987,10 +1070,38 @@
 
     async function loadQuestionOfDay() {
       try {
-        const snap = await getDoc(doc(db, "qotd", todayKey));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        if (!data.question || !Array.isArray(data.options)) return;
+        let activeKey = todayKey;
+        let snap = null;
+        try {
+          snap = await getDoc(doc(db, "qotd", todayKey));
+        } catch (err) {
+          console.warn("Direct qotd getDoc error:", err);
+        }
+
+        let data = null;
+        if (snap && snap.exists()) {
+          data = snap.data();
+        } else {
+          // If question for exact todayKey isn't found yet, fallback to latest available question in qotd collection
+          try {
+            const latestQuery = query(collection(db, "qotd"), orderBy("__name__", "desc"), limit(1));
+            const latestSnap = await getDocs(latestQuery);
+            if (!latestSnap.empty) {
+              const latestDoc = latestSnap.docs[0];
+              activeKey = latestDoc.id;
+              data = latestDoc.data();
+            }
+          } catch (qErr) {
+            console.warn("Fallback qotd query failed:", qErr);
+          }
+        }
+
+        if (!data || !data.question || !Array.isArray(data.options)) return;
+
+        // Save in localStorage cache for instant zero-latency loading on mobile
+        try {
+          localStorage.setItem("sannivesham_cached_qotd", JSON.stringify({ key: activeKey, data: data }));
+        } catch (e) {}
 
         document.getElementById("qotdQuestionText").innerText = data.question;
 
@@ -998,13 +1109,17 @@
         optionsBox.innerHTML = "";
 
         let alreadyAnswered = false;
-        const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
-        const guestChoice = localStorage.getItem(`qotd_choice_${todayKey}`);
+        const guestAnswered = (localStorage.getItem(`qotd_answered_${activeKey}`) === "true") ||
+                              (localStorage.getItem(`qotd_answered_${todayKey}`) === "true");
+        const guestChoice = localStorage.getItem(`qotd_choice_${activeKey}`) ||
+                            localStorage.getItem(`qotd_choice_${todayKey}`);
 
         if (currentUser) {
           const userSnap = await getDoc(doc(db, "users", currentUser.uid));
           if (userSnap.exists()) {
-            alreadyAnswered = (userSnap.data().answeredDates || []).includes(todayKey);
+            const uData = userSnap.data();
+            alreadyAnswered = (uData.answeredDates || []).includes(activeKey) ||
+                              (uData.answeredDates || []).includes(todayKey);
           }
         }
         if (guestAnswered) {
@@ -1024,7 +1139,7 @@
               btn.classList.add("wrong-option");
             }
           } else {
-            btn.addEventListener("click", () => handleQotdAnswer(index, data.correct));
+            btn.addEventListener("click", () => handleQotdAnswer(index, data.correct, activeKey));
           }
           optionsBox.appendChild(btn);
         });
@@ -1042,15 +1157,19 @@
             hideQotdLoginHint();
           }
         }
-      } catch (e) { console.log("QOTD Error:", e); }
+      } catch (e) {
+        console.log("QOTD Error:", e);
+      }
     }
 
-    async function handleQotdAnswer(selectedIndex, correctIndex) {
+    async function handleQotdAnswer(selectedIndex, correctIndex, activeKey) {
+      if (!activeKey) activeKey = todayKey;
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
       allBtns.forEach((b) => { b.disabled = true; b.classList.add("disabled-option"); });
-      if (selectedIndex === correctIndex) {
+      const isCorrect = selectedIndex === correctIndex;
+      if (isCorrect) {
         allBtns[selectedIndex].classList.add("correct-option");
       } else {
         allBtns[selectedIndex].classList.add("wrong-option");
@@ -1058,30 +1177,50 @@
       }
 
       // Record answer in localStorage immediately so closing & reopening the app will NOT ask again
+      localStorage.setItem(`qotd_answered_${activeKey}`, "true");
       localStorage.setItem(`qotd_answered_${todayKey}`, "true");
+      localStorage.setItem(`qotd_choice_${activeKey}`, selectedIndex.toString());
       localStorage.setItem(`qotd_choice_${todayKey}`, selectedIndex.toString());
-      if (selectedIndex === correctIndex) {
+      if (isCorrect) {
+        localStorage.setItem(`qotd_correct_${activeKey}`, "true");
         localStorage.setItem(`qotd_correct_${todayKey}`, "true");
       }
 
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
-        const freshSnap = await getDoc(userRef);
-        const freshData = freshSnap.exists() ? freshSnap.data() : {};
-        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
+        let freshData = {};
+        try {
+          const freshSnap = await getDoc(userRef);
+          if (freshSnap.exists()) freshData = freshSnap.data();
+        } catch (e) {}
+
+        const alreadyOnServer = (freshData.answeredDates || []).includes(activeKey) ||
+                                (freshData.answeredDates || []).includes(todayKey);
 
         if (alreadyOnServer) {
           updateQotdScoreRow(freshData);
           return;
         }
 
-        const isCorrect = selectedIndex === correctIndex;
-        const updateData = { answeredDates: arrayUnion(todayKey) };
-        if (isCorrect) { updateData.score = increment(1); updateData.correctDates = arrayUnion(todayKey); }
-        await updateDoc(userRef, updateData);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          updateQotdScoreRow(userSnap.data());
+        const resolvedName = freshData.name || currentUser.displayName || (currentUser.email ? currentUser.email.split("@")[0] : "") || "జ్ఞాన సాధకుడు";
+        const updateData = {
+          answeredDates: arrayUnion(activeKey),
+          name: resolvedName,
+          lastUpdated: new Date().toISOString()
+        };
+        if (isCorrect) {
+          updateData.score = increment(1);
+          updateData.correctDates = arrayUnion(activeKey);
+        }
+
+        try {
+          await setDoc(userRef, updateData, { merge: true });
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            updateQotdScoreRow(userSnap.data());
+          }
+        } catch (saveErr) {
+          console.error("Failed to save score:", saveErr);
         }
       } else {
         // Guest user: prompt for login to know about scores and leaderboard!
@@ -1110,44 +1249,46 @@
       if (hint) hint.style.display = "none";
     }
 
-    document.getElementById("qotdLeaderboardBtn")?.addEventListener("click", async () => {
-      showModal("leaderboardModal");
-      const listBox = document.getElementById("leaderboardList");
-      const t = window.Sannivesham18n ? window.Sannivesham18n.t : (te) => te;
-      listBox.innerHTML = `<p style='text-align:center;color:#ffd166'>${t("లోడ్ అవుతోంది...", "Loading...")}</p>`;
-      const snap = await getDocs(collection(db, "users"));
-      const users = [];
-      snap.forEach(d => {
-        const ud = d.data();
-        if (ud.name && (ud.score || 0) > 0) users.push({ uid: d.id, name: ud.name, score: ud.score || 0 });
-      });
-      users.sort((a, b) => b.score - a.score);
-      if (users.length === 0) {
-        listBox.innerHTML = `<p style='text-align:center;color:white'>${t("ఇంకా స్కోర్లు లేవు", "No scores yet")}</p>`;
-        return;
-      }
-      const medals = ["🥇", "🥈", "🥉"];
-      listBox.innerHTML = users.map((u, i) => {
-        const isMe = currentUser && u.uid === currentUser.uid;
-        const youLabel = isMe ? ` ${t("(మీరు)", "(You)")}` : "";
-        return `<div class="lb-row${isMe ? " lb-row-me" : ""}">
-          <span class="lb-rank">${medals[i] || `${i + 1}.`}</span>
-          <span class="lb-name">${u.name}${youLabel}</span>
-          <span class="lb-score">⭐ ${u.score}</span>
-        </div>`;
-      }).join("");
-    });
-
     async function loadWordOfDay() {
       try {
-        const snap = await getDoc(doc(db, "wordOfDay", todayKey));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        if (!data.text) return;
+        let snap = null;
+        let activeKey = todayKey;
+        try {
+          snap = await getDoc(doc(db, "wordOfDay", todayKey));
+        } catch (err) {
+          console.warn("Direct wordOfDay getDoc error:", err);
+        }
+
+        let data = null;
+        if (snap && snap.exists()) {
+          data = snap.data();
+        } else {
+          // If word for exact todayKey isn't found yet, fallback to latest available word
+          try {
+            const latestQuery = query(collection(db, "wordOfDay"), orderBy("__name__", "desc"), limit(1));
+            const latestSnap = await getDocs(latestQuery);
+            if (!latestSnap.empty) {
+              const latestDoc = latestSnap.docs[0];
+              activeKey = latestDoc.id;
+              data = latestDoc.data();
+            }
+          } catch (wErr) {
+            console.warn("Fallback wordOfDay query failed:", wErr);
+          }
+        }
+
+        if (!data || !data.text) return;
+
+        try {
+          localStorage.setItem("sannivesham_cached_word", JSON.stringify({ key: activeKey, data: data }));
+        } catch (e) {}
+
         document.getElementById("wordOfDayText").innerText = data.text;
         document.getElementById("wordCard").style.display = "block";
         document.getElementById("qotdWordSection").style.display = "flex";
-      } catch (e) {}
+      } catch (e) {
+        console.warn("loadWordOfDay error:", e);
+      }
     }
   </script>
 

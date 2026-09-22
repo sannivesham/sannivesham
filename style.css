@@ -785,17 +785,25 @@ body {
 }
 
 .qotd-leaderboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   padding: 10px 18px;
   border-radius: 14px;
   border: 1px solid rgba(255,209,102,0.45);
   background: rgba(255,209,102,0.12);
   color: #ffd166;
   font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .qotd-leaderboard-btn:hover {
   background: rgba(255,209,102,0.22);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .qotd-login-hint {

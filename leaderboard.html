@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>నేటి ప్రశ్న అగ్రస్థాన పట్టిక (Leaderboard) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="సన్నివేశం నేటి ప్రశ్న అగ్రస్థాన పట్టిక — రోజూ అడిగే ప్రశ్నలకు సరైన సమాధానాలు ఇచ్చి అగ్రస్థానంలో నిలిచిన సాధకుల స్కోర్లు మరియు ర్యాంకులు.">
+  <link rel="canonical" href="https://sannivesham.com/leaderboard.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="theme.js?v=20260922"></script>
+  <link rel="stylesheet" href="style.css?v=20260922">
+
+  <style>
+    :root {
+      --lb-gold: #ffd166;
+      --lb-gold-dark: #d4af37;
+      --lb-bg-card: rgba(28, 16, 8, 0.88);
+      --lb-border: rgba(255, 209, 102, 0.35);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Outfit', 'Noto Serif Telugu', serif;
+      background: radial-gradient(circle at 50% 15%, #2a1508 0%, #150903 60%, #0a0401 100%);
+      color: #ffffff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .lb-page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+
+    /* Top Navigation */
+    .lb-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: rgba(26, 14, 6, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 30px;
+      margin-bottom: 28px;
+    }
+
+    .lb-nav-back {
+      color: var(--lb-gold);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .lb-nav-back:hover {
+      transform: translateX(-4px);
+    }
+
+    .lb-nav-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lb-nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .lb-nav-btn {
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      color: var(--lb-gold);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .lb-nav-btn:hover {
+      background: var(--lb-gold);
+      color: #1a0c02;
+    }
+
+    /* Hero Header */
+    .lb-hero {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .lb-hero-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.2), rgba(255, 183, 3, 0.08));
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      border-radius: 20px;
+      color: var(--lb-gold);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .lb-hero-h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0 0 8px;
+      background: linear-gradient(135deg, #ffd166 0%, #fff 50%, #f39c12 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lb-hero-desc {
+      color: rgba(255, 243, 214, 0.8);
+      font-size: 1rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Current User Highlight Card */
+    .lb-my-card {
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(255, 183, 3, 0.06));
+      border: 1.5px solid var(--lb-gold);
+      border-radius: 20px;
+      padding: 16px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 209, 102, 0.2);
+    }
+
+    .lb-my-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lb-my-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--lb-gold);
+      color: #1a0c02;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .lb-my-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .lb-my-status {
+      font-size: 0.85rem;
+      color: var(--lb-gold);
+    }
+
+    .lb-my-score {
+      text-align: right;
+    }
+
+    .lb-my-score-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--lb-gold);
+    }
+
+    .lb-my-score-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Podium Layout */
+    .lb-podium {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr 1fr;
+      gap: 14px;
+      align-items: flex-end;
+      margin-bottom: 35px;
+    }
+
+    .podium-card {
+      background: var(--lb-bg-card);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid var(--lb-border);
+      border-radius: 20px;
+      padding: 20px 14px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .podium-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .podium-rank-1 {
+      border-color: #ffd166;
+      background: linear-gradient(160deg, rgba(60, 32, 12, 0.95), rgba(28, 14, 5, 0.98));
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 209, 102, 0.35);
+      padding-top: 26px;
+      padding-bottom: 24px;
+    }
+
+    .podium-rank-2 {
+      border-color: #e0e0e0;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+    }
+
+    .podium-rank-3 {
+      border-color: #cd7f32;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+    }
+
+    .podium-badge {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .podium-rank-1 .podium-badge {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.7));
+    }
+
+    .podium-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .podium-score {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--lb-gold);
+      margin-bottom: 4px;
+    }
+
+    .podium-label {
+      font-size: 0.76rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Full Rankings List */
+    .lb-list-card {
+      background: var(--lb-bg-card);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid var(--lb-border);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .lb-list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .lb-list-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--lb-gold);
+      margin: 0;
+    }
+
+    .lb-search-input {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 0.9rem;
+      outline: none;
+      width: 200px;
+      transition: all 0.25s ease;
+    }
+
+    .lb-search-input:focus {
+      border-color: var(--lb-gold);
+      background: rgba(255, 255, 255, 0.14);
+      width: 240px;
+    }
+
+    .lb-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lb-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .lb-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(4px);
+    }
+
+    .lb-item.is-me {
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.2), rgba(255, 183, 3, 0.08));
+      border: 1.5px solid var(--lb-gold);
+    }
+
+    .lb-item-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lb-item-rank {
+      font-size: 1.15rem;
+      font-weight: 800;
+      min-width: 34px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .lb-item-avatar {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .lb-item-details {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .lb-item-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lb-item-badge-you {
+      background: var(--lb-gold);
+      color: #1a0c02;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 10px;
+      margin-left: 6px;
+    }
+
+    .lb-item-score {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--lb-gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .lb-empty-box {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .lb-empty-box .icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    /* Bottom Action */
+    .lb-bottom-action {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .lb-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #ffd166, #ffb703);
+      color: #1a0c02;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(255, 209, 102, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .lb-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 209, 102, 0.5);
+    }
+
+    @media (max-width: 600px) {
+      .lb-podium {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .podium-rank-1 {
+        order: -1;
+      }
+      .lb-search-input {
+        width: 100%;
+      }
+      .lb-my-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .lb-my-info {
+        flex-direction: column;
+      }
+      .lb-my-score {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lb-page-wrap">
+    <!-- Top Pill Navbar -->
+    <nav class="lb-nav">
+      <a href="/" class="lb-nav-back">
+        <span>← ప్రారంభం</span>
+      </a>
+
+      <div class="lb-nav-title">
+        <span>🏆</span>
+        <span>అగ్రస్థాన పట్టిక</span>
+      </div>
+
+      <div class="lb-nav-actions">
+        <a href="/profile/" class="lb-nav-btn" title="ప్రొఫైల్">
+          <span>👤</span>
+          <span>ఖాతా</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="lb-hero">
+      <div class="lb-hero-badge">✨ నిత్య జ్ఞాన సాధకులు • DAILY QUIZ RANKINGS ✨</div>
+      <h1 class="lb-hero-h1">నేటి ప్రశ్న అగ్రస్థాన పట్టిక</h1>
+      <p class="lb-hero-desc">రోజూ నేటి ప్రశ్నలకు సరైన సమాధానాలు ఇచ్చి అగ్రస్థానంలో నిలిచిన భక్తులు మరియు సాధకులు</p>
+    </header>
+
+    <!-- Current User's Status (Rendered dynamically if logged in) -->
+    <div id="myScoreCard" style="display: none;"></div>
+
+    <!-- Top 3 Podium (1st, 2nd, 3rd) -->
+    <div id="lbPodium" class="lb-podium" style="display: none;"></div>
+
+    <!-- Full Leaderboard Table Card -->
+    <section class="lb-list-card">
+      <div class="lb-list-header">
+        <h2 class="lb-list-title">సమగ్ర ర్యాంకుల జాబితా</h2>
+        <input type="text" id="lbSearch" class="lb-search-input" placeholder="పేరు వెతకండి...">
+      </div>
+
+      <div id="lbRows" class="lb-rows">
+        <div class="lb-empty-box">
+          <div class="icon">⌛</div>
+          <p>అగ్రస్థాన వివరాలు లోడ్ అవుతున్నాయి...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Action Button -->
+    <div class="lb-bottom-action">
+      <a href="/#qotdCard" class="lb-action-btn">
+        <span>🎯 నేటి ప్రశ్నకు సమాధానం ఇవ్వండి ➜</span>
+      </a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    let currentUser = null;
+    let allLeaderboardUsers = [];
+
+    const myScoreCard = document.getElementById("myScoreCard");
+    const lbPodium = document.getElementById("lbPodium");
+    const lbRows = document.getElementById("lbRows");
+    const lbSearch = document.getElementById("lbSearch");
+
+    // Track Auth State
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      renderLeaderboard();
+    });
+
+    // Fetch and compute all scores
+    async function fetchLeaderboard() {
+      try {
+        const snap = await getDocs(collection(db, "users"));
+        const list = [];
+
+        snap.forEach((d) => {
+          const ud = d.data();
+          // Extract score: check score, or correctDates length
+          let score = Number(ud.score);
+          if (isNaN(score) || score <= 0) {
+            score = Array.isArray(ud.correctDates) ? ud.correctDates.length : 0;
+          }
+
+          // Extract name
+          const rawName = ud.name || ud.displayName || ud.username || (ud.email ? ud.email.split("@")[0] : "");
+          const name = (rawName && rawName.trim()) ? rawName.trim() : "జ్ఞాన సాధకుడు";
+
+          if (score > 0) {
+            list.push({
+              uid: d.id,
+              name,
+              score,
+              streak: Number(ud.streak || 1),
+              answeredCount: Array.isArray(ud.answeredDates) ? ud.answeredDates.length : score
+            });
+          }
+        });
+
+        // Sort descending by score
+        list.sort((a, b) => b.score - a.score);
+        allLeaderboardUsers = list;
+
+        renderLeaderboard();
+      } catch (err) {
+        console.error("Error loading leaderboard:", err);
+        lbRows.innerHTML = `
+          <div class="lb-empty-box">
+            <div class="icon">⚠️</div>
+            <p>అగ్రస్థాన వివరాలు లోడ్ చేయడంలో సమస్య ఏర్పడింది. దయచేసి రీఫ్రెష్ చేయండి.</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderLeaderboard() {
+      const query = (lbSearch?.value || "").toLowerCase().trim();
+      const filtered = query
+        ? allLeaderboardUsers.filter(u => u.name.toLowerCase().includes(query))
+        : allLeaderboardUsers;
+
+      // 1. Current user highlight banner
+      if (currentUser && allLeaderboardUsers.length > 0) {
+        const myIndex = allLeaderboardUsers.findIndex(u => u.uid === currentUser.uid);
+        if (myIndex !== -1) {
+          const me = allLeaderboardUsers[myIndex];
+          myScoreCard.style.display = "block";
+          myScoreCard.innerHTML = `
+            <div class="lb-my-card">
+              <div class="lb-my-info">
+                <div class="lb-my-avatar">😊</div>
+                <div>
+                  <div class="lb-my-name">${me.name} (మీరు)</div>
+                  <div class="lb-my-status">🏆 అగ్రస్థాన పట్టికలో మీ ర్యాంకు: <strong>#${myIndex + 1}</strong></div>
+                </div>
+              </div>
+              <div class="lb-my-score">
+                <div class="lb-my-score-val">⭐ ${me.score}</div>
+                <div class="lb-my-score-label">మొత్తం సాధించిన పాయింట్లు</div>
+              </div>
+            </div>
+          `;
+        } else {
+          myScoreCard.style.display = "none";
+        }
+      } else {
+        myScoreCard.style.display = "none";
+      }
+
+      // 2. Podium (Top 3)
+      if (allLeaderboardUsers.length > 0 && !query) {
+        const top1 = allLeaderboardUsers[0];
+        const top2 = allLeaderboardUsers[1];
+        const top3 = allLeaderboardUsers[2];
+
+        lbPodium.style.display = "grid";
+        lbPodium.innerHTML = `
+          ${top2 ? `
+            <div class="podium-card podium-rank-2">
+              <div class="podium-badge">🥈</div>
+              <div class="podium-name" title="${top2.name}">${top2.name}</div>
+              <div class="podium-score">⭐ ${top2.score}</div>
+              <div class="podium-label">2వ స్థానం</div>
+            </div>
+          ` : `<div></div>`}
+
+          ${top1 ? `
+            <div class="podium-card podium-rank-1">
+              <div class="podium-badge">🥇</div>
+              <div class="podium-name" title="${top1.name}">${top1.name}</div>
+              <div class="podium-score">⭐ ${top1.score}</div>
+              <div class="podium-label">మొదటి స్థానం (విజేత)</div>
+            </div>
+          ` : `<div></div>`}
+
+          ${top3 ? `
+            <div class="podium-card podium-rank-3">
+              <div class="podium-badge">🥉</div>
+              <div class="podium-name" title="${top3.name}">${top3.name}</div>
+              <div class="podium-score">⭐ ${top3.score}</div>
+              <div class="podium-label">3వ స్థానం</div>
+            </div>
+          ` : `<div></div>`}
+        `;
+      } else {
+        lbPodium.style.display = "none";
+      }
+
+      // 3. Full List Rows
+      if (filtered.length === 0) {
+        lbRows.innerHTML = `
+          <div class="lb-empty-box">
+            <div class="icon">🌟</div>
+            <p>${query ? "ఎటువంటి ఫలితాలు లభించలేదు" : "ఇంకా ఎవరూ స్కోరు నమోదు చేయలేదు. మీరే మొదటగా సమాధానం ఇచ్చి మొదటి స్థానాన్ని కైవసం చేసుకోండి!"}</p>
+          </div>
+        `;
+        return;
+      }
+
+      const medals = ["🥇", "🥈", "🥉"];
+      lbRows.innerHTML = filtered.map((u, i) => {
+        const globalRank = allLeaderboardUsers.findIndex(x => x.uid === u.uid) + 1;
+        const isMe = currentUser && u.uid === currentUser.uid;
+        const rankDisplay = medals[globalRank - 1] || `#${globalRank}`;
+
+        return `
+          <div class="lb-item ${isMe ? 'is-me' : ''}">
+            <div class="lb-item-left">
+              <span class="lb-item-rank">${rankDisplay}</span>
+              <span class="lb-item-avatar">${isMe ? '😊' : '👤'}</span>
+              <div class="lb-item-details">
+                <span class="lb-item-name">${u.name}</span>
+                ${isMe ? `<span class="lb-item-badge-you">మీరు</span>` : ''}
+              </div>
+            </div>
+            <div class="lb-item-score">
+              <span>⭐</span>
+              <span>${u.score}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    lbSearch?.addEventListener("input", renderLeaderboard);
+
+    // Initial Load
+    fetchLeaderboard();
+  </script>
+</body>
+</html>
