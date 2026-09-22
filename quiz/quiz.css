@@ -991,7 +991,7 @@ body {
   /* 1. Navbar - Clean pill that never sticks or covers content */
   .quiz-navbar {
     width: 100% !important;
-    margin: 10px auto 20px !important;
+    margin: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) auto 20px !important;
     padding: 8px 14px !important;
     gap: 8px !important;
     border-radius: 999px !important;

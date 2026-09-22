@@ -125,9 +125,9 @@
   /* FLOATING NAVBAR */
   .glass-navbar {
     position: sticky;
-    top: 10px;
+    top: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px);
     z-index: 999;
-    margin: 10px auto 0;
+    margin: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) auto 0;
     max-width: calc(100% - 20px);
     width: fit-content;
     padding: 6px 14px;
@@ -852,7 +852,7 @@
     .glass-navbar {
       width: calc(100% - 20px);
       max-width: 100%;
-      margin: 8px auto 0;
+      margin: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) auto 0;
       padding: 6px 10px;
       box-sizing: border-box;
     }

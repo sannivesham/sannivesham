@@ -450,7 +450,7 @@
 
     /* Mobile adjustments */
     @media (max-width: 600px) {
-      .ithihasalu-wrapper { padding: 14px 12px 60px; }
+      .ithihasalu-wrapper { padding: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) 12px 60px; }
       .it-navbar { padding: 8px 12px; margin-bottom: 20px; }
       .it-hero-card { padding: 32px 16px 28px; border-radius: 20px; }
       .it-hero-title { font-size: 2.1rem; }

@@ -486,7 +486,7 @@
 
     /* Mobile adjustments */
     @media (max-width: 600px) {
-      .videos-wrapper { padding: 14px 12px 60px; }
+      .videos-wrapper { padding: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) 12px 60px; }
       .vc-navbar { padding: 8px 12px; margin-bottom: 20px; }
       .vc-videos-grid { grid-template-columns: 1fr; gap: 18px; }
       .vc-title { font-size: 2rem; }

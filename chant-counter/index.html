@@ -774,7 +774,7 @@
 
     /* Responsiveness */
     @media (max-width: 600px) {
-      .japa-wrapper { padding: 14px 10px 60px; }
+      .japa-wrapper { padding: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) 10px 60px; }
       .jc-navbar { padding: 8px 12px; margin-bottom: 20px; }
       .jc-deity-grid { grid-template-columns: 1fr; gap: 14px; }
       .jc-wheel-wrapper { width: 280px; height: 280px; }

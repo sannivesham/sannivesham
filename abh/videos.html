@@ -130,9 +130,9 @@
   /* GLASS NAVBAR */
   .glass-navbar {
     position: sticky;
-    top: 14px;
+    top: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px);
     z-index: 999;
-    margin: 0 auto;
+    margin: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) auto 0;
     width: fit-content;
     max-width: 92%;
     padding: 6px 14px;
@@ -564,7 +564,7 @@
     .glass-navbar {
       width: calc(100% - 16px) !important;
       max-width: calc(100% - 16px) !important;
-      margin: 8px auto 0 !important;
+      margin: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) auto 0 !important;
       padding: 5px 8px !important;
       box-sizing: border-box !important;
     }
