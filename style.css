@@ -1027,6 +1027,15 @@ body {
   margin-top: 24px;
 }
 
+.category-card-disabled {
+  cursor: default !important;
+}
+
+.category-card-disabled:hover {
+  cursor: default !important;
+  transform: none !important;
+}
+
 /* ----------------------------------------------------
    📱 MOBILE-ONLY SWIPEABLE CAROUSEL (max-width: 768px)
 ---------------------------------------------------- */
