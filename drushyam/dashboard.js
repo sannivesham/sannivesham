@@ -10,7 +10,14 @@ import {
 // AUTH GUARD
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "admin.html";
+    window.location.replace("admin.html");
+    return;
+  }
+  const isPasswordUser = user.providerData && user.providerData.some(p => p.providerId === "password");
+  if (!isPasswordUser) {
+    alert("అనుమతి నిరాకరించబడింది: అడ్మిన్ ఖాతా ద్వారా మాత్రమే లాగిన్ అవ్వగలరు.");
+    window.location.replace("admin.html");
+    return;
   }
 });
 

@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /drushyam/admin*
+Disallow: /drushyam/dashboard*
+Disallow: /abh/admin*
+Disallow: /quiz/quiz-cms*
 
 Sitemap: https://sannivesham.com/sitemap.xml
