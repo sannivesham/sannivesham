@@ -521,7 +521,7 @@
       <a href="#home" data-en="Home">ప్రారంభం</a>
       <a href="#categories" data-en="Categories">విభాగాలు</a>
       <a href="#intro" data-en="Intro">పరిచయం</a>
-      <a href="#about" data-en="About Us">మా గురించి</a>
+      <a href="about/" data-en="About Us">మా గురించి</a>
       <a href="#contact" data-en="Contact">సంప్రదించండి</a>
     </div>
     <span class="nav-divider"></span>
@@ -820,28 +820,6 @@
       </p>
     </section>
 
-    <div class="impact-box">
-      <div class="impact-card">
-        <span id="schoolCount">10</span>
-        <p data-en="📚Schools<br>Visited">📚సందర్శించిన<br>పాఠశాలలు</p>
-      </div>
-      <div class="impact-card">
-        <span id="studentCount">2000+</span>
-        <p data-en="👨‍🎓Students<br>Reached">👨‍🎓కలిసిన<br>విద్యార్థులు</p>
-      </div>
-    </div>
-
-    <a href="about/" id="about" class="about-card">
-      <div class="about-overlay"></div>
-      <div class="about-content">
-        <h2 data-en="About Us">మా గురించి</h2>
-        <p data-en="Learn about us, our team members, our goals, and the Sannivesham journey.">
-          మా గురించి, మా బృందం సభ్యులు,
-          మా లక్ష్యాలు మరియు సన్నివేశం ప్రయాణం గురించి తెలుసుకోవచ్చు.
-        </p>
-      </div>
-      <span class="about-arrow">➜</span>
-    </a>
 
   </section>
 
@@ -1300,50 +1278,6 @@
 
   <script src="music.js?v=2"></script>
 
-  <script>
-    function animateCounter(id, target) {
-      let count = 0;
-      const increment = Math.ceil(target / 100);
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.innerText = id === "studentCount" ? "0+" : "0";
-      const timer = setInterval(() => {
-        count += increment;
-        if (count >= target) { count = target; clearInterval(timer); }
-        el.innerText = id === "studentCount" ? count + "+" : count;
-      }, 20);
-    }
-
-    function setFinalCounters() {
-      const schoolEl = document.getElementById("schoolCount");
-      const studentEl = document.getElementById("studentCount");
-      if (schoolEl) schoolEl.innerText = "10";
-      if (studentEl) studentEl.innerText = "2000+";
-    }
-
-    function startCounters() {
-      if (sessionStorage.getItem("countersShown")) {
-        setFinalCounters();
-        return;
-      }
-      setFinalCounters();
-      setTimeout(() => {
-        animateCounter("schoolCount", 10);
-        animateCounter("studentCount", 2000);
-        sessionStorage.setItem("countersShown", "true");
-      }, 350);
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", startCounters);
-    } else {
-      startCounters();
-    }
-
-    window.addEventListener("pageshow", (event) => {
-      setFinalCounters();
-    });
-  </script>
 
   <!-- ============================================================
        🌟 3D INTERACTIVE & SPIRITUAL EXPERIENCES JAVASCRIPT
