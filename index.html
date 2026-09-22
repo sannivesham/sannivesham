@@ -645,19 +645,19 @@
           var targetEl = index === 0 ? qCard : wCard;
           if (!targetEl) return;
 
-          try {
-            targetEl.scrollIntoView({
-              behavior: smooth ? "smooth" : "auto",
-              inline: "start",
-              block: "nearest"
-            });
-          } catch (e) {
-            var targetLeft = index === 0 ? 0 : section.scrollWidth;
-            if (smooth) {
-              section.scrollTo({ left: targetLeft, behavior: "smooth" });
+          var targetLeft = 0;
+          if (index !== 0) {
+            if (targetEl.offsetLeft > 0) {
+              targetLeft = targetEl.offsetParent === section ? targetEl.offsetLeft : (targetEl.offsetLeft - (section.offsetLeft || 0));
             } else {
-              section.scrollLeft = targetLeft;
+              targetLeft = section.clientWidth || section.offsetWidth || section.scrollWidth;
             }
+          }
+
+          if (smooth) {
+            section.scrollTo({ left: targetLeft, behavior: "smooth" });
+          } else {
+            section.scrollLeft = targetLeft;
           }
           window.updateQotdNavPills && window.updateQotdNavPills(index);
         };
@@ -786,20 +786,17 @@
             (cachedQotdRaw && (localStorage.getItem("qotd_answered_" + (JSON.parse(cachedQotdRaw).key || localTodayKey)) === "true"));
           var isColdTopicRead = (localStorage.getItem("topic_read_" + localTodayKey) === "true") ||
             (cachedWordRaw && (localStorage.getItem("topic_read_" + (JSON.parse(cachedWordRaw).key || localTodayKey)) === "true"));
-
-          var qWrap = document.getElementById("qotdContainerWrap");
-          var catSec = document.getElementById("categories");
-          if (isColdQotdAnswered && isColdTopicRead && qWrap && catSec) {
-            catSec.parentNode.insertBefore(qWrap, catSec.nextSibling);
-            qWrap.classList.add("qotd-moved-bottom");
-          }
+          var isColdBothCompleted = isColdQotdAnswered && isColdTopicRead;
 
           var topicCb = document.getElementById("topicReadCheckbox");
           if (topicCb) {
             topicCb.checked = isColdTopicRead;
           }
 
-          if (hasRendered) {
+          // If BOTH are completed, DO NOT render at the top!
+          // Leave hidden so there is ZERO flash/jump at the top of the page.
+          // It will be positioned below categories instantly when #categories finishes parsing.
+          if (hasRendered && !isColdBothCompleted) {
             var parentSec = document.getElementById("qotdWordSection");
             var nav = document.getElementById("qotdCarouselNav");
             if (parentSec) parentSec.style.display = "flex";
@@ -981,6 +978,48 @@
       </a>
     </div>
   </section>
+
+  <!-- Instant Cold-Start Positioning for Completed QOD/Topic (Zero-FOUC & No Scroll Jump) -->
+  <script>
+    (function() {
+      try {
+        var now = new Date();
+        var yyyy = now.getFullYear();
+        var mm = String(now.getMonth() + 1).padStart(2, "0");
+        var dd = String(now.getDate()).padStart(2, "0");
+        var localTodayKey = yyyy + "-" + mm + "-" + dd;
+
+        var cachedQotdRaw = localStorage.getItem("sannivesham_cached_qotd");
+        var cachedWordRaw = localStorage.getItem("sannivesham_cached_word");
+        var qKey = (cachedQotdRaw && (JSON.parse(cachedQotdRaw).key || JSON.parse(cachedQotdRaw).date)) || localTodayKey;
+        var wKey = (cachedWordRaw && (JSON.parse(cachedWordRaw).key || JSON.parse(cachedWordRaw).date)) || localTodayKey;
+
+        var isColdQotdAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
+          (localStorage.getItem("qotd_answered_" + qKey) === "true");
+        var isColdTopicRead = (localStorage.getItem("topic_read_" + localTodayKey) === "true") ||
+          (localStorage.getItem("topic_read_" + wKey) === "true");
+
+        var qWrap = document.getElementById("qotdContainerWrap");
+        var catSec = document.getElementById("categories");
+
+        if (isColdQotdAnswered && isColdTopicRead && qWrap && catSec) {
+          catSec.after(qWrap);
+          qWrap.classList.add("qotd-moved-bottom");
+
+          var parentSec = document.getElementById("qotdWordSection");
+          var nav = document.getElementById("qotdCarouselNav");
+          if (parentSec) parentSec.style.display = "flex";
+          if (nav && window.innerWidth <= 768) nav.style.display = "flex";
+
+          if (window.innerWidth <= 768 && window.goToQotdSlide) {
+            window.goToQotdSlide(1, false);
+          }
+        }
+      } catch (err) {
+        console.warn("Post-categories placement error:", err);
+      }
+    })();
+  </script>
 
   <footer class="home-footer">
     <p class="home-footer-quote" data-en="✨Culture is our soul • Tradition is our legacy • Telugu is our pride✨">
@@ -1421,14 +1460,14 @@
 
       if (isQotdAnswered && isTopicRead) {
         // Both conditions met: Move directly to bottom of the 12 sections
-        if (catSec.nextSibling !== qWrap) {
-          catSec.parentNode.insertBefore(qWrap, catSec.nextSibling);
+        if (qWrap.previousElementSibling !== catSec) {
+          catSec.after(qWrap);
         }
         qWrap.classList.add("qotd-moved-bottom");
       } else {
         // If either is not met, keep on top of the 12 sections
-        if (catSec.previousSibling !== qWrap) {
-          catSec.parentNode.insertBefore(qWrap, catSec);
+        if (qWrap.nextElementSibling !== catSec) {
+          catSec.before(qWrap);
         }
         qWrap.classList.remove("qotd-moved-bottom");
       }
