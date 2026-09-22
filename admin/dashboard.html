@@ -4,14 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - సన్నివేశం</title>
-  <link rel="stylesheet" href="../style.css">
+</head>
 <body class="dashboard-body" id="dashboardBody">
 
-  <div id="adminAuthOverlay" style="position:fixed;inset:0;background:#050300;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ffd166;font-family:system-ui,-apple-system,sans-serif;">
+  <div id="adminAuthOverlay" style="position:fixed;inset:0;background:#050300;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ffd166;font-family:system-ui,-apple-system,sans-serif;text-align:center;padding:20px;">
     <div style="font-size:2.8rem;margin-bottom:12px;">⚡</div>
     <div style="font-size:1.25rem;font-weight:700;letter-spacing:0.5px;">సన్నివేశం Admin Dashboard</div>
-    <div style="font-size:0.9rem;color:#aaa;margin-top:8px;">లాగిన్ ప్రామాణీకరణ తనిఖీ చేయబడుతోంది...</div>
+    <div id="adminAuthMsg" style="font-size:0.9rem;color:#aaa;margin-top:8px;">లాగిన్ ప్రామాణీకరణ తనిఖీ చేయబడుతోంది...</div>
   </div>
+
+  <script>
+    window.addEventListener('error', function(e) {
+      console.error("Dashboard error:", e);
+      var msg = document.getElementById("adminAuthMsg");
+      if (msg) {
+        msg.innerHTML += '<div style="color:#ff6b6b;font-size:0.8rem;margin-top:10px;">ఎర్రర్: ' + (e.message || 'Script error') + ' (' + (e.filename ? e.filename.split('/').pop() : '') + ':' + (e.lineno || '') + ')</div>';
+      }
+    });
+  </script>
+
+  <script type="module">
+    import { auth } from "../firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    const overlay = document.getElementById("adminAuthOverlay");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.replace("admin.html");
+        return;
+      }
+      // Authenticated! Dismiss the overlay instantly
+      if (overlay) {
+        overlay.style.opacity = "0";
+        overlay.style.transition = "opacity 0.25s ease";
+        setTimeout(() => { overlay.style.display = "none"; }, 250);
+      }
+    });
+
+    // Safety fallback: if auth takes more than 3.5 seconds
+    setTimeout(() => {
+      if (overlay && overlay.style.display !== "none") {
+        const msg = document.getElementById("adminAuthMsg");
+        if (msg) {
+          msg.innerHTML = `
+            <div style="margin-top:10px;color:#ffd166;">సెషన్ లోడ్ కావడానికి సమయం పడుతోంది...</div>
+            <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+              <button onclick="document.getElementById('adminAuthOverlay').style.display='none'" style="padding:10px 20px;background:#ffd166;color:#000;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">డ్యాష్‌బోర్డ్ తెరవండి ⚡</button>
+              <a href="admin.html" style="padding:10px 18px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:10px;text-decoration:none;font-size:0.9rem;display:inline-flex;align-items:center;">మళ్లీ లాగిన్</a>
+            </div>
+          `;
+        }
+      }
+    }, 3500);
+  </script>
 
   <div class="dashboard-bg"></div>
 
@@ -1051,7 +1097,7 @@
     </div>
   </section>
 
-  <script type="module" src="dashboard.js?v=20260923_authfix"></script>
+  <script type="module" src="dashboard.js?v=20260923_instant"></script>
 
 </body>
 </html>
