@@ -1,14 +1,17 @@
-﻿import { auth }
+import { auth }
 
 from "../firebase-config.js";
 
 import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-  signInWithEmailAndPassword
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.location.href = "dashboard.html";
+  }
+});
 
 
 const loginBtn =

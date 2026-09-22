@@ -88,6 +88,8 @@ async function loadFestival() {
           break;
         }
       }
+    }
+
     // 4. Fallback: Search in Ekadashis
     if (!festival && queryParam) {
       const ekadashi = EKADASHI_LIST.find(
