@@ -58,28 +58,6 @@ async function loadFestivals() {
 
     festivalsGrid.innerHTML = "";
 
-    // Prominent Featured Entry Card for Ekadashis (Divine Text & Motif Card)
-    const featuredEkadashiCard = document.createElement("div");
-    featuredEkadashiCard.className = "festival-card featured-ekadashi-card";
-    featuredEkadashiCard.style.cursor = "pointer";
-    featuredEkadashiCard.innerHTML = `
-      <span class="featured-badge">🪷 26 వ్రతాలు</span>
-      <div class="featured-ekadashi-inner">
-        <div class="featured-ekadashi-om">ॐ</div>
-        <div class="featured-ekadashi-icon">🪷</div>
-        <h3 class="featured-ekadashi-title">ఏకాదశి వ్రతాలు</h3>
-        <p class="featured-ekadashi-desc">26 పవిత్ర ఏకాదశుల పురాణ కథలు, ఉపవాస నియమాలు &amp; ఫలశ్రుతి</p>
-        <div class="featured-ekadashi-cta">
-          <span>అన్ని ఏకాదశులు చూడండి</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    `;
-    featuredEkadashiCard.addEventListener("click", () => {
-      switchCategoryTab("ekadashi");
-      window.scrollTo({ top: 350, behavior: "smooth" });
-    });
-    festivalsGrid.appendChild(featuredEkadashiCard);
 
     snapshot.forEach((docItem) => {
       const festival = docItem.data();
