@@ -55,7 +55,10 @@ function selectDifficulty(level, button) {
   if (button) button.classList.add("selected-difficulty");
 }
 
-if (easyBtn) easyBtn.addEventListener("click", () => selectDifficulty("easy", easyBtn));
+if (easyBtn) {
+  selectDifficulty("easy", easyBtn);
+  easyBtn.addEventListener("click", () => selectDifficulty("easy", easyBtn));
+}
 if (mediumBtn) mediumBtn.addEventListener("click", () => selectDifficulty("medium", mediumBtn));
 if (hardBtn) hardBtn.addEventListener("click", () => selectDifficulty("hard", hardBtn));
 

@@ -261,8 +261,11 @@ function showQuestion() {
   questionEl.innerText = q.question || "";
   questionEl.classList.add("quiz-fade-in");
 
+  const letterLabels = ["A", "B", "C", "D"];
   optionButtons.forEach((btn, index) => {
-    btn.innerText = options[index] || "";
+    const text = options[index] || "";
+    btn.dataset.answer = text;
+    btn.innerHTML = `<span class="option-letter">${letterLabels[index] || (index + 1)}</span><span class="option-text">${text}</span>`;
     btn.classList.remove("option-selected", "option-correct", "option-wrong");
     btn.classList.remove("quiz-fade-in");
     void btn.offsetWidth;
@@ -277,7 +280,8 @@ function showQuestion() {
 optionButtons.forEach(btn => {
   btn.onclick = () => {
     if (isChecking || quizFinished) return;
-    selectedAnswer = btn.innerText;
+    selectedAnswer = btn.dataset.answer || btn.innerText || "";
+    btn.classList.add("option-selected");
     checkAnswer();
   };
 });
@@ -329,7 +333,7 @@ function checkAnswer() {
   // 1. Highlight the correct answer with green animation on all buttons
   optionButtons.forEach(btn => {
     btn.disabled = true;
-    const btnText = String(btn.innerText || "").trim().toLowerCase();
+    const btnText = String(btn.dataset.answer || btn.innerText || "").trim().toLowerCase();
     if (btnText && btnText === normalizedCorrect) {
       btn.classList.add("option-correct");
     }
@@ -341,7 +345,7 @@ function checkAnswer() {
   } else if (normalizedSelected) {
     // Wrong answer selected: highlight player's choice in red with shake animation
     optionButtons.forEach(btn => {
-      const btnText = String(btn.innerText || "").trim().toLowerCase();
+      const btnText = String(btn.dataset.answer || btn.innerText || "").trim().toLowerCase();
       if (btnText && btnText === normalizedSelected) {
         btn.classList.add("option-wrong");
       }

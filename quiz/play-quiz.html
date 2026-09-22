@@ -24,11 +24,23 @@
   <!-- Dynamic Theme Background Layer -->
   <div class="quiz-bg"></div>
 
-  <!-- Centered Glass Navbar -->
-  <nav class="glass-navbar" aria-label="ప్రశ్నావళి నావిగేషన్">
-    <a href="/quiz/" title="ప్రశ్నావళికి తిరిగి వెళ్ళండి">← ప్రశ్నావళి</a>
-    <a href="/" title="ప్రారంభ పుటకు వెళ్ళండి">ప్రారంభ పుట</a>
-    <button id="themeToggleBtn" aria-label="శైలి ఎంపిక" title="శైలి ఎంపిక">🎨 శైలి</button>
+  <!-- Centered Unified Quiz Navbar -->
+  <nav class="quiz-navbar" aria-label="ప్రశ్నావళి నావిగేషన్">
+    <a href="/quiz/" class="quiz-nav-back" title="ప్రశ్నావళికి తిరిగి వెళ్ళండి">
+      <span>← ప్రశ్నావళి</span>
+    </a>
+
+    <div class="quiz-nav-brand">
+      <span class="quiz-nav-icon">🎯</span>
+      <span class="quiz-nav-title">జ్ఞాన సాధన</span>
+    </div>
+
+    <div class="quiz-nav-actions">
+      <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="శైలి ఎంపిక" title="శైలి ఎంపిక">
+        <span>🎨</span>
+        <span>శైలి</span>
+      </button>
+    </div>
   </nav>
 
   <!-- Centered Quiz Play Section -->

@@ -40,12 +40,27 @@
     <!-- Dynamic Theme Background Layer -->
     <div class="quiz-bg"></div>
 
-    <!-- Centered Glass Navbar -->
-    <nav class="glass-navbar" aria-label="ముఖ్య నావిగేషన్">
-        <a href="/" title="ప్రారంభ పుటకు వెళ్లండి">← ప్రారంభ పుట</a>
-        <a href="/quiz/" style="border-color:#ffd166; background:rgba(255,209,102,0.18);">ప్రశ్నావళి</a>
-        <a href="/quiz/leaderboard.html" title="అగ్రస్థానాలు చూడండి">🏆 అగ్రస్థానాలు</a>
-        <button id="themeToggleBtn" aria-label="శైలిని మార్చండి" title="శైలి ఎంపిక">🎨 శైలి</button>
+    <!-- Centered Unified Quiz Navbar -->
+    <nav class="quiz-navbar" aria-label="ముఖ్య నావిగేషన్">
+        <a href="/" class="quiz-nav-back" title="ప్రారంభ పుటకు వెళ్లండి">
+            <span>← ప్రారంభం</span>
+        </a>
+
+        <div class="quiz-nav-brand">
+            <span class="quiz-nav-icon">🪔</span>
+            <span class="quiz-nav-title">సన్నివేశం ప్రశ్నావళి</span>
+        </div>
+
+        <div class="quiz-nav-actions">
+            <a href="/quiz/leaderboard.html" class="quiz-nav-btn" title="అగ్రస్థానాలు చూడండి">
+                <span>🏆</span>
+                <span>అగ్రస్థానాలు</span>
+            </a>
+            <button id="themeToggleBtn" class="quiz-nav-btn" aria-label="శైలిని మార్చండి" title="శైలి ఎంపిక">
+                <span>🎨</span>
+                <span>శైలి</span>
+            </button>
+        </div>
     </nav>
 
     <section class="quiz-page">
@@ -67,7 +82,7 @@
 
             <!-- Logged In State -->
             <div id="userScoreLoggedIn" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:18px;">
+                <div class="user-profile-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:18px;">
                     <div style="display:flex; align-items:center; gap:12px; text-align:left;">
                         <span id="userAvatar" style="font-size:28px; width:44px; height:44px; border-radius:50%; background:rgba(255,209,102,0.2); border:1px solid #ffd166; display:flex; align-items:center; justify-content:center;">🕉️</span>
                         <div>
@@ -80,7 +95,7 @@
                     </div>
                 </div>
 
-                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                <div class="score-chips-grid">
                     <div class="score-chip">🌟 హరి: <strong id="userScoreHari">0</strong></div>
                     <div class="score-chip">🔱 హర: <strong id="userScoreHara">0</strong></div>
                     <div class="score-chip">🌺 దేవి: <strong id="userScoreDevi">0</strong></div>
@@ -94,7 +109,7 @@
                 <p style="margin:0 0 14px; font-size:15px; color:#e0d2c0;">
                     మీ వ్యక్తిగత స్కోరు శాశ్వతంగా భద్రపరచుకోవడానికి మరియు లీడర్‌బోర్డ్‌లో స్థానం పొందడానికి లాగిన్ అవ్వండి.
                 </p>
-                <a href="../login.html" class="start-quiz-btn" style="display:inline-block; text-decoration:none; padding:10px 26px; font-size:15px;">
+                <a href="/profile/" class="start-quiz-btn" style="display:inline-block; text-decoration:none; padding:10px 26px; font-size:15px;">
                     🔐 లాగిన్ అవ్వండి
                 </a>
             </div>
