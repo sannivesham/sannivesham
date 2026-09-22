@@ -1,11 +1,10 @@
 import { auth, db } from "../firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   collection, addDoc, getDocs, getDoc, updateDoc,
   setDoc, deleteDoc, doc, serverTimestamp, query, orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { EKADASHI_LIST } from "../festivals/ekadashi-data.js";
-import { slugify } from "../library/reader.js";
 
 onAuthStateChanged(auth, async (user) => {
   const overlay = document.getElementById("adminAuthOverlay");
@@ -22,6 +21,9 @@ onAuthStateChanged(auth, async (user) => {
   if (isPasswordUser) {
     if (overlay) overlay.style.display = "none";
     dashBody.style.display = "block";
+    const activeBtn = document.querySelector(".dash-btn.active");
+    const activeSection = activeBtn?.dataset?.section || "eventsSection";
+    loadSectionData(activeSection);
     return;
   }
 
@@ -50,6 +52,9 @@ onAuthStateChanged(auth, async (user) => {
 
   if (overlay) overlay.style.display = "none";
   dashBody.style.display = "block";
+  const activeBtn = document.querySelector(".dash-btn.active");
+  const activeSection = activeBtn?.dataset?.section || "eventsSection";
+  loadSectionData(activeSection);
 });
 
 const CLOUD_NAME = "du5em76za";
@@ -152,56 +157,149 @@ saveBtn.addEventListener("click", async () => {
 
 async function loadAdminEvents() {
   const list = document.getElementById("adminEventsList");
-  const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  list.innerHTML = "";
-  snapshot.forEach((item) => {
-    const data = item.data();
-    const images = data.images || (data.image ? [data.image] : []);
-    const card = document.createElement("div");
-    card.className = "admin-event-card editable-event";
-    card.innerHTML = `
-      <input class="edit-title" value="${data.title || ""}" placeholder="ఈవెంట్ పేరు">
-      <input class="edit-location" value="${data.location || ""}" placeholder="కార్యక్రమ స్థలం">
-      <input class="edit-time" value="${data.time || ""}" placeholder="తేదీ & సమయం">
-      <textarea class="edit-desc" placeholder="ఈవెంట్ వివరాలు">${data.description || ""}</textarea>
-      <div class="cms-image-grid"></div>
-      <div class="admin-actions">
-        <button class="save-edit">Save</button>
-        <button class="delete-event">Delete</button>
-      </div>
-    `;
-    let editImages = [...images];
-    const grid = card.querySelector(".cms-image-grid");
-    function refreshEditGrid() {
-      renderImageGrid(grid, editImages, (imgs) => { editImages = imgs; refreshEditGrid(); });
+  if (!list) return;
+  try {
+    list.innerHTML = "<p style='color:#ffd166;padding:12px;'>ఈవెంట్‌లు లోడ్ అవుతున్నాయి...</p>";
+    let snapshot;
+    try {
+      const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
+      snapshot = await getDocs(q);
+    } catch (e) {
+      console.warn("Falling back to unordered events:", e);
+      snapshot = await getDocs(collection(db, "events"));
     }
-    refreshEditGrid();
-    card.querySelector(".save-edit").onclick = async () => {
-      await updateDoc(doc(db, "events", item.id), {
-        title: card.querySelector(".edit-title").value.trim(),
-        location: card.querySelector(".edit-location").value.trim(),
-        time: card.querySelector(".edit-time").value.trim(),
-        description: card.querySelector(".edit-desc").value.trim(),
-        images: editImages, updatedAt: serverTimestamp()
-      });
-      alert("✅ అప్డేట్ అయింది"); loadAdminEvents();
-    };
-    card.querySelector(".delete-event").onclick = async () => {
-      if (!confirm("ఈ ఈవెంట్ డిలీట్ చేయాలా?")) return;
-      await deleteDoc(doc(db, "events", item.id)); loadAdminEvents();
-    };
-    list.appendChild(card);
-  });
+    const docs = [];
+    snapshot.forEach((item) => docs.push(item));
+    docs.sort((a, b) => (b.data()?.createdAt?.seconds || 0) - (a.data()?.createdAt?.seconds || 0));
+
+    list.innerHTML = "";
+    if (docs.length === 0) {
+      list.innerHTML = "<p style='color:rgba(255,255,255,0.6);padding:12px;'>ఈవెంట్‌లు ఏవీ లేవు. పైన ఫారమ్ ద్వారా కొత్త ఈవెంట్ జోడించండి.</p>";
+      return;
+    }
+    docs.forEach((item) => {
+      const data = item.data();
+      const images = data.images || (data.image ? [data.image] : []);
+      const card = document.createElement("div");
+      card.className = "admin-event-card editable-event";
+      card.innerHTML = `
+        <input class="edit-title" value="${data.title || ""}" placeholder="ఈవెంట్ పేరు">
+        <input class="edit-location" value="${data.location || ""}" placeholder="కార్యక్రమ స్థలం">
+        <input class="edit-time" value="${data.time || ""}" placeholder="తేదీ & సమయం">
+        <textarea class="edit-desc" placeholder="ఈవెంట్ వివరాలు">${data.description || ""}</textarea>
+        <div class="cms-image-grid"></div>
+        <div class="admin-actions">
+          <button class="save-edit">Save</button>
+          <button class="delete-event">Delete</button>
+        </div>
+      `;
+      let editImages = [...images];
+      const grid = card.querySelector(".cms-image-grid");
+      function refreshEditGrid() {
+        renderImageGrid(grid, editImages, (imgs) => { editImages = imgs; refreshEditGrid(); });
+      }
+      refreshEditGrid();
+      card.querySelector(".save-edit").onclick = async () => {
+        await updateDoc(doc(db, "events", item.id), {
+          title: card.querySelector(".edit-title").value.trim(),
+          location: card.querySelector(".edit-location").value.trim(),
+          time: card.querySelector(".edit-time").value.trim(),
+          description: card.querySelector(".edit-desc").value.trim(),
+          images: editImages, updatedAt: serverTimestamp()
+        });
+        alert("✅ అప్డేట్ అయింది"); loadAdminEvents();
+      };
+      card.querySelector(".delete-event").onclick = async () => {
+        if (!confirm("ఈ ఈవెంట్ డిలీట్ చేయాలా?")) return;
+        await deleteDoc(doc(db, "events", item.id)); loadAdminEvents();
+      };
+      list.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error loading events:", err);
+    list.innerHTML = `<p style="color:#ff6b6b;padding:12px;">ఈవెంట్‌లు లోడ్ చేయడంలో లోపం: ${err.message}</p>`;
+  }
 }
 loadAdminEvents();
 
-
-
-
 /* ══════════════════════════════════════
-   DASHBOARD NAVIGATION
+   DASHBOARD NAVIGATION & SECTION LOADER
 ══════════════════════════════════════ */
+
+function loadSectionData(sectionId) {
+  if (!sectionId) return;
+  try {
+    switch (sectionId) {
+      case "eventsSection":
+        if (typeof loadAdminEvents === "function") loadAdminEvents();
+        break;
+      case "festivalsSection":
+        if (typeof loadAdminFestivals === "function") loadAdminFestivals();
+        break;
+      case "ekadashiSection":
+        if (typeof loadAdminEkadashis === "function") loadAdminEkadashis();
+        break;
+      case "templesSection":
+        if (typeof loadTempleCategories === "function") loadTempleCategories();
+        if (typeof loadAdminTemples === "function") loadAdminTemples();
+        break;
+      case "librarySection":
+        if (typeof loadLibCategoriesAdmin === "function") loadLibCategoriesAdmin();
+        if (typeof loadLibCategoryOptions === "function") loadLibCategoryOptions();
+        if (typeof loadLibSubcategoriesAdmin === "function") loadLibSubcategoriesAdmin();
+        if (typeof loadLibSubcategoryOptions === "function") loadLibSubcategoryOptions();
+        if (typeof loadLibContentAdmin === "function") loadLibContentAdmin();
+        break;
+      case "slokasSection":
+        if (typeof loadSlokaCategoriesAdmin === "function") loadSlokaCategoriesAdmin();
+        if (typeof loadSlokaDirectCategories === "function") loadSlokaDirectCategories();
+        if (typeof loadSlokasAdmin === "function") loadSlokasAdmin();
+        break;
+      case "videosSection":
+        if (typeof loadAdminVideos === "function") loadAdminVideos();
+        break;
+      case "ithihasaluSection":
+        if (typeof loadIthiCategories === "function") loadIthiCategories();
+        if (typeof loadIthiSubCategories === "function") loadIthiSubCategories();
+        if (typeof loadIthiShlokas === "function") loadIthiShlokas();
+        break;
+      case "poojaMandirSection":
+        if (typeof loadPoojaGods === "function") loadPoojaGods();
+        if (typeof loadPoojaRituals === "function") loadPoojaRituals();
+        break;
+      case "streamSection":
+        if (typeof loadStreamCats === "function") loadStreamCats();
+        if (typeof loadStreamVideos === "function") loadStreamVideos();
+        if (typeof loadSubscribers === "function") loadSubscribers();
+        break;
+      case "storeSection":
+        if (typeof loadStoreCategories === "function") loadStoreCategories();
+        if (typeof loadStoreProducts === "function") loadStoreProducts();
+        break;
+      case "backgroundsSection":
+        if (typeof loadThemeBackgroundsAdmin === "function") loadThemeBackgroundsAdmin();
+        break;
+      case "socialSection":
+        if (typeof loadSocialLinksAdmin === "function") loadSocialLinksAdmin();
+        break;
+      case "homeCardsSection":
+        if (typeof loadHomeCardsAdmin === "function") loadHomeCardsAdmin();
+        break;
+      case "sponsorSection":
+        if (typeof loadSponsorAdmin === "function") loadSponsorAdmin();
+        break;
+      case "qotdSection":
+        if (typeof loadQotdList === "function") loadQotdList();
+        break;
+      case "wordOfDaySection":
+        if (typeof loadWordList === "function") loadWordList();
+        break;
+    }
+  } catch (err) {
+    console.error("Error in loadSectionData:", sectionId, err);
+  }
+}
+window.loadSectionData = loadSectionData;
 
 const navButtons = document.querySelectorAll(".dash-btn");
 const sections = document.querySelectorAll(".dash-section");
@@ -211,7 +309,9 @@ navButtons.forEach((button) => {
     navButtons.forEach(btn => btn.classList.remove("active"));
     sections.forEach(section => section.classList.remove("active-section"));
     button.classList.add("active");
-    document.getElementById(button.dataset.section)?.classList.add("active-section");
+    const targetSection = document.getElementById(button.dataset.section);
+    if (targetSection) targetSection.classList.add("active-section");
+    loadSectionData(button.dataset.section);
   });
 });
 
@@ -594,34 +694,54 @@ if (saveFestivalBtn) {
 async function loadAdminFestivals() {
   const list = document.getElementById("adminFestivalsList");
   if (!list) return;
-  const q = query(collection(db, "festivals"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  list.innerHTML = "";
-  snapshot.forEach((item) => {
-    const festival = item.data();
-    list.innerHTML += `
-      <div class="admin-event-card editable-festival-card">
-        <img src="${festival.cardImage}" alt="${festival.title}">
-        <div>
-          <h3>${festival.title}</h3>
-          ${renderSlugLinkHtml("festivals", festival.slug, item.id)}
-          <p>Sections: ${festival.sections ? festival.sections.length : 0}</p>
-          <button class="open-festival-edit-btn" data-id="${item.id}">Edit</button>
-          <button class="delete-festival-btn" data-id="${item.id}">Delete</button>
-          <div class="festival-inline-editor" id="festivalEdit-${item.id}"></div>
+  try {
+    list.innerHTML = "<p style='color:#ffd166;padding:12px;'>పండుగల జాబితా లోడ్ అవుతోంది...</p>";
+    let snapshot;
+    try {
+      const q = query(collection(db, "festivals"), orderBy("createdAt", "desc"));
+      snapshot = await getDocs(q);
+    } catch (e) {
+      console.warn("Falling back to unordered festivals:", e);
+      snapshot = await getDocs(collection(db, "festivals"));
+    }
+    const docs = [];
+    snapshot.forEach(item => docs.push(item));
+    docs.sort((a, b) => (b.data()?.createdAt?.seconds || 0) - (a.data()?.createdAt?.seconds || 0));
+
+    list.innerHTML = "";
+    if (docs.length === 0) {
+      list.innerHTML = "<p style='color:rgba(255,255,255,0.6);padding:12px;'>పండుగలు ఏవీ లేవు. పైన ఫారమ్ ద్వారా కొత్త పండుగను జోడించండి.</p>";
+      return;
+    }
+    docs.forEach((item) => {
+      const festival = item.data();
+      list.innerHTML += `
+        <div class="admin-event-card editable-festival-card">
+          <img src="${festival.cardImage || ""}" alt="${festival.title || ""}">
+          <div>
+            <h3>${festival.title || "Untitled"}</h3>
+            ${renderSlugLinkHtml("festivals", festival.slug, item.id)}
+            <p>Sections: ${festival.sections ? festival.sections.length : 0}</p>
+            <button class="open-festival-edit-btn" data-id="${item.id}">Edit</button>
+            <button class="delete-festival-btn" data-id="${item.id}">Delete</button>
+            <div class="festival-inline-editor" id="festivalEdit-${item.id}"></div>
+          </div>
         </div>
-      </div>
-    `;
-  });
-  document.querySelectorAll(".open-festival-edit-btn").forEach(btn => {
-    btn.addEventListener("click", async () => openFestivalInlineEditor(btn.dataset.id));
-  });
-  document.querySelectorAll(".delete-festival-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (!confirm("ఈ పండుగ డిలీట్ చేయాలా?")) return;
-      await deleteDoc(doc(db, "festivals", btn.dataset.id)); loadAdminFestivals();
+      `;
     });
-  });
+    list.querySelectorAll(".open-festival-edit-btn").forEach(btn => {
+      btn.addEventListener("click", async () => openFestivalInlineEditor(btn.dataset.id));
+    });
+    list.querySelectorAll(".delete-festival-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("ఈ పండుగ డిలీట్ చేయాలా?")) return;
+        await deleteDoc(doc(db, "festivals", btn.dataset.id)); loadAdminFestivals();
+      });
+    });
+  } catch (err) {
+    console.error("Error loading festivals:", err);
+    list.innerHTML = `<p style="color:#ff6b6b;padding:12px;">పండుగలు లోడ్ చేయడంలో లోపం: ${err.message}</p>`;
+  }
 }
 
 async function openFestivalInlineEditor(id) {
@@ -1620,44 +1740,63 @@ if (saveTempleBtn) {
 async function loadAdminTemples(filterCatId = "") {
   const list = document.getElementById("adminTemplesList");
   if (!list) return;
- 
-  const catSnap = await getDocs(collection(db, "templeCategories"));
-  const catMap = {};
-  catSnap.forEach(d => { catMap[d.id] = d.data().title; });
- 
-  const q = query(collection(db, "temples"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  list.innerHTML = "";
- 
-  snapshot.forEach((item) => {
-    const temple = item.data();
- 
-    if (filterCatId && temple.categoryId !== filterCatId) return;
- 
-    list.innerHTML += `
-      <div class="admin-event-card">
-        <img src="${temple.cardImage}" alt="${temple.title}">
-        <div>
-          <h3>${temple.title}</h3>
-          ${renderSlugLinkHtml("temples", temple.slug, item.id)}
-          <p>విభాగం: ${catMap[temple.categoryId] || "Uncategorized"}</p>
-          <p>Sections: ${temple.sections ? temple.sections.length : 0}</p>
-          <button class="edit-temple-btn" data-id="${item.id}">Edit</button>
-          <button class="delete-temple-btn" data-id="${item.id}">Delete</button>
-          <div class="temple-inline-editor" id="templeEdit-${item.id}"></div>
+
+  try {
+    list.innerHTML = "<p style='color:#ffd166;padding:12px;'>దేవాలయాల జాబితా లోడ్ అవుతోంది...</p>";
+    const catSnap = await getDocs(collection(db, "templeCategories"));
+    const catMap = {};
+    catSnap.forEach(d => { catMap[d.id] = d.data().title; });
+
+    let snapshot;
+    try {
+      const q = query(collection(db, "temples"), orderBy("createdAt", "desc"));
+      snapshot = await getDocs(q);
+    } catch (e) {
+      console.warn("Falling back to unordered temples:", e);
+      snapshot = await getDocs(collection(db, "temples"));
+    }
+    const docs = [];
+    snapshot.forEach(item => docs.push(item));
+    docs.sort((a, b) => (b.data()?.createdAt?.seconds || 0) - (a.data()?.createdAt?.seconds || 0));
+
+    list.innerHTML = "";
+    let count = 0;
+    docs.forEach((item) => {
+      const temple = item.data();
+      if (filterCatId && temple.categoryId !== filterCatId) return;
+      count++;
+      list.innerHTML += `
+        <div class="admin-event-card">
+          <img src="${temple.cardImage || ""}" alt="${temple.title || ""}">
+          <div>
+            <h3>${temple.title || "Untitled"}</h3>
+            ${renderSlugLinkHtml("temples", temple.slug, item.id)}
+            <p>విభాగం: ${catMap[temple.categoryId] || "Uncategorized"}</p>
+            <p>Sections: ${temple.sections ? temple.sections.length : 0}</p>
+            <button class="edit-temple-btn" data-id="${item.id}">Edit</button>
+            <button class="delete-temple-btn" data-id="${item.id}">Delete</button>
+            <div class="temple-inline-editor" id="templeEdit-${item.id}"></div>
+          </div>
         </div>
-      </div>
-    `;
-  });
-  document.querySelectorAll(".edit-temple-btn").forEach(btn => {
-    btn.addEventListener("click", async () => openTempleInlineEditor(btn.dataset.id, filterCatId));
-  });
-  document.querySelectorAll(".delete-temple-btn").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (!confirm("ఈ దేవాలయం డిలీట్ చేయాలా?")) return;
-      await deleteDoc(doc(db, "temples", btn.dataset.id)); loadAdminTemples(filterCatId);
+      `;
     });
-  });
+    if (count === 0) {
+      list.innerHTML = "<p style='color:rgba(255,255,255,0.6);padding:12px;'>దేవాలయాలు ఏవీ లేవు.</p>";
+      return;
+    }
+    list.querySelectorAll(".edit-temple-btn").forEach(btn => {
+      btn.addEventListener("click", async () => openTempleInlineEditor(btn.dataset.id, filterCatId));
+    });
+    list.querySelectorAll(".delete-temple-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("ఈ దేవాలయాన్ని డిలీట్ చేయాలా?")) return;
+        await deleteDoc(doc(db, "temples", btn.dataset.id)); loadAdminTemples(filterCatId);
+      });
+    });
+  } catch (err) {
+    console.error("Error loading temples:", err);
+    list.innerHTML = `<p style="color:#ff6b6b;padding:12px;">దేవాలయాలు లోడ్ చేయడంలో లోపం: ${err.message}</p>`;
+  }
 }
  
 async function openTempleInlineEditor(id, filterCatId = "") {
@@ -3018,7 +3157,6 @@ loadSubscribers();
    LOGOUT
 ══════════════════════════════════════ */
 
-import { signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => { await signOut(auth); window.location.href = "admin.html"; });

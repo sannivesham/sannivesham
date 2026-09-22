@@ -108,6 +108,9 @@
                   sec.classList.add("active-section");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }
+                if (typeof window.loadSectionData === "function") {
+                  window.loadSectionData(targetId);
+                }
               };
             });
           }
@@ -1127,7 +1130,7 @@
     </div>
   </section>
 
-  <script type="module" src="dashboard.js?v=20260923_tabsfix"></script>
+  <script type="module" src="dashboard.js?v=20260923_cmsfix"></script>
 
 </body>
 </html>
