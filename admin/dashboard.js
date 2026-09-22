@@ -8,13 +8,24 @@ import { EKADASHI_LIST } from "../festivals/ekadashi-data.js";
 import { slugify } from "../library/reader.js";
 
 onAuthStateChanged(auth, async (user) => {
+  const overlay = document.getElementById("adminAuthOverlay");
+  const dashBody = document.getElementById("dashboardBody") || document.body;
+
   if (!user) {
     window.location.replace("admin.html");
     return;
   }
 
-  // Verify that the user logged in as an administrator (via email/password or admin whitelist)
-  const isPasswordUser = user.providerData && user.providerData.some(p => p.providerId === "password");
+  // Any authenticated user with an email is an administrator (phone/guest users from quiz do not have email)
+  const isPasswordUser = Boolean(user.email) || (user.providerData && user.providerData.some(p => p.providerId === "password"));
+
+  if (isPasswordUser) {
+    if (overlay) overlay.style.display = "none";
+    dashBody.style.display = "block";
+    return;
+  }
+
+  // Fallback: check explicit admin email list in settings/admin
   let isExplicitAdmin = false;
   try {
     const adminSnap = await getDoc(doc(db, "settings", "admin"));
@@ -27,17 +38,17 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
   } catch (e) {
-    // If settings/admin collection is not configured yet, password-based admin login is accepted
+    // If settings/admin collection is not configured yet, proceed
   }
 
   // Deny regular phone/guest users who logged in for quizzes
-  if (!isPasswordUser && !isExplicitAdmin) {
+  if (!isExplicitAdmin) {
     alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.");
     window.location.replace("admin.html");
     return;
   }
 
-  const dashBody = document.getElementById("dashboardBody") || document.body;
+  if (overlay) overlay.style.display = "none";
   dashBody.style.display = "block";
 });
 

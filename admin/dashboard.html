@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - సన్నివేశం</title>
   <link rel="stylesheet" href="../style.css">
-</head>
-<body class="dashboard-body" style="display:none;" id="dashboardBody">
+<body class="dashboard-body" id="dashboardBody">
+
+  <div id="adminAuthOverlay" style="position:fixed;inset:0;background:#050300;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ffd166;font-family:system-ui,-apple-system,sans-serif;">
+    <div style="font-size:2.8rem;margin-bottom:12px;">⚡</div>
+    <div style="font-size:1.25rem;font-weight:700;letter-spacing:0.5px;">సన్నివేశం Admin Dashboard</div>
+    <div style="font-size:0.9rem;color:#aaa;margin-top:8px;">లాగిన్ ప్రామాణీకరణ తనిఖీ చేయబడుతోంది...</div>
+  </div>
 
   <div class="dashboard-bg"></div>
 
@@ -1046,7 +1051,7 @@
     </div>
   </section>
 
-  <script type="module" src="dashboard.js?v=20260921_textcards"></script>
+  <script type="module" src="dashboard.js?v=20260923_authfix"></script>
 
 </body>
 </html>

@@ -225,7 +225,6 @@ if (window.history && window.history.pushState) {
 }
 
 // In-page toolbar back button handler
-const readerBackBtn = document.getElementById("readerBackBtn");
 if (readerBackBtn) {
   readerBackBtn.addEventListener("click", (e) => {
     e.preventDefault();
