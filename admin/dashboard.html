@@ -90,6 +90,35 @@
         <button id="logoutBtn">Logout</button>
       </div>
 
+      <script>
+        (function() {
+          function initTabs() {
+            const navBtns = document.querySelectorAll(".dash-btn");
+            const sections = document.querySelectorAll(".dash-section");
+            navBtns.forEach(btn => {
+              btn.onclick = function(e) {
+                e.preventDefault();
+                const targetId = this.dataset.section;
+                if (!targetId) return;
+                navBtns.forEach(b => b.classList.remove("active"));
+                sections.forEach(s => s.classList.remove("active-section"));
+                this.classList.add("active");
+                const sec = document.getElementById(targetId);
+                if (sec) {
+                  sec.classList.add("active-section");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              };
+            });
+          }
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initTabs);
+          } else {
+            initTabs();
+          }
+        })();
+      </script>
+
 
 
       <!-- ═══════════════════════════════════
@@ -1098,7 +1127,7 @@
     </div>
   </section>
 
-  <script type="module" src="dashboard.js?v=20260923_instant"></script>
+  <script type="module" src="dashboard.js?v=20260923_tabsfix"></script>
 
 </body>
 </html>
