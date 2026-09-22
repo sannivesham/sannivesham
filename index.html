@@ -583,6 +583,15 @@
       </a>
     </div>
 
+    <div id="qotdCarouselNav" class="qotd-carousel-nav" style="display:none;">
+      <button type="button" id="qotdNavBtn0" class="qotd-nav-pill active" onclick="window.goToQotdSlide && window.goToQotdSlide(0)" aria-label="Question of the day">
+        <span data-en="❓ Question">❓ నేటి ప్రశ్న</span>
+      </button>
+      <button type="button" id="qotdNavBtn1" class="qotd-nav-pill" onclick="window.goToQotdSlide && window.goToQotdSlide(1)" aria-label="Topic of the day">
+        <span data-en="💡 Topic">💡 నేటి అంశం</span>
+      </button>
+    </div>
+
     <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
       <div id="qotdCard" class="qotd-card" style="display:none;">
         <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
@@ -600,17 +609,102 @@
             లాగిన్ అవ్వండి (Log In) ➜
           </a>
         </div>
+        <div class="qotd-swipe-hint-bar" id="qotdSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(1)">
+          <span class="swipe-hint-text" data-en="👉 Swipe for Today's Topic ➜">👉 నేటి అంశం కోసం స్వైప్ చేయండి ➜</span>
+        </div>
       </div>
 
       <div id="wordCard" class="word-card" style="display:none;">
         <h3 data-en="Word of the Day">నేటి అంశం</h3>
         <p id="wordOfDayText" class="word-of-day-text"></p>
+        <div class="word-swipe-hint-bar" id="wordSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(0)">
+          <span class="swipe-hint-text" data-en="⮌ Swipe back for Question">⮌ నేటి ప్రశ్న కోసం స్వైప్ చేయండి</span>
+        </div>
       </div>
     </div>
 
     <!-- Instant Cold-Start Cache Rendering for Mobile (Zero-Delay Paint) -->
     <script>
       (function() {
+        window.goToQotdSlide = function(index, smooth) {
+          if (smooth === undefined) smooth = true;
+          if (window.innerWidth > 768) return;
+          var section = document.getElementById("qotdWordSection");
+          if (!section) return;
+          var qCard = document.getElementById("qotdCard");
+          var wCard = document.getElementById("wordCard");
+          var targetEl = index === 0 ? qCard : wCard;
+          if (!targetEl) return;
+
+          try {
+            targetEl.scrollIntoView({
+              behavior: smooth ? "smooth" : "auto",
+              inline: "start",
+              block: "nearest"
+            });
+          } catch (e) {
+            var targetLeft = index === 0 ? 0 : section.scrollWidth;
+            if (smooth) {
+              section.scrollTo({ left: targetLeft, behavior: "smooth" });
+            } else {
+              section.scrollLeft = targetLeft;
+            }
+          }
+          window.updateQotdNavPills && window.updateQotdNavPills(index);
+        };
+
+        window.updateQotdNavPills = function(index) {
+          var btn0 = document.getElementById("qotdNavBtn0");
+          var btn1 = document.getElementById("qotdNavBtn1");
+          if (btn0 && btn1) {
+            if (index === 0) {
+              btn0.classList.add("active");
+              btn1.classList.remove("active");
+            } else {
+              btn1.classList.add("active");
+              btn0.classList.remove("active");
+            }
+          }
+        };
+
+        function initQotdCarouselScrollListener() {
+          var section = document.getElementById("qotdWordSection");
+          if (!section) return;
+          var ticking = false;
+          section.addEventListener("scroll", function() {
+            if (window.innerWidth > 768) return;
+            if (!ticking) {
+              window.requestAnimationFrame(function() {
+                var scrollLeft = section.scrollLeft;
+                var width = section.clientWidth || section.offsetWidth;
+                var activeIdx = scrollLeft >= width * 0.45 ? 1 : 0;
+                window.updateQotdNavPills(activeIdx);
+                ticking = false;
+              });
+              ticking = true;
+            }
+          }, { passive: true });
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initQotdCarouselScrollListener);
+        } else {
+          initQotdCarouselScrollListener();
+        }
+
+        window.addEventListener("resize", function() {
+          var nav = document.getElementById("qotdCarouselNav");
+          var section = document.getElementById("qotdWordSection");
+          if (window.innerWidth > 768) {
+            if (nav) nav.style.display = "none";
+            if (section) section.scrollLeft = 0;
+          } else {
+            if (nav && section && section.style.display !== "none") {
+              nav.style.display = "flex";
+            }
+          }
+        });
+
         try {
           var now = new Date();
           var yyyy = now.getFullYear();
@@ -681,7 +775,21 @@
 
           if (hasRendered) {
             var parentSec = document.getElementById("qotdWordSection");
+            var nav = document.getElementById("qotdCarouselNav");
             if (parentSec) parentSec.style.display = "flex";
+            if (nav && window.innerWidth <= 768) nav.style.display = "flex";
+
+            if (window.innerWidth <= 768 && parentSec) {
+              var isAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
+                               (cachedQotdRaw && (localStorage.getItem("qotd_answered_" + (JSON.parse(cachedQotdRaw).key || localTodayKey)) === "true"));
+              if (isAnswered) {
+                setTimeout(function() {
+                  if (window.goToQotdSlide) {
+                    window.goToQotdSlide(1, false);
+                  }
+                }, 10);
+              }
+            }
           }
         } catch (err) {
           console.warn("Instant cache error:", err);
@@ -1123,7 +1231,7 @@
         });
 
         document.getElementById("qotdCard").style.display = "block";
-        document.getElementById("qotdWordSection").style.display = "flex";
+        syncQotdWordDisplay(alreadyAnswered);
 
         if (currentUser) {
           const userSnap = await getDoc(doc(db, "users", currentUser.uid));
@@ -1162,6 +1270,15 @@
       if (isCorrect) {
         localStorage.setItem(`qotd_correct_${activeKey}`, "true");
         localStorage.setItem(`qotd_correct_${todayKey}`, "true");
+      }
+
+      // Auto-swipe to Today's Topic on mobile after 3.5 seconds
+      if (window.innerWidth <= 768) {
+        setTimeout(() => {
+          if (window.innerWidth <= 768 && window.goToQotdSlide) {
+            window.goToQotdSlide(1, true);
+          }
+        }, 3500);
       }
 
       if (currentUser) {
@@ -1263,9 +1380,39 @@
 
         document.getElementById("wordOfDayText").innerText = data.text;
         document.getElementById("wordCard").style.display = "block";
-        document.getElementById("qotdWordSection").style.display = "flex";
+        syncQotdWordDisplay();
       } catch (e) {
         console.warn("loadWordOfDay error:", e);
+      }
+    }
+
+    let hasSetInitialMobileSlide = false;
+    function syncQotdWordDisplay(knownAnswered) {
+      const section = document.getElementById("qotdWordSection");
+      const nav = document.getElementById("qotdCarouselNav");
+      if (section) section.style.display = "flex";
+      if (nav && window.innerWidth <= 768) nav.style.display = "flex";
+
+      if (window.innerWidth <= 768 && !hasSetInitialMobileSlide) {
+        const qCard = document.getElementById("qotdCard");
+        const wCard = document.getElementById("wordCard");
+        if (qCard && wCard && qCard.style.display !== "none" && wCard.style.display !== "none") {
+          hasSetInitialMobileSlide = true;
+          const isAnswered = knownAnswered !== undefined ? knownAnswered :
+            ((localStorage.getItem("qotd_answered_" + todayKey) === "true") ||
+             (localStorage.getItem("sannivesham_cached_qotd") &&
+              localStorage.getItem("qotd_answered_" + (JSON.parse(localStorage.getItem("sannivesham_cached_qotd") || "{}").key || todayKey)) === "true"));
+
+          if (isAnswered) {
+            setTimeout(() => {
+              if (window.goToQotdSlide) window.goToQotdSlide(1, false);
+            }, 30);
+          } else {
+            setTimeout(() => {
+              if (window.goToQotdSlide) window.goToQotdSlide(0, false);
+            }, 30);
+          }
+        }
       }
     }
   </script>
