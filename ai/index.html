@@ -82,9 +82,9 @@
         <div class="divine-pulse"></div>
       </div>
 
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        <span class="status-text" data-en="CULTURAL & EDUCATIONAL AI COMPANION">సాంస్కృతిక & విద్యా మేధస్సు</span>
+      <div class="status-pill coming-soon-pill">
+        <span class="status-dot cs-dot"></span>
+        <span class="status-text" data-en="✨ COMING SOON • IN ENHANCEMENT ✨">✨ త్వరలో రాబోతోంది • COMING SOON ✨</span>
       </div>
 
       <h1 class="medha-title">
@@ -100,39 +100,19 @@
         తెలుగు భాష, కవులు, పురాణాలు, ఇతిహాసాలు, పవిత్ర దేవాలయాలు, పండుగల వెనుక ఉన్న ఆధ్యాత్మిక, శాస్త్రీయ విశేషాలను తెలుసుకోండి.
       </p>
 
-      <!-- QUICK SUGGESTIONS GRID -->
-      <div class="suggestions-wrapper">
-        <div class="suggestions-title" data-en="✨ Suggested Topics to Explore:">✨ అన్వేషించదగిన అంశాలు:</div>
-        <div class="suggestions-grid">
-          <button class="prompt-chip" data-prompt="పోతన భాగవత పద్యాల విశిష్టత మరియు శైలి ఏమిటి?">
-            <span class="chip-icon">📖</span>
-            <span class="chip-text">పోతన భాగవత విశిష్టత</span>
-          </button>
-
-          <button class="prompt-chip" data-prompt="ఉగాది పండుగలో షడ్రుచుల పచ్చడి అంతరార్థం ఏమిటి?">
-            <span class="chip-icon">🪔</span>
-            <span class="chip-text">ఉగాది షడ్రుచుల అంతరార్థం</span>
-          </button>
-
-          <button class="prompt-chip" data-prompt="తిరుమల శ్రీ వేంకటేశ్వర స్వామి క్షేత్ర చరిత్ర మరియు విశేషాలు తెలపండి.">
-            <span class="chip-icon">🛕</span>
-            <span class="chip-text">తిరుమల క్షేత్ర చరిత్ర</span>
-          </button>
-
-          <button class="prompt-chip" data-prompt="భగవద్గీతలో శ్రీకృష్ణుడు ఉపదేశించిన కర్మయోగం ప్రాముఖ్యత ఏమిటి?">
-            <span class="chip-icon">🕉️</span>
-            <span class="chip-text">భగవద్గీత కర్మయోగం</span>
-          </button>
-
-          <button class="prompt-chip" data-prompt="ఏకాదశి వ్రత ప్రాముఖ్యత మరియు దాని వెనుక ఉన్న శాస్త్రీయ కారణాలు ఏమిటి?">
-            <span class="chip-icon">🌙</span>
-            <span class="chip-text">ఏకాదశి వ్రత విశిష్టత</span>
-          </button>
-
-          <button class="prompt-chip" data-prompt="తెలుగు భాషలో 'సంధి' అంటే ఏమిటి? ప్రధాన సంధుల రకాలను వివరించండి.">
-            <span class="chip-icon">✍️</span>
-            <span class="chip-text">తెలుగు వ్యాకరణం - సంధులు</span>
-          </button>
+      <!-- COMING SOON PRESENTATION CARD -->
+      <div class="medha-coming-soon-card">
+        <div class="cs-badge-pill">
+          <span class="cs-dot"></span>
+          <span data-en="✨ COMING SOON • IN ENHANCEMENT ✨">✨ త్వరలో రాబోతోంది • COMING SOON ✨</span>
+        </div>
+        <h2 data-en="Sannivesham AI will be available soon!">సన్నివేశం మేధ త్వరలోనే అందుబాటులోకి రానుంది!</h2>
+        <p data-en="We are training and refining Medha AI with deeper cultural, literary, and spiritual knowledge to give you 100% authentic and verified wisdom. Stay tuned!">
+          తెలుగు భాష, సాహిత్యము, పురాణాలు, ఇతిహాసాలు మరియు సనాతన ధర్మ సంబంధిత అంశాలలో మీకు మరింత ఖచ్చితమైన, ప్రామాణికమైన సమాధానాలు అందించడానికి 'సన్నివేశం మేధ'ను అత్యంత పవిత్రంగా, పరిపూర్ణంగా తీర్చిదిద్దుతున్నాము. త్వరలోనే పూర్తి స్థాయిలో మీ ముందుకు రానుంది!
+        </p>
+        <div class="cs-actions">
+          <a href="../" class="cs-btn cs-primary" data-en="🏠 Back to Home">🏠 ప్రధాన పేజీకి వెళ్లండి</a>
+          <a href="../quiz/" class="cs-btn cs-secondary" data-en="🎯 Play Cultural Quiz">🎯 ప్రశ్నావళిలో పాల్గొనండి</a>
         </div>
       </div>
     </div>
@@ -161,28 +141,16 @@
 
   </main>
 
-  <!-- BOTTOM STICKY INPUT DOCK -->
+  <!-- BOTTOM STICKY COMING SOON DOCK -->
   <footer class="medha-input-dock">
     <div class="input-inner-wrap">
-      <div class="input-box-container">
-        <textarea 
-          id="chatInput" 
-          class="chat-textarea" 
-          rows="1" 
-          placeholder="తెలుగు లేదా భారతీయ సంస్కృతి, సాహిత్యం, ధర్మం గురించి అడగండి..." 
-          aria-label="Ask Sannivesham AI"
-          autocomplete="off"
-        ></textarea>
-        
-        <button id="sendBtn" class="send-action-btn" title="సందేశం పంపండి" aria-label="Send Message" disabled>
-          <svg viewBox="0 0 24 24" class="send-icon" aria-hidden="true">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path>
-          </svg>
-        </button>
+      <div class="coming-soon-dock-hint" data-en="🚀 Sannivesham AI is currently under active fine-tuning. Launching soon!">
+        🚀 సన్నివేశం మేధ సాంస్కృతిక విశేషాలతో శిక్షణ మరియు మెరుగుదల దశలో ఉంది. త్వరలో ప్రారంభించబడుతుంది!
       </div>
-
-      <div class="input-disclaimer" data-en="Sannivesham AI is dedicated exclusively to Telugu language, literature, traditions, and Indian cultural heritage.">
-        సన్నివేశం మేధ తెలుగు భాష, సంస్కృతి, సాహిత్యం మరియు సనాతన ధర్మ విజ్ఞానాన్ని అందించే సాంస్కృతిక వేదిక.
+      <!-- Hidden elements to preserve full script compatibility without removing any created code -->
+      <div style="display: none !important;">
+        <textarea id="chatInput" class="chat-textarea" rows="1"></textarea>
+        <button id="sendBtn" class="send-action-btn" disabled></button>
       </div>
     </div>
   </footer>

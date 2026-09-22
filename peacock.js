@@ -89,14 +89,14 @@
       container.id = 'flyingPeacockRoot';
       container.className = 'is-perched on-right';
       container.setAttribute('role', 'button');
-      container.setAttribute('aria-label', 'సన్నివేశం మేధ — Sannivesham AI తెరవండి');
+      container.setAttribute('aria-label', 'సన్నివేశం మేధ — Sannivesham AI (త్వరలో రాబోతోంది • Coming Soon)');
       container.setAttribute('tabindex', '0');
 
       container.innerHTML = `
         <div class="peacock-ground-shadow"></div>
         <div class="peacock-ai-tooltip">
           <span>🦚</span>
-          <span>సన్నివేశం మేధ • Sannivesham AI</span>
+          <span>సన్నివేశం మేధ • త్వరలో రాబోతోంది (Coming Soon)</span>
           <span>➜</span>
         </div>
         <div class="peacock-inner-wrap">
