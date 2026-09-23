@@ -2613,10 +2613,35 @@ async function loadLibCategoriesAdmin() {
 
   let categories = [];
   snapshot.forEach(item => categories.push({ id: item.id, ...item.data() }));
-  categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  let allCatDoc = categories.find(c => c.id === "all-library-category" || c.slug === "all" || c.isAllBox);
+  if (!allCatDoc) {
+    allCatDoc = {
+      id: "all-library-category",
+      title: "సర్వ గ్రంథ సంపద (All Divine Content)",
+      slug: "all",
+      emoji: "🕉️",
+      image: "https://res.cloudinary.com/du5em76za/image/upload/v1784085723/jfzdyhiuku0afwhaatgr.png",
+      description: "అన్ని విభాగాలలోని స్తోత్రాలు, నామావళులు, సూక్తాలు, చాలీసాలు మరియు సమస్త పవిత్ర రచనల సంపూర్ణ సమాహారం — అన్నీ ఒక్కచోట!",
+      order: -1,
+      isAllBox: true
+    };
+    setDoc(doc(db, "libraryCategories", "all-library-category"), allCatDoc).catch(() => {});
+    categories.unshift(allCatDoc);
+  } else {
+    allCatDoc.isAllBox = true;
+    allCatDoc.order = -1;
+  }
+
+  categories.sort((a, b) => {
+    if (a.isAllBox || a.id === "all-library-category") return -1;
+    if (b.isAllBox || b.id === "all-library-category") return 1;
+    return (a.order || 0) - (b.order || 0);
+  });
   list.innerHTML = "";
 
   categories.forEach(data => {
+    const isAll = data.id === "all-library-category" || data.isAllBox || data.slug === "all";
     const catSubs = allSubs.filter(s => s.categoryId === data.id);
     const catSubIds = catSubs.map(s => s.id);
     const catContents = allContents.filter(c => catSubIds.includes(c.subcategoryId));
@@ -2649,15 +2674,18 @@ async function loadLibCategoriesAdmin() {
     }
 
     list.innerHTML += `
-      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
+      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;${isAll ? 'border:1px solid #ffd166;background:rgba(255,209,102,0.06);box-shadow:0 4px 18px rgba(255,209,102,0.2);' : ''}">
         <div style="display:flex;gap:14px;align-items:center;">
           <img src="${data.image}" alt="${data.title}" style="width:60px;height:60px;object-fit:cover;border-radius:10px;">
           <div style="flex:1;">
-            <h3 style="margin:0 0 4px;">${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <h3 style="margin:0 0 4px;">${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
+              ${isAll ? `<span style="background:linear-gradient(135deg,#ffd166,#ff9f1c);color:#120703;font-size:0.75rem;font-weight:800;padding:2px 8px;border-radius:6px;">⭐ ముఖ్యాంశం / డబుల్ బాక్స్ (Featured All-in-One Box)</span>` : ''}
+            </div>
             ${renderSlugLinkHtml("library", data.slug, data.id)}
             <div style="display:flex;gap:8px;margin-top:6px;">
               <button class="edit-lib-category-btn cms-list-edit-btn" data-id="${data.id}" type="button">✏️ Edit</button>
-              <button class="delete-lib-category-btn cms-list-delete-btn" data-id="${data.id}" type="button">Delete</button>
+              ${isAll ? '' : `<button class="delete-lib-category-btn cms-list-delete-btn" data-id="${data.id}" type="button">Delete</button>`}
             </div>
           </div>
         </div>
@@ -2840,12 +2868,13 @@ async function loadLibCategoriesAdmin() {
         alert("Title and image required");
         return;
       }
-      await updateDoc(doc(db, "libraryCategories", id), {
+      await setDoc(doc(db, "libraryCategories", id), {
         title, slug, emoji, image,
         text, audioUrl,
-        order: orderVal ? Number(orderVal) : 0,
+        order: id === "all-library-category" ? -1 : (orderVal ? Number(orderVal) : 0),
+        isAllBox: id === "all-library-category",
         updatedAt: serverTimestamp()
-      });
+      }, { merge: true });
       const activeContentId = box.dataset.activeContentId;
       if (activeContentId) {
         await updateDoc(doc(db, "libraryContent", activeContentId), {
@@ -2861,6 +2890,10 @@ async function loadLibCategoriesAdmin() {
 
   list.querySelectorAll(".delete-lib-category-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
+      if (btn.dataset.id === "all-library-category") {
+        alert("సర్వ గ్రంథ సంపద (All-in-One) ప్రధాన కేటగిరీని తొలగించలేరు.");
+        return;
+      }
       if (!confirm("Delete this category?")) return;
       await deleteDoc(doc(db, "libraryCategories", btn.dataset.id));
       loadLibCategoriesAdmin(); loadLibCategoryOptions();
@@ -2874,10 +2907,27 @@ async function loadLibCategoryOptions() {
   const snapshot = await getDocs(collection(db, "libraryCategories"));
   let categories = [];
   snapshot.forEach(item => categories.push({ id: item.id, ...item.data() }));
-  categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  let hasAll = categories.some(c => c.id === "all-library-category" || c.slug === "all");
+  if (!hasAll) {
+    categories.unshift({
+      id: "all-library-category",
+      title: "సర్వ గ్రంథ సంపద (All Divine Content)",
+      emoji: "🕉️",
+      order: -1
+    });
+  }
+
+  categories.sort((a, b) => {
+    if (a.id === "all-library-category" || a.slug === "all" || a.isAllBox) return -1;
+    if (b.id === "all-library-category" || b.slug === "all" || b.isAllBox) return 1;
+    return (a.order || 0) - (b.order || 0);
+  });
+
   select.innerHTML = `<option value="">Select Category</option>`;
   categories.forEach(data => {
-    select.innerHTML += `<option value="${data.id}">${data.emoji ? data.emoji + " " : ""}${data.title}</option>`;
+    const isAll = data.id === "all-library-category" || data.slug === "all" || data.isAllBox;
+    select.innerHTML += `<option value="${data.id}">${data.emoji ? data.emoji + " " : ""}${data.title}${isAll ? " (⭐ All in One)" : ""}</option>`;
   });
 }
 
