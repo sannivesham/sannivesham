@@ -2202,6 +2202,18 @@ if (libCategoryImageBox) {
   });
 }
 
+const libCategoryAudioBox = document.getElementById("libCategoryAudioBox");
+if (libCategoryAudioBox) {
+  libCategoryAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile(libCategoryAudioBox);
+    if (!url) return;
+    libCategoryAudioBox.dataset.audio = url;
+    libCategoryAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const audioInput = document.getElementById("libCategoryAudioUrl");
+    if (audioInput) audioInput.value = url;
+  });
+}
+
 const saveLibCategoryBtn = document.getElementById("saveLibCategoryBtn");
 if (saveLibCategoryBtn) {
   attachAutoSlug("libCategoryTitle", "libCategorySlug");
@@ -2212,14 +2224,27 @@ if (saveLibCategoryBtn) {
     const emoji = document.getElementById("libCategoryEmoji").value.trim();
     const orderValue = document.getElementById("libCategoryOrder").value.trim();
     const image = libCategoryImageBox.dataset.image || "";
+    const text = document.getElementById("libCategoryText") ? document.getElementById("libCategoryText").value.trim() : "";
+    const audioUrl = document.getElementById("libCategoryAudioUrl")?.value.trim() || libCategoryAudioBox?.dataset.audio || "";
     if (!title || !image) { document.getElementById("libCategoryMessage").innerText = "Category title and image required"; return; }
-    await addDoc(collection(db, "libraryCategories"), { title, slug, emoji, image, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "libraryCategories"), {
+      title, slug, emoji, image,
+      text, audioUrl,
+      order: orderValue ? Number(orderValue) : Date.now(),
+      createdAt: serverTimestamp()
+    });
     document.getElementById("libCategoryTitle").value = "";
     if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libCategoryEmoji").value = "";
     document.getElementById("libCategoryOrder").value = "";
+    if (document.getElementById("libCategoryText")) document.getElementById("libCategoryText").value = "";
+    if (document.getElementById("libCategoryAudioUrl")) document.getElementById("libCategoryAudioUrl").value = "";
     libCategoryImageBox.dataset.image = "";
     libCategoryImageBox.innerHTML = `<span>＋ Category Image</span>`;
+    if (libCategoryAudioBox) {
+      libCategoryAudioBox.dataset.audio = "";
+      libCategoryAudioBox.innerHTML = `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio File)</span>`;
+    }
     document.getElementById("libCategoryMessage").innerText = "✅ Category saved";
     loadLibCategoriesAdmin(); loadLibCategoryOptions();
   });
@@ -2242,19 +2267,69 @@ async function loadLibCategoriesAdmin() {
             <h3 style="margin:0 0 4px;">${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
             ${renderSlugLinkHtml("library", data.slug, data.id)}
             <div style="display:flex;gap:8px;margin-top:6px;">
-              <button class="edit-lib-category-btn" data-id="${data.id}" type="button">✏️ Edit</button>
-              <button class="delete-lib-category-btn" data-id="${data.id}" type="button">Delete</button>
+              <button class="edit-lib-category-btn cms-list-edit-btn" data-id="${data.id}" type="button">✏️ Edit</button>
+              <button class="delete-lib-category-btn cms-list-delete-btn" data-id="${data.id}" type="button">Delete</button>
             </div>
           </div>
         </div>
-        <div class="general-inline-edit-box" id="libCatEdit-${data.id}" style="display:none;">
+
+        ${data.text ? `
+          <div style="margin:8px 0 4px;color:rgba(255,255,255,0.85);font-size:0.85rem;line-height:1.4;background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:8px;border-left:3px solid #ffd166;">
+            <strong>📝 సాహిత్యం / శ్లోకాలు:</strong>
+            <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(data.text.slice(0, 180))}${data.text.length > 180 ? '...' : ''}</p>
+          </div>
+        ` : ''}
+
+        <!-- CATEGORY AUDIO STATUS & QUICK UPLOAD -->
+        <div class="content-audio-card-box" style="margin:8px 0;">
+          ${data.audioUrl ? `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:240px;">
+                <span>🎵</span>
+                <span style="font-size:0.85rem;color:#ffd166;font-weight:700;">ఆడియో:</span>
+                <audio src="${data.audioUrl}" controls style="height:32px;flex:1;min-width:180px;"></audio>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button class="cat-quick-change-audio" data-id="${data.id}" type="button" style="padding:4px 10px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
+                <button class="cat-quick-remove-audio" data-id="${data.id}" type="button" style="padding:4px 8px;font-size:0.82rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌</button>
+              </div>
+            </div>
+          ` : `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">ఆడియో జతచేయబడలేదు (Optional)</span>
+              <button class="cat-quick-add-audio" data-id="${data.id}" type="button" style="padding:4px 12px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;">
+                🎵 ＋ Audio File జోడించండి
+              </button>
+            </div>
+          `}
+        </div>
+
+        <div class="general-inline-edit-box" id="libCatEdit-${data.id}" style="display:none;flex-direction:column;gap:10px;">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">విభాగం పేరు (Title):</label>
           <input class="lce-title" value="${data.title || ""}" placeholder="Category Title">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">Slug (URL):</label>
           <input class="lce-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug">
-          <input class="lce-emoji" value="${data.emoji || ""}" placeholder="Emoji (e.g. 📚)">
-          <input class="lce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">Emoji & Order:</label>
+          <div style="display:flex;gap:10px;">
+            <input class="lce-emoji" value="${data.emoji || ""}" placeholder="Emoji (e.g. 📚)" style="flex:1;">
+            <input class="lce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)" style="flex:1;">
+          </div>
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">Category Banner Image:</label>
           <div class="festival-card-upload-box lce-image-slot" data-image="${data.image || ""}">
             ${data.image ? `<img src="${data.image}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
           </div>
+
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">📝 పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text):</label>
+          <textarea class="lce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:130px;width:100%;">${data.text || ""}</textarea>
+
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:4px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 సంపూర్ణ ఆడియో (Audio File):</label>
+            <div class="cms-audio-upload-box lce-audio-box" data-audio="${data.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
+              ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`}
+            </div>
+            <input class="lce-audio-url" value="${data.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి">
+          </div>
+
           <div class="general-inline-edit-actions">
             <button class="save-lce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
             <button class="cancel-lce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
@@ -2287,6 +2362,36 @@ async function loadLibCategoriesAdmin() {
     });
   });
 
+  list.querySelectorAll(".lce-audio-box").forEach(slot => {
+    slot.addEventListener("click", async () => {
+      const url = await uploadAudioFile(slot);
+      if (!url) return;
+      slot.dataset.audio = url;
+      slot.innerHTML = `<audio src="${url}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+      const urlInput = slot.closest(".general-inline-edit-box").querySelector(".lce-audio-url");
+      if (urlInput) urlInput.value = url;
+    });
+  });
+
+  list.querySelectorAll(".cat-quick-add-audio, .cat-quick-change-audio").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const url = await uploadAudioFile(btn);
+      if (!url) return;
+      await updateDoc(doc(db, "libraryCategories", btn.dataset.id), { audioUrl: url, updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో విజయవంతంగా జోడించబడింది");
+      loadLibCategoriesAdmin();
+    });
+  });
+
+  list.querySelectorAll(".cat-quick-remove-audio").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ కేటగిరీ నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+      await updateDoc(doc(db, "libraryCategories", btn.dataset.id), { audioUrl: "", updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో తొలగించబడింది");
+      loadLibCategoriesAdmin();
+    });
+  });
+
   list.querySelectorAll(".save-lce-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       const box = btn.closest(".general-inline-edit-box");
@@ -2296,12 +2401,15 @@ async function loadLibCategoriesAdmin() {
       const emoji = box.querySelector(".lce-emoji").value.trim();
       const orderVal = box.querySelector(".lce-order").value.trim();
       const image = box.querySelector(".lce-image-slot").dataset.image || "";
+      const text = box.querySelector(".lce-text") ? box.querySelector(".lce-text").value.trim() : "";
+      const audioUrl = box.querySelector(".lce-audio-url")?.value.trim() || box.querySelector(".lce-audio-box")?.dataset.audio || "";
       if (!title || !image) {
         alert("Title and image required");
         return;
       }
       await updateDoc(doc(db, "libraryCategories", id), {
         title, slug, emoji, image,
+        text, audioUrl,
         order: orderVal ? Number(orderVal) : 0,
         updatedAt: serverTimestamp()
       });
@@ -2355,17 +2463,19 @@ if (saveLibSubcategoryBtn) {
     const title = document.getElementById("libSubcategoryTitle").value.trim();
     const slugInput = document.getElementById("libSubcategorySlug");
     const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
+    const text = document.getElementById("libSubcategoryText") ? document.getElementById("libSubcategoryText").value.trim() : "";
     const audioUrl = document.getElementById("libSubcatAudioUrl")?.value.trim() || libSubcatAudioBox?.dataset.audio || "";
     const orderValue = document.getElementById("libSubcategoryOrder").value.trim();
     if (!categoryId || !title) { document.getElementById("libSubcategoryMessage").innerText = "Category and subcategory title required"; return; }
     await addDoc(collection(db, "librarySubcategories"), {
-      categoryId, title, slug, audioUrl,
+      categoryId, title, slug, text, audioUrl,
       order: orderValue ? Number(orderValue) : Date.now(),
       createdAt: serverTimestamp()
     });
     document.getElementById("libSubcategoryTitle").value = "";
     if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libSubcategoryOrder").value = "";
+    if (document.getElementById("libSubcategoryText")) document.getElementById("libSubcategoryText").value = "";
     const subAudioInput = document.getElementById("libSubcatAudioUrl");
     if (subAudioInput) subAudioInput.value = "";
     if (libSubcatAudioBox) {
@@ -2415,6 +2525,13 @@ async function loadLibSubcategoriesAdmin() {
           </div>
           ${renderSlugLinkHtml("library", data.slug, data.id)}
 
+          ${data.text ? `
+            <div style="margin:8px 0 4px;color:rgba(255,255,255,0.85);font-size:0.85rem;line-height:1.4;background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:8px;border-left:3px solid #ffd166;">
+              <strong>📝 సాహిత్యం / శ్లోకాలు:</strong>
+              <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(data.text.slice(0, 180))}${data.text.length > 180 ? '...' : ''}</p>
+            </div>
+          ` : ''}
+
           <!-- SUBCATEGORY AUDIO STATUS & QUICK UPLOAD -->
           <div class="content-audio-card-box" style="margin:8px 0;">
             ${data.audioUrl ? `
@@ -2440,11 +2557,18 @@ async function loadLibSubcategoriesAdmin() {
           </div>
         </div>
 
-        <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" style="display:none;">
+        <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" style="display:none;flex-direction:column;gap:10px;">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">ప్రధాన విభాగం (Category):</label>
           <select class="lsce-category">${catOptions}</select>
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">ఉపవిభాగం పేరు (Title):</label>
           <input class="lsce-title" value="${data.title || ""}" placeholder="Subcategory Title">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">Slug (URL):</label>
           <input class="lsce-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">క్రమం (Order):</label>
           <input class="lsce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">📝 పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text):</label>
+          <textarea class="lsce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:130px;width:100%;">${data.text || ""}</textarea>
           
           <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:4px 0;">
             <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 సంపూర్ణ స్తోత్ర ఆడియో (Optional):</label>
@@ -2515,13 +2639,14 @@ async function loadLibSubcategoriesAdmin() {
       const title = box.querySelector(".lsce-title").value.trim();
       const slug = box.querySelector(".lsce-slug").value.trim() || slugify(title);
       const orderVal = box.querySelector(".lsce-order").value.trim();
+      const text = box.querySelector(".lsce-text") ? box.querySelector(".lsce-text").value.trim() : "";
       const audioUrl = box.querySelector(".lsce-audio-url").value.trim() || box.querySelector(".lsce-audio-box")?.dataset.audio || "";
       if (!categoryId || !title) {
         alert("Category and Title required");
         return;
       }
       await updateDoc(doc(db, "librarySubcategories", id), {
-        categoryId, title, slug, audioUrl,
+        categoryId, title, slug, text, audioUrl,
         order: orderVal ? Number(orderVal) : 0,
         updatedAt: serverTimestamp()
       });

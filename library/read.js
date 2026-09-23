@@ -123,6 +123,39 @@ async function loadContent() {
       }
     }
 
+    // 4. Fallback: Search libraryCategories by slug or ID
+    let categoryData = null;
+    if (!foundItem && !subcategoryData) {
+      const catQ = query(collection(db, "libraryCategories"), where("slug", "==", targetSlug));
+      const catSnap = await getDocs(catQ);
+      if (!catSnap.empty) {
+        const catDoc = catSnap.docs[0];
+        categoryData = { id: catDoc.id, ...catDoc.data() };
+      } else {
+        try {
+          const directCat = await getDoc(doc(db, "libraryCategories", targetSlug));
+          if (directCat.exists()) {
+            categoryData = { id: directCat.id, ...directCat.data() };
+          }
+        } catch (e) {}
+      }
+
+      if (!categoryData) {
+        const allCatSnap = await getDocs(collection(db, "libraryCategories"));
+        for (const d of allCatSnap.docs) {
+          const data = d.data();
+          const candidateSlug = data.slug || slugify(data.title);
+          if (candidateSlug === targetSlug) {
+            categoryData = { id: d.id, ...data };
+            if (!data.slug) {
+              updateDoc(doc(db, "libraryCategories", d.id), { slug: targetSlug }).catch(() => {});
+            }
+            break;
+          }
+        }
+      }
+    }
+
     // Fetch items for subcategory collection
     if (subcategoryData && itemsList.length === 0) {
       const allItemsQ = query(collection(db, "libraryContent"), where("subcategoryId", "==", subcategoryData.id));
@@ -131,10 +164,22 @@ async function loadContent() {
         itemsList.push({ id: d.id, ...d.data() });
       });
       itemsList.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      // If no separate content items exist but subcategory itself has text
+      if (itemsList.length === 0 && subcategoryData.text) {
+        itemsList = [subcategoryData];
+      }
+    }
+
+    // Fetch items for category
+    if (categoryData && itemsList.length === 0) {
+      if (categoryData.text) {
+        itemsList = [categoryData];
+      }
     }
 
     // If still not found
-    if (!foundItem && !subcategoryData) {
+    if (!foundItem && !subcategoryData && !categoryData) {
       readerTitle.innerText = "రచన కనుగొనబడలేదు";
       readerSubtitle.innerText = `"${targetSlug}" తో సరిపోలే స్తోత్రం లేదా గ్రంథం లేదు.`;
       readerVerses.innerHTML = `<p style="text-align:center;margin:30px 0;"><a href="index.html" class="reader-back-btn">← గ్రంథాలయ విభాగాలను చూడండి</a></p>`;
@@ -142,13 +187,13 @@ async function loadContent() {
     }
 
     // Determine Main Title and Category Info
-    const displayTitle = isSubcategoryCollection ? subcategoryData.title : foundItem.title;
-    const audioUrl = itemsList.find(i => i.audioUrl)?.audioUrl || subcategoryData?.audioUrl || null;
+    const displayTitle = isSubcategoryCollection ? subcategoryData.title : (categoryData ? categoryData.title : foundItem.title);
+    const audioUrl = itemsList.find(i => i.audioUrl)?.audioUrl || subcategoryData?.audioUrl || categoryData?.audioUrl || null;
 
     readerTitle.innerText = displayTitle;
     readerSubtitle.innerText = isSubcategoryCollection 
       ? `దివ్య శ్లోకాలు మరియు సంపూర్ణ సాహిత్యం` 
-      : `పవిత్ర పారాయణ గ్రంథం`;
+      : (categoryData ? `పవిత్ర పారాయణ సాహిత్యం` : `పవిత్ర పారాయణ గ్రంథం`);
     readerBreadcrumb.innerText = displayTitle;
 
     // Fetch parent category title for breadcrumb if available
@@ -162,6 +207,8 @@ async function loadContent() {
           readerBackBtn.href = `subcategories.html?category=${parentCatId}`;
         }
       } catch (e) {}
+    } else if (categoryData) {
+      readerBackBtn.href = `index.html`;
     }
 
     // Render Items / Verses with Real-Time Shloka Sync Support

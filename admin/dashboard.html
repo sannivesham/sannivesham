@@ -595,12 +595,22 @@
 
         <div class="add-event-box">
           <h2>కొత్త Library Category</h2>
-          <input type="text" id="libCategoryTitle" placeholder="Category Title (e.g. స్తోత్రాలు)">
-          <input type="text" id="libCategorySlug" placeholder="Category Slug (e.g. stotras)">
-          <input type="text" id="libCategoryEmoji" placeholder="Emoji (optional, e.g. 🕉️)">
+          <input type="text" id="libCategoryTitle" placeholder="Category Title (e.g. నామావళులు / స్తోత్రాలు)">
+          <input type="text" id="libCategorySlug" placeholder="Category Slug (e.g. naamaavlulu / stotras)">
+          <input type="text" id="libCategoryEmoji" placeholder="Emoji (optional, e.g. 🪔 / 🕉️)">
           <div id="libCategoryImageBox" class="festival-card-upload-box">
             <span>＋ Category Image</span>
           </div>
+          <textarea id="libCategoryText" placeholder="పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text - Optional)..." style="min-height:110px;"></textarea>
+
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:12px;padding:12px;margin:10px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.9rem;">🎵 ఈ కేటగిరీకి ఆడియో (Audio for Real-time Shloka Playback - Optional):</label>
+            <div id="libCategoryAudioBox" class="cms-audio-upload-box">
+              <span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio File)</span>
+            </div>
+            <input type="text" id="libCategoryAudioUrl" placeholder="లేదా ఆడియో URL నేరుగా ఇవ్వండి (Direct Link / Cloudinary)">
+          </div>
+
           <input type="number" id="libCategoryOrder" placeholder="Order (optional, lower shows first)">
           <button id="saveLibCategoryBtn">Save Category</button>
           <p id="libCategoryMessage"></p>
@@ -615,6 +625,7 @@
           </select>
           <input type="text" id="libSubcategoryTitle" placeholder="Subcategory Title (e.g. Ganesha Stotras)">
           <input type="text" id="libSubcategorySlug" placeholder="Subcategory Slug (e.g. ganesha-stotras)">
+          <textarea id="libSubcategoryText" placeholder="పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text - Optional)..." style="min-height:100px;"></textarea>
           <div id="libSubcatAudioBox" class="cms-audio-upload-box">
             <span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio - Optional)</span>
           </div>
