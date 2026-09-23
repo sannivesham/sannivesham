@@ -745,10 +745,15 @@ async function loadAdminFestivals() {
 }
 
 async function openFestivalInlineEditor(id) {
+  const editor = document.getElementById(`festivalEdit-${id}`);
+  if (!editor) return;
+  if (editor.innerHTML.trim() !== "") {
+    editor.innerHTML = "";
+    return;
+  }
   const snap = await getDoc(doc(db, "festivals", id));
   if (!snap.exists()) return;
   const festival = snap.data();
-  const editor = document.getElementById(`festivalEdit-${id}`);
 
   function sectionHTML(section = {}, index = "New") {
     return `
@@ -794,8 +799,11 @@ async function openFestivalInlineEditor(id) {
 
       <h3>Sections</h3>
       <div class="inline-sections-list">${sectionsHTML}</div>
-      <button class="add-inline-section-btn">+ Add Section</button>
-      <button class="save-inline-festival-btn">Save Changes</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+        <button class="add-inline-section-btn" type="button">+ Add Section</button>
+        <button class="save-inline-festival-btn" type="button">Save Changes</button>
+        <button class="cancel-inline-festival-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+      </div>
     </div>
   `;
 
@@ -819,6 +827,10 @@ async function openFestivalInlineEditor(id) {
   editor.querySelector(".add-inline-section-btn").addEventListener("click", () => {
     editor.querySelector(".inline-sections-list").insertAdjacentHTML("beforeend", sectionHTML({}, "New"));
     attachEditorEvents();
+  });
+
+  editor.querySelector(".cancel-inline-festival-btn").addEventListener("click", () => {
+    editor.innerHTML = "";
   });
 
   editor.querySelector(".parse-inline-bulk-btn").addEventListener("click", () => {
@@ -1309,13 +1321,63 @@ async function loadIthiCategories() {
 
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
-        ${data.image ? `<img src="${data.image}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : ""}
-        <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
+          ${data.image ? `<img src="${data.image}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : ""}
+          <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:12px;">(Order: ${data.order || 0})</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn ithi-cat-edit-btn" data-id="${d.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${d.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+      <div class="general-inline-edit-box" id="ithiCatEdit-${d.id}" style="display:none;">
+        <input class="ice-title" value="${data.title || ""}" placeholder="Category Title">
+        <input class="ice-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+        <div class="festival-card-upload-box ice-image-slot" data-image="${data.image || ""}">
+          ${data.image ? `<img src="${data.image}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
+        </div>
+        <div class="general-inline-edit-actions">
+          <button class="save-ice-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-ice-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#ithiCatEdit-${d.id}`);
+    const imgSlot = row.querySelector(".ice-image-slot");
+
+    row.querySelector(".ithi-cat-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-ice-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    imgSlot.addEventListener("click", async () => {
+      const url = await uploadImage();
+      if (!url) return;
+      imgSlot.dataset.image = url;
+      imgSlot.innerHTML = `<img src="${url}" style="max-height:120px;">`;
+    });
+    row.querySelector(".save-ice-btn").addEventListener("click", async () => {
+      const title = editBox.querySelector(".ice-title").value.trim();
+      const order = Number(editBox.querySelector(".ice-order").value) || 0;
+      const image = imgSlot.dataset.image || "";
+      if (!title) {
+        alert("Title is required");
+        return;
+      }
+      await updateDoc(doc(db, "ithihasaluCategories", d.id), {
+        title, order, image, updatedAt: serverTimestamp()
+      });
+      alert("✅ Category updated");
+      loadIthiCategories();
+    });
+
     row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
       if (!confirm("Delete this category?")) return;
       await deleteDoc(doc(db, "ithihasaluCategories", d.id));
@@ -1360,7 +1422,12 @@ async function loadIthiSubCategories() {
 
   const catSnap = await getDocs(collection(db, "ithihasaluCategories"));
   const catMap = {};
-  catSnap.forEach(d => { catMap[d.id] = d.data().title; });
+  const catList = [];
+  catSnap.forEach(d => {
+    catMap[d.id] = d.data().title;
+    catList.push({ id: d.id, ...d.data() });
+  });
+  catList.sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const q = query(collection(db, "ithihasaluSubCategories"), orderBy("order", "asc"));
   const snap = await getDocs(q);
@@ -1376,15 +1443,60 @@ async function loadIthiSubCategories() {
     if (shlokaSelect) shlokaSelect.innerHTML += `<option value="${d.id}">${label}</option>`;
     if (filterSelect) filterSelect.innerHTML += `<option value="${d.id}">${label}</option>`;
 
+    let catOptions = `<option value="">Select Category</option>`;
+    catList.forEach(c => {
+      catOptions += `<option value="${c.id}" ${c.id === data.categoryId ? "selected" : ""}>${c.title}</option>`;
+    });
+
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text">
-        <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
-        <span style="color:rgba(255,255,255,0.5);font-size:13px;"> (${catMap[data.categoryId] || "Unknown"})</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text">
+          <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+          <span style="color:rgba(255,255,255,0.5);font-size:13px;"> (${catMap[data.categoryId] || "Unknown"})</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:12px;">(Order: ${data.order || 0})</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn ithi-sub-edit-btn" data-id="${d.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${d.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+      <div class="general-inline-edit-box" id="ithiSubEdit-${d.id}" style="display:none;">
+        <select class="isce-category">${catOptions}</select>
+        <input class="isce-title" value="${data.title || ""}" placeholder="Sub Category Title">
+        <input class="isce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+        <div class="general-inline-edit-actions">
+          <button class="save-isce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-isce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#ithiSubEdit-${d.id}`);
+    row.querySelector(".ithi-sub-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-isce-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    row.querySelector(".save-isce-btn").addEventListener("click", async () => {
+      const categoryId = editBox.querySelector(".isce-category").value;
+      const title = editBox.querySelector(".isce-title").value.trim();
+      const order = Number(editBox.querySelector(".isce-order").value) || 0;
+      if (!categoryId || !title) {
+        alert("Category and Title required");
+        return;
+      }
+      await updateDoc(doc(db, "ithihasaluSubCategories", d.id), {
+        categoryId, title, order, updatedAt: serverTimestamp()
+      });
+      alert("✅ Sub Category updated");
+      loadIthiSubCategories();
+    });
+
     row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
       if (!confirm("Delete this sub category?")) return;
       await deleteDoc(doc(db, "ithihasaluSubCategories", d.id));
@@ -1497,13 +1609,20 @@ async function loadIthiShlokas(filterSubId = "") {
         <input class="ithi-e-number" value="${item.number || ""}" placeholder="Number" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
         <textarea class="ithi-e-shloka" placeholder="Shloka" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${item.shloka || ""}</textarea>
         <textarea class="ithi-e-explanation" placeholder="Explanation" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${item.explanation || ""}</textarea>
-        <button class="ithi-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <button class="ithi-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+          <button class="ithi-cancel-edit-btn" data-id="${item.id}" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:bold;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
       </div>
     `;
 
     row.querySelector(".ithi-edit-btn").addEventListener("click", () => {
       const box = document.getElementById(`ithiEdit-${item.id}`);
       box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+
+    row.querySelector(".ithi-cancel-edit-btn").addEventListener("click", () => {
+      document.getElementById(`ithiEdit-${item.id}`).style.display = "none";
     });
 
     row.querySelector(".ithi-delete-btn").addEventListener("click", async (e) => {
@@ -1529,7 +1648,7 @@ async function loadIthiShlokas(filterSubId = "") {
         explanation: box.querySelector(".ithi-e-explanation").value.trim(),
         updatedAt: serverTimestamp()
       });
-      alert("✅ Updated");
+      alert("✅ శ్లోకం updated");
       loadIthiShlokas(filterSubId);
     });
 
@@ -1606,13 +1725,69 @@ async function loadTempleCategories() {
  
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
-        ${data.cardImage ? `<img src="${data.cardImage}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : ""}
-        <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
+          ${data.cardImage ? `<img src="${data.cardImage}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">` : ""}
+          <span style="color:#ffd166;font-weight:bold;">${data.title}</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:12px;">(Order: ${data.order || 0})</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn" data-id="${d.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${d.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+      <div class="general-inline-edit-box" id="templeCatEdit-${d.id}" style="display:none;">
+        <input class="tce-title" value="${data.title || ""}" placeholder="Category Title">
+        <input class="tce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+        <div class="festival-card-upload-box tce-card-image" data-image="${data.cardImage || ""}">
+          ${data.cardImage ? `<img src="${data.cardImage}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
+        </div>
+        <div class="general-inline-edit-actions">
+          <button class="save-tce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-tce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#templeCatEdit-${d.id}`);
+    const imgSlot = row.querySelector(".tce-card-image");
+
+    row.querySelector(".cms-list-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+
+    row.querySelector(".cancel-tce-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+
+    imgSlot.addEventListener("click", async () => {
+      const url = await uploadImage();
+      if (!url) return;
+      imgSlot.dataset.image = url;
+      imgSlot.innerHTML = `<img src="${url}" style="max-height:120px;">`;
+    });
+
+    row.querySelector(".save-tce-btn").addEventListener("click", async () => {
+      const updatedTitle = editBox.querySelector(".tce-title").value.trim();
+      const updatedOrder = Number(editBox.querySelector(".tce-order").value) || 0;
+      const updatedImage = imgSlot.dataset.image || "";
+      if (!updatedTitle) {
+        alert("Category title is required");
+        return;
+      }
+      await updateDoc(doc(db, "templeCategories", d.id), {
+        title: updatedTitle,
+        order: updatedOrder,
+        cardImage: updatedImage,
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ Category updated");
+      loadTempleCategories();
+    });
+
     row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
       if (!confirm("Delete this category? Temples inside it will remain but become uncategorized.")) return;
       await deleteDoc(doc(db, "templeCategories", d.id));
@@ -1704,35 +1879,26 @@ if (saveTempleBtn) {
     const footerQuote = document.getElementById("templeFooterQuote").value.trim();
     const cardBox = document.getElementById("templeCardImageGrid");
     const cardImage = cardBox.dataset.image || "";
-    const sectionBoxes = document.querySelectorAll("#templeSectionsContainer .festival-section-box");
+    const sectionBoxes = document.querySelectorAll(".temple-section-box");
     const sections = [];
-    sectionBoxes.forEach(box => {
-      sections.push({
-        title: box.querySelector(".temple-section-title").value.trim(),
-        content: box.querySelector(".temple-section-content").value.trim(),
-        image: box.querySelector(".temple-section-image").dataset.image || "",
-        imgWidth: 75, imgHeight: 420, imgBrightness: 100, imgPosition: "center"
-      });
+    sectionBoxes.forEach((box) => {
+      const sectionTitle = box.querySelector(".temple-section-title").value.trim();
+      const sectionContent = box.querySelector(".temple-section-content").value.trim();
+      const sectionImage = box.querySelector(".section-image-slot").dataset.image || "";
+      if (sectionTitle || sectionContent || sectionImage) {
+        sections.push({ title: sectionTitle, content: sectionContent, image: sectionImage });
+      }
     });
- 
-    if (!categoryId) {
-      document.getElementById("templeMessage").innerText = "దయచేసి విభాగం ఎంచుకోండి";
-      return;
-    }
     if (!title || !cardImage || sections.length === 0) {
       document.getElementById("templeMessage").innerText = "దయచేసి దేవాలయం పేరు, కార్డ్ ఇమేజ్ మరియు కనీసం ఒక section జోడించండి";
       return;
     }
+    saveTempleBtn.disabled = true;
     await addDoc(collection(db, "temples"), { categoryId, title, slug, cardImage, footerQuote, sections, createdAt: serverTimestamp() });
     document.getElementById("templeMessage").innerText = "✅ దేవాలయం సేవ్ అయింది";
- 
-    document.getElementById("templeTitle").value = "";
     if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
-    document.getElementById("templeFooterQuote").value = "";
-    templeSectionsContainer.innerHTML = "";
-    cardBox.dataset.image = "";
-    cardBox.innerHTML = `<span>＋ Temple Card Image</span>`;
- 
+    document.getElementById("templeTitle").value = "";
+    saveTempleBtn.disabled = false;
     loadAdminTemples();
   });
 }
@@ -1766,7 +1932,7 @@ async function loadAdminTemples(filterCatId = "") {
       if (filterCatId && temple.categoryId !== filterCatId) return;
       count++;
       list.innerHTML += `
-        <div class="admin-event-card">
+        <div class="admin-event-card editable-festival-card">
           <img src="${temple.cardImage || ""}" alt="${temple.title || ""}">
           <div>
             <h3>${temple.title || "Untitled"}</h3>
@@ -1800,10 +1966,15 @@ async function loadAdminTemples(filterCatId = "") {
 }
  
 async function openTempleInlineEditor(id, filterCatId = "") {
+  const editor = document.getElementById(`templeEdit-${id}`);
+  if (!editor) return;
+  if (editor.innerHTML.trim() !== "") {
+    editor.innerHTML = "";
+    return;
+  }
   const snap = await getDoc(doc(db, "temples", id));
   if (!snap.exists()) return;
   const temple = snap.data();
-  const editor = document.getElementById(`templeEdit-${id}`);
  
   const catSnap = await getDocs(query(collection(db, "templeCategories"), orderBy("order", "asc")));
   let categoryOptionsHTML = `<option value="">విభాగం ఎంచుకోండి</option>`;
@@ -1857,8 +2028,11 @@ async function openTempleInlineEditor(id, filterCatId = "") {
  
       <h3>Sections</h3>
       <div class="inline-temple-sections-list">${sectionsHTML}</div>
-      <button class="add-inline-temple-section-btn">+ Add Section</button>
-      <button class="save-inline-temple-btn">Save Changes</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+        <button class="add-inline-temple-section-btn" type="button">+ Add Section</button>
+        <button class="save-inline-temple-btn" type="button">Save Changes</button>
+        <button class="cancel-inline-temple-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+      </div>
     </div>
   `;
  
@@ -1882,6 +2056,10 @@ async function openTempleInlineEditor(id, filterCatId = "") {
   editor.querySelector(".add-inline-temple-section-btn").addEventListener("click", () => {
     editor.querySelector(".inline-temple-sections-list").insertAdjacentHTML("beforeend", sectionHTML({}, "New"));
     attachTempleEditorEvents();
+  });
+
+  editor.querySelector(".cancel-inline-temple-btn").addEventListener("click", () => {
+    editor.innerHTML = "";
   });
  
   editor.querySelector(".parse-inline-temple-bulk-btn").addEventListener("click", () => {
@@ -1975,16 +2153,82 @@ async function loadLibCategoriesAdmin() {
   list.innerHTML = "";
   categories.forEach(data => {
     list.innerHTML += `
-      <div class="admin-event-card">
-        <img src="${data.image}" alt="${data.title}">
-        <div>
-          <h3>${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
-          ${renderSlugLinkHtml("library", data.slug, data.id)}
-          <button class="delete-lib-category-btn" data-id="${data.id}">Delete</button>
+      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <img src="${data.image}" alt="${data.title}" style="width:60px;height:60px;object-fit:cover;border-radius:10px;">
+          <div style="flex:1;">
+            <h3 style="margin:0 0 4px;">${data.emoji ? data.emoji + " " : ""}${data.title}</h3>
+            ${renderSlugLinkHtml("library", data.slug, data.id)}
+            <div style="display:flex;gap:8px;margin-top:6px;">
+              <button class="edit-lib-category-btn" data-id="${data.id}" type="button">✏️ Edit</button>
+              <button class="delete-lib-category-btn" data-id="${data.id}" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="general-inline-edit-box" id="libCatEdit-${data.id}" style="display:none;">
+          <input class="lce-title" value="${data.title || ""}" placeholder="Category Title">
+          <input class="lce-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug">
+          <input class="lce-emoji" value="${data.emoji || ""}" placeholder="Emoji (e.g. 📚)">
+          <input class="lce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+          <div class="festival-card-upload-box lce-image-slot" data-image="${data.image || ""}">
+            ${data.image ? `<img src="${data.image}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
+          </div>
+          <div class="general-inline-edit-actions">
+            <button class="save-lce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+            <button class="cancel-lce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+          </div>
         </div>
       </div>
     `;
   });
+
+  list.querySelectorAll(".edit-lib-category-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = document.getElementById(`libCatEdit-${btn.dataset.id}`);
+      if (box) box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+  });
+
+  list.querySelectorAll(".cancel-lce-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = btn.closest(".general-inline-edit-box");
+      if (box) box.style.display = "none";
+    });
+  });
+
+  list.querySelectorAll(".lce-image-slot").forEach(slot => {
+    slot.addEventListener("click", async () => {
+      const url = await uploadImage();
+      if (!url) return;
+      slot.dataset.image = url;
+      slot.innerHTML = `<img src="${url}" style="max-height:120px;">`;
+    });
+  });
+
+  list.querySelectorAll(".save-lce-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const box = btn.closest(".general-inline-edit-box");
+      const id = box.id.replace("libCatEdit-", "");
+      const title = box.querySelector(".lce-title").value.trim();
+      const slug = box.querySelector(".lce-slug").value.trim() || slugify(title);
+      const emoji = box.querySelector(".lce-emoji").value.trim();
+      const orderVal = box.querySelector(".lce-order").value.trim();
+      const image = box.querySelector(".lce-image-slot").dataset.image || "";
+      if (!title || !image) {
+        alert("Title and image required");
+        return;
+      }
+      await updateDoc(doc(db, "libraryCategories", id), {
+        title, slug, emoji, image,
+        order: orderVal ? Number(orderVal) : 0,
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ Category updated");
+      loadLibCategoriesAdmin();
+      loadLibCategoryOptions();
+    });
+  });
+
   list.querySelectorAll(".delete-lib-category-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("Delete this category?")) return;
@@ -2033,24 +2277,86 @@ async function loadLibSubcategoriesAdmin() {
   if (!list) return;
   const catSnap = await getDocs(collection(db, "libraryCategories"));
   const categoryMap = {};
-  catSnap.forEach(item => { categoryMap[item.id] = item.data().title; });
+  const catList = [];
+  catSnap.forEach(item => {
+    categoryMap[item.id] = item.data().title;
+    catList.push({ id: item.id, ...item.data() });
+  });
+  catList.sort((a, b) => (a.order || 0) - (b.order || 0));
+
   const snapshot = await getDocs(collection(db, "librarySubcategories"));
   let subcategories = [];
   snapshot.forEach(item => subcategories.push({ id: item.id, ...item.data() }));
   subcategories.sort((a, b) => (a.order || 0) - (b.order || 0));
   list.innerHTML = "";
   subcategories.forEach(data => {
+    let catOptions = `<option value="">Select Category</option>`;
+    catList.forEach(c => {
+      catOptions += `<option value="${c.id}" ${c.id === data.categoryId ? "selected" : ""}>${c.emoji ? c.emoji + " " : ""}${c.title}</option>`;
+    });
+
     list.innerHTML += `
-      <div class="admin-event-card">
+      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
         <div>
           <h3>${data.title}</h3>
           <p>Category: ${categoryMap[data.categoryId] || "Unknown"}</p>
           ${renderSlugLinkHtml("library", data.slug, data.id)}
-          <button class="delete-lib-subcategory-btn" data-id="${data.id}">Delete</button>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="edit-lib-subcategory-btn" data-id="${data.id}" type="button">✏️ Edit</button>
+            <button class="delete-lib-subcategory-btn" data-id="${data.id}" type="button">Delete</button>
+          </div>
+        </div>
+        <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" style="display:none;">
+          <select class="lsce-category">${catOptions}</select>
+          <input class="lsce-title" value="${data.title || ""}" placeholder="Subcategory Title">
+          <input class="lsce-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug">
+          <input class="lsce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+          <div class="general-inline-edit-actions">
+            <button class="save-lsce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+            <button class="cancel-lsce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+          </div>
         </div>
       </div>
     `;
   });
+
+  list.querySelectorAll(".edit-lib-subcategory-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = document.getElementById(`libSubcatEdit-${btn.dataset.id}`);
+      if (box) box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+  });
+
+  list.querySelectorAll(".cancel-lsce-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = btn.closest(".general-inline-edit-box");
+      if (box) box.style.display = "none";
+    });
+  });
+
+  list.querySelectorAll(".save-lsce-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const box = btn.closest(".general-inline-edit-box");
+      const id = box.id.replace("libSubcatEdit-", "");
+      const categoryId = box.querySelector(".lsce-category").value;
+      const title = box.querySelector(".lsce-title").value.trim();
+      const slug = box.querySelector(".lsce-slug").value.trim() || slugify(title);
+      const orderVal = box.querySelector(".lsce-order").value.trim();
+      if (!categoryId || !title) {
+        alert("Category and Title required");
+        return;
+      }
+      await updateDoc(doc(db, "librarySubcategories", id), {
+        categoryId, title, slug,
+        order: orderVal ? Number(orderVal) : 0,
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ Subcategory updated");
+      loadLibSubcategoriesAdmin();
+      loadLibSubcategoryOptions();
+    });
+  });
+
   list.querySelectorAll(".delete-lib-subcategory-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("Delete this subcategory?")) return;
@@ -2106,7 +2412,11 @@ async function loadLibContentAdmin() {
   if (!list) return;
   const subSnap = await getDocs(collection(db, "librarySubcategories"));
   const subMap = {};
-  subSnap.forEach(item => { subMap[item.id] = item.data().title; });
+  const subList = [];
+  subSnap.forEach(item => {
+    subMap[item.id] = item.data().title;
+    subList.push({ id: item.id, ...item.data() });
+  });
   const snapshot = await getDocs(collection(db, "libraryContent"));
   let items = [];
   snapshot.forEach(item => items.push({ id: item.id, ...item.data() }));
@@ -2121,15 +2431,15 @@ async function loadLibContentAdmin() {
           ${renderSlugLinkHtml("library", data.slug, data.id)}
           <p>${(data.text || "").slice(0, 80)}${data.text && data.text.length > 80 ? "..." : ""}</p>
           ${data.audioUrl ? `<p>🔊 Audio linked</p>` : ""}
-          <button class="edit-lib-content-btn" data-id="${data.id}">Edit</button>
-          <button class="delete-lib-content-btn" data-id="${data.id}">Delete</button>
+          <button class="edit-lib-content-btn" data-id="${data.id}" type="button">Edit</button>
+          <button class="delete-lib-content-btn" data-id="${data.id}" type="button">Delete</button>
           <div class="lib-content-inline-editor" id="libContentEdit-${data.id}"></div>
         </div>
       </div>
     `;
   });
   list.querySelectorAll(".edit-lib-content-btn").forEach(btn => {
-    btn.addEventListener("click", () => openLibContentInlineEditor(btn.dataset.id, items));
+    btn.addEventListener("click", () => openLibContentInlineEditor(btn.dataset.id, items, subList));
   });
   list.querySelectorAll(".delete-lib-content-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -2139,12 +2449,29 @@ async function loadLibContentAdmin() {
   });
 }
 
-function openLibContentInlineEditor(id, items) {
+async function openLibContentInlineEditor(id, items, subList = []) {
+  const editor = document.getElementById(`libContentEdit-${id}`);
+  if (!editor) return;
+  if (editor.innerHTML.trim() !== "") {
+    editor.innerHTML = "";
+    return;
+  }
   const data = items.find(item => item.id === id);
   if (!data) return;
-  const editor = document.getElementById(`libContentEdit-${id}`);
+
+  if (!subList.length) {
+    const subSnap = await getDocs(collection(db, "librarySubcategories"));
+    subSnap.forEach(item => subList.push({ id: item.id, ...item.data() }));
+  }
+
+  let subOptions = `<option value="">Select Subcategory</option>`;
+  subList.forEach(s => {
+    subOptions += `<option value="${s.id}" ${s.id === data.subcategoryId ? "selected" : ""}>${s.title}</option>`;
+  });
+
   editor.innerHTML = `
     <div class="festival-edit-panel">
+      <select class="edit-lib-content-subcat" style="width:100%;padding:10px;border-radius:10px;background:rgba(30,20,10,0.9);color:white;border:1px solid rgba(255,209,102,0.3);margin-bottom:8px;">${subOptions}</select>
       <input class="edit-lib-content-title" value="${data.title || ""}" placeholder="Title">
       <input class="edit-lib-content-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug / Clean URL (e.g. hanuman-chalisa)">
       <textarea class="edit-lib-content-text" placeholder="Telugu Text">${data.text || ""}</textarea>
@@ -2152,15 +2479,25 @@ function openLibContentInlineEditor(id, items) {
       <div style="font-size:0.78rem;color:#ffd166;margin:4px 0 8px;">
         💡 <em>రియల్-టైమ్ సింక్: టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు [0:15], [0:40] లాగా టైమింగ్స్ ఇవ్వవచ్చు లేదా ఆటో-సింక్ వాడుకోవచ్చు.</em>
       </div>
-      <button class="save-lib-content-edit-btn">Save Changes</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <button class="save-lib-content-edit-btn" type="button">Save Changes</button>
+        <button class="cancel-lib-content-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+      </div>
     </div>
   `;
+
+  editor.querySelector(".cancel-lib-content-edit-btn").addEventListener("click", () => {
+    editor.innerHTML = "";
+  });
+
   editor.querySelector(".save-lib-content-edit-btn").addEventListener("click", async () => {
     const updatedTitle = editor.querySelector(".edit-lib-content-title").value.trim();
     const updatedSlug = editor.querySelector(".edit-lib-content-slug")?.value.trim() || slugify(updatedTitle);
+    const updatedSub = editor.querySelector(".edit-lib-content-subcat").value;
     await updateDoc(doc(db, "libraryContent", id), {
       title: updatedTitle,
       slug: updatedSlug,
+      subcategoryId: updatedSub || data.subcategoryId,
       text: editor.querySelector(".edit-lib-content-text").value.trim(),
       audioUrl: editor.querySelector(".edit-lib-content-audio").value.trim(),
       updatedAt: serverTimestamp()
@@ -2304,19 +2641,81 @@ async function loadSlokaCategoriesAdmin() {
   snapshot.forEach(item => {
     const data = item.data();
     list.innerHTML += `
-      <div class="admin-event-card">
-        <img src="${data.cardImage}" alt="${data.title}">
-        <div>
-          <h3>${data.title}</h3>
-          <button class="delete-sloka-category-btn" data-id="${item.id}">Delete</button>
+      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <img src="${data.cardImage}" alt="${data.title}" style="width:60px;height:60px;object-fit:cover;border-radius:10px;">
+          <div style="flex:1;">
+            <h3 style="margin:0 0 6px;">${data.title}</h3>
+            <div style="display:flex;gap:8px;">
+              <button class="edit-sloka-category-btn" data-id="${item.id}" type="button">✏️ Edit</button>
+              <button class="delete-sloka-category-btn" data-id="${item.id}" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="general-inline-edit-box" id="slokaCatEdit-${item.id}" style="display:none;">
+          <input class="sce-title" value="${data.title || ""}" placeholder="Category Title">
+          <div class="festival-card-upload-box sce-card-image" data-image="${data.cardImage || ""}">
+            ${data.cardImage ? `<img src="${data.cardImage}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
+          </div>
+          <div class="general-inline-edit-actions">
+            <button class="save-sce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+            <button class="cancel-sce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+          </div>
         </div>
       </div>
     `;
   });
-  document.querySelectorAll(".delete-sloka-category-btn").forEach(btn => {
+
+  list.querySelectorAll(".edit-sloka-category-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = document.getElementById(`slokaCatEdit-${btn.dataset.id}`);
+      if (box) box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+  });
+
+  list.querySelectorAll(".cancel-sce-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = btn.closest(".general-inline-edit-box");
+      if (box) box.style.display = "none";
+    });
+  });
+
+  list.querySelectorAll(".sce-card-image").forEach(slot => {
+    slot.addEventListener("click", async () => {
+      const url = await uploadImage();
+      if (!url) return;
+      slot.dataset.image = url;
+      slot.innerHTML = `<img src="${url}" style="max-height:120px;">`;
+    });
+  });
+
+  list.querySelectorAll(".save-sce-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const box = btn.closest(".general-inline-edit-box");
+      const id = box.id.replace("slokaCatEdit-", "");
+      const title = box.querySelector(".sce-title").value.trim();
+      const cardImage = box.querySelector(".sce-card-image").dataset.image || "";
+      if (!title || !cardImage) {
+        alert("Title and image required");
+        return;
+      }
+      await updateDoc(doc(db, "slokaCategories", id), {
+        title, cardImage, updatedAt: serverTimestamp()
+      });
+      alert("✅ Sloka category updated");
+      loadSlokaCategoriesAdmin();
+      loadSlokaDirectCategories();
+      loadSlokasAdmin();
+    });
+  });
+
+  list.querySelectorAll(".delete-sloka-category-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("Delete this category?")) return;
-      await deleteDoc(doc(db, "slokaCategories", btn.dataset.id)); loadSlokaCategoriesAdmin();
+      await deleteDoc(doc(db, "slokaCategories", btn.dataset.id));
+      loadSlokaCategoriesAdmin();
+      loadSlokaDirectCategories();
+      loadSlokasAdmin();
     });
   });
 }
@@ -2379,13 +2778,16 @@ async function loadSlokasAdmin() {
                 <div>
                   <h3>${s.number || ""}</h3>
                   <p>${s.sloka || ""}</p>
-                  <button class="edit-sloka-btn" data-id="${s.id}">Edit</button>
-                  <button class="delete-sloka-btn" data-id="${s.id}">Delete</button>
+                  <button class="edit-sloka-btn" data-id="${s.id}" type="button">Edit</button>
+                  <button class="delete-sloka-btn" data-id="${s.id}" type="button">Delete</button>
                   <div class="sloka-edit-box hide" id="slokaEdit-${s.id}">
                     <input type="text" class="edit-sloka-number" value="${s.number || ""}" placeholder="Sloka Number">
                     <textarea class="edit-sloka-text" placeholder="Sloka Text">${s.sloka || ""}</textarea>
                     <textarea class="edit-sloka-telugu" placeholder="Telugu Meaning">${s.telugu || ""}</textarea>
-                    <button class="save-sloka-edit-btn" data-id="${s.id}">Save Changes</button>
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                      <button class="save-sloka-edit-btn" data-id="${s.id}" type="button">Save Changes</button>
+                      <button class="cancel-sloka-edit-btn" data-id="${s.id}" type="button" style="padding:10px 16px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2404,6 +2806,9 @@ async function loadSlokasAdmin() {
   });
   document.querySelectorAll(".edit-sloka-btn").forEach(btn => {
     btn.addEventListener("click", () => document.getElementById(`slokaEdit-${btn.dataset.id}`).classList.toggle("hide"));
+  });
+  document.querySelectorAll(".cancel-sloka-edit-btn").forEach(btn => {
+    btn.addEventListener("click", () => document.getElementById(`slokaEdit-${btn.dataset.id}`).classList.add("hide"));
   });
   document.querySelectorAll(".save-sloka-edit-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -2526,10 +2931,15 @@ async function loadAdminVideos() {
 }
 
 async function openVideoInlineEditor(id) {
+  const editor = document.getElementById(`videoEdit-${id}`);
+  if (!editor) return;
+  if (editor.innerHTML.trim() !== "") {
+    editor.innerHTML = "";
+    return;
+  }
   const snap = await getDoc(doc(db, "videos", id));
   if (!snap.exists()) return;
   const data = snap.data();
-  const editor = document.getElementById(`videoEdit-${id}`);
   editor.innerHTML = `
     <div class="festival-edit-panel">
       <input class="inline-video-title" value="${data.title || ""}" placeholder="Video Title">
@@ -2539,9 +2949,15 @@ async function openVideoInlineEditor(id) {
       <div class="festival-card-upload-box inline-video-file" data-video="${data.videoUrl || ""}">
         ${data.videoUrl ? `<video src="${data.videoUrl}" style="width:100%;max-height:180px;" controls></video>` : `<span>＋ Select Video File</span>`}
       </div>
-      <button class="save-inline-video-btn">Save Changes</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <button class="save-inline-video-btn" type="button">Save Changes</button>
+        <button class="cancel-inline-video-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+      </div>
     </div>
   `;
+  editor.querySelector(".cancel-inline-video-btn").addEventListener("click", () => {
+    editor.innerHTML = "";
+  });
   editor.querySelector(".inline-video-card-image").addEventListener("click", async (e) => {
     const url = await uploadImage(); if (!url) return;
     e.currentTarget.dataset.image = url; e.currentTarget.innerHTML = `<img src="${url}">`;
@@ -2840,18 +3256,76 @@ async function loadQotdList() {
   items.sort((a, b) => a.id < b.id ? -1 : 1);
   listBox.innerHTML = "";
   items.forEach(item => {
+    const opts = item.options || [];
+    const correctIdx = item.correct ?? 0;
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text">
-        <span class="cms-list-item-date">${item.id}</span> ${item.question || ""}
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text">
+          <span class="cms-list-item-date" style="color:#ffd166;font-weight:bold;">${item.id}</span>: ${item.question || ""}
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn qotd-edit-btn" data-id="${item.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${item.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${item.id}">Delete</button>
+      <div class="general-inline-edit-box" id="qotdEdit-${item.id}" style="display:none;">
+        <input class="q-edit-question" value="${item.question || ""}" placeholder="ప్రశ్న (Question)">
+        <input class="q-edit-opt0" value="${opts[0] || ""}" placeholder="Option 1">
+        <input class="q-edit-opt1" value="${opts[1] || ""}" placeholder="Option 2">
+        <input class="q-edit-opt2" value="${opts[2] || ""}" placeholder="Option 3">
+        <input class="q-edit-opt3" value="${opts[3] || ""}" placeholder="Option 4">
+        <label style="font-size:0.85rem;color:#ffd166;">సరైన సమాధానం (Correct Option):</label>
+        <select class="q-edit-correct" style="padding:10px;border-radius:10px;background:rgba(30,20,10,0.9);color:white;border:1px solid rgba(255,209,102,0.3);">
+          <option value="0" ${correctIdx === 0 ? "selected" : ""}>Option 1</option>
+          <option value="1" ${correctIdx === 1 ? "selected" : ""}>Option 2</option>
+          <option value="2" ${correctIdx === 2 ? "selected" : ""}>Option 3</option>
+          <option value="3" ${correctIdx === 3 ? "selected" : ""}>Option 4</option>
+        </select>
+        <div class="general-inline-edit-actions">
+          <button class="save-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#qotdEdit-${item.id}`);
+    row.querySelector(".qotd-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-qotd-edit-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    row.querySelector(".save-qotd-edit-btn").addEventListener("click", async () => {
+      const question = editBox.querySelector(".q-edit-question").value.trim();
+      const options = [
+        editBox.querySelector(".q-edit-opt0").value.trim(),
+        editBox.querySelector(".q-edit-opt1").value.trim(),
+        editBox.querySelector(".q-edit-opt2").value.trim(),
+        editBox.querySelector(".q-edit-opt3").value.trim()
+      ];
+      const correct = parseInt(editBox.querySelector(".q-edit-correct").value);
+      if (!question || options.some(o => !o)) {
+        alert("Please fill question and all 4 options");
+        return;
+      }
+      await setDoc(doc(db, "qotd", item.id), {
+        question, options, correct, updatedAt: serverTimestamp()
+      }, { merge: true });
+      alert("✅ Question updated for " + item.id);
+      loadQotdList();
+    });
+
     listBox.appendChild(row);
   });
   listBox.querySelectorAll(".cms-list-delete-btn").forEach(btn => {
-    btn.addEventListener("click", async () => { await deleteDoc(doc(db, "qotd", btn.dataset.id)); loadQotdList(); });
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ ప్రశ్న డిలీట్ చేయాలా?")) return;
+      await deleteDoc(doc(db, "qotd", btn.dataset.id)); loadQotdList();
+    });
   });
 }
 loadQotdList();
@@ -2885,16 +3359,54 @@ async function loadWordList() {
   items.forEach(item => {
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text">
-        <span class="cms-list-item-date">${item.id}</span> ${item.text || ""}
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text">
+          <span class="cms-list-item-date" style="color:#ffd166;font-weight:bold;">${item.id}</span>: ${item.text || ""}
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn word-edit-btn" data-id="${item.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${item.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${item.id}">Delete</button>
+      <div class="general-inline-edit-box" id="wordEdit-${item.id}" style="display:none;">
+        <textarea class="w-edit-text" placeholder="Word & Meaning" style="min-height:70px;">${item.text || ""}</textarea>
+        <div class="general-inline-edit-actions">
+          <button class="save-word-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-word-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#wordEdit-${item.id}`);
+    row.querySelector(".word-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-word-edit-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    row.querySelector(".save-word-edit-btn").addEventListener("click", async () => {
+      const text = editBox.querySelector(".w-edit-text").value.trim();
+      if (!text) {
+        alert("Please enter a word/sentence");
+        return;
+      }
+      await setDoc(doc(db, "wordOfDay", item.id), {
+        text, updatedAt: serverTimestamp()
+      }, { merge: true });
+      alert("✅ Word updated for " + item.id);
+      loadWordList();
+    });
+
     listBox.appendChild(row);
   });
   listBox.querySelectorAll(".cms-list-delete-btn").forEach(btn => {
-    btn.addEventListener("click", async () => { await deleteDoc(doc(db, "wordOfDay", btn.dataset.id)); loadWordList(); });
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ పదం డిలీట్ చేయాలా?")) return;
+      await deleteDoc(doc(db, "wordOfDay", btn.dataset.id)); loadWordList();
+    });
   });
 }
 loadWordList();
@@ -2949,10 +3461,53 @@ async function loadStreamCats() {
 
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text">${data.emoji || ""} ${data.name}</div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text">
+          <span style="font-size:1.2rem;margin-right:6px;">${data.emoji || "🎬"}</span>
+          <strong style="color:#ffd166;">${data.name}</strong>
+          <span style="font-size:12px;color:rgba(255,255,255,0.4);margin-left:8px;">(Order: ${data.order || 0})</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn stream-cat-edit-btn" data-id="${d.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${d.id}" type="button">Delete</button>
+        </div>
+      </div>
+      <div class="general-inline-edit-box" id="streamCatEdit-${d.id}" style="display:none;">
+        <input class="stce-name" value="${data.name || ""}" placeholder="Category Name">
+        <input class="stce-emoji" value="${data.emoji || ""}" placeholder="Emoji (e.g. 🙏)">
+        <input class="stce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+        <div class="general-inline-edit-actions">
+          <button class="save-stce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-stce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#streamCatEdit-${d.id}`);
+    row.querySelector(".stream-cat-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-stce-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    row.querySelector(".save-stce-btn").addEventListener("click", async () => {
+      const name = editBox.querySelector(".stce-name").value.trim();
+      const emoji = editBox.querySelector(".stce-emoji").value.trim();
+      const order = Number(editBox.querySelector(".stce-order").value) || 0;
+      if (!name) {
+        alert("Category name required");
+        return;
+      }
+      await updateDoc(doc(db, "streamCategories", d.id), {
+        name, emoji, order, updatedAt: serverTimestamp()
+      });
+      alert("✅ Category updated");
+      loadStreamCats();
+    });
+
     row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
       if (!confirm("Delete?")) return;
       await deleteDoc(doc(db, "streamCategories", d.id));
@@ -3071,13 +3626,20 @@ async function loadStreamVideos(filterCatId = "") {
           <option value="free" ${item.access === "free" ? "selected" : ""}>Free</option>
           <option value="paid" ${item.access === "paid" ? "selected" : ""}>Paid (Premium)</option>
         </select>
-        <button class="stream-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <button class="stream-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+          <button class="stream-cancel-edit-btn" data-id="${item.id}" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:bold;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
       </div>
     `;
 
     row.querySelector(".stream-edit-btn").addEventListener("click", () => {
       const box = document.getElementById(`streamEdit-${item.id}`);
       box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+
+    row.querySelector(".stream-cancel-edit-btn").addEventListener("click", () => {
+      document.getElementById(`streamEdit-${item.id}`).style.display = "none";
     });
 
     row.querySelector(".stream-delete-btn").addEventListener("click", async () => {
@@ -3215,13 +3777,65 @@ async function loadPoojaGods() {
 
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
     row.innerHTML = `
-      <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
-        ${data.image ? `<img src="${data.image}" style="width:50px;height:50px;object-fit:cover;border-radius:50%;border:1px solid rgba(255,209,102,0.4);">` : `<span style="font-size:2rem;">${data.emoji || "🛕"}</span>`}
-        <span style="color:#ffd166;font-weight:bold;">${data.name}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+        <div class="cms-list-item-text" style="display:flex;align-items:center;gap:12px;">
+          ${data.image ? `<img src="${data.image}" style="width:50px;height:50px;object-fit:cover;border-radius:50%;border:1px solid rgba(255,209,102,0.4);">` : `<span style="font-size:2rem;">${data.emoji || "🛕"}</span>`}
+          <span style="color:#ffd166;font-weight:bold;">${data.name}</span>
+          <span style="font-size:12px;color:rgba(255,255,255,0.4);margin-left:8px;">(Order: ${data.order || 0})</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="cms-list-edit-btn pooja-god-edit-btn" data-id="${d.id}" type="button">✏️ Edit</button>
+          <button class="cms-list-delete-btn" data-id="${d.id}" type="button">Delete</button>
+        </div>
       </div>
-      <button class="cms-list-delete-btn" data-id="${d.id}">Delete</button>
+      <div class="general-inline-edit-box" id="poojaGodEdit-${d.id}" style="display:none;">
+        <input class="pge-name" value="${data.name || ""}" placeholder="దేవుడి పేరు (Name)">
+        <input class="pge-emoji" value="${data.emoji || ""}" placeholder="Emoji (e.g. 🐘)">
+        <input class="pge-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+        <div class="festival-card-upload-box pge-image-slot" data-image="${data.image || ""}">
+          ${data.image ? `<img src="${data.image}" style="max-height:120px;">` : `<span>＋ దేవుడి ఫోటో</span>`}
+        </div>
+        <div class="general-inline-edit-actions">
+          <button class="save-pge-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+          <button class="cancel-pge-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+        </div>
+      </div>
     `;
+
+    const editBox = row.querySelector(`#poojaGodEdit-${d.id}`);
+    const imgSlot = row.querySelector(".pge-image-slot");
+
+    row.querySelector(".pooja-god-edit-btn").addEventListener("click", () => {
+      editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+    });
+    row.querySelector(".cancel-pge-btn").addEventListener("click", () => {
+      editBox.style.display = "none";
+    });
+    imgSlot.addEventListener("click", async () => {
+      const url = await uploadImage();
+      if (!url) return;
+      imgSlot.dataset.image = url;
+      imgSlot.innerHTML = `<img src="${url}" style="max-height:120px;">`;
+    });
+    row.querySelector(".save-pge-btn").addEventListener("click", async () => {
+      const name = editBox.querySelector(".pge-name").value.trim();
+      const emoji = editBox.querySelector(".pge-emoji").value.trim();
+      const order = Number(editBox.querySelector(".pge-order").value) || 0;
+      const image = imgSlot.dataset.image || "";
+      if (!name) {
+        alert("Name is required");
+        return;
+      }
+      await updateDoc(doc(db, "poojaGods", d.id), {
+        name, emoji, order, image, updatedAt: serverTimestamp()
+      });
+      alert("✅ దేవుడు updated");
+      loadPoojaGods();
+    });
+
     row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
       if (!confirm("Delete this god?")) return;
       await deleteDoc(doc(db, "poojaGods", d.id));
@@ -3326,13 +3940,20 @@ async function loadPoojaRituals(filterGodId = "") {
           <input class="p-edit-emoji" value="${ritual.emoji || ""}" placeholder="Emoji" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
           <textarea class="p-edit-mantra" placeholder="Mantra Text" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${ritual.mantraText || ""}</textarea>
           <input class="p-edit-audio" value="${ritual.audioUrl || ""}" placeholder="Audio URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
-          <button class="pooja-save-edit-btn" data-godid="${god.id}" data-id="${ritual.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="pooja-save-edit-btn" data-godid="${god.id}" data-id="${ritual.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
+            <button class="pooja-cancel-edit-btn" data-id="${ritual.id}" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:bold;cursor:pointer;">రద్దు (Cancel)</button>
+          </div>
         </div>
       `;
 
       row.querySelector(".pooja-edit-btn").addEventListener("click", () => {
         const box = document.getElementById(`poojaEdit-${ritual.id}`);
         box.style.display = box.style.display === "none" ? "flex" : "none";
+      });
+
+      row.querySelector(".pooja-cancel-edit-btn").addEventListener("click", () => {
+        document.getElementById(`poojaEdit-${ritual.id}`).style.display = "none";
       });
 
       row.querySelector(".pooja-delete-btn").addEventListener("click", async (e) => {
@@ -3450,14 +4071,54 @@ async function loadStoreCategories() {
         cachedCategories.forEach(cat => {
           const row = document.createElement("div");
           row.className = "cms-list-item";
+          row.style.flexDirection = "column";
+          row.style.alignItems = "stretch";
           row.innerHTML = `
-            <div class="cms-list-item-text">
-              <span style="font-size:1.2rem;margin-right:6px;">${cat.emoji || "🛍️"}</span>
-              <strong style="color:#ffd166;">${cat.name}</strong>
-              <span style="font-size:12px;color:rgba(255,255,255,0.4);margin-left:8px;">(క్రమం: ${cat.order || 0})</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
+              <div class="cms-list-item-text">
+                <span style="font-size:1.2rem;margin-right:6px;">${cat.emoji || "🛍️"}</span>
+                <strong style="color:#ffd166;">${cat.name}</strong>
+                <span style="font-size:12px;color:rgba(255,255,255,0.4);margin-left:8px;">(క్రమం: ${cat.order || 0})</span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="cms-list-edit-btn store-cat-edit-btn" data-id="${cat.id}" type="button">✏️ Edit</button>
+                <button class="cms-list-delete-btn" data-id="${cat.id}" type="button">Delete</button>
+              </div>
             </div>
-            <button class="cms-list-delete-btn" data-id="${cat.id}">Delete</button>
+            <div class="general-inline-edit-box" id="storeCatEdit-${cat.id}" style="display:none;">
+              <input class="stc-name" value="${cat.name || ""}" placeholder="Category Name">
+              <input class="stc-emoji" value="${cat.emoji || ""}" placeholder="Emoji (e.g. 🛍️)">
+              <input class="stc-order" type="number" value="${cat.order ?? ""}" placeholder="Order (1, 2, 3...)">
+              <div class="general-inline-edit-actions">
+                <button class="save-stc-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
+                <button class="cancel-stc-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+              </div>
+            </div>
           `;
+
+          const editBox = row.querySelector(`#storeCatEdit-${cat.id}`);
+          row.querySelector(".store-cat-edit-btn").addEventListener("click", () => {
+            editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
+          });
+          row.querySelector(".cancel-stc-btn").addEventListener("click", () => {
+            editBox.style.display = "none";
+          });
+          row.querySelector(".save-stc-btn").addEventListener("click", async () => {
+            const name = editBox.querySelector(".stc-name").value.trim();
+            const emoji = editBox.querySelector(".stc-emoji").value.trim();
+            const order = Number(editBox.querySelector(".stc-order").value) || 0;
+            if (!name) {
+              alert("Category name required");
+              return;
+            }
+            await updateDoc(doc(db, "storeCategories", cat.id), {
+              name, emoji: emoji || "🛍️", order, updatedAt: serverTimestamp()
+            });
+            alert("✅ Category updated");
+            await loadStoreCategories();
+            await loadStoreProducts();
+          });
+
           row.querySelector(".cms-list-delete-btn").addEventListener("click", async () => {
             if (!confirm(`'${cat.name}' విభాగాన్ని తొలగించాలనుకుంటున్నారా?`)) return;
             try {

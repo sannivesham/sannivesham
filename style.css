@@ -4433,13 +4433,137 @@ body.dashboard-body {
 }
 
 .edit-festival-btn:hover {
-
   transform: translateY(-2px);
 }
 
 .delete-festival-btn:hover {
-
   transform: translateY(-2px);
+}
+
+/* Universal Admin CMS Action Buttons */
+.open-festival-edit-btn,
+.edit-temple-btn,
+.edit-lib-content-btn,
+.edit-lib-category-btn,
+.edit-lib-subcategory-btn,
+.edit-sloka-category-btn,
+.edit-sloka-btn,
+.edit-video-btn,
+.store-edit-btn,
+.ithi-edit-btn,
+.pooja-edit-btn,
+.stream-edit-btn,
+.cms-list-edit-btn,
+.edit-category-btn {
+  padding: 8px 18px !important;
+  border: none !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  margin-right: 8px !important;
+  margin-top: 8px !important;
+  background: #ffd166 !important;
+  color: #1b0d00 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: 0 2px 8px rgba(255, 209, 102, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+.open-festival-edit-btn:hover,
+.edit-temple-btn:hover,
+.edit-lib-content-btn:hover,
+.edit-lib-category-btn:hover,
+.edit-lib-subcategory-btn:hover,
+.edit-sloka-category-btn:hover,
+.edit-sloka-btn:hover,
+.edit-video-btn:hover,
+.store-edit-btn:hover,
+.ithi-edit-btn:hover,
+.pooja-edit-btn:hover,
+.stream-edit-btn:hover,
+.cms-list-edit-btn:hover,
+.edit-category-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 14px rgba(255, 209, 102, 0.45) !important;
+  background: #ffe082 !important;
+}
+
+.delete-festival-btn,
+.delete-temple-btn,
+.delete-lib-content-btn,
+.delete-lib-category-btn,
+.delete-lib-subcategory-btn,
+.delete-sloka-category-btn,
+.delete-sloka-btn,
+.delete-video-btn,
+.store-delete-btn,
+.ithi-delete-btn,
+.pooja-delete-btn,
+.stream-delete-btn,
+.cms-list-delete-btn {
+  padding: 8px 18px !important;
+  border: 1px solid rgba(230, 57, 70, 0.4) !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  margin-top: 8px !important;
+  background: rgba(230, 57, 70, 0.2) !important;
+  color: #ff6b6b !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.delete-festival-btn:hover,
+.delete-temple-btn:hover,
+.delete-lib-content-btn:hover,
+.delete-lib-category-btn:hover,
+.delete-lib-subcategory-btn:hover,
+.delete-sloka-category-btn:hover,
+.delete-sloka-btn:hover,
+.delete-video-btn:hover,
+.store-delete-btn:hover,
+.ithi-delete-btn:hover,
+.pooja-delete-btn:hover,
+.stream-delete-btn:hover,
+.cms-list-delete-btn:hover {
+  background: #c0392b !important;
+  color: #ffffff !important;
+  border-color: #c0392b !important;
+  transform: translateY(-2px) !important;
+}
+
+.general-inline-edit-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.general-inline-edit-box input,
+.general-inline-edit-box select,
+.general-inline-edit-box textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  color: #fff;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+.general-inline-edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
 }
 .editable-festival-card {
   width: 100%;
