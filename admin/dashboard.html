@@ -327,7 +327,10 @@
     <input type="text" id="poojaRitualName" placeholder="విధి పేరు (అభిషేకం)">
     <input type="text" id="poojaRitualEmoji" placeholder="Emoji (🫧)">
     <textarea id="poojaRitualMantra" placeholder="మంత్రం / శ్లోకం (Telugu text)"></textarea>
-    <input type="text" id="poojaRitualAudio" placeholder="Audio URL (optional - mantra audio link)">
+    <div id="poojaRitualAudioBox" class="cms-audio-upload-box">
+      <span>＋ Pooja Mantra Audio అప్‌లోడ్ చేయండి (Upload MP3)</span>
+    </div>
+    <input type="text" id="poojaRitualAudio" placeholder="లేదా Audio URL ఇవ్వండి (optional - mantra audio link)">
 
     <select id="poojaRitualAnimation">
       <option value="water">🫧 అభిషేకం (Water)</option>
@@ -612,6 +615,10 @@
           </select>
           <input type="text" id="libSubcategoryTitle" placeholder="Subcategory Title (e.g. Ganesha Stotras)">
           <input type="text" id="libSubcategorySlug" placeholder="Subcategory Slug (e.g. ganesha-stotras)">
+          <div id="libSubcatAudioBox" class="cms-audio-upload-box">
+            <span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio - Optional)</span>
+          </div>
+          <input type="text" id="libSubcatAudioUrl" placeholder="లేదా ఆడియో URL ఇవ్వండి (Optional Audio Link)">
           <input type="number" id="libSubcategoryOrder" placeholder="Order (optional, lower shows first)">
           <button id="saveLibSubcategoryBtn">Save Subcategory</button>
           <p id="libSubcategoryMessage"></p>
@@ -627,10 +634,18 @@
           <input type="text" id="libContentTitle" placeholder="Content Title (e.g. హనుమాన్ చాలీసా)">
           <input type="text" id="libContentSlug" placeholder="Content Slug / URL (e.g. hanuman-chalisa)">
           <textarea id="libContentText" placeholder="Telugu Text"></textarea>
-          <input type="text" id="libContentAudioUrl" placeholder="Audio URL (Direct MP3, Cloudinary, Drive link)">
-          <div style="background:rgba(255,209,102,0.08);border:1px dashed rgba(255,209,102,0.3);border-radius:10px;padding:8px 12px;margin:8px 0;font-size:0.82rem;color:#ffd166;line-height:1.4;">
-            ✨ <strong>రియల్-టైమ్ శ్లోక సింక్ (Synced Lyrics):</strong> ఆడియో ప్లేయర్ కోసం శ్లోకాల టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు <code>[0:15]</code>, <code>[0:40]</code> లాంటి టైమ్‌స్టాంప్‌లు ఇవ్వవచ్చు. ఇవ్వకపోయినా ఆడియో మొత్తం శ్లోకాలకు ఆటోమేటిక్‌గా రియల్-టైమ్‌లో సింక్ అవుతుంది!
+          
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:12px;padding:14px;margin:12px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:8px;font-size:0.95rem;">🎵 శ్లోకాల ఆడియో (Audio for Real-time Shloka Playback):</label>
+            <div id="libContentAudioBox" class="cms-audio-upload-box">
+              <span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio File)</span>
+            </div>
+            <input type="text" id="libContentAudioUrl" placeholder="లేదా ఆడియో URL నేరుగా ఇవ్వండి (Direct MP3, Cloudinary, Drive link)">
+            <div style="background:rgba(255,209,102,0.08);border:1px dashed rgba(255,209,102,0.3);border-radius:10px;padding:8px 12px;margin-top:10px;font-size:0.82rem;color:#ffd166;line-height:1.4;">
+              ✨ <strong>రియల్-టైమ్ శ్లోక సింక్ (Synced Lyrics):</strong> ఆడియో ప్లేయర్ కోసం శ్లోకాల టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు <code>[0:15]</code>, <code>[0:40]</code> లాంటి టైమ్‌స్టాంప్‌లు ఇవ్వవచ్చు. ఇవ్వకపోయినా ఆడియో మొత్తం శ్లోకాలకు ఆటోమేటిక్‌గా రియల్-టైమ్‌లో సింక్ అవుతుంది!
+            </div>
           </div>
+
           <input type="number" id="libContentOrder" placeholder="Order (optional, lower shows first)">
           <button id="saveLibContentBtn">Save Content</button>
           <p id="libContentMessage"></p>
@@ -682,6 +697,13 @@
         <textarea id="slokaText" placeholder="Sloka Text"></textarea>
         <textarea id="slokaTeluguMeaning" placeholder="Telugu Meaning"></textarea>
         <textarea id="slokaEnglishMeaning" placeholder="English Meaning"></textarea>
+        <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:12px;padding:14px;margin:12px 0;">
+          <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:8px;font-size:0.95rem;">🎵 శ్లోకం ఆడియో (Sloka Audio):</label>
+          <div id="slokaAudioBox" class="cms-audio-upload-box">
+            <span>＋ Sloka Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>
+          </div>
+          <input type="text" id="slokaAudioUrl" placeholder="లేదా ఆడియో URL ఇవ్వండి (Direct MP3 Link)">
+        </div>
         <button id="saveSlokaBtn">Save Sloka</button>
         <p id="slokaMessage"></p>
         <div id="adminSlokasList"></div>
@@ -754,9 +776,13 @@
           <input type="text" id="ithiShlokaNumber" placeholder="శ్లోక సంఖ్య (1.1, 1.2...)">
           <textarea id="ithiShlokaText" placeholder="శ్లోకం (Telugu text)"></textarea>
           <textarea id="ithiShlokaExplanation" placeholder="వివరణ (Explanation)"></textarea>
-         <div id="ithiShlokaAudioBox" class="festival-card-upload-box">
-  <span>＋ Audio File ఎంచుకోండి</span>
-</div>
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:12px;padding:14px;margin:12px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:8px;font-size:0.95rem;">🎵 శ్లోకం ఆడియో (Shloka Audio):</label>
+            <div id="ithiShlokaAudioBox" class="cms-audio-upload-box">
+              <span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>
+            </div>
+            <input type="text" id="ithiShlokaAudioUrl" placeholder="లేదా ఆడియో URL ఇవ్వండి (Direct MP3 Link)">
+          </div>
           <input type="number" id="ithiShlokaOrder" placeholder="Order">
           <button id="saveIthiShlokaBtn">Save శ్లోకం</button>
           <p id="ithiShlokaMsg"></p>

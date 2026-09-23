@@ -86,6 +86,49 @@ function uploadImage() {
   });
 }
 
+function uploadAudioFile(boxOrId = null) {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "audio/*";
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return resolve(null);
+
+      const box = typeof boxOrId === "string" ? document.getElementById(boxOrId) : boxOrId;
+      const statusText = document.createElement("span");
+      statusText.innerText = "⏳ ఆడియో అప్‌లోడ్ అవుతోంది...";
+      statusText.style.color = "#ffd166";
+      statusText.style.display = "block";
+      statusText.style.fontWeight = "bold";
+      statusText.style.padding = "6px 0";
+      if (box) box.appendChild(statusText);
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
+
+      try {
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
+          { method: "POST", body: formData }
+        );
+        const data = await res.json();
+        if (!res.ok || !data.secure_url) throw new Error(data?.error?.message || "Audio upload failed");
+        resolve(data.secure_url);
+      } catch (error) {
+        alert("Audio upload failed: " + error.message);
+        resolve(null);
+      } finally {
+        statusText.remove();
+      }
+    };
+
+    input.click();
+  });
+}
+
 /* ══════════════════════════════════════
    IMAGE GRID (Events)
 ══════════════════════════════════════ */
@@ -1222,47 +1265,6 @@ loadAdminEkadashis();
    ITHIHASALU CMS
 ══════════════════════════════════════ */
 
-function uploadAudioFile(boxId) {
-  return new Promise((resolve) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "audio/*";
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (!file) return resolve(null);
-
-      const box = document.getElementById(boxId);
-      const statusText = document.createElement("span");
-      statusText.innerText = "అప్‌లోడ్ అవుతోంది...";
-      statusText.style.color = "#ffd166";
-      statusText.style.display = "block";
-      if (box) box.appendChild(statusText);
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", UPLOAD_PRESET);
-
-      try {
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
-          { method: "POST", body: formData }
-        );
-        const data = await res.json();
-        if (!res.ok || !data.secure_url) throw new Error("Audio upload failed");
-        resolve(data.secure_url);
-      } catch (error) {
-        alert("Audio upload failed: " + error.message);
-        resolve(null);
-      } finally {
-        statusText.remove();
-      }
-    };
-
-    input.click();
-  });
-}
-
 // ── CATEGORY ──
 
 const ithiCatImageBox = document.getElementById("ithiCatImageBox");
@@ -1515,7 +1517,9 @@ if (ithiShlokaAudioBox) {
     const url = await uploadAudioFile("ithiShlokaAudioBox");
     if (!url) return;
     ithiShlokaAudioBox.dataset.audio = url;
-    ithiShlokaAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;"></audio>`;
+    ithiShlokaAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const audioInput = document.getElementById("ithiShlokaAudioUrl");
+    if (audioInput) audioInput.value = url;
   });
 }
 
@@ -1526,7 +1530,7 @@ if (saveIthiShlokaBtn) {
     const number = document.getElementById("ithiShlokaNumber").value.trim();
     const shloka = document.getElementById("ithiShlokaText").value.trim();
     const explanation = document.getElementById("ithiShlokaExplanation").value.trim();
-    const audioUrl = ithiShlokaAudioBox?.dataset.audio || "";
+    const audioUrl = document.getElementById("ithiShlokaAudioUrl")?.value.trim() || ithiShlokaAudioBox?.dataset.audio || "";
     const order = Number(document.getElementById("ithiShlokaOrder").value) || 0;
 
     if (!subCategoryId || !number || !shloka) {
@@ -1550,9 +1554,11 @@ if (saveIthiShlokaBtn) {
     document.getElementById("ithiShlokaText").value = "";
     document.getElementById("ithiShlokaExplanation").value = "";
     document.getElementById("ithiShlokaOrder").value = "";
+    const urlInput = document.getElementById("ithiShlokaAudioUrl");
+    if (urlInput) urlInput.value = "";
     if (ithiShlokaAudioBox) {
       ithiShlokaAudioBox.dataset.audio = "";
-      ithiShlokaAudioBox.innerHTML = `<span>＋ Audio File ఎంచుకోండి</span>`;
+      ithiShlokaAudioBox.innerHTML = `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`;
     }
 
     loadIthiShlokas();
@@ -1591,24 +1597,55 @@ async function loadIthiShlokas(filterSubId = "") {
     const row = document.createElement("div");
     row.className = "cms-list-item";
     row.style.flexDirection = "column";
-    row.style.alignItems = "flex-start";
+    row.style.alignItems = "stretch";
     row.style.gap = "8px";
 
     row.innerHTML = `
-      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;flex-wrap:wrap;gap:8px;">
         <span><strong style="color:#ffd166;">${item.number}</strong> — ${subMap[item.subCategoryId] || "Unknown"}</span>
         <div style="display:flex;gap:8px;">
-          <button class="ithi-edit-btn cms-list-delete-btn" data-id="${item.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
-          <button class="ithi-delete-btn cms-list-delete-btn" data-id="${item.id}" data-sub="${item.subCategoryId}">Delete</button>
+          <button class="ithi-edit-btn cms-list-edit-btn" data-id="${item.id}" type="button">✏️ Edit</button>
+          <button class="ithi-delete-btn cms-list-delete-btn" data-id="${item.id}" data-sub="${item.subCategoryId}" type="button">Delete</button>
         </div>
       </div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);">${(item.shloka || "").substring(0, 70)}...</div>
-      ${item.audioUrl ? `<audio src="${item.audioUrl}" controls style="width:100%;height:32px;"></audio>` : ""}
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);">${(item.shloka || "").substring(0, 80)}...</div>
+
+      <!-- AUDIO CONTROLS ON CARD -->
+      <div class="content-audio-card-box" style="margin:4px 0 8px;">
+        ${item.audioUrl ? `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:220px;">
+              <span>🎵</span>
+              <audio src="${item.audioUrl}" controls style="height:32px;flex:1;"></audio>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="ithi-change-audio-btn" data-id="${item.id}" type="button" style="padding:4px 10px;font-size:0.8rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
+              <button class="ithi-remove-audio-btn" data-id="${item.id}" data-sub="${item.subCategoryId}" type="button" style="padding:4px 8px;font-size:0.8rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌</button>
+            </div>
+          </div>
+        ` : `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">⚠️ ఆడియో లేదు (No audio)</span>
+            <button class="ithi-quick-add-audio-btn" data-id="${item.id}" type="button" style="padding:6px 12px;font-size:0.82rem;border-radius:8px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">
+              🎵 ＋ Audio File అప్‌లోడ్ చేయండి
+            </button>
+          </div>
+        `}
+      </div>
 
       <div class="ithi-edit-box" id="ithiEdit-${item.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
         <input class="ithi-e-number" value="${item.number || ""}" placeholder="Number" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
         <textarea class="ithi-e-shloka" placeholder="Shloka" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${item.shloka || ""}</textarea>
         <textarea class="ithi-e-explanation" placeholder="Explanation" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${item.explanation || ""}</textarea>
+        
+        <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:2px 0;">
+          <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 శ్లోకం ఆడియో (Audio):</label>
+          <div class="cms-audio-upload-box ithi-e-audio-box" data-audio="${item.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
+            ${item.audioUrl ? `<audio src="${item.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
+          </div>
+          <input class="ithi-e-audio-url" value="${item.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+        </div>
+
         <div style="display:flex;gap:8px;margin-top:6px;">
           <button class="ithi-save-edit-btn" data-id="${item.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
           <button class="ithi-cancel-edit-btn" data-id="${item.id}" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:bold;cursor:pointer;">రద్దు (Cancel)</button>
@@ -1616,14 +1653,58 @@ async function loadIthiShlokas(filterSubId = "") {
       </div>
     `;
 
+    const box = row.querySelector(`#ithiEdit-${item.id}`);
+    const audioUploadBox = box.querySelector(".ithi-e-audio-box");
+    const audioUrlInput = box.querySelector(".ithi-e-audio-url");
+
+    if (audioUploadBox) {
+      audioUploadBox.addEventListener("click", async () => {
+        const url = await uploadAudioFile(audioUploadBox);
+        if (!url) return;
+        audioUploadBox.dataset.audio = url;
+        audioUploadBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+        if (audioUrlInput) audioUrlInput.value = url;
+      });
+    }
+
     row.querySelector(".ithi-edit-btn").addEventListener("click", () => {
-      const box = document.getElementById(`ithiEdit-${item.id}`);
       box.style.display = box.style.display === "none" ? "flex" : "none";
     });
 
     row.querySelector(".ithi-cancel-edit-btn").addEventListener("click", () => {
-      document.getElementById(`ithiEdit-${item.id}`).style.display = "none";
+      box.style.display = "none";
     });
+
+    // Quick audio actions on card
+    const quickAddBtn = row.querySelector(".ithi-quick-add-audio-btn");
+    if (quickAddBtn) {
+      quickAddBtn.addEventListener("click", async () => {
+        const url = await uploadAudioFile(quickAddBtn);
+        if (!url) return;
+        await updateDoc(doc(db, "ithihasaluShlokas", item.id), { audioUrl: url, updatedAt: serverTimestamp() });
+        alert("✅ ఆడియో విజయవంతంగా జోడించబడింది");
+        loadIthiShlokas(filterSubId);
+      });
+    }
+    const changeBtn = row.querySelector(".ithi-change-audio-btn");
+    if (changeBtn) {
+      changeBtn.addEventListener("click", async () => {
+        const url = await uploadAudioFile(changeBtn);
+        if (!url) return;
+        await updateDoc(doc(db, "ithihasaluShlokas", item.id), { audioUrl: url, updatedAt: serverTimestamp() });
+        alert("✅ ఆడియో అప్‌డేట్ చేయబడింది");
+        loadIthiShlokas(filterSubId);
+      });
+    }
+    const removeBtn = row.querySelector(".ithi-remove-audio-btn");
+    if (removeBtn) {
+      removeBtn.addEventListener("click", async () => {
+        if (!confirm("ఈ శ్లోకం నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+        await updateDoc(doc(db, "ithihasaluShlokas", item.id), { audioUrl: "", updatedAt: serverTimestamp() });
+        alert("✅ ఆడియో తొలగించబడింది");
+        loadIthiShlokas(filterSubId);
+      });
+    }
 
     row.querySelector(".ithi-delete-btn").addEventListener("click", async (e) => {
       if (!confirm("Delete this shloka?")) return;
@@ -1641,11 +1722,12 @@ async function loadIthiShlokas(filterSubId = "") {
 
     row.querySelector(".ithi-save-edit-btn").addEventListener("click", async (e) => {
       const btn = e.currentTarget;
-      const box = document.getElementById(`ithiEdit-${btn.dataset.id}`);
+      const finalAudio = audioUrlInput.value.trim() || audioUploadBox?.dataset.audio || "";
       await updateDoc(doc(db, "ithihasaluShlokas", btn.dataset.id), {
         number: box.querySelector(".ithi-e-number").value.trim(),
         shloka: box.querySelector(".ithi-e-shloka").value.trim(),
         explanation: box.querySelector(".ithi-e-explanation").value.trim(),
+        audioUrl: finalAudio,
         updatedAt: serverTimestamp()
       });
       alert("✅ శ్లోకం updated");
@@ -2253,6 +2335,18 @@ async function loadLibCategoryOptions() {
 
 loadLibCategoriesAdmin(); loadLibCategoryOptions();
 
+const libSubcatAudioBox = document.getElementById("libSubcatAudioBox");
+if (libSubcatAudioBox) {
+  libSubcatAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile(libSubcatAudioBox);
+    if (!url) return;
+    libSubcatAudioBox.dataset.audio = url;
+    libSubcatAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const audioInput = document.getElementById("libSubcatAudioUrl");
+    if (audioInput) audioInput.value = url;
+  });
+}
+
 const saveLibSubcategoryBtn = document.getElementById("saveLibSubcategoryBtn");
 if (saveLibSubcategoryBtn) {
   attachAutoSlug("libSubcategoryTitle", "libSubcategorySlug");
@@ -2261,12 +2355,23 @@ if (saveLibSubcategoryBtn) {
     const title = document.getElementById("libSubcategoryTitle").value.trim();
     const slugInput = document.getElementById("libSubcategorySlug");
     const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
+    const audioUrl = document.getElementById("libSubcatAudioUrl")?.value.trim() || libSubcatAudioBox?.dataset.audio || "";
     const orderValue = document.getElementById("libSubcategoryOrder").value.trim();
     if (!categoryId || !title) { document.getElementById("libSubcategoryMessage").innerText = "Category and subcategory title required"; return; }
-    await addDoc(collection(db, "librarySubcategories"), { categoryId, title, slug, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "librarySubcategories"), {
+      categoryId, title, slug, audioUrl,
+      order: orderValue ? Number(orderValue) : Date.now(),
+      createdAt: serverTimestamp()
+    });
     document.getElementById("libSubcategoryTitle").value = "";
     if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libSubcategoryOrder").value = "";
+    const subAudioInput = document.getElementById("libSubcatAudioUrl");
+    if (subAudioInput) subAudioInput.value = "";
+    if (libSubcatAudioBox) {
+      libSubcatAudioBox.dataset.audio = "";
+      libSubcatAudioBox.innerHTML = `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio - Optional)</span>`;
+    }
     document.getElementById("libSubcategoryMessage").innerText = "✅ Subcategory saved";
     loadLibSubcategoriesAdmin(); loadLibSubcategoryOptions();
   });
@@ -2297,20 +2402,58 @@ async function loadLibSubcategoriesAdmin() {
 
     list.innerHTML += `
       <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
-        <div>
-          <h3>${data.title}</h3>
-          <p>Category: ${categoryMap[data.categoryId] || "Unknown"}</p>
+        <div style="width:100%;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+            <div>
+              <h3 style="margin:0 0 4px;color:#ffd166;">${data.title}</h3>
+              <p style="margin:0;color:rgba(255,255,255,0.7);font-size:0.9rem;">Category: <strong>${categoryMap[data.categoryId] || "Unknown"}</strong></p>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="edit-lib-subcategory-btn cms-list-edit-btn" data-id="${data.id}" type="button">✏️ Edit</button>
+              <button class="delete-lib-subcategory-btn cms-list-delete-btn" data-id="${data.id}" type="button">Delete</button>
+            </div>
+          </div>
           ${renderSlugLinkHtml("library", data.slug, data.id)}
-          <div style="display:flex;gap:8px;margin-top:6px;">
-            <button class="edit-lib-subcategory-btn" data-id="${data.id}" type="button">✏️ Edit</button>
-            <button class="delete-lib-subcategory-btn" data-id="${data.id}" type="button">Delete</button>
+
+          <!-- SUBCATEGORY AUDIO STATUS & QUICK UPLOAD -->
+          <div class="content-audio-card-box" style="margin:8px 0;">
+            ${data.audioUrl ? `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:240px;">
+                  <span>🎵</span>
+                  <span style="font-size:0.85rem;color:#ffd166;font-weight:700;">ఆడియో:</span>
+                  <audio src="${data.audioUrl}" controls style="height:32px;flex:1;min-width:180px;"></audio>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <button class="subcat-quick-change-audio" data-id="${data.id}" type="button" style="padding:4px 10px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
+                  <button class="subcat-quick-remove-audio" data-id="${data.id}" type="button" style="padding:4px 8px;font-size:0.82rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌</button>
+                </div>
+              </div>
+            ` : `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">ఆడియో జతచేయబడలేదు (Optional)</span>
+                <button class="subcat-quick-add-audio" data-id="${data.id}" type="button" style="padding:4px 12px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;">
+                  🎵 ＋ Audio File జోడించండి
+                </button>
+              </div>
+            `}
           </div>
         </div>
+
         <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" style="display:none;">
           <select class="lsce-category">${catOptions}</select>
           <input class="lsce-title" value="${data.title || ""}" placeholder="Subcategory Title">
           <input class="lsce-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug">
           <input class="lsce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
+          
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:4px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 సంపూర్ణ స్తోత్ర ఆడియో (Optional):</label>
+            <div class="cms-audio-upload-box lsce-audio-box" data-audio="${data.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
+              ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
+            </div>
+            <input class="lsce-audio-url" value="${data.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి">
+          </div>
+
           <div class="general-inline-edit-actions">
             <button class="save-lsce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
             <button class="cancel-lsce-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
@@ -2334,6 +2477,36 @@ async function loadLibSubcategoriesAdmin() {
     });
   });
 
+  list.querySelectorAll(".lsce-audio-box").forEach(slot => {
+    slot.addEventListener("click", async () => {
+      const url = await uploadAudioFile(slot);
+      if (!url) return;
+      slot.dataset.audio = url;
+      slot.innerHTML = `<audio src="${url}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+      const urlInput = slot.closest(".general-inline-edit-box").querySelector(".lsce-audio-url");
+      if (urlInput) urlInput.value = url;
+    });
+  });
+
+  list.querySelectorAll(".subcat-quick-add-audio, .subcat-quick-change-audio").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const url = await uploadAudioFile(btn);
+      if (!url) return;
+      await updateDoc(doc(db, "librarySubcategories", btn.dataset.id), { audioUrl: url, updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో విజయవంతంగా జోడించబడింది");
+      loadLibSubcategoriesAdmin();
+    });
+  });
+
+  list.querySelectorAll(".subcat-quick-remove-audio").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ ఉపవిభాగం నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+      await updateDoc(doc(db, "librarySubcategories", btn.dataset.id), { audioUrl: "", updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో తొలగించబడింది");
+      loadLibSubcategoriesAdmin();
+    });
+  });
+
   list.querySelectorAll(".save-lsce-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       const box = btn.closest(".general-inline-edit-box");
@@ -2342,12 +2515,13 @@ async function loadLibSubcategoriesAdmin() {
       const title = box.querySelector(".lsce-title").value.trim();
       const slug = box.querySelector(".lsce-slug").value.trim() || slugify(title);
       const orderVal = box.querySelector(".lsce-order").value.trim();
+      const audioUrl = box.querySelector(".lsce-audio-url").value.trim() || box.querySelector(".lsce-audio-box")?.dataset.audio || "";
       if (!categoryId || !title) {
         alert("Category and Title required");
         return;
       }
       await updateDoc(doc(db, "librarySubcategories", id), {
-        categoryId, title, slug,
+        categoryId, title, slug, audioUrl,
         order: orderVal ? Number(orderVal) : 0,
         updatedAt: serverTimestamp()
       });
@@ -2384,6 +2558,18 @@ async function loadLibSubcategoryOptions() {
 
 loadLibSubcategoriesAdmin(); loadLibSubcategoryOptions();
 
+const libContentAudioBox = document.getElementById("libContentAudioBox");
+if (libContentAudioBox) {
+  libContentAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile(libContentAudioBox);
+    if (!url) return;
+    libContentAudioBox.dataset.audio = url;
+    libContentAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const audioInput = document.getElementById("libContentAudioUrl");
+    if (audioInput) audioInput.value = url;
+  });
+}
+
 const saveLibContentBtn = document.getElementById("saveLibContentBtn");
 if (saveLibContentBtn) {
   attachAutoSlug("libContentTitle", "libContentSlug");
@@ -2393,15 +2579,23 @@ if (saveLibContentBtn) {
     const slugInput = document.getElementById("libContentSlug");
     const slug = (slugInput ? slugInput.value.trim() : "") || slugify(title);
     const text = document.getElementById("libContentText").value.trim();
-    const audioUrl = document.getElementById("libContentAudioUrl").value.trim();
+    const audioUrl = document.getElementById("libContentAudioUrl").value.trim() || libContentAudioBox?.dataset.audio || "";
     const orderValue = document.getElementById("libContentOrder").value.trim();
     if (!subcategoryId || !title || !text) { document.getElementById("libContentMessage").innerText = "Subcategory, title and text required"; return; }
-    await addDoc(collection(db, "libraryContent"), { subcategoryId, title, slug, text, audioUrl, order: orderValue ? Number(orderValue) : Date.now(), createdAt: serverTimestamp() });
+    await addDoc(collection(db, "libraryContent"), {
+      subcategoryId, title, slug, text, audioUrl,
+      order: orderValue ? Number(orderValue) : Date.now(),
+      createdAt: serverTimestamp()
+    });
     document.getElementById("libContentTitle").value = "";
     if (slugInput) { slugInput.value = ""; delete slugInput.dataset.manuallyEdited; }
     document.getElementById("libContentText").value = "";
     document.getElementById("libContentAudioUrl").value = "";
     document.getElementById("libContentOrder").value = "";
+    if (libContentAudioBox) {
+      libContentAudioBox.dataset.audio = "";
+      libContentAudioBox.innerHTML = `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio File)</span>`;
+    }
     document.getElementById("libContentMessage").innerText = "✅ Content saved";
     loadLibContentAdmin();
   });
@@ -2424,20 +2618,102 @@ async function loadLibContentAdmin() {
   list.innerHTML = "";
   items.forEach(data => {
     list.innerHTML += `
-      <div class="admin-event-card">
-        <div>
-          <h3>${data.title}</h3>
-          <p>Subcategory: ${subMap[data.subcategoryId] || "Unknown"}</p>
-          ${renderSlugLinkHtml("library", data.slug, data.id)}
-          <p>${(data.text || "").slice(0, 80)}${data.text && data.text.length > 80 ? "..." : ""}</p>
-          ${data.audioUrl ? `<p>🔊 Audio linked</p>` : ""}
-          <button class="edit-lib-content-btn" data-id="${data.id}" type="button">Edit</button>
-          <button class="delete-lib-content-btn" data-id="${data.id}" type="button">Delete</button>
+      <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
+        <div style="width:100%;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h3 style="margin:0 0 4px;color:#ffd166;">${data.title}</h3>
+              <p style="margin:0 0 6px;color:rgba(255,255,255,0.7);font-size:0.9rem;">Subcategory: <strong>${subMap[data.subcategoryId] || "Unknown"}</strong></p>
+              ${renderSlugLinkHtml("library", data.slug, data.id)}
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="edit-lib-content-btn cms-list-edit-btn" data-id="${data.id}" type="button">✏️ Edit</button>
+              <button class="delete-lib-content-btn cms-list-delete-btn" data-id="${data.id}" type="button">Delete</button>
+            </div>
+          </div>
+          <p style="margin:8px 0;font-size:0.9rem;color:rgba(255,255,255,0.7);line-height:1.5;">${(data.text || "").slice(0, 100)}${data.text && data.text.length > 100 ? "..." : ""}</p>
+          
+          <!-- AUDIO SECTION FOR PRESENT CONTENT -->
+          <div class="content-audio-card-box">
+            ${data.audioUrl ? `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:260px;">
+                  <span style="font-size:1.2rem;">🎵</span>
+                  <div style="flex:1;">
+                    <div style="color:#ffd166;font-size:0.85rem;font-weight:700;margin-bottom:4px;">ఆడియో జోడించబడింది (Audio linked):</div>
+                    <audio src="${data.audioUrl}" controls style="width:100%;height:32px;"></audio>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <button class="quick-change-audio-btn" data-id="${data.id}" type="button" style="padding:6px 14px;font-size:0.85rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;">🔄 ఆడియో మార్చండి</button>
+                  <button class="quick-remove-audio-btn" data-id="${data.id}" type="button" style="padding:6px 12px;font-size:0.85rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌ తీసివేయి</button>
+                </div>
+              </div>
+            ` : `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:1.2rem;opacity:0.6;">🔇</span>
+                  <span style="color:rgba(255,255,255,0.6);font-size:0.88rem;">ఈ కంటెంట్‌కు ఆడియో ఇంకా జోడించలేదు (No audio attached)</span>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <button class="quick-add-audio-btn" data-id="${data.id}" type="button">
+                    🎵 ＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)
+                  </button>
+                  <button class="quick-link-audio-btn" data-id="${data.id}" type="button" style="padding:7px 12px;font-size:0.85rem;border-radius:10px;background:rgba(255,209,102,0.15);color:#ffd166;border:1px solid rgba(255,209,102,0.4);cursor:pointer;font-weight:600;">
+                    🔗 URL ఇవ్వండి
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+
           <div class="lib-content-inline-editor" id="libContentEdit-${data.id}"></div>
         </div>
       </div>
     `;
   });
+
+  list.querySelectorAll(".quick-add-audio-btn, .quick-change-audio-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const docId = btn.dataset.id;
+      const url = await uploadAudioFile(btn);
+      if (!url) return;
+      await updateDoc(doc(db, "libraryContent", docId), {
+        audioUrl: url,
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ ఆడియో విజయవంతంగా జోడించబడింది!");
+      loadLibContentAdmin();
+    });
+  });
+
+  list.querySelectorAll(".quick-link-audio-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const docId = btn.dataset.id;
+      const inputUrl = prompt("ఆడియో డైరెక్ట్ MP3 లేదా Cloudinary URL ఇవ్వండి:");
+      if (!inputUrl || !inputUrl.trim()) return;
+      await updateDoc(doc(db, "libraryContent", docId), {
+        audioUrl: inputUrl.trim(),
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ ఆడియో లింక్ జోడించబడింది!");
+      loadLibContentAdmin();
+    });
+  });
+
+  list.querySelectorAll(".quick-remove-audio-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ కంటెంట్ నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+      const docId = btn.dataset.id;
+      await updateDoc(doc(db, "libraryContent", docId), {
+        audioUrl: "",
+        updatedAt: serverTimestamp()
+      });
+      alert("✅ ఆడియో తొలగించబడింది.");
+      loadLibContentAdmin();
+    });
+  });
+
   list.querySelectorAll(".edit-lib-content-btn").forEach(btn => {
     btn.addEventListener("click", () => openLibContentInlineEditor(btn.dataset.id, items, subList));
   });
@@ -2475,16 +2751,36 @@ async function openLibContentInlineEditor(id, items, subList = []) {
       <input class="edit-lib-content-title" value="${data.title || ""}" placeholder="Title">
       <input class="edit-lib-content-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug / Clean URL (e.g. hanuman-chalisa)">
       <textarea class="edit-lib-content-text" placeholder="Telugu Text">${data.text || ""}</textarea>
-      <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="Audio URL (Direct MP3, Cloudinary, Drive link)">
-      <div style="font-size:0.78rem;color:#ffd166;margin:4px 0 8px;">
-        💡 <em>రియల్-టైమ్ సింక్: టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు [0:15], [0:40] లాగా టైమింగ్స్ ఇవ్వవచ్చు లేదా ఆటో-సింక్ వాడుకోవచ్చు.</em>
+      
+      <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:12px;padding:12px;margin:10px 0;">
+        <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:8px;font-size:0.95rem;">🎵 ఆడియో (Audio for Real-time Shloka Playback):</label>
+        <div class="cms-audio-upload-box edit-lib-audio-box" data-audio="${data.audioUrl || ""}" style="cursor:pointer;margin-bottom:8px;">
+          ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి ఇక్కడ క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`}
+        </div>
+        <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="లేదా ఆడియో URL ఇవ్వండి (Direct MP3, Cloudinary link)">
+        <div style="font-size:0.78rem;color:#ffd166;margin:6px 0 2px;">
+          💡 <em>రియల్-టైమ్ సింక్: టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు [0:15], [0:40] లాగా టైమింగ్స్ ఇవ్వవచ్చు లేదా ఆటో-సింక్ వాడుకోవచ్చు.</em>
+        </div>
       </div>
+
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
         <button class="save-lib-content-edit-btn" type="button">Save Changes</button>
         <button class="cancel-lib-content-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
       </div>
     </div>
   `;
+
+  const audioBox = editor.querySelector(".edit-lib-audio-box");
+  const audioInput = editor.querySelector(".edit-lib-content-audio");
+  if (audioBox) {
+    audioBox.addEventListener("click", async () => {
+      const url = await uploadAudioFile(audioBox);
+      if (!url) return;
+      audioBox.dataset.audio = url;
+      audioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+      if (audioInput) audioInput.value = url;
+    });
+  }
 
   editor.querySelector(".cancel-lib-content-edit-btn").addEventListener("click", () => {
     editor.innerHTML = "";
@@ -2494,12 +2790,13 @@ async function openLibContentInlineEditor(id, items, subList = []) {
     const updatedTitle = editor.querySelector(".edit-lib-content-title").value.trim();
     const updatedSlug = editor.querySelector(".edit-lib-content-slug")?.value.trim() || slugify(updatedTitle);
     const updatedSub = editor.querySelector(".edit-lib-content-subcat").value;
+    const finalAudio = audioInput ? audioInput.value.trim() : (audioBox?.dataset?.audio || "");
     await updateDoc(doc(db, "libraryContent", id), {
       title: updatedTitle,
       slug: updatedSlug,
       subcategoryId: updatedSub || data.subcategoryId,
       text: editor.querySelector(".edit-lib-content-text").value.trim(),
-      audioUrl: editor.querySelector(".edit-lib-content-audio").value.trim(),
+      audioUrl: finalAudio,
       updatedAt: serverTimestamp()
     });
     alert("✅ Content updated"); loadLibContentAdmin();
@@ -2732,6 +3029,18 @@ async function loadSlokaDirectCategories() {
   });
 }
 
+const slokaAudioBox = document.getElementById("slokaAudioBox");
+if (slokaAudioBox) {
+  slokaAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile(slokaAudioBox);
+    if (!url) return;
+    slokaAudioBox.dataset.audio = url;
+    slokaAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const audioInput = document.getElementById("slokaAudioUrl");
+    if (audioInput) audioInput.value = url;
+  });
+}
+
 const saveSlokaBtn = document.getElementById("saveSlokaBtn");
 if (saveSlokaBtn) {
   saveSlokaBtn.addEventListener("click", async () => {
@@ -2739,12 +3048,21 @@ if (saveSlokaBtn) {
     const number = document.getElementById("slokaNumber").value.trim();
     const sloka = document.getElementById("slokaText").value.trim();
     const telugu = document.getElementById("slokaTeluguMeaning").value.trim();
+    const audioUrl = document.getElementById("slokaAudioUrl")?.value.trim() || slokaAudioBox?.dataset.audio || "";
     if (!categoryId || !number || !sloka || !telugu) { document.getElementById("slokaMessage").innerText = "Category, number, sloka and Telugu meaning required"; return; }
-    await addDoc(collection(db, "slokas"), { categoryId, number, sloka, telugu, createdAt: serverTimestamp() });
+    await addDoc(collection(db, "slokas"), {
+      categoryId, number, sloka, telugu, audioUrl, createdAt: serverTimestamp()
+    });
     document.getElementById("slokaMessage").innerText = "✅ Sloka Saved";
     document.getElementById("slokaNumber").value = "";
     document.getElementById("slokaText").value = "";
     document.getElementById("slokaTeluguMeaning").value = "";
+    const audioInput = document.getElementById("slokaAudioUrl");
+    if (audioInput) audioInput.value = "";
+    if (slokaAudioBox) {
+      slokaAudioBox.dataset.audio = "";
+      slokaAudioBox.innerHTML = `<span>＋ Sloka Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`;
+    }
     loadSlokasAdmin();
   });
 }
@@ -2766,37 +3084,108 @@ async function loadSlokasAdmin() {
   categories.forEach(category => {
     const categorySlokas = slokas.filter(s => s.categoryId === category.id).sort((a, b) => getSlokaNumberAdmin(a.number) - getSlokaNumberAdmin(b.number));
     list.innerHTML += `
-      <div class="admin-event-card sloka-category-admin-card">
-        <img src="${category.cardImage || ""}" alt="${category.title || ""}">
-        <div>
-          <h3>${category.title || ""}</h3>
-          <p>Total Slokas: ${categorySlokas.length}</p>
-          <button class="toggle-sloka-category-btn" data-id="${category.id}">Open Slokas</button>
-          <div class="sloka-category-list hide" id="slokaList-${category.id}">
-            ${categorySlokas.length === 0 ? `<p>No slokas added yet</p>` : categorySlokas.map(s => `
-              <div class="admin-event-card single-sloka-admin-card">
-                <div>
-                  <h3>${s.number || ""}</h3>
-                  <p>${s.sloka || ""}</p>
-                  <button class="edit-sloka-btn" data-id="${s.id}" type="button">Edit</button>
-                  <button class="delete-sloka-btn" data-id="${s.id}" type="button">Delete</button>
-                  <div class="sloka-edit-box hide" id="slokaEdit-${s.id}">
-                    <input type="text" class="edit-sloka-number" value="${s.number || ""}" placeholder="Sloka Number">
-                    <textarea class="edit-sloka-text" placeholder="Sloka Text">${s.sloka || ""}</textarea>
-                    <textarea class="edit-sloka-telugu" placeholder="Telugu Meaning">${s.telugu || ""}</textarea>
-                    <div style="display:flex;gap:8px;margin-top:8px;">
-                      <button class="save-sloka-edit-btn" data-id="${s.id}" type="button">Save Changes</button>
-                      <button class="cancel-sloka-edit-btn" data-id="${s.id}" type="button" style="padding:10px 16px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
+      <div class="admin-event-card sloka-category-admin-card" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <img src="${category.cardImage || ""}" alt="${category.title || ""}" style="width:70px;height:70px;object-fit:cover;border-radius:10px;">
+          <div>
+            <h3 style="margin:0 0 6px;">${category.title || ""}</h3>
+            <p style="margin:0 0 8px;font-size:0.9rem;color:rgba(255,255,255,0.7);">Total Slokas: ${categorySlokas.length}</p>
+            <button class="toggle-sloka-category-btn" data-id="${category.id}">Open Slokas</button>
+          </div>
+        </div>
+        <div class="sloka-category-list hide" id="slokaList-${category.id}" style="width:100%;margin-top:14px;">
+          ${categorySlokas.length === 0 ? `<p style="padding:10px;color:rgba(255,255,255,0.5);">No slokas added yet</p>` : categorySlokas.map(s => `
+            <div class="admin-event-card single-sloka-admin-card" style="flex-direction:column;align-items:stretch;margin-bottom:12px;">
+              <div style="width:100%;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                  <h3 style="margin:0;color:#ffd166;">${s.number || ""}</h3>
+                  <div style="display:flex;gap:8px;">
+                    <button class="edit-sloka-btn cms-list-edit-btn" data-id="${s.id}" type="button">✏️ Edit</button>
+                    <button class="delete-sloka-btn cms-list-delete-btn" data-id="${s.id}" type="button">Delete</button>
+                  </div>
+                </div>
+                <p style="margin:8px 0;line-height:1.6;">${s.sloka || ""}</p>
+                <p style="margin:4px 0;font-size:0.85rem;color:rgba(255,255,255,0.7);"><strong>భావం:</strong> ${s.telugu || ""}</p>
+
+                <!-- SLOKA AUDIO CARD CONTROLS -->
+                <div class="content-audio-card-box" style="margin:8px 0;">
+                  ${s.audioUrl ? `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                      <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:220px;">
+                        <span>🎵</span>
+                        <audio src="${s.audioUrl}" controls style="height:32px;flex:1;"></audio>
+                      </div>
+                      <div style="display:flex;gap:6px;">
+                        <button class="sloka-change-audio-btn" data-id="${s.id}" type="button" style="padding:4px 10px;font-size:0.8rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
+                        <button class="sloka-remove-audio-btn" data-id="${s.id}" type="button" style="padding:4px 8px;font-size:0.8rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌</button>
+                      </div>
                     </div>
+                  ` : `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                      <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">ఆడియో జతచేయబడలేదు (No audio attached)</span>
+                      <button class="sloka-quick-add-audio-btn" data-id="${s.id}" type="button" style="padding:5px 12px;font-size:0.82rem;border-radius:8px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">
+                        🎵 ＋ Audio File జోడించండి
+                      </button>
+                    </div>
+                  `}
+                </div>
+
+                <div class="sloka-edit-box hide" id="slokaEdit-${s.id}">
+                  <input type="text" class="edit-sloka-number" value="${s.number || ""}" placeholder="Sloka Number">
+                  <textarea class="edit-sloka-text" placeholder="Sloka Text">${s.sloka || ""}</textarea>
+                  <textarea class="edit-sloka-telugu" placeholder="Telugu Meaning">${s.telugu || ""}</textarea>
+                  
+                  <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:6px 0;">
+                    <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 శ్లోకం ఆడియో (Sloka Audio):</label>
+                    <div class="cms-audio-upload-box edit-sloka-audio-box" data-audio="${s.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
+                      ${s.audioUrl ? `<audio src="${s.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
+                    </div>
+                    <input type="text" class="edit-sloka-audio-url" value="${s.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+                  </div>
+
+                  <div style="display:flex;gap:8px;margin-top:8px;">
+                    <button class="save-sloka-edit-btn" data-id="${s.id}" type="button">Save Changes</button>
+                    <button class="cancel-sloka-edit-btn" data-id="${s.id}" type="button" style="padding:10px 16px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
                   </div>
                 </div>
               </div>
-            `).join("")}
-          </div>
+            </div>
+          `).join("")}
         </div>
       </div>
     `;
   });
+
+  list.querySelectorAll(".edit-sloka-audio-box").forEach(slot => {
+    slot.addEventListener("click", async () => {
+      const url = await uploadAudioFile(slot);
+      if (!url) return;
+      slot.dataset.audio = url;
+      slot.innerHTML = `<audio src="${url}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+      const urlInput = slot.closest(".sloka-edit-box").querySelector(".edit-sloka-audio-url");
+      if (urlInput) urlInput.value = url;
+    });
+  });
+
+  list.querySelectorAll(".sloka-quick-add-audio-btn, .sloka-change-audio-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const url = await uploadAudioFile(btn);
+      if (!url) return;
+      await updateDoc(doc(db, "slokas", btn.dataset.id), { audioUrl: url, updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో విజయవంతంగా జోడించబడింది");
+      loadSlokasAdmin();
+    });
+  });
+
+  list.querySelectorAll(".sloka-remove-audio-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("ఈ శ్లోకం నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+      await updateDoc(doc(db, "slokas", btn.dataset.id), { audioUrl: "", updatedAt: serverTimestamp() });
+      alert("✅ ఆడియో తొలగించబడింది");
+      loadSlokasAdmin();
+    });
+  });
+
   document.querySelectorAll(".toggle-sloka-category-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const box = document.getElementById(`slokaList-${btn.dataset.id}`);
@@ -2813,10 +3202,12 @@ async function loadSlokasAdmin() {
   document.querySelectorAll(".save-sloka-edit-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       const box = document.getElementById(`slokaEdit-${btn.dataset.id}`);
+      const audioUrl = box.querySelector(".edit-sloka-audio-url")?.value.trim() || box.querySelector(".edit-sloka-audio-box")?.dataset.audio || "";
       await updateDoc(doc(db, "slokas", btn.dataset.id), {
         number: box.querySelector(".edit-sloka-number").value.trim(),
         sloka: box.querySelector(".edit-sloka-text").value.trim(),
         telugu: box.querySelector(".edit-sloka-telugu").value.trim(),
+        audioUrl: audioUrl,
         updatedAt: serverTimestamp()
       });
       alert("✅ Sloka updated"); loadSlokasAdmin();
@@ -3845,6 +4236,18 @@ async function loadPoojaGods() {
   });
 }
 
+const poojaRitualAudioBox = document.getElementById("poojaRitualAudioBox");
+if (poojaRitualAudioBox) {
+  poojaRitualAudioBox.addEventListener("click", async () => {
+    const url = await uploadAudioFile(poojaRitualAudioBox);
+    if (!url) return;
+    poojaRitualAudioBox.dataset.audio = url;
+    poojaRitualAudioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+    const input = document.getElementById("poojaRitualAudio");
+    if (input) input.value = url;
+  });
+}
+
 const savePoojaRitualBtn = document.getElementById("savePoojaRitualBtn");
 if (savePoojaRitualBtn) {
   savePoojaRitualBtn.addEventListener("click", async () => {
@@ -3852,7 +4255,7 @@ if (savePoojaRitualBtn) {
     const name = document.getElementById("poojaRitualName").value.trim();
     const emoji = document.getElementById("poojaRitualEmoji").value.trim();
     const mantraText = document.getElementById("poojaRitualMantra").value.trim();
-    const audioUrl = document.getElementById("poojaRitualAudio").value.trim();
+    const audioUrl = document.getElementById("poojaRitualAudio")?.value.trim() || poojaRitualAudioBox?.dataset.audio || "";
     const animationType = document.getElementById("poojaRitualAnimation").value;
     const order = Number(document.getElementById("poojaRitualOrder").value) || 0;
 
@@ -3869,7 +4272,12 @@ if (savePoojaRitualBtn) {
     document.getElementById("poojaRitualName").value = "";
     document.getElementById("poojaRitualEmoji").value = "";
     document.getElementById("poojaRitualMantra").value = "";
-    document.getElementById("poojaRitualAudio").value = "";
+    const audioInput = document.getElementById("poojaRitualAudio");
+    if (audioInput) audioInput.value = "";
+    if (poojaRitualAudioBox) {
+      poojaRitualAudioBox.dataset.audio = "";
+      poojaRitualAudioBox.innerHTML = `<span>＋ Pooja Mantra Audio అప్‌లోడ్ చేయండి (Upload MP3)</span>`;
+    }
     document.getElementById("poojaRitualOrder").value = "";
     loadPoojaRituals();
   });
@@ -3922,24 +4330,55 @@ async function loadPoojaRituals(filterGodId = "") {
       const row = document.createElement("div");
       row.className = "cms-list-item";
       row.style.flexDirection = "column";
-      row.style.alignItems = "flex-start";
+      row.style.alignItems = "stretch";
       row.style.gap = "10px";
 
       row.innerHTML = `
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;flex-wrap:wrap;gap:8px;">
           <span>${ritual.emoji || "🙏"} <strong style="color:#ffd166;">${ritual.name}</strong></span>
           <div style="display:flex;gap:8px;">
-            <button class="pooja-edit-btn cms-list-delete-btn" data-godid="${god.id}" data-id="${ritual.id}" style="background:rgba(255,209,102,0.2);color:#ffd166;">Edit</button>
-            <button class="pooja-delete-btn cms-list-delete-btn" data-godid="${god.id}" data-id="${ritual.id}">Delete</button>
+            <button class="pooja-edit-btn cms-list-edit-btn" data-godid="${god.id}" data-id="${ritual.id}" type="button">✏️ Edit</button>
+            <button class="pooja-delete-btn cms-list-delete-btn" data-godid="${god.id}" data-id="${ritual.id}" type="button">Delete</button>
           </div>
         </div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.6);">${ritual.mantraText ? ritual.mantraText.substring(0, 60) + "..." : "No mantra"}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);">${ritual.mantraText ? ritual.mantraText.substring(0, 70) + "..." : "No mantra"}</div>
+
+        <!-- RITUAL AUDIO CONTROLS -->
+        <div class="content-audio-card-box" style="margin:4px 0 6px;">
+          ${ritual.audioUrl ? `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:220px;">
+                <span>🎵</span>
+                <audio src="${ritual.audioUrl}" controls style="height:32px;flex:1;"></audio>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button class="pooja-quick-change-audio" data-godid="${god.id}" data-id="${ritual.id}" type="button" style="padding:4px 10px;font-size:0.8rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
+                <button class="pooja-quick-remove-audio" data-godid="${god.id}" data-id="${ritual.id}" type="button" style="padding:4px 8px;font-size:0.8rem;border-radius:8px;background:rgba(255,100,100,0.15);color:#ff6b6b;border:1px solid rgba(255,100,100,0.3);cursor:pointer;">❌</button>
+              </div>
+            </div>
+          ` : `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">ఆడియో జతచేయబడలేదు</span>
+              <button class="pooja-quick-add-audio" data-godid="${god.id}" data-id="${ritual.id}" type="button" style="padding:5px 12px;font-size:0.82rem;border-radius:8px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">
+                🎵 ＋ Audio జోడించండి
+              </button>
+            </div>
+          `}
+        </div>
 
         <div class="pooja-edit-box" id="poojaEdit-${ritual.id}" style="display:none;width:100%;flex-direction:column;gap:10px;">
           <input class="p-edit-name" value="${ritual.name || ""}" placeholder="Name" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
           <input class="p-edit-emoji" value="${ritual.emoji || ""}" placeholder="Emoji" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
           <textarea class="p-edit-mantra" placeholder="Mantra Text" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;min-height:80px;">${ritual.mantraText || ""}</textarea>
-          <input class="p-edit-audio" value="${ritual.audioUrl || ""}" placeholder="Audio URL" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          
+          <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:2px 0;">
+            <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 మంత్రం ఆడియో (Audio):</label>
+            <div class="cms-audio-upload-box p-edit-audio-box" data-audio="${ritual.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
+              ${ritual.audioUrl ? `<audio src="${ritual.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
+            </div>
+            <input class="p-edit-audio" value="${ritual.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,209,102,0.3);background:rgba(255,255,255,0.07);color:white;">
+          </div>
+
           <div style="display:flex;gap:8px;margin-top:6px;">
             <button class="pooja-save-edit-btn" data-godid="${god.id}" data-id="${ritual.id}" style="padding:10px 20px;border-radius:12px;background:#ffd166;color:#1a1a1a;border:none;font-weight:bold;cursor:pointer;">Save Changes</button>
             <button class="pooja-cancel-edit-btn" data-id="${ritual.id}" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:bold;cursor:pointer;">రద్దు (Cancel)</button>
@@ -3947,14 +4386,59 @@ async function loadPoojaRituals(filterGodId = "") {
         </div>
       `;
 
+      const editBox = row.querySelector(`#poojaEdit-${ritual.id}`);
+      const audioBox = editBox.querySelector(".p-edit-audio-box");
+      const audioInput = editBox.querySelector(".p-edit-audio");
+
+      if (audioBox) {
+        audioBox.addEventListener("click", async () => {
+          const url = await uploadAudioFile(audioBox);
+          if (!url) return;
+          audioBox.dataset.audio = url;
+          audioBox.innerHTML = `<audio src="${url}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">✅ Audio uploaded! మార్చడానికి మళ్లీ క్లిక్ చేయండి</div>`;
+          if (audioInput) audioInput.value = url;
+        });
+      }
+
       row.querySelector(".pooja-edit-btn").addEventListener("click", () => {
-        const box = document.getElementById(`poojaEdit-${ritual.id}`);
-        box.style.display = box.style.display === "none" ? "flex" : "none";
+        editBox.style.display = editBox.style.display === "none" ? "flex" : "none";
       });
 
       row.querySelector(".pooja-cancel-edit-btn").addEventListener("click", () => {
-        document.getElementById(`poojaEdit-${ritual.id}`).style.display = "none";
+        editBox.style.display = "none";
       });
+
+      const quickAddBtn = row.querySelector(".pooja-quick-add-audio");
+      if (quickAddBtn) {
+        quickAddBtn.addEventListener("click", async () => {
+          const url = await uploadAudioFile(quickAddBtn);
+          if (!url) return;
+          await updateDoc(doc(db, "poojaGods", god.id, "rituals", ritual.id), { audioUrl: url, updatedAt: serverTimestamp() });
+          alert("✅ ఆడియో విజయవంతంగా జోడించబడింది");
+          loadPoojaRituals(filterGodId);
+        });
+      }
+
+      const quickChangeBtn = row.querySelector(".pooja-quick-change-audio");
+      if (quickChangeBtn) {
+        quickChangeBtn.addEventListener("click", async () => {
+          const url = await uploadAudioFile(quickChangeBtn);
+          if (!url) return;
+          await updateDoc(doc(db, "poojaGods", god.id, "rituals", ritual.id), { audioUrl: url, updatedAt: serverTimestamp() });
+          alert("✅ ఆడియో అప్‌డేట్ చేయబడింది");
+          loadPoojaRituals(filterGodId);
+        });
+      }
+
+      const quickRemoveBtn = row.querySelector(".pooja-quick-remove-audio");
+      if (quickRemoveBtn) {
+        quickRemoveBtn.addEventListener("click", async () => {
+          if (!confirm("ఈ విధి నుండి ఆడియోను తొలగించాలనుకుంటున్నారా?")) return;
+          await updateDoc(doc(db, "poojaGods", god.id, "rituals", ritual.id), { audioUrl: "", updatedAt: serverTimestamp() });
+          alert("✅ ఆడియో తొలగించబడింది");
+          loadPoojaRituals(filterGodId);
+        });
+      }
 
       row.querySelector(".pooja-delete-btn").addEventListener("click", async (e) => {
         if (!confirm("Delete this ritual?")) return;
@@ -3965,12 +4449,12 @@ async function loadPoojaRituals(filterGodId = "") {
 
       row.querySelector(".pooja-save-edit-btn").addEventListener("click", async (e) => {
         const btn = e.currentTarget;
-        const box = document.getElementById(`poojaEdit-${btn.dataset.id}`);
+        const finalAudio = audioInput ? audioInput.value.trim() : (audioBox?.dataset?.audio || "");
         await updateDoc(doc(db, "poojaGods", btn.dataset.godid, "rituals", btn.dataset.id), {
-          name: box.querySelector(".p-edit-name").value.trim(),
-          emoji: box.querySelector(".p-edit-emoji").value.trim(),
-          mantraText: box.querySelector(".p-edit-mantra").value.trim(),
-          audioUrl: box.querySelector(".p-edit-audio").value.trim(),
+          name: editBox.querySelector(".p-edit-name").value.trim(),
+          emoji: editBox.querySelector(".p-edit-emoji").value.trim(),
+          mantraText: editBox.querySelector(".p-edit-mantra").value.trim(),
+          audioUrl: finalAudio,
           updatedAt: serverTimestamp()
         });
         alert("✅ Updated");

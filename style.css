@@ -6353,3 +6353,59 @@ button[class*="delete"] {
   }
 }
 
+/* ══════════════════════════════════════
+   CMS UNIVERSAL AUDIO BOX & CONTROLS
+══════════════════════════════════════ */
+.cms-audio-upload-box {
+  width: 100%;
+  min-height: 52px;
+  border: 1.5px dashed rgba(255, 209, 102, 0.5);
+  border-radius: 12px;
+  background: rgba(255, 209, 102, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px 16px;
+  margin: 8px 0;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+}
+.cms-audio-upload-box:hover {
+  border-color: #ffd166;
+  background: rgba(255, 209, 102, 0.14);
+  transform: translateY(-1px);
+}
+.cms-audio-upload-box span {
+  color: #ffd166;
+  font-weight: 700;
+  font-size: 0.92rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.content-audio-card-box {
+  margin: 10px 0;
+  background: rgba(255, 209, 102, 0.06);
+  border: 1px solid rgba(255, 209, 102, 0.25);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+}
+.quick-add-audio-btn {
+  background: linear-gradient(135deg, #ffd166, #e67e22) !important;
+  color: #1a0c02 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.quick-add-audio-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 209, 102, 0.3) !important;
+}
+

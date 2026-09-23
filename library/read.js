@@ -143,7 +143,7 @@ async function loadContent() {
 
     // Determine Main Title and Category Info
     const displayTitle = isSubcategoryCollection ? subcategoryData.title : foundItem.title;
-    const audioUrl = itemsList.find(i => i.audioUrl)?.audioUrl || null;
+    const audioUrl = itemsList.find(i => i.audioUrl)?.audioUrl || subcategoryData?.audioUrl || null;
 
     readerTitle.innerText = displayTitle;
     readerSubtitle.innerText = isSubcategoryCollection 
