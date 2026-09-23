@@ -246,17 +246,27 @@ function applyAllFilters(currentCat = null) {
     `;
   }
 
-  filtered.forEach((item) => {
+  filtered.forEach((item, idx) => {
     const readUrl = `read.html?slug=${encodeURIComponent(item.slug)}`;
+    const delay = Math.min(idx * 0.03, 0.6);
     html += `
-      <a href="${readUrl}" class="all-item-card">
-        <div class="all-item-cat-tag">
-          ${item.categoryEmoji || "📿"} ${item.categoryTitle || "సాహిత్యం"}
+      <a href="${readUrl}" class="all-item-card" style="animation-delay: ${delay}s;">
+        <div class="all-item-icon-wrap">
+          <span class="all-item-icon">${item.categoryEmoji || "📿"}</span>
         </div>
-        <div class="all-item-title">
-          <span>${item.title}</span>
-          ${item.hasAudio ? `<span class="all-item-badge-audio" title="ఆడియో ఉంది">🎵</span>` : ''}
+        <div class="all-item-body">
+          <div class="all-item-top-row">
+            <span class="all-item-cat-tag">${item.categoryTitle || "సాహిత్యం"}</span>
+            ${item.hasAudio ? `
+              <span class="all-item-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
+                <span class="audio-wave-bars"><span></span><span></span><span></span></span>
+                <span>ఆడియో</span>
+              </span>
+            ` : ''}
+          </div>
+          <h4 class="all-item-title">${item.title}</h4>
         </div>
+        <span class="all-item-arrow">→</span>
       </a>
     `;
   });
@@ -286,15 +296,29 @@ function renderSubcategories(list, currentCat) {
     `;
   }
 
-  list.forEach((sub) => {
+  list.forEach((sub, idx) => {
     const slug = sub.slug || slugify(sub.title) || sub.id;
     const readUrl = `read.html?slug=${encodeURIComponent(slug)}`;
+    const delay = Math.min(idx * 0.03, 0.6);
 
     html += `
-      <a href="${readUrl}" class="subcategory-card">
-        <span>📿</span>
-        <span>${sub.title}</span>
-        ${sub.audioUrl ? `<span style="font-size:0.85rem;color:#ffd166;margin-left:auto;">🎵</span>` : ''}
+      <a href="${readUrl}" class="all-item-card" style="animation-delay: ${delay}s;">
+        <div class="all-item-icon-wrap">
+          <span class="all-item-icon">${currentCat?.emoji || "📿"}</span>
+        </div>
+        <div class="all-item-body">
+          <div class="all-item-top-row">
+            <span class="all-item-cat-tag">${currentCat?.title || "విభాగం"}</span>
+            ${sub.audioUrl ? `
+              <span class="all-item-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
+                <span class="audio-wave-bars"><span></span><span></span><span></span></span>
+                <span>ఆడియో</span>
+              </span>
+            ` : ''}
+          </div>
+          <h4 class="all-item-title">${sub.title}</h4>
+        </div>
+        <span class="all-item-arrow">→</span>
       </a>
     `;
   });
