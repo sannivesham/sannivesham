@@ -20,7 +20,41 @@ const searchInput = document.getElementById("subcategorySearchInput");
 let isAllMode = false;
 let allCategoriesList = [];
 let allUnifiedItems = [];
+let allSubcategories = [];
 let activeCatFilter = "all";
+let currentCategory = null;
+
+
+const DEITY_IMAGES = {
+  ganesha: "https://res.cloudinary.com/du5em76za/image/upload/v1784085346/bb4gi6iomegl5n2oxsfi.png",
+  shiva: "https://res.cloudinary.com/du5em76za/image/upload/v1784095160/gjhwblwy0htrarocmvfa.png",
+  vishnu: "https://res.cloudinary.com/du5em76za/image/upload/v1784085417/bpjze4zvpnrdsnfh43lw.png",
+  venkateswara: "../images/tirumala.jpg",
+  hanuman: "https://res.cloudinary.com/du5em76za/image/upload/v1784085527/lvtbrrjzu0hpc8zln10a.png",
+  narasimha: "https://res.cloudinary.com/du5em76za/image/upload/v1784085578/dlwo5piw8s21nkhu8agf.png",
+  devi: "../images/devi.png",
+  suktam: "https://res.cloudinary.com/du5em76za/image/upload/v1784085776/y5cz11hvy2rxdxy7onfe.png",
+  gita: "../images/gita.png",
+  default: "https://res.cloudinary.com/du5em76za/image/upload/v1784085723/jfzdyhiuku0afwhaatgr.png"
+};
+
+function resolveItemImage(title = "", categoryTitle = "", fallbackCatImage = "") {
+  const combined = (title + " " + categoryTitle).toLowerCase();
+  
+  if (/వినాయక|గణేశ|గణపతి|సంకట|మోదక|లంబోదర|ganesh/i.test(combined)) return DEITY_IMAGES.ganesha;
+  if (/శివ|రుద్ర|లింగ|బిల్వ|చంద్రశేఖర|నటరాజ|దక్షిణామూర్తి|కాలభైరవ|shiva/i.test(combined)) return DEITY_IMAGES.shiva;
+  if (/హనుమాన్|ఆంజనేయ|చాలీసా|సుందర|మారుతి|hanuman/i.test(combined)) return DEITY_IMAGES.hanuman;
+  if (/నరసింహ|నృసింహ|ప్రహ్లాద|నారసింహ|కవచ/i.test(combined)) return DEITY_IMAGES.narasimha;
+  if (/వేంకటేశ్వర|శ్రీనివాస|తిరుమల|గోవింద|బాలాజీ|venkateswara/i.test(combined)) return DEITY_IMAGES.venkateswara;
+  if (/కృష్ణ|విష్ణు|అచ్యుత|ముకుంద|హరి|సహస్రనామ|నారాయణ/i.test(combined)) return DEITY_IMAGES.vishnu;
+  if (/లలిత|లక్ష్మి|కనకధార|దుర్గ|సరస్వతి|మహిష|దేవి|అన్నపూర్ణ|గాయత్రి|శ్రీచక్ర|devi|durga|lakshmi/i.test(combined)) return DEITY_IMAGES.devi;
+  if (/సూక్త|వేద|పురుష|శ్రీ సూక్త|suktam/i.test(combined)) return DEITY_IMAGES.suktam;
+  if (/గీత|భగవద్గీత|gita/i.test(combined)) return DEITY_IMAGES.gita;
+  
+  if (fallbackCatImage) return fallbackCatImage;
+  return DEITY_IMAGES.default;
+}
+
 
 async function initPage() {
   try {
@@ -44,7 +78,7 @@ async function initPage() {
     }
 
     // Load category info
-    let currentCategory = null;
+    currentCategory = null;
     if (isAllMode) {
       // Try to load custom all-library-category if saved in Firestore
       try {
@@ -94,6 +128,7 @@ async function initPage() {
       subsList.forEach(sub => {
         const parentCat = catMap[sub.categoryId] || { title: "ఇతర రచనలు", emoji: "📿" };
         const slug = sub.slug || slugify(sub.title) || sub.id;
+        const imgUrl = sub.image || resolveItemImage(sub.title, parentCat.title, parentCat.image);
         unifiedMap.set(`sub_${sub.id}`, {
           id: sub.id,
           title: sub.title,
@@ -101,6 +136,7 @@ async function initPage() {
           categoryId: sub.categoryId || "general",
           categoryTitle: parentCat.title,
           categoryEmoji: parentCat.emoji || "📿",
+          image: imgUrl,
           hasAudio: Boolean(sub.audioUrl),
           order: sub.order ?? 0
         });
@@ -114,6 +150,7 @@ async function initPage() {
         const catEmoji = parentCat ? (parentCat.emoji || "📿") : "📖";
         const catId = parentCat ? parentCat.id : (parentSub ? parentSub.categoryId : "general");
         const slug = con.slug || slugify(con.title) || con.id;
+        const imgUrl = con.image || parentSub?.image || resolveItemImage(con.title, catTitle, parentCat?.image);
 
         // If not already in unifiedMap under the same title
         let exists = false;
@@ -121,6 +158,7 @@ async function initPage() {
           if (item.title === con.title) {
             exists = true;
             if (con.audioUrl && !item.hasAudio) item.hasAudio = true;
+            if (!item.image && imgUrl) item.image = imgUrl;
             break;
           }
         }
@@ -133,6 +171,7 @@ async function initPage() {
             categoryId: catId,
             categoryTitle: catTitle,
             categoryEmoji: catEmoji,
+            image: imgUrl,
             hasAudio: Boolean(con.audioUrl),
             order: con.order ?? 0
           });
@@ -234,13 +273,13 @@ function applyAllFilters(currentCat = null) {
   let html = "";
   if (currentCat && (currentCat.text || currentCat.audioUrl) && activeCatFilter === "all" && !queryText) {
     html += `
-      <div style="grid-column:1/-1;background:rgba(255,209,102,0.08);border:1px solid #ffd166;border-radius:14px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;width:100%;">
-        <div style="flex:1;min-width:240px;">
-          <h3 style="color:#ffd166;margin:0 0 6px;font-size:1.1rem;">📖 ${currentCat.title} సాహిత్యం / శ్లోకాలు</h3>
-          <p style="margin:0;color:rgba(255,255,255,0.85);font-size:0.9rem;line-height:1.4;">${currentCat.text ? currentCat.text.slice(0, 140) + (currentCat.text.length > 140 ? '...' : '') : 'సంపూర్ణ సాహిత్యం మరియు ఆడియో అందుబాటులో ఉంది.'}</p>
+      <div class="divine-highlight-banner">
+        <div class="divine-banner-text">
+          <h3>🪔 ${currentCat.title} సంపూర్ణ గ్రంథం &amp; శ్లోకాలు</h3>
+          <p>${currentCat.text ? currentCat.text.slice(0, 140) + (currentCat.text.length > 140 ? '...' : '') : 'సంపూర్ణ సాహిత్యం మరియు దివ్య ఆడియో అందుబాటులో ఉంది.'}</p>
         </div>
-        <a href="read.html?slug=all" class="reader-back-btn" style="background:#ffd166;color:#120703;font-weight:700;padding:10px 20px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
-          ${currentCat.audioUrl ? '🎵 ఆడియోతో పాటు చదవండి' : '📖 చదవండి'}
+        <a href="read.html?slug=all" class="divine-banner-cta">
+          ${currentCat.audioUrl ? '🎵 ఆడియోతో పాటు చదవండి' : '📖 చదవండి →'}
         </a>
       </div>
     `;
@@ -249,24 +288,28 @@ function applyAllFilters(currentCat = null) {
   filtered.forEach((item, idx) => {
     const readUrl = `read.html?slug=${encodeURIComponent(item.slug)}`;
     const delay = Math.min(idx * 0.03, 0.6);
+    const imgUrl = item.image || resolveItemImage(item.title, item.categoryTitle, "");
+
     html += `
-      <a href="${readUrl}" class="all-item-card" style="animation-delay: ${delay}s;">
-        <div class="all-item-icon-wrap">
-          <span class="all-item-icon">${item.categoryEmoji || "📿"}</span>
+      <a href="${readUrl}" class="divine-stotra-card" style="animation-delay: ${delay}s;">
+        <div class="stotra-card-media">
+          <img src="${imgUrl}" alt="${item.title}" class="stotra-card-img" loading="lazy">
+          <div class="stotra-card-overlay"></div>
+          <span class="stotra-badge-cat">${item.categoryEmoji || "📿"} ${item.categoryTitle || "స్తోత్రం"}</span>
+          ${item.hasAudio ? `
+            <span class="stotra-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
+              <span class="audio-wave-bars"><span></span><span></span><span></span></span>
+              <span>ఆడియో</span>
+            </span>
+          ` : ''}
         </div>
-        <div class="all-item-body">
-          <div class="all-item-top-row">
-            <span class="all-item-cat-tag">${item.categoryTitle || "సాహిత్యం"}</span>
-            ${item.hasAudio ? `
-              <span class="all-item-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
-                <span class="audio-wave-bars"><span></span><span></span><span></span></span>
-                <span>ఆడియో</span>
-              </span>
-            ` : ''}
+        <div class="stotra-card-content">
+          <h3 class="stotra-card-title">${item.title}</h3>
+          <div class="stotra-card-footer">
+            <span class="stotra-card-type">📖 పవిత్ర సాహిత్యం</span>
+            <span class="stotra-read-cta">చదవండి →</span>
           </div>
-          <h4 class="all-item-title">${item.title}</h4>
         </div>
-        <span class="all-item-arrow">→</span>
       </a>
     `;
   });
@@ -284,13 +327,13 @@ function renderSubcategories(list, currentCat) {
   if (currentCat && (currentCat.text || currentCat.audioUrl)) {
     const catSlug = currentCat.slug || slugify(currentCat.title) || categoryId;
     html += `
-      <div style="grid-column:1/-1;background:rgba(255,209,102,0.08);border:1px solid #ffd166;border-radius:14px;padding:16px 20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
-        <div style="flex:1;min-width:240px;">
-          <h3 style="color:#ffd166;margin:0 0 6px;font-size:1.1rem;">📖 ${currentCat.title} సాహిత్యం / శ్లోకాలు</h3>
-          <p style="margin:0;color:rgba(255,255,255,0.85);font-size:0.9rem;line-height:1.4;">${currentCat.text ? currentCat.text.slice(0, 140) + (currentCat.text.length > 140 ? '...' : '') : 'సంపూర్ణ సాహిత్యం మరియు ఆడియో అందుబాటులో ఉంది.'}</p>
+      <div class="divine-highlight-banner">
+        <div class="divine-banner-text">
+          <h3>🪔 ${currentCat.title} సంపూర్ణ గ్రంథం &amp; శ్లోకాలు</h3>
+          <p>${currentCat.text ? currentCat.text.slice(0, 140) + (currentCat.text.length > 140 ? '...' : '') : 'సంపూర్ణ సాహిత్యం మరియు దివ్య ఆడియో అందుబాటులో ఉంది.'}</p>
         </div>
-        <a href="read.html?slug=${encodeURIComponent(catSlug)}" class="reader-back-btn" style="background:#ffd166;color:#120703;font-weight:700;padding:10px 20px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
-          ${currentCat.audioUrl ? '🎵 ఆడియోతో పాటు చదవండి' : '📖 చదవండి'}
+        <a href="read.html?slug=${encodeURIComponent(catSlug)}" class="divine-banner-cta">
+          ${currentCat.audioUrl ? '🎵 ఆడియోతో పాటు చదవండి' : '📖 చదవండి →'}
         </a>
       </div>
     `;
@@ -300,25 +343,28 @@ function renderSubcategories(list, currentCat) {
     const slug = sub.slug || slugify(sub.title) || sub.id;
     const readUrl = `read.html?slug=${encodeURIComponent(slug)}`;
     const delay = Math.min(idx * 0.03, 0.6);
+    const imgUrl = sub.image || resolveItemImage(sub.title, currentCat?.title || "", currentCat?.image);
 
     html += `
-      <a href="${readUrl}" class="all-item-card" style="animation-delay: ${delay}s;">
-        <div class="all-item-icon-wrap">
-          <span class="all-item-icon">${currentCat?.emoji || "📿"}</span>
+      <a href="${readUrl}" class="divine-stotra-card" style="animation-delay: ${delay}s;">
+        <div class="stotra-card-media">
+          <img src="${imgUrl}" alt="${sub.title}" class="stotra-card-img" loading="lazy">
+          <div class="stotra-card-overlay"></div>
+          <span class="stotra-badge-cat">${currentCat?.emoji || "📿"} ${currentCat?.title || "విభాగం"}</span>
+          ${sub.audioUrl ? `
+            <span class="stotra-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
+              <span class="audio-wave-bars"><span></span><span></span><span></span></span>
+              <span>ఆడియో</span>
+            </span>
+          ` : ''}
         </div>
-        <div class="all-item-body">
-          <div class="all-item-top-row">
-            <span class="all-item-cat-tag">${currentCat?.title || "విభాగం"}</span>
-            ${sub.audioUrl ? `
-              <span class="all-item-badge-audio" title="సంపూర్ణ ఆడియో అందుబాటులో ఉంది">
-                <span class="audio-wave-bars"><span></span><span></span><span></span></span>
-                <span>ఆడియో</span>
-              </span>
-            ` : ''}
+        <div class="stotra-card-content">
+          <h3 class="stotra-card-title">${sub.title}</h3>
+          <div class="stotra-card-footer">
+            <span class="stotra-card-type">📖 పవిత్ర సాహిత్యం</span>
+            <span class="stotra-read-cta">చదవండి →</span>
           </div>
-          <h4 class="all-item-title">${sub.title}</h4>
         </div>
-        <span class="all-item-arrow">→</span>
       </a>
     `;
   });
@@ -334,14 +380,14 @@ if (searchInput) {
     }
     const queryText = e.target.value.trim().toLowerCase();
     if (!queryText) {
-      renderSubcategories(allSubcategories);
+      renderSubcategories(allSubcategories, currentCategory);
       return;
     }
     const filtered = allSubcategories.filter(sub => 
       (sub.title && sub.title.toLowerCase().includes(queryText)) ||
       (sub.slug && sub.slug.toLowerCase().includes(queryText))
     );
-    renderSubcategories(filtered);
+    renderSubcategories(filtered, currentCategory);
   });
 }
 
