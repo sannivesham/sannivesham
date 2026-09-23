@@ -214,9 +214,17 @@ export class SacredReader {
     }, 2400);
   }
 
-  // Devotional Audio Player Bar
+  // Devotional Real-Time Synced Audio Player Bar
   initAudioBar(audioUrl) {
     if (!audioUrl) return;
+
+    const directUrl = this.toDirectAudio(audioUrl);
+    if (!directUrl) return;
+
+    document.body.classList.add("has-reader-audio");
+    this.autoScrollEnabled = true;
+    this.currentActiveVerseIdx = -1;
+
     let audioBar = document.getElementById("readerAudioBar");
     if (!audioBar) {
       audioBar = document.createElement("div");
@@ -224,8 +232,11 @@ export class SacredReader {
       audioBar.className = "reader-audio-bar";
       audioBar.innerHTML = `
         <div class="audio-track-info">
-          <span>🔊</span>
-          <span class="audio-track-title">${this.title || "స్తోత్ర పారాయణం"}</span>
+          <span>🎶</span>
+          <div class="audio-track-text-wrap">
+            <span class="audio-track-title">${this.title || "స్తోత్ర పారాయణం"}</span>
+            <span id="audioTrackVerseInfo" class="audio-verse-indicator">రియల్-టైమ్ శ్లోక సింక్ ⚡</span>
+          </div>
         </div>
         <div class="audio-controls">
           <button id="readerAudioPlayBtn" class="audio-play-btn" title="ప్లే / పాజ్">▶</button>
@@ -235,49 +246,157 @@ export class SacredReader {
             <span id="audioDuration" class="audio-time">0:00</span>
           </div>
           <button id="readerAudioSpeedBtn" class="audio-speed-btn" title="వేగం">1.0x</button>
+          <button id="readerAutoScrollBtn" class="audio-scroll-toggle-btn active" title="ఆటో-స్క్రోల్ ఆన్/ఆఫ్">📜 Auto-Scroll</button>
         </div>
       `;
       document.body.appendChild(audioBar);
     }
 
-    this.audioEl = new Audio(audioUrl);
+    try {
+      this.audioEl = new Audio(directUrl);
+    } catch (e) {
+      console.warn("Audio element error:", e);
+      return;
+    }
+
     const playBtn = document.getElementById("readerAudioPlayBtn");
     const slider = document.getElementById("readerAudioSlider");
     const currentTimeEl = document.getElementById("audioCurrentTime");
     const durationEl = document.getElementById("audioDuration");
     const speedBtn = document.getElementById("readerAudioSpeedBtn");
+    const autoScrollBtn = document.getElementById("readerAutoScrollBtn");
+    const verseInfoEl = document.getElementById("audioTrackVerseInfo");
 
     const formatTime = (secs) => {
-      if (isNaN(secs)) return "0:00";
+      if (isNaN(secs) || secs === Infinity) return "0:00";
       const m = Math.floor(secs / 60);
       const s = Math.floor(secs % 60);
       return `${m}:${s < 10 ? "0" : ""}${s}`;
     };
 
+    // Calculate/Interpolate timestamps for verses
+    const setupVerseTimestamps = () => {
+      const verseElements = Array.from(document.querySelectorAll(".reader-verse-block"));
+      if (verseElements.length === 0) return;
+
+      const dur = this.audioEl.duration;
+      const hasExplicit = verseElements.some(el => el.dataset.start !== undefined && el.dataset.start !== "" && parseFloat(el.dataset.start) > 0);
+
+      if (!hasExplicit && dur && !isNaN(dur) && dur > 0) {
+        const count = verseElements.length;
+        verseElements.forEach((el, i) => {
+          el.dataset.start = (dur * (i / count)).toFixed(1);
+        });
+      }
+    };
+
+    // Click on any verse to seek and play
+    const bindVerseClicks = () => {
+      const verseElements = Array.from(document.querySelectorAll(".reader-verse-block"));
+      verseElements.forEach((el) => {
+        el.classList.add("syncable");
+        el.onclick = () => {
+          const start = parseFloat(el.dataset.start);
+          if (!isNaN(start)) {
+            this.audioEl.currentTime = start;
+            if (this.audioEl.paused) {
+              this.audioEl.play().catch(() => {});
+              if (playBtn) playBtn.innerText = "⏸";
+            }
+            const idx = parseInt(el.dataset.verseIdx, 10);
+            this.showToast(`శ్లోకం #${isNaN(idx) ? "" : idx + 1} వద్ద ప్లే అవుతోంది 🎵`);
+          }
+        };
+      });
+    };
+
+    bindVerseClicks();
+
+    // Toggle Play/Pause
     playBtn.onclick = () => {
       if (this.audioEl.paused) {
-        this.audioEl.play();
-        playBtn.innerText = "⏸";
+        this.audioEl.play().then(() => {
+          playBtn.innerText = "⏸";
+          setupVerseTimestamps();
+        }).catch((err) => {
+          console.warn("Audio play prevented:", err);
+          this.showToast("ఆడియో ప్లే చేయలేకపోయాము");
+        });
       } else {
         this.audioEl.pause();
         playBtn.innerText = "▶";
       }
     };
 
+    // Toggle Auto-Scroll
+    if (autoScrollBtn) {
+      autoScrollBtn.onclick = () => {
+        this.autoScrollEnabled = !this.autoScrollEnabled;
+        if (this.autoScrollEnabled) {
+          autoScrollBtn.classList.add("active");
+          this.showToast("📜 ఆటో-స్క్రోల్ ఆన్ చేయబడింది");
+        } else {
+          autoScrollBtn.classList.remove("active");
+          this.showToast("📜 ఆటో-స్క్రోల్ ఆఫ్ చేయబడింది");
+        }
+      };
+    }
+
+    // Real-Time Timeupdate & Verse Syncing
     this.audioEl.ontimeupdate = () => {
       if (this.audioEl.duration) {
         slider.value = (this.audioEl.currentTime / this.audioEl.duration) * 100;
         currentTimeEl.innerText = formatTime(this.audioEl.currentTime);
       }
+
+      const current = this.audioEl.currentTime;
+      const verseElements = Array.from(document.querySelectorAll(".reader-verse-block"));
+      if (verseElements.length === 0) return;
+
+      // Find current active verse
+      let activeIdx = -1;
+      for (let i = 0; i < verseElements.length; i++) {
+        const start = parseFloat(verseElements[i].dataset.start) || 0;
+        const nextStart = (i + 1 < verseElements.length)
+          ? (parseFloat(verseElements[i + 1].dataset.start) || Infinity)
+          : (this.audioEl.duration || Infinity);
+
+        if (current >= start && current < nextStart) {
+          activeIdx = i;
+          break;
+        }
+      }
+
+      if (activeIdx !== -1 && activeIdx !== this.currentActiveVerseIdx) {
+        this.currentActiveVerseIdx = activeIdx;
+        verseElements.forEach((el, idx) => {
+          if (idx === activeIdx) {
+            el.classList.add("active-sync-verse");
+            if (this.autoScrollEnabled) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          } else {
+            el.classList.remove("active-sync-verse");
+          }
+        });
+
+        if (verseInfoEl) {
+          verseInfoEl.innerText = `శ్లోకం ${activeIdx + 1} / ${verseElements.length}`;
+        }
+      }
     };
 
     this.audioEl.onloadedmetadata = () => {
       durationEl.innerText = formatTime(this.audioEl.duration);
+      setupVerseTimestamps();
     };
 
     this.audioEl.onended = () => {
       playBtn.innerText = "▶";
       slider.value = 0;
+      this.currentActiveVerseIdx = -1;
+      document.querySelectorAll(".reader-verse-block").forEach(el => el.classList.remove("active-sync-verse"));
+      if (verseInfoEl) verseInfoEl.innerText = "పారాయణం పూర్తయింది ✦";
     };
 
     slider.oninput = () => {
@@ -295,6 +414,19 @@ export class SacredReader {
       speedBtn.innerText = `${newSpeed}x`;
       this.showToast(`ఆడియో వేగం: ${newSpeed}x`);
     };
+  }
+
+  toDirectAudio(url) {
+    if (!url) return null;
+    let clean = url.trim();
+    const driveMatch = clean.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/);
+    if (driveMatch) {
+      return `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
+    }
+    if (clean.includes("dropbox.com")) {
+      return clean.replace("dl=0", "raw=1").replace("www.dropbox.com", "dl.dropboxusercontent.com");
+    }
+    return clean;
   }
 
   // Setup button event listeners

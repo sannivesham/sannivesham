@@ -427,6 +427,150 @@ body.theme-oled .reader-toolbar {
   border-radius: 6px;
   font-size: 0.8rem;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.audio-scroll-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--reader-text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.audio-scroll-toggle-btn.active {
+  background: rgba(255, 209, 102, 0.18);
+  color: #ffd166;
+  border-color: rgba(255, 209, 102, 0.5);
+  font-weight: 600;
+}
+
+.audio-track-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.audio-verse-indicator {
+  font-size: 0.76rem;
+  color: #ffd166;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+/* =========================================================
+   SYNCHRONIZED REAL-TIME SHLOKA HIGHLIGHTING
+   ========================================================= */
+
+body.has-reader-audio .reader-container,
+body.has-reader-audio main {
+  padding-bottom: 110px;
+}
+
+.reader-verses-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reader-verse-block {
+  position: relative;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border-left: 4px solid transparent;
+  background: transparent;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.reader-verse-block.syncable {
+  cursor: pointer;
+}
+
+.reader-verse-block.syncable:hover {
+  background: rgba(255, 215, 0, 0.05);
+  border-left-color: rgba(255, 215, 0, 0.4);
+}
+
+.reader-verse-block.syncable:hover .verse-play-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.verse-play-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--reader-gold);
+  background: rgba(255, 209, 102, 0.12);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  opacity: 0.65;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+/* Active Highlight when playing in real-time */
+.reader-verse-block.active-sync-verse {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.16), rgba(255, 170, 0, 0.08));
+  border-left: 4px solid #ffd166;
+  border-radius: 14px;
+  box-shadow: 0 4px 25px rgba(255, 209, 102, 0.25), inset 0 0 16px rgba(255, 215, 0, 0.06);
+  transform: scale(1.012);
+  color: #fffaf0;
+}
+
+.reader-verse-block.active-sync-verse .verse-play-badge {
+  opacity: 1;
+  background: #ffd166;
+  color: #120703;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+}
+
+.reader-verse-block.active-sync-verse .verse-lines {
+  text-shadow: 0 0 12px rgba(255, 209, 102, 0.45);
+}
+
+[data-theme="light"] .reader-verse-block.active-sync-verse {
+  background: linear-gradient(135deg, rgba(230, 140, 0, 0.16), rgba(255, 200, 50, 0.12));
+  border-left: 4px solid #c97a00;
+  box-shadow: 0 4px 20px rgba(200, 130, 0, 0.2);
+  color: #301400;
+}
+
+@media (max-width: 650px) {
+  .reader-audio-bar {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px max(12px, env(safe-area-inset-bottom));
+  }
+  .audio-controls {
+    width: 100%;
+    max-width: 100%;
+    gap: 8px;
+  }
+  .audio-track-info {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.85rem;
+  }
+  .audio-scroll-toggle-btn {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+  body.has-reader-audio .reader-container,
+  body.has-reader-audio main {
+    padding-bottom: 130px;
+  }
 }
 
 /* =========================================================

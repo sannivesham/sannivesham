@@ -164,17 +164,54 @@ async function loadContent() {
       } catch (e) {}
     }
 
-    // Render Items / Verses
+    // Render Items / Verses with Real-Time Shloka Sync Support
     let html = "";
     if (itemsList.length === 0) {
       html = `<p style="text-align:center;padding:40px 0;color:var(--reader-text-muted);">ఇంకా ఈ విభాగంలో శ్లోకాలు లేదా సాహిత్యం జోడించలేదు.</p>`;
     } else {
+      let globalVerseIdx = 0;
       itemsList.forEach((item, idx) => {
         const hasMultiple = itemsList.length > 1;
+
+        // Parse individual stanzas from item.text
+        const text = (item.text || "").trim();
+        const rawStanzas = text.split(/\n\s*\n+/);
+
+        let stanzasHtml = "";
+        rawStanzas.forEach((stanza) => {
+          let sText = stanza.trim();
+          if (!sText) return;
+
+          let startTime = null;
+          // Check for timestamp like [0:15] or [00:15] or [1:25.5]
+          const m = sText.match(/\[(\d{1,2}):(\d{2}(?:\.\d{1,2})?)\]/);
+          if (m) {
+            startTime = parseInt(m[1], 10) * 60 + parseFloat(m[2]);
+            sText = sText.replace(/\[\d{1,2}:\d{2}(?:\.\d{1,2})?\]\s*/g, "").trim();
+          }
+
+          const cleanLines = sText.replace(/\n/g, "<br>");
+          const hasStart = startTime !== null;
+
+          stanzasHtml += `
+            <div class="reader-verse-block ${audioUrl ? 'syncable' : ''}" 
+                 data-verse-idx="${globalVerseIdx}" 
+                 ${hasStart ? `data-start="${startTime}"` : ''}>
+              ${audioUrl ? `<div class="verse-play-badge" title="ఈ శ్లోకం నుండి వినండి">▶ #${globalVerseIdx + 1}</div>` : ''}
+              <div class="verse-lines">${cleanLines}</div>
+            </div>
+          `;
+          globalVerseIdx++;
+        });
+
         html += `
           <section class="reader-section">
             ${hasMultiple && item.title ? `<h2 class="reader-section-title">${item.title}</h2>` : ""}
-            <div class="reader-text-content">${(item.text || "").trim().replace(/\n/g, "<br>")}</div>
+            <div class="reader-text-content">
+              <div class="reader-verses-container">
+                ${stanzasHtml || `<div class="reader-verse-block"><div class="verse-lines">${(item.text || "").trim().replace(/\n/g, "<br>")}</div></div>`}
+              </div>
+            </div>
             ${item.audioUrl && !audioUrl ? `
               <div style="text-align:center;margin-top:16px;">
                 <a href="${item.audioUrl}" target="_blank" class="reader-btn">🔊 ఆడియో వినండి</a>

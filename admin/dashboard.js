@@ -2148,7 +2148,10 @@ function openLibContentInlineEditor(id, items) {
       <input class="edit-lib-content-title" value="${data.title || ""}" placeholder="Title">
       <input class="edit-lib-content-slug" value="${data.slug || slugify(data.title) || ""}" placeholder="Slug / Clean URL (e.g. hanuman-chalisa)">
       <textarea class="edit-lib-content-text" placeholder="Telugu Text">${data.text || ""}</textarea>
-      <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="Audio URL">
+      <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="Audio URL (Direct MP3, Cloudinary, Drive link)">
+      <div style="font-size:0.78rem;color:#ffd166;margin:4px 0 8px;">
+        💡 <em>రియల్-టైమ్ సింక్: టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు [0:15], [0:40] లాగా టైమింగ్స్ ఇవ్వవచ్చు లేదా ఆటో-సింక్ వాడుకోవచ్చు.</em>
+      </div>
       <button class="save-lib-content-edit-btn">Save Changes</button>
     </div>
   `;
