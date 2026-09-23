@@ -247,11 +247,11 @@ body {
 ========================= */
 .glass-navbar {
   position: sticky;
-  top: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px);
+  top: max(calc(env(safe-area-inset-top, 0px) + 6px), 10px);
   z-index: 1000;
   width: fit-content;
   max-width: min(94%, 860px);
-  margin: max(calc(env(safe-area-inset-top, 0px) + 28px), 28px) auto 0;
+  margin: max(calc(env(safe-area-inset-top, 0px) + 8px), 10px) auto 4px;
   padding: 8px 18px;
   display: flex;
   justify-content: center;
@@ -293,9 +293,7 @@ body {
 
 .home-page {
   min-height: 100vh;
-
-  padding: 40px 20px;
-
+  padding: 12px 20px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -303,16 +301,12 @@ body {
 
 .top-brand {
   width: 100%;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  gap: 52px;
-
-  margin-bottom: 15px;
-
-  padding: 25px;
+  gap: 40px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
 }
 
 .logo-image {
@@ -1338,8 +1332,8 @@ body {
 
     width: 94%;
 
-    margin: max(calc(env(safe-area-inset-top, 0px) + 28px), 28px) auto 0;
-    top: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px);
+    margin: max(calc(env(safe-area-inset-top, 0px) + 6px), 8px) auto 4px;
+    top: max(calc(env(safe-area-inset-top, 0px) + 4px), 8px);
 
     padding: 12px 18px;
 
@@ -1550,9 +1544,9 @@ body {
   @media (max-width: 700px) {
     .glass-navbar {
       width: calc(100% - 24px) !important;
-      margin: calc(env(safe-area-inset-top, 0px) + 28px) 12px 0 12px !important;
-      top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
-      padding: 12px 18px 12px 14px !important;
+      margin: max(calc(env(safe-area-inset-top, 0px) + 6px), 8px) 12px 4px 12px !important;
+      top: max(calc(env(safe-area-inset-top, 0px) + 4px), 8px) !important;
+      padding: 8px 14px !important;
 
       display: flex !important;
       justify-content: flex-start !important;
@@ -5966,7 +5960,7 @@ button[class*="delete"] {
   padding: 6px 18px;
   border-radius: 20px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 209, 102, 0.2);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   letter-spacing: 0.3px;
@@ -6172,9 +6166,9 @@ button[class*="delete"] {
     scrollbar-width: none !important;
     width: calc(100% - 24px) !important;
     max-width: calc(100% - 24px) !important;
-    margin: calc(env(safe-area-inset-top, 0px) + 28px) auto 16px auto !important;
-    top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
-    padding: 8px 12px !important;
+    margin: max(calc(env(safe-area-inset-top, 0px) + 6px), 8px) auto 4px auto !important;
+    top: max(calc(env(safe-area-inset-top, 0px) + 4px), 8px) !important;
+    padding: 7px 10px !important;
   }
   .glass-navbar::before,
   .glass-navbar::after {
@@ -6214,21 +6208,24 @@ button[class*="delete"] {
     gap: 8px !important;
     flex-shrink: 0 !important;
   }
+  .home-page {
+    padding: 4px 12px 30px !important;
+  }
   .top-brand {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    gap: 16px !important;
-    padding: 16px 12px !important;
-    margin: 0 auto 15px auto !important;
+    gap: 10px !important;
+    padding: 4px 8px !important;
+    margin: 0 auto 8px auto !important;
     width: 100% !important;
   }
   .brand-logo-wrap {
     width: 170px !important;
     height: 170px !important;
-    margin: 0 auto 22px auto !important;
+    margin: 0 auto 10px auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
