@@ -6409,3 +6409,88 @@ button[class*="delete"] {
   box-shadow: 0 4px 12px rgba(255, 209, 102, 0.3) !important;
 }
 
+/* ══════════════════════════════════════
+   LINE-WISE AUDIO SYNC EDITOR
+   ══════════════════════════════════════ */
+.line-sync-panel {
+  background: #180e07 !important;
+  border: 1px solid #ffd166 !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+  border-radius: 14px !important;
+  padding: 16px !important;
+  margin: 12px 0 !important;
+  box-sizing: border-box !important;
+}
+
+.sync-line-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 209, 102, 0.12);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.sync-line-row:hover {
+  background: rgba(255, 209, 102, 0.08);
+  border-color: rgba(255, 209, 102, 0.35);
+}
+
+.sync-line-row.stamped-flash {
+  background: rgba(46, 196, 182, 0.3) !important;
+  border-color: #2ec4b6 !important;
+  transform: scale(1.01);
+}
+
+.sync-time-input {
+  width: 75px !important;
+  text-align: center !important;
+  font-family: 'Courier New', monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  padding: 6px 8px !important;
+  border-radius: 8px !important;
+  background: #0d0602 !important;
+  color: #a8ffb2 !important;
+  border: 1px solid rgba(255, 209, 102, 0.4) !important;
+  outline: none !important;
+}
+.sync-time-input:focus {
+  border-color: #ffd166 !important;
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.4) !important;
+}
+
+.sync-stamp-btn {
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #ffd166, #ff9f1c) !important;
+  color: #1a0c02 !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  transition: transform 0.15s, filter 0.15s !important;
+}
+.sync-stamp-btn:hover {
+  transform: scale(1.04) !important;
+  filter: brightness(1.1) !important;
+}
+
+.sync-test-play-btn {
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  cursor: pointer !important;
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+}
+.sync-test-play-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+

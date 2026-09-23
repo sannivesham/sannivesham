@@ -130,6 +130,340 @@ function uploadAudioFile(boxOrId = null) {
 }
 
 /* ══════════════════════════════════════
+   LINE-WISE AUDIO SYNC EDITOR SYSTEM
+══════════════════════════════════════ */
+const _activeSyncAudios = {};
+
+function formatSecondsToTimestamp(secs) {
+  if (isNaN(secs) || secs === Infinity || secs < 0) return "0:00";
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s < 10 ? "0" : ""}${s}`;
+}
+
+function parseTimestampToSeconds(str) {
+  if (!str) return 0;
+  const cleaned = String(str).replace(/[\[\]]/g, "").trim();
+  if (cleaned.includes(":")) {
+    const parts = cleaned.split(":");
+    return parseInt(parts[0], 10) * 60 + parseFloat(parts[1]);
+  }
+  return parseFloat(cleaned) || 0;
+}
+
+function createLineSyncEditorHtml(uid) {
+  return `
+    <div class="line-sync-panel" id="lineSyncPanel-${uid}" style="display:none;background:#180e07;border:1px solid #ffd166;box-shadow:0 8px 30px rgba(0,0,0,0.7);border-radius:14px;padding:16px;margin:12px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;border-bottom:1px solid rgba(255,209,102,0.2);padding-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.3rem;">🎙️</span>
+          <div>
+            <strong style="color:#ffd166;font-size:1rem;display:block;">లైన్ వారీగా ఆడియో టైమింగ్స్ సెట్ చేయండి (Line-by-Line Audio Sync)</strong>
+            <span style="color:rgba(255,255,255,0.7);font-size:0.8rem;">ఆడియో వింటూ ప్రతి లైన్ వద్ద కరెక్ట్ సెకన్లను సులభంగా సెట్ చేయండి</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button type="button" class="sync-auto-distribute-btn" data-target="${uid}" style="padding:6px 12px;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-size:0.82rem;font-weight:700;">
+            ⚡ సమానంగా విభజించు (Auto Distribute)
+          </button>
+          <button type="button" class="sync-close-btn" data-target="${uid}" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff;border:none;cursor:pointer;font-size:0.82rem;">
+            ✕ మూసివేయి
+          </button>
+        </div>
+      </div>
+
+      <!-- AUDIO CONTROLLER BAR -->
+      <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;border:1px solid rgba(255,209,102,0.15);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button type="button" class="sync-play-btn" data-target="${uid}" style="width:38px;height:38px;border-radius:50%;background:#ffd166;color:#120703;border:none;font-size:1rem;cursor:pointer;font-weight:bold;display:flex;align-items:center;justify-content:center;">
+            ▶
+          </button>
+          <div>
+            <div style="color:#ffd166;font-family:monospace;font-size:1.1rem;font-weight:bold;">
+              <span class="sync-current-time">0:00</span> <span style="color:rgba(255,255,255,0.4);font-size:0.85rem;">/ <span class="sync-duration">0:00</span></span>
+            </div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);">ఆడియో ప్లేయర్</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:180px;">
+          <input type="range" class="sync-seek-slider" data-target="${uid}" min="0" max="100" value="0" style="width:100%;accent-color:#ffd166;cursor:pointer;">
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span style="font-size:0.78rem;color:rgba(255,255,255,0.6);">వేగం:</span>
+          <button type="button" class="sync-speed-btn" data-target="${uid}" data-speed="0.75" style="padding:4px 8px;font-size:0.78rem;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:none;cursor:pointer;">0.75x</button>
+          <button type="button" class="sync-speed-btn active" data-target="${uid}" data-speed="1.0" style="padding:4px 8px;font-size:0.78rem;border-radius:6px;background:#ffd166;color:#120703;border:none;cursor:pointer;font-weight:bold;">1.0x</button>
+          <button type="button" class="sync-speed-btn" data-target="${uid}" data-speed="1.25" style="padding:4px 8px;font-size:0.78rem;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:none;cursor:pointer;">1.25x</button>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,209,102,0.06);border-left:3px solid #ffd166;padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:0.82rem;color:#ffd166;line-height:1.4;">
+        💡 <strong>ఎలా ఉపయోగించాలి:</strong> పైన <strong>▶ Play</strong> నొక్కండి. ఆడియోలో ఏ శ్లోకం/లైన్ చదువుతున్నారో వింటూ, ఆ లైన్ పక్కన ఉన్న <strong>"⏱️ సమయం తీసుకో"</strong> బటన్ నొక్కండి! లేదా సెకన్లను (ఉదా: <code>0:15</code> లేదా <code>15</code>) నేరుగా టైప్ చేయవచ్చు. పూర్తయ్యాక కింద <strong>"Apply Timings to Text"</strong> క్లిక్ చేయండి.
+      </div>
+
+      <!-- LINES TABLE CONTAINER -->
+      <div class="sync-lines-container" id="syncLinesContainer-${uid}" style="max-height:360px;overflow-y:auto;padding-right:6px;display:flex;flex-direction:column;gap:8px;">
+      </div>
+
+      <!-- APPLY BUTTON -->
+      <div style="margin-top:14px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid rgba(255,209,102,0.2);padding-top:12px;">
+        <button type="button" class="sync-apply-btn" data-target="${uid}" style="padding:10px 22px;border-radius:10px;background:#2ec4b6;color:#042b26;font-weight:bold;border:none;font-size:0.95rem;cursor:pointer;">
+          ✅ ఈ టైమింగ్స్‌ను టెక్స్ట్‌కు జతచేయి (Apply Timings to Text)
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function attachLineSyncEvents(uid, getTextareaFn, getAudioUrlFn, onAppliedCallback = null) {
+  const panel = document.getElementById(`lineSyncPanel-${uid}`);
+  if (!panel) return;
+
+  const playBtn = panel.querySelector(".sync-play-btn");
+  const slider = panel.querySelector(".sync-seek-slider");
+  const curTimeEl = panel.querySelector(".sync-current-time");
+  const durTimeEl = panel.querySelector(".sync-duration");
+  const speedBtns = panel.querySelectorAll(".sync-speed-btn");
+  const autoDistBtn = panel.querySelector(".sync-auto-distribute-btn");
+  const closeBtn = panel.querySelector(".sync-close-btn");
+  const applyBtn = panel.querySelector(".sync-apply-btn");
+  const linesContainer = document.getElementById(`syncLinesContainer-${uid}`);
+
+  function getOrInitAudio() {
+    const rawAudioUrl = getAudioUrlFn();
+    if (!rawAudioUrl) return null;
+    let audio = _activeSyncAudios[uid];
+    if (!audio || audio.src !== rawAudioUrl) {
+      if (audio) { audio.pause(); }
+      audio = new Audio(rawAudioUrl);
+      _activeSyncAudios[uid] = audio;
+
+      audio.ontimeupdate = () => {
+        if (audio.duration) {
+          slider.value = (audio.currentTime / audio.duration) * 100;
+          curTimeEl.innerText = formatSecondsToTimestamp(audio.currentTime);
+          durTimeEl.innerText = formatSecondsToTimestamp(audio.duration);
+        }
+      };
+
+      audio.onended = () => {
+        if (playBtn) playBtn.innerText = "▶";
+      };
+
+      audio.onloadedmetadata = () => {
+        durTimeEl.innerText = formatSecondsToTimestamp(audio.duration);
+      };
+    }
+    return audio;
+  }
+
+  function togglePlay() {
+    const audio = getOrInitAudio();
+    if (!audio) {
+      alert("దయచేసి ముందుగా ఆడియో ఫైల్ అప్‌లోడ్ చేయండి లేదా ఆడియో URL ఇవ్వండి.");
+      return;
+    }
+    if (audio.paused) {
+      audio.play().then(() => {
+        if (playBtn) playBtn.innerText = "⏸";
+      }).catch(err => alert("ఆడియో ప్లే చేయలేకపోయాము: " + err.message));
+    } else {
+      audio.pause();
+      if (playBtn) playBtn.innerText = "▶";
+    }
+  }
+
+  if (playBtn) playBtn.onclick = togglePlay;
+
+  if (slider) {
+    slider.oninput = () => {
+      const audio = getOrInitAudio();
+      if (audio && audio.duration) {
+        audio.currentTime = (slider.value / 100) * audio.duration;
+      }
+    };
+  }
+
+  speedBtns.forEach(btn => {
+    btn.onclick = () => {
+      const speed = parseFloat(btn.dataset.speed);
+      const audio = getOrInitAudio();
+      if (audio) audio.playbackRate = speed;
+      speedBtns.forEach(b => {
+        b.classList.remove("active");
+        b.style.background = "rgba(255,255,255,0.1)";
+        b.style.color = "#fff";
+        b.style.fontWeight = "normal";
+      });
+      btn.classList.add("active");
+      btn.style.background = "#ffd166";
+      btn.style.color = "#120703";
+      btn.style.fontWeight = "bold";
+    };
+  });
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      const audio = _activeSyncAudios[uid];
+      if (audio) audio.pause();
+      if (playBtn) playBtn.innerText = "▶";
+      panel.style.display = "none";
+    };
+  }
+
+  if (autoDistBtn) {
+    autoDistBtn.onclick = () => {
+      const audio = getOrInitAudio();
+      const dur = (audio && audio.duration && !isNaN(audio.duration)) ? audio.duration : 60;
+      const rows = linesContainer.querySelectorAll(".sync-line-row");
+      if (!rows.length) return;
+      rows.forEach((row, i) => {
+        const input = row.querySelector(".sync-time-input");
+        if (input) {
+          const sec = dur * (i / rows.length);
+          input.value = formatSecondsToTimestamp(sec);
+        }
+      });
+      alert(`⚡ ${rows.length} లైన్లకు ఆడియో సమయం సమానంగా విభజించబడింది!`);
+    };
+  }
+
+  if (applyBtn) {
+    applyBtn.onclick = () => {
+      const textarea = getTextareaFn();
+      if (!textarea) return;
+      const rows = linesContainer.querySelectorAll(".sync-line-row");
+      const updatedLines = [];
+      rows.forEach(r => {
+        const timeInput = r.querySelector(".sync-time-input");
+        const time = timeInput ? timeInput.value.trim() : "";
+        const text = r.dataset.lineText || "";
+        if (time) {
+          updatedLines.push(`[${time}] ${text}`);
+        } else {
+          updatedLines.push(text);
+        }
+      });
+      textarea.value = updatedLines.join("\n\n");
+      const audio = _activeSyncAudios[uid];
+      if (audio) audio.pause();
+      if (playBtn) playBtn.innerText = "▶";
+      panel.style.display = "none";
+      if (onAppliedCallback) onAppliedCallback(textarea.value);
+      alert("✅ టైమింగ్స్ టెక్స్ట్‌కు విజయవంతంగా జతచేయబడ్డాయి! సేవ్ చేయడానికి 'Save Changes' క్లిక్ చేయండి.");
+    };
+  }
+
+  // Populate lines whenever opening
+  panel.populateLines = function() {
+    const textarea = getTextareaFn();
+    const rawText = textarea ? textarea.value.trim() : "";
+    if (!rawText) {
+      alert("దయచేసి ముందుగా సాహిత్యం / శ్లోకాలు నమోదు చేయండి.");
+      panel.style.display = "none";
+      return false;
+    }
+    const audioUrl = getAudioUrlFn();
+    if (!audioUrl) {
+      alert("దయచేసి ముందుగా ఆడియో ఫైల్ అప్‌లోడ్ చేయండి లేదా ఆడియో URL ఇవ్వండి.");
+      panel.style.display = "none";
+      return false;
+    }
+
+    const audio = getOrInitAudio();
+    if (audio) {
+      curTimeEl.innerText = formatSecondsToTimestamp(audio.currentTime);
+      durTimeEl.innerText = formatSecondsToTimestamp(audio.duration || 0);
+    }
+
+    const rawLines = rawText.split("\n");
+    const parsedLines = [];
+    rawLines.forEach(l => {
+      const trimmed = l.trim();
+      if (!trimmed) return;
+      const m = trimmed.match(/^\[(\d{1,2}:\d{2}(?:\.\d{1,2})?|\d+(?:\.\d+)?)\]\s*(.*)$/);
+      if (m) {
+        parsedLines.push({ time: m[1], text: m[2] });
+      } else {
+        parsedLines.push({ time: "", text: trimmed });
+      }
+    });
+
+    linesContainer.innerHTML = "";
+    parsedLines.forEach((item, idx) => {
+      const row = document.createElement("div");
+      row.className = "sync-line-row";
+      row.dataset.lineIndex = idx;
+      row.dataset.lineText = item.text;
+      row.innerHTML = `
+        <span style="color:#ffd166;font-weight:bold;font-size:0.85rem;min-width:28px;">#${idx + 1}</span>
+        <div style="flex:1;color:#fff;font-size:0.95rem;line-height:1.4;word-break:break-word;">
+          ${escapeHtml(item.text)}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <input type="text" class="sync-time-input" value="${item.time || ''}" placeholder="0:00" title="సెకన్లు లేదా M:SS టైప్ చేయండి">
+          <button type="button" class="sync-stamp-btn" title="ప్రస్తుత సమయాన్ని తీసుకోండి">⏱️ సమయం తీసుకో</button>
+          <button type="button" class="sync-test-play-btn" title="ఈ సమయం నుండి వినండి">▶️ విను</button>
+        </div>
+      `;
+
+      const stampBtn = row.querySelector(".sync-stamp-btn");
+      const timeInput = row.querySelector(".sync-time-input");
+      const testPlayBtn = row.querySelector(".sync-test-play-btn");
+
+      stampBtn.onclick = () => {
+        const curAudio = getOrInitAudio();
+        const cur = curAudio ? curAudio.currentTime : 0;
+        timeInput.value = formatSecondsToTimestamp(cur);
+        row.classList.add("stamped-flash");
+        setTimeout(() => row.classList.remove("stamped-flash"), 400);
+
+        // Auto-focus next row's stamp button
+        const nextRow = linesContainer.children[idx + 1];
+        if (nextRow) {
+          const nextBtn = nextRow.querySelector(".sync-stamp-btn");
+          if (nextBtn) {
+            nextRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            nextBtn.focus();
+          }
+        }
+      };
+
+      testPlayBtn.onclick = () => {
+        const val = timeInput.value.trim();
+        const sec = parseTimestampToSeconds(val);
+        const curAudio = getOrInitAudio();
+        if (curAudio) {
+          curAudio.currentTime = sec;
+          curAudio.play().then(() => {
+            if (playBtn) playBtn.innerText = "⏸";
+          }).catch(() => {});
+        }
+      };
+
+      linesContainer.appendChild(row);
+    });
+
+    return true;
+  };
+}
+
+// Global click handler to toggle line sync panels
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".open-line-sync-btn");
+  if (!btn) return;
+  const targetId = btn.dataset.target;
+  const panel = document.getElementById(`lineSyncPanel-${targetId}`);
+  if (!panel) return;
+  if (panel.style.display === "none" || !panel.style.display) {
+    if (panel.populateLines && panel.populateLines()) {
+      panel.style.display = "block";
+    }
+  } else {
+    panel.style.display = "none";
+  }
+});
+
+/* ══════════════════════════════════════
    IMAGE GRID (Events)
 ══════════════════════════════════════ */
 
@@ -2250,15 +2584,70 @@ if (saveLibCategoryBtn) {
   });
 }
 
+// Attach line sync for Category Add Form
+const catMount = document.getElementById("lineSyncMount-cat-new");
+if (catMount) {
+  catMount.innerHTML = createLineSyncEditorHtml("cat-new");
+  attachLineSyncEvents(
+    "cat-new",
+    () => document.getElementById("libCategoryText"),
+    () => document.getElementById("libCategoryAudioUrl")?.value.trim() || libCategoryAudioBox?.dataset.audio || ""
+  );
+}
+
 async function loadLibCategoriesAdmin() {
   const list = document.getElementById("adminLibCategoriesList");
   if (!list) return;
-  const snapshot = await getDocs(collection(db, "libraryCategories"));
+
+  const [snapshot, subSnap, conSnap] = await Promise.all([
+    getDocs(collection(db, "libraryCategories")),
+    getDocs(collection(db, "librarySubcategories")),
+    getDocs(collection(db, "libraryContent"))
+  ]);
+
+  const allSubs = [];
+  subSnap.forEach(item => allSubs.push({ id: item.id, ...item.data() }));
+
+  const allContents = [];
+  conSnap.forEach(item => allContents.push({ id: item.id, ...item.data() }));
+
   let categories = [];
   snapshot.forEach(item => categories.push({ id: item.id, ...item.data() }));
   categories.sort((a, b) => (a.order || 0) - (b.order || 0));
   list.innerHTML = "";
+
   categories.forEach(data => {
+    const catSubs = allSubs.filter(s => s.categoryId === data.id);
+    const catSubIds = catSubs.map(s => s.id);
+    const catContents = allContents.filter(c => catSubIds.includes(c.subcategoryId));
+
+    // Determine already present matter and audio
+    const firstWithText = catContents.find(c => c.text && c.text.trim()) || catSubs.find(s => s.text && s.text.trim());
+    const presentText = data.text || (firstWithText ? firstWithText.text : "");
+    const presentAudio = data.audioUrl || (firstWithText ? firstWithText.audioUrl : "");
+    const defaultActiveId = data.text ? "" : (firstWithText ? firstWithText.id : "");
+
+    // Generate pills for existing child content if present
+    let contentPillsHtml = "";
+    if (catContents.length > 0) {
+      contentPillsHtml = `
+        <div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:10px;padding:10px 14px;margin:8px 0 12px;">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">
+            📚 ఈ కేటగిరీలోని ప్రస్తుత రచనల సాహిత్యం (${catContents.length} రచనలు అందుబాటులో ఉన్నాయి):
+          </label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${catContents.map((c) => `
+              <button type="button" class="lce-load-content-btn ${c.id === defaultActiveId ? 'active' : ''}" 
+                      data-cat-id="${data.id}" data-content-id="${c.id}"
+                      style="padding:6px 12px;border-radius:8px;font-size:0.82rem;cursor:pointer;border:1px solid #ffd166;background:${c.id === defaultActiveId ? '#ffd166' : 'rgba(255,209,102,0.15)'};color:${c.id === defaultActiveId ? '#120703' : '#ffd166'};font-weight:600;">
+                📖 ${escapeHtml(c.title)}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     list.innerHTML += `
       <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
         <div style="display:flex;gap:14px;align-items:center;">
@@ -2273,21 +2662,21 @@ async function loadLibCategoriesAdmin() {
           </div>
         </div>
 
-        ${data.text ? `
+        ${presentText ? `
           <div style="margin:8px 0 4px;color:rgba(255,255,255,0.85);font-size:0.85rem;line-height:1.4;background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:8px;border-left:3px solid #ffd166;">
-            <strong>📝 సాహిత్యం / శ్లోకాలు:</strong>
-            <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(data.text.slice(0, 180))}${data.text.length > 180 ? '...' : ''}</p>
+            <strong>📝 సాహిత్యం / శ్లోకాలు ${!data.text && firstWithText ? `(రచన: ${escapeHtml(firstWithText.title)})` : ''}:</strong>
+            <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(presentText.slice(0, 180))}${presentText.length > 180 ? '...' : ''}</p>
           </div>
         ` : ''}
 
         <!-- CATEGORY AUDIO STATUS & QUICK UPLOAD -->
         <div class="content-audio-card-box" style="margin:8px 0;">
-          ${data.audioUrl ? `
+          ${presentAudio ? `
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
               <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:240px;">
                 <span>🎵</span>
                 <span style="font-size:0.85rem;color:#ffd166;font-weight:700;">ఆడియో:</span>
-                <audio src="${data.audioUrl}" controls style="height:32px;flex:1;min-width:180px;"></audio>
+                <audio src="${presentAudio}" controls style="height:32px;flex:1;min-width:180px;"></audio>
               </div>
               <div style="display:flex;gap:6px;">
                 <button class="cat-quick-change-audio" data-id="${data.id}" type="button" style="padding:4px 10px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
@@ -2304,7 +2693,7 @@ async function loadLibCategoriesAdmin() {
           `}
         </div>
 
-        <div class="general-inline-edit-box" id="libCatEdit-${data.id}" style="display:none;flex-direction:column;gap:10px;">
+        <div class="general-inline-edit-box" id="libCatEdit-${data.id}" data-active-content-id="${defaultActiveId}" style="display:none;flex-direction:column;gap:10px;">
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">విభాగం పేరు (Title):</label>
           <input class="lce-title" value="${data.title || ""}" placeholder="Category Title">
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">Slug (URL):</label>
@@ -2319,15 +2708,21 @@ async function loadLibCategoriesAdmin() {
             ${data.image ? `<img src="${data.image}" style="max-height:120px;">` : `<span>＋ Category Image</span>`}
           </div>
 
+          ${contentPillsHtml}
+
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">📝 పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text):</label>
-          <textarea class="lce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:130px;width:100%;">${data.text || ""}</textarea>
+          <textarea class="lce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:160px;width:100%;">${escapeHtml(presentText)}</textarea>
 
           <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:4px 0;">
             <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 సంపూర్ణ ఆడియో (Audio File):</label>
-            <div class="cms-audio-upload-box lce-audio-box" data-audio="${data.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
-              ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`}
+            <div class="cms-audio-upload-box lce-audio-box" data-audio="${presentAudio}" style="cursor:pointer;margin-bottom:6px;">
+              ${presentAudio ? `<audio src="${presentAudio}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`}
             </div>
-            <input class="lce-audio-url" value="${data.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి">
+            <input class="lce-audio-url" value="${presentAudio}" placeholder="లేదా Audio URL ఇవ్వండి">
+            <button type="button" class="open-line-sync-btn" data-target="cat-${data.id}" style="margin-top:8px;padding:8px 14px;border-radius:10px;background:rgba(255,209,102,0.18);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;">
+              ⏱️ లైన్ వారీగా ఆడియో సెకన్లు సెట్ చేయండి (Set Line-by-Line Audio Timings)
+            </button>
+            ${createLineSyncEditorHtml(`cat-${data.id}`)}
           </div>
 
           <div class="general-inline-edit-actions">
@@ -2337,6 +2732,18 @@ async function loadLibCategoriesAdmin() {
         </div>
       </div>
     `;
+  });
+
+  // Attach Line Sync Events for all category editors
+  categories.forEach(data => {
+    const box = document.getElementById(`libCatEdit-${data.id}`);
+    if (box) {
+      attachLineSyncEvents(
+        `cat-${data.id}`,
+        () => box.querySelector(".lce-text"),
+        () => box.querySelector(".lce-audio-url")?.value.trim() || box.querySelector(".lce-audio-box")?.dataset.audio || ""
+      );
+    }
   });
 
   list.querySelectorAll(".edit-lib-category-btn").forEach(btn => {
@@ -2350,6 +2757,32 @@ async function loadLibCategoriesAdmin() {
     btn.addEventListener("click", () => {
       const box = btn.closest(".general-inline-edit-box");
       if (box) box.style.display = "none";
+    });
+  });
+
+  list.querySelectorAll(".lce-load-content-btn").forEach(pBtn => {
+    pBtn.addEventListener("click", () => {
+      const box = pBtn.closest(".general-inline-edit-box");
+      const targetContent = allContents.find(c => c.id === pBtn.dataset.contentId);
+      if (!targetContent) return;
+      box.dataset.activeContentId = targetContent.id;
+      const textEl = box.querySelector(".lce-text");
+      if (textEl) textEl.value = targetContent.text || "";
+      const audioInput = box.querySelector(".lce-audio-url");
+      if (audioInput) audioInput.value = targetContent.audioUrl || "";
+      const audioBox = box.querySelector(".lce-audio-box");
+      if (audioBox) {
+        audioBox.dataset.audio = targetContent.audioUrl || "";
+        audioBox.innerHTML = targetContent.audioUrl 
+          ? `<audio src="${targetContent.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>`
+          : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`;
+      }
+      box.querySelectorAll(".lce-load-content-btn").forEach(b => {
+        b.style.background = "rgba(255,209,102,0.15)";
+        b.style.color = "#ffd166";
+      });
+      pBtn.style.background = "#ffd166";
+      pBtn.style.color = "#120703";
     });
   });
 
@@ -2413,7 +2846,14 @@ async function loadLibCategoriesAdmin() {
         order: orderVal ? Number(orderVal) : 0,
         updatedAt: serverTimestamp()
       });
-      alert("✅ Category updated");
+      const activeContentId = box.dataset.activeContentId;
+      if (activeContentId) {
+        await updateDoc(doc(db, "libraryContent", activeContentId), {
+          text, audioUrl,
+          updatedAt: serverTimestamp()
+        });
+      }
+      alert("✅ Category and content updated successfully");
       loadLibCategoriesAdmin();
       loadLibCategoryOptions();
     });
@@ -2487,10 +2927,27 @@ if (saveLibSubcategoryBtn) {
   });
 }
 
+// Attach line sync for Subcategory Add Form
+const subcatMount = document.getElementById("lineSyncMount-subcat-new");
+if (subcatMount) {
+  subcatMount.innerHTML = createLineSyncEditorHtml("subcat-new");
+  attachLineSyncEvents(
+    "subcat-new",
+    () => document.getElementById("libSubcategoryText"),
+    () => document.getElementById("libSubcatAudioUrl")?.value.trim() || libSubcatAudioBox?.dataset.audio || ""
+  );
+}
+
 async function loadLibSubcategoriesAdmin() {
   const list = document.getElementById("adminLibSubcategoriesList");
   if (!list) return;
-  const catSnap = await getDocs(collection(db, "libraryCategories"));
+
+  const [catSnap, snapshot, conSnap] = await Promise.all([
+    getDocs(collection(db, "libraryCategories")),
+    getDocs(collection(db, "librarySubcategories")),
+    getDocs(collection(db, "libraryContent"))
+  ]);
+
   const categoryMap = {};
   const catList = [];
   catSnap.forEach(item => {
@@ -2499,16 +2956,45 @@ async function loadLibSubcategoriesAdmin() {
   });
   catList.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  const snapshot = await getDocs(collection(db, "librarySubcategories"));
+  const allContents = [];
+  conSnap.forEach(item => allContents.push({ id: item.id, ...item.data() }));
+
   let subcategories = [];
   snapshot.forEach(item => subcategories.push({ id: item.id, ...item.data() }));
   subcategories.sort((a, b) => (a.order || 0) - (b.order || 0));
   list.innerHTML = "";
+
   subcategories.forEach(data => {
     let catOptions = `<option value="">Select Category</option>`;
     catList.forEach(c => {
       catOptions += `<option value="${c.id}" ${c.id === data.categoryId ? "selected" : ""}>${c.emoji ? c.emoji + " " : ""}${c.title}</option>`;
     });
+
+    const subContents = allContents.filter(c => c.subcategoryId === data.id);
+    const firstWithText = subContents.find(c => c.text && c.text.trim());
+    const presentText = data.text || (firstWithText ? firstWithText.text : "");
+    const presentAudio = data.audioUrl || (firstWithText ? firstWithText.audioUrl : "");
+    const defaultActiveId = data.text ? "" : (firstWithText ? firstWithText.id : "");
+
+    let contentPillsHtml = "";
+    if (subContents.length > 0) {
+      contentPillsHtml = `
+        <div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:10px;padding:10px 14px;margin:8px 0 12px;">
+          <label style="color:#ffd166;font-weight:700;font-size:0.85rem;display:block;margin-bottom:6px;">
+            📚 ఈ ఉపవిభాగంలోని ప్రస్తుత రచనల సాహిత్యం (${subContents.length} రచనలు):
+          </label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${subContents.map((c) => `
+              <button type="button" class="lsce-load-content-btn ${c.id === defaultActiveId ? 'active' : ''}" 
+                      data-sub-id="${data.id}" data-content-id="${c.id}"
+                      style="padding:6px 12px;border-radius:8px;font-size:0.82rem;cursor:pointer;border:1px solid #ffd166;background:${c.id === defaultActiveId ? '#ffd166' : 'rgba(255,209,102,0.15)'};color:${c.id === defaultActiveId ? '#120703' : '#ffd166'};font-weight:600;">
+                📖 ${escapeHtml(c.title)}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
 
     list.innerHTML += `
       <div class="admin-event-card" style="flex-direction:column;align-items:stretch;">
@@ -2525,21 +3011,21 @@ async function loadLibSubcategoriesAdmin() {
           </div>
           ${renderSlugLinkHtml("library", data.slug, data.id)}
 
-          ${data.text ? `
+          ${presentText ? `
             <div style="margin:8px 0 4px;color:rgba(255,255,255,0.85);font-size:0.85rem;line-height:1.4;background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:8px;border-left:3px solid #ffd166;">
-              <strong>📝 సాహిత్యం / శ్లోకాలు:</strong>
-              <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(data.text.slice(0, 180))}${data.text.length > 180 ? '...' : ''}</p>
+              <strong>📝 సాహిత్యం / శ్లోకాలు ${!data.text && firstWithText ? `(రచన: ${escapeHtml(firstWithText.title)})` : ''}:</strong>
+              <p style="margin:4px 0 0;white-space:pre-wrap;max-height:80px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(presentText.slice(0, 180))}${presentText.length > 180 ? '...' : ''}</p>
             </div>
           ` : ''}
 
           <!-- SUBCATEGORY AUDIO STATUS & QUICK UPLOAD -->
           <div class="content-audio-card-box" style="margin:8px 0;">
-            ${data.audioUrl ? `
+            ${presentAudio ? `
               <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:240px;">
                   <span>🎵</span>
                   <span style="font-size:0.85rem;color:#ffd166;font-weight:700;">ఆడియో:</span>
-                  <audio src="${data.audioUrl}" controls style="height:32px;flex:1;min-width:180px;"></audio>
+                  <audio src="${presentAudio}" controls style="height:32px;flex:1;min-width:180px;"></audio>
                 </div>
                 <div style="display:flex;gap:6px;">
                   <button class="subcat-quick-change-audio" data-id="${data.id}" type="button" style="padding:4px 10px;font-size:0.82rem;border-radius:8px;background:rgba(255,209,102,0.2);color:#ffd166;border:1px solid #ffd166;cursor:pointer;">🔄 మార్చండి</button>
@@ -2557,7 +3043,7 @@ async function loadLibSubcategoriesAdmin() {
           </div>
         </div>
 
-        <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" style="display:none;flex-direction:column;gap:10px;">
+        <div class="general-inline-edit-box" id="libSubcatEdit-${data.id}" data-active-content-id="${defaultActiveId}" style="display:none;flex-direction:column;gap:10px;">
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">ప్రధాన విభాగం (Category):</label>
           <select class="lsce-category">${catOptions}</select>
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">ఉపవిభాగం పేరు (Title):</label>
@@ -2567,15 +3053,21 @@ async function loadLibSubcategoriesAdmin() {
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">క్రమం (Order):</label>
           <input class="lsce-order" type="number" value="${data.order ?? ""}" placeholder="Order (1, 2, 3...)">
 
+          ${contentPillsHtml}
+
           <label style="color:#ffd166;font-weight:700;font-size:0.85rem;">📝 పూర్తి కంటెంట్ / శ్లోకాలు / సాహిత్యం (Matter / Telugu Text):</label>
-          <textarea class="lsce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:130px;width:100%;">${data.text || ""}</textarea>
+          <textarea class="lsce-text" placeholder="శ్లోకాలు లేదా పూర్తి సాహిత్యం ఇక్కడ రాయండి / పేస్ట్ చేయండి..." style="min-height:150px;width:100%;">${escapeHtml(presentText)}</textarea>
           
           <div style="background:rgba(255,209,102,0.06);border:1px solid rgba(255,209,102,0.25);border-radius:10px;padding:10px;margin:4px 0;">
             <label style="color:#ffd166;font-weight:700;display:block;margin-bottom:6px;font-size:0.88rem;">🎵 సంపూర్ణ స్తోత్ర ఆడియో (Optional):</label>
-            <div class="cms-audio-upload-box lsce-audio-box" data-audio="${data.audioUrl || ""}" style="cursor:pointer;margin-bottom:6px;">
-              ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
+            <div class="cms-audio-upload-box lsce-audio-box" data-audio="${presentAudio}" style="cursor:pointer;margin-bottom:6px;">
+              ${presentAudio ? `<audio src="${presentAudio}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3)</span>`}
             </div>
-            <input class="lsce-audio-url" value="${data.audioUrl || ""}" placeholder="లేదా Audio URL ఇవ్వండి">
+            <input class="lsce-audio-url" value="${presentAudio}" placeholder="లేదా Audio URL ఇవ్వండి">
+            <button type="button" class="open-line-sync-btn" data-target="subcat-${data.id}" style="margin-top:8px;padding:8px 14px;border-radius:10px;background:rgba(255,209,102,0.18);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;">
+              ⏱️ లైన్ వారీగా ఆడియో సెకన్లు సెట్ చేయండి (Set Line-by-Line Audio Timings)
+            </button>
+            ${createLineSyncEditorHtml(`subcat-${data.id}`)}
           </div>
 
           <div class="general-inline-edit-actions">
@@ -2585,6 +3077,18 @@ async function loadLibSubcategoriesAdmin() {
         </div>
       </div>
     `;
+  });
+
+  // Attach Line Sync Events for all subcategory editors
+  subcategories.forEach(data => {
+    const box = document.getElementById(`libSubcatEdit-${data.id}`);
+    if (box) {
+      attachLineSyncEvents(
+        `subcat-${data.id}`,
+        () => box.querySelector(".lsce-text"),
+        () => box.querySelector(".lsce-audio-url")?.value.trim() || box.querySelector(".lsce-audio-box")?.dataset.audio || ""
+      );
+    }
   });
 
   list.querySelectorAll(".edit-lib-subcategory-btn").forEach(btn => {
@@ -2598,6 +3102,32 @@ async function loadLibSubcategoriesAdmin() {
     btn.addEventListener("click", () => {
       const box = btn.closest(".general-inline-edit-box");
       if (box) box.style.display = "none";
+    });
+  });
+
+  list.querySelectorAll(".lsce-load-content-btn").forEach(pBtn => {
+    pBtn.addEventListener("click", () => {
+      const box = pBtn.closest(".general-inline-edit-box");
+      const targetContent = allContents.find(c => c.id === pBtn.dataset.contentId);
+      if (!targetContent) return;
+      box.dataset.activeContentId = targetContent.id;
+      const textEl = box.querySelector(".lsce-text");
+      if (textEl) textEl.value = targetContent.text || "";
+      const audioInput = box.querySelector(".lsce-audio-url");
+      if (audioInput) audioInput.value = targetContent.audioUrl || "";
+      const audioBox = box.querySelector(".lsce-audio-box");
+      if (audioBox) {
+        audioBox.dataset.audio = targetContent.audioUrl || "";
+        audioBox.innerHTML = targetContent.audioUrl 
+          ? `<audio src="${targetContent.audioUrl}" controls style="width:100%;height:32px;"></audio><div style="font-size:11px;color:#ffd166;margin-top:2px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి క్లిక్ చేయండి</div>`
+          : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`;
+      }
+      box.querySelectorAll(".lsce-load-content-btn").forEach(b => {
+        b.style.background = "rgba(255,209,102,0.15)";
+        b.style.color = "#ffd166";
+      });
+      pBtn.style.background = "#ffd166";
+      pBtn.style.color = "#120703";
     });
   });
 
@@ -2650,7 +3180,14 @@ async function loadLibSubcategoriesAdmin() {
         order: orderVal ? Number(orderVal) : 0,
         updatedAt: serverTimestamp()
       });
-      alert("✅ Subcategory updated");
+      const activeContentId = box.dataset.activeContentId;
+      if (activeContentId) {
+        await updateDoc(doc(db, "libraryContent", activeContentId), {
+          text, audioUrl,
+          updatedAt: serverTimestamp()
+        });
+      }
+      alert("✅ Subcategory and content updated successfully");
       loadLibSubcategoriesAdmin();
       loadLibSubcategoryOptions();
     });
@@ -2724,6 +3261,17 @@ if (saveLibContentBtn) {
     document.getElementById("libContentMessage").innerText = "✅ Content saved";
     loadLibContentAdmin();
   });
+}
+
+// Attach line sync for Content Add Form
+const contentMount = document.getElementById("lineSyncMount-content-new");
+if (contentMount) {
+  contentMount.innerHTML = createLineSyncEditorHtml("content-new");
+  attachLineSyncEvents(
+    "content-new",
+    () => document.getElementById("libContentText"),
+    () => document.getElementById("libContentAudioUrl")?.value.trim() || libContentAudioBox?.dataset.audio || ""
+  );
 }
 
 async function loadLibContentAdmin() {
@@ -2883,9 +3431,10 @@ async function openLibContentInlineEditor(id, items, subList = []) {
           ${data.audioUrl ? `<audio src="${data.audioUrl}" controls style="width:100%;height:36px;"></audio><div style="font-size:12px;color:#ffd166;margin-top:4px;">🔄 వేరొక ఆడియో ఫైల్ మార్చడానికి ఇక్కడ క్లిక్ చేయండి</div>` : `<span>＋ Audio File అప్‌లోడ్ చేయండి (Upload MP3 / Audio)</span>`}
         </div>
         <input class="edit-lib-content-audio" value="${data.audioUrl || ""}" placeholder="లేదా ఆడియో URL ఇవ్వండి (Direct MP3, Cloudinary link)">
-        <div style="font-size:0.78rem;color:#ffd166;margin:6px 0 2px;">
-          💡 <em>రియల్-టైమ్ సింక్: టెక్స్ట్‌లో ప్రతి శ్లోకం ముందు [0:15], [0:40] లాగా టైమింగ్స్ ఇవ్వవచ్చు లేదా ఆటో-సింక్ వాడుకోవచ్చు.</em>
-        </div>
+        <button type="button" class="open-line-sync-btn" data-target="content-${data.id}" style="margin-top:8px;padding:8px 14px;border-radius:10px;background:rgba(255,209,102,0.18);color:#ffd166;border:1px solid #ffd166;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;">
+          ⏱️ లైన్ వారీగా ఆడియో సెకన్లు సెట్ చేయండి (Set Line-by-Line Audio Timings)
+        </button>
+        ${createLineSyncEditorHtml(`content-${data.id}`)}
       </div>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
@@ -2894,6 +3443,12 @@ async function openLibContentInlineEditor(id, items, subList = []) {
       </div>
     </div>
   `;
+
+  attachLineSyncEvents(
+    `content-${data.id}`,
+    () => editor.querySelector(".edit-lib-content-text"),
+    () => editor.querySelector(".edit-lib-content-audio")?.value.trim() || editor.querySelector(".edit-lib-audio-box")?.dataset.audio || ""
+  );
 
   const audioBox = editor.querySelector(".edit-lib-audio-box");
   const audioInput = editor.querySelector(".edit-lib-content-audio");
