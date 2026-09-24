@@ -1,0 +1,46 @@
+{
+  "name": "sannivesham-desktop",
+  "version": "1.0.0",
+  "description": "సన్నివేశం - తెలుగు సంస్కృతి, సంప్రదాయం, పండుగలు, దేవాలయాలు మరియు దివ్య గ్రంథాలయం",
+  "main": "main.js",
+  "author": "Sannivesham",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . Sannivesham --platform=win32 --arch=x64 --icon=icon.ico --out=dist-packager --overwrite",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.sannivesham.app",
+    "productName": "Sannivesham",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "సన్నివేశం - Sannivesham"
+    }
+  },
+  "keywords": [
+    "sannivesham",
+    "telugu",
+    "culture",
+    "stotras"
+  ],
+  "devDependencies": {
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
+    "electron-packager": "^17.1.2",
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.35.4"
+  }
+}

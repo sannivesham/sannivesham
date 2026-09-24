@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <title>సన్నివేశం - ఇంటర్నెట్ కనెక్షన్ అవసరం</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at 50% 20%, #2a1307 0%, #120703 60%, #080301 100%);
+      color: #fcf1e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .offline-card {
+      background: rgba(30, 15, 6, 0.9);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 209, 102, 0.15);
+    }
+    .logo-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid #ffd166;
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.4);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      color: #ffd166;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    p {
+      color: #d9be9b;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #120703;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(255, 209, 102, 0.4);
+      transition: all 0.25s ease;
+    }
+    .retry-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(255, 209, 102, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <img src="../images/logo.png" alt="Sannivesham" class="logo-img">
+    <h1>ఇంటర్నెట్ కనెక్షన్ అవసరం</h1>
+    <p>సన్నివేశం లైవ్ వెబ్‌సైట్‌ను లోడ్ చేయడానికి దయచేసి మీ ల్యాప్‌టాప్ ఇంటర్నెట్ కనెక్షన్‌ను పరిశీలించండి.</p>
+    <button class="retry-btn" onclick="retryConnection()">
+      <span>🔄</span> <span>తిరిగి ప్రయత్నించండి (Retry)</span>
+    </button>
+  </div>
+
+  <script>
+    function retryConnection() {
+      window.location.href = 'https://sannivesham.com/';
+    }
+    window.addEventListener('online', () => {
+      retryConnection();
+    });
+  </script>
+</body>
+</html>

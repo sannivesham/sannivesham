@@ -22,3 +22,10 @@ ui-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Desktop App Builds
+desktop-app/dist/
+desktop-app/dist-packager/
+desktop-app/node_modules/
+desktop-app/*.png
+
