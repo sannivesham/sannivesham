@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>డెస్క్‌టాప్ యాప్ డౌన్‌లోడ్ (Windows PC & Laptop) - సన్నివేశం | Sannivesham</title>
+  <meta name="description" content="ల్యాప్‌టాప్ & విండోస్ పీసీ కోసం సన్నివేశం అధికారిక డెస్క్‌టాప్ యాప్. లైవ్ అప్‌డేట్స్, నిరంతర ఆడియో మరియు ఆధ్యాత్మిక గ్రంథాలయం.">
+  <link rel="canonical" href="https://sannivesham.com/download/">
+  <link rel="icon" type="image/png" href="../images/logo.png">
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../library/library.css">
+
+  <style>
+    .download-hero {
+      text-align: center;
+      padding: 50px 20px 30px;
+      position: relative;
+      z-index: 2;
+    }
+    .download-hero h1 {
+      font-size: 2.6rem;
+      color: #ffd166;
+      margin-bottom: 12px;
+      font-weight: 800;
+      text-shadow: 0 0 20px rgba(255, 209, 102, 0.45);
+    }
+    .download-hero p {
+      color: #d9be9b;
+      font-size: 1.15rem;
+      max-width: 680px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    .download-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 860px;
+      margin: 0 auto 50px;
+      padding: 0 16px;
+      position: relative;
+      z-index: 2;
+    }
+    .download-card {
+      background: linear-gradient(150deg, rgba(42, 20, 8, 0.94) 0%, rgba(18, 8, 3, 0.98) 100%);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 24px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 209, 102, 0.15);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .download-card:hover {
+      transform: translateY(-8px);
+      border-color: #ffd166;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 209, 102, 0.35);
+    }
+    .download-card.featured {
+      border: 2px solid #ffd166;
+      background: linear-gradient(150deg, rgba(56, 26, 10, 0.96) 0%, rgba(22, 10, 4, 0.98) 100%);
+    }
+    .download-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #120703;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .download-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 209, 102, 0.15);
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .download-card-title {
+      font-size: 1.45rem;
+      color: #ffd166;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .download-card-desc {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .download-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .download-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: #f7e7ce;
+    }
+    .download-features li span.tick {
+      color: #ffd166;
+      font-weight: bold;
+    }
+    .download-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #120703 !important;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 14px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(255, 209, 102, 0.4);
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+    .download-action-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(255, 209, 102, 0.6);
+    }
+    .download-action-btn.secondary {
+      background: rgba(255, 209, 102, 0.15);
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      color: #ffd166 !important;
+    }
+    .download-action-btn.secondary:hover {
+      background: #ffd166;
+      color: #120703 !important;
+    }
+    .feature-highlights-wrap {
+      max-width: 920px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .highlights-title {
+      text-align: center;
+      color: #ffd166;
+      font-size: 1.7rem;
+      margin-bottom: 28px;
+      font-weight: 800;
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .highlight-box {
+      background: rgba(30, 15, 6, 0.85);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 18px;
+      padding: 22px 20px;
+      backdrop-filter: blur(10px);
+    }
+    .highlight-box h3 {
+      color: #ffd166;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .highlight-box p {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      .download-hero h1 { font-size: 2rem; }
+      .download-cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="library-body theme-night">
+
+  <div class="library-bg"></div>
+  <canvas id="divineParticleCanvas"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="glass-navbar">
+    <a href="/">← ప్రారంభం (Home)</a>
+    <a href="/library/">గ్రంథాలయం</a>
+    <a href="/download/" class="active">డౌన్‌లోడ్</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="download-hero">
+    <div class="hero-divine-glow"></div>
+    <div class="hero-mandala-halo"></div>
+
+    <div class="hero-diya-badge">
+      <span>💻 Windows PC &amp; Laptop App ✨</span>
+    </div>
+
+    <h1>సన్నివేశం డెస్క్‌టాప్ యాప్</h1>
+    <p>మీ ల్యాప్‌టాప్‌లో నిరంతరాయంగా తెలుగు సంస్కృతి, పవిత్ర స్తోత్రాలు మరియు సమస్త ఆధ్యాత్మిక గ్రంథాల సంపదను ఆస్వాదించండి.</p>
+
+    <div class="sacred-hero-divider">
+      <span class="divider-dot">✦</span>
+      <span class="divider-line"></span>
+      <span class="divider-om">🪔</span>
+      <span class="divider-line"></span>
+      <span class="divider-dot">✦</span>
+    </div>
+  </header>
+
+  <!-- DOWNLOAD CARDS -->
+  <main>
+    <div class="download-cards-grid">
+      <!-- 1. SETUP INSTALLER -->
+      <div class="download-card featured">
+        <span class="download-badge">సిఫార్సు చేయబడింది (Recommended)</span>
+        <div>
+          <div class="download-icon-wrap">💿</div>
+          <h2 class="download-card-title">విండోస్ ఇన్‌స్టాలర్ (Setup)</h2>
+          <p class="download-card-desc">ల్యాప్‌టాప్ లేదా కంప్యూటర్‌లో ఇన్‌స్టాల్ చేసుకుని, డెస్క్‌టాప్ మరియు స్టార్ట్ మెనూ నుండి ఒక్క క్లిక్‌తో ఓపెన్ చేయండి.</p>
+          <ul class="download-features">
+            <li><span class="tick">✔</span> డెస్క్‌టాప్ &amp; స్టార్ట్ మెనూ షార్ట్‌కట్స్</li>
+            <li><span class="tick">✔</span> ఎల్లప్పుడూ లైవ్ వెబ్‌సైట్ అప్‌డేట్స్</li>
+            <li><span class="tick">✔</span> విండోస్ 10 / 11 (64-bit) మద్దతు</li>
+            <li><span class="tick">✔</span> బ్యాక్‌గ్రౌండ్ ఆడియో ప్లేబ్యాక్</li>
+          </ul>
+        </div>
+        <a href="https://github.com/sannivesham/sannivesham/releases/download/v1.0.0/Sannivesham-Setup.exe" class="download-action-btn">
+          <span>⬇️</span> <span>ఇన్‌స్టాలర్ డౌన్‌లోడ్ (.exe)</span>
+        </a>
+      </div>
+
+      <!-- 2. PORTABLE EDITION -->
+      <div class="download-card">
+        <span class="download-badge" style="background: rgba(255,209,102,0.2); color: #ffd166; border: 1px solid rgba(255,209,102,0.4);">నో-ఇన్‌స్టాల్ (Portable)</span>
+        <div>
+          <div class="download-icon-wrap">⚡</div>
+          <h2 class="download-card-title">పోర్టబుల్ ఎడిషన్ (Portable)</h2>
+          <p class="download-card-desc">ఇన్‌స్టాలేషన్ చేయవలసిన అవసరం లేదు. ఫైల్‌ను డౌన్‌లోడ్ చేసి డబుల్ క్లిక్ చేయగానే నేరుగా రన్ అవుతుంది. పెన్‌డ్రైవ్‌లో కూడా ఉపయోగించవచ్చు.</p>
+          <ul class="download-features">
+            <li><span class="tick">✔</span> సులభమైన సింగిల్ క్లిక్ రన్</li>
+            <li><span class="tick">✔</span> సిస్టమ్ రిజిస్ట్రీలో మార్పులు ఉండవు</li>
+            <li><span class="tick">✔</span> పెన్‌డ్రైవ్ / USB నుండి రన్ చేయవచ్చు</li>
+            <li><span class="tick">✔</span> పూర్తి లైవ్ అప్‌డేట్స్ మద్దతు</li>
+          </ul>
+        </div>
+        <a href="https://github.com/sannivesham/sannivesham/releases/download/v1.0.0/Sannivesham-Portable.exe" class="download-action-btn secondary">
+          <span>⬇️</span> <span>పోర్టబుల్ డౌన్‌లోడ్ (.exe)</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- APP HIGHLIGHTS -->
+    <section class="feature-highlights-wrap">
+      <h2 class="highlights-title">✨ డెస్క్‌టాప్ యాప్ ప్రత్యేకతలు ✨</h2>
+      <div class="highlights-grid">
+        <div class="highlight-box">
+          <h3>🔄 ఎల్లప్పుడూ లైవ్ (Always Updated)</h3>
+          <p>వెబ్‌సైట్‌లో ఏ కొత్త స్తోత్రం, కథ లేదా క్యాలెండర్ వివరాలు అప్‌లోడ్ చేసినా, డెస్క్‌టాప్ యాప్‌లో వెంటనే అప్‌డేట్ అవుతాయి. మళ్లీ డౌన్‌లోడ్ చేయాల్సిన పని లేదు!</p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>🎵 నిరంతర ఆడియో (Background Play)</h3>
+          <p>మీరు ఇతర పనులు చేసుకుంటున్నప్పుడు లేదా యాప్‌ను మినిమైజ్ చేసినా కూడా శ్లోకాలు, నామావళులు బ్యాక్‌గ్రౌండ్‌లో నిరంతరాయంగా ప్రశాంతంగా ప్లే అవుతాయి.</p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>🪔 ఏకాగ్రత &amp; ప్రకటనల రహితం</h3>
+          <p>బ్రౌజర్ ట్యాబ్‌ల గందరగోళం లేకుండా మీ ల్యాప్‌టాప్‌లో ఒక స్వచ్ఛమైన ఆధ్యాత్మిక మందిరంలా పూర్తి ఏకాగ్రతతో సాహిత్యాన్ని పఠించవచ్చు.</p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>⌨️ కీబోర్డ్ షార్ట్‌కట్స్</h3>
+          <p><b>F5 / Ctrl+R</b> తో రీఫ్రెష్, <b>F11</b> తో ఫుల్ స్క్రీన్, మరియు <b>Alt+Left</b> తో వెనుకకు వెళ్లే సులభతరమైన నావిగేషన్ సదుపాయం.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="simple-footer">
+    <p class="footer-quote">✨ సన్నివేశం - సంస్కృతి • సంప్రదాయం • సంభాషణ ✨</p>
+    <script type="module" src="../social-links.js"></script>
+    <p>© 2026 సన్నివేశం</p>
+  </footer>
+
+  <script src="../theme.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>

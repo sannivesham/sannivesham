@@ -38,6 +38,7 @@ async function loadSocialLinks() {
         ${instagram ? `<a href="${instagram}" target="_blank">Instagram</a>` : ""}
         ${facebook ? `<a href="${facebook}" target="_blank">Facebook</a>` : ""}
         ${phone ? `<a href="tel:${phone}">Phone</a>` : ""}
+        <a href="/download/" style="color:#ffd166;font-weight:700;">💻 డెస్క్‌టాప్ యాప్</a>
       `;
 
       footer.insertBefore(box, footer.firstChild);
