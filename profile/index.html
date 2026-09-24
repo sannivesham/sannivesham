@@ -103,6 +103,115 @@
       cursor:pointer; transition:all 0.2s; margin-top:16px; display:block;
     }
     .logout-btn:hover { background:rgba(231,76,60,0.28); transform:translateY(-2px); }
+
+    /* Desktop App Download Card */
+    .desktop-app-card {
+      background: linear-gradient(145deg, rgba(32, 16, 7, 0.92), rgba(16, 8, 3, 0.96));
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 20px;
+      padding: 22px 20px;
+      margin-top: 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 209, 102, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .desktop-app-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+    .desktop-app-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255, 209, 102, 0.15);
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .desktop-app-title {
+      color: #ffd166;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 3px;
+    }
+    .desktop-app-sub {
+      color: rgba(237, 227, 200, 0.7);
+      font-size: 0.8rem;
+      margin: 0;
+    }
+    .desktop-app-desc {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 10px 0 16px;
+    }
+    .desktop-download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .desktop-dl-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+    .desktop-dl-btn.primary {
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #120703 !important;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(255, 209, 102, 0.35);
+    }
+    .desktop-dl-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 209, 102, 0.55);
+    }
+    .desktop-dl-btn.secondary {
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      color: #ffd166 !important;
+      font-weight: 700;
+    }
+    .desktop-dl-btn.secondary:hover {
+      background: #ffd166;
+      color: #120703 !important;
+      transform: translateY(-2px);
+    }
+    .desktop-dl-main-text {
+      font-size: 0.88rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .desktop-dl-sub-text {
+      font-size: 0.72rem;
+      opacity: 0.85;
+    }
+    .desktop-more-link {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      color: rgba(255, 209, 102, 0.85);
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .desktop-more-link:hover {
+      color: #ffd166;
+      text-decoration: underline;
+    }
   </style>
 </head>
 
@@ -173,6 +282,31 @@
       </div>
 
       <button id="logoutUserBtn" class="logout-btn">🚪 లాగ్అవుట్</button>
+    </div>
+
+    <!-- WINDOWS DESKTOP APP DOWNLOAD -->
+    <div class="desktop-app-card">
+      <div class="desktop-app-header">
+        <div class="desktop-app-icon">💻</div>
+        <div>
+          <h3 class="desktop-app-title">సన్నివేశం డెస్క్‌టాప్ యాప్</h3>
+          <p class="desktop-app-sub">Download for Windows PC &amp; Laptop</p>
+        </div>
+      </div>
+      <p class="desktop-app-desc">
+        మీ ల్యాప్‌టాప్‌లో లైవ్ వెబ్‌సైట్ అప్‌డేట్స్, బ్యాక్‌గ్రౌండ్ ఆడియో ప్లేబ్యాక్ మరియు పూర్తి ఆధ్యాత్మిక గ్రంథాలయం.
+      </p>
+      <div class="desktop-download-grid">
+        <a href="https://github.com/sannivesham/sannivesham/releases/download/v1.0.0/Sannivesham-Setup.exe" class="desktop-dl-btn primary">
+          <span class="desktop-dl-main-text">⬇️ ఇన్‌స్టాలర్</span>
+          <span class="desktop-dl-sub-text">Setup .exe (సిఫార్సు)</span>
+        </a>
+        <a href="https://github.com/sannivesham/sannivesham/releases/download/v1.0.0/Sannivesham-Portable.exe" class="desktop-dl-btn secondary">
+          <span class="desktop-dl-main-text">⚡ పోర్టబుల్</span>
+          <span class="desktop-dl-sub-text">Portable .exe (నో ఇన్‌స్టాల్)</span>
+        </a>
+      </div>
+      <a href="/download/" class="desktop-more-link">మరిన్ని వివరాలు &amp; ఫీచర్లు (View All Details) →</a>
     </div>
   </div>
 
