@@ -941,31 +941,31 @@
   <section id="contact" class="contact-section">
     <h2 data-en="Contact">సంప్రదించండి</h2>
     <div class="contact-container">
-      <a id="homeInstagram" href="javascript:void(0)" target="_blank" class="contact-box">
+      <a id="homeInstagram" href="https://www.instagram.com/sannivesham/" target="_blank" class="contact-box">
         <img src="images/instagram.png" alt="Instagram">
         <span>Sannivesham</span>
       </a>
-      <a id="homeFacebook" href="javascript:void(0)" target="_blank" class="contact-box">
+      <a id="homeFacebook" href="https://www.facebook.com/people/sannivesham/61590227441949/?rdid=uQ6WI682rLad7R5c&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1EEvnb1Ucg%2F" target="_blank" class="contact-box">
         <img src="images/facebook.png" alt="Facebook">
         <span>Sannivesham</span>
       </a>
-      <a id="homeYoutube" href="javascript:void(0)" target="_blank" class="contact-box">
+      <a id="homeYoutube" href="https://www.youtube.com/@Sannivesham" target="_blank" class="contact-box">
         <img src="images/youtube.png" alt="YouTube">
         <span>Sannivesham</span>
       </a>
-      <a id="homeWhatsapp" href="javascript:void(0)" target="_blank" class="contact-box">
+      <a id="homeWhatsapp" href="https://wa.me/919493226037" target="_blank" class="contact-box">
         <img src="images/whatsapp.png" alt="WhatsApp">
         <span>WhatsApp</span>
       </a>
-      <a id="homePhone" href="javascript:void(0)" class="contact-box">
+      <a id="homePhone" href="tel:+919493226037" class="contact-box">
         <img src="images/phone.png" alt="Phone">
         <span>Phone</span>
       </a>
-      <a id="homeEmail" href="javascript:void(0)" class="contact-box">
+      <a id="homeEmail" href="mailto:info.sannivesham@gmail.com" class="contact-box">
         <img src="images/email.png" alt="Email">
         <span>Email</span>
       </a>
-      <a id="homeWhatsappChannel" href="javascript:void(0)" target="_blank" class="whatsapp-channel-box">
+      <a id="homeWhatsappChannel" href="https://whatsapp.com/channel/0029VbCycK7BKfhvGog2Xx1f" target="_blank" class="whatsapp-channel-box">
         <div class="channel-text">
           <h3 data-en="WhatsApp Channel">వాట్సాప్ ఛానల్</h3>
           <p data-en="Join our WhatsApp channel for our events, updates, and cultural content.">
@@ -1123,84 +1123,7 @@
       modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
     });
 
-    async function loadHomeBackground() {
-      try {
-        let snap;
-        try {
-          snap = await getDoc(doc(db, "settings", "backgrounds"));
-        } catch (e) {
-          snap = await getDocFromServer(doc(db, "settings", "backgrounds"));
-        }
-        if (!snap || !snap.exists()) return;
 
-        const data = snap.data();
-        const themesData = data.themes || {};
-
-        // Cache theme backgrounds locally for instant zero-flash rendering on next visit
-        try {
-          localStorage.setItem("sannivesham_theme_bg_cache", JSON.stringify(themesData));
-        } catch (e) {}
-
-        const currentTheme = window.SanniveshamTheme ? window.SanniveshamTheme.getTheme() : "ramayanam";
-        const themeConfig = themesData[currentTheme] || (data[currentTheme] && typeof data[currentTheme] === "object" ? data[currentTheme] : null);
-
-        let customPc = "";
-        let customMobile = "";
-        if (themeConfig) {
-          customPc = themeConfig.homePc || themeConfig.pc || "";
-          customMobile = themeConfig.homeMobile || themeConfig.mobile || "";
-        }
-
-        const isMobile = window.innerWidth <= 700;
-        const chosenCustomUrl = isMobile ? (customMobile || customPc) : (customPc || customMobile);
-
-        if (window.SanniveshamTheme && window.SanniveshamTheme.applyThemeBackground) {
-          window.SanniveshamTheme.applyThemeBackground(currentTheme, chosenCustomUrl || "");
-        }
-      } catch (e) {
-        console.log("Background load error:", e);
-      }
-    }
-    loadHomeBackground();
-    window.addEventListener("sannivesham_theme_changed", () => {
-      loadHomeBackground();
-      loadHomeCards();
-    });
-
-    async function loadHomeCards() {
-      try {
-        const snap = await getDoc(doc(db, "settings", "homeCards"));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        const currentTheme = window.SanniveshamTheme ? window.SanniveshamTheme.getTheme() : "ramayanam";
-        const themeCards = (data.themes && data.themes[currentTheme]) || {};
-
-        const cardMappings = [
-          { key: "eventsCard", id: "eventsCardImg" },
-          { key: "festivalsCard", id: "festivalsCardImg" },
-          { key: "templesCard", id: "templesCardImg" },
-          { key: "storiesCard", id: "storiesCardImg" },
-          { key: "slokasCard", id: "slokasCardImg" },
-          { key: "quizCard", id: "quizCardImg" },
-          { key: "itihasaluCard", id: "itihasaluCardImg" },
-          { key: "videosCard", id: "videosCardImg" },
-          { key: "calendarCard", id: "calendarCardImg" },
-          { key: "chantCounterCard", id: "chantCounterCardImg" },
-          { key: "poojaRoomCard", id: "poojaRoomCardImg" },
-          { key: "storeCard", id: "storeCardImg" }
-        ];
-
-        cardMappings.forEach(({ key, id }) => {
-          const el = document.getElementById(id);
-          if (!el) return;
-          const url = themeCards[key] || data[key];
-          if (url) el.src = url;
-        });
-      } catch (err) {
-        console.warn("Home cards load failed:", err);
-      }
-    }
-    loadHomeCards();
 
 
     async function loadQuestionOfDay() {
