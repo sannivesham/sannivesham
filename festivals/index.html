@@ -319,67 +319,300 @@
     </section>
 
     <!-- FOOTER -->
-
-
     <footer class="simple-footer">
-
         <p class="footer-quote">
             ✨ మన పండుగలు మన సంస్కృతి యొక్క ప్రతిబింబం ✨
         </p>
-
-<script type="module" src="../social-links.js"></script>
+        <div class="footer-links">
+            <a href="https://www.instagram.com/sannivesham/" target="_blank">Instagram</a>
+            <a href="https://www.facebook.com/people/sannivesham/61590227441949/?rdid=uQ6WI682rLad7R5c&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1EEvnb1Ucg%2F" target="_blank">Facebook</a>
+            <a href="tel:+919493226037">Phone</a>
+            <a href="/download/" style="color:#ffd166;font-weight:700;">💻 డెస్క్‌టాప్ యాప్</a>
+        </div>
         <p>
             © 2026 సన్నివేశం
         </p>
-
     </footer>
 
     <script src="../script.js"></script>
 
     <script type="module">
-        import { db } from "../firebase-config.js";
+        import { EKADASHI_LIST } from "./ekadashi-data.js";
 
-        import {
-            doc,
-            getDoc
-        } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        // 1. Static 21 Sacred Hindu / Telugu Festivals
+        const FESTIVALS = [
+            { title: "ఉగాది", file: "ugadi.html", image: "../images/festivals/ugadi.png" },
+            { title: "శ్రీరామ నవమి", file: "sri-rama-navami.html", image: "../images/festivals/sri-rama-navami.png" },
+            { title: "హనుమాన్ జన్మోత్సవం", file: "hanuman-jayanti.html", image: "../images/festivals/hanuman-jayanti.png" },
+            { title: "అక్షయ తృతీయ", file: "akshaya-tritiya.html", image: "../images/festivals/akshaya-tritiya.png" },
+            { title: "నరసింహ జయంతి", file: "narasimha-jayanti.html", image: "../images/festivals/narasimha-jayanti.png" },
+            { title: "గురు పూర్ణిమ", file: "guru-poornima.html", image: "../images/festivals/guru-poornima.png" },
+            { title: "శ్రీకృష్ణ జన్మాష్టమి", file: "sri-krishna-janmashtami.html", image: "../images/festivals/sri-krishna-janmashtami.png" },
+            { title: "వినాయక చవితి", file: "vinayaka-chavithi.html", image: "../images/festivals/vinayaka-chavithi.png" },
+            { title: "శరన్నవరాత్రులు", file: "navaratrulu.html", image: "../images/festivals/navaratrulu.png" },
+            { title: "విజయదశమి (దసరా)", file: "vijayadasami.html", image: "../images/festivals/vijayadasami.png" },
+            { title: "ధనత్రయోదశి", file: "dhanatrayodashi.html", image: "../images/festivals/dhanatrayodashi.png" },
+            { title: "నరక చతుర్దశి", file: "naraka-chaturdashi.html", image: "../images/festivals/naraka-chaturdashi.png" },
+            { title: "దీపావళి", file: "diwali.html", image: "../images/festivals/diwali.png" },
+            { title: "నాగుల చవితి", file: "nagula-chavithi.html", image: "../images/festivals/nagula-chavithi.png" },
+            { title: "కార్తీక పౌర్ణమి", file: "karthika-pournami.html", image: "../images/festivals/karthika-pournami.png" },
+            { title: "వైకుంఠ ఏకాదశి", file: "vaikuntha-ekadashi.html", image: "../images/festivals/vaikuntha-ekadashi.png" },
+            { title: "మకర సంక్రాంతి", file: "makar-sankranti.html", image: "../images/festivals/makar-sankranti.png" },
+            { title: "రథ సప్తమి", file: "ratha-saptami.html", image: "../images/festivals/ratha-saptami.png" },
+            { title: "వసంత పంచమి", file: "vasanta-panchami.html", image: "../images/festivals/vasanta-panchami.png" },
+            { title: "మహా శివరాత్రి", file: "maha-shiva-raatri.html", image: "../images/festivals/maha-shiva-raatri.png" },
+            { title: "హోళీ", file: "holi.html", image: "../images/festivals/holi.png" }
+        ];
 
-        async function loadFestivalsBackground() {
-            try {
-                const snap = await getDoc(doc(db, "settings", "backgrounds"));
-                if (!snap.exists()) return;
+        // Render Main Festivals Grid
+        const festivalsGrid = document.querySelector("#mainFestivalsView .festivals-grid");
+        if (festivalsGrid) {
+            festivalsGrid.innerHTML = FESTIVALS.map(f => `
+                <a href="${f.file}" class="festival-card">
+                    <img src="${f.image}" alt="${f.title}" loading="lazy">
+                    <div class="festival-name">${f.title}</div>
+                </a>
+            `).join("");
+        }
 
-                const data = snap.data();
-                const bg = document.querySelector(".festivals-bg");
-                if (!bg) return;
+        // 2. Tab Navigation
+        const tabFestivals = document.getElementById("tabMainFestivals");
+        const tabEkadashi = document.getElementById("tabEkadashi");
+        const mainView = document.getElementById("mainFestivalsView");
+        const ekadashiView = document.getElementById("ekadashiSectionView");
 
-                const res = window.SanniveshamTheme
-                    ? window.SanniveshamTheme.resolveBackground(data, "festivals")
-                    : { chosen: (window.innerWidth <= 700 ? data.festivalsMobile : data.festivalsPc) || data.festivalsPc };
-
-                if (res.chosen) {
-                    bg.style.backgroundImage =
-                        `linear-gradient(rgba(15,8,3,0.55), rgba(15,8,3,0.55)), url("${res.chosen}")`;
-                }
-            } catch (err) {
-                console.warn("Festivals background load error:", err);
+        function switchTab(target) {
+            if (target === "ekadashi") {
+                tabEkadashi.classList.add("active");
+                tabFestivals.classList.remove("active");
+                mainView.style.display = "none";
+                ekadashiView.style.display = "block";
+            } else {
+                tabFestivals.classList.add("active");
+                tabEkadashi.classList.remove("active");
+                mainView.style.display = "block";
+                ekadashiView.style.display = "none";
             }
         }
 
-        loadFestivalsBackground();
-        window.addEventListener("sannivesham_theme_changed", loadFestivalsBackground);
+        tabFestivals?.addEventListener("click", () => switchTab("festivals"));
+        tabEkadashi?.addEventListener("click", () => switchTab("ekadashi"));
+
+        // 3. Ekadashi Management
+        const ekadashiGrid = document.getElementById("ekadashiGrid");
+        const searchInput = document.getElementById("ekadashiSearchInput");
+        const clearSearchBtn = document.getElementById("ekadashiClearSearch");
+        const pills = document.querySelectorAll(".ekadashi-pill");
+        const monthFilter = document.getElementById("ekadashiMonthFilter");
+        const emptyState = document.getElementById("ekadashiEmptyState");
+        const resetFilterBtn = document.getElementById("resetEkadashiFilterBtn");
+
+        let activeFilter = "all";
+        let activeMonth = "";
+        let searchQuery = "";
+
+        function renderEkadashis() {
+            if (!ekadashiGrid) return;
+
+            let filtered = EKADASHI_LIST.filter(item => {
+                // Pill Filter
+                if (activeFilter === "major" && !item.isMajor) return false;
+                if (activeFilter === "shukla" && !item.paksham.includes("శుక్ల")) return false;
+                if (activeFilter === "krishna" && !item.paksham.includes("కృష్ణ")) return false;
+
+                // Month Filter
+                if (activeMonth && !item.masam.includes(activeMonth)) return false;
+
+                // Search Query
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    const inTitle = item.title.toLowerCase().includes(q);
+                    const inEn = (item.titleEn || "").toLowerCase().includes(q);
+                    const inMasam = (item.masam || "").toLowerCase().includes(q);
+                    const inSummary = (item.summary || "").toLowerCase().includes(q);
+                    if (!inTitle && !inEn && !inMasam && !inSummary) return false;
+                }
+
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                ekadashiGrid.style.display = "none";
+                if (emptyState) emptyState.style.display = "block";
+                return;
+            }
+
+            ekadashiGrid.style.display = "grid";
+            if (emptyState) emptyState.style.display = "none";
+
+            ekadashiGrid.innerHTML = filtered.map(item => `
+                <div class="ekadashi-card ${item.isMajor ? "is-major" : ""}" data-slug="${item.slug}">
+                    <div class="ekadashi-card-top">
+                        <span class="ekadashi-masam-badge">📅 ${item.masam}</span>
+                        ${item.isMajor ? '<span class="ekadashi-star-badge">⭐ ముఖ్యమైనది</span>' : ''}
+                    </div>
+                    <div class="ekadashi-card-symbol">🪷</div>
+                    <h3 class="ekadashi-card-title">${item.title}</h3>
+                    <div class="ekadashi-card-en">${item.titleEn || ""}</div>
+                    <div class="ekadashi-card-paksham">${item.paksham.includes("శుక్ల") ? "🌕 శుక్ల పక్షం" : "🌑 కృష్ణ పక్షం"}</div>
+                    <p class="ekadashi-card-summary">${item.summary || ""}</p>
+                    <button class="ekadashi-read-btn">పూర్తి వివరాలు చదవండి →</button>
+                </div>
+            `).join("");
+
+            // Attach click listeners to cards
+            ekadashiGrid.querySelectorAll(".ekadashi-card").forEach(card => {
+                card.addEventListener("click", () => {
+                    const slug = card.dataset.slug;
+                    const item = EKADASHI_LIST.find(e => e.slug === slug);
+                    if (item) openEkadashiModal(item);
+                });
+            });
+        }
+
+        // Search & Filter Events
+        searchInput?.addEventListener("input", (e) => {
+            searchQuery = e.target.value.trim();
+            if (clearSearchBtn) clearSearchBtn.style.display = searchQuery ? "flex" : "none";
+            renderEkadashis();
+        });
+
+        clearSearchBtn?.addEventListener("click", () => {
+            searchInput.value = "";
+            searchQuery = "";
+            clearSearchBtn.style.display = "none";
+            renderEkadashis();
+            searchInput.focus();
+        });
+
+        pills.forEach(pill => {
+            pill.addEventListener("click", () => {
+                pills.forEach(p => p.classList.remove("active"));
+                pill.classList.add("active");
+                activeFilter = pill.dataset.filter;
+                renderEkadashis();
+            });
+        });
+
+        monthFilter?.addEventListener("change", (e) => {
+            activeMonth = e.target.value;
+            renderEkadashis();
+        });
+
+        resetFilterBtn?.addEventListener("click", () => {
+            searchQuery = "";
+            if (searchInput) searchInput.value = "";
+            if (clearSearchBtn) clearSearchBtn.style.display = "none";
+            activeFilter = "all";
+            pills.forEach(p => p.classList.toggle("active", p.dataset.filter === "all"));
+            activeMonth = "";
+            if (monthFilter) monthFilter.value = "";
+            renderEkadashis();
+        });
+
+        // 4. Modal Reader for Ekadashi
+        const modal = document.getElementById("ekadashiReaderModal");
+        const modalBody = document.getElementById("ekadashiModalBody");
+        const modalBackdrop = document.getElementById("ekadashiReaderBackdrop");
+        const closeModalBtn = document.getElementById("closeEkadashiReaderBtn");
+        const fontMinus = document.getElementById("ekadashiFontMinusBtn");
+        const fontPlus = document.getElementById("ekadashiFontPlusBtn");
+        const fontDisplay = document.getElementById("ekadashiFontSizeDisplay");
+        const copyBtn = document.getElementById("ekadashiCopyBtn");
+        const shareBtn = document.getElementById("ekadashiShareBtn");
+        const themeBtn = document.getElementById("ekadashiThemeBtn");
+        const modalDialog = document.getElementById("ekadashiReaderDialog");
+
+        let currentEkadashi = null;
+        let fontSize = 20;
+        const themes = ["theme-night", "theme-sepia", "theme-normal"];
+        let themeIdx = 0;
+
+        function openEkadashiModal(item) {
+            currentEkadashi = item;
+            modalBody.innerHTML = `
+                <header class="reader-detail-header" style="text-align:center;padding:10px 0 25px;">
+                    <span style="font-size:2.4rem;color:#ffd166;">ॐ</span>
+                    <h1 style="color:#ffd166;font-size:2rem;margin:8px 0;">${item.title}</h1>
+                    <div style="color:#d5c29d;font-size:1.05rem;margin-bottom:14px;">${item.titleEn || ""}</div>
+                    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
+                        <span style="background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.3);padding:4px 12px;border-radius:20px;color:#ffd166;font-size:0.85rem;">📅 ${item.masam}</span>
+                        <span style="background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.3);padding:4px 12px;border-radius:20px;color:#ffd166;font-size:0.85rem;">${item.paksham}</span>
+                        <span style="background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.3);padding:4px 12px;border-radius:20px;color:#ffd166;font-size:0.85rem;">🙏 ${item.deity || "శ్రీ మహావిష్ణువు"}</span>
+                    </div>
+                </header>
+                <div style="line-height:2.1;color:#f0e3cd;font-size:${fontSize}px;">
+                    <h2 style="color:#ffd166;font-size:1.35rem;border-bottom:1px solid rgba(255,209,102,0.25);padding-bottom:6px;margin:20px 0 10px;">📖 పురాణ గాథ & విశిష్టత</h2>
+                    <p style="margin-bottom:20px;">${item.story || item.summary || ""}</p>
+                    <h2 style="color:#ffd166;font-size:1.35rem;border-bottom:1px solid rgba(255,209,102,0.25);padding-bottom:6px;margin:20px 0 10px;">🪔 వ్రత విధానం & ఫలశ్రుతి</h2>
+                    <p style="margin-bottom:20px;">${item.vidhanam || ""}</p>
+                    ${item.phalam ? `<div style="background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.3);border-radius:12px;padding:16px 20px;margin-top:16px;"><strong style="color:#ffd166;">✨ వ్రత ఫలం:</strong> ${item.phalam}</div>` : ""}
+                </div>
+            `;
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+            currentEkadashi = null;
+        }
+
+        closeModalBtn?.addEventListener("click", closeModal);
+        modalBackdrop?.addEventListener("click", closeModal);
+
+        fontMinus?.addEventListener("click", () => {
+            fontSize = Math.max(16, fontSize - 2);
+            if (fontDisplay) fontDisplay.innerText = fontSize + "px";
+            if (modalBody.firstElementChild) modalBody.lastElementChild.style.fontSize = fontSize + "px";
+        });
+
+        fontPlus?.addEventListener("click", () => {
+            fontSize = Math.min(30, fontSize + 2);
+            if (fontDisplay) fontDisplay.innerText = fontSize + "px";
+            if (modalBody.firstElementChild) modalBody.lastElementChild.style.fontSize = fontSize + "px";
+        });
+
+        themeBtn?.addEventListener("click", () => {
+            themeIdx = (themeIdx + 1) % themes.length;
+            modalDialog.className = `ekadashi-reader-dialog ${themes[themeIdx]}`;
+        });
+
+        copyBtn?.addEventListener("click", async () => {
+            if (!currentEkadashi) return;
+            const text = `${currentEkadashi.title}\n\n${currentEkadashi.summary || ""}\n\nపురాణ గాథ: ${currentEkadashi.story || ""}\n\nవిధానం: ${currentEkadashi.vidhanam || ""}`;
+            await navigator.clipboard.writeText(text);
+            const orig = copyBtn.innerText;
+            copyBtn.innerText = "✓ కాపీ అయింది";
+            setTimeout(() => copyBtn.innerText = orig, 2000);
+        });
+
+        shareBtn?.addEventListener("click", () => {
+            if (!currentEkadashi) return;
+            const text = `*${currentEkadashi.title}*\n\n${currentEkadashi.summary || ""}\n\nhttps://sannivesham.com/festivals/`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
+        });
+
+        // Initialize Ekadashi List
+        renderEkadashis();
+
+        // Check URL for tab
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("tab") === "ekadashi" || window.location.hash === "#ekadashi") {
+            switchTab("ekadashi");
+        }
     </script>
-    <script type="module" src="festivals.js?v=20260921_textcards"></script>
+
     <audio id="bgMusic" loop>
-  <source src="../music/traditional.mp3" type="audio/mpeg">
-</audio>
+        <source src="../music/traditional.mp3" type="audio/mpeg">
+    </audio>
 
-<button id="musicBtn" class="music-btn">
-  🔊
-</button>
+    <button id="musicBtn" class="music-btn">
+        🔊
+    </button>
 
-<script src="../music.js"></script>
+    <script src="../music.js"></script>
 </body>
-
 </html>
 

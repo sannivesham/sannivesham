@@ -210,56 +210,279 @@
     <a href="/">ప్రారంభం</a>
     <a href="/temples/">దేవాలయాలు</a>
   </nav>
+
   <section class="temples-page">
     <div class="temples-title-box">
       <h1>దేవాలయాలు</h1>
       <p>భారతీయ సంస్కృతి, భక్తి మరియు చరిత్రకు ప్రతీకలైన పవిత్ర క్షేత్రాలు</p>
     </div>
-    <div class="temples-grid" id="templeCategoriesGrid">
-      
+
+    <!-- CATEGORY TABS / PILLS -->
+    <div class="temple-category-tabs" id="templeCategoryTabs">
+      <button class="temple-tab-btn active" data-cat="all">🌟 అన్ని విభాగాలు</button>
+      <button class="temple-tab-btn" data-cat="jyotirlingas">🕉️ జ్యోతిర్లింగాలు</button>
+      <button class="temple-tab-btn" data-cat="peethas">🏛️ చతురామ్నాయ పీఠాలు</button>
+      <button class="temple-tab-btn" data-cat="punyakshetralu">🛕 పుణ్యక్షేత్రాలు</button>
+      <button class="temple-tab-btn" data-cat="shakti-peethas">🪷 శక్తి పీఠాలు</button>
+      <button class="temple-tab-btn" data-cat="pancharama">🛕 పంచారామాలు</button>
+      <button class="temple-tab-btn" data-cat="chardham">🏔️ చార్ ధామ్</button>
+      <button class="temple-tab-btn" data-cat="ramalayalu">🏹 రామాలయాలు</button>
+      <button class="temple-tab-btn" data-cat="krishnalayalu">🦚 కృష్ణాలయాలు</button>
+      <button class="temple-tab-btn" data-cat="narasimha">🦁 నరసింహ క్షేత్రాలు</button>
+      <button class="temple-tab-btn" data-cat="panchabhoota">🌊 పంచభూత లింగాలు</button>
+    </div>
+
+    <!-- MAIN CATEGORIES VIEW -->
+    <div id="templeCategoriesView">
+      <div class="temples-grid" id="templeCategoriesGrid">
+        <!-- Rendered statically via JS below for instant interactive filter -->
+      </div>
+    </div>
+
+    <!-- SELECTED CATEGORY TEMPLES VIEW -->
+    <div id="templeItemsView" style="display:none;">
+      <div class="temple-subcat-header">
+        <div class="temple-subcat-info">
+          <h2 id="activeSubcatTitle">విభాగం</h2>
+          <p id="activeSubcatDesc">పవిత్ర దేవాలయాలు</p>
+        </div>
+        <button class="temple-back-btn" id="backToCategoriesBtn">← అన్ని విభాగాలు</button>
+      </div>
+      <div class="temples-grid" id="templeListGrid">
+        <!-- Temple cards injected -->
+      </div>
+      <div class="temple-empty-state" id="templeEmptyState" style="display:none;">
+        <div class="empty-icon">🛕</div>
+        <h3>త్వరలో మరిన్ని దేవాలయాలు</h3>
+        <p>ఈ విభాగంలో దేవాలయాల విశేషాలు, చరిత్ర మరియు దర్శన వివరాలు త్వరలోనే సమగ్రంగా అందుబాటులోకి రానున్నాయి.</p>
+        <button class="temple-back-btn" onclick="showCategory('all')" style="margin-top:14px;">అన్ని విభాగాలు చూడండి</button>
+      </div>
     </div>
   </section>
+
   <footer class="simple-footer">
     <p class="footer-quote">✨ దేవాలయాలు భారతీయ సంస్కృతికి ప్రతీకలు ✨</p>
-    <script type="module" src="../social-links.js"></script>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/sannivesham/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/people/sannivesham/61590227441949/?rdid=uQ6WI682rLad7R5c&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1EEvnb1Ucg%2F" target="_blank">Facebook</a>
+      <a href="tel:+919493226037">Phone</a>
+      <a href="/download/" style="color:#ffd166;font-weight:700;">💻 డెస్క్‌టాప్ యాప్</a>
+    </div>
     <p>© 2026 సన్నివేశం</p>
   </footer>
+
   <script src="../script.js"></script>
-  <script type="module">
-  import { db } from "../firebase-config.js";
-  import {
-    doc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-  async function loadTemplesBackground() {
-    try {
-      const snap = await getDoc(doc(db, "settings", "backgrounds"));
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const bg = document.querySelector(".temples-bg");
-      if (!bg) return;
-      const res = window.SanniveshamTheme
-        ? window.SanniveshamTheme.resolveBackground(data, "temples")
-        : { chosen: (window.innerWidth <= 700 ? data.templesMobile : data.templesPc) || data.templesPc };
-      if (res.chosen) {
-        bg.style.backgroundImage =
-          linear-gradient(rgba(10,5,0,0.65), rgba(10,5,0,0.70)), url("${res.chosen}");
+
+  <script>
+    (function() {
+      // 100% Static Temples Architecture Data
+      const CATEGORIES = [
+        {
+          id: "jyotirlingas",
+          title: "🕉️ జ్యోతిర్లింగాలు",
+          desc: "భారతదేశ ద్వాదశ జ్యోతిర్లింగ దివ్య క్షేత్రాలు",
+          image: "../images/temples/jyotirlinga.png",
+          temples: [
+            {
+              title: "శ్రీ మల్లికార్జున జ్యోతిర్లింగ దేవాలయం",
+              location: "శ్రీశైలం, ఆంధ్రప్రదేశ్ • 2వ జ్యోతిర్లింగం",
+              image: "../images/temples/mallikarjuna.png",
+              file: "mallikarjuna.html"
+            },
+            {
+              title: "శ్రీ సోమనాథ జ్యోతిర్లింగ దేవాలయం",
+              location: "గిర్ సోమనాథ్, గుజరాత్ • 1వ జ్యోతిర్లింగం",
+              image: "../images/temples/somnath.png",
+              file: "somnath.html"
+            },
+            {
+              title: "శ్రీ మహాకాళేశ్వర జ్యోతిర్లింగ దేవాలయం",
+              location: "ఉజ్జయిని, మధ్యప్రదేశ్ • 3వ జ్యోతిర్లింగం",
+              image: "../images/temples/mahakaleshwar.png",
+              file: "mahakaleshwar.html"
+            }
+          ]
+        },
+        {
+          id: "peethas",
+          title: "చతురామ్నాయ పీఠాలు",
+          desc: "జగద్గురు శ్రీ ఆదిశంకరాచార్యులు స్థాపించిన దివ్య పీఠాలు",
+          image: "../images/temples/peethas.png",
+          temples: [
+            {
+              title: "శ్రీ శృంగేరి శారదా పీఠం",
+              location: "శృంగేరి, కర్ణాటక • దక్షిణ ఆమ్నాయ పీఠం",
+              image: "../images/temples/sringeri.png",
+              file: "sringeri.html"
+            },
+            {
+              title: "శ్రీ ద్వారకా శారదా పీఠం",
+              location: "ద్వారక, గుజరాత్ • పశ్చిమ ఆమ్నాయ పీఠం",
+              image: "../images/temples/dwaraka.png",
+              file: "dwaraka.html"
+            }
+          ]
+        },
+        {
+          id: "punyakshetralu",
+          title: "ప్రసిద్ధ పుణ్యక్షేత్రాలు",
+          desc: "భారతదేశ ప్రముఖ పవిత్ర పుణ్యక్షేత్రాలు",
+          image: "../images/tirumala.jpg",
+          temples: [
+            {
+              title: "శ్రీ వేంకటేశ్వర స్వామి దేవాలయం (తిరుమల)",
+              location: "తిరుమల, ఆంధ్రప్రదేశ్ • కలియుగ వైకుంఠం",
+              image: "../images/tirumala.jpg",
+              file: "tirumala.html"
+            }
+          ]
+        },
+        {
+          id: "shakti-peethas",
+          title: "అష్టాదశ శక్తి పీఠాలు",
+          desc: "సతీదేవి దివ్య అష్టాదశ మహాశక్తి పీఠాలు",
+          image: "../images/temples/shakti-peethas.png",
+          temples: []
+        },
+        {
+          id: "pancharama",
+          title: "పంచారామ క్షేత్రాలు",
+          desc: "ఆంధ్రప్రదేశ్‌లోని పవిత్ర పంచారామ క్షేత్రాలు",
+          image: "../images/temples/pancharama.png",
+          temples: []
+        },
+        {
+          id: "chardham",
+          title: "చార్ ధామ్",
+          desc: "బద్రీనాథ్, పూరి, రామేశ్వరం, ద్వారక పవిత్ర చతుర్ధామ యాత్ర",
+          image: "../images/temples/chardham.png",
+          temples: []
+        },
+        {
+          id: "ramalayalu",
+          title: "ప్రసిద్ధ రామాలయాలు",
+          desc: "అయోధ్య, భద్రాచలం తదితర ప్రసిద్ధ శ్రీరామ క్షేత్రాలు",
+          image: "../images/temples/ramalayalu.png",
+          temples: []
+        },
+        {
+          id: "krishnalayalu",
+          title: "ప్రసిద్ధ కృష్ణాలయాలు",
+          desc: "ద్వారక, మథుర, బృందావనం, గురువాయూర్ కృష్ణ క్షేత్రాలు",
+          image: "../images/temples/krishnalayalu.png",
+          temples: []
+        },
+        {
+          id: "narasimha",
+          title: "నవ నరసింహ క్షేత్రాలు",
+          desc: "అహోబిలం నవ నరసింహ స్వామి దివ్య ధామాలు",
+          image: "../images/temples/narasimha.png",
+          temples: []
+        },
+        {
+          id: "panchabhoota",
+          title: "పంచ భూత లింగాలు",
+          desc: "పృథ్వి, అప్పు, తేజస్సు, వాయువు, ఆకాశ లింగ క్షేత్రాలు",
+          image: "../images/temples/panchabhoota.png",
+          temples: []
+        }
+      ];
+
+      const catTabs = document.getElementById("templeCategoryTabs");
+      const catsView = document.getElementById("templeCategoriesView");
+      const catsGrid = document.getElementById("templeCategoriesGrid");
+      const itemsView = document.getElementById("templeItemsView");
+      const listGrid = document.getElementById("templeListGrid");
+      const emptyState = document.getElementById("templeEmptyState");
+      const activeTitle = document.getElementById("activeSubcatTitle");
+      const activeDesc = document.getElementById("activeSubcatDesc");
+      const backBtn = document.getElementById("backToCategoriesBtn");
+
+      // Render Categories Grid
+      catsGrid.innerHTML = CATEGORIES.map(cat => `
+        <div class="temple-card" onclick="showCategory('${cat.id}')">
+          <img src="${cat.image}" alt="${cat.title}" loading="lazy">
+          <div class="temple-name">${cat.title}</div>
+        </div>
+      `).join("");
+
+      window.showCategory = function(catId, updateHistory = true) {
+        // Update Tab active state
+        document.querySelectorAll(".temple-tab-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.dataset.cat === catId);
+        });
+
+        if (catId === "all") {
+          catsView.style.display = "block";
+          itemsView.style.display = "none";
+          if (updateHistory) history.replaceState(null, "", window.location.pathname);
+          return;
+        }
+
+        const cat = CATEGORIES.find(c => c.id === catId);
+        if (!cat) return;
+
+        catsView.style.display = "none";
+        itemsView.style.display = "block";
+        activeTitle.innerText = cat.title;
+        activeDesc.innerText = cat.desc;
+
+        if (cat.temples && cat.temples.length > 0) {
+          emptyState.style.display = "none";
+          listGrid.style.display = "grid";
+          listGrid.innerHTML = cat.temples.map(t => `
+            <a href="${t.file}" class="temple-card">
+              <img src="${t.image}" alt="${t.title}" loading="lazy">
+              <div class="temple-name">${t.title}</div>
+            </a>
+          `).join("");
+        } else {
+          listGrid.style.display = "none";
+          listGrid.innerHTML = "";
+          emptyState.style.display = "block";
+        }
+
+        if (updateHistory) {
+          history.replaceState(null, "", `#${catId}`);
+        }
+        window.scrollTo({ top: 120, behavior: "smooth" });
+      };
+
+      // Tab clicks
+      catTabs.querySelectorAll(".temple-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          showCategory(btn.dataset.cat);
+        });
+      });
+
+      backBtn.addEventListener("click", () => {
+        showCategory("all");
+      });
+
+      // Handle initial Hash / Search Params
+      function checkInitialRoute() {
+        const hash = window.location.hash.replace("#", "");
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get("cat") || hash;
+        if (catParam && CATEGORIES.some(c => c.id === catParam)) {
+          showCategory(catParam, false);
+        } else {
+          showCategory("all", false);
+        }
       }
-    } catch (err) {
-      console.warn("Temples bg load error:", err);
-    }
-  }
-  loadTemplesBackground();
-  window.addEventListener("sannivesham_theme_changed", loadTemplesBackground);
-</script>
-<script type="module" src="temples.js"></script>
-<audio id="bgMusic" loop>
-  <source src="../music/traditional.mp3" type="audio/mpeg">
-</audio>
-<button id="musicBtn" class="music-btn">
-  🔊
-</button>
-<script src="../music.js"></script>
+
+      window.addEventListener("hashchange", checkInitialRoute);
+      checkInitialRoute();
+    })();
+  </script>
+
+  <audio id="bgMusic" loop>
+    <source src="../music/traditional.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" class="music-btn">
+    🔊
+  </button>
+  <script src="../music.js"></script>
 </body>
 </html>
 

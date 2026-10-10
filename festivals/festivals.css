@@ -14,7 +14,7 @@ body.festival-detail-body {
 
   background:
     linear-gradient(rgba(15, 8, 3, 0.80), rgba(15, 8, 3, 0.80)),
-    url("images/festivals-bg.jpg");
+    url("../images/festivals-bg.jpg");
 
   background-size: cover;
   background-position: center;
@@ -25,9 +25,9 @@ body.festival-detail-body {
   .festivals-bg {
     background:
       linear-gradient(rgba(15, 8, 3, 0.60), rgba(15, 8, 3, 0.60)),
-      url("images/festivals-mobile.jpg");
+      url("../images/festivals-bg.jpg");
 
-    background-size: contain;
+    background-size: cover;
     background-position: center top;
   }
 
