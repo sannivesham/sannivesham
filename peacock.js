@@ -12,9 +12,9 @@
   window.__SanniveshamDualWingPeacock = true;
 
   const AI_DESTINATION = 'ai/';
-  const IMG_PERCHED = 'images/peacock-perched.png';
-  const IMG_WING_UP = 'images/peacock-wing-up.png';
-  const IMG_WING_DOWN = 'images/peacock-wing-down.png';
+  const IMG_PERCHED = 'images/hamsa-perched.png';
+  const IMG_WING_UP = 'images/hamsa-wing-up.png';
+  const IMG_WING_DOWN = 'images/hamsa-wing-down.png';
 
   class DualWingTravellingPeacock {
     constructor() {
@@ -95,19 +95,19 @@
       container.innerHTML = `
         <div class="peacock-ground-shadow"></div>
         <div class="peacock-ai-tooltip">
-          <span>🦚</span>
+          <span>🦢</span>
           <span>సన్నివేశం మేధ • త్వరలో రాబోతోంది (Coming Soon)</span>
           <span>➜</span>
         </div>
         <div class="peacock-inner-wrap">
-          <!-- 1. Photorealistic Sitting Peacock (Wings completely folded against body) -->
-          <img src="${IMG_PERCHED}" alt="Sannivesham Peacock Perched" class="peacock-img-layer peacock-img-perched" loading="eager" decoding="async">
+          <!-- 1. Sacred Golden Hamsa Perched (Folded wings) -->
+          <img src="${IMG_PERCHED}" alt="సన్నివేశం హంస - Sannivesham Hamsa Perched" class="peacock-img-layer peacock-img-perched" loading="eager" decoding="async">
           
-          <!-- 2. Photorealistic Wing Up Stroke (Active only while flying) -->
-          <img src="${IMG_WING_UP}" alt="Sannivesham Peacock Wing Up" class="peacock-img-layer peacock-img-wing-up" loading="eager" decoding="async">
+          <!-- 2. Sacred Golden Hamsa Wing Up -->
+          <img src="${IMG_WING_UP}" alt="సన్నివేశం హంస - Sannivesham Hamsa Wing Up" class="peacock-img-layer peacock-img-wing-up" loading="eager" decoding="async">
           
-          <!-- 3. Photorealistic Wing Down Stroke (Alternating flight stroke) -->
-          <img src="${IMG_WING_DOWN}" alt="Sannivesham Peacock Wing Down" class="peacock-img-layer peacock-img-wing-down" loading="eager" decoding="async">
+          <!-- 3. Sacred Golden Hamsa Wing Down -->
+          <img src="${IMG_WING_DOWN}" alt="సన్నివేశం హంస - Sannivesham Hamsa Wing Down" class="peacock-img-layer peacock-img-wing-down" loading="eager" decoding="async">
         </div>
         <div class="peacock-click-aura"></div>
       `;
