@@ -1470,7 +1470,11 @@ body {
   }
 
   .contact-container {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
   }
 
   .contact-section {
@@ -1478,24 +1482,43 @@ body {
   }
 
   .contact-box {
-    width: 100%;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    padding: 0;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 209, 102, 0.3);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .contact-box:hover,
+  .contact-box:active {
+    transform: translateY(-3px) scale(1.08);
+    background: rgba(255, 209, 102, 0.2);
+    border-color: #ffd166;
+  }
+
+  .contact-box img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
   }
 
   .contact-box span {
-    font-size: 18px;
-
-    word-break: break-word;
+    display: none !important;
   }
 
   .whatsapp-channel-box {
     width: 100%;
-
-    grid-column: span 1;
-
+    flex: 1 1 100%;
+    margin-top: 14px;
     flex-direction: column;
-
     text-align: center;
-
     gap: 20px;
   }
 
