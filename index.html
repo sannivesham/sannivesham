@@ -448,6 +448,151 @@
         text-align: center !important;
       }
     }
+
+    /* CATEGORIES GRID: 5 MAIN + MORE BOX (DEFAULT 6) & 12 ALL SECTIONS EXPANDED */
+    .category-card-extra {
+      display: none !important;
+    }
+    .category-grid.is-expanded .category-card-extra {
+      display: block !important;
+      animation: catCardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes catCardPop {
+      0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .category-card-more {
+      cursor: pointer;
+      background: linear-gradient(145deg, rgba(32, 16, 7, 0.92), rgba(16, 8, 3, 0.96)) !important;
+      border: 1.5px dashed rgba(255, 209, 102, 0.55) !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6) !important;
+    }
+    .category-card-more:hover {
+      border-color: #ffd166 !important;
+      border-style: solid !important;
+      box-shadow: 0 14px 35px rgba(255, 209, 102, 0.28), 0 0 25px rgba(255, 209, 102, 0.2) !important;
+      transform: translateY(-8px) scale(1.025) !important;
+    }
+    .more-card-content {
+      position: absolute;
+      inset: 0;
+      bottom: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      z-index: 3;
+    }
+    .more-card-icon-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.25), rgba(212, 175, 55, 0.08));
+      border: 1.5px solid rgba(255, 209, 102, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.1rem;
+      margin-bottom: 10px;
+      box-shadow: 0 0 22px rgba(255, 209, 102, 0.35);
+      transition: transform 0.35s ease, border-color 0.35s ease;
+    }
+    .category-card-more:hover .more-card-icon-ring {
+      transform: scale(1.12) rotate(12deg);
+      border-color: #ffd166;
+    }
+    .more-card-highlight {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #ffd166;
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+    .more-card-preview {
+      font-size: 0.78rem;
+      color: rgba(237, 227, 200, 0.75);
+      line-height: 1.35;
+      max-width: 200px;
+    }
+
+    /* EXPANDED MODE: More box transforms into a bottom collapse bar */
+    .category-grid.is-expanded .category-card-more {
+      order: 99 !important;
+      grid-column: 1 / -1 !important;
+      max-width: 440px !important;
+      height: 76px !important;
+      aspect-ratio: auto !important;
+      margin: 12px auto 0 !important;
+      border-radius: 24px !important;
+      border-style: solid !important;
+      border-color: rgba(255, 209, 102, 0.45) !important;
+      background: linear-gradient(135deg, rgba(32, 16, 7, 0.95), rgba(16, 8, 3, 0.98)) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 209, 102, 0.15) !important;
+    }
+    .category-grid.is-expanded .category-card-more .more-card-content {
+      position: static !important;
+      flex-direction: row !important;
+      gap: 14px !important;
+      padding: 10px 24px !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .category-grid.is-expanded .category-card-more .more-card-icon-ring {
+      width: 42px !important;
+      height: 42px !important;
+      font-size: 1.3rem !important;
+      margin-bottom: 0 !important;
+      flex-shrink: 0 !important;
+    }
+    .category-grid.is-expanded .category-card-more .category-title,
+    .category-grid.is-expanded .category-card-more .category-card-badge {
+      display: none !important;
+    }
+    .category-grid.is-expanded .category-card-more .more-card-preview {
+      display: none !important;
+    }
+    .category-grid.is-expanded .category-card-more .more-card-highlight {
+      font-size: 1.05rem !important;
+      margin: 0 !important;
+    }
+
+    @media (max-width: 700px) {
+      .more-card-content {
+        bottom: 50px;
+        padding: 10px;
+      }
+      .more-card-icon-ring {
+        width: 54px;
+        height: 54px;
+        font-size: 1.7rem;
+        margin-bottom: 6px;
+      }
+      .more-card-highlight {
+        font-size: 1.02rem;
+      }
+      .more-card-preview {
+        font-size: 0.72rem;
+        max-width: 150px;
+      }
+      .category-grid.is-expanded .category-card-more {
+        height: 68px !important;
+        max-width: 92% !important;
+      }
+      .category-grid.is-expanded .category-card-more .more-card-highlight {
+        font-size: 0.95rem !important;
+      }
+    }
   </style>
 </head>
 
@@ -822,8 +967,9 @@
     <section id="categories" class="category-section">
       <h2 class="category-heading" data-en="Categories">విభాగాలు</h2>
 
-      <div class="category-grid">
+      <div class="category-grid" id="categoryGrid">
 
+        <!-- 1. గ్రంథాలయం (Library) -->
         <a href="library/" class="category-card" data-tilt>
           <span class="category-card-badge">📖 150+ కథలు</span>
           <div class="category-card-inner">
@@ -833,6 +979,7 @@
           </div>
         </a>
 
+        <!-- 2. ఇతిహాసాలు (Epics) -->
         <a href="ithihasalu/" class="category-card" data-tilt>
           <span class="category-card-badge">📜 ఇతిహాసాలు</span>
           <div class="category-card-inner">
@@ -842,6 +989,7 @@
           </div>
         </a>
 
+        <!-- 3. పండుగలు (Festivals) -->
         <a href="festivals/" class="category-card" data-tilt>
           <span class="category-card-badge">🪔 పండుగలు</span>
           <div class="category-card-inner">
@@ -851,24 +999,7 @@
           </div>
         </a>
 
-        <a href="temples/" class="category-card" data-tilt>
-          <span class="category-card-badge">🛕 దర్శనం</span>
-          <div class="category-card-inner">
-            <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు" loading="lazy">
-            <div class="category-title" data-en="Temples">దేవాలయాలు</div>
-            <div class="category-card-shine"></div>
-          </div>
-        </a>
-
-        <a href="calendar/" class="category-card" data-tilt>
-          <span class="category-card-badge">🗓️ పంచాంగం</span>
-          <div class="category-card-inner">
-            <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్" loading="lazy">
-            <div class="category-title" data-en="Calendar">పంచాంగం</div>
-            <div class="category-card-shine"></div>
-          </div>
-        </a>
-
+        <!-- 4. ప్రశ్నావళి (Quiz) -->
         <a href="quiz/" class="category-card" data-tilt>
           <span class="category-card-badge">🎯 క్విజ్</span>
           <div class="category-card-inner">
@@ -878,7 +1009,55 @@
           </div>
         </a>
 
-        <a href="games/" class="category-card" data-tilt>
+        <!-- 5. స్టోర్ (Store) -->
+        <a href="store/" class="category-card" data-tilt title="విక్రయశాల - త్వరలో ప్రారంభమవుతుంది (Coming Soon)">
+          <span class="category-card-badge" style="background: linear-gradient(135deg, #ffd166, #ff9a3c); color: #1a0c02; font-weight: 800; box-shadow: 0 4px 12px rgba(255, 209, 102, 0.35);">⏳ త్వరలో (Coming Soon)</span>
+          <div class="category-card-inner">
+            <img id="storeCardImg" src="images/store.png" alt="స్టోర్" loading="lazy">
+            <div class="category-title" data-en="Store (Coming Soon)">స్టోర్</div>
+            <div class="category-card-shine"></div>
+          </div>
+        </a>
+
+        <!-- 6. MORE BOX (మరిన్ని విభాగాలు) -->
+        <div class="category-card category-card-more" id="moreCategoriesCard" data-tilt role="button" tabindex="0" title="మరిన్ని విభాగాలు చూడండి">
+          <span class="category-card-badge" id="moreCardBadge">✨ 12 విభాగాలు</span>
+          <div class="category-card-inner">
+            <div class="more-card-content">
+              <div class="more-card-icon-ring">
+                <span id="moreCardIcon">🪷</span>
+              </div>
+              <div class="more-card-highlight" id="moreCardHighlight" data-en="+7 Categories">+7 విభాగాలు</div>
+              <div class="more-card-preview" id="moreCardPreview" data-en="Temples • Panchangam • Games & more">దేవాలయాలు, పంచాంగం, ఆటలు &amp; మరిన్ని</div>
+            </div>
+            <div class="category-title" id="moreCardTitle" data-en="More Categories">మరిన్ని విభాగాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
+        </div>
+
+        <!-- REMAINING 7 SECTIONS (Hidden by default, revealed on clicking More) -->
+        <!-- 7. దేవాలయాలు (Temples) -->
+        <a href="temples/" class="category-card category-card-extra" data-tilt>
+          <span class="category-card-badge">🛕 దర్శనం</span>
+          <div class="category-card-inner">
+            <img id="templesCardImg" src="images/temples.png" alt="దేవాలయాలు" loading="lazy">
+            <div class="category-title" data-en="Temples">దేవాలయాలు</div>
+            <div class="category-card-shine"></div>
+          </div>
+        </a>
+
+        <!-- 8. పంచాంగం (Calendar) -->
+        <a href="calendar/" class="category-card category-card-extra" data-tilt>
+          <span class="category-card-badge">🗓️ పంచాంగం</span>
+          <div class="category-card-inner">
+            <img id="calendarCardImg" src="images/calendar.png" alt="క్యాలెండర్" loading="lazy">
+            <div class="category-title" data-en="Calendar">పంచాంగం</div>
+            <div class="category-card-shine"></div>
+          </div>
+        </a>
+
+        <!-- 9. ఆటలు (Games) -->
+        <a href="games/" class="category-card category-card-extra" data-tilt>
           <span class="category-card-badge">🎮 7+ ఆటలు</span>
           <div class="category-card-inner">
             <img id="slokasCardImg" src="images/gita.png" alt="ఆటలు" loading="lazy">
@@ -887,7 +1066,8 @@
           </div>
         </a>
 
-        <a href="events/" class="category-card" data-tilt>
+        <!-- 10. కార్యక్రమాలు (Events) -->
+        <a href="events/" class="category-card category-card-extra" data-tilt>
           <span class="category-card-badge">🚩 కార్యక్రమాలు</span>
           <div class="category-card-inner">
             <img id="eventsCardImg" src="images/events.png" alt="కార్యక్రమాలు" loading="lazy">
@@ -896,7 +1076,8 @@
           </div>
         </a>
 
-        <a href="videos/" class="category-card" data-tilt>
+        <!-- 11. దృశ్యచిత్రాలు (Videos) -->
+        <a href="videos/" class="category-card category-card-extra" data-tilt>
           <span class="category-card-badge">🎥 దృశ్యచిత్రాలు</span>
           <div class="category-card-inner">
             <img id="videosCardImg" src="images/videos.png" alt="దృశ్యచిత్రాలు" loading="lazy">
@@ -905,7 +1086,8 @@
           </div>
         </a>
 
-        <a href="festival-counter/" class="category-card" data-tilt>
+        <!-- 12. పండుగల గణకం (Festival Counter) -->
+        <a href="festival-counter/" class="category-card category-card-extra" data-tilt>
           <span class="category-card-badge">🪔 పండుగల గణకం</span>
           <div class="category-card-inner">
             <img id="poojaRoomCardImg" src="images/pooja-room.png" alt="పండుగల గణకం" loading="lazy">
@@ -914,20 +1096,12 @@
           </div>
         </a>
 
-        <a href="chant-counter/" class="category-card" data-tilt>
+        <!-- 13. జప గణకం (Chant Counter) -->
+        <a href="chant-counter/" class="category-card category-card-extra" data-tilt>
           <span class="category-card-badge">📿 జప గణకం</span>
           <div class="category-card-inner">
             <img id="chantCounterCardImg" src="images/chant-counter.png" alt="జప గణకం" loading="lazy">
             <div class="category-title" data-en="Chant Counter">జప గణకం</div>
-            <div class="category-card-shine"></div>
-          </div>
-        </a>
-
-        <a href="javascript:void(0)" class="category-card category-card-disabled" onclick="return false;" aria-disabled="true" style="cursor: default;" title="విక్రయశాల - త్వరలో ప్రారంభమవుతుంది (Coming Soon)">
-          <span class="category-card-badge" style="background: linear-gradient(135deg, #ffd166, #ff9a3c); color: #1a0c02; font-weight: 800; box-shadow: 0 4px 12px rgba(255, 209, 102, 0.35);">⏳ త్వరలో (Coming Soon)</span>
-          <div class="category-card-inner">
-            <img id="storeCardImg" src="images/store.png" alt="స్టోర్" loading="lazy">
-            <div class="category-title" data-en="Store (Coming Soon)">విక్రయశాల (త్వరలో)</div>
             <div class="category-card-shine"></div>
           </div>
         </a>
@@ -1655,6 +1829,73 @@
         }
       }
 
+      /* --- 6. CATEGORY EXPAND / COLLAPSE CONTROLLER --- */
+      function initCategoryExpansion() {
+        const moreCard = document.getElementById("moreCategoriesCard");
+        const grid = document.getElementById("categoryGrid");
+        const badge = document.getElementById("moreCardBadge");
+        const highlight = document.getElementById("moreCardHighlight");
+        const preview = document.getElementById("moreCardPreview");
+        const title = document.getElementById("moreCardTitle");
+        const icon = document.getElementById("moreCardIcon");
+        if (!moreCard || !grid) return;
+
+        let expanded = false;
+
+        function updateLabels() {
+          const isEn = localStorage.getItem("sannivesham_lang") === "en";
+          if (expanded) {
+            if (badge) badge.textContent = isEn ? "🔼 Collapse" : "🔼 మూసివేయి";
+            if (icon) icon.textContent = "▲";
+            if (highlight) {
+              highlight.textContent = isEn ? "Show Less" : "తక్కువగా చూడండి";
+              highlight.setAttribute("data-en", "Show Less");
+            }
+            if (preview) preview.textContent = isEn ? "Click to show top 5 sections" : "ప్రధాన 5 విభాగాలు చూడటానికి నొక్కండి";
+            if (title) {
+              title.textContent = isEn ? "Show Less" : "తక్కువగా చూడండి";
+              title.setAttribute("data-en", "Show Less");
+            }
+          } else {
+            if (badge) badge.textContent = isEn ? "✨ 12 Categories" : "✨ 12 విభాగాలు";
+            if (icon) icon.textContent = "🪷";
+            if (highlight) {
+              highlight.textContent = isEn ? "+7 Categories" : "+7 విభాగాలు";
+              highlight.setAttribute("data-en", "+7 Categories");
+            }
+            if (preview) preview.textContent = isEn ? "Temples • Panchangam • Games & more" : "దేవాలయాలు, పంచాంగం, ఆటలు & మరిన్ని";
+            if (title) {
+              title.textContent = isEn ? "More Categories" : "మరిన్ని విభాగాలు";
+              title.setAttribute("data-en", "More Categories");
+            }
+          }
+        }
+
+        moreCard.addEventListener("click", () => {
+          expanded = !expanded;
+          grid.classList.toggle("is-expanded", expanded);
+          updateLabels();
+
+          if (!expanded) {
+            const catSection = document.getElementById("categories");
+            if (catSection) {
+              catSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }
+        });
+
+        moreCard.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            moreCard.click();
+          }
+        });
+
+        window.addEventListener("storage", (e) => {
+          if (e.key === "sannivesham_lang") updateLabels();
+        });
+      }
+
       function initNavbarScroll() {
         const nl = document.querySelector('.nav-links');
         if (nl) {
@@ -1676,6 +1917,7 @@
           initNavbarScroll();
           initDivineParticles();
           init3DCardTilt();
+          initCategoryExpansion();
           initTimeGreeting();
           initPanchangamRibbon();
         });
@@ -1683,6 +1925,7 @@
         initNavbarScroll();
         initDivineParticles();
         init3DCardTilt();
+        initCategoryExpansion();
         initTimeGreeting();
         initPanchangamRibbon();
       }
