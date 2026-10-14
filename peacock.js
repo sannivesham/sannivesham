@@ -12,9 +12,9 @@
   window.__SanniveshamDualWingPeacock = true;
 
   const AI_DESTINATION = 'ai/';
-  const IMG_PERCHED = 'images/hamsa-perched.png';
-  const IMG_WING_UP = 'images/hamsa-wing-up.png';
-  const IMG_WING_DOWN = 'images/hamsa-wing-down.png';
+  const IMG_PERCHED = 'images/hamsa-perched.png?v=20261013b';
+  const IMG_WING_UP = 'images/hamsa-wing-up.png?v=20261013b';
+  const IMG_WING_DOWN = 'images/hamsa-wing-down.png?v=20261013b';
 
   class DualWingTravellingPeacock {
     constructor() {

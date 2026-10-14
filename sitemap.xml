@@ -84,12 +84,6 @@
 
   <!-- Dedicated Sub-Apps & Games -->
   <url>
-    <loc>https://sannivesham.com/calendar/calender/</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sannivesham.com/games/word-search/</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
