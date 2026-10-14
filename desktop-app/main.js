@@ -23,6 +23,12 @@ function createWindow() {
     }
   });
 
+  // Provide clean Chrome User-Agent without Electron tokens to prevent Google 403 disallowed_useragent
+  const rawUA = mainWindow.webContents.getUserAgent();
+  const cleanUA = rawUA.replace(/Electron\/[0-9\.]+\s?/g, '').replace(/sannivesham-desktop\/[0-9\.]+\s?/g, '').replace(/Sannivesham\/[0-9\.]+\s?/g, '');
+  mainWindow.webContents.setUserAgent(cleanUA);
+  app.userAgentFallback = cleanUA;
+
   // Load the live website so any site updates reflect immediately!
   mainWindow.loadURL(LIVE_URL);
 
@@ -39,17 +45,39 @@ function createWindow() {
     }
   });
 
-  // Open external links (e.g. YouTube, Instagram, WhatsApp) in the system default browser
+  // Allow Google OAuth & Firebase Auth popups; open general external links in system browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (!url.startsWith('https://sannivesham.com') && !url.startsWith('http://localhost')) {
-      shell.openExternal(url);
-      return { action: 'deny' };
+    const isAuthUrl = url.startsWith('https://accounts.google.com') ||
+                      url.startsWith('https://sannivesham-b4231.firebaseapp.com') ||
+                      url.startsWith('https://apis.google.com') ||
+                      url.startsWith('https://ssl.gstatic.com') ||
+                      url.startsWith('https://www.gstatic.com');
+
+    if (isAuthUrl || url.startsWith('https://sannivesham.com') || url.startsWith('http://localhost')) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          autoHideMenuBar: true,
+          backgroundColor: '#0d0603',
+          webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
+          }
+        }
+      };
     }
-    return { action: 'allow' };
+
+    shell.openExternal(url);
+    return { action: 'deny' };
   });
 
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (!url.startsWith('https://sannivesham.com') && !url.startsWith('file://')) {
+    const isAuthUrl = url.startsWith('https://accounts.google.com') ||
+                      url.startsWith('https://sannivesham-b4231.firebaseapp.com') ||
+                      url.startsWith('https://apis.google.com');
+
+    if (!url.startsWith('https://sannivesham.com') && !url.startsWith('file://') && !isAuthUrl) {
       event.preventDefault();
       shell.openExternal(url);
     }
@@ -115,3 +143,11 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// Ensure any child popup windows (like Google Auth popups) inherit the clean user agent
+app.on('web-contents-created', (event, contents) => {
+  if (app.userAgentFallback) {
+    contents.setUserAgent(app.userAgentFallback);
+  }
+});
+

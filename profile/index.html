@@ -41,6 +41,45 @@
       cursor:pointer; transition:all 0.2s;
     }
     .auth-btn:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(255,209,102,0.4); }
+    .auth-btn-outline {
+      width:100%; background:transparent; color:#ffd166;
+      border:1px solid rgba(255,209,102,0.6); padding:12px; border-radius:12px; font-size:1rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .auth-btn-outline:hover { background:rgba(255,209,102,0.12); border-color:#ffd166; }
+    .auth-btn-row { display:flex; gap:10px; margin-top:4px; }
+    .auth-divider {
+      display:flex; align-items:center; text-align:center; margin:20px 0 16px;
+      color:rgba(237,227,200,0.5); font-size:0.85rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content:''; flex:1; border-bottom:1px solid rgba(255,209,102,0.2);
+    }
+    .auth-divider span { padding:0 12px; }
+    .auth-forgot-link { color:rgba(255,209,102,0.7); text-decoration:none; font-size:0.82rem; }
+    .auth-forgot-link:hover { color:#ffd166; text-decoration:underline; }
+
+    /* Desktop Browser Sync Box */
+    .desktop-sync-box {
+      margin-top:18px; padding:16px; border-radius:16px;
+      background:rgba(255,209,102,0.06); border:1px dashed rgba(255,209,102,0.35);
+      text-align:center;
+    }
+    .desktop-sync-title { font-weight:700; color:#ffd166; font-size:0.95rem; margin-bottom:6px; }
+    .desktop-sync-desc { font-size:0.82rem; color:rgba(237,227,200,0.7); margin-bottom:12px; line-height:1.4; }
+    .desktop-sync-btn {
+      width:100%; background:rgba(255,209,102,0.15); color:#ffd166; border:1px solid rgba(255,209,102,0.5);
+      padding:10px 16px; border-radius:10px; font-size:0.92rem; font-weight:700; cursor:pointer; transition:all 0.2s;
+    }
+    .desktop-sync-btn:hover { background:rgba(255,209,102,0.25); border-color:#ffd166; }
+    .sync-spinner-row { display:flex; align-items:center; justify-content:center; gap:10px; color:#ffd166; font-size:0.85rem; margin-top:10px; }
+    .sync-spinner {
+      width:18px; height:18px; border:2px solid rgba(255,209,102,0.3); border-top-color:#ffd166;
+      border-radius:50%; animation:syncSpin 0.8s linear infinite;
+    }
+    @keyframes syncSpin { to { transform:rotate(360deg); } }
+    .sync-subtext { font-size:0.75rem; color:rgba(237,227,200,0.5); margin-top:6px; }
+
 
     /* Profile cards */
     .profile-avatar-ring {
@@ -228,6 +267,36 @@
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> Google తో లాగిన్
         </button>
         <div id="googleBtnHolder" style="margin-top:10px;"></div>
+
+        <!-- DESKTOP APP BROWSER SYNC (Auto-shown in Electron) -->
+        <div id="desktopSyncSection" style="display:none;" class="desktop-sync-box">
+          <div class="desktop-sync-title">💻 డెస్క్‌టాప్ సమన్వయం (Browser Sync)</div>
+          <p class="desktop-sync-desc">మీ సిస్టమ్ బ్రౌజర్ (Chrome/Edge) ద్వారా 1-క్లిక్‌తో డెస్క్‌టాప్ యాప్‌లోకి లాగిన్ అవ్వండి:</p>
+          <button id="startDesktopSyncBtn" class="desktop-sync-btn">🌐 బ్రౌజర్‌లో లాగిన్ అవ్వండి</button>
+          <div id="syncWaitingArea" style="display:none;">
+            <div class="sync-spinner-row">
+              <div class="sync-spinner"></div>
+              <span>బ్రౌజర్‌లో లాగిన్ కోసం చూస్తున్నాము...</span>
+            </div>
+            <p class="sync-subtext">బ్రౌజర్‌లో లాగిన్ పూర్తయిన వెంటనే డెస్క్‌టాప్ యాప్ ఆటోమేటిక్‌గా అప్‌డేట్ అవుతుంది.</p>
+          </div>
+        </div>
+
+        <div class="auth-divider"><span>లేదా ఈమెయిల్‌తో లాగిన్</span></div>
+
+        <!-- EMAIL & PASSWORD LOGIN -->
+        <form id="emailLoginForm" onsubmit="return false;">
+          <input type="email" id="emailInput" placeholder="మీ ఈమెయిల్ (Email address)" class="auth-input" autocomplete="email">
+          <input type="password" id="passwordInput" placeholder="పాస్‌వర్డ్ (Password)" class="auth-input" autocomplete="current-password">
+          <div class="auth-btn-row">
+            <button type="button" id="emailSignInBtn" class="auth-btn">లాగిన్</button>
+            <button type="button" id="emailSignUpBtn" class="auth-btn-outline">కొత్త ఖాతా</button>
+          </div>
+          <div style="text-align:right; margin-top:8px;">
+            <a href="#" id="forgotPasswordLink" class="auth-forgot-link">పాస్‌వర్డ్ మర్చిపోయారా?</a>
+          </div>
+        </form>
+
         <p id="loginMsg" class="auth-msg"></p>
       </div>
       <div id="loginStep3" style="display:none;">
@@ -314,8 +383,17 @@
 
   <script type="module">
     import { db, auth } from "../firebase-config.js";
-    import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-    import { GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import { doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signInWithCredential, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      sendPasswordResetEmail, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
     let currentUser = null;
@@ -394,38 +472,263 @@
       if (data.dob) renderBirthday(data.dob);
     }
 
+    // Check if running inside Electron desktop app
+    const isElectron = /Electron/i.test(navigator.userAgent);
+    if (isElectron) {
+      const dSync = document.getElementById("desktopSyncSection");
+      if (dSync) dSync.style.display = "block";
+    }
+
+    // Handle desktop sync if opened in external browser with ?sync_session=CODE
+    const urlParams = new URLSearchParams(window.location.search);
+    const incomingSyncSession = urlParams.get("sync_session");
+
+    async function syncSessionToDesktop(user) {
+      if (!incomingSyncSession || !user) return;
+      try {
+        const uSnap = await getDoc(doc(db, "users", user.uid));
+        const uName = (uSnap.exists() && uSnap.data().name) ? uSnap.data().name : (user.displayName || "User");
+        await setDoc(doc(db, "desktop_sync", incomingSyncSession), {
+          uid: user.uid,
+          email: user.email || "",
+          name: uName,
+          syncedAt: Date.now()
+        });
+        alert("✅ మీ డెస్క్‌టాప్ యాప్‌తో లాగిన్ విజయవంతంగా అనుసంధానించబడింది! మీరు ఈ పేజీని మూసివేసి మీ డెస్క్‌టాప్ యాప్‌కి తిరిగి వెళ్ళవచ్చు.");
+      } catch (err) {
+        console.warn("Desktop sync write error:", err);
+      }
+    }
+
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       if (user) {
+        if (incomingSyncSession) {
+          await syncSessionToDesktop(user);
+        }
         const snap = await getDoc(doc(db, "users", user.uid));
         if (!snap.exists()) { showLogin(3); return; }
         await updateStreak(user.uid);
         const fresh = await getDoc(doc(db, "users", user.uid));
         showProfile(fresh.data());
       } else {
-        showLogin(1);
+        // Fallback: Check if local desktop user session is cached
+        let cachedDone = false;
+        if (isElectron) {
+          try {
+            const savedRaw = localStorage.getItem("sannivesham_desktop_user");
+            if (savedRaw) {
+              const saved = JSON.parse(savedRaw);
+              if (saved && saved.uid) {
+                currentUser = { uid: saved.uid, email: saved.email };
+                const uDoc = await getDoc(doc(db, "users", saved.uid));
+                if (uDoc.exists()) {
+                  showProfile(uDoc.data());
+                  cachedDone = true;
+                }
+              }
+            }
+          } catch(e) {}
+        }
+        if (!cachedDone) showLogin(1);
       }
     });
 
     window.handleGoogleCredentialResponse = async function(resp) {
       try {
         const r = await signInWithCredential(auth, GoogleAuthProvider.credential(resp.credential));
+        if (incomingSyncSession) await syncSessionToDesktop(r.user);
         const snap = await getDoc(doc(db, "users", r.user.uid));
         if (!snap.exists()) showLogin(3);
       } catch(e) { document.getElementById("loginMsg").textContent = "Google లాగిన్ విఫలమైంది"; }
     };
 
-    document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      if (window.AndroidBridge) { window.AndroidBridge.triggerGoogleSignIn(); return; }
+    // Universal Google Login Handler
+    async function handleGoogleLogin() {
+      const msgEl = document.getElementById("loginMsg");
+      if (msgEl) msgEl.textContent = "";
+
+      // 1. Android Native App Bridge
+      if (window.AndroidBridge) {
+        window.AndroidBridge.triggerGoogleSignIn();
+        return;
+      }
+
+      // 2. Direct Firebase signInWithPopup
+      // Supported in modern browsers and in updated Electron desktop apps
+      try {
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        const res = await signInWithPopup(auth, provider);
+        if (res && res.user) {
+          currentUser = res.user;
+          if (incomingSyncSession) await syncSessionToDesktop(res.user);
+          const snap = await getDoc(doc(db, "users", res.user.uid));
+          if (!snap.exists()) {
+            showLogin(3);
+          } else {
+            await updateStreak(res.user.uid);
+            const fresh = await getDoc(doc(db, "users", res.user.uid));
+            showProfile(fresh.data());
+          }
+          return;
+        }
+      } catch (popupErr) {
+        console.warn("Popup sign-in notice:", popupErr);
+        if (popupErr.code === "auth/popup-closed-by-user") {
+          if (msgEl) msgEl.textContent = "లాగిన్ రద్దు చేయబడింది";
+          return;
+        }
+        // If popup was blocked or intercepted in older desktop app exe
+        if (isElectron) {
+          if (msgEl) msgEl.textContent = "డెస్క్‌టాప్ యాప్ కోసం క్రింది 'బ్రౌజర్‌లో లాగిన్ అవ్వండి' బటన్ లేదా ఈమెయిల్ ఉపయోగించండి.";
+          const dSync = document.getElementById("desktopSyncSection");
+          if (dSync) dSync.style.display = "block";
+          return;
+        }
+      }
+
+      // 3. Fallback: Google Identity Services (GSI)
       try {
         if (window.google && google.accounts && google.accounts.id) {
           google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredentialResponse });
           google.accounts.id.prompt(n => {
-            if (n.isNotDisplayed()||n.isSkippedMoment())
-              google.accounts.id.renderButton(document.getElementById("googleBtnHolder"), { theme:"outline", size:"large", width:260 });
+            if (n.isNotDisplayed() || n.isSkippedMoment()) {
+              document.getElementById("googleBtnHolder").innerHTML = "";
+              google.accounts.id.renderButton(
+                document.getElementById("googleBtnHolder"),
+                { theme: "outline", size: "large", width: 260 }
+              );
+            }
           });
-        } else { document.getElementById("loginMsg").textContent = "Google లాగిన్ లోడ్ కావడం లేదు"; }
-      } catch(e) { document.getElementById("loginMsg").textContent = "Google లాగిన్ లోడ్ కావడం లేదు"; }
+        } else {
+          if (msgEl) msgEl.textContent = "Google లాగిన్ తెరవడం సాధ్యం కాలేదు. దయచేసి క్రింద ఈమెయిల్ ద్వారా లాగిన్ చేయండి.";
+        }
+      } catch (e) {
+        if (msgEl) msgEl.textContent = "Google లాగిన్ లోడ్ కావడం లేదు. దయచేసి క్రింద ఈమెయిల్ ద్వారా లాగిన్ చేయండి.";
+      }
+    }
+
+    document.getElementById("googleLoginBtn").addEventListener("click", handleGoogleLogin);
+
+    // Desktop App: Listen for login sync from default browser
+    const startSyncBtn = document.getElementById("startDesktopSyncBtn");
+    if (startSyncBtn) {
+      startSyncBtn.addEventListener("click", () => {
+        const syncCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const waitingArea = document.getElementById("syncWaitingArea");
+        if (waitingArea) waitingArea.style.display = "block";
+        startSyncBtn.style.display = "none";
+
+        let unsub = null;
+        try {
+          unsub = onSnapshot(doc(db, "desktop_sync", syncCode), async (snap) => {
+            if (snap.exists()) {
+              const data = snap.data();
+              if (data && data.uid) {
+                if (unsub) unsub();
+                try { await deleteDoc(doc(db, "desktop_sync", syncCode)); } catch(e) {}
+
+                currentUser = { uid: data.uid, email: data.email };
+                localStorage.setItem("sannivesham_desktop_user", JSON.stringify(data));
+
+                const uDoc = await getDoc(doc(db, "users", data.uid));
+                if (!uDoc.exists()) {
+                  showLogin(3);
+                } else {
+                  await updateStreak(data.uid);
+                  const fresh = await getDoc(doc(db, "users", data.uid));
+                  showProfile(fresh.data());
+                }
+              }
+            }
+          });
+        } catch (syncErr) {
+          console.warn("Desktop sync error:", syncErr);
+        }
+
+        // Open in user's default system browser
+        window.open(`https://sannivesham.com/profile/?sync_session=${syncCode}`, "_blank");
+      });
+    }
+
+    // Email/Password Login
+    document.getElementById("emailSignInBtn")?.addEventListener("click", async () => {
+      const email = document.getElementById("emailInput").value.trim();
+      const password = document.getElementById("passwordInput").value;
+      const msgEl = document.getElementById("loginMsg");
+      if (msgEl) msgEl.textContent = "";
+
+      if (!email || !password) {
+        if (msgEl) msgEl.textContent = "దయచేసి ఈమెయిల్ మరియు పాస్‌వర్డ్ నమోదు చేయండి";
+        return;
+      }
+
+      try {
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        currentUser = res.user;
+        if (incomingSyncSession) await syncSessionToDesktop(res.user);
+      } catch (err) {
+        console.error("Email login error:", err);
+        if (msgEl) {
+          if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
+            msgEl.textContent = "ఈమెయిల్ లేదా పాస్‌వర్డ్ సరిగ్గా లేదు. కొత్తవారైతే 'కొత్త ఖాతా' ఎంచుకోండి.";
+          } else if (err.code === "auth/wrong-password") {
+            msgEl.textContent = "పాస్‌వర్డ్ తప్పుగా ఉంది.";
+          } else {
+            msgEl.textContent = "లాగిన్ విఫలమైంది: " + (err.message || err.code);
+          }
+        }
+      }
+    });
+
+    // Email/Password Signup
+    document.getElementById("emailSignUpBtn")?.addEventListener("click", async () => {
+      const email = document.getElementById("emailInput").value.trim();
+      const password = document.getElementById("passwordInput").value;
+      const msgEl = document.getElementById("loginMsg");
+      if (msgEl) msgEl.textContent = "";
+
+      if (!email || !password) {
+        if (msgEl) msgEl.textContent = "దయచేసి ఈమెయిల్ మరియు పాస్‌వర్డ్ నమోదు చేయండి";
+        return;
+      }
+      if (password.length < 6) {
+        if (msgEl) msgEl.textContent = "పాస్‌వర్డ్ కనీసం 6 అక్షరాలు ఉండాలి";
+        return;
+      }
+
+      try {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        currentUser = res.user;
+        if (incomingSyncSession) await syncSessionToDesktop(res.user);
+      } catch (err) {
+        console.error("Email signup error:", err);
+        if (msgEl) {
+          if (err.code === "auth/email-already-in-use") {
+            msgEl.textContent = "ఈ ఈమెయిల్‌తో ఇప్పటికే ఖాతా ఉంది. దయచేసి 'లాగిన్' పై క్లిక్ చేయండి.";
+          } else {
+            msgEl.textContent = "ఖాతా సృష్టించడం విఫలమైంది: " + (err.message || err.code);
+          }
+        }
+      }
+    });
+
+    // Forgot Password
+    document.getElementById("forgotPasswordLink")?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("emailInput").value.trim();
+      const msgEl = document.getElementById("loginMsg");
+      if (!email) {
+        if (msgEl) msgEl.textContent = "పాస్‌వర్డ్ రీసెట్ చేయడానికి మీ ఈమెయిల్ నమోదు చేయండి";
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("✅ పాస్‌వర్డ్ రీసెట్ లింక్ మీ ఈమెయిల్‌కి (" + email + ") పంపబడింది. దయచేసి మీ ఇన్‌బాక్స్ తనిఖీ చేయండి.");
+      } catch (err) {
+        if (msgEl) msgEl.textContent = "పాస్‌వర్డ్ రీసెట్ ఇమెయిల్ పంపడం విఫలమైంది: " + (err.message || err.code);
+      }
     });
 
     window.onNativeGoogleSignIn = async function(idToken) {
