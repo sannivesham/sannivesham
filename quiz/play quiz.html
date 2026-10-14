@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ప్రశ్నావళి ఆడండి - సన్నివేశం | Sannivesham</title>
+  <link rel="canonical" href="https://sannivesham.com/quiz/play-quiz.html">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Theme & Styles -->
+  <script src="../theme.js?v=20260906"></script>
+  <link rel="stylesheet" href="../style.css?v=20260906">
+  <link rel="stylesheet" href="quiz.css?v=20260906">
+</head>
+<body>
+  <!-- 3D Sacred Particle Canvas -->
+  <canvas id="canvas3D"></canvas>
+
+  <!-- Dynamic Theme Background Layer -->
+  <div class="quiz-bg"></div>
+
+  <!-- Centered Glass Navbar -->
+  <nav class="glass-navbar" aria-label="ప్రశ్నావళి నావిగేషన్">
+    <a href="/quiz/" title="ప్రశ్నావళికి తిరిగి వెళ్ళండి">← ప్రశ్నావళి</a>
+    <a href="/" title="ప్రారంభ పుటకు వెళ్ళండి">ప్రారంభ పుట</a>
+    <button id="themeToggleBtn" aria-label="శైలి ఎంపిక" title="శైలి ఎంపిక">🎨 శైలి</button>
+  </nav>
+
+  <!-- Centered Quiz Play Section -->
+  <section class="play-quiz-page">
+    <div class="play-quiz-card">
+      <div class="quiz-top">
+        <h2 id="quizTypeTitle">సాధారణ ప్రశ్నావళి</h2>
+        <div id="timer" aria-label="మిగిలిన సమయం">30</div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <p class="question-count" id="questionCount">ప్రశ్న 1 / 10</p>
+
+      <h2 class="quiz-question" id="quizQuestion">ప్రశ్నలు లోడ్ అవుతున్నాయి...</h2>
+
+      <div class="quiz-options">
+        <button class="option-btn"></button>
+        <button class="option-btn"></button>
+        <button class="option-btn"></button>
+        <button class="option-btn"></button>
+      </div>
+
+      <div class="quiz-bottom-buttons">
+        <button id="nextQuestionBtn">తదుపరి ప్రశ్న →</button>
+        <button id="quitQuizBtn">ప్రశ్నావళి నిష్క్రమించండి</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Theme Modal -->
+  <div id="themeModal" class="theme-modal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="theme-modal-backdrop" id="themeModalBackdrop"></div>
+    <div class="theme-modal-card">
+      <div class="theme-modal-header">
+        <h3>🎨 శైలిని ఎంచుకోండి (Themes)</h3>
+        <button class="theme-modal-close" id="themeModalClose">&times;</button>
+      </div>
+      <div class="theme-list" id="themeList"></div>
+    </div>
+  </div>
+
+  <!-- Global App Script -->
+  <script src="../script.js"></script>
+
+  <!-- 3D Sacred Particle Canvas Script -->
+  <script>
+  (function () {
+    const canvas = document.getElementById("canvas3D");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    const particleCount = window.innerWidth < 768 ? 32 : 65;
+    const particles = [];
+    const colors = ["#ffd166", "#ff9f1c", "#ffeaa7", "#d4af37"];
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: (Math.random() - 0.5) * w * 1.5,
+        y: (Math.random() - 0.5) * h * 1.5,
+        z: Math.random() * 800 + 100,
+        radius: Math.random() * 2.2 + 1.2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: -(Math.random() * 0.4 + 0.2)
+      });
+    }
+
+    const fov = 380;
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2;
+      const cy = h / 2;
+
+      particles.forEach(p => {
+        p.y += p.vy;
+        if (p.y < -h * 0.8) p.y = h * 0.8;
+        const rz = p.z + 500;
+        if (rz > 50) {
+          const scale = fov / rz;
+          const sx = cx + p.x * scale;
+          const sy = cy + p.y * scale;
+          const alpha = Math.max(0.1, Math.min(0.7, scale * 1.2));
+          ctx.beginPath();
+          ctx.arc(sx, sy, p.radius * scale * 1.6, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = alpha;
+          ctx.fill();
+        }
+      });
+      requestAnimationFrame(render);
+    }
+    render();
+  })();
+  </script>
+
+  <!-- Quiz Play Logic Module -->
+  <script type="module" src="play-quiz.js"></script>
+
+  <!-- Dynamic Theme Background Loader -->
+  <script type="module">
+    import { db } from "../firebase-config.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    async function loadQuizBackground() {
+      try {
+        const snap = await getDoc(doc(db, "settings", "backgrounds"));
+        if (!snap.exists()) return;
+        const data = snap.data();
+        const bg = document.querySelector(".quiz-bg");
+        if (!bg) return;
+        const res = window.SanniveshamTheme
+          ? window.SanniveshamTheme.resolveBackground(data, "quiz")
+          : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
+        if (res.chosen) {
+          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}")`;
+        }
+      } catch (err) {
+        console.warn("Quiz bg load error:", err);
+      }
+    }
+    loadQuizBackground();
+    window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
+  </script>
+</body>
+</html>

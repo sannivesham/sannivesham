@@ -12,9 +12,9 @@
   window.__SanniveshamDualWingPeacock = true;
 
   const AI_DESTINATION = 'ai/';
-  const IMG_PERCHED = 'images/hamsa-perched.png?v=20261013b';
-  const IMG_WING_UP = 'images/hamsa-wing-up.png?v=20261013b';
-  const IMG_WING_DOWN = 'images/hamsa-wing-down.png?v=20261013b';
+  const IMG_PERCHED = 'images/hamsa-perched.png';
+  const IMG_WING_UP = 'images/hamsa-wing-up.png';
+  const IMG_WING_DOWN = 'images/hamsa-wing-down.png';
 
   class DualWingTravellingPeacock {
     constructor() {
@@ -31,7 +31,7 @@
       this.targetScreenX = 0;
       this.targetScreenY = 0;
       this.angle = 0;
-      this.facing = -1; // 1 = right, -1 = left
+      this.facing = 1; // Native image faces left. 1 = face left, -1 = face right (flipped)
 
       // Hero starting coordinates
       this.heroScreenX = 0;
@@ -77,7 +77,7 @@
       // Initial placement at Hero (Where Diya was on desktop, Right gutter on mobile)
       this.screenX = this.targetScreenX = this.heroScreenX;
       this.screenY = this.targetScreenY = this.heroScreenY;
-      this.facing = -1; // Face inward toward Sannivesham logo
+      this.facing = 1; // Face inward toward Sannivesham logo (native left-facing image)
       this.renderPosition();
 
       // Start initial settle loop
@@ -348,17 +348,19 @@
         if (this.scrollDirection === 1) {
           // Scrolling down: travelling from w0 to w1
           const movingRight = endX > startX;
-          targetFacing = movingRight ? 1 : -1;
-          targetAngle = movingRight ? 8 : -8;
+          // Native Hamsa image faces LEFT: scaleX(-1) faces RIGHT, scaleX(1) faces LEFT
+          targetFacing = movingRight ? -1 : 1;
+          targetAngle = movingRight ? 7 : -7;
         } else {
           // Scrolling up: travelling from w1 back to w0
           const movingRight = startX > endX;
-          targetFacing = movingRight ? 1 : -1;
-          targetAngle = movingRight ? -6 : 6;
+          targetFacing = movingRight ? -1 : 1;
+          targetAngle = movingRight ? -7 : 7;
         }
       } else {
         // When perched (stopped), face inward toward content:
-        targetFacing = (targetX < this.winW / 2) ? 1 : -1;
+        // Left side -> face right (-1), Right side -> face left (1)
+        targetFacing = (targetX < this.winW / 2) ? -1 : 1;
         targetAngle = 0;
       }
 

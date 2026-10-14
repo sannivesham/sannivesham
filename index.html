@@ -598,7 +598,7 @@
           <div id="qotdOptions" class="qotd-options"></div>
           <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
             <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-            <a id="qotdLeaderboardBtn" href="quiz/leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
+            <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
           </div>
           <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
             <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
@@ -1142,19 +1142,42 @@
         } else {
           // If question for exact todayKey isn't found yet, fallback to latest available question in qotd collection
           try {
-            const latestQuery = query(collection(db, "qotd"), orderBy("__name__", "desc"), limit(1));
-            const latestSnap = await getDocs(latestQuery);
-            if (!latestSnap.empty) {
-              const latestDoc = latestSnap.docs[0];
-              activeKey = latestDoc.id;
-              data = latestDoc.data();
+            const allSnap = await getDocs(collection(db, "qotd"));
+            if (!allSnap.empty) {
+              const validDocs = allSnap.docs.filter(d => d.data() && d.data().question && Array.isArray(d.data().options));
+              validDocs.sort((a, b) => b.id.localeCompare(a.id));
+              if (validDocs.length > 0) {
+                const latestDoc = validDocs[0];
+                activeKey = latestDoc.id;
+                data = latestDoc.data();
+              }
             }
           } catch (qErr) {
             console.warn("Fallback qotd query failed:", qErr);
           }
         }
 
-        if (!data || !data.question || !Array.isArray(data.options)) return;
+        if (!data) {
+          try {
+            const cachedRaw = localStorage.getItem("sannivesham_cached_qotd");
+            if (cachedRaw) {
+              const cached = JSON.parse(cachedRaw);
+              if (cached && (cached.data || cached.question)) {
+                data = cached.data || cached;
+                activeKey = cached.key || todayKey;
+              }
+            }
+          } catch (cErr) {}
+        }
+
+        if (!data || !data.question || !Array.isArray(data.options)) {
+          activeKey = todayKey;
+          data = {
+            question: "శ్రీమదాంధ్ర మహాభాగవతాన్ని తెలుగులో రచించిన భక్త కవి ఎవరు?",
+            options: ["బమ్మెర పోతన", "నన్నయ భట్టారకుడు", "తిక్కన సోమయాజి", "శ్రీనాథుడు"],
+            correct: 0
+          };
+        }
 
         // Save in localStorage cache for instant zero-latency loading on mobile
         try {
@@ -1337,19 +1360,40 @@
         } else {
           // If word for exact todayKey isn't found yet, fallback to latest available word
           try {
-            const latestQuery = query(collection(db, "wordOfDay"), orderBy("__name__", "desc"), limit(1));
-            const latestSnap = await getDocs(latestQuery);
-            if (!latestSnap.empty) {
-              const latestDoc = latestSnap.docs[0];
-              activeKey = latestDoc.id;
-              data = latestDoc.data();
+            const allSnap = await getDocs(collection(db, "wordOfDay"));
+            if (!allSnap.empty) {
+              const validDocs = allSnap.docs.filter(d => d.data() && d.data().text);
+              validDocs.sort((a, b) => b.id.localeCompare(a.id));
+              if (validDocs.length > 0) {
+                const latestDoc = validDocs[0];
+                activeKey = latestDoc.id;
+                data = latestDoc.data();
+              }
             }
           } catch (wErr) {
             console.warn("Fallback wordOfDay query failed:", wErr);
           }
         }
 
-        if (!data || !data.text) return;
+        if (!data) {
+          try {
+            const cachedRaw = localStorage.getItem("sannivesham_cached_word");
+            if (cachedRaw) {
+              const cached = JSON.parse(cachedRaw);
+              if (cached && (cached.data || cached.text)) {
+                data = cached.data || cached;
+                activeKey = cached.key || todayKey;
+              }
+            }
+          } catch (cErr) {}
+        }
+
+        if (!data || !data.text) {
+          activeKey = todayKey;
+          data = {
+            text: "సన్నివేశం: భారతీయ సనాతన సంస్కృతి, సంప్రదాయాలు మరియు తెలుగు భాషా వైభవాన్ని ప్రతిబింబించే పవిత్ర వేదిక."
+          };
+        }
 
         try {
           localStorage.setItem("sannivesham_cached_word", JSON.stringify({ key: activeKey, data: data }));

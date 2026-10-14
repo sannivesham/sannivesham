@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>గ్రంథాలయం - సన్నివేశం</title>
+  <script src="../theme.js"></script>
+    <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Scoped fix for this page only - does not touch style.css */
+    .festival-detail-page {
+      padding-top: 20px !important;
+      margin-top: 0 !important;
+    }
+    .festival-detail-box {
+      margin-top: 10px !important;
+    }
+    .festival-detail-box,
+    .festival-detail-box h1,
+    .festival-detail-box h2,
+    .festival-detail-box p,
+    .festival-section {
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+<body class="stories-body">
+  <div class="stories-bg"></div>
+  <nav class="glass-navbar">
+    <a href="stories.html">← గ్రంథాలయం</a>
+    <a href="../index.html">ప్రారంభం</a>
+  </nav>
+  <section class="festival-detail-page">
+    <article class="festival-detail-box" id="storyDetailBox">
+      <h1>Loading...</h1>
+    </article>
+  </section>
+  <script type="module" src="story-detail.js"></script>
+  <script src="../script.js"></script>
+<audio id="bgMusic" loop>
+  <source src="../music/traditional.mp3" type="audio/mpeg">
+</audio>
+<button id="musicBtn" class="music-btn">
+  🔊
+</button>
+<script src="../music.js"></script>
+</body>
+</html>
+
