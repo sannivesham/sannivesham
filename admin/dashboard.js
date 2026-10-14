@@ -607,6 +607,12 @@ function loadSectionData(sectionId) {
   if (!sectionId) return;
   try {
     switch (sectionId) {
+      case "newQuizSection":
+        const qFrame = document.getElementById("quizCmsFrame");
+        if (qFrame && qFrame.contentWindow) {
+          try { qFrame.contentWindow.location.reload(); } catch(e) {}
+        }
+        break;
       case "eventsSection":
         if (typeof loadAdminEvents === "function") loadAdminEvents();
         break;
