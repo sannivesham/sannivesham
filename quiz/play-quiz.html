@@ -149,29 +149,16 @@
   <script type="module" src="play-quiz.js"></script>
 
   <!-- Dynamic Theme Background Loader -->
-  <script type="module">
-    import { db } from "../firebase-config.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-    async function loadQuizBackground() {
-      try {
-        const snap = await getDoc(doc(db, "settings", "backgrounds"));
-        if (!snap.exists()) return;
-        const data = snap.data();
-        const bg = document.querySelector(".quiz-bg");
-        if (!bg) return;
-        const res = window.SanniveshamTheme
-          ? window.SanniveshamTheme.resolveBackground(data, "quiz")
-          : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
-        if (res.chosen) {
-          bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}")`;
-        }
-      } catch (err) {
-        console.warn("Quiz bg load error:", err);
-      }
+  <script>
+    function setQuizBackground() {
+      const bg = document.querySelector(".quiz-bg");
+      if (!bg) return;
+      const isMobile = window.innerWidth <= 768;
+      const img = isMobile ? "../images/quiz-bg-mobile.jpg" : "../images/quiz-bg-desktop.jpg";
+      bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60), rgba(10,5,0,0.78)), url("${img}")`;
     }
-    loadQuizBackground();
-    window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
+    setQuizBackground();
+    window.addEventListener("resize", setQuizBackground);
   </script>
 </body>
 </html>

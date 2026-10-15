@@ -142,10 +142,7 @@
         <div class="quiz-category-grid">
             <!-- Hari -->
             <div class="quiz-category-card" data-category="hari">
-                <picture class="quiz-card-picture">
-                    <source media="(max-width: 768px)" srcset="../images/hari-mobile.jpg">
-                    <img src="../images/hari-desktop.jpg" alt="హరి" loading="lazy">
-                </picture>
+                <img src="../images/hari.jpg" alt="హరి" loading="lazy">
                 <div class="quiz-card-overlay">
                     <h2>హరి</h2>
                     <p class="community-score">సమూహ ఫలితం</p>
@@ -159,10 +156,7 @@
 
             <!-- Hara -->
             <div class="quiz-category-card" data-category="hara">
-                <picture class="quiz-card-picture">
-                    <source media="(max-width: 768px)" srcset="../images/hara-mobile.jpg">
-                    <img src="../images/hara-desktop.jpg" alt="హర" loading="lazy">
-                </picture>
+                <img src="../images/hara.jpg" alt="హర" loading="lazy">
                 <div class="quiz-card-overlay">
                     <h2>హర</h2>
                     <p class="community-score">సమూహ ఫలితం</p>
@@ -176,10 +170,7 @@
 
             <!-- Devi -->
             <div class="quiz-category-card" data-category="devi">
-                <picture class="quiz-card-picture">
-                    <source media="(max-width: 768px)" srcset="../images/devi-mobile.jpg">
-                    <img src="../images/devi-desktop.jpg" alt="దేవి" loading="lazy">
-                </picture>
+                <img src="../images/devi.jpg" alt="దేవి" loading="lazy">
                 <div class="quiz-card-overlay">
                     <h2>దేవి</h2>
                     <p class="community-score">సమూహ ఫలితం</p>
@@ -193,10 +184,7 @@
 
             <!-- Telugu -->
             <div class="quiz-category-card" data-category="telugu">
-                <picture class="quiz-card-picture">
-                    <source media="(max-width: 768px)" srcset="../images/telugu-mobile.jpg">
-                    <img src="../images/telugu-desktop.jpg" alt="తెలుగు" loading="lazy">
-                </picture>
+                <img src="../images/telugu.jpg" alt="తెలుగు" loading="lazy">
                 <div class="quiz-card-overlay">
                     <h2>తెలుగు</h2>
                     <p class="community-score">సమూహ ఫలితం</p>
@@ -289,30 +277,17 @@
     })();
     </script>
 
-    <!-- Background Loader -->
-    <script type="module">
-      import { db } from "../firebase-config.js";
-      import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-      async function loadQuizBackground() {
-        try {
-          const snap = await getDoc(doc(db, "settings", "backgrounds"));
-          if (!snap.exists()) return;
-          const data = snap.data();
-          const bg = document.querySelector(".quiz-bg");
-          if (!bg) return;
-          const res = window.SanniveshamTheme
-            ? window.SanniveshamTheme.resolveBackground(data, "quiz")
-            : { chosen: (window.innerWidth <= 700 ? data.quizMobile : data.quizPc) || data.quizPc };
-          if (res.chosen) {
-            bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.78), rgba(10,5,0,0.85)), url("${res.chosen}")`;
-          }
-        } catch (err) {
-          console.warn("Quiz bg load error:", err);
-        }
+    <!-- Background Responsive Handler -->
+    <script>
+      function setQuizBackground() {
+        const bg = document.querySelector(".quiz-bg");
+        if (!bg) return;
+        const isMobile = window.innerWidth <= 768;
+        const img = isMobile ? "../images/quiz-bg-mobile.jpg" : "../images/quiz-bg-desktop.jpg";
+        bg.style.backgroundImage = `linear-gradient(rgba(10,5,0,0.60), rgba(10,5,0,0.78)), url("${img}")`;
       }
-      loadQuizBackground();
-      window.addEventListener("sannivesham_theme_changed", loadQuizBackground);
+      setQuizBackground();
+      window.addEventListener("resize", setQuizBackground);
     </script>
 </body>
 </html>
