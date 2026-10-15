@@ -149,7 +149,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
 
   <script src="theme.js?v=20260919f"></script>
-  <link rel="stylesheet" href="style.css?v=20260921b">
+  <link rel="stylesheet" href="style.css?v=20261015c">
   <link rel="stylesheet" href="peacock.css?v=20261013">
   <style>
     html, body {
@@ -328,12 +328,41 @@
       }
     }
 
+    .qotd-options {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important;
+      margin: 16px 0 !important;
+    }
+
     .qotd-option-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      width: 100% !important;
+      min-height: 52px !important;
+      padding: 12px 14px !important;
+      border-radius: 14px !important;
+      border: 1px solid rgba(255, 209, 102, 0.4) !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: #fff !important;
+      font-size: 0.98rem !important;
+      font-weight: 600 !important;
+      line-height: 1.35;
+      box-sizing: border-box !important;
+      word-break: break-word;
       position: relative;
       z-index: 2;
       touch-action: manipulation;
       -webkit-tap-highlight-color: rgba(255,255,255,0.15);
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .qotd-option-btn:hover:not(.disabled-option) {
+      background: rgba(255, 209, 102, 0.16) !important;
+      border-color: #ffd166 !important;
+      transform: translateY(-2px);
     }
 
     .qotd-option-btn.correct-option {
