@@ -2040,7 +2040,23 @@ body {
   transition: opacity 0.3s ease;
 }
 
-/* 1. Ramayanam Theme (Default Theme) */
+/* 0. Default Sacred Golden Theme (Default Theme) */
+html[data-theme="default"] .home-bg,
+body[data-theme="default"] .home-bg,
+html:not([data-theme]) .home-bg,
+body:not([data-theme]) .home-bg {
+  background-image: linear-gradient(rgba(10, 5, 0, 0.60), rgba(10, 5, 0, 0.78)), url("images/quiz-bg-desktop.jpg");
+}
+@media (max-width: 700px) {
+  html[data-theme="default"] .home-bg,
+  body[data-theme="default"] .home-bg,
+  html:not([data-theme]) .home-bg,
+  body:not([data-theme]) .home-bg {
+    background-image: linear-gradient(rgba(10, 5, 0, 0.60), rgba(10, 5, 0, 0.78)), url("images/quiz-bg-mobile.jpg");
+  }
+}
+
+/* 1. Ramayanam Theme */
 html[data-theme="ramayanam"] .home-bg,
 body[data-theme="ramayanam"] .home-bg {
   background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-bg.jpg");
@@ -2085,18 +2101,6 @@ body[data-theme="dark"] .home-bg {
   html[data-theme="dark"] .home-bg,
   body[data-theme="dark"] .home-bg {
     background-image: linear-gradient(rgba(10, 5, 0, 0.70), rgba(10, 5, 0, 0.78)), url("images/homebg-mobile.jpg");
-  }
-}
-
-/* Fallback if data-theme is not yet attached */
-html:not([data-theme]) .home-bg,
-body:not([data-theme]) .home-bg {
-  background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-bg.jpg");
-}
-@media (max-width: 700px) {
-  html:not([data-theme]) .home-bg,
-  body:not([data-theme]) .home-bg {
-    background-image: linear-gradient(rgba(38, 14, 4, 0.65), rgba(22, 7, 2, 0.72)), url("images/ramayanam-mobile.jpg");
   }
 }
 
@@ -5696,7 +5700,8 @@ button[class*="delete"] {
   padding: 16px !important;
   backdrop-filter: blur(8px) !important;
 }
-.theme-modal-box {
+.theme-modal-box,
+.theme-modal-card {
   width: 94% !important;
   max-width: 560px !important;
   background: rgba(20, 10, 5, 0.96) !important;
@@ -5707,6 +5712,26 @@ button[class*="delete"] {
   position: relative !important;
   max-height: 90vh !important;
   overflow-y: auto !important;
+}
+.theme-modal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 18px !important;
+}
+.theme-modal-header h3 {
+  margin: 0 !important;
+  color: #ffd166 !important;
+  font-size: 1.35rem !important;
+}
+.theme-modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #ffd166 !important;
+  font-size: 1.8rem !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  padding: 0 4px !important;
 }
 .theme-modal-title {
   text-align: center !important;
@@ -5721,7 +5746,8 @@ button[class*="delete"] {
   font-size: 0.92rem !important;
   margin-bottom: 22px !important;
 }
-.theme-options-grid {
+.theme-options-grid,
+.theme-list {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 14px !important;
@@ -5788,8 +5814,32 @@ button[class*="delete"] {
   border-radius: 50% !important;
   border: 1px solid rgba(255,255,255,0.4) !important;
 }
+.theme-reset-default-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 12px 18px !important;
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(255, 159, 28, 0.28)) !important;
+  border: 1.5px solid #ffd166 !important;
+  border-radius: 12px !important;
+  color: #ffd166 !important;
+  font-family: inherit !important;
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+}
+.theme-reset-default-btn:hover {
+  background: linear-gradient(135deg, #ffd166, #ff9f1c) !important;
+  color: #120603 !important;
+  box-shadow: 0 4px 18px rgba(255, 209, 102, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
 @media (max-width: 520px) {
-  .theme-options-grid {
+  .theme-options-grid,
+  .theme-list {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
   }
