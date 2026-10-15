@@ -881,49 +881,38 @@ body {
 .qotd-word-section {
   display: flex;
   flex-wrap: wrap;
-
   gap: 24px;
-
   max-width: 1000px;
   width: 100%;
-
   margin: 30px auto;
+  box-sizing: border-box;
+  padding: 0 16px;
 }
 
-.qotd-card,
-.word-card {
+.qotd-card {
   flex: 1 1 320px;
-
   background: rgba(255, 255, 255, 0.08);
-
   border: 1px solid rgba(255, 209, 102, 0.35);
-
   border-radius: 22px;
-
   padding: 28px 24px;
-
   backdrop-filter: blur(8px);
-
   color: white;
+  box-sizing: border-box;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.qotd-card h3,
-.word-card h3 {
+.qotd-card h3 {
   color: #ffd166;
-
   font-size: 20px;
-
   margin-bottom: 16px;
-
   text-align: center;
 }
 
 .qotd-question-text {
   font-size: 17px;
   line-height: 1.6;
-
   margin-bottom: 18px;
-
   text-align: center;
 }
 
@@ -935,23 +924,14 @@ body {
 
 .qotd-option-btn {
   width: 100%;
-
   padding: 14px 16px;
-
   border-radius: 14px;
-
   border: 1px solid rgba(255, 209, 102, 0.4);
-
   background: rgba(255, 255, 255, 0.06);
-
   color: white;
-
   font-size: 15px;
-
   cursor: pointer;
-
   text-align: left;
-
   transition: 0.2s ease;
 }
 
@@ -974,55 +954,168 @@ body {
   pointer-events: none;
 }
 
-.word-of-day-text {
-  font-size: 18px;
-  line-height: 1.8;
-
-  text-align: center;
+/* 3D Flip Card System */
+.qotd-flip-card {
+  perspective: 1200px;
 }
 
-.topic-read-row {
+.qotd-flip-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.qotd-flip-card.flipped .qotd-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.qotd-flip-front {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg);
+}
+
+.qotd-flip-back {
+  display: none;
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+/* Explanation buttons and badges */
+.qotd-explanation-btn-wrap {
   margin-top: 18px;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-.topic-read-label {
+.qotd-explanation-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 209, 102, 0.35);
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ffd166, #f39c12);
+  color: #1a0c02;
+  font-size: 0.96rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 209, 102, 0.35);
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.qotd-explanation-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 209, 102, 0.5);
+}
+
+.qotd-flip-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 209, 102, 0.4);
   color: #ffd166;
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  user-select: none;
+  margin-top: 16px;
   transition: all 0.25s ease;
+  width: 100%;
 }
 
-.topic-read-label:hover {
-  background: rgba(255, 209, 102, 0.18);
-  border-color: #ffd166;
+.qotd-flip-back-btn:hover {
+  background: rgba(255, 209, 102, 0.22);
+  color: #ffffff;
 }
 
-.topic-read-checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: #ffd166;
-  cursor: pointer;
+.qotd-correct-answer-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  background: rgba(46, 204, 113, 0.2);
+  border: 1px solid rgba(46, 204, 113, 0.5);
+  color: #2ecc71;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.qotd-explanation-text {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: pre-line;
+  margin: 0;
+}
+
+.qotd-explanation-scroll-box {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 209, 102, 0.4) transparent;
+}
+
+/* Desktop Explanation Card */
+.qotd-desktop-explanation-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.qotd-desktop-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  min-height: 200px;
+  padding: 24px 12px;
+}
+
+.qotd-lock-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 2px 8px rgba(255, 209, 102, 0.3));
+}
+
+.qotd-lock-title {
+  color: #ffd166;
+  font-size: 1.15rem;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.qotd-lock-desc {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@keyframes qotdHighlightPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7); border-color: #ffd166; }
+  50% { box-shadow: 0 0 25px 6px rgba(255, 209, 102, 0.6); border-color: #ffd166; }
+  100% { box-shadow: none; border-color: rgba(255, 209, 102, 0.35); }
+}
+
+.qotd-highlight-pulse {
+  animation: qotdHighlightPulse 1.2s ease-out;
 }
 
 .qotd-container-wrap {
   width: 100%;
   transition: opacity 0.3s ease;
-}
-
-.qotd-container-wrap.qotd-moved-bottom {
-  margin-top: 24px;
 }
 
 .category-card-disabled {
@@ -1035,115 +1128,54 @@ body {
 }
 
 /* ----------------------------------------------------
-   📱 MOBILE-ONLY SWIPEABLE CAROUSEL (max-width: 768px)
+   📱 MOBILE-ONLY QOTD 3D FLIP CARD (max-width: 768px)
 ---------------------------------------------------- */
 @media (max-width: 768px) {
-  .qotd-carousel-nav {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px auto 10px auto;
-    width: calc(100% - 32px);
-    max-width: 380px;
-  }
-
-  .qotd-nav-pill {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 14px;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 209, 102, 0.25);
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.88rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-    user-select: none;
-    touch-action: manipulation;
-  }
-
-  .qotd-nav-pill.active {
-    background: linear-gradient(135deg, rgba(255, 209, 102, 0.28), rgba(224, 86, 36, 0.25));
-    border-color: #ffd166;
-    color: #ffd166;
-    box-shadow: 0 4px 14px rgba(255, 209, 102, 0.25);
-    transform: scale(1.02);
-  }
-
-  .qotd-word-section {
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    scroll-snap-type: x mandatory !important;
-    scroll-behavior: smooth !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 16px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 6px 16px 16px 16px !important;
-    box-sizing: border-box !important;
-    margin: 0 auto 20px auto !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  .qotd-word-section::-webkit-scrollbar {
+  .qotd-desktop-explanation-card {
     display: none !important;
   }
 
-  .qotd-card,
-  .word-card {
-    flex: 0 0 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
+  .qotd-word-section {
+    display: block !important;
     width: 100% !important;
-    scroll-snap-align: center !important;
-    scroll-snap-stop: always !important;
-    box-sizing: border-box !important;
+    max-width: 100% !important;
+    padding: 0 16px !important;
+    margin: 16px auto 24px auto !important;
+    overflow: visible !important;
+  }
+
+  .qotd-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
     margin: 0 !important;
     padding: 22px 18px !important;
+    min-height: 380px;
   }
 
-  .qotd-swipe-hint-bar,
-  .word-swipe-hint-bar {
+  .qotd-flip-back {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 20px;
-    padding: 10px 14px;
-    background: linear-gradient(135deg, rgba(255, 209, 102, 0.12), rgba(224, 86, 36, 0.1));
-    border: 1px dashed rgba(255, 209, 102, 0.45);
-    border-radius: 14px;
-    color: #ffd166;
-    font-size: 0.84rem;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    user-select: none;
-    transition: all 0.25s ease;
-    animation: qotdPulseHint 2.4s infinite ease-in-out;
+    flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(22, 10, 2, 0.96);
+    border-radius: 20px;
+    padding: 22px 18px;
+    box-sizing: border-box;
+    z-index: 2;
   }
 
-  .qotd-swipe-hint-bar:active,
-  .word-swipe-hint-bar:active {
-    transform: scale(0.97);
-    background: rgba(255, 209, 102, 0.25);
-  }
-
-  @keyframes qotdPulseHint {
-    0%, 100% {
-      border-color: rgba(255, 209, 102, 0.35);
-      box-shadow: 0 0 0 rgba(255, 209, 102, 0);
-    }
-    50% {
-      border-color: #ffd166;
-      box-shadow: 0 0 10px rgba(255, 209, 102, 0.2);
-    }
+  .qotd-flip-back-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+    margin-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 209, 102, 0.4) transparent;
   }
 }
 
@@ -5596,13 +5628,20 @@ button[class*="delete"] {
 [data-theme="light"] .intro-box,
 [data-theme="light"] .impact-card,
 [data-theme="light"] .qotd-card,
-[data-theme="light"] .word-card,
+[data-theme="light"] .qotd-desktop-explanation-card,
 [data-theme="light"] .contact-box,
 [data-theme="light"] .whatsapp-channel-box {
   background: rgba(255, 255, 255, 0.88) !important;
   border-color: rgba(184, 115, 16, 0.3) !important;
   color: #2C1810 !important;
   box-shadow: 0 4px 16px rgba(100, 60, 20, 0.08) !important;
+}
+[data-theme="light"] .qotd-flip-back {
+  background: rgba(255, 250, 240, 0.98) !important;
+  color: #2C1810 !important;
+}
+[data-theme="light"] .qotd-explanation-text {
+  color: #2C1810 !important;
 }
 [data-theme="light"] .intro-box p,
 [data-theme="light"] .intro-box h2,

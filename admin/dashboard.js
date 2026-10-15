@@ -4365,11 +4365,14 @@ if (saveQotdBtn) {
       document.getElementById("qotdOption3").value.trim()
     ];
     const correct = parseInt(document.getElementById("qotdCorrectSelect").value);
+    const explanationInput = document.getElementById("qotdExplanationInput");
+    const explanation = explanationInput ? explanationInput.value.trim() : "";
     if (!question || options.some(o => !o)) { document.getElementById("qotdMessage").innerText = "⚠️ Please fill question and all 4 options"; return; }
-    await setDoc(doc(db, "qotd", dateValue), { question, options, correct, updatedAt: serverTimestamp() });
+    await setDoc(doc(db, "qotd", dateValue), { question, options, correct, explanation, updatedAt: serverTimestamp() });
     document.getElementById("qotdMessage").innerText = "✅ Question saved for " + dateValue;
     document.getElementById("qotdQuestionInput").value = "";
     ["qotdOption0","qotdOption1","qotdOption2","qotdOption3"].forEach(id => document.getElementById(id).value = "");
+    if (explanationInput) explanationInput.value = "";
     loadQotdList();
   });
 }
@@ -4385,6 +4388,7 @@ async function loadQotdList() {
   items.forEach(item => {
     const opts = item.options || [];
     const correctIdx = item.correct ?? 0;
+    const expl = item.explanation || "";
     const row = document.createElement("div");
     row.className = "cms-list-item";
     row.style.flexDirection = "column";
@@ -4393,6 +4397,7 @@ async function loadQotdList() {
       <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
         <div class="cms-list-item-text">
           <span class="cms-list-item-date" style="color:#ffd166;font-weight:bold;">${item.id}</span>: ${item.question || ""}
+          ${expl ? `<div style="font-size:0.85rem;color:#bbf7d0;margin-top:4px;">💡 వివరణ: ${expl}</div>` : ''}
         </div>
         <div style="display:flex;gap:8px;">
           <button class="cms-list-edit-btn qotd-edit-btn" data-id="${item.id}" type="button">✏️ Edit</button>
@@ -4412,6 +4417,8 @@ async function loadQotdList() {
           <option value="2" ${correctIdx === 2 ? "selected" : ""}>Option 3</option>
           <option value="3" ${correctIdx === 3 ? "selected" : ""}>Option 4</option>
         </select>
+        <label style="font-size:0.85rem;color:#ffd166;margin-top:6px;">సమాధాన వివరణ (Explanation):</label>
+        <textarea class="q-edit-explanation" placeholder="సమాధాన వివరణ (Explanation)" rows="3" style="width:100%;padding:10px;border-radius:10px;background:rgba(30,20,10,0.9);color:white;border:1px solid rgba(255,209,102,0.3);resize:vertical;">${expl}</textarea>
         <div class="general-inline-edit-actions">
           <button class="save-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
           <button class="cancel-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
@@ -4435,12 +4442,13 @@ async function loadQotdList() {
         editBox.querySelector(".q-edit-opt3").value.trim()
       ];
       const correct = parseInt(editBox.querySelector(".q-edit-correct").value);
+      const explanation = editBox.querySelector(".q-edit-explanation") ? editBox.querySelector(".q-edit-explanation").value.trim() : "";
       if (!question || options.some(o => !o)) {
         alert("Please fill question and all 4 options");
         return;
       }
       await setDoc(doc(db, "qotd", item.id), {
-        question, options, correct, updatedAt: serverTimestamp()
+        question, options, correct, explanation, updatedAt: serverTimestamp()
       }, { merge: true });
       alert("✅ Question updated for " + item.id);
       loadQotdList();

@@ -546,139 +546,77 @@
       </a>
     </div>
 
-    <div id="qotdContainerWrap" class="qotd-container-wrap">
-      <div id="qotdCarouselNav" class="qotd-carousel-nav" style="display:none;">
-        <button type="button" id="qotdNavBtn0" class="qotd-nav-pill active" onclick="window.goToQotdSlide && window.goToQotdSlide(0)" aria-label="Question of the day">
-          <span data-en="❓ Question">❓ నేటి ప్రశ్న</span>
-        </button>
-        <button type="button" id="qotdNavBtn1" class="qotd-nav-pill" onclick="window.goToQotdSlide && window.goToQotdSlide(1)" aria-label="Topic of the day">
-          <span data-en="💡 Topic">💡 నేటి అంశం</span>
-        </button>
-      </div>
+    <div id="qotdContainerWrap" class="qotd-container-wrap" style="display:none;">
+      <div id="qotdWordSection" class="qotd-word-section">
+        <!-- Card 1: Question of the Day (Flips to backside on mobile for explanation) -->
+        <div id="qotdCard" class="qotd-card qotd-flip-card">
+          <div class="qotd-flip-inner" id="qotdFlipInner">
+            <!-- Front: Question, Options, Score & View Explanation Button -->
+            <div class="qotd-flip-front" id="qotdFlipFront">
+              <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
+              <p id="qotdQuestionText" class="qotd-question-text"></p>
+              <div id="qotdOptions" class="qotd-options"></div>
 
-      <div id="qotdWordSection" class="qotd-word-section" style="display:none;">
-        <div id="qotdCard" class="qotd-card" style="display:none;">
-          <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
-          <p id="qotdQuestionText" class="qotd-question-text"></p>
-          <div id="qotdOptions" class="qotd-options"></div>
-          <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-            <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-            <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
-          </div>
-          <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
-            <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
-              ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
-            </p>
-            <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
-              లాగిన్ అవ్వండి (Log In) ➜
-            </a>
-          </div>
-          <div class="qotd-swipe-hint-bar" id="qotdSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(1)">
-            <span class="swipe-hint-text" data-en="👉 Swipe for Today's Topic ➜">👉 నేటి అంశం కోసం స్వైప్ చేయండి ➜</span>
+              <!-- Explanation Button (appears after answering) -->
+              <div id="qotdExplanationBtnWrap" class="qotd-explanation-btn-wrap" style="display:none;">
+                <button type="button" id="qotdShowExplanationBtn" class="qotd-explanation-toggle-btn">
+                  💡 వివరణ చూడండి (View Explanation) ➜
+                </button>
+              </div>
+
+              <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
+                <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
+                <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
+              </div>
+              <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
+                <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
+                  ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
+                </p>
+                <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
+                  లాగిన్ అవ్వండి (Log In) ➜
+                </a>
+              </div>
+            </div>
+
+            <!-- Back: Mobile-only 3D Flip Backside -->
+            <div class="qotd-flip-back" id="qotdFlipBack">
+              <h3 data-en="Answer & Explanation">💡 సమాధాన వివరణ</h3>
+              <div class="qotd-flip-back-body">
+                <div id="qotdCorrectAnswerBadgeMobile" class="qotd-correct-answer-badge"></div>
+                <p id="qotdExplanationTextMobile" class="qotd-explanation-text"></p>
+              </div>
+              <button type="button" id="qotdFlipBackBtn" class="qotd-flip-back-btn">
+                ⮌ ప్రశ్న చూడండి (Back to Question)
+              </button>
+            </div>
           </div>
         </div>
 
-        <div id="wordCard" class="word-card" style="display:none;">
-          <h3 data-en="Word of the Day">నేటి అంశం</h3>
-          <p id="wordOfDayText" class="word-of-day-text"></p>
-
-          <!-- MARK AS READ CHECKBOX -->
-          <div class="topic-read-row">
-            <label class="topic-read-label" for="topicReadCheckbox">
-              <input type="checkbox" id="topicReadCheckbox" class="topic-read-checkbox">
-              <span class="topic-read-text" data-en="Mark as Read">పూర్తయినట్లు గుర్తించండి (Mark as read)</span>
-            </label>
+        <!-- Card 2: Desktop Explanation Card (Side by side on desktop, hidden on mobile) -->
+        <div id="qotdExplanationCardDesktop" class="qotd-card qotd-desktop-explanation-card">
+          <h3 data-en="Answer & Explanation">💡 సమాధాన వివరణ</h3>
+          
+          <!-- Locked State (Before user answers) -->
+          <div id="qotdDesktopLockedState" class="qotd-desktop-locked">
+            <div class="qotd-lock-icon">🔒</div>
+            <h4 class="qotd-lock-title">సమాధానం ఎంచుకోండి</h4>
+            <p class="qotd-lock-desc">ప్రశ్నకు సమాధానం ఇవ్వగానే సరైన జవాబు మరియు పూర్తి విశేషాలు ఇక్కడ తెలుస్తాయి.</p>
           </div>
 
-          <div class="word-swipe-hint-bar" id="wordSwipeHint" onclick="window.goToQotdSlide && window.goToQotdSlide(0)">
-            <span class="swipe-hint-text" data-en="⮌ Swipe back for Question">⮌ నేటి ప్రశ్న కోసం స్వైప్ చేయండి</span>
+          <!-- Unlocked State (After user answers) -->
+          <div id="qotdDesktopUnlockedState" class="qotd-desktop-unlocked" style="display:none;">
+            <div id="qotdCorrectAnswerBadgeDesktop" class="qotd-correct-answer-badge"></div>
+            <div class="qotd-explanation-scroll-box">
+              <p id="qotdExplanationTextDesktop" class="qotd-explanation-text"></p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Instant Cold-Start Cache Rendering for Mobile (Zero-Delay Paint) -->
+    <!-- Instant Cold-Start Cache Rendering for Zero-Delay Paint -->
     <script>
       (function() {
-        window.goToQotdSlide = function(index, smooth) {
-          if (smooth === undefined) smooth = true;
-          if (window.innerWidth > 768) return;
-          var section = document.getElementById("qotdWordSection");
-          if (!section) return;
-          var qCard = document.getElementById("qotdCard");
-          var wCard = document.getElementById("wordCard");
-          var targetEl = index === 0 ? qCard : wCard;
-          if (!targetEl) return;
-
-          var targetLeft = 0;
-          if (index !== 0) {
-            if (targetEl.offsetLeft > 0) {
-              targetLeft = targetEl.offsetParent === section ? targetEl.offsetLeft : (targetEl.offsetLeft - (section.offsetLeft || 0));
-            } else {
-              targetLeft = section.clientWidth || section.offsetWidth || section.scrollWidth;
-            }
-          }
-
-          if (smooth) {
-            section.scrollTo({ left: targetLeft, behavior: "smooth" });
-          } else {
-            section.scrollLeft = targetLeft;
-          }
-          window.updateQotdNavPills && window.updateQotdNavPills(index);
-        };
-
-        window.updateQotdNavPills = function(index) {
-          var btn0 = document.getElementById("qotdNavBtn0");
-          var btn1 = document.getElementById("qotdNavBtn1");
-          if (btn0 && btn1) {
-            if (index === 0) {
-              btn0.classList.add("active");
-              btn1.classList.remove("active");
-            } else {
-              btn1.classList.add("active");
-              btn0.classList.remove("active");
-            }
-          }
-        };
-
-        function initQotdCarouselScrollListener() {
-          var section = document.getElementById("qotdWordSection");
-          if (!section) return;
-          var ticking = false;
-          section.addEventListener("scroll", function() {
-            if (window.innerWidth > 768) return;
-            if (!ticking) {
-              window.requestAnimationFrame(function() {
-                var scrollLeft = section.scrollLeft;
-                var width = section.clientWidth || section.offsetWidth;
-                var activeIdx = scrollLeft >= width * 0.45 ? 1 : 0;
-                window.updateQotdNavPills(activeIdx);
-                ticking = false;
-              });
-              ticking = true;
-            }
-          }, { passive: true });
-        }
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initQotdCarouselScrollListener);
-        } else {
-          initQotdCarouselScrollListener();
-        }
-
-        window.addEventListener("resize", function() {
-          var nav = document.getElementById("qotdCarouselNav");
-          var section = document.getElementById("qotdWordSection");
-          if (window.innerWidth > 768) {
-            if (nav) nav.style.display = "none";
-            if (section) section.scrollLeft = 0;
-          } else {
-            if (nav && section && section.style.display !== "none") {
-              nav.style.display = "flex";
-            }
-          }
-        });
-
         try {
           var now = new Date();
           var yyyy = now.getFullYear();
@@ -687,95 +625,68 @@
           var localTodayKey = yyyy + "-" + mm + "-" + dd;
 
           var cachedQotdRaw = localStorage.getItem("sannivesham_cached_qotd");
-          var cachedWordRaw = localStorage.getItem("sannivesham_cached_word");
-          var hasRendered = false;
+          if (!cachedQotdRaw) return;
 
-          if (cachedQotdRaw) {
-            var cached = JSON.parse(cachedQotdRaw);
-            var qData = cached.data || cached;
-            var qKey = cached.key || localTodayKey;
-            if (qData && qData.question && Array.isArray(qData.options)) {
-              var qText = document.getElementById("qotdQuestionText");
-              var qBox = document.getElementById("qotdOptions");
-              var qCard = document.getElementById("qotdCard");
-              if (qText && qBox && qCard) {
-                qText.innerText = qData.question;
-                qBox.innerHTML = "";
-                var answered = (localStorage.getItem("qotd_answered_" + qKey) === "true") ||
-                               (localStorage.getItem("qotd_answered_" + localTodayKey) === "true");
-                var choice = localStorage.getItem("qotd_choice_" + qKey) ||
-                             localStorage.getItem("qotd_choice_" + localTodayKey);
+          var cached = JSON.parse(cachedQotdRaw);
+          // If cached question is not for today, ignore and remove it
+          if (!cached || cached.key !== localTodayKey) {
+            localStorage.removeItem("sannivesham_cached_qotd");
+            return;
+          }
 
-                qData.options.forEach(function(opt, idx) {
-                  var btn = document.createElement("button");
-                  btn.className = "qotd-option-btn";
-                  btn.type = "button";
-                  btn.innerText = opt;
-                  if (answered) {
-                    btn.classList.add("disabled-option");
-                    if (idx === qData.correct) {
-                      btn.classList.add("correct-option");
-                    } else if (choice !== null && parseInt(choice, 10) === idx) {
-                      btn.classList.add("wrong-option");
-                    }
+          var qData = cached.data || cached;
+          if (qData && qData.question && Array.isArray(qData.options)) {
+            var qText = document.getElementById("qotdQuestionText");
+            var qBox = document.getElementById("qotdOptions");
+            var wrap = document.getElementById("qotdContainerWrap");
+            if (qText && qBox && wrap) {
+              qText.innerText = qData.question;
+              qBox.innerHTML = "";
+
+              var answered = localStorage.getItem("qotd_answered_" + localTodayKey) === "true";
+              var choice = localStorage.getItem("qotd_choice_" + localTodayKey);
+
+              qData.options.forEach(function(opt, idx) {
+                var btn = document.createElement("button");
+                btn.className = "qotd-option-btn";
+                btn.type = "button";
+                btn.innerText = opt;
+                if (answered) {
+                  btn.classList.add("disabled-option");
+                  if (idx === qData.correct) {
+                    btn.classList.add("correct-option");
+                  } else if (choice !== null && parseInt(choice, 10) === idx) {
+                    btn.classList.add("wrong-option");
                   }
-                  qBox.appendChild(btn);
-                });
+                }
+                qBox.appendChild(btn);
+              });
 
-                qCard.style.display = "block";
-                hasRendered = true;
+              var expl = qData.explanation || ("ఈ ప్రశ్నకు సరైన సమాధానం: " + qData.options[qData.correct]);
+              var explMobile = document.getElementById("qotdExplanationTextMobile");
+              var explDesktop = document.getElementById("qotdExplanationTextDesktop");
+              var badgeMobile = document.getElementById("qotdCorrectAnswerBadgeMobile");
+              var badgeDesktop = document.getElementById("qotdCorrectAnswerBadgeDesktop");
+              if (explMobile) explMobile.innerText = expl;
+              if (explDesktop) explDesktop.innerText = expl;
+              if (badgeMobile) badgeMobile.innerText = "✓ సరైన సమాధానం: " + qData.options[qData.correct];
+              if (badgeDesktop) badgeDesktop.innerText = "✓ సరైన సమాధానం: " + qData.options[qData.correct];
 
-                if (answered && !localStorage.getItem("sannivesham_user_logged_in")) {
+              if (answered) {
+                var explWrap = document.getElementById("qotdExplanationBtnWrap");
+                if (explWrap) explWrap.style.display = "flex";
+                var locked = document.getElementById("qotdDesktopLockedState");
+                var unlocked = document.getElementById("qotdDesktopUnlockedState");
+                if (locked) locked.style.display = "none";
+                if (unlocked) unlocked.style.display = "block";
+
+                if (!localStorage.getItem("sannivesham_user_logged_in")) {
                   var hint = document.getElementById("qotdLoginHint");
                   if (hint) hint.style.display = "flex";
                 }
               }
-            }
-          }
 
-          if (cachedWordRaw) {
-            var cachedW = JSON.parse(cachedWordRaw);
-            var wData = cachedW.data || cachedW;
-            if (wData && wData.text) {
-              var wText = document.getElementById("wordOfDayText");
-              var wCard = document.getElementById("wordCard");
-              if (wText && wCard) {
-                wText.innerText = wData.text;
-                wCard.style.display = "block";
-                hasRendered = true;
-              }
-            }
-          }
-
-          var isColdQotdAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
-            (cachedQotdRaw && (localStorage.getItem("qotd_answered_" + (JSON.parse(cachedQotdRaw).key || localTodayKey)) === "true"));
-          var isColdTopicRead = (localStorage.getItem("topic_read_" + localTodayKey) === "true") ||
-            (cachedWordRaw && (localStorage.getItem("topic_read_" + (JSON.parse(cachedWordRaw).key || localTodayKey)) === "true"));
-          var isColdBothCompleted = isColdQotdAnswered && isColdTopicRead;
-
-          var topicCb = document.getElementById("topicReadCheckbox");
-          if (topicCb) {
-            topicCb.checked = isColdTopicRead;
-          }
-
-          // If BOTH are completed, DO NOT render at the top!
-          // Leave hidden so there is ZERO flash/jump at the top of the page.
-          // It will be positioned below categories instantly when #categories finishes parsing.
-          if (hasRendered && !isColdBothCompleted) {
-            var parentSec = document.getElementById("qotdWordSection");
-            var nav = document.getElementById("qotdCarouselNav");
-            if (parentSec) parentSec.style.display = "flex";
-            if (nav && window.innerWidth <= 768) nav.style.display = "flex";
-
-            if (window.innerWidth <= 768 && parentSec) {
-              var isAnswered = isColdQotdAnswered;
-              if (isAnswered) {
-                setTimeout(function() {
-                  if (window.goToQotdSlide) {
-                    window.goToQotdSlide(1, false);
-                  }
-                }, 10);
-              }
+              wrap.style.display = "block";
             }
           }
         } catch (err) {
@@ -946,47 +857,7 @@
     </div>
   </section>
 
-  <!-- Instant Cold-Start Positioning for Completed QOD/Topic (Zero-FOUC & No Scroll Jump) -->
-  <script>
-    (function() {
-      try {
-        var now = new Date();
-        var yyyy = now.getFullYear();
-        var mm = String(now.getMonth() + 1).padStart(2, "0");
-        var dd = String(now.getDate()).padStart(2, "0");
-        var localTodayKey = yyyy + "-" + mm + "-" + dd;
 
-        var cachedQotdRaw = localStorage.getItem("sannivesham_cached_qotd");
-        var cachedWordRaw = localStorage.getItem("sannivesham_cached_word");
-        var qKey = (cachedQotdRaw && (JSON.parse(cachedQotdRaw).key || JSON.parse(cachedQotdRaw).date)) || localTodayKey;
-        var wKey = (cachedWordRaw && (JSON.parse(cachedWordRaw).key || JSON.parse(cachedWordRaw).date)) || localTodayKey;
-
-        var isColdQotdAnswered = (localStorage.getItem("qotd_answered_" + localTodayKey) === "true") ||
-          (localStorage.getItem("qotd_answered_" + qKey) === "true");
-        var isColdTopicRead = (localStorage.getItem("topic_read_" + localTodayKey) === "true") ||
-          (localStorage.getItem("topic_read_" + wKey) === "true");
-
-        var qWrap = document.getElementById("qotdContainerWrap");
-        var catSec = document.getElementById("categories");
-
-        if (isColdQotdAnswered && isColdTopicRead && qWrap && catSec) {
-          catSec.after(qWrap);
-          qWrap.classList.add("qotd-moved-bottom");
-
-          var parentSec = document.getElementById("qotdWordSection");
-          var nav = document.getElementById("qotdCarouselNav");
-          if (parentSec) parentSec.style.display = "flex";
-          if (nav && window.innerWidth <= 768) nav.style.display = "flex";
-
-          if (window.innerWidth <= 768 && window.goToQotdSlide) {
-            window.goToQotdSlide(1, false);
-          }
-        }
-      } catch (err) {
-        console.warn("Post-categories placement error:", err);
-      }
-    })();
-  </script>
 
   <footer class="home-footer">
     <p class="home-footer-quote" data-en="✨Culture is our soul • Tradition is our legacy • Telugu is our pride✨">
@@ -1021,16 +892,15 @@
     }
 
     loadQuestionOfDay();
-    loadWordOfDay();
 
     // Just reflects login state on the profile icon — actual login/profile
-    // UI now lives entirely on profile.html
+    // UI lives on profile.html
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       const profileBtn = document.getElementById("profileBtn");
       if (user) {
         localStorage.setItem("sannivesham_user_logged_in", "true");
-        profileBtn.innerText = "😊";
+        if (profileBtn) profileBtn.innerText = "😊";
         const userRef = doc(db, "users", user.uid);
         let userData = {};
         try {
@@ -1065,7 +935,7 @@
         }
       } else {
         localStorage.removeItem("sannivesham_user_logged_in");
-        profileBtn.innerText = "👤";
+        if (profileBtn) profileBtn.innerText = "👤";
         const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
         if (guestAnswered) {
           showQotdLoginPromptAfterAnswer();
@@ -1076,26 +946,8 @@
       loadQuestionOfDay();
     });
 
-    function showModal(id) {
-      document.querySelectorAll(".auth-modal").forEach(m => m.style.display = "none");
-      const target = document.getElementById(id);
-      if (target) target.style.display = "flex";
-    }
-    function hideModal(id) {
-      const target = document.getElementById(id);
-      if (target) target.style.display = "none";
-    }
-
-    document.querySelectorAll(".auth-modal").forEach(modal => {
-      modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
-    });
-
-
-
-
     async function loadQuestionOfDay() {
       try {
-        let activeKey = todayKey;
         let snap = null;
         try {
           snap = await getDoc(doc(db, "qotd", todayKey));
@@ -1103,71 +955,58 @@
           console.warn("Direct qotd getDoc error:", err);
         }
 
-        let data = null;
-        if (snap && snap.exists()) {
-          data = snap.data();
-        } else {
-          // If question for exact todayKey isn't found yet, fallback to latest available question in qotd collection
-          try {
-            const allSnap = await getDocs(collection(db, "qotd"));
-            if (!allSnap.empty) {
-              const validDocs = allSnap.docs.filter(d => d.data() && d.data().question && Array.isArray(d.data().options));
-              validDocs.sort((a, b) => b.id.localeCompare(a.id));
-              if (validDocs.length > 0) {
-                const latestDoc = validDocs[0];
-                activeKey = latestDoc.id;
-                data = latestDoc.data();
-              }
-            }
-          } catch (qErr) {
-            console.warn("Fallback qotd query failed:", qErr);
+        // CRITICAL REQUIREMENT: If in a day no question is scheduled in Firestore,
+        // the entire card should NOT appear! It should NOT show previous questions or fallbacks.
+        if (!snap || !snap.exists()) {
+          const wrap = document.getElementById("qotdContainerWrap");
+          if (wrap) wrap.style.display = "none";
+          const cachedRaw = localStorage.getItem("sannivesham_cached_qotd");
+          if (cachedRaw) {
+            try {
+              const c = JSON.parse(cachedRaw);
+              if (c.key !== todayKey) localStorage.removeItem("sannivesham_cached_qotd");
+            } catch (e) {}
           }
+          return;
         }
 
-        if (!data) {
-          try {
-            const cachedRaw = localStorage.getItem("sannivesham_cached_qotd");
-            if (cachedRaw) {
-              const cached = JSON.parse(cachedRaw);
-              if (cached && (cached.data || cached.question)) {
-                data = cached.data || cached;
-                activeKey = cached.key || todayKey;
-              }
-            }
-          } catch (cErr) {}
-        }
-
+        const data = snap.data();
         if (!data || !data.question || !Array.isArray(data.options)) {
-          activeKey = todayKey;
-          data = {
-            question: "శ్రీమదాంధ్ర మహాభాగవతాన్ని తెలుగులో రచించిన భక్త కవి ఎవరు?",
-            options: ["బమ్మెర పోతన", "నన్నయ భట్టారకుడు", "తిక్కన సోమయాజి", "శ్రీనాథుడు"],
-            correct: 0
-          };
+          const wrap = document.getElementById("qotdContainerWrap");
+          if (wrap) wrap.style.display = "none";
+          return;
         }
 
-        // Save in localStorage cache for instant zero-latency loading on mobile
+        // Cache question for today
         try {
-          localStorage.setItem("sannivesham_cached_qotd", JSON.stringify({ key: activeKey, data: data }));
+          localStorage.setItem("sannivesham_cached_qotd", JSON.stringify({ key: todayKey, data: data }));
         } catch (e) {}
 
         document.getElementById("qotdQuestionText").innerText = data.question;
+
+        // Explanation text & correct answer badge
+        const expl = data.explanation || `ఈ ప్రశ్నకు సరైన సమాధానం: ${data.options[data.correct]}.\nసనాతన ధర్మం మరియు సాహిత్య విశేషాలను తెలుసుకుంటున్నందుకు అభినందనలు!`;
+        const explMobile = document.getElementById("qotdExplanationTextMobile");
+        const explDesktop = document.getElementById("qotdExplanationTextDesktop");
+        const badgeMobile = document.getElementById("qotdCorrectAnswerBadgeMobile");
+        const badgeDesktop = document.getElementById("qotdCorrectAnswerBadgeDesktop");
+        if (explMobile) explMobile.innerText = expl;
+        if (explDesktop) explDesktop.innerText = expl;
+        if (badgeMobile) badgeMobile.innerText = `✓ సరైన సమాధానం: ${data.options[data.correct]}`;
+        if (badgeDesktop) badgeDesktop.innerText = `✓ సరైన సమాధానం: ${data.options[data.correct]}`;
 
         const optionsBox = document.getElementById("qotdOptions");
         optionsBox.innerHTML = "";
 
         let alreadyAnswered = false;
-        const guestAnswered = (localStorage.getItem(`qotd_answered_${activeKey}`) === "true") ||
-                              (localStorage.getItem(`qotd_answered_${todayKey}`) === "true");
-        const guestChoice = localStorage.getItem(`qotd_choice_${activeKey}`) ||
-                            localStorage.getItem(`qotd_choice_${todayKey}`);
+        const guestAnswered = localStorage.getItem(`qotd_answered_${todayKey}`) === "true";
+        const guestChoice = localStorage.getItem(`qotd_choice_${todayKey}`);
 
         if (currentUser) {
           const userSnap = await getDoc(doc(db, "users", currentUser.uid));
           if (userSnap.exists()) {
             const uData = userSnap.data();
-            alreadyAnswered = (uData.answeredDates || []).includes(activeKey) ||
-                              (uData.answeredDates || []).includes(todayKey);
+            alreadyAnswered = (uData.answeredDates || []).includes(todayKey);
           }
         }
         if (guestAnswered) {
@@ -1187,14 +1026,25 @@
               btn.classList.add("wrong-option");
             }
           } else {
-            btn.addEventListener("click", () => handleQotdAnswer(index, data.correct, activeKey));
+            btn.addEventListener("click", () => handleQotdAnswer(index, data.correct, data));
           }
           optionsBox.appendChild(btn);
         });
 
-        window._activeQotdKey = activeKey;
-        document.getElementById("qotdCard").style.display = "block";
-        syncQotdWordDisplay(alreadyAnswered);
+        // Set explanation visibility
+        if (alreadyAnswered) {
+          revealExplanationUI();
+        } else {
+          const explWrap = document.getElementById("qotdExplanationBtnWrap");
+          if (explWrap) explWrap.style.display = "none";
+          const locked = document.getElementById("qotdDesktopLockedState");
+          const unlocked = document.getElementById("qotdDesktopUnlockedState");
+          if (locked) locked.style.display = "flex";
+          if (unlocked) unlocked.style.display = "none";
+        }
+
+        const wrap = document.getElementById("qotdContainerWrap");
+        if (wrap) wrap.style.display = "block";
 
         if (currentUser) {
           const userSnap = await getDoc(doc(db, "users", currentUser.uid));
@@ -1207,13 +1057,20 @@
           }
         }
       } catch (e) {
-        console.log("QOTD Error:", e);
+        console.warn("QOTD Error:", e);
       }
     }
 
-    async function handleQotdAnswer(selectedIndex, correctIndex, activeKey) {
-      if (!activeKey) activeKey = todayKey;
-      window._activeQotdKey = activeKey;
+    function revealExplanationUI() {
+      const explWrap = document.getElementById("qotdExplanationBtnWrap");
+      if (explWrap) explWrap.style.display = "flex";
+      const locked = document.getElementById("qotdDesktopLockedState");
+      const unlocked = document.getElementById("qotdDesktopUnlockedState");
+      if (locked) locked.style.display = "none";
+      if (unlocked) unlocked.style.display = "block";
+    }
+
+    async function handleQotdAnswer(selectedIndex, correctIndex, data) {
       const optionsBox = document.getElementById("qotdOptions");
       const allBtns = optionsBox.querySelectorAll(".qotd-option-btn");
 
@@ -1226,26 +1083,24 @@
         allBtns[correctIndex]?.classList.add("correct-option");
       }
 
-      // Record answer in localStorage immediately so closing & reopening the app will NOT ask again
-      localStorage.setItem(`qotd_answered_${activeKey}`, "true");
+      // Record answer in localStorage
       localStorage.setItem(`qotd_answered_${todayKey}`, "true");
-      localStorage.setItem(`qotd_choice_${activeKey}`, selectedIndex.toString());
       localStorage.setItem(`qotd_choice_${todayKey}`, selectedIndex.toString());
       if (isCorrect) {
-        localStorage.setItem(`qotd_correct_${activeKey}`, "true");
         localStorage.setItem(`qotd_correct_${todayKey}`, "true");
       }
 
-      // If user answered QOD and also read the topic today, move box to bottom of 12 sections
-      window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
+      // Show explanation button on question card and unlock desktop explanation
+      revealExplanationUI();
 
-      // Auto-swipe to Today's Topic on mobile after 3.5 seconds
-      if (window.innerWidth <= 768) {
-        setTimeout(() => {
-          if (window.innerWidth <= 768 && window.goToQotdSlide) {
-            window.goToQotdSlide(1, true);
-          }
-        }, 3500);
+      // On desktop, highlight the side-by-side explanation card
+      if (window.innerWidth > 768) {
+        const deskCard = document.getElementById("qotdExplanationCardDesktop");
+        if (deskCard) {
+          deskCard.classList.remove("qotd-highlight-pulse");
+          void deskCard.offsetWidth;
+          deskCard.classList.add("qotd-highlight-pulse");
+        }
       }
 
       if (currentUser) {
@@ -1256,9 +1111,7 @@
           if (freshSnap.exists()) freshData = freshSnap.data();
         } catch (e) {}
 
-        const alreadyOnServer = (freshData.answeredDates || []).includes(activeKey) ||
-                                (freshData.answeredDates || []).includes(todayKey);
-
+        const alreadyOnServer = (freshData.answeredDates || []).includes(todayKey);
         if (alreadyOnServer) {
           updateQotdScoreRow(freshData);
           return;
@@ -1266,13 +1119,13 @@
 
         const resolvedName = freshData.name || currentUser.displayName || (currentUser.email ? currentUser.email.split("@")[0] : "") || "జ్ఞాన సాధకుడు";
         const updateData = {
-          answeredDates: arrayUnion(activeKey),
+          answeredDates: arrayUnion(todayKey),
           name: resolvedName,
           lastUpdated: new Date().toISOString()
         };
         if (isCorrect) {
           updateData.score = increment(1);
-          updateData.correctDates = arrayUnion(activeKey);
+          updateData.correctDates = arrayUnion(todayKey);
         }
 
         try {
@@ -1285,18 +1138,19 @@
           console.error("Failed to save score:", saveErr);
         }
       } else {
-        // Guest user: prompt for login to know about scores and leaderboard!
         showQotdLoginPromptAfterAnswer();
       }
     }
 
     function updateQotdScoreRow(userData) {
-      document.getElementById("qotdScoreRow").style.display = "flex";
+      const scoreRow = document.getElementById("qotdScoreRow");
+      if (scoreRow) scoreRow.style.display = "flex";
       hideQotdLoginHint();
       const label = window.Sannivesham18n
         ? window.Sannivesham18n.t("⭐ సాధించిన అంకాలు", "⭐ Score earned")
         : "⭐ సాధించిన అంకాలు";
-      document.getElementById("qotdScoreDisplay").innerText = `${label}: ${userData.score || 0}`;
+      const scoreDisp = document.getElementById("qotdScoreDisplay");
+      if (scoreDisp) scoreDisp.innerText = `${label}: ${userData.score || 0}`;
     }
 
     function showQotdLoginPromptAfterAnswer() {
@@ -1311,143 +1165,39 @@
       if (hint) hint.style.display = "none";
     }
 
-    async function loadWordOfDay() {
-      try {
-        let snap = null;
-        let activeKey = todayKey;
-        try {
-          snap = await getDoc(doc(db, "wordOfDay", todayKey));
-        } catch (err) {
-          console.warn("Direct wordOfDay getDoc error:", err);
-        }
-
-        let data = null;
-        if (snap && snap.exists()) {
-          data = snap.data();
+    // Explanation button & 3D Flip handlers
+    const showExplBtn = document.getElementById("qotdShowExplanationBtn");
+    if (showExplBtn) {
+      showExplBtn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          const card = document.getElementById("qotdCard");
+          if (card) card.classList.add("flipped");
         } else {
-          // If word for exact todayKey isn't found yet, fallback to latest available word
-          try {
-            const allSnap = await getDocs(collection(db, "wordOfDay"));
-            if (!allSnap.empty) {
-              const validDocs = allSnap.docs.filter(d => d.data() && d.data().text);
-              validDocs.sort((a, b) => b.id.localeCompare(a.id));
-              if (validDocs.length > 0) {
-                const latestDoc = validDocs[0];
-                activeKey = latestDoc.id;
-                data = latestDoc.data();
-              }
-            }
-          } catch (wErr) {
-            console.warn("Fallback wordOfDay query failed:", wErr);
+          const deskCard = document.getElementById("qotdExplanationCardDesktop");
+          if (deskCard) {
+            deskCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            deskCard.classList.remove("qotd-highlight-pulse");
+            void deskCard.offsetWidth;
+            deskCard.classList.add("qotd-highlight-pulse");
           }
         }
-
-        if (!data) {
-          try {
-            const cachedRaw = localStorage.getItem("sannivesham_cached_word");
-            if (cachedRaw) {
-              const cached = JSON.parse(cachedRaw);
-              if (cached && (cached.data || cached.text)) {
-                data = cached.data || cached;
-                activeKey = cached.key || todayKey;
-              }
-            }
-          } catch (cErr) {}
-        }
-
-        if (!data || !data.text) {
-          activeKey = todayKey;
-          data = {
-            text: "సన్నివేశం: భారతీయ సనాతన సంస్కృతి, సంప్రదాయాలు మరియు తెలుగు భాషా వైభవాన్ని ప్రతిబింబించే పవిత్ర వేదిక."
-          };
-        }
-
-        try {
-          localStorage.setItem("sannivesham_cached_word", JSON.stringify({ key: activeKey, data: data }));
-        } catch (e) {}
-
-        window._activeWordKey = activeKey;
-        document.getElementById("wordOfDayText").innerText = data.text;
-        document.getElementById("wordCard").style.display = "block";
-        syncQotdWordDisplay();
-      } catch (e) {
-        console.warn("loadWordOfDay error:", e);
-      }
-    }
-
-    window.checkAndPositionQotdSection = function() {
-      const qKey = window._activeQotdKey || todayKey;
-      const wKey = window._activeWordKey || todayKey;
-
-      const isQotdAnswered = (localStorage.getItem("qotd_answered_" + todayKey) === "true") ||
-                             (localStorage.getItem("qotd_answered_" + qKey) === "true");
-
-      const isTopicRead = (localStorage.getItem("topic_read_" + todayKey) === "true") ||
-                          (localStorage.getItem("topic_read_" + wKey) === "true");
-
-      const cb = document.getElementById("topicReadCheckbox");
-      if (cb) cb.checked = isTopicRead;
-
-      const qWrap = document.getElementById("qotdContainerWrap");
-      const catSec = document.getElementById("categories");
-      if (!qWrap || !catSec) return;
-
-      if (isQotdAnswered && isTopicRead) {
-        // Both conditions met: Move directly to bottom of the 12 sections
-        if (qWrap.previousElementSibling !== catSec) {
-          catSec.after(qWrap);
-        }
-        qWrap.classList.add("qotd-moved-bottom");
-      } else {
-        // If either is not met, keep on top of the 12 sections
-        if (qWrap.nextElementSibling !== catSec) {
-          catSec.before(qWrap);
-        }
-        qWrap.classList.remove("qotd-moved-bottom");
-      }
-    };
-
-    let hasSetInitialMobileSlide = false;
-    function syncQotdWordDisplay(knownAnswered) {
-      const section = document.getElementById("qotdWordSection");
-      const nav = document.getElementById("qotdCarouselNav");
-      if (section) section.style.display = "flex";
-      if (nav && window.innerWidth <= 768) nav.style.display = "flex";
-
-      window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
-
-      if (window.innerWidth <= 768 && !hasSetInitialMobileSlide) {
-        const qCard = document.getElementById("qotdCard");
-        const wCard = document.getElementById("wordCard");
-        if (qCard && wCard && qCard.style.display !== "none" && wCard.style.display !== "none") {
-          hasSetInitialMobileSlide = true;
-          const isAnswered = knownAnswered !== undefined ? knownAnswered :
-            ((localStorage.getItem("qotd_answered_" + todayKey) === "true") ||
-             (localStorage.getItem("sannivesham_cached_qotd") &&
-              localStorage.getItem("qotd_answered_" + (JSON.parse(localStorage.getItem("sannivesham_cached_qotd") || "{}").key || todayKey)) === "true"));
-
-          if (isAnswered) {
-            setTimeout(() => {
-              if (window.goToQotdSlide) window.goToQotdSlide(1, false);
-            }, 30);
-          } else {
-            setTimeout(() => {
-              if (window.goToQotdSlide) window.goToQotdSlide(0, false);
-            }, 30);
-          }
-        }
-      }
-    }
-
-    const topicCb = document.getElementById("topicReadCheckbox");
-    if (topicCb) {
-      topicCb.addEventListener("change", function() {
-        const wKey = window._activeWordKey || todayKey;
-        localStorage.setItem("topic_read_" + todayKey, this.checked ? "true" : "false");
-        localStorage.setItem("topic_read_" + wKey, this.checked ? "true" : "false");
-        window.checkAndPositionQotdSection && window.checkAndPositionQotdSection();
       });
     }
+
+    const flipBackBtn = document.getElementById("qotdFlipBackBtn");
+    if (flipBackBtn) {
+      flipBackBtn.addEventListener("click", () => {
+        const card = document.getElementById("qotdCard");
+        if (card) card.classList.remove("flipped");
+      });
+    }
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        const card = document.getElementById("qotdCard");
+        if (card) card.classList.remove("flipped");
+      }
+    });
   </script>
 
   <script type="module" src="social-links.js"></script>
