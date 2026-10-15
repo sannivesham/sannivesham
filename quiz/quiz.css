@@ -37,8 +37,8 @@ body {
   inset: 0;
   z-index: -10;
   background:
-    linear-gradient(rgba(10, 5, 0, 0.78), rgba(10, 5, 0, 0.85)),
-    url("../images/quiz-bg.jpg");
+    linear-gradient(rgba(10, 5, 0, 0.72), rgba(10, 5, 0, 0.82)),
+    url("../images/quiz-bg-desktop.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -340,19 +340,24 @@ body {
 .quiz-category-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  gap: 30px;
   width: 100%;
 }
 
 .quiz-category-card {
   position: relative;
   overflow: hidden;
-  border-radius: 26px;
-  min-height: 520px;
+  border-radius: 28px;
+  min-height: 480px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  background: rgba(22, 12, 6, 0.7);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease;
   animation: quizCardRise 0.5s ease both;
 }
 
@@ -362,10 +367,22 @@ body {
 .quiz-category-grid .quiz-category-card:nth-child(4) { animation-delay: 0.26s; }
 
 .quiz-category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 36px rgba(255, 209, 102, 0.3);
+  transform: translateY(-8px) scale(1.015);
+  border-color: rgba(255, 209, 102, 0.75);
+  box-shadow: 0 20px 50px rgba(255, 209, 102, 0.22), 0 0 30px rgba(212, 175, 55, 0.25);
 }
 
+.quiz-card-picture,
+.quiz-category-card picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.quiz-card-picture img,
+.quiz-category-card picture img,
 .quiz-category-card img {
   position: absolute;
   inset: 0;
@@ -374,12 +391,13 @@ body {
   object-fit: cover;
   object-position: center top;
   z-index: 1;
-  transition: transform 0.5s ease, filter 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), filter 0.6s ease;
 }
 
+.quiz-category-card:hover picture img,
 .quiz-category-card:hover img {
-  transform: scale(1.08);
-  filter: brightness(1.08);
+  transform: scale(1.06);
+  filter: brightness(1.08) saturate(1.05);
 }
 
 .quiz-category-card::before {
@@ -388,22 +406,22 @@ body {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.88) 0%,
-    rgba(0, 0, 0, 0.55) 35%,
-    rgba(0, 0, 0, 0.1) 65%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(10, 5, 2, 0.95) 0%,
+    rgba(10, 5, 2, 0.72) 40%,
+    rgba(10, 5, 2, 0.25) 70%,
+    rgba(10, 5, 2, 0.05) 100%
   );
   z-index: 2;
-  transition: background 0.3s ease;
+  transition: background 0.4s ease;
 }
 
 .quiz-category-card:hover::before {
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.94) 0%,
-    rgba(0, 0, 0, 0.6) 40%,
-    rgba(0, 0, 0, 0.15) 70%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(10, 5, 2, 0.98) 0%,
+    rgba(10, 5, 2, 0.76) 45%,
+    rgba(10, 5, 2, 0.2) 75%,
+    rgba(10, 5, 2, 0) 100%
   );
 }
 
@@ -411,33 +429,40 @@ body {
   position: relative;
   z-index: 3;
   width: 100%;
-  padding: 30px 25px;
+  padding: 30px 24px 26px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .quiz-card-overlay h2 {
   color: #ffd166;
-  font-size: 34px;
-  margin: 0 0 8px;
+  font-size: 36px;
+  margin: 0 0 4px;
   font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 209, 102, 0.35);
 }
 
 .community-score {
-  color: white;
+  color: #e6dac8;
   opacity: 0.95;
-  margin: 6px 0;
-  font-size: 16px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  margin: 4px 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.3px;
 }
 
 .quiz-card-overlay span {
   display: block;
   color: #ffd166;
   font-size: 34px;
-  font-weight: bold;
+  font-weight: 800;
   margin-bottom: 20px;
-  text-shadow: 0 0 16px rgba(255, 209, 102, 0.4);
+  text-shadow: 0 0 20px rgba(255, 209, 102, 0.5), 0 2px 10px rgba(0, 0, 0, 0.9);
+  font-family: 'Outfit', "Noto Serif Telugu", sans-serif;
 }
 
 .quiz-card-buttons {
@@ -448,6 +473,7 @@ body {
   flex-wrap: nowrap;
   padding: 0;
   width: 100%;
+  max-width: 440px;
 }
 
 .quiz-card-buttons button {
@@ -987,7 +1013,16 @@ body {
 /* =========================================================
    MOBILE RESPONSIVENESS & ADVANCED ALIGNMENT (SUPER COOL OVERHAUL)
    ========================================================= */
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+  /* Mobile Background */
+  .quiz-bg {
+    background:
+      linear-gradient(rgba(10, 5, 0, 0.65), rgba(10, 5, 0, 0.82)),
+      url("../images/quiz-bg-mobile.jpg") !important;
+    background-size: cover !important;
+    background-position: center top !important;
+  }
+
   /* 1. Navbar - Clean pill that never sticks or covers content */
   .quiz-navbar {
     width: 100% !important;
@@ -1125,32 +1160,32 @@ body {
   /* 6. Category Quiz Grid */
   .quiz-category-grid {
     grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    gap: 20px !important;
   }
 
   .quiz-category-card {
-    min-height: 280px !important;
-    max-height: 330px !important;
-    border-radius: 20px !important;
+    min-height: 400px !important;
+    max-height: 460px !important;
+    border-radius: 24px !important;
   }
 
   .quiz-card-overlay {
-    padding: 16px 14px 18px !important;
+    padding: 22px 16px 22px !important;
   }
 
   .quiz-category-card h2 {
-    font-size: 24px !important;
+    font-size: 28px !important;
     margin-bottom: 4px !important;
   }
 
   .community-score {
-    font-size: 12.5px !important;
-    margin: 2px 0 !important;
+    font-size: 13.5px !important;
+    margin: 3px 0 1px !important;
   }
 
   .quiz-category-card span {
-    font-size: 24px !important;
-    margin-bottom: 12px !important;
+    font-size: 28px !important;
+    margin-bottom: 16px !important;
   }
 
   .quiz-card-buttons {
@@ -1174,9 +1209,9 @@ body {
     gap: 6px !important;
     min-height: 44px !important;
     padding: 10px 8px !important;
-    font-size: 13.5px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
-    border-radius: 24px !important;
+    border-radius: 999px !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
