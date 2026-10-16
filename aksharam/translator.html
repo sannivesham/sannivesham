@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translator — Sannivesham Aksharam</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --maroon:   #6B1B3A;
+      --maroon-d: #4a1228;
+      --gold:     #C9A24B;
+      --cream:    #F5EDD8;
+      --cream-d:  #EDE0C4;
+      --text:     #1a0a12;
+      --text-dim: #6b5060;
+      --border:   rgba(107,27,58,0.15);
+      --shadow:   rgba(107,27,58,0.12);
+    }
+
+    html, body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(245,237,216,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      text-decoration: none;
+    }
+    .nav-brand-te {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--maroon);
+      font-weight: 700;
+    }
+    .nav-brand-en {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--maroon); }
+
+    .nav-signin {
+      padding: 9px 22px;
+      border-radius: 30px;
+      background: var(--maroon);
+      color: white;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-signin:hover { background: var(--maroon-d); }
+
+    /* ── PAGE ── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .page-eyebrow::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--maroon);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .page-subtitle {
+      color: var(--text-dim);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    /* ── LANG BAR ── */
+    .lang-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .lang-tab {
+      flex: 1;
+      padding: 16px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .lang-tab.active {
+      background: var(--maroon);
+      color: white;
+    }
+    .lang-tab:hover:not(.active) { background: var(--cream-d); }
+
+    .lang-swap {
+      padding: 0 20px;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .swap-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      color: var(--maroon);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+    .swap-btn:hover {
+      background: var(--maroon);
+      color: white;
+      transform: rotate(180deg);
+    }
+
+    /* ── TRANSLATOR GRID ── */
+    .translator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .t-panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .t-panel-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .t-panel-lang {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--maroon);
+    }
+
+    .t-panel-action {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+    .t-panel-action:hover {
+      background: var(--cream);
+      color: var(--maroon);
+    }
+
+    .t-textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 220px;
+      padding: 20px;
+      border: none;
+      outline: none;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text);
+      background: transparent;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+    .t-textarea::placeholder { color: #b0a0a8; }
+
+    .t-output {
+      flex: 1;
+      padding: 20px;
+      min-height: 220px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    .t-output-placeholder { color: #c0b0b8; font-style: italic; }
+
+    .t-panel-foot {
+      padding: 10px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Loading dots */
+    .loading-dots {
+      display: none;
+      gap: 5px;
+      padding: 20px;
+    }
+    .loading-dots.show { display: flex; }
+    .loading-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--maroon);
+      animation: dotB 1s infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotB {
+      0%,80%,100% { transform: scale(0.5); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ── ACTION ROW ── */
+    .action-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 13px 36px;
+      border-radius: 30px;
+      border: none;
+      background: var(--maroon);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover { background: var(--maroon-d); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-outline {
+      padding: 13px 24px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--maroon);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-outline:hover { border-color: var(--maroon); background: var(--cream); }
+
+    .hint-text {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    .error-msg {
+      display: none;
+      color: #b91c1c;
+      font-size: 0.88rem;
+      padding: 10px 16px;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── QUICK PHRASES ── */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .phrases-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+
+    .phrase-chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .phrase-chip:hover {
+      border-color: var(--maroon);
+      background: var(--maroon);
+      color: white;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--maroon);
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* Hamburger toggle button */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      z-index: 220;
+      flex-shrink: 0;
+    }
+    .nav-toggle span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--maroon);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    .nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(36, 27, 47, 0.42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 205;
+    }
+    .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: 0; right: 0;
+        height: 100dvh;
+        width: min(80vw, 320px);
+        background: var(--cream);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 6rem 2rem 2rem;
+        box-shadow: -14px 0 36px -16px rgba(36, 27, 47, 0.3);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 210;
+      }
+      .nav-links.is-open { transform: translateX(0); }
+      .nav-links a {
+        width: 100%;
+        padding: 0.85rem 0;
+        font-size: 1.05rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links a.nav-signin {
+        text-align: center;
+        margin-top: 1rem;
+        border-bottom: none;
+        display: block;
+        width: 100%;
+      }
+      .nav-overlay { display: block; }
+      body.nav-locked { overflow: hidden; }
+
+      .translator-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 2rem; }
+      nav { padding: 0 20px; }
+      .page { padding: 40px 16px 80px; }
+      .hint-text { display: none; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-brand">
+      <span class="nav-brand-te">సన్నివేశం అక్షరం</span>
+      <span class="nav-brand-en">Sannivesham Aksharam</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="mainNav">
+      <a href="dashboard.html">Roadmap</a>
+      <a href="translator.html" class="active">Translator</a>
+      <a href="dictionary.html">Dictionary</a>
+      <a href="signin.html" class="nav-signin" id="authLink">Sign In</a>
+    </div>
+    <div class="nav-overlay" id="navOverlay"></div>
+  </nav>
+
+  <div class="page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <div class="page-eyebrow">Live Translator</div>
+      <h1 class="page-title">Telugu ⇄ English</h1>
+      <p class="page-subtitle">
+        Instantly translate between Telugu and English.
+        Type a word, sentence, or paragraph — results appear in seconds.
+      </p>
+    </div>
+
+    <!-- LANG BAR -->
+    <div class="lang-bar">
+      <button class="lang-tab active" id="fromTab">
+        <span>తె</span> Telugu
+      </button>
+      <div class="lang-swap">
+        <button class="swap-btn" id="swapBtn" title="Swap">⇄</button>
+      </div>
+      <button class="lang-tab" id="toTab">
+        <span>En</span> English
+      </button>
+    </div>
+
+    <!-- TRANSLATOR GRID -->
+    <div class="translator-grid">
+
+      <!-- INPUT -->
+      <div class="t-panel">
+        <div class="t-panel-head">
+          <span class="t-panel-lang" id="inputLang">Telugu</span>
+          <button class="t-panel-action" id="clearBtn">Clear</button>
+        </div>
+        <textarea
+          class="t-textarea"
+          id="inputText"
+          placeholder="Type here..."
+          maxlength="5000"
+        ></textarea>
+        <div class="t-panel-foot">
+          <span class="char-count"><span id="charCount">0</span> / 5000</span>
+        </div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="t-panel">
+        <div class="t-panel-head">
+          <span class="t-panel-lang" id="outputLang">English</span>
+          <button class="t-panel-action" id="copyBtn">Copy</button>
+        </div>
+        <div class="loading-dots" id="loadingDots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="t-output" id="outputText">
+          <span class="t-output-placeholder">Translation appears here...</span>
+        </div>
+        <div class="t-panel-foot"></div>
+      </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <p class="error-msg" id="errorMsg">Translation failed. Please try again.</p>
+
+    <div class="action-row">
+      <button class="btn-primary" id="translateBtn">Translate</button>
+      <button class="btn-outline" id="copyBtnAlt">📋 Copy translation</button>
+      <span class="hint-text">Ctrl + Enter to translate</span>
+    </div>
+
+    <!-- QUICK PHRASES -->
+    <p class="section-label">Quick phrases</p>
+    <div class="phrases-grid" id="phrasesGrid"></div>
+
+    <!-- FEATURES -->
+    <p class="section-label">Why use this</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant results</div>
+        <div class="feature-desc">Results in under a second — no page reload, no waiting.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">Both directions</div>
+        <div class="feature-desc">Telugu → English or English → Telugu. Swap anytime.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🙏</div>
+        <div class="feature-title">Cultural context</div>
+        <div class="feature-desc">Handles devotional phrases, slokas, and everyday Telugu naturally.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <span style="font-weight:600; color:var(--maroon);">© 2026 సన్నివేశం అక్షరం</span>
+      <span>A companion project to <a href="https://sannivesham.com" target="_blank" rel="noopener" style="color:var(--maroon); font-weight:600; text-decoration:none;">Sannivesham</a></span>
+    </div>
+    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+      <a href="courses.html" style="color:var(--text-dim); text-decoration:none;">Courses</a>
+      <a href="translator.html" style="color:var(--maroon); text-decoration:none; font-weight:600;">Translator</a>
+      <a href="dictionary.html" style="color:var(--text-dim); text-decoration:none;">Dictionary</a>
+      <a href="contact.html" style="color:var(--text-dim); text-decoration:none;">Contact</a>
+      <a href="pp.html" style="color:var(--text-dim); text-decoration:none;">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <script>
+    let fromLang = "te";
+    let toLang = "en";
+
+    const quickPhrases = {
+      te: [
+        "నమస్కారం", "ధన్యవాదాలు", "ఎలా ఉన్నారు?",
+        "శుభోదయం", "శుభ రాత్రి", "జయ శ్రీ రామ్",
+        "ఓం నమః శివాయ", "హరే కృష్ణ", "దేవుడు మీకు సహాయం చేయాలి"
+      ],
+      en: [
+        "Hello", "Thank you", "How are you?",
+        "Good morning", "Good night", "Jai Shri Ram",
+        "Om Namah Shivaya", "Hare Krishna", "God bless you"
+      ]
+    };
+
+    const langNames = { te: "Telugu", en: "English" };
+
+    const inputText    = document.getElementById("inputText");
+    const outputText   = document.getElementById("outputText");
+    const translateBtn = document.getElementById("translateBtn");
+    const clearBtn     = document.getElementById("clearBtn");
+    const copyBtn      = document.getElementById("copyBtn");
+    const copyBtnAlt   = document.getElementById("copyBtnAlt");
+    const swapBtn      = document.getElementById("swapBtn");
+    const loadingDots  = document.getElementById("loadingDots");
+    const charCount    = document.getElementById("charCount");
+    const errorMsg     = document.getElementById("errorMsg");
+    const phrasesGrid  = document.getElementById("phrasesGrid");
+    const fromTab      = document.getElementById("fromTab");
+    const toTab        = document.getElementById("toTab");
+
+    function updateUI() {
+      document.getElementById("inputLang").innerText  = langNames[fromLang];
+      document.getElementById("outputLang").innerText = langNames[toLang];
+
+      fromTab.innerHTML = fromLang === "te"
+        ? "<span>తె</span> Telugu"
+        : "<span>En</span> English";
+      toTab.innerHTML = toLang === "te"
+        ? "<span>తె</span> Telugu"
+        : "<span>En</span> English";
+
+      fromTab.classList.add("active");
+      toTab.classList.remove("active");
+
+      inputText.placeholder = fromLang === "te" ? "ఇక్కడ టైప్ చేయండి..." : "Type here...";
+      renderPhrases();
+    }
+
+    function handleSwap() {
+      const prev = outputText.innerText;
+      const hasOutput = !outputText.querySelector(".t-output-placeholder");
+      [fromLang, toLang] = [toLang, fromLang];
+      if (hasOutput && prev.trim()) {
+        inputText.value = prev.trim();
+        charCount.innerText = inputText.value.length;
+      }
+      outputText.innerHTML = `<span class="t-output-placeholder">${fromLang === "te" ? "అనువాదం ఇక్కడ కనిపిస్తుంది..." : "Translation appears here..."}</span>`;
+      errorMsg.classList.remove("show");
+      updateUI();
+    }
+
+    swapBtn.addEventListener("click", handleSwap);
+    fromTab.addEventListener("click", () => {
+      if (fromLang !== "te") handleSwap();
+    });
+    toTab.addEventListener("click", () => {
+      if (fromLang !== "en") handleSwap();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      inputText.value = "";
+      charCount.innerText = "0";
+      outputText.innerHTML = `<span class="t-output-placeholder">${fromLang === "te" ? "అనువాదం ఇక్కడ కనిపిస్తుంది..." : "Translation appears here..."}</span>`;
+      errorMsg.classList.remove("show");
+    });
+
+    inputText.addEventListener("input", () => {
+      charCount.innerText = inputText.value.length;
+    });
+
+    async function copyText() {
+      const text = outputText.innerText;
+      if (!outputText.querySelector(".t-output-placeholder") && text.trim()) {
+        await navigator.clipboard.writeText(text).catch(() => {});
+        copyBtn.innerText = "Copied!";
+        copyBtnAlt.innerText = "✅ Copied!";
+        setTimeout(() => {
+          copyBtn.innerText = "Copy";
+          copyBtnAlt.innerText = "📋 Copy translation";
+        }, 2000);
+      }
+    }
+
+    copyBtn.addEventListener("click", copyText);
+    copyBtnAlt.addEventListener("click", copyText);
+
+    async function translate() {
+      const text = inputText.value.trim();
+      if (!text) return;
+
+      translateBtn.disabled = true;
+      loadingDots.classList.add("show");
+      outputText.innerHTML = "";
+      errorMsg.classList.remove("show");
+
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        let result = "";
+        if (data && data[0]) {
+          data[0].forEach(part => { if (part[0]) result += part[0]; });
+        }
+
+        if (result) {
+          outputText.innerText = result;
+        } else {
+          throw new Error("empty");
+        }
+
+      } catch(e) {
+        errorMsg.classList.add("show");
+        outputText.innerHTML = `<span class="t-output-placeholder">${fromLang === "te" ? "అనువాదం ఇక్కడ కనిపిస్తుంది..." : "Translation appears here..."}</span>`;
+      } finally {
+        loadingDots.classList.remove("show");
+        translateBtn.disabled = false;
+      }
+    }
+
+    translateBtn.addEventListener("click", translate);
+    inputText.addEventListener("keydown", e => {
+      if (e.ctrlKey && e.key === "Enter") translate();
+    });
+
+    function renderPhrases() {
+      phrasesGrid.innerHTML = "";
+      (quickPhrases[fromLang] || []).forEach(phrase => {
+        const chip = document.createElement("button");
+        chip.className = "phrase-chip";
+        chip.innerText = phrase;
+        chip.addEventListener("click", () => {
+          inputText.value = phrase;
+          charCount.innerText = phrase.length;
+          translate();
+        });
+        phrasesGrid.appendChild(chip);
+      });
+    }
+
+    updateUI();
+  </script>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contact Us | Sannivesham Aksharam</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .contact-container {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      text-align: center;
+      position: relative;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #7A2048;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #222;
+      background: #f7f7f7;
+      padding: 18px;
+      margin: 15px 0;
+      border-radius: 14px;
+      transition: 0.2s;
+      text-align: left;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .icon {
+      font-size: 28px;
+      width: 50px;
+      text-align: center;
+      margin-right: 15px;
+    }
+
+    .contact-info h3 {
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .contact-info p {
+      font-size: 14px;
+      color: #666;
+      word-break: break-word;
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #888;
+    }
+    .footer a {
+      color: #7A2048;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 400px) {
+      .contact-container {
+        padding: 30px 18px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contact-container">
+
+    <a href="index.html" class="back-link">← Back to Aksharam</a>
+
+    <!-- Logo -->
+    <img src="logo.png" alt="Sannivesham Logo" class="logo">
+
+    <h1>Contact Us</h1>
+
+    <p class="subtitle">
+      We'd love to hear from you. Reach out to us anytime.
+    </p>
+
+    <!-- EMAIL -->
+    <a href="mailto:web.sannivesham@gmail.com" class="contact-card">
+
+      <div class="icon">📧</div>
+
+      <div class="contact-info">
+        <h3>Email</h3>
+        <p>web.sannivesham@gmail.com</p>
+      </div>
+
+    </a>
+
+
+    <!-- PHONE -->
+    <a href="tel:+919493226037" class="contact-card">
+
+      <div class="icon">📞</div>
+
+      <div class="contact-info">
+        <h3>Phone</h3>
+        <p>+91 94932 26037</p>
+      </div>
+
+    </a>
+
+
+    <div class="footer">
+      © 2026 Sannivesham Aksharam. <a href="https://sannivesham.com" target="_blank" rel="noopener">Visit Sannivesham</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

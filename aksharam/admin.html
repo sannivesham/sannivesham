@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Studio — Sannivesham Aksharam</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ramabhadra&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+<!-- Admin Top Nav -->
+<header class="admin-navbar">
+  <div class="admin-brand">
+    <a href="index.html" style="color: var(--ivory); font-family: var(--font-telugu); font-size: 1.3rem; text-decoration: none;">
+      సన్నివేశం అక్షరం
+    </a>
+    <span class="admin-badge">Admin Studio</span>
+  </div>
+
+  <div class="admin-nav-actions">
+    <a href="dashboard.html" class="btn-admin btn-admin-ghost">
+      👀 Preview Learner View
+    </a>
+    <button type="button" class="btn-admin btn-admin-ghost" id="btnSeedDefaultCurriculum" title="Populate full 4-milestone rich syllabus">
+      🌱 Seed Default Curriculum
+    </button>
+    <button type="button" class="btn-admin btn-admin-gold" id="btnSaveToCloud">
+      ☁️ Save & Sync to Firebase
+    </button>
+    <button type="button" class="btn-admin btn-admin-ghost" id="btnAdminLogout">
+      🚪 Sign Out
+    </button>
+  </div>
+</header>
+
+<!-- Main Admin Container -->
+<main class="admin-container" id="adminMainContainer" style="display: none;">
+  <!-- Intro Strip -->
+  <div class="admin-intro-strip">
+    <div class="admin-intro-text">
+      <h2>రోడ్‌మ్యాప్ & పాఠాల నిర్వహణ</h2>
+      <p>Create and customize milestones, add unlimited sections, and attach videos, photos, matter, match games, and quizzes with realtime cloud sync.</p>
+    </div>
+    <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
+      <span id="adminSyncStatus" style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--teal); font-weight: 600;">
+        🟢 In sync with Firestore
+      </span>
+      <button type="button" class="btn-admin btn-admin-teal" id="btnOpenAddMilestoneModal">
+        + Add New Milestone
+      </button>
+    </div>
+  </div>
+
+  <!-- Milestones Tree -->
+  <div class="admin-milestones-tree" id="adminMilestonesTreeContainer">
+    <!-- Populated dynamically by admin.js -->
+  </div>
+</main>
+
+<!-- Admin Auth Lockout Screen (Shown when not authenticated as admin) -->
+<div id="adminLockoutScreen" style="display: none;">
+  <div class="admin-lockout-box">
+    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔒</div>
+    <h2 style="font-family: var(--font-telugu); color: var(--maroon-dark); margin: 0 0 0.5rem;">నిర్వాహక లాగిన్ (Admin Portal)</h2>
+    <p style="color: var(--ink-soft); font-size: 0.92rem; margin: 0 0 1.5rem;">
+      Enter your administrator credentials or Admin Passcode to access the Curriculum Creator Studio.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+      <div class="form-field">
+        <label>Admin Email</label>
+        <input type="email" id="adminAuthEmail" placeholder="admin@sannivesham.com">
+      </div>
+      <div class="form-field">
+        <label>Admin Password / Passcode</label>
+        <input type="password" id="adminAuthPassword" placeholder="Enter password or admin PIN (default: aksharam2026)">
+      </div>
+      <button type="button" class="btn btn-primary" id="btnAdminSubmitLogin" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+        Sign In as Administrator →
+      </button>
+      <p id="adminAuthError" style="color: #DC2626; font-size: 0.85rem; text-align: center; margin: 0; min-height: 1.2rem;"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL: ADD / EDIT MILESTONE                -->
+<!-- ========================================== -->
+<div class="admin-modal-backdrop" id="modalMilestoneBackdrop">
+  <div class="admin-modal-window">
+    <div class="admin-modal-header">
+      <h3 id="modalMilestoneTitle">Add Milestone</h3>
+      <button type="button" class="btn-icon-sm" onclick="closeAllModals()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="editMilestoneId">
+      <div class="form-field">
+        <label>Milestone Title in Telugu (శీర్షిక)</label>
+        <input type="text" id="inputMilestoneTitle" placeholder="e.g. వర్ణమాల — అచ్చులు">
+      </div>
+      <div class="form-field">
+        <label>English Subtitle</label>
+        <input type="text" id="inputMilestoneTitleEn" placeholder="e.g. Alphabet — Vowels & Foundations">
+      </div>
+      <div class="form-field">
+        <label>Level / Badge Tag</label>
+        <input type="text" id="inputMilestoneBadge" placeholder="e.g. Level 1 • Foundations">
+      </div>
+      <div class="form-field">
+        <label>Emoji Icon</label>
+        <input type="text" id="inputMilestoneIcon" placeholder="e.g. 🔤, 🗣️, 📖, 🌺">
+      </div>
+      <div class="form-field">
+        <label>Color Code (Hex)</label>
+        <input type="text" id="inputMilestoneColor" value="#7A2048">
+      </div>
+      <div class="form-field">
+        <label>Description</label>
+        <textarea id="inputMilestoneDesc" placeholder="Brief summary of what this milestone teaches..."></textarea>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button type="button" class="btn-admin btn-admin-ghost" style="color: var(--ink);" onclick="closeAllModals()">Cancel</button>
+      <button type="button" class="btn-admin btn-admin-gold" id="btnSaveMilestone">Save Milestone</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL: ADD / EDIT SECTION                  -->
+<!-- ========================================== -->
+<div class="admin-modal-backdrop" id="modalSectionBackdrop">
+  <div class="admin-modal-window">
+    <div class="admin-modal-header">
+      <h3 id="modalSectionHeading">Add Section</h3>
+      <button type="button" class="btn-icon-sm" onclick="closeAllModals()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="sectionParentMilestoneId">
+      <input type="hidden" id="editSectionId">
+      <div class="form-field">
+        <label>Section Title in Telugu (పాఠం పేరు)</label>
+        <input type="text" id="inputSectionTitle" placeholder="e.g. అ నుండి ఋ వరకు — First 7 Vowels">
+      </div>
+      <div class="form-field">
+        <label>Subtitle / Included Concepts</label>
+        <input type="text" id="inputSectionSubtitle" placeholder="e.g. Letters అ, ఆ, ఇ, ఈ, ఉ, ఊ, ఋ">
+      </div>
+      <div class="form-field">
+        <label>Estimated Duration</label>
+        <input type="text" id="inputSectionDuration" placeholder="e.g. 12 mins">
+      </div>
+      <div class="form-field">
+        <label>Section Summary</label>
+        <textarea id="inputSectionSummary" placeholder="Brief explanation of this section's core goal..."></textarea>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button type="button" class="btn-admin btn-admin-ghost" style="color: var(--ink);" onclick="closeAllModals()">Cancel</button>
+      <button type="button" class="btn-admin btn-admin-gold" id="btnSaveSection">Save Section</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL: ADD / EDIT CONTENT ITEM             -->
+<!-- ========================================== -->
+<div class="admin-modal-backdrop" id="modalItemBackdrop">
+  <div class="admin-modal-window">
+    <div class="admin-modal-header">
+      <h3 id="modalItemHeading">Add Content Block</h3>
+      <button type="button" class="btn-icon-sm" onclick="closeAllModals()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="itemParentMilestoneId">
+      <input type="hidden" id="itemParentSectionId">
+      <input type="hidden" id="editItemIndex">
+
+      <div class="form-field">
+        <label>Content Block Type</label>
+        <select id="selectItemType">
+          <option value="matter">📖 Matter / Rich Reading (వివరణ)</option>
+          <option value="video">🎥 Video Lesson (వీడియో)</option>
+          <option value="photos">🖼️ Photos / Flashcard Gallery (చిత్రాలు)</option>
+          <option value="match">🧩 Match the Following Game (జతపరచండి)</option>
+          <option value="quiz">❓ Interactive Quiz (క్విజ్)</option>
+        </select>
+      </div>
+
+      <!-- FIELDS FOR MATTER -->
+      <div id="fieldsMatter" class="item-type-fields">
+        <div class="form-field">
+          <label>Title</label>
+          <input type="text" id="inputMatterTitle" placeholder="e.g. అచ్చుల పరిచయం • Introduction to Vowels">
+        </div>
+        <div class="form-field">
+          <label>Matter / Content (Markdown supported)</label>
+          <textarea id="inputMatterContent" rows="8" placeholder="Write lesson notes, vocabulary, pronunciation guides..."></textarea>
+        </div>
+      </div>
+
+      <!-- FIELDS FOR VIDEO -->
+      <div id="fieldsVideo" class="item-type-fields" style="display: none;">
+        <div class="form-field">
+          <label>Video Title</label>
+          <input type="text" id="inputVideoTitle" placeholder="e.g. Pronunciation Masterclass">
+        </div>
+        <div class="form-field">
+          <label>YouTube Embed or Video URL</label>
+          <input type="text" id="inputVideoUrl" placeholder="https://www.youtube.com/watch?v=... or embed URL">
+        </div>
+        <div class="form-field">
+          <label>Caption / Notes</label>
+          <input type="text" id="inputVideoCaption" placeholder="Key takeaways from this video...">
+        </div>
+      </div>
+
+      <!-- FIELDS FOR PHOTOS -->
+      <div id="fieldsPhotos" class="item-type-fields" style="display: none;">
+        <div class="form-field">
+          <label>Photo Gallery Title</label>
+          <input type="text" id="inputPhotosTitle" placeholder="e.g. చిత్ర పదజాలం • Illustrated Vocabulary">
+        </div>
+        <div class="form-field">
+          <label>Photos List (JSON Format: [{"url": "...", "label": "అ — అమ్మ", "caption": "Mother"}])</label>
+          <textarea id="inputPhotosJson" rows="6" placeholder='[{"url": "https://...", "label": "అ — అమ్మ (Amma)", "caption": "Mother"}]'></textarea>
+          <small style="color: var(--ink-soft); font-size: 0.78rem;">Enter valid JSON array of photo objects with url, label, and caption.</small>
+        </div>
+      </div>
+
+      <!-- FIELDS FOR MATCH THE FOLLOWING -->
+      <div id="fieldsMatch" class="item-type-fields" style="display: none;">
+        <div class="form-field">
+          <label>Game Title</label>
+          <input type="text" id="inputMatchTitle" placeholder="e.g. జతపరచండి • Match Letters & Words">
+        </div>
+        <div class="form-field">
+          <label>Instructions</label>
+          <input type="text" id="inputMatchInstructions" placeholder="e.g. Tap a Telugu letter on the left, then tap its matching word!">
+        </div>
+        <div class="form-field">
+          <label>Matching Pairs (JSON Format: [{"left": "అ", "right": "అమ్మ (Mother)"}])</label>
+          <textarea id="inputMatchJson" rows="6" placeholder='[{"left": "అ (a)", "right": "అమ్మ (Mother)"}, {"left": "ఆ (aa)", "right": "ఆవు (Cow)"}]'></textarea>
+        </div>
+      </div>
+
+      <!-- FIELDS FOR QUIZ -->
+      <div id="fieldsQuiz" class="item-type-fields" style="display: none;">
+        <div class="form-field">
+          <label>Quiz Title</label>
+          <input type="text" id="inputQuizTitle" placeholder="e.g. అక్షర పరీక్ష • Knowledge Check Quiz">
+        </div>
+        <div class="form-field">
+          <label>Questions (JSON Format: [{"question": "...", "options": ["A","B","C","D"], "answerIndex": 1, "explanation": "..."}])</label>
+          <textarea id="inputQuizJson" rows="8" placeholder='[{"question": "Which vowel produces the prolonged aa sound?", "options": ["అ","ఆ","ఇ","ఉ"], "answerIndex": 1, "explanation": "ఆ is the long vowel"}]'></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button type="button" class="btn-admin btn-admin-ghost" style="color: var(--ink);" onclick="closeAllModals()">Cancel</button>
+      <button type="button" class="btn-admin btn-admin-gold" id="btnSaveItem">Save Content Block</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+<script type="module" src="admin.js"></script>
+</body>
+</html>

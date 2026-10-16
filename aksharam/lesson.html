@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Lesson — Sannivesham Aksharam</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ramabhadra&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson-view-page">
+
+<!-- Top Bar -->
+<header class="lesson-top-bar">
+  <div class="lesson-top-bar-inner">
+    <a href="dashboard.html" class="lesson-back-btn">
+      ← Back to Roadmap
+    </a>
+
+    <div class="lesson-heading-center">
+      <span class="lesson-milestone-crumb" id="headerMilestoneCrumb">వర్ణమాల — అచ్చులు</span>
+      <h1 class="lesson-top-title" id="headerSectionTitle">అ నుండి ఋ వరకు — First 7 Vowels</h1>
+    </div>
+
+    <div class="lesson-header-actions">
+      <span class="completion-status-pill status-pending" id="sectionStatusPill">In Progress</span>
+    </div>
+  </div>
+</header>
+
+<main class="lesson-main-arena">
+  <!-- Content Tabs Navigation Strip -->
+  <div class="content-tabs-strip" id="contentTabsStrip">
+    <!-- Populated dynamically by lesson.js: Matter, Video, Photos, Match, Quiz -->
+  </div>
+
+  <!-- Tab Panels Container -->
+  <div id="tabPanelsContainer">
+    <!-- Loading skeleton -->
+    <div class="panel-card" style="text-align: center; padding: 4rem 1rem;">
+      <p style="font-family: var(--font-telugu); font-size: 1.3rem; color: var(--maroon);">పాఠం లోడ్ అవుతోంది... <span class="mono-tag">loading section</span></p>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Lesson Navigation Bar -->
+<nav class="lesson-bottom-nav">
+  <div class="lesson-bottom-nav-inner">
+    <button type="button" class="btn-nav-prev" id="btnPrevSection">
+      ← Previous Section
+    </button>
+
+    <button type="button" class="btn-mark-complete" id="btnCompleteSection">
+      ✓ Mark Section Complete (+50 XP)
+    </button>
+
+    <button type="button" class="btn-nav-next" id="btnNextSection">
+      Next Section →
+    </button>
+  </div>
+</nav>
+
+<script type="module" src="main.js"></script>
+<script type="module" src="lesson.js"></script>
+</body>
+</html>

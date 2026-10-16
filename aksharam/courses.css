@@ -1,0 +1,401 @@
+:root {
+  --maroon: #7A2048;
+  --maroon-dark: #591636;
+  --gold: #C9A227;
+  --teal: #1F6F5C;
+  --ivory: #FAF6F0;
+  --ivory-deep: #F1EADD;
+  --ink: #241B2F;
+  --ink-soft: #5B5265;
+
+  --font-telugu: 'Ramabhadra', sans-serif;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Work Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { overflow-x: hidden; }
+
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62em;
+  font-weight: 500;
+  color: var(--teal);
+  background: rgba(31, 111, 92, 0.09);
+  border: 1px solid rgba(31, 111, 92, 0.22);
+  border-radius: 4px;
+  padding: 0.12em 0.5em;
+  margin-left: 0.5em;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.mono-tag--lg {
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Shared typography utilities used across index / courses / lesson pages */
+.eyebrow {
+  font-family: var(--font-telugu);
+  font-size: 1.1rem;
+  color: var(--maroon);
+  margin: 0 0 1rem;
+}
+.eyebrow-small {
+  font-family: var(--font-telugu);
+  color: var(--maroon);
+  font-size: 0.95rem;
+  margin: 0 0 0.6rem;
+}
+.eyebrow-small.centered { text-align: center; }
+.hero-sub {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 34rem;
+  margin: 0 0 2.2rem;
+}
+.section-sub {
+  text-align: center;
+  color: var(--ink-soft);
+  margin: 0 0 3rem;
+}
+.stop-index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: transform 0.15s ease, background 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--maroon); color: var(--ivory); }
+.btn-primary:hover { background: var(--maroon-dark); }
+.btn-ghost {
+  background: transparent;
+  color: var(--maroon);
+  border: 1.5px solid var(--maroon);
+}
+.btn-ghost:hover { background: rgba(122, 32, 72, 0.06); }
+.btn-disabled { opacity: 0.5; pointer-events: none; }
+.btn-lg { padding: 1rem 2.2rem; font-size: 1.05rem; }
+
+/* ---------- HEADER + NAV ---------- */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.3rem 6vw;
+  position: relative;
+  z-index: 200;
+}
+
+.logo {
+  font-family: var(--font-telugu);
+  font-size: 1.5rem;
+  color: var(--maroon-dark);
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.logo-en {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.main-nav { display: flex; align-items: center; gap: 2rem; }
+.main-nav a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.main-nav a:hover { color: var(--maroon); }
+.main-nav a.active { color: var(--maroon); font-weight: 600; }
+.nav-cta {
+  background: var(--maroon);
+  color: var(--ivory) !important;
+  padding: 0.55rem 1.3rem;
+  border-radius: 999px;
+}
+.nav-cta:hover { background: var(--maroon-dark); }
+
+/* Hamburger toggle button (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 220;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--maroon-dark);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-overlay { display: none; }
+
+@media (max-width: 720px) {
+  .nav-toggle { display: flex; }
+
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: min(80vw, 320px);
+    background: var(--ivory);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 6rem 2rem 2rem;
+    box-shadow: -14px 0 36px -16px rgba(36, 27, 47, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 210;
+  }
+  .main-nav.is-open { transform: translateX(0); }
+  .main-nav a {
+    width: 100%;
+    padding: 0.85rem 0;
+    font-size: 1.05rem;
+    border-bottom: 1px solid rgba(122, 32, 72, 0.1);
+  }
+  .main-nav a.nav-cta {
+    text-align: center;
+    margin-top: 1rem;
+    border-bottom: none;
+  }
+
+  .nav-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(36, 27, 47, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 205;
+  }
+  .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+  body.nav-locked { overflow: hidden; }
+}
+
+/* ---------- FOOTER ---------- */
+.site-footer { text-align: left; padding: 3rem 0 2.5rem; color: var(--ink-soft); font-size: 0.9rem; }
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 6vw;
+}
+.footer-logo {
+  font-family: var(--font-telugu);
+  font-size: 1.2rem;
+  color: var(--maroon-dark);
+  margin: 0 0 0.3rem;
+}
+.footer-tag { margin: 0; font-size: 0.85rem; }
+.footer-tag a { color: var(--maroon); font-weight: 600; }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { font-size: 0.9rem; color: var(--ink-soft); }
+.footer-links a:hover { color: var(--maroon); }
+
+@media (max-width: 560px) {
+  .footer-grid { flex-direction: column; align-items: flex-start; }
+}
+/* ---------- COURSES PAGE ---------- */
+.courses-hero {
+  padding: 3rem 6vw 2rem;
+  max-width: 44rem;
+}
+.courses-hero .eyebrow { margin-bottom: 0.8rem; }
+.courses-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+.courses-hero .hero-sub {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.level-block {
+  margin: 0 6vw 1.2rem;
+  border: 1px solid rgba(122, 32, 72, 0.14);
+  border-radius: 16px;
+  background: var(--ivory-deep);
+  overflow: hidden;
+}
+.level-block.level-open { background: var(--ivory); border-color: rgba(122, 32, 72, 0.28); }
+
+.level-head {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.8rem 2rem;
+}
+.level-head .stop-index {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.level-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0 0 0.3rem;
+}
+.level-head p {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin: 0;
+}
+.level-head > div { flex: 1; }
+
+.level-status {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.status-available {
+  background: rgba(31, 111, 92, 0.12);
+  color: var(--teal);
+  border: 1px solid rgba(31, 111, 92, 0.3);
+}
+.status-soon {
+  background: rgba(91, 82, 101, 0.1);
+  color: var(--ink-soft);
+  border: 1px solid rgba(91, 82, 101, 0.2);
+}
+
+.lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 2rem 2rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.lesson-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--ivory-deep);
+  border: 1px solid rgba(122, 32, 72, 0.1);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+.lesson-card:hover {
+  border-color: var(--maroon);
+  transform: translateX(4px);
+}
+
+.lesson-num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--maroon);
+  background: rgba(122, 32, 72, 0.08);
+  border-radius: 50%;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.lesson-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+.lesson-info p {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Fix: lessons 2-7 had no link and no visual state, so tapping them on
+   mobile did nothing with no explanation. They're now marked as locked. */
+.lesson-card--locked {
+  cursor: default;
+  opacity: 0.6;
+}
+.lesson-card--locked:hover { border-color: rgba(122, 32, 72, 0.1); transform: none; }
+.lesson-card--locked .lesson-num { background: rgba(91, 82, 101, 0.1); color: var(--ink-soft); }
+.lock-tag {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .level-head { flex-wrap: wrap; }
+  .level-status { order: -1; }
+}
+@media (max-width: 560px) {
+  .level-head { padding: 1.4rem 1.5rem; }
+  .lesson-list { padding: 0 1.5rem 1.5rem; }
+}

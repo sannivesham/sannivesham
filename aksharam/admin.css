@@ -1,0 +1,401 @@
+/* Sannivesham Aksharam — admin.css
+   Admin Dashboard & Curriculum Studio Styling
+*/
+
+:root {
+  --maroon: #7A2048;
+  --maroon-dark: #591636;
+  --gold: #C9A227;
+  --teal: #1F6F5C;
+  --ivory: #FAF6F0;
+  --ivory-deep: #F1EADD;
+  --ink: #241B2F;
+  --ink-soft: #5B5265;
+  --border: rgba(122, 32, 72, 0.15);
+}
+
+.admin-body {
+  background: #F8F9FA;
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* Admin Top Nav */
+.admin-navbar {
+  background: var(--maroon-dark);
+  color: var(--ivory);
+  padding: 0.9rem 4vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.admin-badge {
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.admin-nav-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.btn-admin {
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.btn-admin-gold {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.btn-admin-gold:hover {
+  background: #DFB738;
+}
+
+.btn-admin-teal {
+  background: var(--teal);
+  color: #FFF;
+}
+
+.btn-admin-teal:hover {
+  background: #185a4a;
+}
+
+.btn-admin-ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--ivory);
+}
+
+.btn-admin-ghost:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Layout */
+.admin-container {
+  max-width: 82rem;
+  margin: 2rem auto 6rem;
+  padding: 0 4vw;
+}
+
+.admin-intro-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 14px rgba(36, 27, 47, 0.04);
+}
+
+.admin-intro-text h2 {
+  font-family: var(--font-telugu);
+  font-size: 1.6rem;
+  color: var(--maroon-dark);
+  margin: 0 0 0.2rem;
+}
+
+.admin-intro-text p {
+  color: var(--ink-soft);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Milestones Tree */
+.admin-milestones-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.admin-milestone-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(36, 27, 47, 0.05);
+  overflow: hidden;
+}
+
+.admin-milestone-head {
+  background: linear-gradient(90deg, rgba(122, 32, 72, 0.05) 0%, rgba(201, 162, 39, 0.04) 100%);
+  padding: 1.2rem 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-milestone-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-milestone-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--maroon);
+  color: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.admin-milestone-titles h3 {
+  font-family: var(--font-telugu);
+  font-size: 1.25rem;
+  color: var(--maroon-dark);
+  margin: 0;
+}
+
+.admin-milestone-titles span {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.admin-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-icon-sm {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: all 0.15s ease;
+}
+
+.btn-icon-sm:hover {
+  background: var(--ivory-deep);
+  color: var(--maroon-dark);
+}
+
+.btn-danger-sm:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #F87171;
+}
+
+/* Sections List in Admin */
+.admin-sections-list {
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.admin-section-box {
+  background: #FAF8F5;
+  border: 1px solid rgba(122, 32, 72, 0.1);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+}
+
+.admin-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.admin-section-title-wrap h4 {
+  font-family: var(--font-telugu);
+  font-size: 1.1rem;
+  color: var(--maroon-dark);
+  margin: 0 0 0.2rem;
+}
+
+.admin-section-title-wrap p {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* Items Preview Grid in Section */
+.admin-items-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px dashed rgba(122, 32, 72, 0.15);
+}
+
+.item-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: #FFFFFF;
+  border: 1px solid rgba(36, 27, 47, 0.12);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.admin-item-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-add-item {
+  font-size: 0.78rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--maroon);
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.btn-add-item:hover {
+  background: var(--maroon);
+  color: #FFF;
+}
+
+/* Modals */
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(36, 27, 47, 0.5);
+  backdrop-filter: blur(4px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.admin-modal-backdrop.is-open {
+  display: flex;
+}
+
+.admin-modal-window {
+  background: #FFFFFF;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-modal-header {
+  padding: 1.2rem 1.6rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-modal-header h3 {
+  font-family: var(--font-telugu);
+  font-size: 1.3rem;
+  color: var(--maroon-dark);
+  margin: 0;
+}
+
+.admin-modal-body {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--maroon-dark);
+}
+
+.form-field input, .form-field textarea, .form-field select {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(122, 32, 72, 0.2);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.form-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.admin-modal-footer {
+  padding: 1.2rem 1.6rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  background: #FAF8F5;
+  border-radius: 0 0 18px 18px;
+}
+
+/* Admin Lockout Screen */
+.admin-lockout-box {
+  max-width: 440px;
+  margin: 5rem auto;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}

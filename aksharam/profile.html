@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — Sannivesham Aksharam</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ramabhadra&family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="logo">
+    సన్నివేశం అక్షరం
+    <span class="logo-en">Sannivesham Aksharam</span>
+  </a>
+  <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mainNav">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="main-nav" id="mainNav">
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Roadmap</a>
+    <a href="translator.html">Translator</a>
+    <a href="dictionary.html">Dictionary</a>
+    <a href="profile.html" class="nav-cta active" id="authLink">Profile</a>
+  </nav>
+  <div class="nav-overlay" id="navOverlay"></div>
+</header>
+
+<main>
+  <section class="profile-section">
+    <div class="profile-card">
+      <img id="profilePhoto" class="profile-photo" src="https://ui-avatars.com/api/?name=User&background=7A2048&color=ffffff&size=300" alt="Profile Photo">
+      
+      <h1 id="userName">User Profile</h1>
+      <p id="userEmail">learner@sannivesham.com</p>
+
+      <!-- Stats Grid -->
+      <div class="profile-info">
+        <div class="info-box">
+          <span class="label">Current Mastery</span>
+          <span class="value" id="userLevel">Level 1</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">Completed Sections</span>
+          <span class="value" id="userLessons">0</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">Daily Streak</span>
+          <span class="value" id="userStreak">1 Day</span>
+        </div>
+
+        <div class="info-box">
+          <span class="label">Total XP</span>
+          <span class="value" id="userXp">50 XP</span>
+        </div>
+      </div>
+
+      <!-- Badges Section -->
+      <div style="margin: 2rem 0; width: 100%; text-align: left;">
+        <h3 style="font-family: var(--font-telugu); font-size: 1.15rem; color: var(--maroon-dark); margin-bottom: 0.8rem; text-align: center;">
+          సాధించిన మైలురాళ్ళు & బ్యాడ్జ్‌లు <span class="mono-tag">achievements</span>
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem; text-align: center;" id="badgesGrid">
+          <div style="background: var(--ivory); padding: 0.9rem; border-radius: 12px; border: 1px solid rgba(122, 32, 72, 0.12);">
+            <div style="font-size: 1.8rem; margin-bottom: 0.2rem;">🔤</div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--maroon);">అచ్చులు సాధకుడు</span>
+          </div>
+          <div style="background: var(--ivory); padding: 0.9rem; border-radius: 12px; border: 1px solid rgba(122, 32, 72, 0.12);">
+            <div style="font-size: 1.8rem; margin-bottom: 0.2rem;">🗣️</div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--teal);">హల్లుల శోధకుడు</span>
+          </div>
+          <div style="background: var(--ivory); padding: 0.9rem; border-radius: 12px; border: 1px solid rgba(122, 32, 72, 0.12);">
+            <div style="font-size: 1.8rem; margin-bottom: 0.2rem;">⭐</div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--gold);">క్విజ్ విజేత</span>
+          </div>
+          <div style="background: var(--ivory); padding: 0.9rem; border-radius: 12px; border: 1px solid rgba(122, 32, 72, 0.12);">
+            <div style="font-size: 1.8rem; margin-bottom: 0.2rem;">🔥</div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: #E65100;">నిరంతర సాధకుడు</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
+        <a href="dashboard.html" class="btn btn-primary" style="flex: 1; min-width: 180px; text-align: center;">
+          Continue Roadmap →
+        </a>
+        <button id="logoutBtn" class="btn btn-ghost" style="flex: 1; min-width: 140px;">
+          Log Out
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-logo">సన్నివేశం అక్షరం</p>
+      <p class="footer-tag">a companion project to <a href="https://sannivesham.com" target="_blank" rel="noopener">Sannivesham</a></p>
+    </div>
+    <div class="footer-links">
+      <a href="dashboard.html">Roadmap</a>
+      <a href="translator.html">Translator</a>
+      <a href="dictionary.html">Dictionary</a>
+      <a href="contact.html">Contact</a>
+      <a href="pp.html">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="main.js"></script>
+<script type="module" src="profile.js"></script>
+</body>
+</html>
