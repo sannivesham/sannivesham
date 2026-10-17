@@ -44,7 +44,7 @@ body.temple-detail-body {
 
 .temples-title-box {
   max-width: 950px;
-  margin: 0 auto 55px;
+  margin: 0 auto 40px;
   padding: 38px 32px;
   text-align: center;
 
@@ -93,9 +93,9 @@ body.temple-detail-body {
 .temples-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 22px;
-  max-width: 1700px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px 20px;
+  max-width: 1350px;
   margin: 0 auto;
   place-items: center;
 }
@@ -142,6 +142,10 @@ body.temple-detail-body {
 .temple-card:nth-child(10) { animation-delay: 0.50s; }
 .temple-card:nth-child(11) { animation-delay: 0.55s; }
 .temple-card:nth-child(12) { animation-delay: 0.60s; }
+.temple-card:nth-child(13) { animation-delay: 0.65s; }
+.temple-card:nth-child(14) { animation-delay: 0.70s; }
+.temple-card:nth-child(15) { animation-delay: 0.75s; }
+.temple-card:nth-child(16) { animation-delay: 0.80s; }
 
 @keyframes cardRise {
   from { opacity: 0; transform: translateY(30px) scale(0.95); }
@@ -449,51 +453,8 @@ body.temple-detail-body {
 }
 
 /* =========================
-   SUBCATEGORY & TABS STYLES
+   SUBCATEGORY STYLES
 ========================= */
-
-.temple-category-tabs {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: -20px auto 35px;
-  padding: 8px 12px;
-}
-
-.temple-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
-  background: rgba(26, 14, 5, 0.72);
-  border: 1px solid rgba(255, 209, 102, 0.35);
-  border-radius: 30px;
-  color: #ffd166;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-}
-
-.temple-tab-btn:hover {
-  background: rgba(255, 209, 102, 0.20);
-  border-color: #ffd166;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 209, 102, 0.3);
-}
-
-.temple-tab-btn.active {
-  background: linear-gradient(135deg, #ffd166, #ff9800);
-  color: #120703;
-  border-color: #ffd166;
-  font-weight: 700;
-  box-shadow: 0 0 16px rgba(255, 209, 102, 0.5);
-}
 
 .temple-subcat-header {
   max-width: 1300px;
