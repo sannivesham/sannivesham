@@ -1049,7 +1049,7 @@
     <!-- TAB 1: TODAY'S PANCHANG CARD -->
     <section id="sectionToday" class="panchang-card">
       <div class="panchang-header">
-        <div class="panchang-year" id="todaySamvatsara">శ్రీ క్రోధి నామ సంవత్సరం</div>
+        <div class="panchang-year" id="todaySamvatsara">శ్రీ పరాభవ నామ సంవత్సరం</div>
         <div class="panchang-today-date" id="todayFullDate">లోడ్ అవుతోంది...</div>
       </div>
 
@@ -1122,7 +1122,7 @@
     <p>© 2026 సన్నివేశం</p>
   </footer>
 
-  <script src="../panchang-engine.js"></script>
+  <script src="../panchang-engine.js?v=20261022drik"></script>
   <script src="../i18n.js"></script>
 
   <script>
@@ -1245,7 +1245,8 @@
           { label:"⚠️ రాహుకాలం", val:p.rahuKalam, sub:"వర్జ్య సమయం", caution:true },
           { label:"⏳ యమగండం", val:p.yamagandam, sub:"వర్జ్య సమయం", caution:true },
           { label:"🛑 గుళిక కాలం", val:p.gulikaKalam, sub:"సాధారణ సమయం" },
-          { label:"🚫 దుర్ముహూర్తం & వర్జ్యం", val:p.durmuhurtham, sub:"వర్జ్యం: "+p.varjyam, caution:true },
+          { label:"🚫 దుర్ముహూర్తం", val:p.durmuhurtham, sub:"వర్జ్య కాలం", caution:true },
+          { label:"🛑 వర్జ్యం", val:p.varjyam, sub:"అశుభ సమయం", caution:true },
           { label:"🕉️ యోగం & కరణం", val:p.yogaTe+" • "+p.karanaTe, sub:"దైవ చింతనకు శ్రేష్టం" }
         ].forEach(item => {
           const d = document.createElement("div");
@@ -1335,6 +1336,7 @@
           { label:"✨ అమృత ఘడియలు", val:p.amruthaGadiyalu },
           { label:"⚠️ రాహుకాలం", val:p.rahuKalam },
           { label:"⏳ యమగండం", val:p.yamagandam },
+          { label:"🛑 గుళిక కాలం", val:p.gulikaKalam },
           { label:"🚫 దుర్ముహూర్తం", val:p.durmuhurtham },
           { label:"🛑 వర్జ్యం", val:p.varjyam },
           { label:"🕉️ యోగం & కరణం", val:p.yogaTe+" • "+p.karanaTe }
