@@ -69,7 +69,7 @@
 
       <div class="dashboard-nav">
         <button class="dash-btn active" data-section="qotdSection">Question of the Day</button>
-        <button class="dash-btn" data-section="wordOfDaySection">Word of the Day</button>
+        
         <button class="dash-btn" data-section="newQuizSection">Quiz CMS</button>
         <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
         <button class="dash-btn" data-section="eventsSection">Events</button>
@@ -810,27 +810,20 @@
             <option value="2">Correct: Option 3</option>
             <option value="3">Correct: Option 4</option>
           </select>
-          <textarea id="qotdExplanationInput" placeholder="సమాధాన వివరణ (Explanation / Detailed Answer)" rows="3" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,209,102,0.35);color:white;font-size:14px;box-sizing:border-box;resize:vertical;"></textarea>
+          <div style="background: rgba(231,76,60,0.12); border: 1px dashed rgba(231,76,60,0.45); border-radius: 14px; padding: 14px 18px; margin: 18px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div style="color: #ff6b6b; font-weight: 700; font-size: 1rem;">🔄 Reset Leaderboard & All Scores to Zero</div>
+            <div style="color: #eee; font-size: 0.85rem; margin-top: 4px;">Start fresh by resetting every user's QOD score, correct count, and streak to 0 in database.</div>
+          </div>
+          <button id="resetQotdLeaderboardBtn" type="button" style="background: #e74c3c; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s;">
+            🔄 రీసెట్ లీడర్‌బోర్డ్ (Reset All to 0)
+          </button>
+        </div>
           <button id="saveQotdBtn">Save Question</button>
           <p id="qotdMessage"></p>
         </div>
         <h3 class="admin-section-title">Scheduled Questions</h3>
         <div id="qotdList" class="cms-list"></div>
-      </div>
-
-      <!-- ═══════════════════════════════════
-           WORD OF DAY SECTION
-      ═══════════════════════════════════ -->
-      <div id="wordOfDaySection" class="dash-section">
-        <h2 class="admin-section-title">Word of the Day</h2>
-        <div class="add-event-box">
-          <input type="date" id="wordDate">
-          <textarea id="wordTextInput" placeholder="పదం / వాక్యం (Word / Sentence)"></textarea>
-          <button id="saveWordBtn">Save Word</button>
-          <p id="wordMessage"></p>
-        </div>
-        <h3 class="admin-section-title">Scheduled Words</h3>
-        <div id="wordList" class="cms-list"></div>
       </div>
 
       <!-- ═══════════════════════════════════

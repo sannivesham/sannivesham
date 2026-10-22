@@ -23,7 +23,8 @@ const questionEl = document.getElementById("quizQuestion");
 const optionButtons = document.querySelectorAll(".option-btn");
 const progressBar = document.getElementById("progressBar");
 const timer = document.getElementById("timer");
-const nextBtn = document.getElementById("nextQuestionBtn");
+const submitBtn = document.getElementById("submitAnswerBtn") || document.getElementById("nextQuestionBtn");
+const nextBtn = submitBtn;
 const quitBtn = document.getElementById("quitQuizBtn");
 
 let questions = [];
@@ -249,7 +250,10 @@ function showQuestion() {
 
   selectedAnswer = "";
   isChecking = false;
-  nextBtn.disabled = false;
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "సమర్పించండి (Submit) ✓";
+  }
 
   questionCountEl.innerText = `ప్రశ్న ${currentQuestion + 1} / ${questions.length}`;
 
@@ -276,13 +280,13 @@ function showQuestion() {
   startTimer();
 }
 
-// Instant evaluation when an option is clicked!
+// Option selection (does not submit immediately)
 optionButtons.forEach(btn => {
   btn.onclick = () => {
     if (isChecking || quizFinished) return;
     selectedAnswer = btn.dataset.answer || btn.innerText || "";
+    optionButtons.forEach(b => b.classList.remove("option-selected"));
     btn.classList.add("option-selected");
-    checkAnswer();
   };
 });
 
@@ -302,9 +306,48 @@ function startTimer() {
     }
 
     if (timeLeft <= 0) {
-      checkAnswer();
+      clearInterval(timerInterval);
+      if (selectedAnswer) {
+        checkAnswer();
+      } else {
+        timeUpAdvance();
+      }
     }
   }, 1000);
+}
+
+
+function timeUpAdvance() {
+  if (isChecking || quizFinished) return;
+  clearInterval(timerInterval);
+  isChecking = true;
+  if (submitBtn) submitBtn.disabled = true;
+
+  if (currentQuestion >= questions.length) {
+    finishQuiz();
+    return;
+  }
+
+  const q = questions[currentQuestion];
+  if (q) {
+    const correctAnswer = String(q.answer || "").trim().toLowerCase();
+    optionButtons.forEach(btn => {
+      btn.disabled = true;
+      const btnText = String(btn.dataset.answer || btn.innerText || "").trim().toLowerCase();
+      if (btnText && btnText === correctAnswer) {
+        btn.classList.add("option-correct");
+      }
+    });
+  }
+
+  currentQuestion++;
+  setTimeout(() => {
+    if (currentQuestion >= questions.length) {
+      finishQuiz();
+    } else {
+      showQuestion();
+    }
+  }, 1300);
 }
 
 function checkAnswer() {
@@ -364,10 +407,16 @@ function checkAnswer() {
   }, 1300);
 }
 
-nextBtn.onclick = () => {
-  if (isChecking || quizFinished) return;
-  checkAnswer();
-};
+if (submitBtn) {
+  submitBtn.onclick = () => {
+    if (isChecking || quizFinished) return;
+    // If no option chosen, nothing happens
+    if (!selectedAnswer) {
+      return;
+    }
+    checkAnswer();
+  };
+}
 
 quitBtn.onclick = () => {
   if (confirm("ప్రశ్నావళిని మధ్యలోనే నిష్క్రమించాలనుకుంటున్నారా?")) {

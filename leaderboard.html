@@ -542,6 +542,9 @@
       renderLeaderboard();
     });
 
+    // Fresh start benchmark date for QOD & Leaderboard
+    const QOD_RESET_DATE = "2026-10-22";
+
     // Fetch and compute all scores
     async function fetchLeaderboard() {
       try {
@@ -550,11 +553,11 @@
 
         snap.forEach((d) => {
           const ud = d.data();
-          // Extract score: check score, or correctDates length
-          let score = Number(ud.score);
-          if (isNaN(score) || score <= 0) {
-            score = Array.isArray(ud.correctDates) ? ud.correctDates.length : 0;
-          }
+          // Extract score: count valid correct dates on/after reset date (2026-10-22)
+          let validCorrect = Array.isArray(ud.correctDates)
+            ? ud.correctDates.filter(dateStr => typeof dateStr === "string" && dateStr >= QOD_RESET_DATE)
+            : [];
+          let score = validCorrect.length;
 
           // Extract name
           const rawName = ud.name || ud.displayName || ud.username || (ud.email ? ud.email.split("@")[0] : "");

@@ -328,6 +328,30 @@
       }
     }
 
+    .qotd-word-section {
+      display: flex !important;
+      justify-content: center !important;
+      max-width: 720px !important;
+      margin: 20px auto 30px auto !important;
+      padding: 0 16px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .qotd-card {
+      max-width: 680px !important;
+      width: 100% !important;
+      margin: 0 auto !important;
+      background: rgba(28, 16, 8, 0.78) !important;
+      border: 1px solid rgba(255, 209, 102, 0.35) !important;
+      border-radius: 22px !important;
+      padding: 24px !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+      box-sizing: border-box !important;
+    }
+
     .qotd-options {
       display: grid !important;
       grid-template-columns: repeat(2, 1fr) !important;
@@ -594,67 +618,23 @@
 
     <div id="qotdContainerWrap" class="qotd-container-wrap" style="display:none;">
       <div id="qotdWordSection" class="qotd-word-section">
-        <!-- Card 1: Question of the Day (Flips to backside on mobile for explanation) -->
-        <div id="qotdCard" class="qotd-card qotd-flip-card">
-          <div class="qotd-flip-inner" id="qotdFlipInner">
-            <!-- Front: Question, Options, Score & View Explanation Button -->
-            <div class="qotd-flip-front" id="qotdFlipFront">
-              <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
-              <p id="qotdQuestionText" class="qotd-question-text"></p>
-              <div id="qotdOptions" class="qotd-options"></div>
+        <!-- Question of the Day Card -->
+        <div id="qotdCard" class="qotd-card">
+          <h3 data-en="Question of the Day">నేటి ప్రశ్న</h3>
+          <p id="qotdQuestionText" class="qotd-question-text"></p>
+          <div id="qotdOptions" class="qotd-options"></div>
 
-              <!-- Explanation Button (appears after answering) -->
-              <div id="qotdExplanationBtnWrap" class="qotd-explanation-btn-wrap" style="display:none;">
-                <button type="button" id="qotdShowExplanationBtn" class="qotd-explanation-toggle-btn">
-                  💡 వివరణ చూడండి (View Explanation) ➜
-                </button>
-              </div>
-
-              <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
-                <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
-                <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
-              </div>
-              <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
-                <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
-                  ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
-                </p>
-                <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
-                  లాగిన్ అవ్వండి (Log In) ➜
-                </a>
-              </div>
-            </div>
-
-            <!-- Back: Mobile-only 3D Flip Backside -->
-            <div class="qotd-flip-back" id="qotdFlipBack">
-              <h3 data-en="Answer & Explanation">💡 సమాధాన వివరణ</h3>
-              <div class="qotd-flip-back-body">
-                <div id="qotdCorrectAnswerBadgeMobile" class="qotd-correct-answer-badge"></div>
-                <p id="qotdExplanationTextMobile" class="qotd-explanation-text"></p>
-              </div>
-              <button type="button" id="qotdFlipBackBtn" class="qotd-flip-back-btn">
-                ⮌ ప్రశ్న చూడండి (Back to Question)
-              </button>
-            </div>
+          <div id="qotdScoreRow" class="qotd-score-row" style="display:none;">
+            <span id="qotdScoreDisplay" class="qotd-score-display">⭐ సాధించిన అంకాలు: 0</span>
+            <a id="qotdLeaderboardBtn" href="leaderboard.html" class="qotd-leaderboard-btn" data-en="🏆 Leaderboard">🏆 అగ్రస్థాన పట్టిక</a>
           </div>
-        </div>
-
-        <!-- Card 2: Desktop Explanation Card (Side by side on desktop, hidden on mobile) -->
-        <div id="qotdExplanationCardDesktop" class="qotd-card qotd-desktop-explanation-card">
-          <h3 data-en="Answer & Explanation">💡 సమాధాన వివరణ</h3>
-          
-          <!-- Locked State (Before user answers) -->
-          <div id="qotdDesktopLockedState" class="qotd-desktop-locked">
-            <div class="qotd-lock-icon">🔒</div>
-            <h4 class="qotd-lock-title">సమాధానం ఎంచుకోండి</h4>
-            <p class="qotd-lock-desc">ప్రశ్నకు సమాధానం ఇవ్వగానే సరైన జవాబు మరియు పూర్తి విశేషాలు ఇక్కడ తెలుస్తాయి.</p>
-          </div>
-
-          <!-- Unlocked State (After user answers) -->
-          <div id="qotdDesktopUnlockedState" class="qotd-desktop-unlocked" style="display:none;">
-            <div id="qotdCorrectAnswerBadgeDesktop" class="qotd-correct-answer-badge"></div>
-            <div class="qotd-explanation-scroll-box">
-              <p id="qotdExplanationTextDesktop" class="qotd-explanation-text"></p>
-            </div>
+          <div id="qotdLoginHint" class="qotd-login-post-answer" style="display:none;">
+            <p id="qotdLoginText" class="qotd-login-post-msg" data-en="Log in to know your scores, ranking and leaderboard!">
+              ✨ మీ స్కోర్లు &amp; అగ్రస్థాన పట్టిక (Leaderboard) తెలుసుకోవడానికి లాగిన్ అవ్వండి:
+            </p>
+            <a id="qotdLoginBtn" href="profile/" class="qotd-login-post-btn" data-en="Log In Now ➜">
+              లాగిన్ అవ్వండి (Log In) ➜
+            </a>
           </div>
         </div>
       </div>
@@ -708,24 +688,7 @@
                 qBox.appendChild(btn);
               });
 
-              var expl = qData.explanation || ("ఈ ప్రశ్నకు సరైన సమాధానం: " + qData.options[qData.correct]);
-              var explMobile = document.getElementById("qotdExplanationTextMobile");
-              var explDesktop = document.getElementById("qotdExplanationTextDesktop");
-              var badgeMobile = document.getElementById("qotdCorrectAnswerBadgeMobile");
-              var badgeDesktop = document.getElementById("qotdCorrectAnswerBadgeDesktop");
-              if (explMobile) explMobile.innerText = expl;
-              if (explDesktop) explDesktop.innerText = expl;
-              if (badgeMobile) badgeMobile.innerText = "✓ సరైన సమాధానం: " + qData.options[qData.correct];
-              if (badgeDesktop) badgeDesktop.innerText = "✓ సరైన సమాధానం: " + qData.options[qData.correct];
-
               if (answered) {
-                var explWrap = document.getElementById("qotdExplanationBtnWrap");
-                if (explWrap) explWrap.style.display = "flex";
-                var locked = document.getElementById("qotdDesktopLockedState");
-                var unlocked = document.getElementById("qotdDesktopUnlockedState");
-                if (locked) locked.style.display = "none";
-                if (unlocked) unlocked.style.display = "block";
-
                 if (!localStorage.getItem("sannivesham_user_logged_in")) {
                   var hint = document.getElementById("qotdLoginHint");
                   if (hint) hint.style.display = "flex";
@@ -921,10 +884,13 @@
     import { db, auth } from "./firebase-config.js";
 
     import {
-      doc, getDoc, getDocFromServer, getDocs, collection, setDoc, updateDoc, arrayUnion, increment, query, orderBy, limit
+      doc, getDoc, getDocs, collection, setDoc, updateDoc, arrayUnion, increment
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    // Fresh start benchmark date for QOD & Leaderboard
+    const QOD_RESET_DATE = "2026-10-22";
 
     let currentUser = null;
     let todayKey = getTodayKey();
@@ -939,8 +905,7 @@
 
     loadQuestionOfDay();
 
-    // Just reflects login state on the profile icon — actual login/profile
-    // UI lives on profile.html
+    // Reflect login state on profile icon
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       const profileBtn = document.getElementById("profileBtn");
@@ -960,14 +925,20 @@
 
         if (guestAnswered && !serverAnswered) {
           const resolvedName = userData.name || user.displayName || (user.email ? user.email.split("@")[0] : "") || "జ్ఞాన సాధకుడు";
+          const correctDates = Array.isArray(userData.correctDates) ? [...userData.correctDates] : [];
+          if (guestCorrect && !correctDates.includes(todayKey)) {
+            correctDates.push(todayKey);
+          }
+          const freshScore = correctDates.filter(d => typeof d === "string" && d >= QOD_RESET_DATE).length;
+
           const updateData = {
             answeredDates: arrayUnion(todayKey),
             name: resolvedName,
+            score: freshScore,
             lastUpdated: new Date().toISOString()
           };
           if (guestCorrect) {
-            updateData.score = increment(1);
-            updateData.correctDates = arrayUnion(todayKey);
+            updateData.correctDates = correctDates;
           }
           try {
             await setDoc(userRef, updateData, { merge: true });
@@ -1001,8 +972,7 @@
           console.warn("Direct qotd getDoc error:", err);
         }
 
-        // CRITICAL REQUIREMENT: If in a day no question is scheduled in Firestore,
-        // the entire card should NOT appear! It should NOT show previous questions or fallbacks.
+        // Hide completely if no question is scheduled for today
         if (!snap || !snap.exists()) {
           const wrap = document.getElementById("qotdContainerWrap");
           if (wrap) wrap.style.display = "none";
@@ -1029,17 +999,6 @@
         } catch (e) {}
 
         document.getElementById("qotdQuestionText").innerText = data.question;
-
-        // Explanation text & correct answer badge
-        const expl = data.explanation || `ఈ ప్రశ్నకు సరైన సమాధానం: ${data.options[data.correct]}.\nసనాతన ధర్మం మరియు సాహిత్య విశేషాలను తెలుసుకుంటున్నందుకు అభినందనలు!`;
-        const explMobile = document.getElementById("qotdExplanationTextMobile");
-        const explDesktop = document.getElementById("qotdExplanationTextDesktop");
-        const badgeMobile = document.getElementById("qotdCorrectAnswerBadgeMobile");
-        const badgeDesktop = document.getElementById("qotdCorrectAnswerBadgeDesktop");
-        if (explMobile) explMobile.innerText = expl;
-        if (explDesktop) explDesktop.innerText = expl;
-        if (badgeMobile) badgeMobile.innerText = `✓ సరైన సమాధానం: ${data.options[data.correct]}`;
-        if (badgeDesktop) badgeDesktop.innerText = `✓ సరైన సమాధానం: ${data.options[data.correct]}`;
 
         const optionsBox = document.getElementById("qotdOptions");
         optionsBox.innerHTML = "";
@@ -1077,18 +1036,6 @@
           optionsBox.appendChild(btn);
         });
 
-        // Set explanation visibility
-        if (alreadyAnswered) {
-          revealExplanationUI();
-        } else {
-          const explWrap = document.getElementById("qotdExplanationBtnWrap");
-          if (explWrap) explWrap.style.display = "none";
-          const locked = document.getElementById("qotdDesktopLockedState");
-          const unlocked = document.getElementById("qotdDesktopUnlockedState");
-          if (locked) locked.style.display = "flex";
-          if (unlocked) unlocked.style.display = "none";
-        }
-
         const wrap = document.getElementById("qotdContainerWrap");
         if (wrap) wrap.style.display = "block";
 
@@ -1105,15 +1052,6 @@
       } catch (e) {
         console.warn("QOTD Error:", e);
       }
-    }
-
-    function revealExplanationUI() {
-      const explWrap = document.getElementById("qotdExplanationBtnWrap");
-      if (explWrap) explWrap.style.display = "flex";
-      const locked = document.getElementById("qotdDesktopLockedState");
-      const unlocked = document.getElementById("qotdDesktopUnlockedState");
-      if (locked) locked.style.display = "none";
-      if (unlocked) unlocked.style.display = "block";
     }
 
     async function handleQotdAnswer(selectedIndex, correctIndex, data) {
@@ -1136,19 +1074,6 @@
         localStorage.setItem(`qotd_correct_${todayKey}`, "true");
       }
 
-      // Show explanation button on question card and unlock desktop explanation
-      revealExplanationUI();
-
-      // On desktop, highlight the side-by-side explanation card
-      if (window.innerWidth > 768) {
-        const deskCard = document.getElementById("qotdExplanationCardDesktop");
-        if (deskCard) {
-          deskCard.classList.remove("qotd-highlight-pulse");
-          void deskCard.offsetWidth;
-          deskCard.classList.add("qotd-highlight-pulse");
-        }
-      }
-
       if (currentUser) {
         const userRef = doc(db, "users", currentUser.uid);
         let freshData = {};
@@ -1164,14 +1089,20 @@
         }
 
         const resolvedName = freshData.name || currentUser.displayName || (currentUser.email ? currentUser.email.split("@")[0] : "") || "జ్ఞాన సాధకుడు";
+        const correctDates = Array.isArray(freshData.correctDates) ? [...freshData.correctDates] : [];
+        if (isCorrect && !correctDates.includes(todayKey)) {
+          correctDates.push(todayKey);
+        }
+        const freshScore = correctDates.filter(d => typeof d === "string" && d >= QOD_RESET_DATE).length;
+
         const updateData = {
           answeredDates: arrayUnion(todayKey),
           name: resolvedName,
+          score: freshScore,
           lastUpdated: new Date().toISOString()
         };
         if (isCorrect) {
-          updateData.score = increment(1);
-          updateData.correctDates = arrayUnion(todayKey);
+          updateData.correctDates = correctDates;
         }
 
         try {
@@ -1196,7 +1127,10 @@
         ? window.Sannivesham18n.t("⭐ సాధించిన అంకాలు", "⭐ Score earned")
         : "⭐ సాధించిన అంకాలు";
       const scoreDisp = document.getElementById("qotdScoreDisplay");
-      if (scoreDisp) scoreDisp.innerText = `${label}: ${userData.score || 0}`;
+      const freshScore = Array.isArray(userData.correctDates)
+        ? userData.correctDates.filter(d => typeof d === "string" && d >= QOD_RESET_DATE).length
+        : (userData.score || 0);
+      if (scoreDisp) scoreDisp.innerText = `${label}: ${freshScore}`;
     }
 
     function showQotdLoginPromptAfterAnswer() {
@@ -1210,43 +1144,7 @@
       const hint = document.getElementById("qotdLoginHint");
       if (hint) hint.style.display = "none";
     }
-
-    // Explanation button & 3D Flip handlers
-    const showExplBtn = document.getElementById("qotdShowExplanationBtn");
-    if (showExplBtn) {
-      showExplBtn.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-          const card = document.getElementById("qotdCard");
-          if (card) card.classList.add("flipped");
-        } else {
-          const deskCard = document.getElementById("qotdExplanationCardDesktop");
-          if (deskCard) {
-            deskCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            deskCard.classList.remove("qotd-highlight-pulse");
-            void deskCard.offsetWidth;
-            deskCard.classList.add("qotd-highlight-pulse");
-          }
-        }
-      });
-    }
-
-    const flipBackBtn = document.getElementById("qotdFlipBackBtn");
-    if (flipBackBtn) {
-      flipBackBtn.addEventListener("click", () => {
-        const card = document.getElementById("qotdCard");
-        if (card) card.classList.remove("flipped");
-      });
-    }
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 768) {
-        const card = document.getElementById("qotdCard");
-        if (card) card.classList.remove("flipped");
-      }
-    });
-  </script>
-
-  <script type="module" src="social-links.js"></script>
+  </script> <script type="module" src="social-links.js"></script>
 
   <audio id="bgMusic" loop preload="none">
     <source src="music/sannivesham-audio.m4a" type="audio/mp4">

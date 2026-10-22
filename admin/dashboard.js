@@ -4019,14 +4019,11 @@ if (saveQotdBtn) {
       document.getElementById("qotdOption3").value.trim()
     ];
     const correct = parseInt(document.getElementById("qotdCorrectSelect").value);
-    const explanationInput = document.getElementById("qotdExplanationInput");
-    const explanation = explanationInput ? explanationInput.value.trim() : "";
     if (!question || options.some(o => !o)) { document.getElementById("qotdMessage").innerText = "⚠️ Please fill question and all 4 options"; return; }
-    await setDoc(doc(db, "qotd", dateValue), { question, options, correct, explanation, updatedAt: serverTimestamp() });
+    await setDoc(doc(db, "qotd", dateValue), { question, options, correct, updatedAt: serverTimestamp() });
     document.getElementById("qotdMessage").innerText = "✅ Question saved for " + dateValue;
     document.getElementById("qotdQuestionInput").value = "";
     ["qotdOption0","qotdOption1","qotdOption2","qotdOption3"].forEach(id => document.getElementById(id).value = "");
-    if (explanationInput) explanationInput.value = "";
     loadQotdList();
   });
 }
@@ -4051,7 +4048,6 @@ async function loadQotdList() {
       <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px;">
         <div class="cms-list-item-text">
           <span class="cms-list-item-date" style="color:#ffd166;font-weight:bold;">${item.id}</span>: ${item.question || ""}
-          ${expl ? `<div style="font-size:0.85rem;color:#bbf7d0;margin-top:4px;">💡 వివరణ: ${expl}</div>` : ''}
         </div>
         <div style="display:flex;gap:8px;">
           <button class="cms-list-edit-btn qotd-edit-btn" data-id="${item.id}" type="button">✏️ Edit</button>
@@ -4071,8 +4067,7 @@ async function loadQotdList() {
           <option value="2" ${correctIdx === 2 ? "selected" : ""}>Option 3</option>
           <option value="3" ${correctIdx === 3 ? "selected" : ""}>Option 4</option>
         </select>
-        <label style="font-size:0.85rem;color:#ffd166;margin-top:6px;">సమాధాన వివరణ (Explanation):</label>
-        <textarea class="q-edit-explanation" placeholder="సమాధాన వివరణ (Explanation)" rows="3" style="width:100%;padding:10px;border-radius:10px;background:rgba(30,20,10,0.9);color:white;border:1px solid rgba(255,209,102,0.3);resize:vertical;">${expl}</textarea>
+
         <div class="general-inline-edit-actions">
           <button class="save-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:#ffd166;color:#1a0c02;border:none;font-weight:700;cursor:pointer;">Save Changes</button>
           <button class="cancel-qotd-edit-btn" type="button" style="padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;border:none;font-weight:700;cursor:pointer;">రద్దు (Cancel)</button>
@@ -4096,13 +4091,12 @@ async function loadQotdList() {
         editBox.querySelector(".q-edit-opt3").value.trim()
       ];
       const correct = parseInt(editBox.querySelector(".q-edit-correct").value);
-      const explanation = editBox.querySelector(".q-edit-explanation") ? editBox.querySelector(".q-edit-explanation").value.trim() : "";
       if (!question || options.some(o => !o)) {
         alert("Please fill question and all 4 options");
         return;
       }
       await setDoc(doc(db, "qotd", item.id), {
-        question, options, correct, explanation, updatedAt: serverTimestamp()
+        question, options, correct, updatedAt: serverTimestamp()
       }, { merge: true });
       alert("✅ Question updated for " + item.id);
       loadQotdList();
@@ -5510,3 +5504,33 @@ if (seedSampleStoreBtn) {
 loadStoreCategories();
 loadStoreProducts();
 
+
+
+// Reset QOD Leaderboard & Scores to Zero
+const resetQotdBtn = document.getElementById("resetQotdLeaderboardBtn");
+if (resetQotdBtn) {
+  resetQotdBtn.addEventListener("click", async () => {
+    if (!confirm("⚠️ ఖచ్చితంగా అందరి నేటి ప్రశ్న (QOD) స్కోర్లను జీరో (0) చేసి లీడర్‌బోర్డ్‌ను రీసెట్ చేయాలనుకుంటున్నారా?")) return;
+    resetQotdBtn.disabled = true;
+    resetQotdBtn.innerText = "⏳ Resetting...";
+    try {
+      const snap = await getDocs(collection(db, "users"));
+      let count = 0;
+      for (const d of snap.docs) {
+        await setDoc(doc(db, "users", d.id), {
+          score: 0,
+          streak: 0,
+          correctDates: [],
+          answeredDates: []
+        }, { merge: true });
+        count++;
+      }
+      alert(`✅ విజయవంతంగా ${count} మంది వినియోగదారుల స్కోర్లు రీసెట్ చేయబడ్డాయి!`);
+    } catch (err) {
+      alert("❌ Error resetting: " + err.message);
+    } finally {
+      resetQotdBtn.disabled = false;
+      resetQotdBtn.innerText = "🔄 రీసెట్ లీడర్‌బోర్డ్ (Reset All to 0)";
+    }
+  });
+}

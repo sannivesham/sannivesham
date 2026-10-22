@@ -764,6 +764,7 @@ html:not([data-theme]) .quiz-bg {
   transform: translateY(0) scale(0.97);
 }
 
+#submitAnswerBtn,
 #nextQuestionBtn {
   flex: 2;
   background: linear-gradient(135deg, #ffd166, #ff9f1c) !important;
