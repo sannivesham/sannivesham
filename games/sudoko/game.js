@@ -211,7 +211,7 @@ import { SudokuEngine } from "./generator.js";
       window.Progress.recordCompletion(level.id, seconds);
     }
 
-    document.getElementById("winTime").textContent = `Solved in ${formatTime(seconds)} with ${mistakes} mistakes.`;
+    document.getElementById("winTime").textContent = `విజయం సాధించిన సమయం: ${formatTime(seconds)} · తప్పులు: ${mistakes}`;
     document.getElementById("winOverlay").classList.remove("hidden");
 
     const nextBtn = document.getElementById("nextLevelBtn");

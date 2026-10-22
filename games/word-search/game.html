@@ -6,9 +6,8 @@
   <title>సన్నివేశం — పద శోధన ఆట</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Prevent screen dragging and text selection while playing */
     body {
-      touch-action: none;
+      touch-action: manipulation;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -32,9 +31,6 @@
       width: 100%;
       box-sizing: border-box;
       touch-action: none;
-      /* Prevents the grid tracks from expanding past 1fr to fit wide
-         conjunct characters, which is what was pushing 10x10/12x12
-         grids past the edge of the screen on mobile. */
       overflow: hidden;
     }
 
@@ -50,26 +46,16 @@
       justify-content: center;
       cursor: pointer;
       box-sizing: border-box;
-      /* min-width/min-height: 0 overrides CSS Grid's default "min-width:
-         auto" on grid items, which otherwise sizes a track to fit its
-         widest piece of unbreakable content (e.g. multi-glyph conjuncts
-         like క్ష, జ్ఞ, లం) instead of the 1fr share it was actually
-         given — that mismatch is what caused the grid to overflow the
-         viewport on larger boards. */
       min-width: 0;
       min-height: 0;
-      overflow: hidden;
-      /* Font size now scales down as column count (--cols, set by game.js)
-         goes up, so a 12x12 board gets noticeably smaller text than an
-         8x8 board instead of using the same size and overflowing. */
-      font-size: clamp(0.6rem, calc(26vw / var(--cols, 10)), 1.4rem);
-      transition: background-color 0.15s, color 0.15s;
+      font-size: 1.15rem;
+      user-select: none;
     }
 
     .word-cell.selecting {
-      background: rgba(76, 181, 201, 0.4) !important;
+      background: rgba(76, 181, 201, 0.35) !important;
       border-color: #4CB5C9 !important;
-      color: #fff !important;
+      color: #FFFFFF !important;
     }
 
     .word-cell.discovered {
@@ -84,23 +70,24 @@
       gap: 8px;
       justify-content: center;
       margin-top: 15px;
-      padding: 0 10px;
     }
 
     .word-bank-item {
-      padding: 5px 12px;
       background: rgba(237, 227, 200, 0.05);
-      border: 1px solid rgba(237, 227, 200, 0.2);
-      border-radius: 20px;
-      color: rgba(237, 227, 200, 0.6);
-      font-size: clamp(0.85rem, 3vw, 1.05rem);
+      border: 1px solid rgba(201, 162, 75, 0.3);
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: #EDE3C8;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
     }
 
     .word-bank-item.found {
-      text-decoration: line-through;
-      color: #C9A24B;
-      background: rgba(201, 162, 75, 0.1);
+      background: rgba(201, 162, 75, 0.15);
       border-color: #C9A24B;
+      color: #C9A24B;
+      text-decoration: line-through;
+      opacity: 0.7;
     }
 
     .overlay {
@@ -114,7 +101,9 @@
       z-index: 1000;
     }
 
-    .overlay.hidden { display: none !important; }
+    .overlay.hidden {
+      display: none !important;
+    }
 
     .overlay-content {
       text-align: center;
@@ -122,19 +111,24 @@
       padding: 30px;
       border: 1px solid #C9A24B;
       border-radius: 12px;
-      width: 80%;
+      width: 85%;
       max-width: 400px;
+      box-sizing: border-box;
     }
 
     .gold-btn {
       background: transparent;
       border: 1px solid #C9A24B;
       color: #C9A24B;
-      padding: 10px 24px;
+      padding: 10px 20px;
       font-size: 1rem;
       cursor: pointer;
-      margin-top: 20px;
       border-radius: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
     }
 
     .gold-btn:hover {
@@ -174,7 +168,7 @@
         </div>
       </div>
       <div style="margin-top: 8px;">
-        <a href="index.html" class="back-link" style="color: #4CB5C9; text-decoration: none; font-size: 0.9rem;">← అన్ని లెవెల్స్</a>
+        <a href="index.html" class="back-link" style="color: #4CB5C9; text-decoration: none; font-size: 0.9rem;">← అన్ని లెవెల్స్ (All Levels)</a>
       </div>
     </header>
 
@@ -187,13 +181,16 @@
   <div id="winOverlay" class="overlay hidden">
     <div class="overlay-content">
       <h2 style="color: #C9A24B; font-family: 'Cinzel', serif; margin-bottom: 10px;">ధన్యవాదాలు!</h2>
-      <p style="color: #EDE3C8;">మీరు అన్ని పదాలను విజయవంతంగా కనుగొన్నారు.</p>
-      <button id="nextLevelBtn" class="gold-btn">తదుపరి లెవెల్ →</button>
+      <p style="color: #EDE3C8; margin-bottom: 20px;">మీరు అన్ని పదాలను విజయవంతంగా కనుగొన్నారు.</p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button id="nextLevelBtn" class="gold-btn">తదుపరి లెవెల్ →</button>
+        <a href="index.html" class="gold-btn">అన్ని లెవెల్స్</a>
+      </div>
     </div>
   </div>
 
-  <script src="wordsearch-data.js"></script>
-  <script type="module" src="progress.js"></script>
-  <script src="game.js"></script>
+  <script src="wordsearch-data.js?v=4"></script>
+  <script type="module" src="progress.js?v=4"></script>
+  <script src="game.js?v=4"></script>
 </body>
 </html>

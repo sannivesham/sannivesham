@@ -32,6 +32,13 @@
       gridEl.appendChild(card);
     });
   }
+
   renderGrid();
-  setInterval(renderGrid, 1000);
+  window.addEventListener("progress:ready", renderGrid);
+  let polls = 0;
+  const timer = setInterval(() => {
+    renderGrid();
+    polls++;
+    if (polls >= 5) clearInterval(timer);
+  }, 600);
 })();

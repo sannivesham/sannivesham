@@ -26,13 +26,11 @@
   let discoveredWords = [];
   let isSelecting = false;
   let startCell = null;
+  let lastCell = null;
   let gridMatrix;
 
   const teluguCharacters = ["అ", "ఆ", "ఇ", "ఈ", "ఉ", "క", "గ", "చ", "జ", "ట", "డ", "త", "ద", "న", "ప", "బ", "మ", "య", "ర", "ల", "వ", "స", "హ", "ము", "డు", "రి", "శ", "లం", "క్ష", "జ్ఞ"];
 
-  // Try to place every word in wordList onto a fresh grid. Returns the
-  // filled grid on success, or null if any word couldn't be placed within
-  // the per-word attempt budget (caller should retry with a fresh grid).
   function attemptGridGeneration() {
     const matrix = Array(size).fill(null).map(() => Array(size).fill(""));
 
@@ -66,9 +64,6 @@
       }
 
       if (!placed) {
-        // This grid attempt failed — the word couldn't fit. Bail out so the
-        // caller can retry with a completely fresh grid rather than leaving
-        // a word that can never be found.
         return null;
       }
     }
@@ -82,9 +77,6 @@
       const matrix = attemptGridGeneration();
       if (matrix) return matrix;
     }
-    // Extremely unlikely fallback: if every attempt failed (grid too small
-    // for the word set), still return the last attempt's best-effort matrix
-    // padded with fillers, so the page doesn't crash outright.
     console.error(`Word search level ${level.id}: could not place all words after ${MAX_GRID_ATTEMPTS} attempts.`);
     return Array(size).fill(null).map(() => Array(size).fill(""));
   }
@@ -128,37 +120,75 @@
     return null;
   }
 
+  function getCellsInLine(start, end) {
+    if (!start || !end || !container) return [];
+    const cells = [];
+    if (start.r === end.r) {
+      const r = start.r;
+      const step = start.c <= end.c ? 1 : -1;
+      for (let c = start.c; ; c += step) {
+        const el = container.querySelector(`.word-cell[data-row='${r}'][data-col='${c}']`);
+        if (el) cells.push(el);
+        if (c === end.c) break;
+      }
+    } else if (start.c === end.c) {
+      const c = start.c;
+      const step = start.r <= end.r ? 1 : -1;
+      for (let r = start.r; ; r += step) {
+        const el = container.querySelector(`.word-cell[data-row='${r}'][data-col='${c}']`);
+        if (el) cells.push(el);
+        if (r === end.r) break;
+      }
+    }
+    return cells;
+  }
+
   function startSelection(r, c) {
     isSelecting = true;
     startCell = { r, c };
+    lastCell = { r, c };
     updateHighlights(r, c);
   }
 
   function moveSelection(r, c) {
     if (!isSelecting) return;
+    lastCell = { r, c };
     updateHighlights(r, c);
   }
 
+  function updateHighlights(currentR, currentC) {
+    if (!container || !startCell) return;
+    const cells = container.querySelectorAll(".word-cell");
+    cells.forEach(el => el.classList.remove("selecting"));
+
+    const lineCells = getCellsInLine(startCell, { r: currentR, c: currentC });
+    lineCells.forEach(el => el.classList.add("selecting"));
+  }
+
   function endSelection() {
-    if (!isSelecting || !container) return;
+    if (!isSelecting || !container || !startCell) return;
     isSelecting = false;
 
-    const selectedCells = container.querySelectorAll(".word-cell.selecting");
-    let builtWordString = "";
-    selectedCells.forEach(el => builtWordString += el.textContent);
+    const selectedCells = getCellsInLine(startCell, lastCell);
+    if (!selectedCells || selectedCells.length === 0) {
+      container.querySelectorAll(".word-cell.selecting").forEach(el => el.classList.remove("selecting"));
+      startCell = null;
+      lastCell = null;
+      return;
+    }
+
+    const forwardAksharas = selectedCells.map(el => el.textContent.trim());
+    const reverseAksharas = [...forwardAksharas].reverse();
+    const forwardStr = forwardAksharas.join("");
+    const reverseStr = reverseAksharas.join("");
 
     let foundWord = null;
     displayList.forEach(w => {
       if (discoveredWords.includes(w)) return;
       const cleanTarget = w.replace(/\s+/g, "");
 
-      if (builtWordString === cleanTarget) {
+      if (forwardStr === cleanTarget || reverseStr === cleanTarget) {
         foundWord = w;
-      } else {
-        const revBuilt = builtWordString.split("").reverse().join("");
-        if (revBuilt === cleanTarget) {
-          foundWord = w;
-        }
       }
     });
 
@@ -174,27 +204,9 @@
     } else {
       selectedCells.forEach(el => el.classList.remove("selecting"));
     }
-  }
 
-  function updateHighlights(currentR, currentC) {
-    if (!container) return;
-    const cells = container.querySelectorAll(".word-cell");
-    cells.forEach(el => el.classList.remove("selecting"));
-
-    if (startCell.r === currentR || startCell.c === currentC) {
-      const minR = Math.min(startCell.r, currentR);
-      const maxR = Math.max(startCell.r, currentR);
-      const minC = Math.min(startCell.c, currentC);
-      const maxC = Math.max(startCell.c, currentC);
-
-      cells.forEach(el => {
-        const r = Number(el.dataset.row);
-        const c = Number(el.dataset.col);
-        if (r >= minR && r <= maxR && c >= minC && c <= maxC) {
-          el.classList.add("selecting");
-        }
-      });
-    }
+    startCell = null;
+    lastCell = null;
   }
 
   // Mouse event listeners for desktop
@@ -211,7 +223,7 @@
       if (cell) moveSelection(cell.r, cell.c);
     });
 
-    // Mobile touch event listeners with forced preventDefault to enable dragging
+    // Mobile touch event listeners
     container.addEventListener("touchstart", (e) => {
       if (e.touches.length > 0) {
         e.preventDefault();
@@ -256,6 +268,7 @@
       if (nextBtn) {
         const nextLevel = window.WORDSEARCH_LEVELS ? window.WORDSEARCH_LEVELS.find(l => l.id === (level.id + 1)) : null;
         if (nextLevel) {
+          nextBtn.style.display = "inline-flex";
           nextBtn.onclick = () => {
             window.location.href = `game.html?level=${nextLevel.id}`;
           };

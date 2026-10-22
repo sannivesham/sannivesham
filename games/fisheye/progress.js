@@ -1,5 +1,5 @@
-import { db, auth } from "https://sannivesham.com/firebase-config.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { db, auth } from "../../firebase-config.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 const Progress = (() => {
@@ -10,7 +10,11 @@ const Progress = (() => {
 
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
-    if (user) await fetchCloudProgress();
+    if (user) {
+      await fetchCloudProgress();
+    }
+    window.ProgressReady = true;
+    window.dispatchEvent(new CustomEvent("progress:ready"));
   });
 
   async function fetchCloudProgress() {
@@ -20,47 +24,65 @@ const Progress = (() => {
       if (userSnap.exists()) {
         cloudData = userSnap.data().gameProgress?.[GAME_KEY] || { completedLevels: [], metrics: {} };
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.warn("Fisheye progress fetch failed:", e);
+    }
   }
 
   function getLocalFallback() {
-    try { return JSON.parse(localStorage.getItem(LOCAL_KEY)) || { completedLevels: [], metrics: {} }; }
-    catch (e) { return { completedLevels: [], metrics: {} }; }
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_KEY)) || { completedLevels: [], metrics: {} };
+    } catch (e) {
+      return { completedLevels: [], metrics: {} };
+    }
   }
 
   function isUnlocked(levelId) {
     if (Number(levelId) === 1) return true;
     const completedList = currentUser && cloudData ? cloudData.completedLevels : getLocalFallback().completedLevels;
-    return completedList.includes(Number(levelId) - 1);
+    return Array.isArray(completedList) && completedList.includes(Number(levelId) - 1);
   }
 
   function getLevelProgress(levelId) {
     const data = currentUser && cloudData ? cloudData : getLocalFallback();
-    return { completed: data.completedLevels.includes(Number(levelId)) };
+    const list = Array.isArray(data.completedLevels) ? data.completedLevels : [];
+    return { completed: list.includes(Number(levelId)) };
   }
 
   async function recordCompletion(levelId, dynamicMetric) {
     levelId = Number(levelId);
     const local = getLocalFallback();
-    if (!local.completedLevels.includes(levelId)) local.completedLevels.push(levelId);
+    if (!Array.isArray(local.completedLevels)) local.completedLevels = [];
+    if (!local.completedLevels.includes(levelId)) {
+      local.completedLevels.push(levelId);
+    }
     localStorage.setItem(LOCAL_KEY, JSON.stringify(local));
 
     if (currentUser) {
       try {
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const currentProgress = userSnap.data().gameProgress || {};
-          const standardGameProgress = currentProgress[GAME_KEY] || { completedLevels: [], metrics: {} };
-          if (!standardGameProgress.completedLevels.includes(levelId)) standardGameProgress.completedLevels.push(levelId);
-          currentProgress[GAME_KEY] = standardGameProgress;
-          await updateDoc(userRef, { gameProgress: currentProgress });
-          cloudData = standardGameProgress;
+        let currentProgress = {};
+        if (userSnap.exists() && userSnap.data().gameProgress) {
+          currentProgress = userSnap.data().gameProgress;
         }
-      } catch (e) { console.error(e); }
+        const standardGameProgress = currentProgress[GAME_KEY] || { completedLevels: [], metrics: {} };
+        if (!Array.isArray(standardGameProgress.completedLevels)) {
+          standardGameProgress.completedLevels = [];
+        }
+        if (!standardGameProgress.completedLevels.includes(levelId)) {
+          standardGameProgress.completedLevels.push(levelId);
+        }
+        currentProgress[GAME_KEY] = standardGameProgress;
+        await setDoc(userRef, { gameProgress: currentProgress }, { merge: true });
+        cloudData = standardGameProgress;
+      } catch (e) {
+        console.warn("Fisheye progress record error:", e);
+      }
     }
   }
 
   return { isUnlocked, getLevelProgress, recordCompletion };
 })();
+
 window.Progress = Progress;

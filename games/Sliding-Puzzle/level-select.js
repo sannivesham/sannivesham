@@ -18,18 +18,24 @@
         card.href = `puzzle.html?level=${level.id}`;
       }
       const gridSizeLabel = `${level.gridSize}×${level.gridSize}`;
+      const englishMatch = level.title.match(/\((.*?)\)/);
+      const englishSubtitle = englishMatch ? englishMatch[1] : 'Puzzle';
+      const teluguTitle = level.title.replace(/\s*\(.*?\)/, '').trim();
+
       let innerHTML = `
         <div class="level-number">CHAPTER ${level.id}</div>
-        <div class="level-title" style="font-weight: 600; font-size: 1.25rem; margin-bottom: 6px; color: #fff;">${level.title.split(' (')[0]}</div>
-        <div class="level-subtitle" style="font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--gold); opacity: 0.85; margin-bottom: 12px;">(${level.title.split(' (')[1] || 'Puzzle'}</div>
+        <div class="level-title" style="font-weight: 600; font-size: 1.25rem; margin-bottom: 6px; color: #fff;">${teluguTitle}</div>
+        <div class="level-subtitle" style="font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--gold); opacity: 0.85; margin-bottom: 12px;">(${englishSubtitle})</div>
         <div class="level-meta" style="font-size: 0.85rem; opacity: 0.75;">
-          <span>Grid: ${gridSizeLabel} · ${level.difficulty}</span>
+          <span>గడులు: ${gridSizeLabel} · ${level.difficulty}</span>
       `;
       if (progress.completed && progress.bestMoves) {
-        innerHTML += `<span> · Moves: ${progress.bestMoves}</span>`;
+        innerHTML += `<span> · మూవ్స్: ${progress.bestMoves}</span>`;
       }
       innerHTML += `</div>`;
-      if (!isUnlocked) {
+      if (progress.completed) {
+        innerHTML += `<div style="position: absolute; top: 20px; right: 20px; color: var(--gold); font-weight: bold;">✔</div>`;
+      } else if (!isUnlocked) {
         innerHTML += `<div class="level-lock-icon" style="position: absolute; top: 20px; right: 20px;">🔒</div>`;
       }
       card.innerHTML = innerHTML;
@@ -38,14 +44,12 @@
   }
 
   renderGrid();
+  window.addEventListener("progress:ready", renderGrid);
 
-  // Progress arrives asynchronously (Firebase auth state + Firestore fetch),
-  // so we re-render a few times shortly after load to reflect unlock/
-  // completion state, then stop polling.
   let renderCount = 0;
   const pollId = setInterval(() => {
     renderGrid();
     renderCount++;
-    if (renderCount >= 6) clearInterval(pollId); // ~3s of polling, then stop
+    if (renderCount >= 6) clearInterval(pollId);
   }, 500);
 })();

@@ -1,4 +1,4 @@
-import { db, auth } from "https://sannivesham.com/firebase-config.js";
+import { db, auth } from "../../firebase-config.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
@@ -21,6 +21,7 @@ const Progress = (() => {
       cloudData = null;
     }
     markReady();
+    window.dispatchEvent(new CustomEvent("progress:ready"));
   });
 
   async function fetchCloudProgress() {
@@ -52,12 +53,12 @@ const Progress = (() => {
     const completedList = currentUser && cloudData
       ? cloudData.completedLevels
       : getLocalFallback().completedLevels;
-    return completedList.includes(Number(levelId) - 1);
+    return Array.isArray(completedList) && completedList.includes(Number(levelId) - 1);
   }
 
   function getLevelProgress(levelId) {
     const data = currentUser && cloudData ? cloudData : getLocalFallback();
-    const completed = data.completedLevels.includes(Number(levelId));
+    const completed = Array.isArray(data.completedLevels) && data.completedLevels.includes(Number(levelId));
     const scoreMetric = data.metrics?.[levelId] || null;
     return {
       completed: completed,
@@ -71,6 +72,8 @@ const Progress = (() => {
 
     // 1. Always write locally first to keep game execution instant
     const local = getLocalFallback();
+    if (!Array.isArray(local.completedLevels)) local.completedLevels = [];
+    if (!local.metrics) local.metrics = {};
     if (!local.completedLevels.includes(levelId)) {
       local.completedLevels.push(levelId);
     }
@@ -79,9 +82,6 @@ const Progress = (() => {
     localStorage.setItem(LOCAL_KEY, JSON.stringify(local));
 
     // 2. If user is logged in, sync to their Firestore profile.
-    //    setDoc(..., { merge: true }) instead of updateDoc so this still
-    //    works when the user document doesn't exist yet (brand-new account) —
-    //    updateDoc would previously no-op there and progress never synced.
     if (currentUser) {
       try {
         const userRef = doc(db, "users", currentUser.uid);
@@ -89,6 +89,9 @@ const Progress = (() => {
 
         const currentProgress = userSnap.exists() ? (userSnap.data().gameProgress || {}) : {};
         const standardGameProgress = currentProgress[GAME_KEY] || { completedLevels: [], metrics: {} };
+        if (!Array.isArray(standardGameProgress.completedLevels)) standardGameProgress.completedLevels = [];
+        if (!standardGameProgress.metrics) standardGameProgress.metrics = {};
+
         if (!standardGameProgress.completedLevels.includes(levelId)) {
           standardGameProgress.completedLevels.push(levelId);
         }
@@ -107,13 +110,6 @@ const Progress = (() => {
   }
 
   // --- Readiness signal -----------------------------------------------
-  // progress.js is loaded as a module, which defers its execution until
-  // after the page has parsed. Plain <script> files like game.js run
-  // immediately and were reading window.Progress before auth state and
-  // the Firestore fetch had resolved, so isUnlocked() would incorrectly
-  // report every level beyond 1 as locked. window.ProgressReady lets
-  // consumers await the real, settled progress state before deciding
-  // whether to redirect a player away from a level.
   let markReady;
   const readyPromise = new Promise((resolve) => { markReady = resolve; });
   window.ProgressReady = readyPromise;

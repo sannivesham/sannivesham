@@ -36,17 +36,19 @@
         <div class="level-title" style="font-weight: 600; font-size: 1.35rem; margin-bottom: 2px;">${level.titleTelugu}</div>
         <div class="level-subtitle" style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--gold); opacity: 0.85; margin-bottom: 12px;">(${level.titleEnglish})</div>
         <div class="level-meta" style="font-size: 0.85rem; opacity: 0.75;">
-          <span>Grid: ${level.gridSize}×${level.gridSize} · ${difficulty}</span>
+          <span>గడులు: ${level.gridSize}×${level.gridSize} · ${difficulty}</span>
       `;
 
       if (progress.completed && progress.bestTime) {
-        innerHTML += `<span> · Best: ${progress.bestTime}</span>`;
+        innerHTML += `<span> · ఉత్తమ సమయం: ${progress.bestTime}</span>`;
       }
 
       innerHTML += `</div>`;
       innerHTML += `<div class="level-words-preview">${wordsPreview}</div>`;
 
-      if (!isUnlocked) {
+      if (progress.completed) {
+        innerHTML += `<div style="position: absolute; top: 20px; right: 20px; color: var(--gold); font-weight: bold;">✔</div>`;
+      } else if (!isUnlocked) {
         innerHTML += `<div class="level-lock-icon" style="position: absolute; top: 20px; right: 20px;">🔒</div>`;
       }
 
@@ -56,9 +58,8 @@
   }
 
   renderGrid();
+  window.addEventListener("progress:ready", renderGrid);
 
-  // Progress arrives asynchronously (Firebase auth state + Firestore fetch),
-  // so we re-render a few times shortly after load, then stop polling.
   let renderCount = 0;
   const pollId = setInterval(() => {
     renderGrid();

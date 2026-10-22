@@ -146,39 +146,38 @@
 
       const nextLevel = typeof window.getNextLevel === "function" ? window.getNextLevel(level.id) : null;
       const nextBtn = document.getElementById("nextLevelBtn");
-      if (nextLevel) {
-        nextBtn.style.display = "inline-block";
-        nextBtn.onclick = () => {
-          window.location.href = `puzzle.html?level=${nextLevel.id}`;
-        };
-      } else {
-        nextBtn.style.display = "none";
+      if (nextBtn) {
+        if (nextLevel) {
+          nextBtn.style.display = "inline-block";
+          nextBtn.onclick = () => {
+            window.location.href = `puzzle.html?level=${nextLevel.id}`;
+          };
+        } else {
+          nextBtn.style.display = "none";
+        }
       }
     }
   }
 
-  // Wait for progress.js (a deferred module) to finish resolving auth state
-  // and the Firestore fetch before trusting isUnlocked(). Without this,
-  // game.js — a plain synchronous script — was checking window.Progress
-  // before it existed, falling back to a stub that treats every level
-  // except 1 as locked and redirects the player straight back to
-  // index.html, even for levels they've legitimately unlocked.
-  function waitForProgress(timeoutMs = 4000) {
-    if (!window.ProgressReady || typeof window.ProgressReady.then !== "function") {
-      return Promise.resolve();
+  async function waitForProgress(timeoutMs = 3500) {
+    const start = Date.now();
+    while (!window.Progress && (Date.now() - start < timeoutMs)) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
-    return Promise.race([
-      window.ProgressReady,
-      new Promise((resolve) => setTimeout(resolve, timeoutMs))
-    ]);
+    if (window.ProgressReady && typeof window.ProgressReady.then === "function") {
+      await Promise.race([
+        window.ProgressReady,
+        new Promise((resolve) => setTimeout(resolve, timeoutMs))
+      ]);
+    }
   }
 
   async function boot() {
     await waitForProgress();
 
     const progressInstance = window.Progress || {
-      isUnlocked: (id) => id === 1,
-      recordCompletion: () => console.log("Local progress backup placeholder")
+      isUnlocked: (id) => Number(id) === 1,
+      recordCompletion: () => console.log("Local progress placeholder")
     };
 
     if (typeof progressInstance.isUnlocked === "function" && !progressInstance.isUnlocked(levelId)) {

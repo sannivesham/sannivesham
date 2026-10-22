@@ -16,58 +16,102 @@
   const svgLines = document.getElementById("svgLines");
 
   let selectedLeft = null;
+  let selectedRight = null;
+  let isChecking = false;
   let matches = {};
-  let totalPairs = level.pairs.length;
+  const totalPairs = level.pairs.length;
 
-  function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
-  const shuffledLeft = shuffle([...level.pairs]);
-  const shuffledRight = shuffle([...level.pairs]);
+  function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+  const shuffledLeft = shuffle(level.pairs);
+  const shuffledRight = shuffle(level.pairs);
 
-  shuffledLeft.forEach((p, idx) => {
+  shuffledLeft.forEach((p) => {
     const node = document.createElement("div");
     node.className = "dot-node";
     node.textContent = p.left;
     node.addEventListener("click", () => handleLeftSelect(node));
-    node.addEventListener("touchstart", (e) => { e.preventDefault(); handleLeftSelect(node); });
     leftColumn.appendChild(node);
   });
 
-  shuffledRight.forEach((p, idx) => {
+  shuffledRight.forEach((p) => {
     const node = document.createElement("div");
     node.className = "dot-node";
     node.textContent = p.right;
     node.addEventListener("click", () => handleRightSelect(node));
-    node.addEventListener("touchstart", (e) => { e.preventDefault(); handleRightSelect(node); });
     rightColumn.appendChild(node);
   });
 
   function handleLeftSelect(node) {
-    if (node.classList.contains("matched")) return;
+    if (isChecking || node.classList.contains("matched")) return;
+
+    if (selectedLeft === node) {
+      // Toggle off if already selected
+      node.classList.remove("active");
+      selectedLeft = null;
+      return;
+    }
+
     leftColumn.querySelectorAll(".dot-node").forEach(el => el.classList.remove("active"));
     node.classList.add("active");
     selectedLeft = node;
+
+    if (selectedRight) {
+      checkPair();
+    }
   }
 
   function handleRightSelect(node) {
-    if (!selectedLeft || node.classList.contains("matched")) return;
-    const leftText = selectedLeft.textContent;
-    const rightText = node.textContent;
+    if (isChecking || node.classList.contains("matched")) return;
+
+    if (selectedRight === node) {
+      // Toggle off if already selected
+      node.classList.remove("active");
+      selectedRight = null;
+      return;
+    }
+
+    rightColumn.querySelectorAll(".dot-node").forEach(el => el.classList.remove("active"));
+    node.classList.add("active");
+    selectedRight = node;
+
+    if (selectedLeft) {
+      checkPair();
+    }
+  }
+
+  function checkPair() {
+    if (!selectedLeft || !selectedRight) return;
+    const leftText = selectedLeft.textContent.trim();
+    const rightText = selectedRight.textContent.trim();
 
     const isValid = level.pairs.some(p => p.left === leftText && p.right === rightText);
+    const leftNode = selectedLeft;
+    const rightNode = selectedRight;
+
     if (isValid) {
       matches[leftText] = rightText;
-      selectedLeft.classList.remove("active");
-      selectedLeft.classList.add("matched");
-      node.classList.add("matched");
-      drawConnectionLine(selectedLeft, node);
+      leftNode.classList.remove("active");
+      rightNode.classList.remove("active");
+      leftNode.classList.add("matched");
+      rightNode.classList.add("matched");
+      drawConnectionLine(leftNode, rightNode);
       selectedLeft = null;
+      selectedRight = null;
 
       if (Object.keys(matches).length === totalPairs) {
         setTimeout(triggerVictory, 400);
       }
     } else {
-      selectedLeft.classList.remove("active");
-      selectedLeft = null;
+      isChecking = true;
+      leftNode.classList.add("wrong");
+      rightNode.classList.add("wrong");
+      setTimeout(() => {
+        leftNode.classList.remove("active", "wrong");
+        rightNode.classList.remove("active", "wrong");
+        selectedLeft = null;
+        selectedRight = null;
+        isChecking = false;
+      }, 450);
     }
   }
 
@@ -92,6 +136,7 @@
     if (nextBtn) {
       const nextLevel = window.DOTS_LEVELS.find(l => l.id === (level.id + 1));
       if (nextLevel) {
+        nextBtn.style.display = "inline-flex";
         nextBtn.onclick = () => { window.location.href = `game.html?level=${nextLevel.id}`; };
       } else {
         nextBtn.style.display = "none";
@@ -99,11 +144,15 @@
     }
   }
 
-  window.addEventListener("resize", () => {
+  function redrawAllLines() {
     svgLines.innerHTML = "";
     leftColumn.querySelectorAll(".dot-node.matched").forEach(ln => {
-      const rn = Array.from(rightColumn.querySelectorAll(".dot-node")).find(el => el.textContent === matches[ln.textContent]);
+      const targetRight = matches[ln.textContent.trim()];
+      const rn = Array.from(rightColumn.querySelectorAll(".dot-node")).find(el => el.textContent.trim() === targetRight);
       if (rn) drawConnectionLine(ln, rn);
     });
-  });
+  }
+
+  window.addEventListener("resize", redrawAllLines);
+  window.addEventListener("orientationchange", () => setTimeout(redrawAllLines, 200));
 })();

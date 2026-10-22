@@ -1,88 +1,122 @@
-<!DOCTYPE html>
-<html lang="te">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>సన్నివేశం — చక్రవ్యూహం (Maze Game)</title>
-  <style>
-    :root {
-      --bg-dark: #120c08;
-      --card-bg: rgba(237, 227, 200, 0.05);
-      --gold: #C9A24B;
-      --gold-dim: rgba(201, 162, 75, 0.3);
-      --parchment: #EDE3C8;
-      --cyan: #4CB5C9;
-    }
-
-    body {
-      margin: 0; padding: 0;
-      background-color: var(--bg-dark);
-      color: var(--parchment);
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
-    }
-
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-
-    .sannivesham-hero { text-align: center; padding: 20px 10px; }
-    .hero-emblem {
-      width: 80px; height: 80px; background: rgba(201, 162, 75, 0.1);
-      border: 1px solid var(--gold); border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 20px rgba(201, 162, 75, 0.2);
-    }
-    .emblem-img { width: 65px; height: 65px; object-fit: contain; }
-    .main-brand-title { font-size: 2.2rem; margin: 5px 0; font-weight: bold; }
-    .main-brand-tagline { font-size: 0.95rem; color: var(--gold); margin: 5px 0 0 0; letter-spacing: 2px; }
-
-    .site-header { border-bottom: 1px solid rgba(201, 162, 75, 0.2); padding-bottom: 15px; margin-bottom: 25px; }
-    .site-header h2 { margin: 0 0 4px 0; font-size: 1.6rem; }
-    .site-header .subtitle { margin: 0; color: rgba(237, 227, 200, 0.7); font-size: 0.95rem; }
-
-    .level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .level-card {
-      background: var(--card-bg); border: 1px solid var(--gold-dim); border-radius: 12px;
-      padding: 20px; text-decoration: none; color: var(--parchment);
-      display: flex; flex-direction: column; min-height: 130px; box-sizing: border-box;
-      position: relative; transition: transform 0.2s, border-color 0.2s;
-    }
-    .level-card:not(.locked):hover { transform: translateY(-4px); border-color: var(--gold); cursor: pointer; }
-    .level-card.locked { opacity: 0.4; cursor: not-allowed; }
-    .level-number { font-size: 0.75rem; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
-    .level-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 2px; color: #fff; }
-    .level-subtitle { font-size: 0.9rem; color: var(--gold); opacity: 0.8; margin-bottom: 12px; }
-    .level-meta { font-size: 0.8rem; color: rgba(237, 227, 200, 0.6); margin-top: auto; }
-
-    @media (max-width: 768px) {
-      .site-header { text-align: center; padding-bottom: 40px; }
-      .level-grid { grid-template-columns: 1fr; gap: 15px; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="wrap">
-    <div class="sannivesham-hero">
-      <div class="hero-emblem">
-        <img src="https://sannivesham.com/images/logo.png" alt="Sannivesham Logo" class="emblem-img">
-      </div>
-      <h1 class="main-brand-title">సన్నివేశం</h1>
-      <p class="main-brand-tagline">సంస్కృతి • సంప్రదాయం • సంభాషణ</p>
-    </div>
-
-    <header class="site-header" style="position: relative;">
-      <div>
-        <h2>చక్రవ్యూహం (Maze Quest)</h2>
-        <p class="subtitle">ఆటంకాలను దాటుకుంటూ హనుమంతుడిని సీతాదేవి వద్దకు చేర్చండి.</p>
-      </div>
-      <a href="https://sannivesham.com" style="position: absolute; right: 0; bottom: 15px; color: var(--cyan); text-decoration: none; font-size: 0.9rem;">← Back to main site</a>
-    </header>
-
-    <div id="levelGrid" class="level-grid"></div>
-  </div>
-
-  <script src="maze-data.js?v=3"></script>
-  <script type="module" src="progress.js?v=3"></script>
-  <script src="level-select.js?v=3"></script>
-</body>
-</html>
+window.MAZE_LEVELS = [
+  {
+    id: 1,
+    titleTelugu: "మహేంద్ర పర్వతం",
+    titleEnglish: "Mount Mahendra",
+    gridDimension: 11,
+    startX: 1,
+    startY: 1,
+    endX: 9,
+    endY: 9
+  },
+  {
+    id: 2,
+    titleTelugu: "మైనాక పర్వతం",
+    titleEnglish: "Mount Mainaka",
+    gridDimension: 11,
+    startX: 1,
+    startY: 1,
+    endX: 9,
+    endY: 9
+  },
+  {
+    id: 3,
+    titleTelugu: "సురస పరీక్ష",
+    titleEnglish: "Trial of Surasa",
+    gridDimension: 13,
+    startX: 1,
+    startY: 1,
+    endX: 11,
+    endY: 11
+  },
+  {
+    id: 4,
+    titleTelugu: "సింహిక ఛేదన",
+    titleEnglish: "Defeating Simhika",
+    gridDimension: 13,
+    startX: 1,
+    startY: 1,
+    endX: 11,
+    endY: 11
+  },
+  {
+    id: 5,
+    titleTelugu: "లంకిణీ ద్వారం",
+    titleEnglish: "Gateway of Lanka",
+    gridDimension: 15,
+    startX: 1,
+    startY: 1,
+    endX: 13,
+    endY: 13
+  },
+  {
+    id: 6,
+    titleTelugu: "లంకా నగర శోధన",
+    titleEnglish: "Search in Lanka",
+    gridDimension: 15,
+    startX: 1,
+    startY: 1,
+    endX: 13,
+    endY: 13
+  },
+  {
+    id: 7,
+    titleTelugu: "రావణ అంతఃపురం",
+    titleEnglish: "Ravana's Palace",
+    gridDimension: 17,
+    startX: 1,
+    startY: 1,
+    endX: 15,
+    endY: 15
+  },
+  {
+    id: 8,
+    titleTelugu: "విభీషణ మందిరం",
+    titleEnglish: "Vibhishana's Abode",
+    gridDimension: 17,
+    startX: 1,
+    startY: 1,
+    endX: 15,
+    endY: 15
+  },
+  {
+    id: 9,
+    titleTelugu: "అశోక వనం ప్రవేశం",
+    titleEnglish: "Ashoka Vatika Entry",
+    gridDimension: 19,
+    startX: 1,
+    startY: 1,
+    endX: 17,
+    endY: 17
+  },
+  {
+    id: 10,
+    titleTelugu: "శింశుపా వృక్షం",
+    titleEnglish: "Under the Shimshupa Tree",
+    gridDimension: 19,
+    startX: 1,
+    startY: 1,
+    endX: 17,
+    endY: 17
+  },
+  {
+    id: 11,
+    titleTelugu: "రాక్షస కాపలా",
+    titleEnglish: "Guards of Lanka",
+    gridDimension: 21,
+    startX: 1,
+    startY: 1,
+    endX: 19,
+    endY: 19
+  },
+  {
+    id: 12,
+    titleTelugu: "సీతాదర్శనం",
+    titleEnglish: "Meeting Devi Sita",
+    gridDimension: 23,
+    startX: 1,
+    startY: 1,
+    endX: 21,
+    endY: 21
+  }
+];

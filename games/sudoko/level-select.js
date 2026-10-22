@@ -23,13 +23,17 @@ import { LEVELS, getDifficultyLabel } from "./levels.js";
         <div class="level-title" style="font-weight: 600; font-size: 1.35rem; margin-bottom: 2px;">${level.titleTelugu}</div>
         <div class="level-subtitle" style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--gold); opacity: 0.85; margin-bottom: 12px;">(${level.titleEnglish})</div>
         <div class="level-meta" style="font-size: 0.85rem; opacity: 0.75;">
-          <span>Grid: ${level.size}×${level.size} · ${getDifficultyLabel(level.difficulty)}</span>
+          <span>గడులు: ${level.size}×${level.size} · ${getDifficultyLabel(level.difficulty)}</span>
       `;
       if (progress.completed && progress.bestTime) {
-        innerHTML += `<span> · Best: ${progress.bestTime}</span>`;
+        const m = String(Math.floor(progress.bestTime / 60)).padStart(2, "0");
+        const s = String(progress.bestTime % 60).padStart(2, "0");
+        innerHTML += `<span> · ఉత్తమ సమయం: ${m}:${s}</span>`;
       }
       innerHTML += `</div>`;
-      if (!isUnlocked) {
+      if (progress.completed) {
+        innerHTML += `<div style="position: absolute; top: 20px; right: 20px; color: var(--gold); font-weight: bold;">✔</div>`;
+      } else if (!isUnlocked) {
         innerHTML += `<div class="level-lock-icon" style="position: absolute; top: 20px; right: 20px;">🔒</div>`;
       }
       card.innerHTML = innerHTML;
@@ -38,14 +42,12 @@ import { LEVELS, getDifficultyLabel } from "./levels.js";
   }
 
   renderGrid();
+  window.addEventListener("progress:ready", renderGrid);
 
-  // Progress arrives asynchronously (Firebase auth state + Firestore fetch),
-  // so we re-render once shortly after load to reflect unlock/completion
-  // state without polling forever.
   let renderCount = 0;
   const pollId = setInterval(() => {
     renderGrid();
     renderCount++;
-    if (renderCount >= 6) clearInterval(pollId); // ~3s of polling, then stop
+    if (renderCount >= 6) clearInterval(pollId);
   }, 500);
 })();

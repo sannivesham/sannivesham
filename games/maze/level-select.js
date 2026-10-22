@@ -29,7 +29,7 @@
       `;
 
       if (progress.completed) {
-        innerHTML += `<div style="position: absolute; bottom: 20px; right: 20px; color: var(--gold); font-weight: bold;">腔 పూర్తయింది</div>`.replace("腔", "✔");
+        innerHTML += `<div style="position: absolute; bottom: 20px; right: 20px; color: var(--gold); font-weight: bold;">✔ పూర్తయింది</div>`;
       } else if (!isUnlocked) {
         innerHTML += `<div style="position: absolute; bottom: 20px; right: 20px;">🔒</div>`;
       }
@@ -40,5 +40,11 @@
   }
 
   renderGrid();
-  setInterval(renderGrid, 1000);
+  window.addEventListener("progress:ready", renderGrid);
+  let polls = 0;
+  const timer = setInterval(() => {
+    renderGrid();
+    polls++;
+    if (polls >= 5) clearInterval(timer);
+  }, 600);
 })();
