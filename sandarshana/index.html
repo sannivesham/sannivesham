@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SANDARSHANA BROWSER — See the web differently | Sannivesham</title>
+  <meta name="description" content="Download Sandarshana Browser for Android and Windows. A fast, privacy-first web browser with built-in ad blocking, active browsing time insights, and zero telemetry.">
+  <link rel="canonical" href="https://sannivesham.com/sandarshana/">
+  <link rel="icon" type="image/png" href="sandarshana_logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0A0F1D;
+      --bg-card: #121A2D;
+      --bg-card-hover: #17233B;
+      --primary: #82ACFF;
+      --primary-glow: rgba(130, 172, 255, 0.35);
+      --secondary: #A5C8FF;
+      --text-main: #F4F7FC;
+      --text-muted: #94A3B8;
+      --border: rgba(130, 172, 255, 0.15);
+      --border-hover: rgba(130, 172, 255, 0.4);
+      --shield-green: #10B981;
+      --shield-glow: rgba(16, 185, 129, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(49, 93, 184, 0.25) 0%, transparent 60%),
+        radial-gradient(circle at 10% 30%, rgba(130, 172, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .nav-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .nav-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .btn-nav {
+      background: linear-gradient(135deg, var(--primary) 0%, #315DB8 100%);
+      color: #0A0F1D;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 18px var(--primary-glow);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(130, 172, 255, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--shield-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--shield-green);
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #C9D9F8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-tagline {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    /* CTA Buttons */
+    .cta-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .btn-download-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, #82ACFF 0%, #315DB8 100%);
+      color: #0A0F1D;
+      padding: 16px 32px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 30px var(--primary-glow);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-download-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(130, 172, 255, 0.5);
+    }
+
+    .btn-download-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 16px 30px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-download-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .btn-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .btn-text-sub {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.85;
+    }
+
+    /* Browser Mockup Preview */
+    .mockup-wrapper {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto 100px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #1C273D 0%, #101827 100%);
+      border: 1px solid var(--border-hover);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(130, 172, 255, 0.15);
+      overflow: hidden;
+    }
+
+    .mockup-header {
+      background: #0D1424;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background-color: #EF4444; }
+    .dot-yellow { background-color: #F59E0B; }
+    .dot-green { background-color: #10B981; }
+
+    .mockup-address-bar {
+      flex: 1;
+      max-width: 540px;
+      margin: 0 auto;
+      background: #172338;
+      border: 1px solid rgba(130, 172, 255, 0.2);
+      border-radius: 20px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+
+    .mockup-body {
+      padding: 60px 24px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 30%, rgba(130, 172, 255, 0.08) 0%, transparent 60%);
+    }
+
+    .mockup-hero-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      box-shadow: 0 0 30px var(--primary-glow);
+      margin-bottom: 16px;
+    }
+
+    .mockup-search-preview {
+      max-width: 480px;
+      margin: 24px auto 32px;
+      background: #172338;
+      border: 1px solid rgba(130, 172, 255, 0.25);
+      border-radius: 25px;
+      padding: 14px 20px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mockup-badges-grid {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .preview-pill {
+      background: #172338;
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 60px 0 100px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon-wrapper {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(130, 172, 255, 0.12);
+      border: 1px solid rgba(130, 172, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .feature-icon-wrapper.green {
+      background: var(--shield-glow);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .feature-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Comparison / Specs Table */
+    .specs-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 100px;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .specs-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 2.6rem;
+      }
+    }
+
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(130, 172, 255, 0.1);
+    }
+
+    .spec-label {
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .spec-val {
+      font-size: 1.05rem;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 50px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="container">
+    <nav class="navbar">
+      <a href="https://sannivesham.com/sandarshana/" class="nav-brand">
+        <img src="sandarshana_logo.png" alt="Sandarshana Logo" class="nav-logo">
+        <span class="nav-title">SANDARSHANA</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#specs" class="nav-link">Specs</a>
+        <a href="https://sannivesham.com/" class="nav-link">Sannivesham.com</a>
+        <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana.apk" download class="btn-nav">Download APK</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="hero container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span>Official Release v1.0.0 • Android & Windows</span>
+    </div>
+
+    <h1 class="hero-title">See the web differently.</h1>
+    <h2 class="hero-tagline">SANDARSHANA WEB BROWSER</h2>
+    <p class="hero-description">
+      A fast, privacy-first web browser with built-in ad & tracker blocking, active website time analytics, and transparent two-level data insights. No telemetry, no accounts required.
+    </p>
+
+    <!-- Download CTA Buttons -->
+    <div class="cta-container">
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana.apk" download class="btn-download-primary" id="android-download">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.412 13.8533 8.125 12 8.125c-1.8533 0-3.5902.287-5.1368.8247L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.75h24c-.3432-4.0911-2.6889-7.5633-6.1185-9.4286"/>
+        </svg>
+        <div>
+          <span>Download for Android</span>
+          <span class="btn-text-sub">APK v1.0.0 • 22 MB • Android 8.0+</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana-Windows.zip" download class="btn-download-secondary" id="windows-download">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.8"/>
+        </svg>
+        <div>
+          <span>Download for Windows</span>
+          <span class="btn-text-sub">Portable Setup • 35 MB • 64-bit</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Interactive Browser Mockup -->
+    <div class="mockup-wrapper">
+      <div class="mockup-header">
+        <div class="mockup-dots">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+        </div>
+        <div class="mockup-address-bar">
+          <svg style="width:14px;height:14px;fill:#10B981" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+          <span>sandarshana://home — Shields Active</span>
+        </div>
+      </div>
+      <div class="mockup-body">
+        <img src="sandarshana_logo.png" alt="Emblem" class="mockup-hero-logo">
+        <h3 style="font-size:1.8rem; font-weight:700; margin-bottom:6px;">SANDARSHANA</h3>
+        <p style="color:var(--text-muted); font-size:0.95rem;">Private • Fast • Intelligent</p>
+
+        <div class="mockup-search-preview">
+          <svg style="width:18px;height:18px;fill:#94A3B8" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <span>Search with DuckDuckGo or enter web address...</span>
+        </div>
+
+        <div class="mockup-badges-grid">
+          <div class="preview-pill">
+            <span style="color:#10B981">●</span> <strong>Shields:</strong> Trackers Blocked
+          </div>
+          <div class="preview-pill">
+            <span style="color:#82ACFF">⏱</span> <strong>Time Insights:</strong> Active Browsing
+          </div>
+          <div class="preview-pill">
+            <span style="color:#A5C8FF">📊</span> <strong>Data Usage:</strong> Level 1 Measured
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Bento Grid -->
+  <section class="features-section container" id="features">
+    <div class="section-header">
+      <h2 class="section-title">Built for a Better Web</h2>
+      <p class="section-subtitle">Sandarshana brings together cutting-edge privacy engineering and transparent analytics.</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper green">🛡️</div>
+        <h3 class="feature-title">Sandarshana Shields</h3>
+        <p class="feature-text">
+          High-performance network interception powered by curated EasyList & EasyPrivacy rules. Blocks telemetry, tracking pixels, and invasive ads at the network layer before they execute.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">⏱️</div>
+        <h3 class="feature-title">Your Browsing Today</h3>
+        <p class="feature-text">
+          Signature active foreground time tracking using a monotonic hardware clock. Tracks real browsing time on domains and pauses automatically when in background or internal screens.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">📊</div>
+        <h3 class="feature-title">Two-Level Data Insights</h3>
+        <p class="feature-text">
+          Honest network measurement: Level 1 measures exact UID bytes via Android TrafficStats, while Level 2 estimates per-site resource transfers with transparent disclosures.
+        </p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🕶️</div>
+        <h3 class="feature-title">Private Session Isolation</h3>
+        <p class="feature-text">
+          Dedicated private mode tray with discrete visual identity. Zero persistence to normal history or time analytics, with complete cache and cookie clearing on tab exit.
+        </p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">📑</div>
+        <h3 class="feature-title">Multi-Tab Architecture</h3>
+        <p class="feature-text">
+          Fluid card-based tab switcher with instant tab duplication, search filtering, independent navigation stacks, and separate standard and private tab trays.
+        </p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">⚡</div>
+        <h3 class="feature-title">Zero Bloat & Zero Telemetry</h3>
+        <p class="feature-text">
+          No sign-in required, no crypto wallets, and no analytics sent to remote servers. All your bookmarks, history, and usage statistics remain strictly on your device.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Specifications -->
+  <section class="container" id="specs">
+    <div class="specs-section">
+      <h2 style="font-family:'Space Grotesk', sans-serif; font-size:2rem; font-weight:700; margin-bottom:28px; text-align:center;">
+        Platform Specifications
+      </h2>
+      <div class="specs-grid">
+        <!-- Android Spec -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <h3 style="color:var(--primary); font-size:1.3rem; font-weight:700;">Android Edition</h3>
+          <div class="spec-item">
+            <span class="spec-label">Rendering Engine</span>
+            <span class="spec-val">Android System WebView (Chromium)</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">UI Toolkit</span>
+            <span class="spec-val">Jetpack Compose with Material 3</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Compatibility</span>
+            <span class="spec-val">Android 8.0 (API 26) through Android 15+</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Local Storage</span>
+            <span class="spec-val">Room SQLite Database & Preferences DataStore</span>
+          </div>
+        </div>
+
+        <!-- Windows Spec -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <h3 style="color:var(--secondary); font-size:1.3rem; font-weight:700;">Windows Desktop Edition</h3>
+          <div class="spec-item">
+            <span class="spec-label">Desktop Engine</span>
+            <span class="spec-val">Compose Multiplatform for Desktop (Skiko x64)</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Architecture</span>
+            <span class="spec-val">Native 64-bit Windows Executable (.exe)</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Compatibility</span>
+            <span class="spec-val">Windows 10 & Windows 11 (64-bit)</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">AdBlock Ruleset</span>
+            <span class="spec-val">Curated EasyList & EasyPrivacy Index</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p style="margin-bottom:8px;">
+        <strong>SANDARSHANA BROWSER</strong> — An open-source innovation by <a href="https://sannivesham.com/">Sannivesham</a>.
+      </p>
+      <p style="font-size:0.82rem; opacity:0.75;">
+        "See the web differently." • Apache-2.0 & GPLv3/MPL 2.0 Compatible Ruleset • &copy; 2026 Sannivesham. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
