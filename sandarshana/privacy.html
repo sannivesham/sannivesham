@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Sandarshana Browser | Sannivesham</title>
+  <meta name="description" content="Official Privacy Policy for Sandarshana Web Browser. Compliant with Google Play Store policies, All-Ages and Families Policy requirements, COPPA, and GDPR.">
+  <link rel="canonical" href="https://sannivesham.com/sandarshana/privacy/">
+  <link rel="icon" type="image/png" href="../sandarshana_logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0A0F1D;
+      --bg-card: #121A2D;
+      --bg-card-hover: #17233B;
+      --primary: #82ACFF;
+      --primary-glow: rgba(130, 172, 255, 0.35);
+      --secondary: #A5C8FF;
+      --text-main: #F4F7FC;
+      --text-muted: #94A3B8;
+      --border: rgba(130, 172, 255, 0.15);
+      --shield-green: #10B981;
+      --shield-glow: rgba(16, 185, 129, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.7;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(49, 93, 184, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+      background-attachment: fixed;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .nav-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .nav-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    /* Header */
+    .policy-header {
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--shield-glow);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--shield-green);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .policy-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .policy-meta {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Card */
+    .policy-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Typography inside content */
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-top: 36px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(130, 172, 255, 0.12);
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      color: var(--text-main);
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #D1D5DB;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: #D1D5DB;
+      margin-left: 24px;
+      margin-bottom: 18px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    strong {
+      color: var(--text-main);
+    }
+
+    .highlight-box {
+      background: rgba(130, 172, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 0 12px 12px 0;
+      margin: 20px 0;
+    }
+
+    .highlight-box.green {
+      background: var(--shield-glow);
+      border-left-color: var(--shield-green);
+    }
+
+    .highlight-box p {
+      margin-bottom: 0;
+      color: #E2E8F0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(130, 172, 255, 0.1);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #D1D5DB;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      padding-top: 30px;
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .policy-card {
+        padding: 24px;
+      }
+      .policy-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="https://sannivesham.com/sandarshana/" class="nav-brand">
+        <img src="../sandarshana_logo.png" alt="Sandarshana Logo" class="nav-logo">
+        <span class="nav-title">SANDARSHANA</span>
+      </a>
+      <div class="nav-links">
+        <a href="https://sannivesham.com/sandarshana/" class="nav-link">Browser Home</a>
+        <a href="https://sannivesham.com/" class="nav-link">Sannivesham.com</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="policy-header">
+      <div class="badge">
+        <span>🛡️</span> Google Play Families &amp; All-Ages Policy Compliant
+      </div>
+      <h1 class="policy-title">Privacy Policy</h1>
+      <p class="policy-meta">
+        <strong>Application:</strong> Sandarshana Web Browser &nbsp;•&nbsp; 
+        <strong>Developer:</strong> Sannivesham &nbsp;•&nbsp; 
+        <strong>Last Updated:</strong> October 2026
+      </p>
+    </header>
+
+    <!-- Policy Document Card -->
+    <main class="policy-card">
+
+      <h2>1. Introduction &amp; Commitment to Privacy</h2>
+      <p>
+        Welcome to <strong>Sandarshana</strong> ("See the web differently"), a modern, privacy-first web browser developed by <strong>Sannivesham</strong> ("we", "us", or "our").
+      </p>
+      <p>
+        We believe that your web browsing activities belong exclusively to you. Sandarshana is engineered with a strict <strong>privacy-by-design</strong> architecture: <strong>we do not collect, harvest, transmit, profile, or sell your personal information, search queries, or browsing history</strong>.
+      </p>
+
+      <div class="highlight-box green">
+        <p>
+          <strong>Summary of Our Core Promise:</strong> Sandarshana operates with zero user tracking and zero telemetry. All bookmarks, browsing history, and usage insights remain stored 100% locally on your personal device.
+        </p>
+      </div>
+
+      <h2>2. Target Audience &amp; Children's Privacy (All-Ages / Families Policy)</h2>
+      <p>
+        Sandarshana is rated for <strong>Everyone / All Ages</strong> and complies fully with Google Play's <strong>Families Policy</strong>, the United States <strong>Children's Online Privacy Protection Act (COPPA)</strong>, and the European Union <strong>General Data Protection Regulation (GDPR / GDPR-K)</strong>:
+      </p>
+      <ul>
+        <li><strong>No Personal Data Collection from Children:</strong> We do not knowingly solicit, collect, or store any Personally Identifiable Information (PII) from children under the age of 13 (or under the applicable age of digital consent in any jurisdiction), nor from users of any age.</li>
+        <li><strong>No Account Creation:</strong> Sandarshana requires no registration, login, username, email address, or phone number to use.</li>
+        <li><strong>No Behavioral Ad Tracking:</strong> The browser contains <strong>NO third-party advertising SDKs</strong>, behavioral tracking SDKs, or commercial remarketing libraries.</li>
+        <li><strong>Built-In Content &amp; Tracker Shields:</strong> Sandarshana includes built-in network filters (EasyList &amp; EasyPrivacy) designed to block invasive tracking scripts, profiling pixels, and malicious third-party redirects before they execute on the child's or user's device.</li>
+      </ul>
+
+      <h2>3. Data Collection and Usage Practices (Google Play Data Safety)</h2>
+      <p>
+        For full transparency in accordance with the Google Play Store Data Safety Declaration:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Data Category</th>
+            <th>Collected by Sannivesham?</th>
+            <th>Shared with Third Parties?</th>
+            <th>Storage Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Personal Information</strong> (Name, Email, Phone, Address)</td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>None (Not collected)</td>
+          </tr>
+          <tr>
+            <td><strong>Browsing History</strong></td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>Local device only (Room SQLite)</td>
+          </tr>
+          <tr>
+            <td><strong>Bookmarks &amp; Reading List</strong></td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>Local device only (Room SQLite)</td>
+          </tr>
+          <tr>
+            <td><strong>Search Queries &amp; URLs</strong></td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>Sent only to your chosen search engine (e.g. DuckDuckGo / Google)</td>
+          </tr>
+          <tr>
+            <td><strong>Analytics &amp; Usage Insights</strong> (Time spent, Data estimates)</td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>Calculated and kept 100% on-device</td>
+          </tr>
+          <tr>
+            <td><strong>Financial / Payment Info</strong></td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>None (Not collected)</td>
+          </tr>
+          <tr>
+            <td><strong>Precise Location Data</strong></td>
+            <td>❌ No</td>
+            <td>❌ No</td>
+            <td>None (Not collected by app)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. Detailed Browser Features &amp; How They Protect You</h2>
+
+      <h3>A. Local Storage (Room Database &amp; DataStore)</h3>
+      <p>
+        Any websites you choose to bookmark, items saved to your reading list, or entries in your browsing history are stored locally in private application sandbox storage using Android Room SQLite. These records are never uploaded to any cloud server or synchronized without your explicit, future opt-in choice.
+      </p>
+
+      <h3>B. Private Browsing Mode (Incognito)</h3>
+      <p>
+        When you open a Private Tab in Sandarshana:
+      </p>
+      <ul>
+        <li>Browsing history is <strong>not</strong> written to the local database.</li>
+        <li>Cookies, web caches, and form inputs are isolated and automatically destroyed as soon as the private tab or session is closed.</li>
+        <li>Search suggestions from private sessions are not saved.</li>
+      </ul>
+
+      <h3>C. Sandarshana Shields (Ad &amp; Tracker Blocking)</h3>
+      <p>
+        Sandarshana integrates a high-performance network interception engine powered by curated EasyList and EasyPrivacy rulesets. When enabled, it intercepts outbound HTTP/HTTPS requests directly inside the Android WebView and blocks known tracking domains, analytics beacons, and intrusive advertising scripts. Shield statistics (e.g. number of blocked requests) are calculated solely on-device.
+      </p>
+
+      <h3>D. Website Time &amp; Data Usage Insights</h3>
+      <p>
+        The browser displays your daily time spent browsing and an estimate of data consumption on your homepage widget. This metric is computed in real time on your device to help you manage digital wellness. <strong>No metrics, browsing summaries, or usage statistics are transmitted to our servers or any third-party analytics company.</strong>
+      </p>
+
+      <h2>5. Android Device Permissions Explained</h2>
+      <p>
+        Sandarshana only requests permissions that are technically necessary to perform core web browser functions:
+      </p>
+      <ul>
+        <li>
+          <strong><code>INTERNET</code>:</strong> Required to connect to the Internet and load web pages, images, and content requested by you.
+        </li>
+        <li>
+          <strong><code>ACCESS_NETWORK_STATE</code>:</strong> Used to check whether the device is connected to Wi-Fi or mobile data, allowing the browser to display friendly offline screens and prevent unnecessary retry loops when no network is available.
+        </li>
+        <li>
+          <strong><code>POST_NOTIFICATIONS</code> (Android 13+):</strong> Used solely to show active download progress notifications (such as when downloading an APK, PDF, or image file). We do not send promotional, marketing, or spam push notifications.
+        </li>
+      </ul>
+
+      <div class="highlight-box">
+        <p>
+          <strong>Camera, Microphone, and Location:</strong> Sandarshana does not request or retain camera, microphone, or location permissions for its own use. If a website you choose to visit (e.g. a video call or mapping service) requests these capabilities, standard Android runtime permission prompts will ask for your explicit consent. Sandarshana neither accesses nor records these streams.
+        </p>
+      </div>
+
+      <h2>6. Third-Party Websites &amp; Search Engines</h2>
+      <p>
+        As a general-purpose web browser, Sandarshana allows you to navigate to external third-party websites across the World Wide Web. Please be aware:
+      </p>
+      <ul>
+        <li>When you enter a search query, your query is transmitted directly to your configured default search engine (such as DuckDuckGo or Google) in order to fetch search results.</li>
+        <li>Third-party websites you visit are operated by their respective owners and have their own separate privacy policies and terms of service.</li>
+        <li>While Sandarshana Shields block known trackers, we encourage users and parents to review the individual privacy policies of external websites visited.</li>
+      </ul>
+
+      <h2>7. User Control &amp; Data Deletion Rights</h2>
+      <p>
+        You have absolute control over all data stored on your device:
+      </p>
+      <ul>
+        <li><strong>Clear Browsing Data:</strong> You can clear your browsing history, cached files, cookies, and local database records at any time via <strong>Settings &rarr; Clear Browsing Data</strong>.</li>
+        <li><strong>Reset Insights:</strong> You can pause or reset your browsing time and data usage counters directly from the Insights dashboard.</li>
+        <li><strong>Complete Deletion:</strong> Uninstalling the Sandarshana application completely removes all locally stored data, databases, and preferences from your device.</li>
+      </ul>
+
+      <h2>8. Security Safeguards</h2>
+      <p>
+        Sandarshana incorporates industry-standard security protections:
+      </p>
+      <ul>
+        <li><strong>HTTPS by Default:</strong> Web addresses typed without a scheme default to secure HTTPS connections.</li>
+        <li><strong>TLS Certificate Integrity:</strong> The browser strictly respects SSL/TLS certificate validation and warns against expired, mismatched, or insecure certificates.</li>
+        <li><strong>Android Sandboxing:</strong> App data is stored within Android's protected application sandbox, inaccessible to other standard apps without root privileges.</li>
+      </ul>
+
+      <h2>9. Updates to This Privacy Policy</h2>
+      <p>
+        We may occasionally update this Privacy Policy to reflect app enhancements or evolving Google Play Store and legal requirements. Whenever changes occur, the updated policy will be published at this permanent URL with a revised "Last Updated" date. We recommend checking this page periodically.
+      </p>
+
+      <h2>10. Contact Us &amp; Developer Information</h2>
+      <p>
+        If you or your parent/guardian have questions, feedback, or concerns regarding this Privacy Policy or Sandarshana Browser's privacy practices, please contact us:
+      </p>
+      <ul>
+        <li><strong>Developer / Publisher:</strong> Sannivesham</li>
+        <li><strong>Official Website:</strong> <a href="https://sannivesham.com" style="color:var(--primary);">https://sannivesham.com</a></li>
+        <li><strong>Browser Portal:</strong> <a href="https://sannivesham.com/sandarshana/" style="color:var(--primary);">https://sannivesham.com/sandarshana/</a></li>
+        <li><strong>Email:</strong> <a href="mailto:info.sannivesham@gmail.com" style="color:var(--primary);">info.sannivesham@gmail.com</a></li>
+      </ul>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        &copy; 2026 <strong>Sannivesham</strong>. All rights reserved. • 
+        <a href="https://sannivesham.com/sandarshana/">Sandarshana Browser</a> • 
+        <a href="https://sannivesham.com/about/privacy-policy.html">Sannivesham Platform Privacy</a>
+      </p>
+    </footer>
+  </div>
+
+</body>
+</html>
