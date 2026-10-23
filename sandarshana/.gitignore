@@ -1,3 +1,3 @@
 *.apk
 *.zip
-*.exe
+!Sandarshana.exe

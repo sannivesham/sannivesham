@@ -1255,13 +1255,13 @@
           <span class="btn-text-sub">APK v2.0.0 • 15 MB • Android 8.0+</span>
         </div>
       </a>
-      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana-Windows.zip" download class="btn-download-secondary" style="justify-content:center;">
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana.exe" download class="btn-download-secondary" style="justify-content:center;">
         <svg class="btn-icon" viewBox="0 0 24 24">
           <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.8"/>
         </svg>
         <div class="btn-text-wrap">
           <span class="btn-text-main">Download for Windows</span>
-          <span class="btn-text-sub">Portable Setup • 35 MB • 64-bit</span>
+          <span class="btn-text-sub">Direct Executable (.exe) • 1 MB • 64-bit</span>
         </div>
       </a>
     </div>
@@ -1292,13 +1292,13 @@
         </div>
       </a>
 
-      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana-Windows.zip" download class="btn-download-secondary" id="windows-download">
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana.exe" download class="btn-download-secondary" id="windows-download">
         <svg class="btn-icon" viewBox="0 0 24 24">
           <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.8"/>
         </svg>
         <div class="btn-text-wrap">
           <span class="btn-text-main">Download for Windows</span>
-          <span class="btn-text-sub">Portable Setup • 35 MB • <span id="windowsBtnSub">64-bit</span></span>
+          <span class="btn-text-sub">Direct Executable (.exe) • 1 MB • <span id="windowsBtnSub">64-bit</span></span>
         </div>
       </a>
     </div>
@@ -1788,7 +1788,7 @@
       });
 
       // Windows download buttons
-      const windowsTriggers = document.querySelectorAll('#windows-download, a[href*="Sandarshana-Windows.zip"]');
+      const windowsTriggers = document.querySelectorAll('#windows-download, a[href*="Sandarshana.exe"], a[href*="Sandarshana-Windows.zip"]');
       windowsTriggers.forEach(btn => {
         btn.addEventListener('click', (e) => handleDownloadClick('windows', e));
       });
