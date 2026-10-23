@@ -249,11 +249,29 @@
     }
 
     @media (max-width: 640px) {
+      .container {
+        padding: 0 16px;
+      }
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 18px 0;
+      }
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+      }
       .policy-card {
-        padding: 24px;
+        padding: 20px 16px;
+        border-radius: 18px;
       }
       .policy-title {
-        font-size: 2rem;
+        font-size: 1.85rem;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
       }
     }
   </style>

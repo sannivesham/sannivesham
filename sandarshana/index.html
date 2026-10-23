@@ -2,37 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>SANDARSHANA BROWSER — See the web differently | Sannivesham</title>
   <meta name="description" content="Download Sandarshana Browser for Android and Windows. A fast, privacy-first web browser with built-in ad blocking, active browsing time insights, and zero telemetry.">
   <link rel="canonical" href="https://sannivesham.com/sandarshana/">
   <link rel="icon" type="image/png" href="sandarshana_logo.png">
 
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sannivesham.com/sandarshana/">
+  <meta property="og:title" content="SANDARSHANA BROWSER — See the web differently">
+  <meta property="og:description" content="A fast, privacy-first web browser with built-in ad blocking, active website time analytics, and transparent data insights. No telemetry, no accounts required.">
+  <meta property="og:image" content="https://sannivesham.com/sandarshana/sandarshana_logo.png">
+  <meta name="theme-color" content="#070B14">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #0A0F1D;
-      --bg-card: #121A2D;
-      --bg-card-hover: #17233B;
-      --primary: #82ACFF;
-      --primary-glow: rgba(130, 172, 255, 0.35);
-      --secondary: #A5C8FF;
-      --text-main: #F4F7FC;
-      --text-muted: #94A3B8;
-      --border: rgba(130, 172, 255, 0.15);
-      --border-hover: rgba(130, 172, 255, 0.4);
+      --bg-dark: #070B14;
+      --bg-card: rgba(15, 23, 42, 0.72);
+      --bg-card-hover: rgba(22, 34, 60, 0.85);
+      --primary: #38BDF8;
+      --primary-gradient: linear-gradient(135deg, #38BDF8 0%, #2563EB 100%);
+      --primary-glow: rgba(56, 189, 248, 0.35);
+      --celestial: #00D2FF;
+      --secondary: #82ACFF;
+      --accent-purple: #8B5CF6;
+      --accent-gold: #F59E0B;
       --shield-green: #10B981;
       --shield-glow: rgba(16, 185, 129, 0.25);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-sub: #64748B;
+      --border: rgba(56, 189, 248, 0.15);
+      --border-hover: rgba(56, 189, 248, 0.45);
+      --glass-bg: rgba(11, 19, 36, 0.82);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -42,26 +61,61 @@
       line-height: 1.6;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(49, 93, 184, 0.25) 0%, transparent 60%),
-        radial-gradient(circle at 10% 30%, rgba(130, 172, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 50% -10%, rgba(37, 99, 235, 0.28) 0%, transparent 65%),
+        radial-gradient(circle at 10% 25%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 65%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
       background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Ambient animated mesh orbs */
+    .ambient-glow {
+      position: fixed;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: floatGlow 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translateX(-50%) translateY(0) scale(1); }
+      100% { transform: translateX(-46%) translateY(40px) scale(1.12); }
     }
 
     /* Container */
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Navbar */
+    /* Header & Sticky Nav */
+    .header-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(7, 11, 20, 0.78);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      min-height: 68px;
     }
 
     .nav-brand {
@@ -70,21 +124,27 @@
       gap: 12px;
       text-decoration: none;
       color: var(--text-main);
+      z-index: 101;
     }
 
     .nav-logo {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       box-shadow: 0 0 16px var(--primary-glow);
+      transition: transform 0.3s ease;
+    }
+
+    .nav-brand:hover .nav-logo {
+      transform: rotate(8deg) scale(1.05);
     }
 
     .nav-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.35rem;
-      font-weight: 700;
+      font-size: 1.28rem;
+      font-weight: 800;
       letter-spacing: 1.5px;
-      background: linear-gradient(135deg, #FFFFFF 0%, var(--primary) 100%);
+      background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -99,49 +159,185 @@
       color: var(--text-muted);
       text-decoration: none;
       font-weight: 500;
-      font-size: 0.95rem;
-      transition: color 0.2s ease;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      position: relative;
+      padding: 6px 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.25s ease;
+      border-radius: 2px;
     }
 
     .nav-link:hover {
-      color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
     }
 
     .btn-nav {
-      background: linear-gradient(135deg, var(--primary) 0%, #315DB8 100%);
-      color: #0A0F1D;
+      background: var(--primary-gradient);
+      color: #070B14;
       font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 30px;
+      padding: 9px 20px;
+      border-radius: 24px;
       text-decoration: none;
-      font-size: 0.9rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--primary-glow);
+      transition: all 0.25s ease;
     }
 
     .btn-nav:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 18px var(--primary-glow);
+      box-shadow: 0 6px 22px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Mobile Hamburger Button */
+    .menu-toggle {
+      display: none;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 101;
+      transition: all 0.25s ease;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--primary);
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--text-main);
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile Nav Drawer / Sheet */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(7, 11, 20, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 24px 20px 40px;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .mobile-drawer.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .mobile-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-link:active,
+    .mobile-nav-link:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .mobile-drawer-cta {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 80px 0 60px;
+      padding: 50px 0 40px;
       position: relative;
     }
 
+    /* Hero Release Badge */
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       padding: 8px 18px;
-      background: rgba(130, 172, 255, 0.1);
+      background: rgba(56, 189, 248, 0.08);
       border: 1px solid var(--border);
-      border-radius: 50px;
-      font-size: 0.88rem;
+      border-radius: 100px;
+      font-size: clamp(0.78rem, 2.5vw, 0.88rem);
       font-weight: 600;
       color: var(--primary);
       margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      max-width: 95%;
     }
 
     .hero-badge-dot {
@@ -149,34 +345,57 @@
       height: 8px;
       background-color: var(--shield-green);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--shield-green);
+      box-shadow: 0 0 10px var(--shield-green);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .hero-badge-dot::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 50%;
+      border: 1.5px solid var(--shield-green);
+      animation: radarPulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    }
+
+    @keyframes radarPulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(2.4); opacity: 0; }
     }
 
     .hero-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 3.8rem;
+      font-size: clamp(2.3rem, 6.5vw, 4.2rem);
       font-weight: 800;
-      letter-spacing: -1px;
+      letter-spacing: -0.03em;
       line-height: 1.15;
-      margin-bottom: 16px;
-      background: linear-gradient(180deg, #FFFFFF 0%, #C9D9F8 100%);
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #FFFFFF 20%, #93C5FD 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero-tagline {
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.15rem, 3.5vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 1.5px;
       color: var(--primary);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
     }
 
     .hero-description {
-      font-size: 1.15rem;
+      font-size: clamp(0.96rem, 2.7vw, 1.12rem);
       color: var(--text-muted);
-      max-width: 680px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
+      max-width: 660px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+      padding: 0 10px;
     }
 
     /* CTA Buttons */
@@ -184,29 +403,61 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 60px;
+      margin-bottom: 50px;
+      padding: 0 12px;
     }
 
     .btn-download-primary {
       display: inline-flex;
       align-items: center;
       gap: 14px;
-      background: linear-gradient(135deg, #82ACFF 0%, #315DB8 100%);
-      color: #0A0F1D;
-      padding: 16px 32px;
-      border-radius: 16px;
+      background: var(--primary-gradient);
+      color: #070B14;
+      padding: 16px 28px;
+      border-radius: 18px;
       text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
+      font-weight: 800;
+      font-size: 1.05rem;
       box-shadow: 0 10px 30px var(--primary-glow);
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      min-width: 260px;
+      text-align: left;
+    }
+
+    /* Shimmer highlight effect */
+    .btn-download-primary::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.35) 50%,
+        transparent 65%
+      );
+      transform: rotate(25deg);
+      animation: shimmer 5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(25deg); }
+      30%, 100% { transform: translateX(100%) rotate(25deg); }
     }
 
     .btn-download-primary:hover {
       transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 16px 40px rgba(130, 172, 255, 0.5);
+      box-shadow: 0 16px 42px rgba(56, 189, 248, 0.55);
+    }
+
+    .btn-download-primary:active {
+      transform: translateY(0) scale(0.98);
     }
 
     .btn-download-secondary {
@@ -216,47 +467,69 @@
       background: var(--bg-card);
       color: var(--text-main);
       border: 1px solid var(--border);
-      padding: 16px 30px;
-      border-radius: 16px;
+      padding: 16px 28px;
+      border-radius: 18px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 1.1rem;
-      transition: all 0.25s ease;
+      font-size: 1.05rem;
+      transition: all 0.28s ease;
+      min-width: 260px;
+      text-align: left;
+      backdrop-filter: blur(12px);
     }
 
     .btn-download-secondary:hover {
       background: var(--bg-card-hover);
       border-color: var(--primary);
       transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn-download-secondary:active {
+      transform: translateY(0) scale(0.98);
     }
 
     .btn-icon {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    .btn-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btn-text-main {
+      font-size: 1.02rem;
+      line-height: 1.25;
     }
 
     .btn-text-sub {
-      display: block;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 500;
-      opacity: 0.85;
+      opacity: 0.82;
+      margin-top: 2px;
     }
 
-    /* Browser Mockup Preview */
+    /* Device Mockup Showcase */
     .mockup-wrapper {
       position: relative;
-      max-width: 960px;
-      margin: 0 auto 100px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, #1C273D 0%, #101827 100%);
+      max-width: 880px;
+      margin: 0 auto 80px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #121C2F 0%, #0B1322 100%);
       border: 1px solid var(--border-hover);
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(130, 172, 255, 0.15);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.75),
+        0 0 45px rgba(56, 189, 248, 0.18);
       overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .mockup-header {
-      background: #0D1424;
+      background: #090F1C;
       padding: 14px 18px;
       display: flex;
       align-items: center;
@@ -266,12 +539,13 @@
 
     .mockup-dots {
       display: flex;
-      gap: 8px;
+      gap: 7px;
+      flex-shrink: 0;
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
     }
     .dot-red { background-color: #EF4444; }
@@ -280,133 +554,226 @@
 
     .mockup-address-bar {
       flex: 1;
-      max-width: 540px;
+      max-width: 520px;
       margin: 0 auto;
-      background: #172338;
-      border: 1px solid rgba(130, 172, 255, 0.2);
+      background: #142034;
+      border: 1px solid rgba(56, 189, 248, 0.22);
       border-radius: 20px;
-      padding: 6px 16px;
+      padding: 8px 16px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .mockup-body {
-      padding: 60px 24px;
+      padding: 50px 20px;
       text-align: center;
-      background: radial-gradient(circle at 50% 30%, rgba(130, 172, 255, 0.08) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 25%, rgba(56, 189, 248, 0.1) 0%, transparent 65%);
     }
 
     .mockup-hero-logo {
-      width: 90px;
-      height: 90px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
-      box-shadow: 0 0 30px var(--primary-glow);
+      box-shadow: 0 0 35px var(--primary-glow);
       margin-bottom: 16px;
+      animation: logoPulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoPulse {
+      0% { transform: scale(1); box-shadow: 0 0 25px var(--primary-glow); }
+      100% { transform: scale(1.04); box-shadow: 0 0 45px rgba(56, 189, 248, 0.55); }
+    }
+
+    .mockup-brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #38BDF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mockup-brand-sub {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 500;
+      margin-bottom: 24px;
     }
 
     .mockup-search-preview {
-      max-width: 480px;
-      margin: 24px auto 32px;
-      background: #172338;
-      border: 1px solid rgba(130, 172, 255, 0.25);
-      border-radius: 25px;
-      padding: 14px 20px;
+      max-width: 460px;
+      margin: 0 auto 28px;
+      background: #131E33;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: 24px;
+      padding: 13px 18px;
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       display: flex;
       align-items: center;
       gap: 12px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .mockup-search-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
     }
 
     .mockup-badges-grid {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .preview-pill {
-      background: #172338;
+      background: #142034;
       border: 1px solid var(--border);
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    /* Features Section */
+    .preview-pill:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Features Bento Grid Section */
     .features-section {
-      padding: 60px 0 100px;
+      padding: 60px 0 90px;
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 48px;
+    }
+
+    .section-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      margin-bottom: 10px;
     }
 
     .section-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.4rem;
-      font-weight: 700;
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
       margin-bottom: 12px;
       color: var(--text-main);
     }
 
     .section-subtitle {
       color: var(--text-muted);
-      font-size: 1.1rem;
-      max-width: 600px;
+      font-size: clamp(0.95rem, 2.5vw, 1.08rem);
+      max-width: 580px;
       margin: 0 auto;
+      line-height: 1.6;
     }
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
     }
 
     .feature-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      transition: all 0.3s ease;
+      border-radius: 22px;
+      padding: 28px 24px;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--card-accent, var(--primary)), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .feature-card:hover {
       background: var(--bg-card-hover);
       border-color: var(--border-hover);
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
     }
 
     .feature-icon-wrapper {
       width: 52px;
       height: 52px;
-      border-radius: 14px;
-      background: rgba(130, 172, 255, 0.12);
-      border: 1px solid rgba(130, 172, 255, 0.25);
+      border-radius: 16px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.24);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
       font-size: 1.5rem;
+      transition: transform 0.3s ease;
     }
 
-    .feature-icon-wrapper.green {
+    .feature-card:hover .feature-icon-wrapper {
+      transform: scale(1.1) rotate(4deg);
+    }
+
+    .feature-card.green { --card-accent: #10B981; }
+    .feature-card.green .feature-icon-wrapper {
       background: var(--shield-glow);
       border-color: rgba(16, 185, 129, 0.35);
     }
 
+    .feature-card.purple { --card-accent: #8B5CF6; }
+    .feature-card.purple .feature-icon-wrapper {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: rgba(139, 92, 246, 0.35);
+    }
+
+    .feature-card.gold { --card-accent: #F59E0B; }
+    .feature-card.gold .feature-icon-wrapper {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
     .feature-title {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 10px;
@@ -415,52 +782,55 @@
 
     .feature-text {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.94rem;
+      line-height: 1.62;
     }
 
-    /* Comparison / Specs Table */
+    /* Specs Section */
     .specs-section {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
-      margin-bottom: 100px;
+      border-radius: 26px;
+      padding: 38px 32px;
+      margin-bottom: 90px;
+      backdrop-filter: blur(14px);
     }
 
     .specs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      gap: 36px;
     }
 
-    @media (max-width: 768px) {
-      .specs-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-title {
-        font-size: 2.6rem;
-      }
+    .spec-group-title {
+      color: var(--primary);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .spec-item {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(130, 172, 255, 0.1);
+      gap: 5px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.1);
     }
 
     .spec-label {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--primary);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .spec-val {
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: var(--text-main);
       font-weight: 500;
     }
@@ -468,43 +838,307 @@
     /* Footer */
     .footer {
       border-top: 1px solid var(--border);
-      padding: 50px 0;
+      padding: 44px 0 70px;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     .footer a {
       color: var(--primary);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .footer a:hover {
+      color: var(--celestial);
       text-decoration: underline;
+    }
+
+    /* Floating Quick Download Pill (Mobile Only) */
+    .floating-download-bar {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 16px;
+      right: 16px;
+      background: rgba(11, 19, 36, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-hover);
+      border-radius: 50px;
+      padding: 10px 14px 10px 18px;
+      z-index: 90;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.2);
+      align-items: center;
+      justify-content: space-between;
+      transform: translateY(120%);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .floating-download-bar.visible {
+      transform: translateY(0);
+    }
+
+    .floating-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .floating-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .floating-sub {
+      font-size: 0.72rem;
+      color: var(--primary);
+    }
+
+    .floating-btn {
+      background: var(--primary-gradient);
+      color: #070B14;
+      font-weight: 800;
+      font-size: 0.84rem;
+      padding: 9px 16px;
+      border-radius: 30px;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    /* ---------------------------------------------------- */
+    /* RESPONSIVE BREAKPOINTS (Mobile & Tablet Optimization) */
+    /* ---------------------------------------------------- */
+    @media (max-width: 900px) {
+      .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Mobile Nav */
+      .nav-links {
+        display: none;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .mobile-drawer {
+        display: flex;
+      }
+
+      /* Hero Mobile */
+      .hero {
+        padding: 30px 0 30px;
+      }
+      .hero-badge {
+        padding: 7px 14px;
+        margin-bottom: 20px;
+        gap: 8px;
+      }
+      .hero-description {
+        margin-bottom: 28px;
+      }
+
+      /* Stacked Full-Width Mobile CTA Buttons */
+      .cta-container {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+      }
+      .btn-download-primary,
+      .btn-download-secondary {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        padding: 15px 20px;
+      }
+
+      /* Mobile Phone Frame Mockup */
+      .mockup-wrapper {
+        border-radius: 32px;
+        margin-bottom: 60px;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+      }
+      .mockup-header {
+        padding: 12px 14px;
+      }
+      .mockup-address-bar {
+        font-size: 0.78rem;
+        padding: 6px 12px;
+      }
+      .mockup-body {
+        padding: 36px 16px;
+      }
+      .mockup-hero-logo {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 12px;
+      }
+      .mockup-search-preview {
+        padding: 11px 14px;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .mockup-badges-grid {
+        gap: 8px;
+      }
+      .preview-pill {
+        padding: 8px 12px;
+        font-size: 0.78rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Bento Cards on Mobile */
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .feature-card {
+        padding: 22px 18px;
+      }
+
+      /* Specs on Mobile */
+      .specs-section {
+        padding: 24px 18px;
+        border-radius: 20px;
+        margin-bottom: 60px;
+      }
+
+      /* Show Floating Download Bar */
+      .floating-download-bar {
+        display: flex;
+      }
+
+      .footer {
+        padding-bottom: 90px; /* spacing for floating download pill */
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hero-title {
+        font-size: 2.1rem;
+      }
+      .btn-text-main {
+        font-size: 0.95rem;
+      }
+      .btn-text-sub {
+        font-size: 0.68rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <div class="container">
-    <nav class="navbar">
-      <a href="https://sannivesham.com/sandarshana/" class="nav-brand">
-        <img src="sandarshana_logo.png" alt="Sandarshana Logo" class="nav-logo">
-        <span class="nav-title">SANDARSHANA</span>
+  <!-- Ambient background glow mesh -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Header & Sticky Navigation Bar -->
+  <header class="header-wrapper">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="https://sannivesham.com/sandarshana/" class="nav-brand">
+          <img src="sandarshana_logo.png" alt="Sandarshana Logo" class="nav-logo">
+          <span class="nav-title">SANDARSHANA</span>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="nav-links">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#specs" class="nav-link">Specs</a>
+          <a href="privacy/" class="nav-link">Privacy Policy</a>
+          <a href="https://sannivesham.com/" class="nav-link">Sannivesham.com</a>
+          <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana-v2.0.0.apk" download class="btn-nav">
+            <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24">
+              <path d="M5 20h14v-2H5v2zM12 4l-5 5h3v6h4V9h3l-5-5z" transform="rotate(180 12 12)"/>
+            </svg>
+            Download APK
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div>
+      <ul class="mobile-nav-list">
+        <li>
+          <a href="#features" class="mobile-nav-link" data-close-drawer>
+            <span>✨ Features</span>
+            <span style="color:var(--primary); font-size:1.2rem;">&rsaquo;</span>
+          </a>
+        </li>
+        <li>
+          <a href="#specs" class="mobile-nav-link" data-close-drawer>
+            <span>⚙️ Platform Specs</span>
+            <span style="color:var(--primary); font-size:1.2rem;">&rsaquo;</span>
+          </a>
+        </li>
+        <li>
+          <a href="privacy/" class="mobile-nav-link" data-close-drawer>
+            <span>🛡️ Privacy Policy</span>
+            <span style="color:var(--primary); font-size:1.2rem;">&rsaquo;</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://sannivesham.com/" class="mobile-nav-link" data-close-drawer>
+            <span>🌐 Sannivesham.com</span>
+            <span style="color:var(--primary); font-size:1.2rem;">&rsaquo;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mobile-drawer-cta">
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana-v2.0.0.apk" download class="btn-download-primary" style="justify-content:center;">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.412 13.8533 8.125 12 8.125c-1.8533 0-3.5902.287-5.1368.8247L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.75h24c-.3432-4.0911-2.6889-7.5633-6.1185-9.4286"/>
+        </svg>
+        <div class="btn-text-wrap">
+          <span class="btn-text-main">Download for Android</span>
+          <span class="btn-text-sub">APK v2.0.0 • 15 MB • Android 8.0+</span>
+        </div>
       </a>
-      <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#specs" class="nav-link">Specs</a>
-        <a href="privacy/" class="nav-link">Privacy Policy</a>
-        <a href="https://sannivesham.com/" class="nav-link">Sannivesham.com</a>
-        <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana-v2.0.0.apk" download class="btn-nav">Download APK</a>
-      </div>
-    </nav>
+      <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v1.0.0/Sandarshana-Windows.zip" download class="btn-download-secondary" style="justify-content:center;">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.8"/>
+        </svg>
+        <div class="btn-text-wrap">
+          <span class="btn-text-main">Download for Windows</span>
+          <span class="btn-text-sub">Portable Setup • 35 MB • 64-bit</span>
+        </div>
+      </a>
+    </div>
   </div>
 
   <!-- Hero Section -->
-  <header class="hero container">
+  <main class="hero container">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
       <span>Official Release v2.0.0 (API 36) • Android & Windows</span>
@@ -522,8 +1156,8 @@
         <svg class="btn-icon" viewBox="0 0 24 24">
           <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.412 13.8533 8.125 12 8.125c-1.8533 0-3.5902.287-5.1368.8247L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.75h24c-.3432-4.0911-2.6889-7.5633-6.1185-9.4286"/>
         </svg>
-        <div>
-          <span>Download for Android</span>
+        <div class="btn-text-wrap">
+          <span class="btn-text-main">Download for Android</span>
           <span class="btn-text-sub">APK v2.0.0 • 15 MB • Android 8.0+ (API 36)</span>
         </div>
       </a>
@@ -532,14 +1166,14 @@
         <svg class="btn-icon" viewBox="0 0 24 24">
           <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.8"/>
         </svg>
-        <div>
-          <span>Download for Windows</span>
+        <div class="btn-text-wrap">
+          <span class="btn-text-main">Download for Windows</span>
           <span class="btn-text-sub">Portable Setup • 35 MB • 64-bit</span>
         </div>
       </a>
     </div>
 
-    <!-- Interactive Browser Mockup -->
+    <!-- Interactive Browser Mockup / Mobile Showcase -->
     <div class="mockup-wrapper">
       <div class="mockup-header">
         <div class="mockup-dots">
@@ -548,20 +1182,22 @@
           <span class="dot dot-green"></span>
         </div>
         <div class="mockup-address-bar">
-          <svg style="width:14px;height:14px;fill:#10B981" viewBox="0 0 24 24">
+          <svg style="width:14px;height:14px;fill:#10B981;flex-shrink:0;" viewBox="0 0 24 24">
             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
           </svg>
           <span>sandarshana://home — Shields Active</span>
         </div>
       </div>
       <div class="mockup-body">
-        <img src="sandarshana_logo.png" alt="Emblem" class="mockup-hero-logo">
-        <h3 style="font-size:1.8rem; font-weight:700; margin-bottom:6px;">SANDARSHANA</h3>
-        <p style="color:var(--text-muted); font-size:0.95rem;">Private • Fast • Intelligent</p>
+        <img src="sandarshana_logo.png" alt="Sandarshana Logo" class="mockup-hero-logo">
+        <h3 class="mockup-brand-title">SANDARSHANA</h3>
+        <p class="mockup-brand-sub">Private • Fast • Intelligent</p>
 
         <div class="mockup-search-preview">
-          <svg style="width:18px;height:18px;fill:#94A3B8" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <span>Search with DuckDuckGo or enter web address...</span>
+          <svg style="width:18px;height:18px;fill:#94A3B8;flex-shrink:0;" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <span class="mockup-search-text">Search with DuckDuckGo or enter URL...</span>
         </div>
 
         <div class="mockup-badges-grid">
@@ -569,27 +1205,28 @@
             <span style="color:#10B981">●</span> <strong>Shields:</strong> Trackers Blocked
           </div>
           <div class="preview-pill">
-            <span style="color:#82ACFF">⏱</span> <strong>Time Insights:</strong> Active Browsing
+            <span style="color:#38BDF8">⏱</span> <strong>Time Insights:</strong> Active Browsing
           </div>
           <div class="preview-pill">
-            <span style="color:#A5C8FF">📊</span> <strong>Data Usage:</strong> Level 1 Measured
+            <span style="color:#8B5CF6">📊</span> <strong>Data Usage:</strong> Level 1 Measured
           </div>
         </div>
       </div>
     </div>
-  </header>
+  </main>
 
   <!-- Features Bento Grid -->
   <section class="features-section container" id="features">
     <div class="section-header">
+      <span class="section-badge">Pure Innovation</span>
       <h2 class="section-title">Built for a Better Web</h2>
       <p class="section-subtitle">Sandarshana brings together cutting-edge privacy engineering and transparent analytics.</p>
     </div>
 
     <div class="features-grid">
       <!-- Feature 1 -->
-      <div class="feature-card">
-        <div class="feature-icon-wrapper green">🛡️</div>
+      <div class="feature-card green">
+        <div class="feature-icon-wrapper">🛡️</div>
         <h3 class="feature-title">Sandarshana Shields</h3>
         <p class="feature-text">
           High-performance network interception powered by curated EasyList & EasyPrivacy rules. Blocks telemetry, tracking pixels, and invasive ads at the network layer before they execute.
@@ -606,7 +1243,7 @@
       </div>
 
       <!-- Feature 3 -->
-      <div class="feature-card">
+      <div class="feature-card purple">
         <div class="feature-icon-wrapper">📊</div>
         <h3 class="feature-title">Two-Level Data Insights</h3>
         <p class="feature-text">
@@ -615,7 +1252,7 @@
       </div>
 
       <!-- Feature 4 -->
-      <div class="feature-card">
+      <div class="feature-card purple">
         <div class="feature-icon-wrapper">🕶️</div>
         <h3 class="feature-title">Private Session Isolation</h3>
         <p class="feature-text">
@@ -624,7 +1261,7 @@
       </div>
 
       <!-- Feature 5 -->
-      <div class="feature-card">
+      <div class="feature-card gold">
         <div class="feature-icon-wrapper">📑</div>
         <h3 class="feature-title">Multi-Tab Architecture</h3>
         <p class="feature-text">
@@ -646,13 +1283,15 @@
   <!-- Technical Specifications -->
   <section class="container" id="specs">
     <div class="specs-section">
-      <h2 style="font-family:'Space Grotesk', sans-serif; font-size:2rem; font-weight:700; margin-bottom:28px; text-align:center;">
+      <h2 style="font-family:'Space Grotesk', sans-serif; font-size:clamp(1.7rem, 4vw, 2.2rem); font-weight:800; margin-bottom:28px; text-align:center;">
         Platform Specifications
       </h2>
       <div class="specs-grid">
         <!-- Android Spec -->
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <h3 style="color:var(--primary); font-size:1.3rem; font-weight:700;">Android Edition</h3>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <h3 class="spec-group-title">
+            <span>📱</span> Android Edition
+          </h3>
           <div class="spec-item">
             <span class="spec-label">Rendering Engine</span>
             <span class="spec-val">Android System WebView (Chromium)</span>
@@ -663,7 +1302,7 @@
           </div>
           <div class="spec-item">
             <span class="spec-label">Compatibility</span>
-            <span class="spec-val">Android 8.0 (API 26) through Android 15+</span>
+            <span class="spec-val">Android 8.0 (API 26) through Android 15 / 16 (API 36)</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Local Storage</span>
@@ -672,8 +1311,10 @@
         </div>
 
         <!-- Windows Spec -->
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <h3 style="color:var(--secondary); font-size:1.3rem; font-weight:700;">Windows Desktop Edition</h3>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <h3 class="spec-group-title" style="color:var(--secondary);">
+            <span>💻</span> Windows Desktop Edition
+          </h3>
           <div class="spec-item">
             <span class="spec-label">Desktop Engine</span>
             <span class="spec-val">Compose Multiplatform for Desktop (Skiko x64)</span>
@@ -698,15 +1339,68 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p style="margin-bottom:8px;">
+      <p style="margin-bottom:10px;">
         <strong>SANDARSHANA BROWSER</strong> — An open-source innovation by <a href="https://sannivesham.com/">Sannivesham</a>. &bull; 
         <a href="privacy/">Privacy Policy</a>
       </p>
-      <p style="font-size:0.82rem; opacity:0.75;">
+      <p style="font-size:0.82rem; opacity:0.75; max-width:650px; margin:0 auto; line-height:1.6;">
         "See the web differently." • Apache-2.0 & GPLv3/MPL 2.0 Compatible Ruleset • &copy; 2026 Sannivesham. All rights reserved.
       </p>
     </div>
   </footer>
+
+  <!-- Floating Mobile Quick Download Pill -->
+  <div class="floating-download-bar" id="floatingBar" aria-label="Quick download bar">
+    <div class="floating-info">
+      <img src="sandarshana_logo.png" alt="Logo" class="floating-logo">
+      <div>
+        <div class="floating-title">SANDARSHANA</div>
+        <div class="floating-sub">v2.0.0 • 15 MB</div>
+      </div>
+    </div>
+    <a href="https://github.com/sannivesham/sannivesham/releases/download/sandarshana-v2.0.0/Sandarshana-v2.0.0.apk" download class="floating-btn">
+      Download APK
+    </a>
+  </div>
+
+  <!-- Interactive Logic -->
+  <script>
+    // Mobile Drawer Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const closeDrawerElements = document.querySelectorAll('[data-close-drawer]');
+
+    function toggleMenu() {
+      const isOpen = menuToggle.classList.toggle('active');
+      mobileDrawer.classList.toggle('active', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+
+    closeDrawerElements.forEach(item => {
+      item.addEventListener('click', () => {
+        if (menuToggle.classList.contains('active')) {
+          toggleMenu();
+        }
+      });
+    });
+
+    // Floating Download Bar on Mobile (Appears after scrolling past hero)
+    const floatingBar = document.getElementById('floatingBar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > 380) {
+        floatingBar.classList.add('visible');
+      } else {
+        floatingBar.classList.remove('visible');
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+  </script>
 
 </body>
 </html>
