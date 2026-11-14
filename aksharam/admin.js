@@ -42,12 +42,6 @@ function initAdminAuth() {
       }
     }
 
-    // Check if session passcode flag is active
-    if (sessionStorage.getItem('aksharam_admin_session') === 'true') {
-      unlockAdminView();
-      return;
-    }
-
     // Lock screen
     if (lockoutScreen) lockoutScreen.style.display = 'block';
     if (mainContainer) mainContainer.style.display = 'none';
@@ -59,21 +53,8 @@ function initAdminAuth() {
       const password = document.getElementById('adminAuthPassword').value.trim();
       authError.textContent = "";
 
-      if (!password) {
-        authError.textContent = "Please enter password or Admin Passcode.";
-        return;
-      }
-
-      // Check Master Passcode bypass
-      if (password === 'aksharam2026' || password === 'sannivesham2026') {
-        sessionStorage.setItem('aksharam_admin_session', 'true');
-        unlockAdminView();
-        showToast("Signed in via Admin Key", "success");
-        return;
-      }
-
-      if (!email) {
-        authError.textContent = "Please enter admin email.";
+      if (!email || !password) {
+        authError.textContent = "Please enter both admin email and password.";
         return;
       }
 
@@ -83,10 +64,10 @@ function initAdminAuth() {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         const isAdmin = await checkIsAdmin(userCred.user);
         if (isAdmin) {
-          sessionStorage.setItem('aksharam_admin_session', 'true');
           unlockAdminView();
           showToast("Welcome to Admin Studio!", "success");
         } else {
+          await signOut(auth);
           authError.textContent = "Access denied: This user does not have administrator privileges.";
         }
       } catch (err) {
@@ -100,7 +81,6 @@ function initAdminAuth() {
 
   if (btnLogout) {
     btnLogout.addEventListener('click', async () => {
-      sessionStorage.removeItem('aksharam_admin_session');
       await signOut(auth);
       window.location.reload();
     });

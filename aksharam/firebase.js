@@ -52,48 +52,43 @@ export const CLOUDINARY_CONFIG = {
   uploadPreset: "sannivesham_upload"
 };
 
-// Admin email check list (matches existing Sannivesham admin logic)
-export const ADMIN_EMAILS = [
-  "admin@sannivesham.com",
-  "sannivesham@gmail.com",
-  "sanniveshamapp@gmail.com",
-  "potturisanjeev@gmail.com"
-];
-
 /**
- * Checks if the user has administrative privileges
+ * Checks if the user has administrative privileges using Firebase Custom Claims
+ * with fallback to protected Firestore settings/admin allowlist.
  */
 export async function checkIsAdmin(user) {
   if (!user) return false;
-  
-  // If user signed in via password or email matches ADMIN_EMAILS
-  if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-    return true;
-  }
-  
-  // Check settings/admin document in Firestore
+
+  // 1. Primary check: Firebase Custom Claims (admin: true)
   try {
-    const adminSnap = await getDoc(doc(db, "settings", "admin"));
-    if (adminSnap.exists()) {
-      const data = adminSnap.data();
-      if (Array.isArray(data.emails) && data.emails.includes(user.email)) return true;
-      if (data.email && data.email === user.email) return true;
+    const tokenResult = await user.getIdTokenResult(true);
+    if (tokenResult?.claims?.admin === true) {
+      return true;
     }
   } catch (e) {
-    console.warn("Could not check settings/admin collection:", e);
+    console.warn("Could not check custom claims:", e);
   }
 
-  // Check aksharam_admins collection
+  // 2. Check settings/admin document in Firestore
+  if (user.email) {
+    try {
+      const adminSnap = await getDoc(doc(db, "settings", "admin"));
+      if (adminSnap.exists()) {
+        const data = adminSnap.data();
+        if (Array.isArray(data.emails) && data.emails.includes(user.email)) return true;
+        if (data.email && data.email === user.email) return true;
+      }
+    } catch (e) {
+      console.warn("Could not check settings/admin collection:", e);
+    }
+  }
+
+  // 3. Check aksharam_admins collection
   try {
     const aksharamAdminSnap = await getDoc(doc(db, "aksharam_admins", user.uid));
     if (aksharamAdminSnap.exists()) return true;
   } catch (e) {
     // collection might not exist yet
-  }
-
-  // Fallback check: if user has a verified admin session key stored in sessionStorage
-  if (sessionStorage.getItem("aksharam_admin_session") === "true") {
-    return true;
   }
 
   return false;

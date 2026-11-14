@@ -65,6 +65,49 @@
       doc, getDoc
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
+    const MAX_FAILED_ATTEMPTS = 5;
+    const LOCKOUT_DURATION_MS = 5 * 60 * 1000;
+    const loginBtn = document.getElementById("adminLoginBtn");
+    const msg = document.getElementById("loginMsg");
+
+    function getLockoutState() {
+      const lockedUntil = parseInt(localStorage.getItem("drushyam_admin_locked_until") || "0", 10);
+      const failedAttempts = parseInt(localStorage.getItem("drushyam_admin_failed_attempts") || "0", 10);
+      const now = Date.now();
+      if (lockedUntil > now) {
+        return { isLocked: true, remainingSec: Math.ceil((lockedUntil - now) / 1000) };
+      }
+      return { isLocked: false, remainingSec: 0, failedAttempts };
+    }
+
+    function recordFailedAttempt() {
+      const current = parseInt(localStorage.getItem("drushyam_admin_failed_attempts") || "0", 10) + 1;
+      localStorage.setItem("drushyam_admin_failed_attempts", current.toString());
+      if (current >= MAX_FAILED_ATTEMPTS) {
+        const lockUntil = Date.now() + LOCKOUT_DURATION_MS;
+        localStorage.setItem("drushyam_admin_locked_until", lockUntil.toString());
+        return { locked: true, remainingSec: Math.ceil(LOCKOUT_DURATION_MS / 1000) };
+      }
+      return { locked: false, remainingAttempts: MAX_FAILED_ATTEMPTS - current };
+    }
+
+    function resetLockoutState() {
+      localStorage.removeItem("drushyam_admin_failed_attempts");
+      localStorage.removeItem("drushyam_admin_locked_until");
+    }
+
+    function updateLockoutUI() {
+      const state = getLockoutState();
+      if (state.isLocked) {
+        loginBtn.disabled = true;
+        msg.textContent = `⏳ ఖాతా తాత్కాలికంగా లాక్ చేయబడింది. దయచేసి ${state.remainingSec} సెకన్ల తర్వాత ప్రయత్నించండి.`;
+        setTimeout(updateLockoutUI, 1000);
+        return true;
+      }
+      loginBtn.disabled = false;
+      return false;
+    }
+
     async function verifyAdminStatus(user) {
       if (!user) return false;
       try {
@@ -85,36 +128,58 @@
       return false;
     }
 
+    updateLockoutUI();
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const isAdmin = await verifyAdminStatus(user);
-        if (isAdmin) window.location.href = "dashboard.html";
+        if (isAdmin) {
+          resetLockoutState();
+          window.location.href = "dashboard.html";
+        }
       }
     });
 
-    document.getElementById("adminLoginBtn").addEventListener("click", async () => {
+    loginBtn.addEventListener("click", async () => {
+      if (updateLockoutUI()) return;
+
       const email = document.getElementById("adminEmail").value.trim();
       const password = document.getElementById("adminPassword").value.trim();
-      const msg = document.getElementById("loginMsg");
 
       if (!email || !password) {
-        msg.innerText = "Email మరియు Password నమోదు చేయండి";
+        msg.textContent = "Email మరియు Password నమోదు చేయండి";
         return;
       }
 
-      msg.innerText = "⏳ తనిఖీ చేస్తోంది (Verifying credentials)...";
+      msg.textContent = "⏳ తనిఖీ చేస్తోంది (Verifying credentials)...";
+      loginBtn.disabled = true;
 
       try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         const isAdmin = await verifyAdminStatus(cred.user);
         if (!isAdmin) {
           await signOut(auth);
-          msg.innerText = "❌ ఈ ఖాతాకు అడ్మిన్ అనుమతులు లేవు (Access Denied: Not an admin)";
+          const attemptInfo = recordFailedAttempt();
+          if (attemptInfo.locked) {
+            updateLockoutUI();
+          } else {
+            msg.textContent = `❌ ఈ ఖాతాకు అడ్మిన్ అనుమతులు లేవు. మిగిలిన ప్రయత్నాలు: ${attemptInfo.remainingAttempts}`;
+          }
           return;
         }
+        resetLockoutState();
+        msg.textContent = "✅ Login Successful";
         window.location.href = "dashboard.html";
       } catch (e) {
-        msg.innerText = "లాగిన్ విఫలమైంది — " + e.message;
+        const attemptInfo = recordFailedAttempt();
+        if (attemptInfo.locked) {
+          updateLockoutUI();
+        } else {
+          msg.textContent = `లాగిన్ విఫలమైంది — ${e.message} (మిగిలిన ప్రయత్నాలు: ${attemptInfo.remainingAttempts})`;
+        }
+      } finally {
+        const state = getLockoutState();
+        if (!state.isLocked) loginBtn.disabled = false;
       }
     });
   </script>

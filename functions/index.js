@@ -278,3 +278,67 @@ exports.createSubscriptionOrder = functions.https.onRequest((req, res) => {
 exports.verifySubscriptionPayment = functions.https.onRequest((req, res) => {
   return corsMiddleware(req, res, () => handleVerifyPayment(req, res, db, admin));
 });
+
+// ---------------------------------------------------------------------
+// 6. SECURE CLOUDINARY SIGNED UPLOAD ENDPOINT
+// ---------------------------------------------------------------------
+exports.getCloudinaryUploadSignature = functions.https.onRequest((req, res) => {
+  return corsMiddleware(req, res, async () => {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method Not Allowed' });
+    }
+
+    try {
+      const authHeader = req.headers.authorization || '';
+      if (!authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const idToken = authHeader.split('Bearer ')[1].trim();
+      const decoded = await admin.auth().verifyIdToken(idToken);
+
+      // Verify admin status
+      let isAdmin = decoded.admin === true;
+      if (!isAdmin && decoded.email) {
+        const adminDoc = await db.collection('settings').doc('admin').get();
+        if (adminDoc.exists) {
+          const d = adminDoc.data();
+          if ((Array.isArray(d.emails) && d.emails.includes(decoded.email)) || d.email === decoded.email) {
+            isAdmin = true;
+          }
+        }
+      }
+
+      if (!isAdmin) {
+        return res.status(403).json({ error: 'Access denied: Administrator privileges required' });
+      }
+
+      const cloudName = process.env.CLOUDINARY_CLOUD_NAME || functions.config().cloudinary?.cloud_name || 'du5em76za';
+      const apiKey = process.env.CLOUDINARY_API_KEY || functions.config().cloudinary?.api_key || '';
+      const apiSecret = process.env.CLOUDINARY_API_SECRET || functions.config().cloudinary?.api_secret || '';
+
+      if (!apiKey || !apiSecret) {
+        return res.status(500).json({ error: 'Cloudinary server credentials are not configured' });
+      }
+
+      const timestamp = Math.floor(Date.now() / 1000);
+      const folder = 'sannivesham_admin_uploads';
+      const crypto = require('crypto');
+      const signature = crypto
+        .createHash('sha1')
+        .update(`folder=${folder}&timestamp=${timestamp}${apiSecret}`)
+        .digest('hex');
+
+      return res.status(200).json({
+        signature,
+        timestamp,
+        apiKey,
+        cloudName,
+        folder
+      });
+    } catch (err) {
+      console.error('Cloudinary signature error:', err);
+      return res.status(500).json({ error: 'Failed to generate upload signature' });
+    }
+  });
+});

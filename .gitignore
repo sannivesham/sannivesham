@@ -23,9 +23,17 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Binaries & Executables (host in GitHub Releases instead)
+*.exe
+*.dll
+*.msi
+*.dmg
+*.pkg
+*.apk
+sandarshana/Sandarshana.exe
+
 # Desktop App Builds
 desktop-app/dist/
 desktop-app/dist-packager/
 desktop-app/node_modules/
 desktop-app/*.png
-

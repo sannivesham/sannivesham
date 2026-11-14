@@ -58,8 +58,39 @@ onAuthStateChanged(auth, async (user) => {
   loadSectionData(activeSection);
 });
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 const CLOUD_NAME = "du5em76za";
 const UPLOAD_PRESET = "sannivesham_upload";
+
+async function getSignedUploadParams() {
+  try {
+    if (auth.currentUser) {
+      const token = await auth.currentUser.getIdToken();
+      const resp = await fetch("https://us-central1-sannivesham-b4231.cloudfunctions.net/getCloudinaryUploadSignature", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (resp.ok) {
+        return await resp.json();
+      }
+    }
+  } catch (e) {
+    console.warn("Could not retrieve signed upload params:", e);
+  }
+  return null;
+}
 
 /* ══════════════════════════════════════
    IMAGE UPLOAD
@@ -73,11 +104,23 @@ function uploadImage() {
     input.onchange = async () => {
       const file = input.files[0];
       if (!file) return resolve(null);
+
+      const signedParams = await getSignedUploadParams();
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", UPLOAD_PRESET);
+
+      if (signedParams && signedParams.signature) {
+        formData.append("api_key", signedParams.apiKey);
+        formData.append("timestamp", signedParams.timestamp);
+        formData.append("signature", signedParams.signature);
+        formData.append("folder", signedParams.folder);
+      } else {
+        formData.append("upload_preset", UPLOAD_PRESET);
+      }
+
+      const activeCloud = signedParams?.cloudName || CLOUD_NAME;
       const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${activeCloud}/image/upload`,
         { method: "POST", body: formData }
       );
       const data = await res.json();
@@ -106,13 +149,23 @@ function uploadAudioFile(boxOrId = null) {
       statusText.style.padding = "6px 0";
       if (box) box.appendChild(statusText);
 
+      const signedParams = await getSignedUploadParams();
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", UPLOAD_PRESET);
 
+      if (signedParams && signedParams.signature) {
+        formData.append("api_key", signedParams.apiKey);
+        formData.append("timestamp", signedParams.timestamp);
+        formData.append("signature", signedParams.signature);
+        formData.append("folder", signedParams.folder);
+      } else {
+        formData.append("upload_preset", UPLOAD_PRESET);
+      }
+
+      const activeCloud = signedParams?.cloudName || CLOUD_NAME;
       try {
         const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
+          `https://api.cloudinary.com/v1_1/${activeCloud}/video/upload`,
           { method: "POST", body: formData }
         );
         const data = await res.json();
@@ -4468,14 +4521,20 @@ async function loadSubscribers() {
     const data = d.data();
     const row = document.createElement("div");
     row.className = "cms-list-item";
+    const safeName = escapeHtml(data.name || "Unknown");
+    const safeEmail = escapeHtml(data.email || "");
+    const safePlan = escapeHtml(data.plan || "");
+    const safeAmount = Number(data.amount) || 0;
+    const safeId = escapeHtml(d.id);
+
     row.innerHTML = `
       <div class="cms-list-item-text">
-        <div style="font-weight:bold;">${data.name || "Unknown"}</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.5);">${data.email || ""} • ${data.plan || ""} • ₹${data.amount || 0}</div>
+        <div style="font-weight:bold;">${safeName}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);">${safeEmail} • ${safePlan} • ₹${safeAmount}</div>
         <div style="font-size:12px;color:${data.active ? "#2ed573" : "#ff6b6b"};">${data.active ? "✅ Active" : "❌ Inactive"}</div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="sub-toggle-btn cms-list-delete-btn" data-id="${d.id}" data-active="${data.active}" style="background:rgba(255,209,102,0.2);color:#ffd166;">
+        <button class="sub-toggle-btn cms-list-delete-btn" data-id="${safeId}" data-active="${data.active}" style="background:rgba(255,209,102,0.2);color:#ffd166;">
           ${data.active ? "Deactivate" : "Activate"}
         </button>
       </div>

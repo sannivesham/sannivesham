@@ -52,6 +52,16 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
@@ -220,17 +230,20 @@ async function loadCategories() {
 
     snap.forEach(d => {
       const c = d.data();
-      vidSelect.innerHTML += `<option value="${d.id}">${c.emoji || "🏷️"} ${c.name}</option>`;
+      const safeName = escapeHtml(c.name || "");
+      const safeEmoji = escapeHtml(c.emoji || "🏷️");
+      const safeId = escapeHtml(d.id);
+      vidSelect.innerHTML += `<option value="${safeId}">${safeEmoji} ${safeName}</option>`;
 
       const row = document.createElement("div");
       row.className = "item-row";
       row.innerHTML = `
         <div class="item-info">
-          <div class="item-title">${c.emoji || ""} ${c.name}</div>
-          <div class="item-sub">క్రమ సంఖ్య: ${c.order}</div>
+          <div class="item-title">${safeEmoji} ${safeName}</div>
+          <div class="item-sub">క్రమ సంఖ్య: ${Number(c.order) || 0}</div>
         </div>
         <div class="item-actions">
-          <button class="btn-danger" data-id="${d.id}">తొలగించండి</button>
+          <button class="btn-danger" data-id="${safeId}">తొలగించండి</button>
         </div>
       `;
       row.querySelector(".btn-danger").addEventListener("click", async () => {
@@ -352,25 +365,31 @@ async function loadVideos() {
         ? `<span class="badge badge-direct">DIRECT MP4</span>`
         : `<span class="badge badge-yt">YOUTUBE</span>`;
 
+      const safeTitle = escapeHtml(v.title || "");
+      const safeCategory = escapeHtml(v.category || "");
+      const safeDuration = escapeHtml(v.duration || "");
+      const safeYear = escapeHtml(v.year || "");
+      const safeId = escapeHtml(d.id);
+
       if (heroSelect) {
-        heroSelect.innerHTML += `<option value="${d.id}">${v.title}</option>`;
+        heroSelect.innerHTML += `<option value="${safeId}">${safeTitle}</option>`;
       }
 
       const row = document.createElement("div");
       row.className = "item-row";
       row.innerHTML = `
-        <img class="item-thumb" src="${v.thumbnail || '../images/placeholder.jpg'}" alt="">
+        <img class="item-thumb" src="${escapeHtml(v.thumbnail || '../images/placeholder.jpg')}" alt="">
         <div class="item-info">
           <div class="item-title">
-            <span>${v.title}</span>
+            <span>${safeTitle}</span>
             ${accessBadge}
             ${sourceBadge}
           </div>
-          <div class="item-sub">${v.category || ""} • ${v.duration || ""} • ${v.year || ""}</div>
+          <div class="item-sub">${safeCategory} • ${safeDuration} • ${safeYear}</div>
         </div>
         <div class="item-actions">
-          <a href="watch.html?id=${d.id}" target="_blank" class="btn-outline" style="text-decoration:none;padding:6px 14px;font-size:0.75rem;">ప్లే చేయండి ▶</a>
-          <button class="btn-danger" data-id="${d.id}">తొలగించండి</button>
+          <a href="watch.html?id=${safeId}" target="_blank" class="btn-outline" style="text-decoration:none;padding:6px 14px;font-size:0.75rem;">ప్లే చేయండి ▶</a>
+          <button class="btn-danger" data-id="${safeId}">తొలగించండి</button>
         </div>
       `;
 
@@ -441,13 +460,17 @@ async function loadSubscribers() {
 
     snap.forEach(d => {
       const s = d.data();
+      const safeId = escapeHtml(d.id);
+      const safePlan = escapeHtml(s.plan || "Standard");
       const active = s.active ? "<span style='color:var(--green);font-weight:700;'>Active</span>" : "<span style='color:var(--red);font-weight:700;'>Expired</span>";
+      const safeExpiry = s.expiresAt ? escapeHtml(new Date(s.expiresAt).toLocaleDateString("te-IN")) : "Lifetime";
+
       html += `
         <tr style="border-bottom:1px solid var(--border);">
-          <td style="padding:10px;font-family:monospace;">${d.id}</td>
-          <td style="padding:10px;">${s.plan || "Standard"}</td>
+          <td style="padding:10px;font-family:monospace;">${safeId}</td>
+          <td style="padding:10px;">${safePlan}</td>
           <td style="padding:10px;">${active}</td>
-          <td style="padding:10px;">${s.expiresAt ? new Date(s.expiresAt).toLocaleDateString("te-IN") : "Lifetime"}</td>
+          <td style="padding:10px;">${safeExpiry}</td>
         </tr>
       `;
     });

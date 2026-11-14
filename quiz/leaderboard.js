@@ -7,6 +7,16 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 /* =========================================================
    1. STATE & URL PARAMETERS
    ========================================================= */
@@ -180,12 +190,13 @@ async function loadLeaderboard() {
       podiumOrder.forEach(p => {
         if (!p.item) return;
         const isMe = currentUser && currentUser.uid === p.item.uid;
+        const safeName = escapeHtml(p.item.name || "User");
         const card = document.createElement("div");
         card.className = `podium-card ${p.cls}`;
         card.innerHTML = `
           <span class="podium-medal">${p.medal}</span>
-          <div class="podium-name">${p.item.name} ${isMe ? "<span style='color:#ffd166;'>(మీరు)</span>" : ""}</div>
-          <div class="podium-score">⭐ ${p.item.score.toLocaleString()}</div>
+          <div class="podium-name">${safeName} ${isMe ? "<span style='color:#ffd166;'>(మీరు)</span>" : ""}</div>
+          <div class="podium-score">⭐ ${Number(p.item.score || 0).toLocaleString()}</div>
           <div style="font-size:0.8rem; color:var(--quiz-text-muted); margin-top:4px;">${p.rank}వ స్థానం</div>
         `;
         podiumEl.appendChild(card);
@@ -198,6 +209,7 @@ async function loadLeaderboard() {
 
       users.forEach((user, index) => {
         const isMe = currentUser && currentUser.uid === user.uid;
+        const safeUserName = escapeHtml(user.name || "User");
         const row = document.createElement("div");
         row.className = isMe ? "lb-row lb-row-me" : "lb-row";
 
@@ -210,11 +222,11 @@ async function loadLeaderboard() {
           <div class="lb-left">
             <span class="lb-rank">${rankBadge}</span>
             <span class="lb-name">
-              ${user.name}
+              ${safeUserName}
               ${isMe ? " <span style='color:var(--quiz-gold); font-weight:800;'>(మీరు)</span>" : ""}
             </span>
           </div>
-          <span class="lb-score">⭐ ${user.score.toLocaleString()}</span>
+          <span class="lb-score">⭐ ${Number(user.score || 0).toLocaleString()}</span>
         `;
         listEl.appendChild(row);
       });
