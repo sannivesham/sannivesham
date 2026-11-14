@@ -1,22 +1,18 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ====================================================
-    // AUTHENTICATION & ROLE HELPERS
-    // ====================================================
-
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    function isUser(uid) {
+    function isOwner(uid) {
       return isAuthenticated() && request.auth.uid == uid;
     }
 
-    // Admin authorization:
-    // 1. Primary: Custom claims (request.auth.token.admin == true)
-    // 2. Fallback: Checked against settings/admin allowlist document
+    // Admin verified via Firebase Custom Claims OR settings/admin allowlist
     function isAdmin() {
       return isAuthenticated() && (
         request.auth.token.admin == true ||
@@ -27,228 +23,95 @@ service cloud.firestore {
       );
     }
 
-    // Default deny all documents unless explicitly permitted below
+    // Default: Deny all access to any unlisted collection
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // ====================================================
-    // SYSTEM SETTINGS & CONFIGURATION
-    // ====================================================
-
+    // ----------------------------------------------------
+    // 1. ADMIN CONFIGURATION
+    // ----------------------------------------------------
     match /settings/admin {
-      // Authenticated users can check admin list for client UI resolution
       allow read: if isAuthenticated();
-      // Only existing admins can update the admin allowlist
       allow write: if isAdmin();
     }
 
-    match /settings/{settingId} {
+    match /settings/{doc} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /config/{configId} {
-      // Sensitive server config (API keys, credentials) restricted to Admin
+    match /config/{doc} {
       allow read, write: if isAdmin();
     }
 
-    // ====================================================
-    // PUBLIC READ CONTENT COLLECTIONS (Admin Write Only)
-    // ====================================================
-
-    match /events/{id} {
+    // ----------------------------------------------------
+    // 2. ACTIVE CONTENT: QUESTION OF THE DAY & WORD OF THE DAY
+    // ----------------------------------------------------
+    match /qotd/{date} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /festivals/{id} {
+    match /wordOfDay/{date} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /ithihasaluCategories/{id} {
+    // ----------------------------------------------------
+    // 3. QUIZ & LEADERBOARD
+    // ----------------------------------------------------
+    match /quizQuestions/{doc} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /ithihasaluSubCategories/{id} {
+    match /quizScores/{doc} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
     }
 
-    match /ithihasaluShlokas/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /templeCategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /temples/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /libraryCategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /librarySubcategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /libraryContent/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /qotd/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /wordOfDay/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /streamSettings/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /streamCategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /streamVideos/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /poojaGods/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-
-      match /rituals/{ritualId} {
-        allow read: if true;
-        allow write: if isAdmin();
-      }
-    }
-
-    match /storeCategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /storeProducts/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /storeSettings/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /slokaCategories/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /slokaChapters/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /slokas/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /videos/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /aboutMembers/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /aboutSettings/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /quizQuestions/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // ====================================================
-    // USER DATA & INTERACTIVE FEATURES
-    // ====================================================
-
-    match /users/{userId} {
-      allow read: if isAuthenticated();
-      // Users can only update their own profile and cannot tamper with roles/admin fields
-      allow create, update: if (isUser(userId) && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin', 'role']))) || isAdmin();
-      allow delete: if isAdmin();
-    }
-
-    match /sectionScores/{id} {
-      allow read: if isAuthenticated();
-      allow create, update: if isAuthenticated();
-      allow delete: if isAdmin();
-    }
-
-    match /japaCommunity/{id} {
+    match /sectionScores/{doc} {
       allow read: if true;
       allow create, update: if isAuthenticated();
       allow delete: if isAdmin();
     }
 
-    match /desktop_sync/{userId} {
-      allow read, write: if isUser(userId) || isAdmin();
+    // ----------------------------------------------------
+    // 4. USER AUTHENTICATION, PROFILES & GAME PROGRESS
+    // ----------------------------------------------------
+    match /users/{uid} {
+      // Read allowed for leaderboard rankings and profiles
+      allow read: if true;
+      // Users can only write their own profile and cannot escalate privileges
+      allow create, update: if isOwner(uid) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin', 'role']));
+      allow delete: if isAdmin();
     }
 
-    match /aksharam_users/{userId} {
-      allow read, write: if isUser(userId) || isAdmin();
+    match /desktop_sync/{code} {
+      allow read, write: if isAuthenticated();
     }
 
-    match /aksharam_admins/{id} {
-      allow read, write: if isAdmin();
+    match /japaCommunity/{deityId} {
+      allow read: if true;
+      allow create, update: if isAuthenticated();
+      allow delete: if isAdmin();
     }
 
-    match /aksharam_roadmap/{id} {
-      allow read: if isAuthenticated();
+    // ----------------------------------------------------
+    // 5. SERVER-CONTROLLED COLLECTIONS (Subscriptions & Moderation)
+    // ----------------------------------------------------
+    match /subscribers/{uid} {
+      // Users can only inspect their own subscription status
+      allow read: if isOwner(uid) || isAdmin();
+      // Client-side writes are strictly forbidden (managed by Razorpay Cloud Functions)
       allow write: if isAdmin();
     }
 
-    // ====================================================
-    // HIGH-SECURITY COLLECTIONS
-    // Client write is strictly forbidden.
-    // Writes are only permitted via Firebase Admin SDK / Cloud Functions or Admin.
-    // ====================================================
-
-    match /subscribers/{userId} {
-      // Users can only read their own subscription state; admins can read all
-      allow read: if isUser(userId) || isAdmin();
-      // Normal clients CANNOT write or forge subscriptions
-      allow write: if isAdmin();
-    }
-
-    match /ai_moderation_records/{userId} {
-      // Users can inspect their restriction duration; admins can read all
-      allow read: if isUser(userId) || isAdmin();
-      // Normal clients CANNOT clear their bans or ban others
+    match /ai_moderation_records/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
       allow write: if isAdmin();
     }
   }
