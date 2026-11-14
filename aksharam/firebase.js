@@ -1,10 +1,9 @@
 // Sannivesham Aksharam — firebase.js
 // Connects to Sannivesham Firebase backend with Realtime Firestore and Auth
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { app, auth, db, firebaseConfig } from "../firebase-config.js";
 
 import {
-  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -15,7 +14,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 import {
-  getFirestore,
   doc,
   setDoc,
   getDoc,
@@ -29,21 +27,7 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-// Sannivesham Production Firebase Configuration
-export const firebaseConfig = {
-  apiKey: "AIzaSyDH2Fo5K4L2sOn_mH5C3mqG6aIlhpeziFg",
-  authDomain: "sannivesham-b4231.firebaseapp.com",
-  projectId: "sannivesham-b4231",
-  storageBucket: "sannivesham-b4231.firebasestorage.app",
-  messagingSenderId: "915869829387",
-  appId: "1:915869829387:web:25d1f428a44fb3ef93fa0e",
-  measurementId: "G-D4JD43J1QS"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+export { app, auth, db, firebaseConfig };
 const provider = new GoogleAuthProvider();
 
 // Cloudinary Configuration for Media Uploads

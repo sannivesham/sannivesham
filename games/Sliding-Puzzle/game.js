@@ -177,7 +177,7 @@
 
     const progressInstance = window.Progress || {
       isUnlocked: (id) => Number(id) === 1,
-      recordCompletion: () => console.log("Local progress placeholder")
+      recordCompletion: () => {}
     };
 
     if (typeof progressInstance.isUnlocked === "function" && !progressInstance.isUnlocked(levelId)) {

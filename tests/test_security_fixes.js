@@ -10,7 +10,7 @@
 
 const assert = require("assert");
 const crypto = require("crypto");
-const { SUBSCRIPTION_PLANS } = require("./functions/payments");
+const { SUBSCRIPTION_PLANS } = require("../functions/payments");
 
 console.log("=================================================");
 console.log("🔒 RUNNING SANNIVESHAM SECURITY VERIFICATION SUITE");

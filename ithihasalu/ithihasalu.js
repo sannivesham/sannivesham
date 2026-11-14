@@ -38,7 +38,7 @@ async function loadIthihasaluCategories() {
     });
 
   } catch (error) {
-    console.log("Ithihasalu categories loading error:", error);
+    console.error("Ithihasalu categories loading error:", error);
     ithihasaluGrid.innerHTML =
       "<p style='color:white;text-align:center;'>విభాగాలను లోడ్ చేయలేకపోయాము.</p>";
   }

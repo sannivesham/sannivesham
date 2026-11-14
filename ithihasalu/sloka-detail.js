@@ -137,7 +137,7 @@ window.toggleSpeech = function(button) {
   };
 
   speech.onerror = (e) => {
-    console.log("Speech error:", e);
+    console.error("Speech error:", e);
     button.innerHTML = "▶️ వినండి";
   };
 

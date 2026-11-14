@@ -1,12 +1,21 @@
+/**
+ * Sannivesham Common Game Progress Module
+ * 
+ * Provides unified offline-first progress management and Firestore synchronization
+ * across all Sannivesham cultural games.
+ */
 import { db, auth } from "../../firebase-config.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-const Progress = (() => {
-  const GAME_KEY = "sudoku";
-  const LOCAL_KEY = `sannivesham_${GAME_KEY}_fallback`;
+export function createGameProgress(gameKey, options = {}) {
+  const LOCAL_KEY = `sannivesham_${gameKey}_fallback`;
   let currentUser = null;
   let cloudData = null;
+
+  let markReady;
+  const readyPromise = new Promise((resolve) => { markReady = resolve; });
+  window.ProgressReady = readyPromise;
 
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
@@ -15,8 +24,7 @@ const Progress = (() => {
     } else {
       cloudData = null;
     }
-    markReady();
-    window.ProgressReady = true;
+    if (markReady) markReady();
     window.dispatchEvent(new CustomEvent("progress:ready"));
   });
 
@@ -26,12 +34,13 @@ const Progress = (() => {
       const userSnap = await getDoc(doc(db, "users", currentUser.uid));
       if (userSnap.exists()) {
         const data = userSnap.data();
-        cloudData = data.gameProgress?.[GAME_KEY] || { completedLevels: [], metrics: {} };
+        cloudData = data.gameProgress?.[gameKey] || { completedLevels: [], metrics: {} };
       } else {
         cloudData = { completedLevels: [], metrics: {} };
       }
     } catch (e) {
-      console.warn("Error fetching sudoku progress:", e);
+      // Offline or network error; gracefully fallback to local cache
+      cloudData = null;
     }
   }
 
@@ -58,13 +67,15 @@ const Progress = (() => {
     const scoreMetric = data.metrics?.[levelId] || null;
     return {
       completed: completed,
-      bestTime: scoreMetric
+      bestMoves: gameKey === "slidingPuzzle" ? scoreMetric : null,
+      bestTime: gameKey !== "slidingPuzzle" ? scoreMetric : null
     };
   }
 
   async function recordCompletion(levelId, dynamicMetric) {
     levelId = Number(levelId);
 
+    // 1. Always write locally first to keep game execution instant
     const local = getLocalFallback();
     if (!Array.isArray(local.completedLevels)) local.completedLevels = [];
     if (!local.metrics) local.metrics = {};
@@ -75,13 +86,14 @@ const Progress = (() => {
     local.metrics[levelId] = existingMetric ? Math.min(existingMetric, dynamicMetric) : dynamicMetric;
     localStorage.setItem(LOCAL_KEY, JSON.stringify(local));
 
+    // 2. If user is logged in, sync to their Firestore profile.
     if (currentUser) {
       try {
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
 
         const currentProgress = userSnap.exists() ? (userSnap.data().gameProgress || {}) : {};
-        const standardGameProgress = currentProgress[GAME_KEY] || { completedLevels: [], metrics: {} };
+        const standardGameProgress = currentProgress[gameKey] || { completedLevels: [], metrics: {} };
         if (!Array.isArray(standardGameProgress.completedLevels)) standardGameProgress.completedLevels = [];
         if (!standardGameProgress.metrics) standardGameProgress.metrics = {};
 
@@ -90,21 +102,24 @@ const Progress = (() => {
         }
         const currentBest = standardGameProgress.metrics[levelId];
         standardGameProgress.metrics[levelId] = currentBest ? Math.min(currentBest, dynamicMetric) : dynamicMetric;
-        currentProgress[GAME_KEY] = standardGameProgress;
+        currentProgress[gameKey] = standardGameProgress;
 
         await setDoc(userRef, { gameProgress: currentProgress }, { merge: true });
+
+        // Refresh cloud cache tracking snapshot
         cloudData = standardGameProgress;
       } catch (e) {
-        console.warn("Sudoku progress record failed:", e);
+        // Non-blocking sync error
       }
     }
   }
 
-  let markReady;
-  const readyPromise = new Promise((resolve) => { markReady = resolve; });
-  window.ProgressReady = readyPromise;
+  const instance = {
+    isUnlocked,
+    getLevelProgress,
+    recordCompletion
+  };
 
-  return { isUnlocked, getLevelProgress, recordCompletion };
-})();
-
-window.Progress = Progress;
+  window.Progress = instance;
+  return instance;
+}

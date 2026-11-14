@@ -1,50 +1,8 @@
-(function () {
-  function renderGrid() {
-    const gridEl = document.getElementById("levelGrid");
-    if (!gridEl || !window.MAZE_LEVELS) return;
+import { initLevelSelect } from "../common/level-select.js";
 
-    gridEl.innerHTML = "";
-
-    window.MAZE_LEVELS.forEach((level) => {
-      const isUnlocked = typeof window.Progress?.isUnlocked === "function" 
-        ? window.Progress.isUnlocked(level.id) 
-        : (level.id === 1);
-
-      const progress = typeof window.Progress?.getLevelProgress === "function"
-        ? window.Progress.getLevelProgress(level.id)
-        : { completed: false };
-
-      const card = document.createElement(isUnlocked ? "a" : "div");
-      card.className = `level-card ${isUnlocked ? "" : "locked"}`;
-      
-      if (isUnlocked) {
-        card.href = `game.html?level=${level.id}`;
-      }
-
-      let innerHTML = `
-        <div class="level-number">LEVEL ${level.id}</div>
-        <div class="level-title">${level.titleTelugu}</div>
-        <div class="level-subtitle">(${level.titleEnglish})</div>
-        <div class="level-meta">గడులు: ${level.gridDimension}×${level.gridDimension}</div>
-      `;
-
-      if (progress.completed) {
-        innerHTML += `<div style="position: absolute; bottom: 20px; right: 20px; color: var(--gold); font-weight: bold;">✔ పూర్తయింది</div>`;
-      } else if (!isUnlocked) {
-        innerHTML += `<div style="position: absolute; bottom: 20px; right: 20px;">🔒</div>`;
-      }
-
-      card.innerHTML = innerHTML;
-      gridEl.appendChild(card);
-    });
-  }
-
-  renderGrid();
-  window.addEventListener("progress:ready", renderGrid);
-  let polls = 0;
-  const timer = setInterval(() => {
-    renderGrid();
-    polls++;
-    if (polls >= 5) clearInterval(timer);
-  }, 600);
-})();
+initLevelSelect({
+  levels: window.MAZE_LEVELS,
+  containerId: "levelGrid",
+  getUrl: (level) => `game.html?level=${level.id}`,
+  getMeta: () => "చిక్కుముడి (Labyrinth)"
+});

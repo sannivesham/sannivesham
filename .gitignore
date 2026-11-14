@@ -36,3 +36,13 @@ desktop-app/dist/
 desktop-app/dist-packager/
 desktop-app/node_modules/
 desktop-app/*.png
+
+# Local scratch & analysis artifacts
+apk/
+tools/
+unpacked_raw/
+project/
+SanniveshamApp/
+*.bat
+*.ps1
+!tests/*.ps1

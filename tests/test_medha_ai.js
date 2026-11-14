@@ -9,8 +9,8 @@
  * 5. Language Detection & Mixed Mode verification
  */
 
-const { evaluateSafety } = require('./functions/moderation');
-const { detectLanguage, classifyTopicRelevance } = require('./functions/relevance');
+const { evaluateSafety } = require('../functions/moderation');
+const { detectLanguage, classifyTopicRelevance } = require('../functions/relevance');
 
 const RELEVANT_QUESTIONS = [
   "పోతన భాగవత పద్యాల విశిష్టత ఏమిటి?",

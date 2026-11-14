@@ -68,7 +68,7 @@ function createWindow() {
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     // If main frame fails to load due to no internet
     if (errorCode !== -3) { // -3 is ABORTED
-      console.log('Failed to load live website:', errorCode, errorDescription);
+      console.error('Failed to load live website:', errorCode, errorDescription);
       mainWindow.loadFile(path.join(__dirname, 'offline.html'));
     }
   });

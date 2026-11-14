@@ -44,7 +44,7 @@ async function loadSocialLinks() {
     });
 
   } catch (error) {
-    console.log("Social links error:", error);
+    console.error("Social links error:", error);
   }
 }
 
