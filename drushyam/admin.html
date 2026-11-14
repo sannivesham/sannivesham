@@ -55,14 +55,41 @@
   </div>
 
   <script type="module">
-    import { auth } from "./firebase-config.js";
+    import { auth, db } from "./firebase-config.js";
     import {
       signInWithEmailAndPassword,
-      onAuthStateChanged
+      onAuthStateChanged,
+      signOut
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import {
+      doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = "dashboard.html";
+    async function verifyAdminStatus(user) {
+      if (!user) return false;
+      try {
+        const tokenResult = await user.getIdTokenResult(true);
+        if (tokenResult?.claims?.admin === true) return true;
+      } catch (e) {}
+
+      if (user.email) {
+        try {
+          const adminSnap = await getDoc(doc(db, "settings", "admin"));
+          if (adminSnap.exists()) {
+            const data = adminSnap.data();
+            if (Array.isArray(data.emails) && data.emails.includes(user.email)) return true;
+            if (data.email && data.email === user.email) return true;
+          }
+        } catch (e) {}
+      }
+      return false;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const isAdmin = await verifyAdminStatus(user);
+        if (isAdmin) window.location.href = "dashboard.html";
+      }
     });
 
     document.getElementById("adminLoginBtn").addEventListener("click", async () => {
@@ -75,11 +102,19 @@
         return;
       }
 
+      msg.innerText = "⏳ తనిఖీ చేస్తోంది (Verifying credentials)...";
+
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const isAdmin = await verifyAdminStatus(cred.user);
+        if (!isAdmin) {
+          await signOut(auth);
+          msg.innerText = "❌ ఈ ఖాతాకు అడ్మిన్ అనుమతులు లేవు (Access Denied: Not an admin)";
+          return;
+        }
         window.location.href = "dashboard.html";
       } catch (e) {
-        msg.innerText = "లాగిన్ విఫలమైంది — వివరాలు తనిఖీ చేయండి";
+        msg.innerText = "లాగిన్ విఫలమైంది — " + e.message;
       }
     });
   </script>

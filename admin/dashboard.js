@@ -14,37 +14,39 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Any authenticated user with an email is an administrator (phone/guest users from quiz do not have email)
-  const isPasswordUser = Boolean(user.email) || (user.providerData && user.providerData.some(p => p.providerId === "password"));
+  let isAdmin = false;
 
-  if (isPasswordUser) {
-    if (overlay) overlay.style.display = "none";
-    dashBody.style.display = "block";
-    const activeBtn = document.querySelector(".dash-btn.active");
-    const activeSection = activeBtn?.dataset?.section || "eventsSection";
-    loadSectionData(activeSection);
-    return;
-  }
-
-  // Fallback: check explicit admin email list in settings/admin
-  let isExplicitAdmin = false;
+  // 1. Primary check: Firebase Auth Custom Claims (admin: true)
   try {
-    const adminSnap = await getDoc(doc(db, "settings", "admin"));
-    if (adminSnap.exists()) {
-      const adminData = adminSnap.data();
-      if (adminData.emails && Array.isArray(adminData.emails)) {
-        isExplicitAdmin = adminData.emails.includes(user.email);
-      } else if (adminData.email) {
-        isExplicitAdmin = (adminData.email === user.email);
-      }
+    const tokenResult = await user.getIdTokenResult(true);
+    if (tokenResult && tokenResult.claims && tokenResult.claims.admin === true) {
+      isAdmin = true;
     }
-  } catch (e) {
-    // If settings/admin collection is not configured yet, proceed
+  } catch (claimErr) {
+    console.warn("Failed to retrieve custom claims:", claimErr);
   }
 
-  // Deny regular phone/guest users who logged in for quizzes
-  if (!isExplicitAdmin) {
-    alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.");
+  // 2. Fallback check: Firestore allowlist in settings/admin (for accounts before custom claim is set)
+  if (!isAdmin && user.email) {
+    try {
+      const adminSnap = await getDoc(doc(db, "settings", "admin"));
+      if (adminSnap.exists()) {
+        const adminData = adminSnap.data();
+        if (adminData.emails && Array.isArray(adminData.emails)) {
+          isAdmin = adminData.emails.includes(user.email);
+        } else if (adminData.email) {
+          isAdmin = (adminData.email === user.email);
+        }
+      }
+    } catch (e) {
+      console.warn("Could not check settings/admin allowlist:", e);
+    }
+  }
+
+  // 3. Deny non-admin users
+  if (!isAdmin) {
+    alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.\nAccess Denied: You do not have administrator permissions.");
+    await signOut(auth);
     window.location.replace("admin.html");
     return;
   }

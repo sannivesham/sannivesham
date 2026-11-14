@@ -8,14 +8,45 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 // AUTH GUARD
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.replace("admin.html");
     return;
   }
-  const isPasswordUser = user.providerData && user.providerData.some(p => p.providerId === "password");
-  if (!isPasswordUser) {
-    alert("అనుమతి నిరాకరించబడింది: అడ్మిన్ ఖాతా ద్వారా మాత్రమే లాగిన్ అవ్వగలరు.");
+
+  let isAdmin = false;
+
+  // 1. Primary check: Firebase Auth Custom Claims (admin: true)
+  try {
+    const tokenResult = await user.getIdTokenResult(true);
+    if (tokenResult?.claims?.admin === true) {
+      isAdmin = true;
+    }
+  } catch (claimErr) {
+    console.warn("Failed to retrieve custom claims:", claimErr);
+  }
+
+  // 2. Fallback check: Firestore allowlist in settings/admin
+  if (!isAdmin && user.email) {
+    try {
+      const adminSnap = await getDoc(doc(db, "settings", "admin"));
+      if (adminSnap.exists()) {
+        const adminData = adminSnap.data();
+        if (adminData.emails && Array.isArray(adminData.emails)) {
+          isAdmin = adminData.emails.includes(user.email);
+        } else if (adminData.email) {
+          isAdmin = (adminData.email === user.email);
+        }
+      }
+    } catch (e) {
+      console.warn("Could not check settings/admin allowlist:", e);
+    }
+  }
+
+  // 3. Deny non-admin users
+  if (!isAdmin) {
+    alert("అనుమతి నిరాకరించబడింది: నిర్వాహకులు (Admin) మాత్రమే ఈ పేజీని యాక్సెస్ చేయగలరు.\nAccess Denied: You do not have administrator permissions.");
+    await signOut(auth);
     window.location.replace("admin.html");
     return;
   }

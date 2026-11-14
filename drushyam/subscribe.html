@@ -252,11 +252,14 @@
   <script type="module">
     import { auth, db } from "./firebase-config.js";
     import {
-      doc, getDoc, setDoc, serverTimestamp
+      doc, getDoc
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
     import {
       GoogleAuthProvider, signInWithPopup, onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+    const CREATE_ORDER_ENDPOINT = "https://us-central1-sannivesham-b4231.cloudfunctions.net/createSubscriptionOrder";
+    const VERIFY_PAYMENT_ENDPOINT = "https://us-central1-sannivesham-b4231.cloudfunctions.net/verifySubscriptionPayment";
 
     let currentUser = null;
 
@@ -286,62 +289,84 @@ onAuthStateChanged(auth, async (user) => {
         } catch(e) { return; }
       }
 
-      // ⚠️ SECURITY: everything in this handleSubscribe function runs in the
-      // user's browser. Right now, the `handler` callback below writes
-      // { active: true } to Firestore as soon as Razorpay's popup calls it —
-      // with NO server-side check that a real payment happened. Anyone can
-      // open devtools and call this function (or write to Firestore directly)
-      // to grant themselves a free subscription. Before going live, move the
-      // Firestore write into a Cloud Function that verifies the Razorpay
-      // payment signature server-side, and lock down Firestore rules so the
-      // browser can never write `active`/`expiresAt` on `subscribers` itself.
+      if (!currentUser) {
+        alert("దయచేసి చందా కోసం లాగిన్ అవ్వండి.");
+        return;
+      }
 
-      // Razorpay checkout
-      const options = {
-        key: "YOUR_RAZORPAY_KEY_ID", // ⚠️ Still a placeholder — replace with your real Razorpay Key ID or checkout won't open
-        amount: parseInt(amount) * 100, // in paise
-        currency: "INR",
-        name: "సన్నివేశం",
-        description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
-        image: "images/logo.png",
-        prefill: {
-          name: currentUser.displayName || "",
-          email: currentUser.email || ""
-        },
-        theme: { color: "#f5a623" },
-        handler: async function(response) {
-          // Payment successful — save to Firestore
-          try {
-            const expiryDate = new Date();
-            if (plan === "monthly") expiryDate.setMonth(expiryDate.getMonth() + 1);
-            else if (plan === "yearly") expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-            else expiryDate.setFullYear(expiryDate.getFullYear() + 100); // lifetime
+      try {
+        const idToken = await currentUser.getIdToken();
 
-            await setDoc(doc(db, "subscribers", currentUser.uid), {
-              uid: currentUser.uid,
-              name: currentUser.displayName,
-              email: currentUser.email,
-              plan,
-              amount: parseInt(amount),
-              active: true,
-              paymentId: response.razorpay_payment_id,
-              subscribedAt: serverTimestamp(),
-              expiresAt: expiryDate.toISOString()
-            });
+        // 1. Request secure order creation from Cloud Function (server sets price)
+        const orderResp = await fetch(CREATE_ORDER_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${idToken}`
+          },
+          body: JSON.stringify({ planId: plan })
+        });
 
-            document.getElementById("alreadySubBox").style.display = "block";
-            alert("✅ Subscription successful! అన్ని Premium videos enjoy చేయండి!");
-          } catch(e) {
-            alert("Payment successful కానీ save చేయడం విఫలమైంది. మాకు contact చేయండి.");
-          }
-        },
-        modal: {
-          ondismiss: function() {}
+        if (!orderResp.ok) {
+          const errData = await orderResp.json().catch(() => ({}));
+          throw new Error(errData.error || "ఆర్డర్ సృష్టించడం విఫలమైంది.");
         }
-      };
 
-      const rzp = new Razorpay(options);
-      rzp.open();
+        const orderData = await orderResp.json();
+
+        // 2. Open Razorpay modal with server-generated order details
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount, // Server-enforced amount
+          currency: orderData.currency || "INR",
+          name: "సన్నివేశం",
+          description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
+          order_id: orderData.orderId,
+          image: "images/logo.png",
+          prefill: {
+            name: currentUser.displayName || "",
+            email: currentUser.email || ""
+          },
+          theme: { color: "#f5a623" },
+          handler: async function(response) {
+            // 3. Cryptographically verify payment on server (HMAC-SHA256 signature)
+            try {
+              const freshToken = await currentUser.getIdToken();
+              const verifyResp = await fetch(VERIFY_PAYMENT_ENDPOINT, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${freshToken}`
+                },
+                body: JSON.stringify({
+                  planId: plan,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+
+              if (!verifyResp.ok) {
+                const verifyErr = await verifyResp.json().catch(() => ({}));
+                throw new Error(verifyErr.error || "చెల్లింపు ధృవీకరణ విఫలమైంది.");
+              }
+
+              document.getElementById("alreadySubBox").style.display = "block";
+              alert("✅ Subscription successful! అన్ని Premium videos enjoy చేయండి!");
+            } catch (err) {
+              alert("చెల్లింపు ధృవీకరణ విఫలమైంది: " + err.message + ". దయచేసి మద్దతు బృందాన్ని సంప్రదించండి.");
+            }
+          },
+          modal: {
+            ondismiss: function() {}
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        alert("ఆర్డర్ ప్రాసెస్ చేయడం విఫలమైంది: " + err.message);
+      }
     };
   </script>
 

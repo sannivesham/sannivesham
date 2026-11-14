@@ -11,12 +11,13 @@
  */
 
 import { auth, db } from "../firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import {
+  onAuthStateChanged,
+  signInAnonymously
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   doc,
-  getDoc,
-  setDoc,
-  serverTimestamp
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 // Cloud Function Endpoint (Can be configured or proxied)
@@ -186,9 +187,17 @@ class SanniveshamAIChat {
       // ignore
     }
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user && user.uid) {
         this.userId = user.uid;
+      } else {
+        // Authenticate anonymously so every visitor gets a verified Firebase ID token
+        try {
+          const anon = await signInAnonymously(auth);
+          this.userId = anon.user.uid;
+        } catch (anonErr) {
+          console.warn("Anonymous auth unavailable:", anonErr);
+        }
       }
       this.checkRestriction();
     });
@@ -367,45 +376,11 @@ class SanniveshamAIChat {
   }
 
   async recordViolationToFirestore(violationDetails, isTelugu) {
-    try {
-      if (!db || !this.userId) return;
-      const ref = doc(db, "ai_moderation_records", this.userId);
-      const snap = await getDoc(ref);
-      const existing = snap.exists() ? snap.data() : { warningCount: 0, violationCount: 0 };
-
-      const now = Date.now();
-      const newWarning = (existing.warningCount || 0) + 1;
-      let newViolation = existing.violationCount || 0;
-      let restrictionStatus = "warned";
-      let restrictionUntil = null;
-
-      if (violationDetails.severity === "severe" || newWarning >= 3) {
-        newViolation += 1;
-        restrictionStatus = newViolation >= 2 ? "escalated_restriction" : "temporary_restriction";
-        const lockDuration = restrictionStatus === "escalated_restriction" ? TWENTY_FOUR_HOURS_MS : ONE_HOUR_MS;
-        restrictionUntil = now + lockDuration;
-      }
-
-      await setDoc(ref, {
-        userId: this.userId,
-        warningCount: newWarning,
-        violationCount: newViolation,
-        restrictionStatus,
-        restrictionUntil,
-        lastViolation: {
-          timestamp: new Date(now).toISOString(),
-          reason: violationDetails.type || "Policy Violation",
-          severity: violationDetails.severity || "warning"
-        },
-        updatedAt: serverTimestamp()
-      }, { merge: true });
-
-      if (restrictionUntil) {
-        const mins = Math.ceil((restrictionUntil - now) / (60 * 1000));
-        this.showRestriction(mins, violationDetails.type);
-      }
-    } catch (e) {
-      console.warn("Moderation log notice:", e);
+    // Note: Database writes for policy violations are strictly managed server-side
+    // in Cloud Functions via Firebase Admin SDK to ensure clients cannot tamper with
+    // or clear their own bans or ban others.
+    if (violationDetails && violationDetails.severity === "severe") {
+      this.showRestriction(60, violationDetails.type);
     }
   }
 
@@ -552,13 +527,22 @@ class SanniveshamAIChat {
 
     // 2. Attempt backend Cloud Function if deployed
     try {
+      let idToken = "";
+      if (auth.currentUser) {
+        idToken = await auth.currentUser.getIdToken().catch(() => "");
+      }
+
+      const headers = { "Content-Type": "application/json" };
+      if (idToken) {
+        headers["Authorization"] = `Bearer ${idToken}`;
+      }
+
       const resp = await fetch(BACKEND_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           message: userMessage,
-          conversationHistory: this.conversationHistory,
-          userId: this.userId
+          conversationHistory: this.conversationHistory.slice(-8)
         })
       });
 
@@ -566,6 +550,9 @@ class SanniveshamAIChat {
         const data = await resp.json();
         if (data.status === "RESTRICTED") {
           this.showRestriction(data.remainingMinutes);
+          return { message: data.message };
+        }
+        if (data.status === "SAFETY_VIOLATION") {
           return { message: data.message };
         }
         if (data.message) {
