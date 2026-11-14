@@ -4,13 +4,13 @@
   "description": "Sannivesham AI (సన్నివేశం మేధ) backend moderation, relevance classifier, secure Gemini API engine, and payment verification",
   "main": "index.js",
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "dependencies": {
-    "@google/genai": "^0.1.2",
+    "@google/genai": "^0.2.0",
     "cors": "^2.8.5",
-    "firebase-admin": "^12.0.0",
-    "firebase-functions": "^5.0.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^5.1.0",
     "razorpay": "^2.9.4"
   },
   "private": true

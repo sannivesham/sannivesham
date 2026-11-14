@@ -4,6 +4,34 @@ const path = require('path');
 const LIVE_URL = 'https://sannivesham.com/';
 let mainWindow = null;
 
+function isSafeExternalUrl(rawUrl) {
+  try {
+    const parsed = new URL(rawUrl);
+    // Strictly require https: protocol (block javascript:, file:, data:, custom protocols)
+    if (parsed.protocol !== 'https:') return false;
+
+    const hostname = parsed.hostname.toLowerCase();
+    const isTrusted = hostname === 'sannivesham.com' ||
+                      hostname.endsWith('.sannivesham.com') ||
+                      hostname === 'sannivesham.in' ||
+                      hostname.endsWith('.sannivesham.in') ||
+                      hostname.endsWith('firebaseapp.com') ||
+                      hostname.endsWith('google.com') ||
+                      hostname.endsWith('googleapis.com') ||
+                      hostname.endsWith('youtube.com') ||
+                      hostname === 'youtu.be' ||
+                      hostname.endsWith('instagram.com') ||
+                      hostname.endsWith('facebook.com') ||
+                      hostname.endsWith('whatsapp.com') ||
+                      hostname === 'wa.me' ||
+                      hostname.endsWith('razorpay.com') ||
+                      hostname.endsWith('github.com');
+    return isTrusted;
+  } catch (e) {
+    return false;
+  }
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -68,7 +96,11 @@ function createWindow() {
       };
     }
 
-    shell.openExternal(url);
+    if (isSafeExternalUrl(url)) {
+      shell.openExternal(url);
+    } else {
+      console.warn('Blocked opening untrusted external URL:', url);
+    }
     return { action: 'deny' };
   });
 
@@ -79,7 +111,11 @@ function createWindow() {
 
     if (!url.startsWith('https://sannivesham.com') && !url.startsWith('file://') && !isAuthUrl) {
       event.preventDefault();
-      shell.openExternal(url);
+      if (isSafeExternalUrl(url)) {
+        shell.openExternal(url);
+      } else {
+        console.warn('Blocked navigation to untrusted external URL:', url);
+      }
     }
   });
 

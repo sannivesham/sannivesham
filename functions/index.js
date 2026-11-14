@@ -10,9 +10,12 @@
  */
 
 const functions = require('firebase-functions');
+const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
 const cors = require('cors');
 const { GoogleGenAI } = require('@google/genai');
+
+const geminiApiKeySecret = defineSecret('GEMINI_API_KEY');
 
 const { checkUserRestriction, evaluateSafety, recordViolation } = require('./moderation');
 const { detectLanguage, classifyTopicRelevance } = require('./relevance');
@@ -23,6 +26,22 @@ if (!admin.apps.length) {
   admin.initializeApp();
 }
 const db = admin.firestore();
+
+function getGeminiApiKey() {
+  try {
+    if (geminiApiKeySecret && typeof geminiApiKeySecret.value === 'function') {
+      const val = geminiApiKeySecret.value();
+      if (val) return val;
+    }
+  } catch (e) {}
+  return process.env.GEMINI_API_KEY || functions.config().gemini?.key || '';
+}
+
+function getAiClient() {
+  const key = getGeminiApiKey();
+  if (!key) return null;
+  return new GoogleGenAI({ apiKey: key });
+}
 
 // ---------------------------------------------------------------------
 // 1. CORS CONFIGURATION
@@ -82,18 +101,9 @@ function checkRateLimit(key, maxRequests, windowMs) {
 }
 
 // ---------------------------------------------------------------------
-// 3. GEMINI CLIENT INITIALIZATION
+// 4. MEDHA AI CHAT ENDPOINT (Configured with Secret Manager & Multi-Layer Safety)
 // ---------------------------------------------------------------------
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || functions.config().gemini?.key || '';
-let aiClient = null;
-if (GEMINI_API_KEY) {
-  aiClient = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-}
-
-// ---------------------------------------------------------------------
-// 4. MEDHA AI CHAT ENDPOINT
-// ---------------------------------------------------------------------
-exports.medhaChat = functions.https.onRequest((req, res) => {
+exports.medhaChat = functions.runWith({ secrets: [geminiApiKeySecret] }).https.onRequest((req, res) => {
   return corsMiddleware(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method Not Allowed' });
@@ -219,7 +229,8 @@ exports.medhaChat = functions.https.onRequest((req, res) => {
       }
 
       // 4H. STEP 5: AI Generation via Gemini API
-      if (!aiClient) {
+      const client = getAiClient();
+      if (!client) {
         return res.status(200).json({
           status: 'SUCCESS',
           message: isTelugu
@@ -238,17 +249,35 @@ exports.medhaChat = functions.https.onRequest((req, res) => {
       }
       contents.push({ role: 'user', parts: [{ text: cleanMessage }] });
 
-      const response = await aiClient.models.generateContent({
+      // Model-level safety settings (Defense in Depth)
+      const safetySettings = [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_LOW_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_LOW_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_LOW_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_LOW_AND_ABOVE' }
+      ];
+
+      const response = await client.models.generateContent({
         model: 'gemini-2.5-flash',
         contents,
         config: {
           systemInstruction: SANNIVESHAM_SYSTEM_INSTRUCTION,
+          safetySettings,
           temperature: 0.65,
           maxOutputTokens: 1200
         }
       });
 
-      const responseText = response.text || '';
+      let responseText = response.text || '';
+
+      // Post-generation Output Check (Prevents system prompt leakage & compliance bypasses)
+      const containsSystemLeak = /\b(SANNIVESHAM_SYSTEM_INSTRUCTION|developer instructions|hidden prompt|you are a culturally grounded AI guide created for the Sannivesham)\b/i.test(responseText);
+      if (containsSystemLeak) {
+        console.warn('System prompt leakage detected in generated response. Sanitizing output.');
+        responseText = isTelugu
+          ? 'సన్నివేశం మేధ తెలుగు సంస్కృతి, భాష మరియు ఆధ్యాత్మిక విషయాలపై మాత్రమే సమాధానాలు ఇస్తుంది. దయచేసి సంబంధిత ప్రశ్నలు అడగండి.'
+          : 'Sannivesham AI provides guidance exclusively on Telugu culture, language, and spiritual heritage. Please ask a related question.';
+      }
 
       return res.status(200).json({
         status: 'SUCCESS',
