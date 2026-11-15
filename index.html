@@ -248,6 +248,7 @@
     }
     .nav-actions .nav-action-btn,
     .nav-actions .desktop-btn,
+    .nav-actions .refresh-btn,
     .nav-actions .music-btn,
     .nav-actions .profile-btn,
     .nav-actions .lang-btn,
@@ -278,6 +279,7 @@
     }
     .nav-actions .nav-action-btn:hover,
     .nav-actions .desktop-btn:hover,
+    .nav-actions .refresh-btn:hover,
     .nav-actions .music-btn:hover,
     .nav-actions .profile-btn:hover,
     .nav-actions .lang-btn:hover,
@@ -287,6 +289,15 @@
       transform: scale(1.08) !important;
       box-shadow: 0 0 12px rgba(255, 209, 102, 0.35) !important;
     }
+    @keyframes spinRefresh {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .nav-actions .refresh-btn.spinning,
+    .nav-actions .refresh-btn:active {
+      animation: spinRefresh 0.55s ease-in-out !important;
+    }
+
 
     @media (max-width: 780px) {
       .glass-navbar {
@@ -319,6 +330,7 @@
       }
       .nav-actions .nav-action-btn,
       .nav-actions .desktop-btn,
+      .nav-actions .refresh-btn,
       .nav-actions .music-btn,
       .nav-actions .profile-btn,
       .nav-actions .lang-btn,
@@ -568,6 +580,7 @@
   <nav class="glass-navbar">
     <div class="nav-actions">
       <a id="desktopDownloadBtn" href="https://github.com/sannivesham/sannivesham/releases/download/v1.0.0/Sannivesham-Setup.exe" class="nav-action-btn desktop-btn" title="డెస్క్‌టాప్ యాప్ డౌన్‌లోడ్ (Download Desktop App)" aria-label="Download Desktop App">💻</a>
+      <button id="refreshBtn" class="nav-action-btn refresh-btn" title="రీఫ్రెష్ చేయండి (Refresh Site)" aria-label="Refresh Site" data-en-attr="title" data-en="Refresh Site">🔄</button>
       <button id="musicBtn" class="nav-action-btn music-btn" title="సంగీతం ప్లే / పాజ్" aria-label="Play or pause background music">🔊</button>
       <button id="themeToggleBtn" class="nav-action-btn theme-btn" title="రంగు శైలిని ఎంచుకోండి (Choose Theme)" aria-label="Choose Theme">🎨</button>
       <button id="langToggleBtn" class="nav-action-btn lang-btn" title="View in English" aria-label="Toggle language">EN</button>
@@ -1361,6 +1374,19 @@
         }
       }
 
+      function initRefreshButton() {
+        const btn = document.getElementById("refreshBtn");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            btn.classList.add("spinning");
+            setTimeout(() => {
+              window.scrollTo(0, 0);
+              window.location.reload();
+            }, 180);
+          });
+        }
+      }
+
       function initNavbarScroll() {
         const nl = document.querySelector('.nav-links');
         if (nl) {
@@ -1379,6 +1405,7 @@
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => {
+          initRefreshButton();
           initNavbarScroll();
           initDivineParticles();
           init3DCardTilt();
@@ -1386,6 +1413,7 @@
           initPanchangamRibbon();
         });
       } else {
+        initRefreshButton();
         initNavbarScroll();
         initDivineParticles();
         init3DCardTilt();
