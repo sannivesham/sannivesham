@@ -2,7 +2,7 @@
 <html lang="te">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -33,7 +33,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <script src="../theme.js"></script>
   <link rel="stylesheet" href="../style.css">
 
   <style>
@@ -41,9 +40,9 @@
       --jc-gold: #ffd166;
       --jc-gold-glow: rgba(255, 209, 102, 0.35);
       --jc-amber: #ff9f1c;
-      --jc-bg-dark: #0e0804;
-      --jc-card-bg: rgba(26, 16, 10, 0.78);
-      --jc-card-border: rgba(255, 209, 102, 0.22);
+      --jc-bg-dark: #0c0603;
+      --jc-card-bg: rgba(24, 13, 7, 0.85);
+      --jc-card-border: rgba(255, 209, 102, 0.35);
       --jc-text-main: #fbf1d8;
       --jc-text-muted: #d4c0a5;
       --jc-success: #2ec4b6;
@@ -60,36 +59,28 @@
       font-family: "Noto Serif Telugu", serif;
       color: var(--jc-text-main);
       background-color: var(--jc-bg-dark);
-      background-image:
-        radial-gradient(circle at 50% 0%, rgba(255, 170, 0, 0.16), transparent 50%),
-        radial-gradient(circle at 15% 45%, rgba(218, 112, 214, 0.07), transparent 35%),
-        radial-gradient(circle at 85% 85%, rgba(255, 140, 0, 0.08), transparent 45%),
-        linear-gradient(180deg, #140b05 0%, #0a0603 100%);
-      background-attachment: fixed;
+      background-image: linear-gradient(rgba(10, 5, 2, 0.72), rgba(8, 4, 1, 0.85)), url('images/bg-desktop.jpg');
       background-size: cover;
       background-position: center top;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
       overflow-x: hidden;
       line-height: 1.6;
       position: relative;
     }
 
-    /* 3D Interactive WebGL/Canvas Background */
-    #canvas3D {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.85;
+    @media (max-width: 768px) {
+      body {
+        background-image: linear-gradient(rgba(10, 5, 2, 0.70), rgba(8, 4, 1, 0.82)), url('images/bg-mobile.jpg');
+        background-attachment: scroll;
+      }
     }
 
     .japa-wrapper {
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 1120px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 24px 16px 80px;
     }
@@ -100,14 +91,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 12px 18px;
-      background: rgba(25, 16, 10, 0.65);
+      padding: 10px 18px;
+      background: rgba(22, 12, 6, 0.78);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 209, 102, 0.18);
+      border: 1px solid rgba(255, 209, 102, 0.25);
       border-radius: 999px;
       margin-bottom: 28px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
     }
 
     .jc-back-btn {
@@ -152,26 +143,6 @@
       letter-spacing: 0.5px;
     }
 
-    .jc-theme-btn {
-      background: rgba(255, 209, 102, 0.12);
-      border: 1px solid rgba(255, 209, 102, 0.3);
-      color: #ffd166;
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.25s ease;
-    }
-
-    .jc-theme-btn:hover {
-      background: rgba(255, 209, 102, 0.22);
-      transform: scale(1.04);
-    }
-
     /* Stepper Screens */
     .jc-step {
       display: none;
@@ -192,7 +163,7 @@
     /* Headers */
     .jc-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
     .jc-badge {
@@ -225,7 +196,7 @@
     }
 
     .jc-title {
-      font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+      font-size: clamp(1.8rem, 4.2vw, 2.7rem);
       font-weight: 800;
       color: #ffd166;
       text-shadow: 0 0 26px rgba(255, 209, 102, 0.25);
@@ -234,7 +205,7 @@
     }
 
     .jc-subtitle {
-      font-size: clamp(0.96rem, 2vw, 1.15rem);
+      font-size: clamp(0.94rem, 1.8vw, 1.1rem);
       color: var(--jc-text-muted);
       max-width: 680px;
       margin: 0 auto;
@@ -255,145 +226,154 @@
       font-weight: 600;
     }
 
-    /* Step 1: Deity Search Bar */
-    .jc-search-row {
-      max-width: 480px;
-      margin: 0 auto 26px;
-      position: relative;
-    }
-
-    .jc-search-input {
-      width: 100%;
-      padding: 12px 18px 12px 44px;
-      background: rgba(14, 8, 4, 0.85);
-      border: 1px solid rgba(255, 209, 102, 0.3);
-      border-radius: 999px;
-      color: #fff;
-      font-size: 0.98rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.25s ease;
-    }
-
-    .jc-search-input:focus {
-      border-color: #ffd166;
-      box-shadow: 0 0 16px rgba(255, 209, 102, 0.3);
-    }
-
-    .jc-search-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 209, 102, 0.6);
-      font-size: 1rem;
-      pointer-events: none;
-    }
-
-    /* Deity Grid */
+    /* ══════════════════════════════════════════════════════════
+       SIDE-BY-SIDE 2x6 DEITY BOXES (2 PER ROW ON ALL SCREENS)
+       ══════════════════════════════════════════════════════════ */
     .jc-deity-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      margin-bottom: 30px;
+      max-width: 840px;
+      margin: 0 auto 36px;
+      padding: 0 4px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 600px) {
+      .jc-deity-grid {
+        gap: 12px;
+        padding: 0;
+      }
     }
 
     .jc-deity-card {
-      background: var(--jc-card-bg);
-      border: 1px solid var(--jc-card-border);
-      border-radius: 20px;
-      padding: 22px 18px 18px;
-      text-align: center;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1.12;
+      min-height: 195px;
+      max-height: 380px;
+      border-radius: 22px;
+      overflow: hidden;
       cursor: pointer;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+      border: 1.5px solid rgba(255, 209, 102, 0.35);
+      background: rgba(24, 13, 7, 0.85);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+      transition: transform 0.32s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.32s ease, box-shadow 0.32s ease;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .jc-deity-card::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #ffd166, transparent);
-      opacity: 0;
-      transition: opacity 0.28s ease;
+      justify-content: flex-end;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .jc-deity-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255, 209, 102, 0.55);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(255, 209, 102, 0.16);
+      transform: translateY(-6px) scale(1.02);
+      border-color: #ffd166;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(255, 209, 102, 0.35);
     }
 
-    .jc-deity-card:hover::before {
-      opacity: 1;
+    .jc-deity-card:active {
+      transform: scale(0.98);
     }
 
-    .jc-deity-icon {
-      font-size: 3rem;
-      line-height: 1;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 4px 12px rgba(255, 209, 102, 0.3));
-      transition: transform 0.25s ease;
+    .jc-deity-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.45s ease;
+      z-index: 1;
     }
 
-    .jc-deity-card:hover .jc-deity-icon {
-      transform: scale(1.12);
+    .jc-deity-card:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Gradient overlay for clear, striking text readability */
+    .jc-deity-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10, 5, 2, 0.95) 0%,
+        rgba(10, 5, 2, 0.75) 34%,
+        rgba(10, 5, 2, 0.25) 62%,
+        rgba(10, 5, 2, 0.05) 100%
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .jc-deity-card-content {
+      position: relative;
+      z-index: 3;
+      padding: 16px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
     }
 
     .jc-deity-name {
-      color: #fff3db;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+      color: #ffd166;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      font-weight: 800;
+      line-height: 1.25;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 14px rgba(255, 209, 102, 0.35);
     }
 
     .jc-deity-mantra-preview {
-      font-size: 0.88rem;
-      color: #ffd166;
-      font-weight: 600;
-      line-height: 1.5;
-      min-height: 42px;
-      margin-bottom: 14px;
+      color: #fbf1d8;
+      font-size: clamp(0.72rem, 1.5vw, 0.88rem);
+      font-weight: 500;
+      line-height: 1.35;
+      opacity: 0.95;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .jc-deity-stats-box {
-      border-top: 1px solid rgba(255, 209, 102, 0.16);
-      padding-top: 12px;
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      font-size: 0.82rem;
-      text-align: left;
-    }
-
-    .jc-stat-row {
-      display: flex;
-      justify-content: space-between;
+    .jc-deity-badge {
+      align-self: center;
+      margin-top: 4px;
+      display: inline-flex;
       align-items: center;
-    }
-
-    .jc-stat-label {
-      color: var(--jc-text-muted);
-    }
-
-    .jc-stat-val-community {
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 209, 102, 0.18);
+      border: 1px solid rgba(255, 209, 102, 0.4);
       color: #ffd166;
+      font-size: 0.72rem;
       font-weight: 700;
-      font-family: "Outfit", sans-serif;
+      backdrop-filter: blur(4px);
     }
 
-    .jc-stat-val-today {
-      color: #64eedf;
-      font-weight: 700;
-      font-family: "Outfit", sans-serif;
+    @media (max-width: 600px) {
+      .jc-deity-card {
+        border-radius: 16px;
+        min-height: 175px;
+      }
+      .jc-deity-card-content {
+        padding: 10px 6px 10px;
+        gap: 2px;
+      }
+      .jc-deity-name {
+        font-size: 0.95rem;
+      }
+      .jc-deity-mantra-preview {
+        font-size: 0.70rem;
+        -webkit-line-clamp: 1;
+      }
+      .jc-deity-badge {
+        font-size: 0.65rem;
+        padding: 2px 7px;
+      }
     }
 
     /* Step 2: Target Count Selection */
@@ -420,8 +400,14 @@
       margin-bottom: 24px;
     }
 
-    .jc-hero-icon {
-      font-size: 2.8rem;
+    .jc-hero-deity-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1.5px solid #ffd166;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 12px rgba(255, 209, 102, 0.3);
+      flex-shrink: 0;
     }
 
     .jc-hero-name {
@@ -449,14 +435,19 @@
       padding: 16px 12px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.22s ease;
+      transition: all 0.25s ease;
     }
 
-    .jc-count-card:hover, .jc-count-card.selected {
+    .jc-count-card:hover {
       border-color: #ffd166;
       background: rgba(255, 209, 102, 0.12);
       transform: translateY(-2px);
-      box-shadow: 0 0 16px rgba(255, 209, 102, 0.22);
+    }
+
+    .jc-count-card.selected {
+      border-color: #ffd166;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.25), rgba(255, 159, 28, 0.15));
+      box-shadow: 0 0 20px rgba(255, 209, 102, 0.3);
     }
 
     .jc-count-num {
@@ -464,260 +455,248 @@
       font-size: 1.8rem;
       font-weight: 800;
       color: #ffd166;
-      line-height: 1.1;
+      line-height: 1;
       margin-bottom: 4px;
     }
 
     .jc-count-label {
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: var(--jc-text-muted);
-      font-weight: 600;
     }
 
     .jc-custom-input-box {
-      background: rgba(14, 8, 4, 0.75);
-      border: 1px solid rgba(255, 209, 102, 0.25);
-      border-radius: 16px;
-      padding: 12px 18px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 26px;
-      transition: border-color 0.22s ease;
-    }
-
-    .jc-custom-input-box:focus-within {
-      border-color: #ffd166;
-      box-shadow: 0 0 14px rgba(255, 209, 102, 0.25);
+      gap: 10px;
+      background: rgba(14, 8, 4, 0.75);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 24px;
     }
 
     .jc-custom-input-box input {
-      flex: 1;
+      width: 100%;
       background: transparent;
       border: none;
       outline: none;
-      color: #ffd166;
-      font-size: 1.15rem;
-      font-family: "Outfit", sans-serif;
-      font-weight: 700;
-    }
-
-    .jc-custom-input-box input::placeholder {
-      font-family: "Noto Serif Telugu", serif;
-      font-size: 0.92rem;
-      color: rgba(212, 192, 165, 0.5);
+      color: #fff;
+      font-size: 0.96rem;
+      font-family: inherit;
     }
 
     .jc-start-btn {
       width: 100%;
-      padding: 15px;
-      border: 1px solid #ffd166;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ff9f1c 0%, #d48b00 100%);
-      color: #100a05;
-      font-size: 1.15rem;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #1a0e05;
       font-weight: 800;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 999px;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(255, 159, 28, 0.35);
+      box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
       transition: all 0.25s ease;
     }
 
     .jc-start-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(255, 159, 28, 0.5);
+      box-shadow: 0 10px 28px rgba(255, 159, 28, 0.55);
     }
 
     .jc-start-btn:disabled {
-      opacity: 0.45;
+      opacity: 0.5;
       cursor: not-allowed;
-      box-shadow: none;
     }
 
     .jc-back-link {
       display: block;
       text-align: center;
-      margin-top: 18px;
-      color: #ffd166;
-      font-size: 0.92rem;
+      margin-top: 14px;
+      color: var(--jc-text-muted);
+      font-size: 0.9rem;
       cursor: pointer;
       text-decoration: underline;
     }
 
-    /* Step 3: Active Chanting Screen */
-    .jc-counter-stage {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .jc-back-link:hover {
+      color: #ffd166;
     }
 
-    /* Deity Mantra Banner */
-    .jc-mantra-card {
-      width: 100%;
-      background: linear-gradient(135deg, rgba(38, 20, 10, 0.88), rgba(20, 10, 5, 0.92));
-      border: 1.5px solid rgba(255, 209, 102, 0.35);
-      border-radius: 24px;
-      padding: 24px 20px;
+    /* Step 3: Interactive Mala & Counter Stage */
+    .jc-counter-stage {
+      max-width: 640px;
+      margin: 0 auto;
       text-align: center;
+    }
+
+    .jc-mantra-card {
+      background: var(--jc-card-bg);
+      border: 1px solid var(--jc-card-border);
+      border-radius: 20px;
+      padding: 16px 20px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(255, 209, 102, 0.1);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
 
-    .jc-mantra-deity-badge {
-      display: inline-flex;
+    .jc-mantra-card-top {
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 14px;
-      background: rgba(255, 209, 102, 0.16);
-      border: 1px solid rgba(255, 209, 102, 0.4);
-      border-radius: 999px;
-      font-size: 0.86rem;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .jc-active-deity-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #ffd166;
+      box-shadow: 0 0 10px rgba(255, 209, 102, 0.35);
+    }
+
+    .jc-mantra-deity-badge {
+      display: inline-block;
       color: #ffd166;
+      font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 12px;
     }
 
     .jc-mantra-text {
-      font-size: clamp(1.2rem, 3.2vw, 1.55rem);
-      font-weight: 700;
-      color: #fff4dc;
-      line-height: 1.7;
-      text-shadow: 0 0 20px rgba(255, 209, 102, 0.25);
+      color: #fff;
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      font-weight: 600;
+      line-height: 1.5;
     }
 
-    /* Interactive 3D Japa Mala Wheel & Central Counter */
     .jc-wheel-wrapper {
       position: relative;
       width: 320px;
       height: 320px;
-      margin: 10px auto 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin: 0 auto 28px;
     }
 
     .jc-mala-svg {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      transform-origin: center center;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 100%;
+      height: 100%;
+      transition: transform 0.25s ease-out;
     }
 
     .jc-counter-core {
-      position: relative;
-      z-index: 3;
-      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(38, 20, 10, 0.95), rgba(18, 9, 4, 0.98));
+      border: 2px solid rgba(255, 209, 102, 0.45);
+      box-shadow: 0 0 35px rgba(255, 209, 102, 0.2), inset 0 0 25px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 190px;
-      height: 190px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(28, 16, 8, 0.95) 0%, rgba(12, 7, 3, 0.98) 100%);
-      border: 2px solid rgba(255, 209, 102, 0.35);
-      box-shadow: 0 0 28px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 209, 102, 0.12);
+      pointer-events: none;
     }
 
     .jc-count-display {
       font-family: "Outfit", sans-serif;
-      font-size: 3.6rem;
+      font-size: 3.4rem;
       font-weight: 800;
       color: #ffd166;
       line-height: 1;
-      text-shadow: 0 0 24px rgba(255, 209, 102, 0.4);
-      margin-bottom: 2px;
+      text-shadow: 0 0 20px rgba(255, 209, 102, 0.45);
     }
 
     .jc-target-display {
-      font-size: 0.92rem;
+      font-family: "Outfit", sans-serif;
+      font-size: 0.95rem;
       color: var(--jc-text-muted);
-      font-weight: 600;
+      margin-top: 2px;
     }
 
     .jc-mala-progress-info {
-      font-size: 0.78rem;
-      color: #64eedf;
+      font-size: 0.82rem;
+      color: #2ec4b6;
       font-weight: 600;
       margin-top: 4px;
     }
 
-    /* Big Tactile Chant Tap Button */
     .jc-tap-btn {
       width: 100%;
-      max-width: 320px;
-      height: 68px;
-      border-radius: 999px;
-      border: 2px solid #ffd166;
-      background: radial-gradient(circle at 35% 30%, #ffeaa7, #ff9f1c 55%, #c07a00 100%);
-      color: #1a0e04;
-      font-size: 1.35rem;
+      max-width: 340px;
+      margin: 0 auto 20px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #1a0e05;
+      font-size: 1.3rem;
       font-weight: 800;
+      border: none;
+      border-radius: 999px;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(255, 159, 28, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.5);
-      transition: transform 0.08s ease, box-shadow 0.08s ease;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
+      box-shadow: 0 10px 30px rgba(255, 159, 28, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin-bottom: 20px;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .jc-tap-btn:active {
-      transform: scale(0.94);
-      box-shadow: 0 4px 14px rgba(255, 159, 28, 0.6);
+      transform: scale(0.96);
+      box-shadow: 0 4px 14px rgba(255, 159, 28, 0.3);
     }
 
-    /* Aux Controls Toolbar (Sound, Vibrate, Auto, Reset, Change) */
     .jc-tools-bar {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 24px;
-      width: 100%;
+      gap: 8px;
+      margin-top: 10px;
     }
 
     .jc-tool-btn {
-      background: rgba(14, 8, 4, 0.85);
-      border: 1px solid rgba(255, 209, 102, 0.25);
-      border-radius: 999px;
-      padding: 8px 16px;
-      color: var(--jc-text-muted);
-      font-size: 0.86rem;
-      font-weight: 600;
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      padding: 8px 14px;
+      background: rgba(22, 12, 6, 0.7);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 999px;
+      color: #ffd166;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .jc-tool-btn:hover, .jc-tool-btn.active {
+    .jc-tool-btn:hover {
+      background: rgba(255, 209, 102, 0.18);
       border-color: #ffd166;
-      color: #ffd166;
-      background: rgba(255, 209, 102, 0.14);
     }
 
-    /* Step 4: Completion Modal / Card */
+    .jc-tool-btn.active {
+      background: rgba(46, 196, 182, 0.16);
+      border-color: #2ec4b6;
+      color: #64eedf;
+    }
+
+    /* Completion Banner Card */
     .jc-completion-card {
       display: none;
-      width: 100%;
-      background: linear-gradient(135deg, rgba(46, 26, 12, 0.95), rgba(20, 10, 4, 0.98));
+      background: linear-gradient(135deg, rgba(38, 24, 12, 0.95), rgba(20, 10, 4, 0.95));
       border: 2px solid #ffd166;
-      border-radius: 26px;
-      padding: 34px 22px;
-      text-align: center;
-      box-shadow: 0 0 45px rgba(255, 209, 102, 0.35);
-      animation: jcStepIn 0.4s ease;
-      margin-top: 10px;
+      border-radius: 24px;
+      padding: 30px 20px;
+      margin-top: 24px;
+      box-shadow: 0 0 35px rgba(255, 209, 102, 0.35);
+      animation: jcStepIn 0.4s ease forwards;
     }
 
     .jc-completion-card.show {
@@ -725,71 +704,47 @@
     }
 
     .jc-completion-icon {
-      font-size: 3.6rem;
-      margin-bottom: 12px;
-      animation: jcFloat 3s ease-in-out infinite;
-    }
-
-    @keyframes jcFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .jc-completion-title {
-      font-size: 1.8rem;
-      color: #ffd166;
-      font-weight: 800;
+      font-size: 3.2rem;
       margin-bottom: 8px;
     }
 
+    .jc-completion-title {
+      font-size: 1.6rem;
+      color: #ffd166;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
     .jc-completion-sub {
-      font-size: 1.05rem;
-      color: #fff3db;
-      margin-bottom: 22px;
-      line-height: 1.6;
+      color: #fbf1d8;
+      font-size: 0.98rem;
+      margin-bottom: 18px;
     }
 
     .jc-completion-actions {
       display: flex;
-      gap: 12px;
       justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     /* Footer */
     .jc-footer {
       text-align: center;
-      padding: 34px 20px;
-      border-top: 1px solid rgba(255, 209, 102, 0.18);
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 209, 102, 0.14);
       color: var(--jc-text-muted);
-      font-size: 0.95rem;
-      margin-top: 40px;
+      font-size: 0.9rem;
     }
 
     .jc-footer a {
       color: #ffd166;
       text-decoration: none;
-      font-weight: 600;
-    }
-
-    /* Responsiveness */
-    @media (max-width: 600px) {
-      .japa-wrapper { padding: max(calc(env(safe-area-inset-top, 0px) + 26px), 28px) 10px 60px; }
-      .jc-navbar { padding: 8px 12px; margin-bottom: 20px; }
-      .jc-deity-grid { grid-template-columns: 1fr; gap: 14px; }
-      .jc-wheel-wrapper { width: 280px; height: 280px; }
-      .jc-counter-core { width: 165px; height: 165px; }
-      .jc-count-display { font-size: 3rem; }
-      .jc-tap-btn { height: 60px; font-size: 1.2rem; }
-      .jc-tools-bar { gap: 6px; }
-      .jc-tool-btn { padding: 6px 12px; font-size: 0.78rem; }
     }
   </style>
 </head>
 <body>
-
-  <!-- 3D Interactive Sacred Background Canvas -->
-  <canvas id="canvas3D"></canvas>
 
   <div class="japa-wrapper">
 
@@ -804,14 +759,9 @@
         <img src="../images/logo.png" alt="సన్నివేశం" class="jc-nav-logo" onerror="this.style.display='none'">
         <span class="jc-nav-title">సన్నివేశం</span>
       </a>
-
-      <button id="themeToggleBtn" class="jc-theme-btn" title="వర్ణశైలిని మార్చండి">
-        <span>🎨</span>
-        <span>శైలి</span>
-      </button>
     </nav>
 
-    <!-- STEP 1: CHOOSE DEITY -->
+    <!-- STEP 1: CHOOSE DEITY (2x6 Grid Layout) -->
     <section id="stepDeity" class="jc-step active">
       <header class="jc-header">
         <div class="jc-badge">
@@ -825,13 +775,7 @@
         <div id="myTotalBanner" class="jc-my-today-banner" style="display:none;"></div>
       </header>
 
-      <!-- Search Deity -->
-      <div class="jc-search-row">
-        <span class="jc-search-icon">🔍</span>
-        <input type="text" id="deitySearch" class="jc-search-input" placeholder="దైవం లేదా మంత్రం పేరుతో వెతకండి...">
-      </div>
-
-      <!-- Deity Cards Grid -->
+      <!-- Deity Cards Grid (Side-by-side 2 per line) -->
       <div id="deityGrid" class="jc-deity-grid">
         <!-- Injected via JavaScript -->
       </div>
@@ -856,9 +800,9 @@
       <div class="jc-count-container">
         <!-- Selected Deity Summary -->
         <div class="jc-selected-deity-hero">
-          <div class="jc-hero-icon" id="heroDeityIcon">🐘</div>
+          <img id="heroDeityImg" src="images/ganesha.jpg" alt="దైవం" class="jc-hero-deity-img">
           <div>
-            <div class="jc-hero-name" id="heroDeityName">గణపతి</div>
+            <div class="jc-hero-name" id="heroDeityName">శ్రీ గణపతి</div>
             <div class="jc-hero-mantra" id="heroDeityMantra">ఓం గం గణపతయే నమః</div>
           </div>
         </div>
@@ -900,7 +844,10 @@
 
         <!-- Mantra Banner -->
         <div class="jc-mantra-card">
-          <div class="jc-mantra-deity-badge" id="activeDeityBadge">🙏 శ్రీ మహాగణపతి</div>
+          <div class="jc-mantra-card-top">
+            <img id="activeDeityImg" src="images/ganesha.jpg" alt="దైవం" class="jc-active-deity-thumb">
+            <div class="jc-mantra-deity-badge" id="activeDeityBadge">🙏 శ్రీ గణపతి</div>
+          </div>
           <div class="jc-mantra-text" id="activeMantraText">ఓం గం గణపతయే నమః</div>
         </div>
 
@@ -978,38 +925,6 @@
 
   </div>
 
-  <!-- Theme Selector Modal Include -->
-  <div id="themeModal" class="theme-modal" style="display: none;">
-    <div class="theme-modal-box">
-      <button class="auth-close-btn" id="themeCloseBtn">&times;</button>
-      <h2 class="theme-modal-title">రంగు శైలిని ఎంచుకోండి</h2>
-      <p class="theme-modal-sub">సన్నివేశం అనుభూతి కోసం మీకు నచ్చిన శైలిని ఎంచుకోండి</p>
-
-      <div class="theme-options-grid">
-        <div class="theme-card-option" data-theme-choice="ramayanam">
-          <div class="theme-card-icon">🏹</div>
-          <div class="theme-card-name">రామాయణం</div>
-          <div class="theme-card-desc">అయోధ్య కాషాయం & రాజ సువర్ణం</div>
-        </div>
-        <div class="theme-card-option" data-theme-choice="mahabharatam">
-          <div class="theme-card-icon">🦚</div>
-          <div class="theme-card-name">మహాభారతం</div>
-          <div class="theme-card-desc">కృష్ణ మయూర నీలం & స్వర్ణం</div>
-        </div>
-        <div class="theme-card-option" data-theme-choice="light">
-          <div class="theme-card-icon">☀️</div>
-          <div class="theme-card-name">సాత్విక / వెలుగు</div>
-          <div class="theme-card-desc">చందనం & దేవాలయ ప్రకాశం</div>
-        </div>
-        <div class="theme-card-option" data-theme-choice="dark">
-          <div class="theme-card-icon">🌙</div>
-          <div class="theme-card-name">రాత్రి / చీకటి</div>
-          <div class="theme-card-desc">శాంత రాత్రి & ధ్యాన రూపం</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- =====================================================
        FIREBASE INTEGRATION & COMMUNITY COUNT TRACKER
   ===================================================== -->
@@ -1024,59 +939,25 @@
     } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     /* ════════════════════════════════════════════════════════
-       1. SECTION BACKGROUND LOADER
-    ════════════════════════════════════════════════════════ */
-    async function loadChantCounterBackground() {
-      try {
-        let data = null;
-        const themeSnap = await getDoc(doc(db, "settings", "theme"));
-        if (themeSnap.exists()) data = themeSnap.data();
-        if (!data) {
-          const bgSnap = await getDoc(doc(db, "settings", "backgrounds"));
-          if (bgSnap.exists()) data = bgSnap.data();
-        }
-        if (!data) return;
-
-        function applyBg() {
-          if (window.SanniveshamTheme && window.SanniveshamTheme.resolveBackground) {
-            const res = window.SanniveshamTheme.resolveBackground(data, "chantCounter");
-            if (res && res.chosen) {
-              document.body.style.backgroundImage = `linear-gradient(rgba(12, 7, 3, 0.84), rgba(10, 5, 2, 0.92)), url('${res.chosen}')`;
-              document.body.style.backgroundSize = "cover";
-              document.body.style.backgroundPosition = "center top";
-              document.body.style.backgroundAttachment = "fixed";
-            }
-          }
-        }
-        applyBg();
-        window.addEventListener("sannivesham_theme_changed", applyBg);
-        window.addEventListener("resize", applyBg);
-      } catch (e) {
-        console.warn("Chant counter bg load error:", e);
-      }
-    }
-    loadChantCounterBackground();
-
-    /* ════════════════════════════════════════════════════════
-       2. DEITIES MASTER LIST
+       1. DEITIES MASTER LIST (12 GODS / MANTRAS)
     ════════════════════════════════════════════════════════ */
     window.deities = [
-      { id: "ganesha", icon: "🐘", name: "గణపతి", mantra: "ఓం గం గణపతయే నమః" },
-      { id: "shiva", icon: "🔱", name: "శివుడు", mantra: "ఓం నమః శివాయ" },
-      { id: "venkateswara", icon: "🛕", name: "శ్రీ వేంకటేశ్వర స్వామి", mantra: "ఓం నమో వేంకటేశాయ" },
-      { id: "vishnu", icon: "🕉️", name: "విష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
-      { id: "lakshmi", icon: "🪷", name: "లక్ష్మీదేవి", mantra: "ఓం శ్రీం మహాలక్ష్మ్యై నమః" },
-      { id: "durga", icon: "🦁", name: "దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
-      { id: "rama", icon: "🏹", name: "శ్రీరాముడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
-      { id: "krishna", icon: "🪈", name: "శ్రీకృష్ణుడు", mantra: "హరే కృష్ణ హరే కృష్ణ కృష్ణ కృష్ణ హరే హరే, హరే రామ హరే రామ రామ రామ హరే హరే" },
-      { id: "hanuman", icon: "🚩", name: "శ్రీ హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
-      { id: "saraswati", icon: "📚", name: "సరస్వతీదేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" },
-      { id: "subrahmanya", icon: "🦚", name: "శ్రీ సుబ్రహ్మణ్య స్వామి", mantra: "ఓం శరవణభవాయ నమః" },
-      { id: "ayyappa", icon: "🐯", name: "శ్రీ అయ్యప్ప స్వామి", mantra: "స్వామియే శరణం అయ్యప్ప" }
+      { id: "ganesha", image: "images/ganesha.jpg", name: "శ్రీ గణపతి", mantra: "ఓం గం గణపతయే నమః" },
+      { id: "shiva", image: "images/shiva.jpg", name: "పరమశివుడు", mantra: "ఓం నమః శివాయ" },
+      { id: "venkateswara", image: "images/venkateswara.jpg", name: "శ్రీ వేంకటేశ్వర స్వామి", mantra: "ఓం నమో వేంకటేశాయ" },
+      { id: "vishnu", image: "images/vishnu.jpg", name: "శ్రీ మహావిష్ణువు", mantra: "ఓం నమో నారాయణాయ" },
+      { id: "lakshmi", image: "images/lakshmi.jpg", name: "శ్రీ మహాలక్ష్మీ దేవి", mantra: "ఓం శ్రీం మహాలక్ష్మ్యై నమః" },
+      { id: "durga", image: "images/durga.jpg", name: "శ్రీ దుర్గాదేవి", mantra: "ఓం దుం దుర్గాయై నమః" },
+      { id: "rama", image: "images/rama.jpg", name: "శ్రీరామచంద్రుడు", mantra: "శ్రీ రామ జయ రామ జయ జయ రామ" },
+      { id: "krishna", image: "images/krishna.jpg", name: "శ్రీకృష్ణ పరమాత్మ", mantra: "హరే కృష్ణ హరే కృష్ణ కృష్ణ కృష్ణ హరే హరే, హరే రామ హరే రామ రామ రామ హరే హరే" },
+      { id: "hanuman", image: "images/hanuman.jpg", name: "శ్రీ హనుమంతుడు", mantra: "ఓం హనుమతే నమః" },
+      { id: "saraswati", image: "images/saraswati.jpg", name: "శ్రీ సరస్వతీ దేవి", mantra: "ఓం ఐం సరస్వత్యై నమః" },
+      { id: "subrahmanya", image: "images/subrahmanya.jpg", name: "శ్రీ సుబ్రహ్మణ్య స్వామి", mantra: "ఓం శరవణభవాయ నమః" },
+      { id: "ayyappa", image: "images/ayyappa.jpg", name: "శ్రీ అయ్యప్ప స్వామి", mantra: "స్వామియే శరణం అయ్యప్ప" }
     ];
 
     /* ════════════════════════════════════════════════════════
-       3. COMMUNITY & PERSONAL PROGRESS STATE
+       2. COMMUNITY & PERSONAL PROGRESS STATE
     ════════════════════════════════════════════════════════ */
     let currentUser = null;
     let personalProgress = {};
@@ -1098,27 +979,42 @@
         return raw ? JSON.parse(raw) : {};
       } catch (e) { return {}; }
     }
-    function saveLocalProgress(data) {
-      try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {}
+
+    function saveLocalProgress(prog) {
+      try {
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(prog));
+      } catch (e) {}
     }
 
     function getTodayScore(deityId) {
-      const record = personalProgress[deityId];
-      if (!record || record.date !== todayKey) return 0;
-      return record.score || 0;
+      const rec = personalProgress[deityId];
+      if (rec && rec.date === todayKey) {
+        return rec.score || 0;
+      }
+      return 0;
     }
+
     function getTodayRounds(deityId) {
-      const record = personalProgress[deityId];
-      if (!record || record.date !== todayKey) return 0;
-      return record.rounds || 0;
+      const rec = personalProgress[deityId];
+      if (rec && rec.date === todayKey) {
+        return rec.rounds || 0;
+      }
+      return 0;
     }
 
     function getMyTotalRoundsToday() {
-      return window.deities.reduce((sum, d) => sum + getTodayRounds(d.id), 0);
+      let total = 0;
+      Object.keys(personalProgress).forEach(k => {
+        const rec = personalProgress[k];
+        if (rec && rec.date === todayKey) {
+          total += (rec.rounds || 0);
+        }
+      });
+      return total;
     }
 
     /* ════════════════════════════════════════════════════════
-       4. LOAD COMMUNITY TOTALS (All-Time, Live)
+       3. LOAD COMMUNITY TOTALS (All-Time, Live)
     ════════════════════════════════════════════════════════ */
     async function loadCommunityTotals() {
       try {
@@ -1173,14 +1069,11 @@
         }
       } else {
         saveLocalProgress(personalProgress);
-        // Guests also attempt to contribute to live community totals
         try {
           await setDoc(doc(db, "japaCommunity", deityId), {
             totalScore: increment(countCompleted)
           }, { merge: true });
-        } catch (e) {
-          // If Firestore security rules restrict unauthenticated writes, silently preserve local total
-        }
+        } catch (e) {}
         if (!communityTotals[deityId]) communityTotals[deityId] = { totalScore: 0 };
         communityTotals[deityId].totalScore += countCompleted;
       }
@@ -1212,7 +1105,7 @@
     loadCommunityTotals();
 
     /* ════════════════════════════════════════════════════════
-       5. RENDER DEITY GRID
+       4. RENDER DEITY GRID (Side-by-side 2x6 Box Design)
     ════════════════════════════════════════════════════════ */
     function updateTodayBanner() {
       const banner = document.getElementById("myTotalBanner");
@@ -1229,37 +1122,19 @@
       const grid = document.getElementById("deityGrid");
       if (!grid) return;
       grid.innerHTML = "";
-      const query = (document.getElementById("deitySearch")?.value || "").toLowerCase().trim();
 
-      const filtered = window.deities.filter(d => 
-        !query || d.name.toLowerCase().includes(query) || d.mantra.toLowerCase().includes(query)
-      );
-
-      filtered.forEach(d => {
-        const commScore = communityTotals[d.id]?.totalScore || 0;
-        const myScore = getTodayScore(d.id);
+      window.deities.forEach(d => {
         const myRounds = getTodayRounds(d.id);
 
         const card = document.createElement("article");
         card.className = "jc-deity-card";
         card.dataset.deityId = d.id;
         card.innerHTML = `
-          <div class="jc-deity-icon">${d.icon}</div>
-          <h3 class="jc-deity-name">${d.name}</h3>
-          <div class="jc-deity-mantra-preview">${d.mantra}</div>
-          <div class="jc-deity-stats-box">
-            <div class="jc-stat-row">
-              <span class="jc-stat-label">🌐 లోక సమిష్టి జపం:</span>
-              <span class="jc-stat-val-community">${commScore.toLocaleString("en-IN")}</span>
-            </div>
-            <div class="jc-stat-row">
-              <span class="jc-stat-label">🔥 నేటి మీ జపం:</span>
-              <span class="jc-stat-val-today">${myScore.toLocaleString("en-IN")}</span>
-            </div>
-            <div class="jc-stat-row">
-              <span class="jc-stat-label">🙏 నేటి మాలలు:</span>
-              <span class="jc-stat-val-today">${myRounds}</span>
-            </div>
+          <img src="${d.image}" alt="${d.name}" loading="lazy" onerror="this.src='../images/logo.png'">
+          <div class="jc-deity-card-content">
+            <h3 class="jc-deity-name">${d.name}</h3>
+            <div class="jc-deity-mantra-preview">${d.mantra}</div>
+            <div class="jc-deity-badge">${myRounds > 0 ? `📿 నేడు: ${myRounds} మాలలు` : '📿 జపించండి'}</div>
           </div>
         `;
         card.addEventListener("click", () => {
@@ -1268,136 +1143,10 @@
         grid.appendChild(card);
       });
     }
-
-    document.getElementById("deitySearch")?.addEventListener("input", renderDeityGrid);
-  </script>
-
-  <!-- =====================================================
-       3D CANVAS SACRED GEOMETRY BACKGROUND ENGINE
-  ===================================================== -->
-  <script>
-    (function init3DBackground() {
-      const canvas = document.getElementById("canvas3D");
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      let w = canvas.width = window.innerWidth;
-      let h = canvas.height = window.innerHeight;
-
-      window.addEventListener("resize", () => {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-      });
-
-      // Interactive mouse / touch coordinates
-      let mouseX = w / 2;
-      let mouseY = h / 2;
-      window.addEventListener("mousemove", e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      // 3D Particles Matrix (Rudraksha / Pearl Spheres)
-      const numParticles = Math.min(65, Math.floor(w / 22));
-      const particles = [];
-      for (let i = 0; i < numParticles; i++) {
-        particles.push({
-          x: (Math.random() - 0.5) * w * 1.5,
-          y: (Math.random() - 0.5) * h * 1.5,
-          z: Math.random() * 800 + 100,
-          radius: Math.random() * 2.8 + 1.2,
-          color: Math.random() > 0.4 ? "#ffd166" : "#ff9f1c",
-          vy: -(Math.random() * 0.4 + 0.15),
-          pulseSpeed: Math.random() * 0.02 + 0.01
-        });
-      }
-
-      let angleY = 0;
-      let angleX = 0;
-
-      function render() {
-        ctx.clearRect(0, 0, w, h);
-
-        const targetAngleY = ((mouseX - w / 2) / w) * 0.4;
-        const targetAngleX = ((mouseY - h / 2) / h) * 0.25;
-        angleY += (targetAngleY - angleY) * 0.05;
-        angleX += (targetAngleX - angleX) * 0.05;
-
-        const fov = 450;
-        const cx = w / 2;
-        const cy = h / 2;
-
-        // 1. Draw 3D Rotating Sacred Rings in Center
-        const ringRadius = Math.min(w, h) * 0.38;
-        ctx.save();
-        ctx.translate(cx, cy);
-
-        // Outer Mandala wireframe ring
-        for (let r = 0; r < 3; r++) {
-          const rad = ringRadius * (0.6 + r * 0.25);
-          ctx.beginPath();
-          const points = 16;
-          for (let p = 0; p <= points; p++) {
-            const th = (p / points) * Math.PI * 2 + angleY * (r % 2 === 0 ? 1 : -1) + Date.now() * 0.00015 * (r + 1);
-            const x3 = Math.cos(th) * rad;
-            const z3 = Math.sin(th) * rad;
-            const y3 = Math.sin(th * 2) * (rad * 0.15);
-
-            // Project
-            const cosY = Math.cos(angleY);
-            const sinY = Math.sin(angleY);
-            const rx = x3 * cosY - z3 * sinY;
-            const rz = x3 * sinY + z3 * cosY + 700;
-            const scale = fov / rz;
-
-            const px = rx * scale;
-            const py = (y3 + 40) * scale;
-
-            if (p === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-          }
-          ctx.strokeStyle = `rgba(255, 209, 102, ${0.10 - r * 0.02})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        // 2. Project and Draw 3D Floating Beads
-        particles.forEach(p => {
-          p.y += p.vy;
-          if (p.y < -h * 0.75) p.y = h * 0.75;
-
-          const cosY = Math.cos(angleY);
-          const sinY = Math.sin(angleY);
-          const rx = p.x * cosY - p.z * sinY;
-          const rz = p.x * sinY + p.z * cosY + 500;
-
-          if (rz > 50) {
-            const scale = fov / rz;
-            const sx = cx + rx * scale;
-            const sy = cy + p.y * scale;
-
-            const alpha = Math.max(0.12, Math.min(0.75, (scale * 1.4)));
-            ctx.beginPath();
-            ctx.arc(sx, sy, p.radius * scale * 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = alpha;
-            ctx.shadowBlur = 12 * scale;
-            ctx.shadowColor = p.color;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1.0;
-          }
-        });
-
-        requestAnimationFrame(render);
-      }
-      render();
-    })();
   </script>
 
   <!-- =====================================================
        WEB AUDIO ZERO-LATENCY TEMPLE BELL SYNTHESIZER
-  ===================================================== */
   ===================================================== -->
   <script>
     let audioCtx = null;
@@ -1411,13 +1160,12 @@
       return audioCtx;
     }
 
-    // High-precision sacred temple bell chime synthesis (0 network delay)
+    // High-precision sacred temple bell chime synthesis
     function playTempleBellChime() {
       try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;
 
-        // Frequencies for soothing singing bowl / brass temple bell
         const freqs = [880, 1760, 2640, 3520];
         const gains = [0.18, 0.08, 0.04, 0.02];
 
@@ -1442,7 +1190,7 @@
       }
     }
 
-    // Sacred Gong on Completion (Deep rich resonant gong)
+    // Sacred Gong on Completion
     function playSacredGong() {
       try {
         const ctx = getAudioContext();
@@ -1515,7 +1263,6 @@
       const activeIndex = (currentCount % totalBeads);
       const svg = document.getElementById("malaSvg");
 
-      // Rotate wheel so active bead is always towards top
       const rotationDeg = -(activeIndex / totalBeads) * 360;
       if (svg) {
         svg.style.transform = `rotate(${rotationDeg}deg)`;
@@ -1550,7 +1297,11 @@
     // Select Deity (Invoked from Card Click)
     window.selectDeity = function(deity) {
       activeDeity = deity;
-      document.getElementById("heroDeityIcon").textContent = deity.icon;
+      const heroImg = document.getElementById("heroDeityImg");
+      if (heroImg) {
+        heroImg.src = deity.image;
+        heroImg.alt = deity.name;
+      }
       document.getElementById("heroDeityName").textContent = deity.name;
       document.getElementById("heroDeityMantra").textContent = deity.mantra;
       showStep("stepCount");
@@ -1584,7 +1335,13 @@
     document.getElementById("startChantingBtn").addEventListener("click", () => {
       if (!activeDeity || !targetCount) return;
       currentCount = 0;
-      document.getElementById("activeDeityBadge").textContent = `🙏 శ్రీ ${activeDeity.name}`;
+
+      const activeImg = document.getElementById("activeDeityImg");
+      if (activeImg) {
+        activeImg.src = activeDeity.image;
+        activeImg.alt = activeDeity.name;
+      }
+      document.getElementById("activeDeityBadge").textContent = `🙏 ${activeDeity.name}`;
       document.getElementById("activeMantraText").textContent = activeDeity.mantra;
       document.getElementById("targetDisplay").textContent = `/ ${targetCount}`;
 
@@ -1630,18 +1387,14 @@
 
     // Completion Handler
     function handleChantCompletion() {
-      // Stop auto chant if running
       stopAutoChant();
 
-      // Sacred gong sound
       if (isSoundOn) playSacredGong();
 
-      // Haptic long vibration
       if (isVibrateOn && navigator.vibrate) {
         navigator.vibrate([40, 60, 80]);
       }
 
-      // Save to Firebase & Local
       if (window.saveCompletedRoundToFirebase && activeDeity) {
         window.saveCompletedRoundToFirebase(activeDeity.id, targetCount);
       }
