@@ -28,7 +28,6 @@ let isTouching = false;
 let lastTapTime = 0;
 
 const eventsListContainer = document.querySelector(".events-list");
-const statsCountEl = document.getElementById("eventsCountStat");
 
 /**
  * Render Shimmer Skeleton Cards while loading
@@ -78,7 +77,6 @@ async function loadEvents() {
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-      if (statsCountEl) statsCountEl.textContent = "0";
       eventsListContainer.innerHTML = `
         <div class="events-empty-state">
           <span class="events-empty-icon">🪔</span>
@@ -165,10 +163,6 @@ async function loadEvents() {
         </article>
       `;
     });
-
-    if (statsCountEl) {
-      statsCountEl.textContent = `${count} కార్యక్రమాలు`;
-    }
 
     eventsListContainer.innerHTML = html;
     bindGalleryClicks();
