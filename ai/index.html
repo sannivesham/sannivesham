@@ -4,160 +4,310 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.cloudfunctions.net; base-uri 'self'; form-action 'self';">
-  <title>సన్నివేశం మేధ — Sannivesham AI | సాంస్కృతిక & విద్యా మేధస్సు</title>
-  <meta name="description" content="సన్నివేశం మేధ (Sannivesham AI) — మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. తెలుగు భాష, సాహిత్యం, సంస్కృతి, దేవాలయాలు, పండుగలు మరియు సనాతన ధర్మం గురించిన నమ్మకమైన విజ్ఞాన వేదిక.">
-  <link rel="canonical" href="https://sannivesham.com/ai/">
-  <link rel="icon" type="image/png" href="../images/logo.png">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="సన్నివేశం మేధ — Sannivesham AI">
-  <meta property="og:description" content="మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు. తెలుగు మరియు భారతీయ సాంస్కృతిక విజ్ఞాన వేదిక.">
-  <meta property="og:image" content="https://sannivesham.com/images/logo.png">
-  <meta property="og:url" content="https://sannivesham.com/ai/">
-  <meta property="og:type" content="website">
-
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
+  <title>సన్నివేశం మేధ — Sannivesham AI (త్వరలో రాబోతోంది)</title>
+  <meta name="description" content="సన్నివేశం మేధ (Sannivesham AI) — త్వరలో రాబోతోంది.">
+  <link rel="canonical" href="https://sannivesham.com/ai/">
+  <link rel="icon" type="image/png" href="../images/logo.png">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700;800&family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@500;700;800&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Noto Serif Telugu", serif;
+      background: radial-gradient(circle at 50% 35%, #241208 0%, #120703 65%, #080301 100%);
+      color: #fcf4e4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Ambient Canvas */
+    #ambientCanvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.55;
+    }
+
+    /* Top Back Button */
+    .ai-top-nav {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      z-index: 10;
+    }
+
+    .ai-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(255, 209, 102, 0.08);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      border-radius: 999px;
+      color: #ffd166;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .ai-back-btn:hover {
+      background: rgba(255, 209, 102, 0.2);
+      border-color: #ffd166;
+      transform: translateX(-3px);
+      box-shadow: 0 6px 20px rgba(255, 209, 102, 0.25);
+    }
+
+    /* Main Container */
+    .ai-cs-card {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 40px 28px;
+      max-width: 580px;
+      width: 90%;
+      background: rgba(24, 13, 7, 0.72);
+      border: 1.5px solid rgba(255, 209, 102, 0.35);
+      border-radius: 28px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(255, 209, 102, 0.12);
+    }
+
+    .ai-avatar-wrap {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-avatar-halo {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.4), transparent 70%);
+      animation: pulseHalo 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseHalo {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .ai-avatar-img {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(255, 209, 102, 0.5));
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(255, 209, 102, 0.12);
+      border: 1px solid rgba(255, 209, 102, 0.45);
+      border-radius: 999px;
+      color: #ffd166;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 16px rgba(255, 209, 102, 0.15);
+    }
+
+    .ai-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffd166;
+      box-shadow: 0 0 10px #ffd166;
+      animation: pulseDot 1.8s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.5; }
+    }
+
+    .ai-title {
+      font-size: clamp(2rem, 5.5vw, 2.6rem);
+      font-weight: 800;
+      color: #fff6e6;
+      margin-bottom: 6px;
+      line-height: 1.25;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+    }
+
+    .ai-eng-title {
+      font-family: "Outfit", sans-serif;
+      font-size: 1.15rem;
+      color: #ffd166;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .ai-desc {
+      font-size: 1.05rem;
+      color: #d6be9f;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    .ai-home-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #ff9f1c, #d48b00);
+      color: #120803;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 999px;
+      box-shadow: 0 4px 18px rgba(255, 159, 28, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .ai-home-action:hover {
+      background: linear-gradient(135deg, #ffa72b, #df9300);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(255, 159, 28, 0.55);
+    }
+
+    @media (max-width: 500px) {
+      .ai-top-nav {
+        top: 16px;
+        left: 16px;
+      }
+      .ai-back-btn {
+        padding: 8px 16px;
+        font-size: 0.88rem;
+      }
+      .ai-cs-card {
+        padding: 30px 20px;
+      }
+      .ai-title {
+        font-size: 1.85rem;
+      }
+      .ai-desc {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Background Aura & Sacred Particles -->
-  <div class="medha-bg"></div>
-  <div class="medha-glow-orb orb-1"></div>
-  <div class="medha-glow-orb orb-2"></div>
-  <div class="medha-glow-orb orb-3"></div>
-  <canvas id="medhaCanvas"></canvas>
 
-  <!-- Top Glass Bar -->
-  <header class="medha-nav">
-    <a href="../" class="nav-back-link" title="సన్నివేశం ముఖచిత్రానికి వెళ్లండి">
-      <span class="back-arrow">←</span>
-      <span class="back-text" data-en="Home">సన్నివేశం</span>
+  <canvas id="ambientCanvas"></canvas>
+
+  <nav class="ai-top-nav">
+    <a href="../" class="ai-back-btn">
+      <span>←</span>
+      <span>ప్రారంభ పుట (Home)</span>
     </a>
+  </nav>
 
-    <div class="nav-brand">
-      <img src="../images/logo.png" alt="Sannivesham Logo" class="brand-mini-logo">
-      <div class="brand-headings">
-        <span class="brand-mini-name">సన్నివేశం మేధ</span>
-        <span class="brand-mini-sub">SANNIVESHAM AI</span>
-      </div>
+  <main class="ai-cs-card">
+    <div class="ai-avatar-wrap">
+      <div class="ai-avatar-halo"></div>
+      <img src="../images/peacock-perched.png" alt="సన్నివేశం మేధ" class="ai-avatar-img" onerror="this.src='../images/logo.png'">
     </div>
 
-    <div class="nav-controls">
-      <button id="clearChatBtn" class="nav-action-pill" title="కొత్త సంభాషణ ప్రారంభించండి" aria-label="New Conversation">
-        <span>🔄</span>
-        <span class="control-label" data-en="New Chat">కొత్త ప్రశ్న</span>
-      </button>
+    <div class="ai-badge">
+      <span class="ai-pulse-dot"></span>
+      <span>త్వరలో రాబోతోంది • COMING SOON</span>
+    </div>
 
-      <button id="langToggleBtn" class="nav-action-pill lang-pill" title="భాష మార్చండి (Toggle Language)" aria-label="Toggle Language">
-        <span id="langLabel">తెలుగు</span>
-      </button>
+    <h1 class="ai-title">సన్నివేశం మేధ</h1>
+    <span class="ai-eng-title">SANNIVESHAM AI</span>
 
-      <a href="../profile/" class="nav-action-pill profile-pill" title="ఖాతా వివరాలు" aria-label="User Profile">
-        <span>👤</span>
+    <p class="ai-desc">
+      మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు.<br>
+      సన్నివేశం ఆర్టిఫిషియల్ ఇంటెలిజెన్స్ త్వరలోనే అందుబాటులోకి రానుంది.
+    </p>
+
+    <div>
+      <a href="../" class="ai-home-action">
+        <span>🏠</span>
+        <span>ముఖచిత్రానికి వెళ్లండి</span>
       </a>
     </div>
-  </header>
-
-  <!-- Main AI Interaction Space -->
-  <main class="medha-container">
-
-    <!-- WELCOME HERO (Visible when no messages yet) -->
-    <div id="welcomeHero" class="medha-hero">
-      <div class="medha-emblem-wrap">
-        <div class="mandala-ring outer-ring"></div>
-        <div class="mandala-ring middle-ring"></div>
-        <div class="mandala-ring inner-ring"></div>
-        <div class="peacock-divine-avatar">
-          <img src="../images/peacock-perched.png" alt="సన్నివేశం మేధ మయూరం" class="hero-peacock-img">
-        </div>
-        <div class="divine-pulse"></div>
-      </div>
-
-      <div class="status-pill coming-soon-pill">
-        <span class="status-dot cs-dot"></span>
-        <span class="status-text" data-en="✨ COMING SOON • IN ENHANCEMENT ✨">✨ త్వరలో రాబోతోంది • COMING SOON ✨</span>
-      </div>
-
-      <h1 class="medha-title">
-        <span class="title-telugu">సన్నివేశం మేధ</span>
-        <span class="title-english">SANNIVESHAM AI</span>
-      </h1>
-
-      <p class="medha-tagline" data-en="Your Culture • Your Questions • Authentic Answers">
-        మీ సంస్కృతి... మీ ప్రశ్నలు... మీకు సమాధానాలు.
-      </p>
-
-      <p class="medha-lead" data-en="Explore Telugu language, classical literature, temples, festivals, epics, Puranas, and Sanatana Dharma with verified cultural wisdom.">
-        తెలుగు భాష, కవులు, పురాణాలు, ఇతిహాసాలు, పవిత్ర దేవాలయాలు, పండుగల వెనుక ఉన్న ఆధ్యాత్మిక, శాస్త్రీయ విశేషాలను తెలుసుకోండి.
-      </p>
-
-      <!-- COMING SOON PRESENTATION CARD -->
-      <div class="medha-coming-soon-card">
-        <div class="cs-badge-pill">
-          <span class="cs-dot"></span>
-          <span data-en="✨ COMING SOON • IN ENHANCEMENT ✨">✨ త్వరలో రాబోతోంది • COMING SOON ✨</span>
-        </div>
-        <h2 data-en="Sannivesham AI will be available soon!">సన్నివేశం మేధ త్వరలోనే అందుబాటులోకి రానుంది!</h2>
-        <p data-en="We are training and refining Medha AI with deeper cultural, literary, and spiritual knowledge to give you 100% authentic and verified wisdom. Stay tuned!">
-          తెలుగు భాష, సాహిత్యము, పురాణాలు, ఇతిహాసాలు మరియు సనాతన ధర్మ సంబంధిత అంశాలలో మీకు మరింత ఖచ్చితమైన, ప్రామాణికమైన సమాధానాలు అందించడానికి 'సన్నివేశం మేధ'ను అత్యంత పవిత్రంగా, పరిపూర్ణంగా తీర్చిదిద్దుతున్నాము. త్వరలోనే పూర్తి స్థాయిలో మీ ముందుకు రానుంది!
-        </p>
-        <div class="cs-actions">
-          <a href="../" class="cs-btn cs-primary" data-en="🏠 Back to Home">🏠 ప్రధాన పేజీకి వెళ్లండి</a>
-          <a href="../quiz/" class="cs-btn cs-secondary" data-en="🎯 Play Cultural Quiz">🎯 ప్రశ్నావళిలో పాల్గొనండి</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- CHAT MESSAGES STREAM CONTAINER -->
-    <div id="chatMessages" class="chat-messages-container" style="display: none;"></div>
-
-    <!-- POLICY RESTRICTION / WARNING BANNER -->
-    <div id="restrictionBanner" class="restriction-banner" style="display: none;">
-      <span class="banner-icon">⚠️</span>
-      <div class="banner-content">
-        <div id="restrictionTitle" class="banner-title">ఖాతా పరిమితి గమనిక</div>
-        <div id="restrictionDesc" class="banner-desc"></div>
-      </div>
-    </div>
-
-    <!-- TYPING / GENERATION LOADER -->
-    <div id="typingIndicator" class="typing-indicator" style="display: none;">
-      <div class="indicator-avatar">🦚</div>
-      <div class="typing-bubble">
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-      </div>
-    </div>
-
   </main>
 
-  <!-- BOTTOM STICKY COMING SOON DOCK -->
-  <footer class="medha-input-dock">
-    <div class="input-inner-wrap">
-      <div class="coming-soon-dock-hint" data-en="🚀 Sannivesham AI is currently under active fine-tuning. Launching soon!">
-        🚀 సన్నివేశం మేధ సాంస్కృతిక విశేషాలతో శిక్షణ మరియు మెరుగుదల దశలో ఉంది. త్వరలో ప్రారంభించబడుతుంది!
-      </div>
-      <!-- Hidden elements to preserve full script compatibility without removing any created code -->
-      <div style="display: none !important;">
-        <textarea id="chatInput" class="chat-textarea" rows="1"></textarea>
-        <button id="sendBtn" class="send-action-btn" disabled></button>
-      </div>
-    </div>
-  </footer>
+  <script>
+    (function initParticles() {
+      const canvas = document.getElementById("ambientCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
 
-  <!-- Firebase Scripts -->
-  <script type="module" src="script.js"></script>
+      window.addEventListener("resize", () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      for (let i = 0; i < 35; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2 + 0.6,
+          speedY: Math.random() * 0.35 + 0.15,
+          speedX: (Math.random() - 0.5) * 0.25
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "rgba(255, 209, 102, 0.45)";
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          p.y -= p.speedY;
+          p.x += p.speedX;
+          if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+
 </body>
-
 </html>
