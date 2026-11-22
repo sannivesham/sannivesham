@@ -218,19 +218,51 @@
 
       <div class="rk-finder-controls">
         <div class="rk-selector-group">
-          <label class="rk-selector-label" for="charSelect1">
+          <label class="rk-selector-label" for="charInput1">
             <span>👤 మొదటి పాత్ర (Character 1)</span>
           </label>
-          <select id="charSelect1" class="rk-select"></select>
+          <div class="rk-char-picker-wrap" id="pickerWrap1">
+            <div class="rk-char-picker-box">
+              <span class="rk-picker-avatar" id="pickerAvatar1">🏹</span>
+              <input 
+                type="text" 
+                id="charInput1" 
+                class="rk-picker-input" 
+                placeholder="పాత్ర పేరు టైప్ చేయండి లేదా ఎంచుకోండి..." 
+                autocomplete="off"
+                value="శ్రీరామచంద్రుడు (Sri Rama)"
+                data-selected-id="sri_rama"
+              >
+              <button type="button" class="rk-picker-arrow-btn" id="arrowBtn1" title="అన్ని పాత్రల జాబితా">▼</button>
+            </div>
+            <div class="rk-picker-dropdown" id="pickerDrop1"></div>
+          </div>
+          <select id="charSelect1" class="rk-select" style="display:none;"></select>
         </div>
 
         <button class="rk-finder-swap-btn" id="btnSwapChars" title="Swap characters">⇄</button>
 
         <div class="rk-selector-group">
-          <label class="rk-selector-label" for="charSelect2">
+          <label class="rk-selector-label" for="charInput2">
             <span>👤 రెండవ పాత్ర (Character 2)</span>
           </label>
-          <select id="charSelect2" class="rk-select"></select>
+          <div class="rk-char-picker-wrap" id="pickerWrap2">
+            <div class="rk-char-picker-box">
+              <span class="rk-picker-avatar" id="pickerAvatar2">👑</span>
+              <input 
+                type="text" 
+                id="charInput2" 
+                class="rk-picker-input" 
+                placeholder="పాత్ర పేరు టైప్ చేయండి లేదా ఎంచుకోండి..." 
+                autocomplete="off"
+                value="భరతుడు (Bharata)"
+                data-selected-id="bharata"
+              >
+              <button type="button" class="rk-picker-arrow-btn" id="arrowBtn2" title="అన్ని పాత్రల జాబితా">▼</button>
+            </div>
+            <div class="rk-picker-dropdown" id="pickerDrop2"></div>
+          </div>
+          <select id="charSelect2" class="rk-select" style="display:none;"></select>
         </div>
       </div>
 

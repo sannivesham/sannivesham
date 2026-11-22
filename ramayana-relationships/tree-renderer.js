@@ -716,50 +716,163 @@
   }
 
   /* =====================================================
-     9. RELATIONSHIP FINDER UI HANDLER
+     9. RELATIONSHIP FINDER UI HANDLER (SEARCHABLE PICKERS)
   ===================================================== */
   function initRelationshipFinderUI() {
-    const sel1 = document.getElementById("charSelect1");
-    const sel2 = document.getElementById("charSelect2");
+    const input1 = document.getElementById("charInput1");
+    const input2 = document.getElementById("charInput2");
+    const avatar1 = document.getElementById("pickerAvatar1");
+    const avatar2 = document.getElementById("pickerAvatar2");
+    const drop1 = document.getElementById("pickerDrop1");
+    const drop2 = document.getElementById("pickerDrop2");
+    const arrow1 = document.getElementById("arrowBtn1");
+    const arrow2 = document.getElementById("arrowBtn2");
     const btnFind = document.getElementById("btnFindRelationship");
     const btnSwap = document.getElementById("btnSwapChars");
     const resultCard = document.getElementById("relationshipResultCard");
-
-    if (!sel1 || !sel2 || !btnFind) return;
+    const sel1 = document.getElementById("charSelect1");
+    const sel2 = document.getElementById("charSelect2");
 
     const data = getData();
     if (!data) return;
 
-    // Populate dropdown options
-    const options = [];
+    // Collect all unique characters
+    const allChars = [];
     (data.CHARACTERS || []).forEach(c => {
-      options.push({ id: c.id, name: `${c.nameTelugu} (${c.nameEnglish})` });
+      allChars.push({
+        id: c.id,
+        nameTe: c.nameTelugu,
+        nameEn: c.nameEnglish,
+        role: c.kingdom || "",
+        avatar: getAvatar(c.id)
+      });
     });
 
     (data.IKSHVAKU_LINEAGE || []).forEach(k => {
-      if (!options.some(o => o.id === k.id)) {
-        options.push({ id: k.id, name: `${k.nameTe} (${k.nameEn})` });
+      if (!allChars.some(o => o.id === k.id)) {
+        allChars.push({
+          id: k.id,
+          nameTe: k.nameTe,
+          nameEn: k.nameEn,
+          role: `ఇక్ష్వాకు ${k.gen}వ తరం`,
+          avatar: getAvatar(k.id)
+        });
       }
     });
 
-    options.sort((a, b) => a.name.localeCompare(b.name, "te"));
+    allChars.sort((a, b) => a.nameTe.localeCompare(b.nameTe, "te"));
 
-    let optsHtml = `<option value="">-- పాత్రను ఎంచుకోండి (Select Character) --</option>`;
-    options.forEach(o => {
-      optsHtml += `<option value="${o.id}">${o.name}</option>`;
+    // Populate hidden select for fallback/programmatic access
+    if (sel1 && sel2) {
+      let optsHtml = `<option value="">-- పాత్రను ఎంచుకోండి --</option>`;
+      allChars.forEach(c => {
+        optsHtml += `<option value="${c.id}">${c.nameTe} (${c.nameEn})</option>`;
+      });
+      sel1.innerHTML = optsHtml;
+      sel2.innerHTML = optsHtml;
+    }
+
+    function renderDropdown(dropEl, query, onSelect) {
+      if (!dropEl) return;
+      const q = (query || "").trim().toLowerCase();
+      const filtered = q
+        ? allChars.filter(c => c.nameTe.toLowerCase().includes(q) || c.nameEn.toLowerCase().includes(q) || c.role.toLowerCase().includes(q))
+        : allChars;
+
+      if (filtered.length === 0) {
+        dropEl.innerHTML = `<div style="padding:1rem; text-align:center; color:var(--rk-text-dim);">పాత్ర కనుగొనబడలేదు</div>`;
+        dropEl.classList.add("active");
+        return;
+      }
+
+      let html = "";
+      filtered.forEach(c => {
+        html += `
+          <div class="rk-picker-item" data-id="${c.id}">
+            <div class="rk-picker-item-left">
+              <span class="rk-picker-item-avatar">${c.avatar}</span>
+              <div>
+                <div class="rk-picker-item-name">${c.nameTe}</div>
+                <div class="rk-picker-item-en">${c.nameEn}</div>
+              </div>
+            </div>
+            ${c.role ? `<span class="rk-picker-item-badge">${c.role}</span>` : ''}
+          </div>
+        `;
+      });
+      dropEl.innerHTML = html;
+      dropEl.classList.add("active");
+
+      dropEl.querySelectorAll(".rk-picker-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const id = item.getAttribute("data-id");
+          const found = allChars.find(x => x.id === id);
+          if (found) onSelect(found);
+          dropEl.classList.remove("active");
+        });
+      });
+    }
+
+    function selectChar1(c) {
+      if (!input1) return;
+      input1.value = `${c.nameTe} (${c.nameEn})`;
+      input1.setAttribute("data-selected-id", c.id);
+      if (avatar1) avatar1.textContent = c.avatar;
+      if (sel1) sel1.value = c.id;
+      computeAndShow();
+    }
+
+    function selectChar2(c) {
+      if (!input2) return;
+      input2.value = `${c.nameTe} (${c.nameEn})`;
+      input2.setAttribute("data-selected-id", c.id);
+      if (avatar2) avatar2.textContent = c.avatar;
+      if (sel2) sel2.value = c.id;
+      computeAndShow();
+    }
+
+    // Input 1 listeners
+    if (input1) {
+      input1.addEventListener("focus", () => renderDropdown(drop1, "", selectChar1));
+      input1.addEventListener("input", () => renderDropdown(drop1, input1.value, selectChar1));
+    }
+    if (arrow1) {
+      arrow1.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (drop1.classList.contains("active")) {
+          drop1.classList.remove("active");
+        } else {
+          renderDropdown(drop1, "", selectChar1);
+        }
+      });
+    }
+
+    // Input 2 listeners
+    if (input2) {
+      input2.addEventListener("focus", () => renderDropdown(drop2, "", selectChar2));
+      input2.addEventListener("input", () => renderDropdown(drop2, input2.value, selectChar2));
+    }
+    if (arrow2) {
+      arrow2.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (drop2.classList.contains("active")) {
+          drop2.classList.remove("active");
+        } else {
+          renderDropdown(drop2, "", selectChar2);
+        }
+      });
+    }
+
+    // Close dropdowns on click outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#pickerWrap1") && drop1) drop1.classList.remove("active");
+      if (!e.target.closest("#pickerWrap2") && drop2) drop2.classList.remove("active");
     });
 
-    sel1.innerHTML = optsHtml;
-    sel2.innerHTML = optsHtml;
-
-    // Set defaults: Sri Rama and Bharata
-    sel1.value = "sri_rama";
-    sel2.value = "bharata";
-
+    // Compute and display
     function computeAndShow() {
-      const id1 = sel1.value;
-      const id2 = sel2.value;
-      if (!id1 || !id2) return;
+      const id1 = (input1 && input1.getAttribute("data-selected-id")) || (sel1 && sel1.value) || "sri_rama";
+      const id2 = (input2 && input2.getAttribute("data-selected-id")) || (sel2 && sel2.value) || "bharata";
 
       const engine = (typeof window !== "undefined" && window.KinshipEngine) || null;
       if (!engine || !engine.findRelationship) return;
@@ -782,14 +895,19 @@
       if (resultCard) resultCard.classList.add("active");
     }
 
-    btnFind.addEventListener("click", computeAndShow);
+    if (btnFind) btnFind.addEventListener("click", computeAndShow);
 
+    // Swap button
     if (btnSwap) {
       btnSwap.addEventListener("click", () => {
-        const tmp = sel1.value;
-        sel1.value = sel2.value;
-        sel2.value = tmp;
-        computeAndShow();
+        const id1 = (input1 && input1.getAttribute("data-selected-id")) || "sri_rama";
+        const id2 = (input2 && input2.getAttribute("data-selected-id")) || "bharata";
+        const c1 = allChars.find(x => x.id === id1);
+        const c2 = allChars.find(x => x.id === id2);
+        if (c1 && c2) {
+          selectChar1(c2);
+          selectChar2(c1);
+        }
       });
     }
 
@@ -798,15 +916,33 @@
       pill.addEventListener("click", () => {
         const p1 = pill.getAttribute("data-c1");
         const p2 = pill.getAttribute("data-c2");
-        if (p1 && p2) {
-          sel1.value = p1;
-          sel2.value = p2;
-          computeAndShow();
+        const c1 = allChars.find(x => x.id === p1);
+        const c2 = allChars.find(x => x.id === p2);
+        if (c1 && c2) {
+          selectChar1(c1);
+          selectChar2(c2);
         }
       });
     });
 
-    // Auto compute initial preset
+    // Default selection
+    const defaultC1 = allChars.find(x => x.id === "sri_rama");
+    const defaultC2 = allChars.find(x => x.id === "bharata");
+    if (defaultC1) {
+      if (input1) {
+        input1.value = `${defaultC1.nameTe} (${defaultC1.nameEn})`;
+        input1.setAttribute("data-selected-id", defaultC1.id);
+      }
+      if (avatar1) avatar1.textContent = defaultC1.avatar;
+    }
+    if (defaultC2) {
+      if (input2) {
+        input2.value = `${defaultC2.nameTe} (${defaultC2.nameEn})`;
+        input2.setAttribute("data-selected-id", defaultC2.id);
+      }
+      if (avatar2) avatar2.textContent = defaultC2.avatar;
+    }
+
     computeAndShow();
   }
 
@@ -869,7 +1005,11 @@
 
   if (typeof window !== "undefined") {
     window.RamayanaExplorer = RamayanaExplorer;
-    document.addEventListener("DOMContentLoaded", init);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
   }
   if (typeof globalThis !== "undefined") {
     globalThis.RamayanaExplorer = RamayanaExplorer;

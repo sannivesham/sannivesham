@@ -107,6 +107,14 @@ const requiredIds = [
   "searchResultsBox",
   "charSelect1",
   "charSelect2",
+  "charInput1",
+  "charInput2",
+  "pickerAvatar1",
+  "pickerAvatar2",
+  "pickerDrop1",
+  "pickerDrop2",
+  "arrowBtn1",
+  "arrowBtn2",
   "btnSwapChars",
   "btnFindRelationship",
   "relationshipResultCard",
@@ -134,7 +142,7 @@ const requiredIds = [
 requiredIds.forEach(id => {
   assert.ok(html.includes(`id="${id}"`), `HTML must contain element with id="${id}"`);
 });
-console.log("✓ All 29 required DOM element IDs verified in index.html");
+console.log("✓ All 37 required DOM element IDs verified in index.html");
 
 // 5. Verify Hierarchy Integration (Ithihasalu -> Ramayanam -> Ramayana Bandhutvalu)
 const mainHtmlPath = path.join(__dirname, "../index.html");

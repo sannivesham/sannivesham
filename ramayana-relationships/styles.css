@@ -592,6 +592,141 @@ body {
   box-shadow: 0 0 14px rgba(255, 209, 102, 0.3);
 }
 
+/* Character Picker Searchable Component */
+.rk-char-picker-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.rk-char-picker-box {
+  display: flex;
+  align-items: center;
+  background: rgba(22, 6, 6, 0.95);
+  border: 1px solid var(--rk-maroon-border);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.85rem;
+  transition: all 0.25s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.rk-char-picker-box:focus-within {
+  border-color: var(--rk-gold-main);
+  box-shadow: 0 0 16px rgba(255, 209, 102, 0.35);
+  background: rgba(30, 9, 9, 0.98);
+}
+
+.rk-picker-avatar {
+  font-size: 1.45rem;
+  margin-right: 0.65rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.4));
+}
+
+.rk-picker-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--rk-text-bright);
+  font-family: var(--font-telugu);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.rk-picker-input::placeholder {
+  color: var(--rk-text-dim);
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+.rk-picker-arrow-btn {
+  background: transparent;
+  border: none;
+  color: var(--rk-gold-main);
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.rk-picker-arrow-btn:hover {
+  transform: translateY(2px);
+  color: var(--rk-gold-light);
+}
+
+.rk-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #1e0808;
+  border: 1px solid var(--rk-gold-dark);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(255, 209, 102, 0.15);
+  max-height: 290px;
+  overflow-y: auto;
+  z-index: 120;
+  display: none;
+}
+
+.rk-picker-dropdown.active {
+  display: block;
+  animation: rkFadeIn 0.2s ease;
+}
+
+.rk-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 209, 102, 0.08);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rk-picker-item:last-child {
+  border-bottom: none;
+}
+
+.rk-picker-item:hover, .rk-picker-item.selected {
+  background: rgba(255, 209, 102, 0.16);
+}
+
+.rk-picker-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rk-picker-item-avatar {
+  font-size: 1.3rem;
+}
+
+.rk-picker-item-name {
+  font-weight: 700;
+  color: var(--rk-gold-light);
+  font-size: 0.95rem;
+}
+
+.rk-picker-item-en {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--rk-text-dim);
+}
+
+.rk-picker-item-badge {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 209, 102, 0.08);
+  border: 1px solid rgba(255, 209, 102, 0.2);
+  color: var(--rk-gold-main);
+  font-family: var(--font-ui);
+}
+
 .rk-finder-swap-btn {
   background: rgba(255, 209, 102, 0.1);
   border: 1px solid var(--rk-maroon-border);

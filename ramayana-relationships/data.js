@@ -3,7 +3,7 @@
  * Primary textual reference: Srimad Valmiki Ramayana (Bala Kanda, Ayodhya Kanda, Kishkindha Kanda, Yuddha Kanda, Uttara Kanda)
  */
 
-export const CATEGORIES = [
+const CATEGORIES = [
   {
     id: "ikshvaku",
     titleTelugu: "ఇక్ష్వాకు వంశవృక్షం",
@@ -66,7 +66,7 @@ export const CATEGORIES = [
   }
 ];
 
-export const IKSHVAKU_LINEAGE = [
+const IKSHVAKU_LINEAGE = [
   { gen: 1, id: "brahma", nameTe: "బ్రహ్మ", nameEn: "Brahma", titleTe: "సృష్టికర్త • స్వయంభూ", roleTe: "సకల సృష్టికి మూలకారకుడు, ఇక్ష్వాకు వంశపు ఆద్యుడు.", sarga: "బాలకాండ 70.20" },
   { gen: 2, id: "marichi", nameTe: "మరీచి", nameEn: "Marichi", titleTe: "ప్రజాపతి • మానసపుత్రుడు", roleTe: "బ్రహ్మ దేవుని మానసపుత్రుడు, సప్తర్షులలో ఒకరు.", sarga: "బాలకాండ 70.20" },
   { gen: 3, id: "kashyapa", nameTe: "కశ్యపుడు", nameEn: "Kashyapa", titleTe: "మహర్షి • ప్రజాపతి", roleTe: "మరీచి కుమారుడు, అదితి ద్వారా దేవతలకు మరియు సూర్యునికి తండ్రి.", sarga: "బాలకాండ 70.21" },
@@ -108,7 +108,7 @@ export const IKSHVAKU_LINEAGE = [
   { gen: 39, id: "sri_rama", nameTe: "శ్రీరాముడు", nameEn: "Sri Rama", titleTe: "మర్యాదా పురుషోత్తముడు", roleTe: "దశరథ-కౌసల్యల జ్యేష్ఠపుత్రుడు. శ్రీమహావిష్ణువు ఏడవ అవతారం, ధర్మస్వరూపుడు.", sarga: "బాలకాండ 70.44" }
 ];
 
-export const CHARACTERS = [
+const CHARACTERS = [
   // ==================== DASHARATHA & QUEENS ====================
   {
     id: "dasharatha",
@@ -1300,7 +1300,7 @@ export const CHARACTERS = [
   }
 ];
 
-export const FAMILY_TREES = {
+const FAMILY_TREES = {
   dasharatha: {
     id: "dasharatha",
     titleTelugu: "దశరథ మహారాజు కుటుంబం",
@@ -1466,6 +1466,14 @@ if (typeof window !== "undefined") {
 }
 if (typeof globalThis !== "undefined") {
   globalThis.RAMAYANA_DATA = {
+    CATEGORIES,
+    CHARACTERS,
+    FAMILY_TREES,
+    IKSHVAKU_LINEAGE
+  };
+}
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
     CATEGORIES,
     CHARACTERS,
     FAMILY_TREES,
