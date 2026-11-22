@@ -90,58 +90,85 @@
     }
     .profile-name-title { text-align:center; font-size:1.4rem; font-weight:700; color:#fff; margin-bottom:4px; }
     .profile-email-sub { text-align:center; font-size:0.82rem; color:rgba(237,227,200,0.55); margin-bottom:26px; }
-    .profile-stats-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .profile-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
     .stat-card {
-      background:rgba(255,209,102,0.07); border:1px solid rgba(255,209,102,0.22);
-      border-radius:16px; padding:18px 14px; text-align:center; transition:transform 0.2s, border-color 0.2s;
+      background: rgba(255, 209, 102, 0.08);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      border-radius: 18px;
+      padding: 22px 14px;
+      text-align: center;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 125px;
     }
-    .stat-card:hover { transform:translateY(-3px); border-color:rgba(255,209,102,0.45); }
-    .stat-card-icon { font-size:1.6rem; margin-bottom:6px; }
-    .stat-card-val { font-size:1.55rem; font-weight:700; color:#ffd166; line-height:1; }
-    .stat-card-lbl { font-size:0.78rem; color:rgba(237,227,200,0.7); margin-top:4px; }
-    .streak-card { grid-column:1 / -1; }
-    .streak-flame { font-size:2.5rem; animation:flame-pulse 1.4s ease-in-out infinite; display:inline-block; }
-    @keyframes flame-pulse { 0%,100%{transform:scale(1) rotate(-4deg);} 50%{transform:scale(1.15) rotate(4deg);} }
-    .streak-val { font-size:2.4rem; font-weight:700; color:#ff7b00; }
-    .streak-label { font-size:0.85rem; color:rgba(237,227,200,0.8); margin-top:4px; }
-
-    /* Birthday section */
-    .bday-section {
-      background:rgba(22,10,5,0.78); border:1px solid rgba(255,209,102,0.3);
-      border-radius:18px; padding:22px 20px; margin-top:16px;
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 209, 102, 0.5);
+      box-shadow: 0 6px 20px rgba(255, 209, 102, 0.15);
     }
-    .bday-section h3 { color:#ffd166; font-size:1.05rem; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
-    .dob-input-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .dob-input {
-      flex:1; background:rgba(36,18,8,0.85); border:1px solid rgba(255,209,102,0.35);
-      color:#EDE3C8; padding:10px 14px; border-radius:12px; font-size:0.95rem; outline:none; min-width:160px;
+    .stat-card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      line-height: 1;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .dob-save-btn {
-      background:linear-gradient(135deg,#d4af37,#ffd166); color:#120703; border:none;
-      padding:10px 20px; border-radius:12px; font-weight:700; font-size:0.9rem;
-      cursor:pointer; transition:all 0.2s; white-space:nowrap;
+    .stat-card-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffd166;
+      line-height: 1.1;
+      font-family: "Outfit", sans-serif;
     }
-    .dob-save-btn:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(255,209,102,0.4); }
-    .bday-result { margin-top:16px; display:none; }
-    .bday-result.visible { display:block; }
-    .bday-nakshatra-pill {
-      display:inline-block; background:linear-gradient(135deg,rgba(255,209,102,0.2),rgba(212,175,55,0.1));
-      border:1px solid rgba(255,209,102,0.45); border-radius:20px;
-      padding:6px 14px; font-size:0.9rem; color:#ffd166; font-weight:700; margin-bottom:10px;
+    .stat-card-lbl {
+      font-size: 0.82rem;
+      color: rgba(237, 227, 200, 0.75);
+      margin-top: 6px;
+      font-weight: 600;
     }
-    .bday-countdown-box {
-      background:rgba(255,209,102,0.06); border:1px dashed rgba(255,209,102,0.3);
-      border-radius:14px; padding:14px; text-align:center;
+    .streak-flame {
+      font-size: 2.3rem;
+      animation: flame-pulse 1.4s ease-in-out infinite;
+      display: inline-block;
+      line-height: 1;
     }
-    .countdown-days { font-size:2.2rem; font-weight:700; color:#ffd166; }
-    .countdown-lbl { font-size:0.82rem; color:rgba(237,227,200,0.75); margin-top:4px; }
-    .countdown-date { font-size:0.88rem; color:#EDE3C8; margin-top:6px; opacity:0.9; }
+    @keyframes flame-pulse {
+      0%, 100% { transform: scale(1) rotate(-4deg); }
+      50% { transform: scale(1.15) rotate(4deg); }
+    }
+    .streak-val {
+      font-size: 1.95rem;
+      font-weight: 800;
+      color: #ff9f1c;
+    }
     .logout-btn {
-      width:100%; background:rgba(231,76,60,0.15); border:1px solid rgba(231,76,60,0.4);
-      color:#e74c3c; padding:12px 20px; border-radius:14px; font-size:1rem; font-weight:700;
-      cursor:pointer; transition:all 0.2s; margin-top:16px; display:block;
+      width: 100%;
+      background: rgba(231, 76, 60, 0.15);
+      border: 1px solid rgba(231, 76, 60, 0.4);
+      color: #e74c3c;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+      display: block;
     }
-    .logout-btn:hover { background:rgba(231,76,60,0.28); transform:translateY(-2px); }
+    .logout-btn:hover {
+      background: rgba(231, 76, 60, 0.28);
+      transform: translateY(-2px);
+    }
 
     /* Desktop App Download Card */
     .desktop-app-card {
@@ -300,44 +327,22 @@
         <div class="profile-avatar-ring">👤</div>
         <div class="profile-name-title" id="profileName"></div>
         <div class="profile-email-sub" id="profileEmail"></div>
+        
         <div class="profile-stats-row">
-          <div class="stat-card streak-card">
-            <div><span class="streak-flame">🔥</span></div>
-            <div class="streak-val" id="streakCount">0</div>
-            <div class="streak-label">రోజుల వరుస సందర్శన</div>
-          </div>
           <div class="stat-card">
-            <div class="stat-card-icon">⭐</div>
-            <div class="stat-card-val" id="profileScore">0</div>
-            <div class="stat-card-lbl">సాధించిన అంకాలు</div>
+            <div class="stat-card-icon"><span class="streak-flame">🔥</span></div>
+            <div class="stat-card-val streak-val" id="streakCount">0</div>
+            <div class="stat-card-lbl">రోజుల వరుస సందర్శన</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-icon">📅</div>
             <div class="stat-card-val" id="streakLastSeen">—</div>
-            <div class="stat-card-lbl">గత సందర్శన</div>
+            <div class="stat-card-lbl">గత సందర్శన తేదీ</div>
           </div>
         </div>
-      </div>
 
-      <!-- Panchang Birthday -->
-      <div class="bday-section">
-        <h3>🪔 పంచాంగ జన్మదిన వివరాలు</h3>
-        <div class="dob-input-row">
-          <input type="date" id="dobInput" class="dob-input">
-          <button id="saveDobBtn" class="dob-save-btn">🔍 లెక్కించు</button>
-        </div>
-        <div class="bday-result" id="bdayResult">
-          <div style="margin-bottom:10px;font-size:0.85rem;color:rgba(237,227,200,0.65);">మీ జన్మ నక్షత్రం &amp; తిథి:</div>
-          <div class="bday-nakshatra-pill" id="bdayNakshatra">—</div>
-          <div class="bday-countdown-box">
-            <div class="countdown-days" id="bdayCountdownDays">—</div>
-            <div class="countdown-lbl">రోజులలో తదుపరి జన్మ నక్షత్ర దినం</div>
-            <div class="countdown-date" id="bdayCountdownDate"></div>
-          </div>
-        </div>
+        <button id="logoutUserBtn" class="logout-btn">🚪 లాగ్అవుట్</button>
       </div>
-
-      <button id="logoutUserBtn" class="logout-btn">🚪 లాగ్అవుట్</button>
     </div>
 
     <!-- WINDOWS DESKTOP APP DOWNLOAD -->
@@ -366,8 +371,6 @@
     </div>
   </div>
 
-  <script src="../panchang-engine.js"></script>
-
   <script type="module">
     import { db, auth } from "../firebase-config.js";
     import { doc, getDoc, setDoc, updateDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
@@ -384,9 +387,6 @@
 
     const GOOGLE_CLIENT_ID = "915869829387-bt0jbcneflkibjtht5gnj0pk2qqd55j2.apps.googleusercontent.com";
     let currentUser = null;
-
-    const NAKSHATRAS_TE = ["అశ్విని","భరణి","కృత్తిక","రోహిణి","మృగశిర","ఆర్ద్ర","పునర్వసు","పుష్యమి","ఆశ్లేష","మఖ","పుబ్బ","ఉత్తర","హస్త","చిత్త","స్వాతి","విశాఖ","అనూరాధ","జ్యేష్ఠ","మూల","పూర్వాషాఢ","ఉత్తరాషాఢ","శ్రవణం","ధనిష్ఠ","శతభిషం","పూర్వాభాద్ర","ఉత్తరాభాద్ర","రేవతి"];
-    const TITHI_TE = ["పాడ్యమి","విదియ","తదియ","చవితి","పంచమి","షష్ఠి","సప్తమి","అష్టమి","నవమి","దశమి","ఏకాదశి","ద్వాదశి","త్రయోదశి","చతుర్దశి","పౌర్ణమి","అమావాస్య"];
 
     function todayStr() {
       const n = new Date();
@@ -405,41 +405,6 @@
       await updateDoc(ref, { streak, lastOpenDate: today });
     }
 
-    function calcBirthInfo(dobStr) {
-      const P = window.SanniveshamPanchang;
-      if (!P) return null;
-      const [y,m,d] = dobStr.split("-").map(Number);
-      const p = P.getPanchang(new Date(y,m-1,d,6,0,0));
-      return { nakshatraIndex: p.nakshatraIndex, tithiIndex: p.tithiIndex, tithiInPaksha: p.tithiInPaksha, isShukla: p.isShukla };
-    }
-
-    function nextNakshatraDate(idx) {
-      const P = window.SanniveshamPanchang;
-      if (!P) return null;
-      const today = new Date(); today.setHours(6,0,0,0);
-      for (let i=1; i<=30; i++) {
-        const d = new Date(today.getTime()+i*86400000);
-        if (P.getPanchang(d).nakshatraIndex === idx) return d;
-      }
-      return null;
-    }
-
-    function renderBirthday(dob) {
-      if (!dob) return;
-      document.getElementById("dobInput").value = dob;
-      const b = calcBirthInfo(dob);
-      if (!b) return;
-      const paksha = b.isShukla ? "శుక్ల" : "బహుళ";
-      const tithi = b.tithiIndex===15 ? "పౌర్ణమి" : b.tithiIndex===30 ? "అమావాస్య" : paksha+" "+(TITHI_TE[b.tithiInPaksha-1]||"");
-      document.getElementById("bdayNakshatra").textContent = "⭐ "+NAKSHATRAS_TE[b.nakshatraIndex]+"  •  📅 "+tithi;
-      const next = nextNakshatraDate(b.nakshatraIndex);
-      document.getElementById("bdayResult").classList.add("visible");
-      if (next) {
-        document.getElementById("bdayCountdownDays").textContent = Math.ceil((next-new Date())/86400000);
-        document.getElementById("bdayCountdownDate").textContent = next.toLocaleDateString("te-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-      }
-    }
-
     function showLogin(step) {
       document.getElementById("loginView").style.display = "block";
       document.getElementById("profileView").style.display = "none";
@@ -450,13 +415,11 @@
     function showProfile(data) {
       document.getElementById("loginView").style.display = "none";
       document.getElementById("profileView").style.display = "block";
-      document.getElementById("profileName").textContent = data.name || "User";
-      document.getElementById("profileEmail").textContent = currentUser.email || "";
-      document.getElementById("profileScore").textContent = data.score || 0;
+      document.getElementById("profileName").textContent = data.name || currentUser?.displayName || "User";
+      document.getElementById("profileEmail").textContent = currentUser?.email || "";
       document.getElementById("streakCount").textContent = data.streak || 0;
       const last = data.lastOpenDate || null;
       document.getElementById("streakLastSeen").textContent = last ? last.slice(5).replace("-","/") : "—";
-      if (data.dob) renderBirthday(data.dob);
     }
 
     // Check if running inside Electron desktop app
@@ -660,13 +623,6 @@
       });
       const s = await getDoc(doc(db,"users",currentUser.uid));
       showProfile(s.data());
-    });
-
-    document.getElementById("saveDobBtn").addEventListener("click", async () => {
-      const dob = document.getElementById("dobInput").value;
-      if (!dob) { alert("జన్మదినం ఎంచుకోండి"); return; }
-      if (currentUser) await updateDoc(doc(db,"users",currentUser.uid), { dob });
-      renderBirthday(dob);
     });
 
     document.getElementById("logoutUserBtn").addEventListener("click", async () => {
