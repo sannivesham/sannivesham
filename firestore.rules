@@ -3,128 +3,198 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    function isOwner(uid) {
-      return isAuthenticated() && request.auth.uid == uid;
-    }
-
-    // Admin verified via Firebase Custom Claims OR settings/admin allowlist
-    function isAdmin() {
-      return isAuthenticated() && (
-        request.auth.token.admin == true ||
-        (exists(/databases/$(database)/documents/settings/admin) &&
-         request.auth.token.email in get(/databases/$(database)/documents/settings/admin).data.emails) ||
-        (exists(/databases/$(database)/documents/settings/admin) &&
-         request.auth.token.email == get(/databases/$(database)/documents/settings/admin).data.email)
-      );
-    }
-
-    // Default: Deny all access to any unlisted collection
-    match /{document=**} {
-      allow read, write: if false;
-    }
-
-    // ----------------------------------------------------
-    // 1. ADMIN CONFIGURATION
-    // ----------------------------------------------------
-    match /settings/admin {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
-    }
-
-    match /settings/{doc} {
+    // ====================================================
+    // 1. PUBLIC DEVOTIONAL CONTENT (Read: Public, Write: Admin/Auth)
+    // ====================================================
+    match /events/{doc} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if request.auth != null;
     }
 
-    match /config/{doc} {
-      allow read, write: if isAdmin();
+    match /festivals/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
 
-    // ----------------------------------------------------
-    // 2. ACTIVE CONTENT: QUESTION OF THE DAY & WORD OF THE DAY
-    // ----------------------------------------------------
+    match /temples/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /templeCategories/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /stories/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /storyCategories/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /storyParts/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /libraryCategories/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /librarySubcategories/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /libraryContent/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /ithihasaluCategories/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /ithihasaluSubCategories/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /ithihasaluShlokas/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /slokas/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /poojaGods/{godId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+      match /rituals/{ritualId} {
+        allow read: if true;
+        allow write: if request.auth != null;
+      }
+    }
+
+    match /about/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /aboutSettings/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /socialLinks/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /homeCards/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /sponsors/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     match /qotd/{date} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if request.auth != null;
     }
 
     match /wordOfDay/{date} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if request.auth != null;
     }
 
-    // ----------------------------------------------------
-    // 3. QUIZ & LEADERBOARD
-    // ----------------------------------------------------
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ====================================================
+    // 2. QUIZ & COMMUNITY SECTION
+    // ====================================================
     match /quizQuestions/{doc} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if request.auth != null;
     }
 
     match /quizScores/{doc} {
       allow read: if true;
-      allow create: if isAuthenticated();
-      allow update, delete: if isAdmin();
+      allow write: if request.auth != null;
     }
 
     match /sectionScores/{doc} {
       allow read: if true;
-      allow create, update: if isAuthenticated();
-      allow delete: if isAdmin();
-    }
-
-    // ----------------------------------------------------
-    // 4. USER AUTHENTICATION, PROFILES & GAME PROGRESS
-    // ----------------------------------------------------
-    match /users/{uid} {
-      // Read allowed for leaderboard rankings and profiles
-      allow read: if true;
-      // Users can only write their own profile and cannot escalate privileges
-      allow create, update: if isOwner(uid) &&
-        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin', 'role']));
-      allow delete: if isAdmin();
-    }
-
-    match /desktop_sync/{code} {
-      allow read, write: if isAuthenticated();
+      allow write: if request.auth != null;
     }
 
     match /japaCommunity/{deityId} {
       allow read: if true;
-      allow create, update: if isAuthenticated();
-      allow delete: if isAdmin();
+      allow write: if request.auth != null;
     }
 
+    // ====================================================
+    // 3. SRI RAMAKOTI (Live Real-Time 1 Crore Countdown & Leaderboard)
+    // ====================================================
     match /ramakoti/{doc} {
       allow read: if true;
-      allow create, update: if isAuthenticated();
-      allow delete: if isAdmin();
+      allow write: if request.auth != null;
     }
 
     match /ramakoti_leaderboard/{uid} {
       allow read: if true;
-      allow create, update: if isAuthenticated() && request.auth.uid == uid;
-      allow delete: if isAdmin();
+      allow write: if request.auth != null;
     }
 
-    // ----------------------------------------------------
-    // 5. SERVER-CONTROLLED COLLECTIONS (Subscriptions & Moderation)
-    // ----------------------------------------------------
+    // ====================================================
+    // 4. AUDIO / STREAMING (Legacy Video Section Removed)
+    // ====================================================
+    match /streamVideos/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /streamCategories/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /streamSettings/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ====================================================
+    // 5. USER ACCOUNTS & CROSS-DEVICE DESKTOP SYNC
+    // ====================================================
+    match /users/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /desktop_sync/{code} {
+      allow read, write: if true;
+    }
+
     match /subscribers/{uid} {
-      // Users can only inspect their own subscription status
-      allow read: if isOwner(uid) || isAdmin();
-      // Client-side writes are strictly forbidden (managed by Razorpay Cloud Functions)
-      allow write: if isAdmin();
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
 
-    match /ai_moderation_records/{uid} {
-      allow read: if isOwner(uid) || isAdmin();
-      allow write: if isAdmin();
-    }
   }
 }
