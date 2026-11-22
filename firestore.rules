@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ====================================================
-    // 1. SRI RAMAKOTI (Live 1 Crore Countdown & Real-Time Leaderboard)
+    // 1. SRI RAMAKOTI (Live 1-Crore Countdown & Real-Time Leaderboard)
     // ====================================================
     match /ramakoti/{doc} {
       allow read: if true;
@@ -17,7 +17,7 @@ service cloud.firestore {
     }
 
     // ====================================================
-    // 2. USER AUTHENTICATION, PROFILES & DESKTOP SYNC
+    // 2. USER AUTHENTICATION, PROFILES, STREAKS & LEADERBOARDS
     // ====================================================
     match /users/{uid} {
       allow read: if true;
@@ -46,9 +46,34 @@ service cloud.firestore {
     }
 
     // ====================================================
-    // 4. QUIZ (PRASHNAVALI) & SCORING
+    // 4. QUIZ (PRASHNAVALI) CATEGORIES, QUESTIONS & LEADERBOARD SCORES
     // ====================================================
     match /quizQuestions/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /quizGeneral/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /quizHari/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /quizHara/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /quizDevi/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /quizTelugu/{doc} {
       allow read: if true;
       allow write: if request.auth != null;
     }
@@ -64,11 +89,10 @@ service cloud.firestore {
     }
 
     // ====================================================
-    // 5. CHANT COUNTER (JAPA COMMUNITY TALLY)
+    // 5. CHANT COUNTER (JAPA COMMUNITY TALLY & TOTAL MANTRA DIGITS)
     // ====================================================
     match /japaCommunity/{deityId} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read, write: if true;
     }
 
     // ====================================================
