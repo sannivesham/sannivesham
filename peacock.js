@@ -11,7 +11,7 @@
   if (window.__SanniveshamDualWingPeacock) return;
   window.__SanniveshamDualWingPeacock = true;
 
-  const AI_DESTINATION = 'ai/';
+  const AI_DESTINATION = 'ramakoti/';
   const IMG_PERCHED = 'images/hamsa-perched.png';
   const IMG_WING_UP = 'images/hamsa-wing-up.png';
   const IMG_WING_DOWN = 'images/hamsa-wing-down.png';
@@ -89,14 +89,14 @@
       container.id = 'flyingPeacockRoot';
       container.className = 'is-perched on-right';
       container.setAttribute('role', 'button');
-      container.setAttribute('aria-label', 'సన్నివేశం మేధ — Sannivesham AI (త్వరలో రాబోతోంది • Coming Soon)');
+      container.setAttribute('aria-label', 'శ్రీరామకోటి నామలేఖనం — Ramakoti');
       container.setAttribute('tabindex', '0');
 
       container.innerHTML = `
         <div class="peacock-ground-shadow"></div>
         <div class="peacock-ai-tooltip">
-          <span>🦢</span>
-          <span>సన్నివేశం మేధ • త్వరలో రాబోతోంది (Coming Soon)</span>
+          <span>🏹</span>
+          <span>శ్రీరామకోటి నామలేఖనం</span>
           <span>➜</span>
         </div>
         <div class="peacock-inner-wrap">
