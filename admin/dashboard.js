@@ -540,27 +540,10 @@ function loadSectionData(sectionId) {
       case "eventsSection":
         if (typeof loadAdminEvents === "function") loadAdminEvents();
         break;
-      case "festivalsSection":
-        if (typeof loadAdminFestivals === "function") loadAdminFestivals();
-        break;
-      case "templesSection":
-        if (typeof loadTempleCategories === "function") loadTempleCategories();
-        if (typeof loadAdminTemples === "function") loadAdminTemples();
-        break;
-      case "librarySection":
-        if (typeof loadLibCategoriesAdmin === "function") loadLibCategoriesAdmin();
-        if (typeof loadLibCategoryOptions === "function") loadLibCategoryOptions();
-        if (typeof loadLibSubcategoriesAdmin === "function") loadLibSubcategoriesAdmin();
-        if (typeof loadLibSubcategoryOptions === "function") loadLibSubcategoryOptions();
-        if (typeof loadLibContentAdmin === "function") loadLibContentAdmin();
-        break;
       case "slokasSection":
         if (typeof loadSlokaCategoriesAdmin === "function") loadSlokaCategoriesAdmin();
         if (typeof loadSlokaDirectCategories === "function") loadSlokaDirectCategories();
         if (typeof loadSlokasAdmin === "function") loadSlokasAdmin();
-        break;
-      case "videosSection":
-        if (typeof loadAdminVideos === "function") loadAdminVideos();
         break;
       case "ithihasaluSection":
         if (typeof loadIthiCategories === "function") loadIthiCategories();

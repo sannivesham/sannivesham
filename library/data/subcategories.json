@@ -1,0 +1,461 @@
+[
+  {
+    "id": "0FeI7pO3h5czC6RKrAjK",
+    "order": 4,
+    "slug": "bhj-govinda-m",
+    "title": "భజ గోవిందం",
+    "updatedAt": "2026-09-07T04:05:54.352Z",
+    "createdAt": "2026-07-15T06:00:33.001Z",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD"
+  },
+  {
+    "id": "0Xqk2tJoaRpFNcWCZWzY",
+    "createdAt": "2026-07-15T05:38:49.541Z",
+    "updatedAt": "2026-09-07T04:05:54.408Z",
+    "title": "రామ చాలీసా",
+    "order": 6,
+    "categoryId": "fQAy99LJLFU9lrTVkv76",
+    "slug": "rama-chalisa"
+  },
+  {
+    "id": "2gZGhKOO9GtJwJN53hLq",
+    "order": 9,
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "updatedAt": "2026-09-07T04:05:54.470Z",
+    "createdAt": "2026-07-15T06:01:11.463Z",
+    "slug": "ganesha-pmchrtnm",
+    "title": "గణేశ పంచరత్నం"
+  },
+  {
+    "id": "2zezvTHU9Z4jqAXZyXpb",
+    "slug": "vishnu-sahasranama-m",
+    "updatedAt": "2026-09-07T04:05:54.539Z",
+    "createdAt": "2026-07-15T04:58:43.182Z",
+    "order": 1,
+    "title": "విష్ణు సహస్రనామం",
+    "categoryId": "VGZcNRe2G26TaRasonpY"
+  },
+  {
+    "id": "40MVoaCU0tkt0zL502Oz",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "updatedAt": "2026-09-07T04:05:54.605Z",
+    "createdAt": "2026-07-15T06:10:52.720Z",
+    "order": 2,
+    "slug": "narasimha-kavacham",
+    "title": "నరసింహ కవచం"
+  },
+  {
+    "id": "65zvSfzosKAZsss885uz",
+    "slug": "sri-shiva-naamaavli",
+    "title": "శ్రీ శివ నామావళి",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "createdAt": "2026-07-15T04:56:10.678Z",
+    "updatedAt": "2026-09-07T04:05:54.661Z",
+    "order": 4
+  },
+  {
+    "id": "6hnWFQB6Hpv3aTUDdLWL",
+    "slug": "mahishasura-mrdinee-stotram",
+    "title": "మహిషాసురమర్దినీ స్తోత్రం",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "updatedAt": "2026-09-07T04:05:54.754Z",
+    "createdAt": "2026-07-15T06:00:51.845Z",
+    "order": 6
+  },
+  {
+    "id": "8suEcL1cF45eg3IpTvIL",
+    "order": 6,
+    "createdAt": "2026-07-15T06:26:14.293Z",
+    "updatedAt": "2026-09-07T04:05:54.809Z",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "slug": "chmkm",
+    "title": "చమకం"
+  },
+  {
+    "id": "92i3G1uc2K53vzULr1Ba",
+    "order": 5,
+    "title": "దుర్గా సూక్తం",
+    "slug": "durga-aa-suktam",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "updatedAt": "2026-09-07T04:05:54.875Z",
+    "createdAt": "2026-07-15T06:26:30.128Z"
+  },
+  {
+    "id": "AbqO7XE4QBwAb4MvDPDz",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "title": "శ్రీ వెంకటేశ్వర స్వామి నామావళి",
+    "updatedAt": "2026-09-07T04:05:54.936Z",
+    "createdAt": "2026-07-15T04:55:37.014Z",
+    "order": 2,
+    "slug": "sri-venkateswara-svaami-naamaavli"
+  },
+  {
+    "id": "BEA49K4WxTNw78YkHvW8",
+    "order": 4,
+    "createdAt": "2026-07-15T06:26:05.424Z",
+    "updatedAt": "2026-09-07T04:05:55Z",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "title": "రుద్రం",
+    "slug": "rudra-m"
+  },
+  {
+    "id": "CBxN6W9W7qNEZ3sTdvNz",
+    "slug": "knkdhaaraa-stotram",
+    "order": 5,
+    "createdAt": "2026-07-15T06:00:41.969Z",
+    "updatedAt": "2026-09-07T04:05:55.072Z",
+    "title": "కనకధారా స్తోత్రం",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD"
+  },
+  {
+    "id": "Czis4SN9Dh9f92k6AB5m",
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "title": "కృష్ణ సహస్రనామం",
+    "slug": "krishna-sahasranama-m",
+    "createdAt": "2026-07-15T05:00:23.775Z",
+    "updatedAt": "2026-09-07T04:05:55.135Z",
+    "order": 10
+  },
+  {
+    "id": "E2kpE8QoWOErGVydKz0Z",
+    "order": 1,
+    "updatedAt": "2026-09-07T04:05:55.191Z",
+    "createdAt": "2026-07-15T05:37:48.178Z",
+    "categoryId": "fQAy99LJLFU9lrTVkv76",
+    "title": "హనుమాన్ చాలీసా",
+    "slug": "hanuman-chalisa"
+  },
+  {
+    "id": "FxUPkRiqSLcVzavqWZBP",
+    "order": 2,
+    "createdAt": "2026-07-15T04:58:56.767Z",
+    "updatedAt": "2026-09-07T04:05:55.252Z",
+    "slug": "lalitha-aa-sahasranama-m",
+    "title": "లలితా సహస్రనామం",
+    "categoryId": "VGZcNRe2G26TaRasonpY"
+  },
+  {
+    "id": "GTLDDtkfgWSuzetZkwhM",
+    "createdAt": "2026-07-15T04:59:18.817Z",
+    "updatedAt": "2026-09-07T04:05:55.309Z",
+    "title": "లక్ష్మీ సహస్రనామం",
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "slug": "lakshmi-sahasranama-m",
+    "order": 4
+  },
+  {
+    "id": "In7e8jy5oyGg6VhOvNIz",
+    "updatedAt": "2026-09-07T04:05:55.371Z",
+    "createdAt": "2026-07-15T06:25:46.805Z",
+    "title": "శ్రీ సూక్తం",
+    "slug": "sri-suktam",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "order": 2
+  },
+  {
+    "id": "JaeQy9gUvbmeFQfWNOGp",
+    "title": "అచ్యుతాష్టకం",
+    "updatedAt": "2026-09-07T04:05:55.428Z",
+    "createdAt": "2026-07-15T06:01:24.913Z",
+    "order": 8,
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "slug": "achyutaashtkm"
+  },
+  {
+    "id": "K0vtM8oBoVcSd5b4lfpY",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "createdAt": "2026-07-15T06:11:45.352Z",
+    "updatedAt": "2026-09-07T04:05:55.491Z",
+    "order": 5,
+    "slug": "rama-rkshaa-stotram",
+    "title": "రామ రక్షా స్తోత్రం"
+  },
+  {
+    "id": "Kn96jFlMb7zah7pbaKcc",
+    "title": "నారాయణ సూక్తం",
+    "slug": "narayana-suktam",
+    "createdAt": "2026-07-15T06:25:56.244Z",
+    "updatedAt": "2026-09-07T04:05:55.563Z",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "order": 3
+  },
+  {
+    "id": "LFmRoCoNOKLt1kGFpF2E",
+    "slug": "shiva-chalisa",
+    "order": 2,
+    "title": "శివ చాలీసా",
+    "createdAt": "2026-07-15T05:37:59.912Z",
+    "updatedAt": "2026-09-07T04:05:55.627Z",
+    "categoryId": "fQAy99LJLFU9lrTVkv76"
+  },
+  {
+    "id": "LVWxSoa7Oly254ZYiGAh",
+    "order": 3,
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "updatedAt": "2026-09-07T04:05:55.687Z",
+    "createdAt": "2026-07-15T04:59:08.551Z",
+    "title": "శివ సహస్రనామం",
+    "slug": "shiva-sahasranama-m"
+  },
+  {
+    "id": "LvSfZGoMdaF65spb4p1e",
+    "slug": "rama-sahasranama-m",
+    "title": "రామ సహస్రనామం",
+    "updatedAt": "2026-09-07T04:05:55.752Z",
+    "createdAt": "2026-07-15T05:00:12.635Z",
+    "order": 9,
+    "categoryId": "VGZcNRe2G26TaRasonpY"
+  },
+  {
+    "id": "LwSCxZSkPlcnjoVor1k9",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "title": "మేధా సూక్తం",
+    "slug": "medhaa-suktam",
+    "order": 7,
+    "createdAt": "2026-07-15T06:26:38.742Z",
+    "updatedAt": "2026-09-07T04:05:55.808Z"
+  },
+  {
+    "id": "McuCMjqtbk1xIckqcsQI",
+    "order": 10,
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "updatedAt": "2026-09-07T04:05:55.923Z",
+    "createdAt": "2026-07-15T06:01:33.980Z",
+    "slug": "mdhuraashtkm",
+    "title": "మధురాష్టకం"
+  },
+  {
+    "id": "N8wqlryabc1PXZGlgBoO",
+    "slug": "shni-chalisa",
+    "categoryId": "fQAy99LJLFU9lrTVkv76",
+    "order": 10,
+    "title": "శని చాలీసా",
+    "updatedAt": "2026-09-07T04:05:55.981Z",
+    "createdAt": "2026-07-15T05:41:35.029Z"
+  },
+  {
+    "id": "OI9p51COETrPxGz7SHCy",
+    "updatedAt": "2026-09-07T04:05:56.045Z",
+    "createdAt": "2026-07-15T06:01:02.680Z",
+    "title": "శ్రీ వెంకటేశ్వర స్తోత్రం",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "slug": "sri-venkateswara-stotram",
+    "order": 7
+  },
+  {
+    "id": "RKLAAUhLd0k1Q2tncnZQ",
+    "title": "పురుష సూక్తం",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "order": 1,
+    "slug": "purush-suktam",
+    "createdAt": "2026-07-15T06:25:37.852Z",
+    "updatedAt": "2026-09-07T04:05:56.102Z"
+  },
+  {
+    "id": "XagnDhnerjiUVKv4quzw",
+    "title": "శ్రీ సరస్వతీదేవి నామావళి",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "slug": "sri-srsvteedevi-naamaavli",
+    "createdAt": "2026-07-15T04:57:11.930Z",
+    "updatedAt": "2026-09-07T04:05:56.189Z",
+    "order": 6
+  },
+  {
+    "id": "YnAtKYsZMSjoFUknbcmm",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "updatedAt": "2026-09-07T04:05:56.264Z",
+    "createdAt": "2026-07-15T04:57:01.976Z",
+    "title": "శ్రీ లక్ష్మీదేవి నామావళి",
+    "order": 5,
+    "slug": "sri-lakshmi-devi-naamaavli"
+  },
+  {
+    "id": "bkQZs2XiFqA9FzrqmsIz",
+    "order": 7,
+    "title": "వెంకటేశ్వర సహస్రనామం",
+    "createdAt": "2026-07-15T04:59:52.623Z",
+    "updatedAt": "2026-09-07T04:05:56.325Z",
+    "slug": "venkateswara-sahasranama-m",
+    "categoryId": "VGZcNRe2G26TaRasonpY"
+  },
+  {
+    "id": "eGhIGoWnD05Bq9TLGls2",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "updatedAt": "2026-09-07T04:05:56.378Z",
+    "createdAt": "2026-07-15T06:00:26.039Z",
+    "title": "శివ తాండవ స్తోత్రం",
+    "order": 3,
+    "slug": "shiva-tandava-stotram"
+  },
+  {
+    "id": "f4NEJZdA4L8FOHxjXjtu",
+    "updatedAt": "2026-09-07T04:05:56.459Z",
+    "createdAt": "2026-07-15T06:26:47.971Z",
+    "title": "భూ సూక్తం",
+    "slug": "bhoo-suktam",
+    "categoryId": "JtTNdRxA6wOIoRsI2lkt",
+    "order": 8
+  },
+  {
+    "id": "g7Xjzlp1g1lGrcK5VsWb",
+    "categoryId": "fQAy99LJLFU9lrTVkv76",
+    "title": "గణేశ చాలీసా",
+    "createdAt": "2026-07-15T05:38:13.895Z",
+    "updatedAt": "2026-09-07T04:05:56.514Z",
+    "order": 3,
+    "slug": "ganesha-chalisa"
+  },
+  {
+    "id": "gYART5dOXdNY7rFjvkeM",
+    "title": "హనుమత్ కవచం",
+    "slug": "hnumt-kavacham",
+    "updatedAt": "2026-09-07T04:05:56.575Z",
+    "createdAt": "2026-07-15T06:10:38.365Z",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "order": 1
+  },
+  {
+    "id": "kzWM4aKwefV0LbH3PBxc",
+    "order": 4,
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "createdAt": "2026-07-15T06:11:23.489Z",
+    "updatedAt": "2026-09-07T04:05:56.632Z",
+    "title": "దేవి కవచం",
+    "slug": "devi-kavacham"
+  },
+  {
+    "id": "lKp9fZ3ws8PPfL3GRPOX",
+    "order": 3,
+    "createdAt": "2026-07-15T06:11:03.032Z",
+    "updatedAt": "2026-09-07T04:05:56.695Z",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "slug": "shiva-kavacham",
+    "title": "శివ కవచం"
+  },
+  {
+    "id": "m9EndYGRxAyBMVlX4OwQ",
+    "order": 1,
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "createdAt": "2026-07-15T04:55:25.487Z",
+    "updatedAt": "2026-09-07T04:05:56.750Z",
+    "slug": "sri-ganesha-naamaavli",
+    "title": "శ్రీ గణేశ నామావళి"
+  },
+  {
+    "id": "mF6kCWXdDoycGNLugB4T",
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "updatedAt": "2026-09-07T04:05:56.813Z",
+    "createdAt": "2026-07-15T04:59:43.788Z",
+    "title": "దుర్గ సహస్రనామం",
+    "order": 6,
+    "slug": "durga-sahasranama-m"
+  },
+  {
+    "id": "mk2Ze60GOAIwMAjRJuwK",
+    "order": 8,
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "updatedAt": "2026-09-07T04:05:56.866Z",
+    "createdAt": "2026-07-15T04:57:38.417Z",
+    "slug": "sri-rama-naamaavli",
+    "title": "శ్రీ రామ నామావళి"
+  },
+  {
+    "id": "pXFWrLBKewQ3BsNJrLbB",
+    "createdAt": "2026-07-15T05:00:03.242Z",
+    "updatedAt": "2026-09-07T04:05:56.940Z",
+    "order": 8,
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "slug": "subrahmanya-sahasranama-m",
+    "title": "సుబ్రహ్మణ్య సహస్రనామం"
+  },
+  {
+    "id": "q5sQ8SEIfy6Au8YpSo1X",
+    "slug": "sri-durga-aadevi-naamaavli",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "title": "శ్రీ దుర్గాదేవి నామావళి",
+    "updatedAt": "2026-09-07T04:05:56.992Z",
+    "createdAt": "2026-07-15T04:57:59.160Z",
+    "order": 9
+  },
+  {
+    "id": "qN2fH0RPQRDr1NpRyD6r",
+    "updatedAt": "2026-09-07T04:05:57.106Z",
+    "createdAt": "2026-07-15T04:57:49.616Z",
+    "title": "శ్రీ కృష్ణ నామావళి",
+    "order": 9,
+    "slug": "sri-krishna-naamaavli",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5"
+  },
+  {
+    "id": "ryO9sr8jVhgr7dOFK7qN",
+    "order": 7,
+    "updatedAt": "2026-09-07T04:05:57.255Z",
+    "createdAt": "2026-07-15T04:57:22.740Z",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "slug": "sri-anjaneya-svaami-naamaavli",
+    "title": "శ్రీ ఆంజనేయ స్వామి నామావళి"
+  },
+  {
+    "id": "smvXsUwiDrAftHv4jHaT",
+    "slug": "aditya-hrudayam",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "createdAt": "2026-07-15T06:00:10.649Z",
+    "updatedAt": "2026-09-07T04:05:57.346Z",
+    "order": 1,
+    "title": "ఆదిత్య హృదయం"
+  },
+  {
+    "id": "tpV5BOkUdnV4y8p2sVwR",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "updatedAt": "2026-09-07T04:05:57.414Z",
+    "createdAt": "2026-07-15T06:12:06.324Z",
+    "title": "సుబ్రహ్మణ్య కవచం",
+    "order": 7,
+    "slug": "subrahmanya-kavacham"
+  },
+  {
+    "id": "ugevnbQUF7xH0Yuvl4XM",
+    "updatedAt": "2026-09-07T04:05:57.475Z",
+    "createdAt": "2026-07-15T04:59:32.304Z",
+    "order": 5,
+    "slug": "ganesha-sahasranama-m",
+    "categoryId": "VGZcNRe2G26TaRasonpY",
+    "title": "గణేశ సహస్రనామం"
+  },
+  {
+    "id": "xhzg2L5ZDf7sPNGxciFk",
+    "createdAt": "2026-07-15T05:38:22.203Z",
+    "updatedAt": "2026-09-07T04:05:57.530Z",
+    "order": 4,
+    "categoryId": "fQAy99LJLFU9lrTVkv76",
+    "slug": "durga-aa-chalisa",
+    "title": "దుర్గా చాలీసా"
+  },
+  {
+    "id": "xqKCrQKACMmGON4AEKbz",
+    "title": "లింగాష్టకం",
+    "categoryId": "c6suT9zXHLhLXLAtEAxD",
+    "updatedAt": "2026-09-07T04:05:57.594Z",
+    "createdAt": "2026-07-15T06:00:18.539Z",
+    "slug": "limgaashtkm",
+    "order": 2
+  },
+  {
+    "id": "yTqugWWYoJbaNgFI86nT",
+    "slug": "sri-maha-vishnu-naamaavli",
+    "order": 3,
+    "createdAt": "2026-07-15T04:55:46.655Z",
+    "updatedAt": "2026-09-07T04:05:57.649Z",
+    "categoryId": "iYsmgVKDYQ0d41rmP9h5",
+    "title": "శ్రీ మహావిష్ణు నామావళి"
+  },
+  {
+    "id": "yXUY2CrFwGDhXwZDdQWN",
+    "title": "లక్ష్మీ కవచం",
+    "slug": "lakshmi-kavacham",
+    "createdAt": "2026-07-15T06:12:15.641Z",
+    "categoryId": "Fy97veYxBNGL7E12k8MD",
+    "updatedAt": "2026-09-07T04:05:57.714Z",
+    "order": 8
+  }
+]

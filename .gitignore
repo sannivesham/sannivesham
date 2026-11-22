@@ -38,6 +38,7 @@ desktop-app/node_modules/
 desktop-app/*.png
 
 # Local scratch & analysis artifacts
+old_desktop_backup/
 apk/
 tools/
 unpacked_raw/

@@ -1,12 +1,3 @@
-import { db } from "../firebase-config.js";
-import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import { SacredReader, slugify } from "./reader.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -23,7 +14,6 @@ let allUnifiedItems = [];
 let allSubcategories = [];
 let activeCatFilter = "all";
 let currentCategory = null;
-
 
 const DEITY_IMAGES = {
   ganesha: "https://res.cloudinary.com/du5em76za/image/upload/v1784085346/bb4gi6iomegl5n2oxsfi.png",
@@ -55,6 +45,26 @@ function resolveItemImage(title = "", categoryTitle = "", fallbackCatImage = "")
   return DEITY_IMAGES.default;
 }
 
+async function getStaticLibraryData() {
+  if (window.SANNIVESHAM_LIBRARY_DATA) {
+    return window.SANNIVESHAM_LIBRARY_DATA;
+  }
+  try {
+    const [catsRes, subRes, conRes] = await Promise.all([
+      fetch("data/categories.json"),
+      fetch("data/subcategories.json"),
+      fetch("data/content.json")
+    ]);
+    return {
+      categories: await catsRes.json(),
+      subcategories: await subRes.json(),
+      content: await conRes.json()
+    };
+  } catch (e) {
+    console.warn("Could not load static library data", e);
+    return { categories: [], subcategories: [], content: [] };
+  }
+}
 
 async function initPage() {
   try {
@@ -62,13 +72,12 @@ async function initPage() {
       isAllMode = true;
     }
 
+    const { categories, subcategories, content } = await getStaticLibraryData();
+
     // If we have slug but not categoryId, find category by slug
     if (!categoryId && categorySlug && !isAllMode) {
-      const q = query(collection(db, "libraryCategories"), where("slug", "==", categorySlug));
-      const snap = await getDocs(q);
-      if (!snap.empty) {
-        categoryId = snap.docs[0].id;
-      }
+      const foundCat = categories.find(c => c.slug === categorySlug);
+      if (foundCat) categoryId = foundCat.id;
     }
 
     if (!categoryId && !isAllMode) {
@@ -77,55 +86,36 @@ async function initPage() {
       return;
     }
 
-    // Load category info
     currentCategory = null;
     if (isAllMode) {
-      // Try to load custom all-library-category if saved in Firestore
-      try {
-        const catSnap = await getDoc(doc(db, "libraryCategories", "all-library-category"));
-        if (catSnap.exists()) {
-          currentCategory = catSnap.data();
-        }
-      } catch (e) {}
+      currentCategory = categories.find(c => c.id === "all-library-category" || c.slug === "all") || {
+        title: "సర్వ గ్రంథ సంపద (All Divine Content)",
+        emoji: "🕉️",
+        description: "దివ్య గ్రంథాలయంలోని సమస్త స్తోత్రాలు, నామావళులు, సూక్తాలు, చాలీసాలు & పవిత్ర రచనలు"
+      };
 
-      titleEl.innerText = currentCategory?.title ? `${currentCategory.emoji || "🕉️"} ${currentCategory.title}` : "🕉️ సర్వ గ్రంథ సంపద (All Divine Content)";
-      descEl.innerText = currentCategory?.description || "దివ్య గ్రంథాలయంలోని సమస్త స్తోత్రాలు, నామావళులు, సూక్తాలు, చాలీసాలు & పవిత్ర రచనలు";
+      titleEl.innerText = `${currentCategory.emoji || "🕉️"} ${currentCategory.title}`;
+      descEl.innerText = currentCategory.description || "దివ్య గ్రంథాలయంలోని సమస్త స్తోత్రాలు, నామావళులు, సూక్తాలు, చాలీసాలు & పవిత్ర రచనలు";
       document.title = "సర్వ గ్రంథ సంపద - గ్రంథాలయం | సన్నివేశం";
-
-      // In All mode: Load categories, subcategories, and content items
-      const [catSnap, subSnap, conSnap] = await Promise.all([
-        getDocs(collection(db, "libraryCategories")),
-        getDocs(collection(db, "librarySubcategories")),
-        getDocs(collection(db, "libraryContent"))
-      ]);
 
       const catMap = {};
       allCategoriesList = [];
-      catSnap.forEach(d => {
-        const cData = { id: d.id, ...d.data() };
-        if (cData.id !== "all-library-category" && cData.slug !== "all") {
-          catMap[d.id] = cData;
-          allCategoriesList.push(cData);
+      categories.forEach(c => {
+        if (c.id !== "all-library-category" && c.slug !== "all") {
+          catMap[c.id] = c;
+          allCategoriesList.push(c);
         }
       });
       allCategoriesList.sort((a, b) => (a.order || 0) - (b.order || 0));
 
       const subMap = {};
-      const subsList = [];
-      subSnap.forEach(d => {
-        const sData = { id: d.id, ...d.data() };
-        subMap[d.id] = sData;
-        subsList.push(sData);
-      });
-
-      const contentsList = [];
-      conSnap.forEach(d => contentsList.push({ id: d.id, ...d.data() }));
+      subcategories.forEach(s => { subMap[s.id] = s; });
 
       // Build unified list of items across all sections
       const unifiedMap = new Map();
 
       // Add subcategories
-      subsList.forEach(sub => {
+      subcategories.forEach(sub => {
         const parentCat = catMap[sub.categoryId] || { title: "ఇతర రచనలు", emoji: "📿" };
         const slug = sub.slug || slugify(sub.title) || sub.id;
         const imgUrl = sub.image || resolveItemImage(sub.title, parentCat.title, parentCat.image);
@@ -142,8 +132,8 @@ async function initPage() {
         });
       });
 
-      // Add content items (avoiding exact duplicate titles under the same subcategory)
-      contentsList.forEach(con => {
+      // Add content items
+      content.forEach(con => {
         const parentSub = subMap[con.subcategoryId];
         const parentCat = parentSub ? catMap[parentSub.categoryId] : null;
         const catTitle = parentCat ? parentCat.title : (parentSub ? parentSub.title : "ఇతర రచనలు");
@@ -152,7 +142,6 @@ async function initPage() {
         const slug = con.slug || slugify(con.title) || con.id;
         const imgUrl = con.image || parentSub?.image || resolveItemImage(con.title, catTitle, parentCat?.image);
 
-        // If not already in unifiedMap under the same title
         let exists = false;
         for (const item of unifiedMap.values()) {
           if (item.title === con.title) {
@@ -186,29 +175,15 @@ async function initPage() {
     }
 
     // Standard Single Category View
-    const catSnap = await getDoc(doc(db, "libraryCategories", categoryId));
-    if (catSnap.exists()) {
-      currentCategory = catSnap.data();
+    currentCategory = categories.find(c => c.id === categoryId || c.slug === categorySlug);
+    if (currentCategory) {
       titleEl.innerText = `${currentCategory.emoji ? currentCategory.emoji + " " : ""}${currentCategory.title}`;
       descEl.innerText = `${currentCategory.title} విభాగంలోని పవిత్ర రచనలు & స్తోత్రాలు`;
       document.title = `${currentCategory.title} - గ్రంథాలయం | సన్నివేశం`;
     }
 
-    // Load subcategories for this category
-    const snapshot = await getDocs(collection(db, "librarySubcategories"));
-    allSubcategories = [];
-    snapshot.forEach((docItem) => {
-      const data = docItem.data();
-      if (data.categoryId === categoryId) {
-        allSubcategories.push({ id: docItem.id, ...data });
-      }
-    });
-
-    allSubcategories.sort((a, b) => {
-      const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
-      const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
-      return aOrder - bOrder;
-    });
+    allSubcategories = subcategories.filter(s => s.categoryId === categoryId || (currentCategory && s.categoryId === currentCategory.id));
+    allSubcategories.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
     renderSubcategories(allSubcategories, currentCategory);
   } catch (err) {
@@ -218,7 +193,6 @@ async function initPage() {
 }
 
 function renderAllView(items, currentCat) {
-  // Render Category Filter Tabs above grid if not already created
   let filterContainer = document.getElementById("libraryFilterTabs");
   if (!filterContainer) {
     filterContainer = document.createElement("div");
@@ -236,7 +210,6 @@ function renderAllView(items, currentCat) {
   });
   filterContainer.innerHTML = filterHtml;
 
-  // Filter clicks
   filterContainer.querySelectorAll(".library-filter-pill").forEach(btn => {
     btn.onclick = () => {
       activeCatFilter = btn.dataset.cat;

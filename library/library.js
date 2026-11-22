@@ -1,9 +1,4 @@
-import { db } from "../firebase-config.js";
-import {
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
+// Sannivesham Static Sacred Library Engine
 const libraryGrid = document.getElementById("libraryGrid");
 const searchInput = document.getElementById("librarySearchInput");
 let allCategories = [];
@@ -19,14 +14,27 @@ const defaultAllCategory = {
   isAllBox: true
 };
 
+async function getStaticCategories() {
+  if (window.SANNIVESHAM_LIBRARY_DATA && Array.isArray(window.SANNIVESHAM_LIBRARY_DATA.categories)) {
+    return window.SANNIVESHAM_LIBRARY_DATA.categories;
+  }
+  try {
+    const res = await fetch("data/categories.json");
+    if (res.ok) return await res.json();
+  } catch (e) {
+    console.warn("Could not fetch data/categories.json", e);
+  }
+  return [];
+}
+
 async function loadLibraryCategories() {
   try {
-    const snapshot = await getDocs(collection(db, "libraryCategories"));
+    const rawCategories = await getStaticCategories();
     allCategories = [];
 
     let hasAllCategory = false;
-    snapshot.forEach((docItem) => {
-      const data = { id: docItem.id, ...docItem.data() };
+    rawCategories.forEach((item) => {
+      const data = { ...item };
       if (data.isAllBox || data.slug === "all" || data.id === "all-library-category") {
         data.isAllBox = true;
         data.order = -999999;
@@ -42,8 +50,8 @@ async function loadLibraryCategories() {
     allCategories.sort((a, b) => {
       if (a.isAllBox) return -1;
       if (b.isAllBox) return 1;
-      const aOrder = a.order ?? a.createdAt?.seconds ?? 0;
-      const bOrder = b.order ?? b.createdAt?.seconds ?? 0;
+      const aOrder = a.order ?? 0;
+      const bOrder = b.order ?? 0;
       return aOrder - bOrder;
     });
 

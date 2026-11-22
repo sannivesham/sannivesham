@@ -1,0 +1,152 @@
+[
+  {
+    "id": "5CwAnjS29OkrnmjdtKO4",
+    "updatedAt": "2026-09-07T04:05:53.338Z",
+    "order": 8,
+    "emoji": "🎵",
+    "slug": "keertnlu",
+    "createdAt": "2026-07-15T03:21:46.180Z",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085693/ykoeaxwiabvyhlmvb8jy.png",
+    "title": "కీర్తనలు"
+  },
+  {
+    "id": "7QlQw3Y5kqWiCMM1rC3w",
+    "createdAt": "2026-07-15T03:24:16.986Z",
+    "order": 12,
+    "emoji": "💎",
+    "slug": "subhaashitaalu",
+    "updatedAt": "2026-09-07T04:05:53.417Z",
+    "title": "సుభాషితాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085853/lbkjoa589u8knsmuaj9e.png"
+  },
+  {
+    "id": "Fy97veYxBNGL7E12k8MD",
+    "createdAt": "2026-07-15T03:19:43.708Z",
+    "order": 5,
+    "slug": "kvchaalu",
+    "updatedAt": "2026-09-07T04:05:53.482Z",
+    "emoji": "🛡️",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085578/dlwo5piw8s21nkhu8agf.png",
+    "title": "కవచాలు"
+  },
+  {
+    "id": "Gzzjp3wOVeUdYOAdvaMg",
+    "updatedAt": "2026-09-07T04:05:53.550Z",
+    "title": "శతకాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085801/wdda3xg60ydknmdtw7bc.png",
+    "emoji": "📜",
+    "slug": "shtkaalu",
+    "order": 11,
+    "createdAt": "2026-07-15T03:23:34.825Z"
+  },
+  {
+    "id": "JZljbJeGZf5M3Ozeq5nk",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085882/g4johjqtuempgjk9hpvb.png",
+    "title": "భక్తి గీతాలు",
+    "slug": "bhkti-geetaalu",
+    "emoji": "🎼",
+    "updatedAt": "2026-09-07T04:05:53.615Z",
+    "order": 13,
+    "createdAt": "2026-07-15T03:24:45.926Z"
+  },
+  {
+    "id": "JtTNdRxA6wOIoRsI2lkt",
+    "emoji": "🌼",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085776/y5cz11hvy2rxdxy7onfe.png",
+    "title": "వేద సూక్తాలు",
+    "updatedAt": "2026-09-07T04:05:53.672Z",
+    "createdAt": "2026-07-15T03:23:01.048Z",
+    "slug": "ved-sooktaalu",
+    "order": 10
+  },
+  {
+    "id": "Qpnq3buT7fyCT2ErhiAp",
+    "createdAt": "2026-07-15T03:21:16.045Z",
+    "title": "పారాయణాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085662/oa4tkynwzaubewsxumhj.png",
+    "emoji": "📖",
+    "slug": "paaraaynaalu",
+    "order": 7,
+    "updatedAt": "2026-09-07T04:05:53.740Z"
+  },
+  {
+    "id": "VGZcNRe2G26TaRasonpY",
+    "order": 2,
+    "updatedAt": "2026-09-07T04:05:53.796Z",
+    "emoji": "🌺",
+    "createdAt": "2026-07-15T03:18:25.717Z",
+    "title": "సహస్రనామాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085417/bpjze4zvpnrdsnfh43lw.png",
+    "slug": "sahasranama-aalu"
+  },
+  {
+    "id": "Z1npryFJr1oDsykMoUtp",
+    "slug": "pilll-bhkti-vibhaagm",
+    "updatedAt": "2026-09-07T04:05:53.865Z",
+    "order": 14,
+    "title": "పిల్లల భక్తి విభాగం",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085912/a2eokavu1xwhatepynjd.png",
+    "emoji": "👶",
+    "createdAt": "2026-07-15T03:25:21.911Z"
+  },
+  {
+    "id": "all-library-category",
+    "title": "సర్వ గ్రంథ సంపద (All Divine Content)",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085723/jfzdyhiuku0afwhaatgr.png",
+    "isAllBox": true,
+    "emoji": "🕉️",
+    "slug": "all",
+    "order": -1,
+    "description": "అన్ని విభాగాలలోని స్తోత్రాలు, నామావళులు, సూక్తాలు, చాలీసాలు మరియు సమస్త పవిత్ర రచనల సంపూర్ణ సమాహారం — అన్నీ ఒక్కచోట!"
+  },
+  {
+    "id": "bqhCf8FT307claOk8QB3",
+    "emoji": "📚",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085723/jfzdyhiuku0afwhaatgr.png",
+    "title": "గ్రంథాలు",
+    "updatedAt": "2026-09-07T04:05:53.920Z",
+    "slug": "grmthaalu",
+    "createdAt": "2026-07-15T03:22:22.140Z",
+    "order": 9
+  },
+  {
+    "id": "c6suT9zXHLhLXLAtEAxD",
+    "createdAt": "2026-07-15T05:59:24.248Z",
+    "title": "స్తోత్రాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784095160/gjhwblwy0htrarocmvfa.png",
+    "emoji": "🙏",
+    "slug": "stotras",
+    "order": 4,
+    "updatedAt": "2026-09-07T04:05:53.985Z"
+  },
+  {
+    "id": "fQAy99LJLFU9lrTVkv76",
+    "createdAt": "2026-07-15T03:18:52.035Z",
+    "slug": "chalisa-lu",
+    "order": 3,
+    "title": "చాలీసాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085527/lvtbrrjzu0hpc8zln10a.png",
+    "updatedAt": "2026-09-07T04:05:54.058Z",
+    "emoji": "📜"
+  },
+  {
+    "id": "iYsmgVKDYQ0d41rmP9h5",
+    "order": 1,
+    "createdAt": "2026-07-15T03:16:16.668Z",
+    "slug": "naamaavlulu",
+    "title": "నామావళులు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085346/bb4gi6iomegl5n2oxsfi.png",
+    "updatedAt": "2026-09-23T05:39:55.737Z",
+    "emoji": "📿"
+  },
+  {
+    "id": "zveyf2f01txeJhWRexNW",
+    "order": 1784085625557,
+    "slug": "mmtraalu",
+    "createdAt": "2026-07-15T03:20:25.635Z",
+    "title": "మంత్రాలు",
+    "image": "https://res.cloudinary.com/du5em76za/image/upload/v1784085609/cqmnlundjejk8zvwkval.png",
+    "updatedAt": "2026-09-07T04:05:54.192Z",
+    "emoji": "🕉️"
+  }
+]
