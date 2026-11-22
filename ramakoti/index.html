@@ -870,6 +870,30 @@
       margin-top: 2px;
     }
 
+    .rk-lb-empty {
+      text-align: center;
+      padding: 32px 16px;
+      color: rgba(255, 209, 102, 0.7);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 209, 102, 0.25);
+      border-radius: 16px;
+      margin: 8px 0;
+    }
+    .rk-lb-empty-icon {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+    .rk-lb-empty-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffd166;
+    }
+    .rk-lb-empty-sub {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4px;
+    }
+
     /* 5. Sacred Ledger Card */
     .rk-ledger-card {
       background: rgba(22, 11, 5, 0.75);
@@ -1339,20 +1363,7 @@
     let pendingGlobalIncrement = 0;
     let batchSaveTimer = null;
 
-    // Seed data for leaderboard
-    const SEED_LEADERBOARD = [
-      { uid: "seed_1", displayName: "శ్రీరామ సేవా బృందం", count: 108000, photoURL: "" },
-      { uid: "seed_2", displayName: "భక్త రామదాసు అనుచరులు", count: 84000, photoURL: "" },
-      { uid: "seed_3", displayName: "సీతారామ ధర్మ ట్రస్ట్", count: 65000, photoURL: "" },
-      { uid: "seed_4", displayName: "తారకనామ సాధకులు", count: 51000, photoURL: "" },
-      { uid: "seed_5", displayName: "హనుమత్ భక్త సమాజం", count: 42000, photoURL: "" },
-      { uid: "seed_6", displayName: "శ్రీరామ చంద్రోపాసకులు", count: 36000, photoURL: "" },
-      { uid: "seed_7", displayName: "అయోధ్యా భక్త బృందం", count: 28000, photoURL: "" },
-      { uid: "seed_8", displayName: "భద్రాచల భక్త నిలయం", count: 21000, photoURL: "" },
-      { uid: "seed_9", displayName: "రామనామ లేఖన సమితి", count: 16000, photoURL: "" },
-      { uid: "seed_10", displayName: "కోదండరామ భక్త సమూహం", count: 12000, photoURL: "" }
-    ];
-    let currentLeaderboard = [...SEED_LEADERBOARD];
+    let currentLeaderboard = [];
 
     // Elements
     const authGateView = document.getElementById("authGateView");
@@ -1405,12 +1416,26 @@
     }
 
     /* =====================================================
-       5. LEADERBOARD ENGINE (REAL-TIME TOP 10)
+       5. LEADERBOARD ENGINE (GENUINE REAL-TIME TOP 10)
     ===================================================== */
     function renderLeaderboard(list) {
       if (!leaderboardList) return;
-      const sorted = [...list].sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 10);
+      // Filter ONLY genuine devotees who have actually written (count > 0)
+      const validEntries = (list || []).filter(item => item && (item.count || 0) > 0);
+      const sorted = validEntries.sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 10);
       currentLeaderboard = sorted;
+
+      // If no devotees yet, show a clean genuine empty state
+      if (sorted.length === 0) {
+        leaderboardList.innerHTML = `
+          <div class="rk-lb-empty">
+            <div class="rk-lb-empty-icon">🚩</div>
+            <div class="rk-lb-empty-text">ఇంకా ఎవరూ నామలేఖనం ప్రారంభించలేదు</div>
+            <div class="rk-lb-empty-sub">మీరే మొదటి రామనామాన్ని లిఖించి లీడర్‌బోర్డ్‌లో మొదటి స్థానం పొందండి!</div>
+          </div>
+        `;
+        return;
+      }
 
       leaderboardList.innerHTML = sorted.map((item, idx) => {
         const rank = idx + 1;
@@ -1453,12 +1478,13 @@
     }
 
     function updateLocalLeaderboard(user, newCount) {
-      if (!user) return;
+      if (!user || newCount <= 0) return;
       const list = [...currentLeaderboard];
       const idx = list.findIndex(u => u.uid === user.uid);
       const entry = {
         uid: user.uid,
         displayName: user.displayName || user.email?.split("@")[0] || "శ్రీ రామభక్తులు",
+        email: user.email || "",
         photoURL: user.photoURL || "",
         count: newCount
       };
@@ -1479,8 +1505,8 @@
       }
     }
 
-    // Initial render of default top 10
-    renderLeaderboard(SEED_LEADERBOARD);
+    // Initial render: Clean empty list until genuine data arrives
+    renderLeaderboard([]);
 
     /* =====================================================
        6. FIREBASE AUTH & REAL-TIME LISTENERS
@@ -1518,7 +1544,9 @@
             const data = docSnap.data();
             const count = (data.ramakotiCount || 0) + pendingPersonalIncrement;
             updatePersonalDisplay(count);
-            updateLocalLeaderboard(user, count);
+            if (count > 0) {
+              updateLocalLeaderboard(user, count);
+            }
           } else {
             updatePersonalDisplay(0 + pendingPersonalIncrement);
           }
@@ -1543,7 +1571,7 @@
         });
         unsubs.push(unsubGlobal);
 
-        // 3. Real-Time Listener for Live Leaderboard (Top 10)
+        // 3. Real-Time Listener for Genuine Live Leaderboard (Top 10)
         try {
           const lbQuery = query(
             collection(db, "ramakoti_leaderboard"),
@@ -1551,29 +1579,63 @@
             limit(10)
           );
           const unsubLb = onSnapshot(lbQuery, (snapshot) => {
+            const remoteList = [];
             if (!snapshot.empty) {
-              const remoteList = [];
               snapshot.forEach(docSnap => {
-                remoteList.push({ id: docSnap.id, ...docSnap.data() });
-              });
-              let combined = [...remoteList];
-              SEED_LEADERBOARD.forEach(seed => {
-                if (combined.length < 10 && !combined.some(c => c.uid === seed.uid)) {
-                  combined.push(seed);
+                const data = docSnap.data();
+                if (data && (data.count || 0) > 0) {
+                  remoteList.push({ uid: docSnap.id, ...data });
                 }
               });
-              renderLeaderboard(combined);
-            } else {
-              renderLeaderboard(SEED_LEADERBOARD);
             }
+
+            // Merge current user's live optimistic count if higher
+            if (currentUser && personalTotal > 0) {
+              const meIdx = remoteList.findIndex(u => u.uid === currentUser.uid);
+              if (meIdx >= 0) {
+                if (personalTotal > (remoteList[meIdx].count || 0)) {
+                  remoteList[meIdx].count = personalTotal;
+                }
+              } else if (remoteList.length < 10) {
+                remoteList.push({
+                  uid: currentUser.uid,
+                  displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
+                  email: currentUser.email || "",
+                  photoURL: currentUser.photoURL || "",
+                  count: personalTotal
+                });
+              }
+            }
+
+            renderLeaderboard(remoteList);
           }, (err) => {
             console.warn("Leaderboard live snapshot warning:", err);
-            renderLeaderboard(SEED_LEADERBOARD);
+            if (currentUser && personalTotal > 0) {
+              renderLeaderboard([{
+                uid: currentUser.uid,
+                displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
+                email: currentUser.email || "",
+                photoURL: currentUser.photoURL || "",
+                count: personalTotal
+              }]);
+            } else {
+              renderLeaderboard([]);
+            }
           });
           unsubs.push(unsubLb);
         } catch (e) {
           console.warn("Error attaching leaderboard listener:", e);
-          renderLeaderboard(SEED_LEADERBOARD);
+          if (currentUser && personalTotal > 0) {
+            renderLeaderboard([{
+              uid: currentUser.uid,
+              displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
+              email: currentUser.email || "",
+              photoURL: currentUser.photoURL || "",
+              count: personalTotal
+            }]);
+          } else {
+            renderLeaderboard([]);
+          }
         }
 
         setTimeout(() => {
@@ -1824,6 +1886,7 @@
         await setDoc(lbRef, {
           uid: currentUser.uid,
           displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
+          email: currentUser.email || "",
           photoURL: currentUser.photoURL || "",
           count: personalTotal,
           updatedAt: serverTimestamp()

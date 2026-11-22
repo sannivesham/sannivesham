@@ -72,3 +72,15 @@ console.log('Allowed chars:');
 });
 
 console.log('All char checks PASSED!');
+
+// Verify JS Module Syntax
+try {
+  // Strip import statements so Function constructor can parse it
+  const codeWithoutImports = scriptMatch[1].replace(/import\s+[\s\S]*?from\s+['"][^'"]+['"];?/g, '// import');
+  new Function(codeWithoutImports);
+  console.log('JavaScript Syntax Check: PASSED!');
+} catch (err) {
+  console.error('JavaScript Syntax Check: FAILED!', err);
+  process.exit(1);
+}
+
