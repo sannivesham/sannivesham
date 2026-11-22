@@ -1110,6 +1110,34 @@
       </p>
     </header>
 
+    <!-- 1. Top Master Box: 1 Crore Real-Time Countdown (Decreasing - Always Visible) -->
+    <section class="rk-counter-section">
+      <div class="rk-master-card">
+        <div class="rk-master-tag">
+          <span class="rk-pulse-dot"></span>
+          <span>అఖండ విశ్వజనీన రామకోటి గణనం (Live Real-Time)</span>
+        </div>
+
+        <div class="rk-master-label">సంపూర్ణ సంకల్పం పూర్తికి మిగిలిన నామాలు</div>
+
+        <div class="rk-countdown-display">
+          <span class="rk-countdown-num" id="globalCountdownVal">1,00,00,000</span>
+          <span class="rk-countdown-unit">నామాలు</span>
+        </div>
+
+        <!-- Visual Progress Bar -->
+        <div class="rk-progress-container">
+          <div class="rk-progress-track">
+            <div class="rk-progress-fill" id="globalProgressFill"></div>
+          </div>
+          <div class="rk-progress-stats">
+            <span>మొత్తం లక్ష్యం: 1,00,00,000 (ఒక కోటి)</span>
+            <span id="globalPercentText">0.0000% పూర్తయింది</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ========================================================
          VIEW 1: AUTH GATE (Visible only when user is NOT logged in)
     ======================================================== -->
@@ -1142,36 +1170,8 @@
     ======================================================== -->
     <main id="writerView" style="display: none;">
 
-      <!-- Counters Section -->
-      <section class="rk-counter-section">
-
-        <!-- 1. Top Master Box: 1 Crore Real-Time Countdown (Decreasing) -->
-        <div class="rk-master-card">
-          <div class="rk-master-tag">
-            <span class="rk-pulse-dot"></span>
-            <span>అఖండ విశ్వజనీన రామకోటి గణనం (Live Real-Time)</span>
-          </div>
-
-          <div class="rk-master-label">సంపూర్ణ సంకల్పం పూర్తికి మిగిలిన నామాలు</div>
-
-          <div class="rk-countdown-display">
-            <span class="rk-countdown-num" id="globalCountdownVal">1,00,00,000</span>
-            <span class="rk-countdown-unit">నామాలు</span>
-          </div>
-
-          <!-- Visual Progress Bar -->
-          <div class="rk-progress-container">
-            <div class="rk-progress-track">
-              <div class="rk-progress-fill" id="globalProgressFill"></div>
-            </div>
-            <div class="rk-progress-stats">
-              <span>మొత్తం లక్ష్యం: 1,00,00,000 (ఒక కోటి)</span>
-              <span id="globalPercentText">0.0000% పూర్తయింది</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Personal Written Counter Box -->
+      <!-- Personal Written Counter Box -->
+      <section class="rk-counter-section" style="margin-bottom: 24px;">
         <div class="rk-personal-card">
           <div class="rk-personal-avatar" id="personalAvatar">
             <span>👤</span>
@@ -1185,12 +1185,10 @@
             <div class="rk-personal-count-lbl">మీరు లిఖించిన నామాలు</div>
           </div>
         </div>
-
       </section>
 
-      <!-- 3. Sacred Writer Card -->
+      <!-- Sacred Writer Card -->
       <section class="rk-writer-card">
-
         <!-- Rule Notice Banner -->
         <div class="rk-rule-banner">
           <span>📌</span>
@@ -1229,31 +1227,9 @@
             <span>సమర్పించు (↵)</span>
           </button>
         </div>
-
       </section>
 
-      <!-- 4. Real-Time Leaderboard: Top 10 Devotees -->
-      <section class="rk-leaderboard-card">
-        <div class="rk-lb-header">
-          <div class="rk-lb-title-wrap">
-            <span class="rk-lb-icon">🏆</span>
-            <div>
-              <h3 class="rk-lb-title">అగ్రగామి రామభక్తులు (Live Leaderboard)</h3>
-              <p class="rk-lb-subtitle">అత్యధిక రామనామాలు లిఖించిన టాప్ 10 భక్తులు • రియల్-టైమ్ స్థానాలు</p>
-            </div>
-          </div>
-          <div class="rk-lb-live-badge">
-            <span class="rk-pulse-dot"></span>
-            <span>Live Real-Time</span>
-          </div>
-        </div>
-
-        <div class="rk-lb-list" id="leaderboardList">
-          <!-- Populated dynamically by renderLeaderboard -->
-        </div>
-      </section>
-
-      <!-- 5. Sacred Ledger / Recent Names Written in Session -->
+      <!-- Sacred Ledger / Recent Names Written in Session -->
       <section class="rk-ledger-card">
         <div class="rk-ledger-header">
           <div class="rk-ledger-title">
@@ -1273,6 +1249,27 @@
       </section>
 
     </main>
+
+    <!-- 4. Real-Time Leaderboard: Top 10 Devotees (Always Visible to All Devices) -->
+    <section class="rk-leaderboard-card">
+      <div class="rk-lb-header">
+        <div class="rk-lb-title-wrap">
+          <span class="rk-lb-icon">🏆</span>
+          <div>
+            <h3 class="rk-lb-title">అగ్రగామి రామభక్తులు (Live Leaderboard)</h3>
+            <p class="rk-lb-subtitle">అత్యధిక రామనామాలు లిఖించిన టాప్ 10 భక్తులు • రియల్-టైమ్ స్థానాలు</p>
+          </div>
+        </div>
+        <div class="rk-lb-live-badge">
+          <span class="rk-pulse-dot"></span>
+          <span>Live Real-Time</span>
+        </div>
+      </div>
+
+      <div class="rk-lb-list" id="leaderboardList">
+        <!-- Populated dynamically by renderLeaderboard -->
+      </div>
+    </section>
 
     <!-- Footer -->
     <footer class="rk-footer">
@@ -1356,6 +1353,7 @@
     ===================================================== */
     const TOTAL_TARGET = 10000000; // 1 Crore = 10,000,000
     let currentUser = null;
+    let currentProfileName = "";
     let personalTotal = 0;
     let globalCompleted = 0;
     let sessionCount = 0;
@@ -1363,7 +1361,8 @@
     let pendingGlobalIncrement = 0;
     let batchSaveTimer = null;
 
-    let currentLeaderboard = [];
+    // Devotee Map for multi-source real-time leaderboard (users + ramakoti_leaderboard)
+    const devoteeMap = new Map();
 
     // Elements
     const authGateView = document.getElementById("authGateView");
@@ -1416,16 +1415,15 @@
     }
 
     /* =====================================================
-       5. LEADERBOARD ENGINE (GENUINE REAL-TIME TOP 10)
+       5. LEADERBOARD ENGINE (GENUINE REAL-TIME MULTI-DEVICE SYNC)
     ===================================================== */
     function renderLeaderboard(list) {
       if (!leaderboardList) return;
       // Filter ONLY genuine devotees who have actually written (count > 0)
       const validEntries = (list || []).filter(item => item && (item.count || 0) > 0);
       const sorted = validEntries.sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 10);
-      currentLeaderboard = sorted;
 
-      // If no devotees yet, show a clean genuine empty state
+      // If no devotees yet, show clean genuine empty state
       if (sorted.length === 0) {
         leaderboardList.innerHTML = `
           <div class="rk-lb-empty">
@@ -1445,15 +1443,18 @@
         else if (rank === 2) { rankClass = "rk-lb-item-rank-2"; medal = "🥈"; }
         else if (rank === 3) { rankClass = "rk-lb-item-rank-3"; medal = "🥉"; }
 
-        const isMe = currentUser && item.uid === currentUser.uid;
+        const isMe = currentUser && (item.uid === currentUser.uid);
         if (isMe) rankClass += " rk-lb-item-me";
 
-        const name = item.displayName || "శ్రీ రామభక్తులు";
+        const name = item.name || item.displayName || "శ్రీ రామభక్తులు";
         const countStr = formatIndianNumber(item.count || 0);
 
         let avatarHtml = `<div class="rk-lb-avatar"><span>🙏</span></div>`;
         if (item.photoURL) {
           avatarHtml = `<img src="${item.photoURL}" alt="${name}" class="rk-lb-avatar" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=\\'rk-lb-avatar\\'><span>🙏</span></div>'">`;
+        } else {
+          const letter = (name.replace(/[^a-zA-Z0-9]/g, "").charAt(0) || "🙏").toUpperCase();
+          avatarHtml = `<div class="rk-lb-avatar"><span>${letter}</span></div>`;
         }
 
         return `
@@ -1477,166 +1478,174 @@
       }).join("");
     }
 
-    function updateLocalLeaderboard(user, newCount) {
-      if (!user || newCount <= 0) return;
-      const list = [...currentLeaderboard];
-      const idx = list.findIndex(u => u.uid === user.uid);
-      const entry = {
-        uid: user.uid,
-        displayName: user.displayName || user.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-        email: user.email || "",
-        photoURL: user.photoURL || "",
-        count: newCount
-      };
+    function updateDevoteeMapAndRender(docs, isLeaderboardCol) {
+      if (!docs) return;
+      docs.forEach(docSnap => {
+        const d = docSnap.data();
+        if (!d) return;
+        const count = isLeaderboardCol ? (d.count || 0) : (d.ramakotiCount || 0);
+        if (count <= 0) return;
 
-      if (idx >= 0) {
-        list[idx] = entry;
-      } else {
-        list.push(entry);
-      }
+        const uid = docSnap.id;
+        const existing = devoteeMap.get(uid) || {};
+        const resolvedName = (d.name || d.displayName || existing.name || d.email?.split("@")[0] || "శ్రీ రామభక్తులు").trim();
+        const photoURL = d.photoURL || existing.photoURL || "";
+        const finalCount = Math.max(count, existing.count || 0);
 
-      renderLeaderboard(list);
+        devoteeMap.set(uid, {
+          uid,
+          name: resolvedName,
+          displayName: resolvedName,
+          photoURL,
+          count: finalCount
+        });
+      });
 
-      const scoreEl = document.getElementById("lbScore_" + user.uid);
-      if (scoreEl) {
-        scoreEl.classList.remove("bump");
-        void scoreEl.offsetWidth;
-        scoreEl.classList.add("bump");
-      }
+      renderFromDevoteeMap();
     }
 
-    // Initial render: Clean empty list until genuine data arrives
+    function renderFromDevoteeMap() {
+      // Merge current user's live optimistic local count and profile username
+      if (currentUser && personalTotal > 0) {
+        const existing = devoteeMap.get(currentUser.uid) || {};
+        const myName = currentProfileName || existing.name || currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు";
+        devoteeMap.set(currentUser.uid, {
+          uid: currentUser.uid,
+          name: myName,
+          displayName: myName,
+          photoURL: currentUser.photoURL || existing.photoURL || "",
+          count: Math.max(personalTotal, existing.count || 0)
+        });
+      }
+
+      const all = Array.from(devoteeMap.values())
+        .filter(item => item && (item.count || 0) > 0)
+        .sort((a, b) => (b.count || 0) - (a.count || 0))
+        .slice(0, 10);
+
+      renderLeaderboard(all);
+    }
+
+    // Initial render of empty list
     renderLeaderboard([]);
 
     /* =====================================================
-       6. FIREBASE AUTH & REAL-TIME LISTENERS
+       6. GLOBAL & UNIVERSAL REAL-TIME LISTENERS (ALL DEVICES)
     ===================================================== */
-    let unsubs = [];
-
-    function clearListeners() {
-      unsubs.forEach(unsub => { if (typeof unsub === "function") unsub(); });
-      unsubs = [];
+    // 1. Universal Real-Time Listener for Global 1-Crore Countdown
+    try {
+      const globalRef = doc(db, "ramakoti", "global");
+      onSnapshot(globalRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const completed = (data.completedCount || 0) + pendingGlobalIncrement;
+          updateGlobalDisplay(completed);
+        } else {
+          setDoc(globalRef, { completedCount: 0, target: TOTAL_TARGET }, { merge: true }).catch(() => {});
+          updateGlobalDisplay(0 + pendingGlobalIncrement);
+        }
+      }, (err) => {
+        console.warn("Global count snapshot error:", err);
+      });
+    } catch (e) {
+      console.warn("Error attaching global listener:", e);
     }
 
+    // 2. Universal Real-Time Leaderboard Listeners
+    // Source A: ramakoti_leaderboard collection
+    try {
+      const lbQuery = query(
+        collection(db, "ramakoti_leaderboard"),
+        orderBy("count", "desc"),
+        limit(10)
+      );
+      onSnapshot(lbQuery, (snapshot) => {
+        if (!snapshot.empty) {
+          updateDevoteeMapAndRender(snapshot.docs, true);
+        }
+      }, (err) => {
+        console.warn("Leaderboard col snapshot warning:", err);
+      });
+    } catch (e) {
+      console.warn("Error attaching ramakoti_leaderboard listener:", e);
+    }
+
+    // Source B: users collection (guaranteed sync fallback with profile names)
+    try {
+      const usersQuery = query(
+        collection(db, "users"),
+        orderBy("ramakotiCount", "desc"),
+        limit(10)
+      );
+      onSnapshot(usersQuery, (snapshot) => {
+        if (!snapshot.empty) {
+          updateDevoteeMapAndRender(snapshot.docs, false);
+        }
+      }, (err) => {
+        console.warn("Users ramakotiCount snapshot warning:", err);
+      });
+    } catch (e) {
+      console.warn("Error attaching users leaderboard listener:", e);
+    }
+
+    /* =====================================================
+       7. USER AUTHENTICATION & PERSONAL PROFILE LISTENER
+    ===================================================== */
+    let unsubUser = null;
+
     onAuthStateChanged(auth, async (user) => {
-      clearListeners();
+      if (typeof unsubUser === "function") {
+        unsubUser();
+        unsubUser = null;
+      }
       currentUser = user;
 
       if (!user) {
         authGateView.style.display = "block";
         writerView.style.display = "none";
+        currentProfileName = "";
       } else {
         authGateView.style.display = "none";
         writerView.style.display = "block";
 
-        const displayName = user.displayName || user.email?.split("@")[0] || "రామభక్తులు";
-        personalUserName.textContent = "శ్రీ " + displayName;
-        if (user.photoURL) {
-          personalAvatar.innerHTML = `<img src="${user.photoURL}" alt="${displayName}" referrerpolicy="no-referrer">`;
-        } else {
-          personalAvatar.innerHTML = `<span>🙏</span>`;
-        }
-
-        // 1. Real-Time Listener for User's personal count
+        // Real-Time Listener for User's personal count & Profile Username
         const userRef = doc(db, "users", user.uid);
-        const unsubUser = onSnapshot(userRef, (docSnap) => {
+        unsubUser = onSnapshot(userRef, (docSnap) => {
           if (docSnap.exists()) {
-            const data = docSnap.data();
+            const data = docSnap.data() || {};
+            // Resolve Profile Username (prioritizing 'name' set in profile section)
+            currentProfileName = (data.name || data.displayName || user.displayName || user.email?.split("@")[0] || "రామభక్తులు").trim();
+            personalUserName.textContent = "శ్రీ " + currentProfileName;
+
+            const photo = data.photoURL || user.photoURL || "";
+            if (photo) {
+              personalAvatar.innerHTML = `<img src="${photo}" alt="${currentProfileName}" referrerpolicy="no-referrer">`;
+            } else {
+              const initial = (currentProfileName.replace(/[^a-zA-Z0-9]/g, "").charAt(0) || "🙏").toUpperCase();
+              personalAvatar.innerHTML = `<span>${initial}</span>`;
+            }
+
             const count = (data.ramakotiCount || 0) + pendingPersonalIncrement;
             updatePersonalDisplay(count);
+
             if (count > 0) {
-              updateLocalLeaderboard(user, count);
+              devoteeMap.set(user.uid, {
+                uid: user.uid,
+                name: currentProfileName,
+                displayName: currentProfileName,
+                photoURL: photo,
+                count: count
+              });
+              renderFromDevoteeMap();
             }
           } else {
+            currentProfileName = (user.displayName || user.email?.split("@")[0] || "రామభక్తులు").trim();
+            personalUserName.textContent = "శ్రీ " + currentProfileName;
             updatePersonalDisplay(0 + pendingPersonalIncrement);
           }
         }, (err) => {
           console.warn("User count snapshot error:", err);
         });
-        unsubs.push(unsubUser);
-
-        // 2. Real-Time Listener for Global 1-Crore Countdown
-        const globalRef = doc(db, "ramakoti", "global");
-        const unsubGlobal = onSnapshot(globalRef, (docSnap) => {
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            const completed = (data.completedCount || 0) + pendingGlobalIncrement;
-            updateGlobalDisplay(completed);
-          } else {
-            setDoc(globalRef, { completedCount: 0, target: TOTAL_TARGET }, { merge: true }).catch(() => {});
-            updateGlobalDisplay(0 + pendingGlobalIncrement);
-          }
-        }, (err) => {
-          console.warn("Global count snapshot error:", err);
-        });
-        unsubs.push(unsubGlobal);
-
-        // 3. Real-Time Listener for Genuine Live Leaderboard (Top 10)
-        try {
-          const lbQuery = query(
-            collection(db, "ramakoti_leaderboard"),
-            orderBy("count", "desc"),
-            limit(10)
-          );
-          const unsubLb = onSnapshot(lbQuery, (snapshot) => {
-            const remoteList = [];
-            if (!snapshot.empty) {
-              snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                if (data && (data.count || 0) > 0) {
-                  remoteList.push({ uid: docSnap.id, ...data });
-                }
-              });
-            }
-
-            // Merge current user's live optimistic count if higher
-            if (currentUser && personalTotal > 0) {
-              const meIdx = remoteList.findIndex(u => u.uid === currentUser.uid);
-              if (meIdx >= 0) {
-                if (personalTotal > (remoteList[meIdx].count || 0)) {
-                  remoteList[meIdx].count = personalTotal;
-                }
-              } else if (remoteList.length < 10) {
-                remoteList.push({
-                  uid: currentUser.uid,
-                  displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-                  email: currentUser.email || "",
-                  photoURL: currentUser.photoURL || "",
-                  count: personalTotal
-                });
-              }
-            }
-
-            renderLeaderboard(remoteList);
-          }, (err) => {
-            console.warn("Leaderboard live snapshot warning:", err);
-            if (currentUser && personalTotal > 0) {
-              renderLeaderboard([{
-                uid: currentUser.uid,
-                displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-                email: currentUser.email || "",
-                photoURL: currentUser.photoURL || "",
-                count: personalTotal
-              }]);
-            } else {
-              renderLeaderboard([]);
-            }
-          });
-          unsubs.push(unsubLb);
-        } catch (e) {
-          console.warn("Error attaching leaderboard listener:", e);
-          if (currentUser && personalTotal > 0) {
-            renderLeaderboard([{
-              uid: currentUser.uid,
-              displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-              email: currentUser.email || "",
-              photoURL: currentUser.photoURL || "",
-              count: personalTotal
-            }]);
-          } else {
-            renderLeaderboard([]);
-          }
-        }
 
         setTimeout(() => {
           if (ramaInput) ramaInput.focus();
@@ -1834,8 +1843,23 @@
       globalCompleted += countToAdd;
       updateGlobalDisplay(globalCompleted);
 
-      // 2. Real-time Leaderboard update locally immediately!
-      updateLocalLeaderboard(currentUser, personalTotal);
+      // 2. Real-time Leaderboard update locally immediately with profile name!
+      const myName = currentProfileName || currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు";
+      devoteeMap.set(currentUser.uid, {
+        uid: currentUser.uid,
+        name: myName,
+        displayName: myName,
+        photoURL: currentUser.photoURL || "",
+        count: personalTotal
+      });
+      renderFromDevoteeMap();
+
+      const scoreEl = document.getElementById("lbScore_" + currentUser.uid);
+      if (scoreEl) {
+        scoreEl.classList.remove("bump");
+        void scoreEl.offsetWidth;
+        scoreEl.classList.add("bump");
+      }
 
       // 3. Add to Ledger Grid
       for (let i = 0; i < countToAdd; i++) {
@@ -1863,13 +1887,18 @@
       pendingPersonalIncrement = 0;
       pendingGlobalIncrement = 0;
 
+      const profileName = currentProfileName || currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు";
+      const photo = currentUser.photoURL || "";
+      const email = currentUser.email || "";
+
       try {
-        // 1. Personal count increment in users/{uid}
+        // 1. Personal count increment in users/{uid} (stores profile username as both 'name' and 'displayName')
         const userRef = doc(db, "users", currentUser.uid);
         await setDoc(userRef, {
-          displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-          email: currentUser.email || "",
-          photoURL: currentUser.photoURL || "",
+          name: profileName,
+          displayName: profileName,
+          email: email,
+          photoURL: photo,
           ramakotiCount: increment(pInc),
           lastRamakotiAt: serverTimestamp()
         }, { merge: true });
@@ -1885,9 +1914,10 @@
         const lbRef = doc(db, "ramakoti_leaderboard", currentUser.uid);
         await setDoc(lbRef, {
           uid: currentUser.uid,
-          displayName: currentUser.displayName || currentUser.email?.split("@")[0] || "శ్రీ రామభక్తులు",
-          email: currentUser.email || "",
-          photoURL: currentUser.photoURL || "",
+          name: profileName,
+          displayName: profileName,
+          email: email,
+          photoURL: photo,
           count: personalTotal,
           updatedAt: serverTimestamp()
         }, { merge: true });
