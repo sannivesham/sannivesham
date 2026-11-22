@@ -106,6 +106,12 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /ramakoti_leaderboard/{uid} {
+      allow read: if true;
+      allow create, update: if isAuthenticated() && request.auth.uid == uid;
+      allow delete: if isAdmin();
+    }
+
     // ----------------------------------------------------
     // 5. SERVER-CONTROLLED COLLECTIONS (Subscriptions & Moderation)
     // ----------------------------------------------------
