@@ -1078,13 +1078,15 @@ body {
 .rk-tree-viewport {
   position: relative;
   width: 100%;
-  min-height: 580px;
-  max-height: 720px;
-  overflow: auto;
+  min-height: 600px;
+  max-height: 740px;
+  overflow: hidden;
   background: radial-gradient(circle at 50% 50%, rgba(35, 11, 11, 0.6) 0%, rgba(12, 2, 2, 0.95) 100%);
+  touch-action: pan-y;
   cursor: grab;
   user-select: none;
-  padding: 2.5rem 1.5rem;
+  -webkit-user-select: none;
+  padding: 0;
 }
 
 .rk-tree-viewport:active {
@@ -1093,12 +1095,27 @@ body {
 
 .rk-tree-content {
   position: relative;
-  transform-origin: 0 0;
-  transition: transform 0.1s ease-out;
+  width: max-content;
   min-width: 100%;
+  margin: 0 auto;
+  transform-origin: top center;
+  transition: transform 0.05s linear;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 2.5rem 2rem 5rem 2rem;
+}
+
+/* Dynamic SVG Connection Overlay */
+.rk-tree-svg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
 }
 
 /* =====================================================
@@ -1108,9 +1125,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 4.5rem;
   position: relative;
   width: 100%;
+  z-index: 2;
 }
 
 .rk-level-title-badge {
@@ -1132,25 +1150,27 @@ body {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 1.4rem;
+  gap: 1.8rem;
+  width: 100%;
 }
 
 /* Spouse Pod / Married Couple cluster */
 .rk-couple-cluster {
   display: inline-flex;
   align-items: center;
-  background: rgba(255, 118, 117, 0.05);
-  border: 1px dashed rgba(255, 118, 117, 0.35);
+  background: rgba(255, 118, 117, 0.06);
+  border: 1px dashed rgba(255, 118, 117, 0.45);
   border-radius: var(--radius-md);
-  padding: 0.6rem;
-  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  gap: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .rk-marriage-heart {
   color: #ff7675;
-  font-size: 0.95rem;
-  padding: 0 0.2rem;
-  filter: drop-shadow(0 0 6px rgba(255, 118, 117, 0.6));
+  font-size: 1.1rem;
+  padding: 0 0.25rem;
+  filter: drop-shadow(0 0 8px rgba(255, 118, 117, 0.7));
 }
 
 /* Individual Character Card */
@@ -1165,7 +1185,37 @@ body {
   position: relative;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  z-index: 2;
+}
+
+/* Flowchart Connector Ports */
+.rk-char-node::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rk-gold-main);
+  border: 1px solid #1e0808;
+  box-shadow: 0 0 5px rgba(255, 209, 102, 0.8);
+}
+
+.rk-char-node::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rk-gold-main);
+  border: 1px solid #1e0808;
+  box-shadow: 0 0 5px rgba(255, 209, 102, 0.8);
 }
 
 .rk-char-node:hover {
@@ -1636,5 +1686,45 @@ body {
   .rk-profile-top {
     flex-direction: column;
     text-align: center;
+  }
+
+  .rk-tree-viewport {
+    min-height: 520px;
+    max-height: 640px;
+  }
+
+  .rk-tree-content {
+    padding: 1.5rem 0.8rem 4rem 0.8rem;
+  }
+
+  .rk-tree-level {
+    margin-bottom: 3.2rem;
+  }
+
+  .rk-nodes-row {
+    gap: 1rem;
+  }
+
+  .rk-char-node {
+    min-width: 135px;
+    max-width: 160px;
+    padding: 0.65rem 0.55rem;
+  }
+
+  .rk-node-avatar {
+    font-size: 1.3rem;
+  }
+
+  .rk-node-name-te {
+    font-size: 0.92rem;
+  }
+
+  .rk-node-name-en {
+    font-size: 0.7rem;
+  }
+
+  .rk-couple-cluster {
+    padding: 0.4rem 0.5rem;
+    gap: 0.4rem;
   }
 }

@@ -109,6 +109,49 @@ const IKSHVAKU_LINEAGE = [
 ];
 
 const CHARACTERS = [
+  // ==================== AJA & INDUMATI (PARENTS OF DASHARATHA) ====================
+  {
+    id: "aja",
+    nameTelugu: "అజ మహారాజు",
+    nameEnglish: "King Aja",
+    alternateNames: ["నాభాగపుత్రుడు", "రఘువంశాధిపతి"],
+    category: "dasharatha",
+    gender: "male",
+    fatherId: "nabhaga",
+    motherId: null,
+    spouseIds: ["indumati"],
+    childrenIds: ["dasharatha"],
+    siblingIds: [],
+    guruIds: ["vasistha"],
+    discipleIds: [],
+    kingdom: "అయోధ్య (Ayodhya)",
+    descriptionTelugu: "సూర్యవంశపు మహాచక్రవర్తి, నాభాగుని కుమారుడు, ఇందుమతీ దేవి పతి, దశరథ మహారాజు తండ్రి. వాల్మీకి రామాయణ బాలకాండ 70వ సర్గలో పేర్కొనబడిన పవిత్ర ఇక్ష్వాకు వంశ ప్రముఖుడు.",
+    descriptionEnglish: "Illustrious monarch of the Solar Dynasty, son of Nabhaga, husband of Indumati, and father of King Dasharatha (Valmiki Ramayana, Bala Kanda 70).",
+    roleInRamayana: "దశరథుని పితృపాదులు, శ్రీరాముని పితామహుడు (తాతగారు).",
+    kandaReferences: "బాలకాండ (సర్గ 70.43)",
+    sourceTradition: "వాల్మీకి రామాయణం"
+  },
+  {
+    id: "indumati",
+    nameTelugu: "ఇందుమతీ దేవి",
+    nameEnglish: "Queen Indumati",
+    alternateNames: ["విదర్భరాజపుత్రి", "దశరథమాత"],
+    category: "dasharatha",
+    gender: "female",
+    fatherId: null,
+    motherId: null,
+    spouseIds: ["aja"],
+    childrenIds: ["dasharatha"],
+    siblingIds: [],
+    guruIds: [],
+    discipleIds: [],
+    kingdom: "విదర్భ / అయోధ్య (Vidarbha / Ayodhya)",
+    descriptionTelugu: "అజ మహారాజు పట్టమహిషి, విదర్భ రాజకుమారి, దశరథుని జననీ, శ్రీరాముని పితామహి (నానమ్మ).",
+    descriptionEnglish: "Queen consort of King Aja, princess of Vidarbha, mother of Dasharatha, and grandmother of Sri Rama.",
+    roleInRamayana: "దశరథ మహారాజు తల్లి, ఇక్ష్వాకు వంశపు మాతృమూర్తి.",
+    kandaReferences: "బాలకాండ (సర్గ 70)",
+    sourceTradition: "వాల్మీకి రామాయణం"
+  },
   // ==================== DASHARATHA & QUEENS ====================
   {
     id: "dasharatha",
@@ -1311,7 +1354,7 @@ const FAMILY_TREES = {
         level: 1,
         titleTelugu: "తల్లిదండ్రుల తరం",
         titleEnglish: "Parents Generation",
-        members: ["aja"]
+        members: ["aja", "indumati"]
       },
       {
         level: 2,

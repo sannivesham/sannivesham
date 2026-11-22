@@ -1,11 +1,12 @@
 /**
  * SANNIVESHAM – RAMAYANA FAMILY TREE & VISUAL EXPLORER ENGINE
- * Interactive Pan/Zoom, Canvas Rendering, Node Network Highlighting, and Modal System
+ * Interactive Flowchart Tree, SVG Connector Lines, Calibrated Mobile Gestures, and Kinship Resolver
  */
 
 (function (global) {
   "use strict";
 
+  // Safeguard access to data
   function getData() {
     if (typeof window !== "undefined" && window.RAMAYANA_DATA) {
       return window.RAMAYANA_DATA;
@@ -21,157 +22,328 @@
   }
 
   /* =====================================================
-     1. ENGINE STATE
+     1. ENGINE STATE & CONFIG
   ===================================================== */
   const state = {
-    currentCategory: "dasharatha", // ikshvaku, dasharatha, janaka, vanara, rakshasa, guru
-    ikshvakuMode: "milestones", // "milestones" or "full"
+    currentCategory: "dasharatha",
+    ikshvakuMode: "milestones",
     scale: 1,
     panX: 0,
     panY: 0,
-    isDragging: false,
-    dragStartX: 0,
-    dragStartY: 0,
-    lang: "te", // "te" or "en"
+    lang: "te",
     highlightActive: true,
     selectedCharId: null
   };
 
-  /* Avatar icons mapped by character role/identity */
   const AVATARS = {
     sri_rama: "🏹",
     sita: "🪷",
-    lakshmana: "🗡️",
+    lakshmana: "🏹",
+    urmila: "🌸",
     bharata: "👑",
+    mandavi: "🌺",
     shatrughna: "⚔️",
+    shrutakirti: "🌼",
     dasharatha: "👑",
-    kausalya: "👸",
-    sumitra: "👸",
-    kaikeyi: "👸",
-    shanta: "✨",
+    kausalya: "🪷",
+    sumitra: "🌿",
+    kaikeyi: "✨",
+    shanta: "🕊️",
     rishyashringa: "🧘",
-    urmila: "🪷",
-    mandavi: "🪷",
-    shrutakirti: "🪷",
+    aja: "👑",
+    indumati: "🪷",
     lava: "🏹",
     kusha: "🏹",
+    angada_lakshmana: "🏹",
+    chandraketu: "🏹",
+    taksha: "👑",
+    pushkala: "👑",
+    subahu_shatrughna: "⚔️",
+    shatrughati: "⚔️",
     janaka: "👑",
     kushadhvaja: "👑",
-    hrasvaroman: "👑",
+    hrasvaroman: "🏛️",
     vali: "🐒",
-    sugriva: "🐒",
-    hanuman: "🚩",
+    sugriva: "👑",
     tara: "🌸",
-    ruma: "🌸",
-    angada: "🐒",
+    ruma: "🌺",
+    angada_vali: "🏹",
+    hanuman: "🙏",
     kesari: "🐒",
-    anjana: "🌸",
+    anjana: "🪷",
     jambavan: "🐻",
+    pulastya: "🧘",
+    vishrava: "📜",
+    kaikasi: "👑",
+    kubera: "💰",
     ravana: "🔱",
-    kumbhakarna: "⛰️",
-    vibhishana: "🕊️",
-    indrajit: "⚡",
-    shurpanakha: "👁️",
-    mandodari: "👸",
+    mandodari: "🪷",
+    kumbhakarna: "🛡️",
+    vajrajvala: "🔥",
+    vibhishana: "🙏",
     sarama: "🌸",
-    trijata: "🌸",
+    shurpanakha: "👁️",
+    indrajit: "⚡",
     akshayakumara: "⚔️",
-    atikaya: "⚔️",
+    atikaya: "🏹",
+    narantaka: "🗡️",
+    devantaka: "🗡️",
+    trishira: "🔱",
     vasistha: "📜",
-    vishwamitra: "☀️",
-    valmiki: "🪶",
+    vishwamitra: "🏹",
+    valmiki: "✍️",
     agastya: "🌊",
-    jabali: "📜"
+    jabali: "🧘"
   };
 
   function getAvatar(id) {
     return AVATARS[id] || "👑";
   }
 
+  /* Explicit genealogical connections for rendering flowcharts */
+  const CONNECTIONS = {
+    dasharatha: [
+      // 1. Marriages (Pink Lines #ff7675)
+      { type: "marriage", from: "aja", to: "indumati" },
+      { type: "marriage", from: "dasharatha", to: "kausalya" },
+      { type: "marriage", from: "dasharatha", to: "sumitra" },
+      { type: "marriage", from: "dasharatha", to: "kaikeyi" },
+      { type: "marriage", from: "shanta", to: "rishyashringa" },
+      { type: "marriage", from: "sri_rama", to: "sita" },
+      { type: "marriage", from: "lakshmana", to: "urmila" },
+      { type: "marriage", from: "bharata", to: "mandavi" },
+      { type: "marriage", from: "shatrughna", to: "shrutakirti" },
+
+      // 2. Siblings (Blue Lines #74b9ff)
+      { type: "siblings", members: ["sri_rama", "lakshmana", "bharata", "shatrughna"] },
+      { type: "siblings", members: ["lava", "kusha"] },
+      { type: "siblings", members: ["angada_lakshmana", "chandraketu"] },
+      { type: "siblings", members: ["taksha", "pushkala"] },
+      { type: "siblings", members: ["subahu_shatrughna", "shatrughati"] },
+
+      // 3. Parent-Child (Yellow Lines #ffd166)
+      { type: "parent_child", from: "aja", to: ["dasharatha"] },
+      { type: "parent_child", from: "dasharatha", to: ["shanta"] },
+      { type: "parent_child", from: "kausalya", to: ["sri_rama"] },
+      { type: "parent_child", from: "sumitra", to: ["lakshmana", "shatrughna"] },
+      { type: "parent_child", from: "kaikeyi", to: ["bharata"] },
+      { type: "parent_child", from: "sri_rama", to: ["lava", "kusha"] },
+      { type: "parent_child", from: "lakshmana", to: ["angada_lakshmana", "chandraketu"] },
+      { type: "parent_child", from: "bharata", to: ["taksha", "pushkala"] },
+      { type: "parent_child", from: "shatrughna", to: ["subahu_shatrughna", "shatrughati"] }
+    ],
+
+    janaka: [
+      // Marriages (Pink)
+      { type: "marriage", from: "sita", to: "sri_rama" },
+      { type: "marriage", from: "urmila", to: "lakshmana" },
+      { type: "marriage", from: "mandavi", to: "bharata" },
+      { type: "marriage", from: "shrutakirti", to: "shatrughna" },
+
+      // Siblings (Blue)
+      { type: "siblings", members: ["janaka", "kushadhvaja"] },
+      { type: "siblings", members: ["sita", "urmila"] },
+      { type: "siblings", members: ["mandavi", "shrutakirti"] },
+
+      // Parent-Child (Yellow)
+      { type: "parent_child", from: "hrasvaroman", to: ["janaka", "kushadhvaja"] },
+      { type: "parent_child", from: "janaka", to: ["sita", "urmila"] },
+      { type: "parent_child", from: "kushadhvaja", to: ["mandavi", "shrutakirti"] }
+    ],
+
+    vanara: [
+      // Marriages (Pink)
+      { type: "marriage", from: "kesari", to: "anjana" },
+      { type: "marriage", from: "vali", to: "tara" },
+      { type: "marriage", from: "sugriva", to: "ruma" },
+
+      // Siblings (Blue)
+      { type: "siblings", members: ["vali", "sugriva"] },
+
+      // Parent-Child (Yellow)
+      { type: "parent_child", from: "kesari", to: ["hanuman"] },
+      { type: "parent_child", from: "anjana", to: ["hanuman"] },
+      { type: "parent_child", from: "vali", to: ["angada_vali"] }
+    ],
+
+    rakshasa: [
+      // Marriages (Pink)
+      { type: "marriage", from: "vishrava", to: "kaikasi" },
+      { type: "marriage", from: "ravana", to: "mandodari" },
+      { type: "marriage", from: "kumbhakarna", to: "vajrajvala" },
+      { type: "marriage", from: "vibhishana", to: "sarama" },
+
+      // Siblings (Blue)
+      { type: "siblings", members: ["ravana", "kumbhakarna", "vibhishana", "shurpanakha"] },
+      { type: "siblings", members: ["indrajit", "akshayakumara", "atikaya", "narantaka", "devantaka", "trishira"] },
+
+      // Parent-Child (Yellow)
+      { type: "parent_child", from: "pulastya", to: ["vishrava"] },
+      { type: "parent_child", from: "vishrava", to: ["kubera"] },
+      { type: "parent_child", from: "kaikasi", to: ["ravana", "kumbhakarna", "vibhishana", "shurpanakha"] },
+      { type: "parent_child", from: "ravana", to: ["indrajit", "akshayakumara", "atikaya", "narantaka", "devantaka", "trishira"] }
+    ],
+
+    guru: [
+      // Guru-Disciple (Purple Dashed)
+      { type: "guru_disciple", from: "vasistha", to: ["dasharatha", "sri_rama", "lakshmana", "bharata", "shatrughna"] },
+      { type: "guru_disciple", from: "vishwamitra", to: ["sri_rama", "lakshmana"] },
+      { type: "guru_disciple", from: "valmiki", to: ["lava", "kusha"] },
+      { type: "guru_disciple", from: "agastya", to: ["sri_rama"] }
+    ]
+  };
+
   /* =====================================================
-     2. PAN & ZOOM CONTROLLER
+     2. PAN & ZOOM CONTROLLER (CALIBRATED FOR MOBILE & DESKTOP)
   ===================================================== */
+  function clampAndApplyTransform() {
+    const viewport = document.getElementById("treeViewport");
+    const content = document.getElementById("treeContent");
+    if (!viewport || !content) return;
+
+    const viewW = viewport.clientWidth || 800;
+    const viewH = viewport.clientHeight || 600;
+    const contentW = (content.scrollWidth || 1000) * state.scale;
+    const contentH = (content.scrollHeight || 800) * state.scale;
+
+    // Strict boundary clamping so tree content NEVER gets lost in black space
+    const maxPanX = Math.max((contentW - viewW) / 2 + 120, 60);
+    const maxPanY = Math.max((contentH - viewH) / 2 + 100, 50);
+
+    state.panX = Math.max(-maxPanX, Math.min(maxPanX, state.panX));
+    state.panY = Math.max(-maxPanY, Math.min(maxPanY, state.panY));
+
+    content.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.scale})`;
+  }
+
   function initPanZoom() {
     const viewport = document.getElementById("treeViewport");
     const content = document.getElementById("treeContent");
     if (!viewport || !content) return;
 
-    function applyTransform() {
-      content.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.scale})`;
-    }
+    // --- Desktop Mouse Dragging ---
+    let isMouseDown = false;
+    let mouseStartX = 0;
+    let mouseStartY = 0;
 
-    // Mouse drag
     viewport.addEventListener("mousedown", (e) => {
-      if (e.target.closest(".rk-char-node") || e.target.closest("button") || e.target.closest("a")) return;
-      state.isDragging = true;
-      state.dragStartX = e.clientX - state.panX;
-      state.dragStartY = e.clientY - state.panY;
+      if (e.target.closest(".rk-char-node") || e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
+      isMouseDown = true;
+      mouseStartX = e.clientX - state.panX;
+      mouseStartY = e.clientY - state.panY;
       viewport.style.cursor = "grabbing";
     });
 
     window.addEventListener("mousemove", (e) => {
-      if (!state.isDragging) return;
-      state.panX = e.clientX - state.dragStartX;
-      state.panY = e.clientY - state.dragStartY;
-      applyTransform();
+      if (!isMouseDown) return;
+      state.panX = e.clientX - mouseStartX;
+      state.panY = e.clientY - mouseStartY;
+      clampAndApplyTransform();
     });
 
     window.addEventListener("mouseup", () => {
-      state.isDragging = false;
+      isMouseDown = false;
       if (viewport) viewport.style.cursor = "grab";
     });
 
-    // Touch drag & mobile support
-    let touchStartDist = 0;
+    // --- Mobile Touch Gestures (Calibrated Sensitivity & Native Page Scrolling) ---
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartPanX = 0;
+    let touchStartPanY = 0;
+    let touchMode = "idle"; // "idle", "scroll", "pan", "pinch"
+    let pinchStartDist = 0;
+    let pinchStartScale = 1;
+
     viewport.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
-        state.isDragging = true;
-        state.dragStartX = e.touches[0].clientX - state.panX;
-        state.dragStartY = e.touches[0].clientY - state.panY;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchStartPanX = state.panX;
+        touchStartPanY = state.panY;
+        touchMode = "idle";
       } else if (e.touches.length === 2) {
-        touchStartDist = Math.hypot(
+        touchMode = "pinch";
+        pinchStartDist = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
         );
+        pinchStartScale = state.scale;
       }
     }, { passive: true });
 
     viewport.addEventListener("touchmove", (e) => {
-      if (e.touches.length === 1 && state.isDragging) {
-        state.panX = e.touches[0].clientX - state.dragStartX;
-        state.panY = e.touches[0].clientY - state.dragStartY;
-        applyTransform();
-      } else if (e.touches.length === 2 && touchStartDist > 0) {
-        const dist = Math.hypot(
+      if (e.touches.length === 1) {
+        const dx = e.touches[0].clientX - touchStartX;
+        const dy = e.touches[0].clientY - touchStartY;
+
+        // If intent hasn't been established yet, detect direction
+        if (touchMode === "idle") {
+          const absX = Math.abs(dx);
+          const absY = Math.abs(dy);
+
+          if (absY > absX && absY > 7) {
+            // Natural page scroll: Let browser scroll the page naturally!
+            touchMode = "scroll";
+            return;
+          } else if (absX > absY && absX > 7) {
+            // Horizontal tree pan
+            touchMode = "pan";
+          } else {
+            return;
+          }
+        }
+
+        if (touchMode === "scroll") {
+          // Allow normal native vertical scroll; do not hijack!
+          return;
+        }
+
+        if (touchMode === "pan") {
+          if (e.cancelable) e.preventDefault();
+          // Gentle 1:1 smooth dampened horizontal pan
+          state.panX = touchStartPanX + dx * 0.95;
+          state.panY = touchStartPanY + dy * 0.35;
+          clampAndApplyTransform();
+        }
+      } else if (e.touches.length === 2 && touchMode === "pinch") {
+        if (e.cancelable) e.preventDefault();
+        const currentDist = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
         );
-        const factor = dist / touchStartDist;
-        zoomBy(factor > 1 ? 0.05 : -0.05);
-        touchStartDist = dist;
+        if (pinchStartDist > 0) {
+          const factor = currentDist / pinchStartDist;
+          let targetScale = pinchStartScale * factor;
+          // Zoom scale locked between 75% and 150% so it NEVER collapses to 45% or gets lost
+          targetScale = Math.min(Math.max(targetScale, 0.75), 1.5);
+          state.scale = Number(targetScale.toFixed(2));
+          clampAndApplyTransform();
+          updateZoomDisplay();
+        }
       }
-    }, { passive: true });
+    }, { passive: false });
 
     viewport.addEventListener("touchend", () => {
-      state.isDragging = false;
-      touchStartDist = 0;
+      touchMode = "idle";
+      pinchStartDist = 0;
     });
 
-    // Mouse wheel zoom with Ctrl or normal wheel
+    // Mouse wheel zoom
     viewport.addEventListener("wheel", (e) => {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      const delta = e.deltaY > 0 ? -0.08 : 0.08;
       zoomBy(delta);
     }, { passive: false });
 
-    // Toolbar button listeners
+    // Toolbar buttons
     const btnZoomIn = document.getElementById("btnZoomIn");
     const btnZoomOut = document.getElementById("btnZoomOut");
     const btnResetZoom = document.getElementById("btnResetZoom");
     const btnFit = document.getElementById("btnFit");
 
-    if (btnZoomIn) btnZoomIn.addEventListener("click", () => zoomBy(0.15));
-    if (btnZoomOut) btnZoomOut.addEventListener("click", () => zoomBy(-0.15));
+    if (btnZoomIn) btnZoomIn.addEventListener("click", () => zoomBy(0.1));
+    if (btnZoomOut) btnZoomOut.addEventListener("click", () => zoomBy(-0.1));
     if (btnResetZoom) btnResetZoom.addEventListener("click", resetZoom);
     if (btnFit) btnFit.addEventListener("click", fitToScreen);
 
@@ -180,23 +352,18 @@
   }
 
   function zoomBy(delta) {
-    const newScale = Math.min(Math.max(state.scale + delta, 0.45), 2.2);
+    const newScale = Math.min(Math.max(state.scale + delta, 0.75), 1.6);
     state.scale = Number(newScale.toFixed(2));
-    const content = document.getElementById("treeContent");
-    if (content) {
-      content.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.scale})`;
-    }
+    clampAndApplyTransform();
     updateZoomDisplay();
   }
 
   function resetZoom() {
-    state.scale = 1;
+    const isMobile = window.innerWidth <= 768;
+    state.scale = isMobile ? 0.85 : 1.0;
     state.panX = 0;
     state.panY = 0;
-    const content = document.getElementById("treeContent");
-    if (content) {
-      content.style.transform = `translate(0px, 0px) scale(1)`;
-    }
+    clampAndApplyTransform();
     updateZoomDisplay();
   }
 
@@ -204,16 +371,16 @@
     const viewport = document.getElementById("treeViewport");
     const content = document.getElementById("treeContent");
     if (!viewport || !content) return;
-    const viewW = viewport.clientWidth;
-    const contentW = content.scrollWidth;
+    const viewW = viewport.clientWidth || 800;
+    const contentW = content.scrollWidth || 1000;
     if (contentW > viewW) {
-      state.scale = Number(Math.max((viewW - 40) / contentW, 0.5).toFixed(2));
+      state.scale = Number(Math.max((viewW - 40) / contentW, 0.75).toFixed(2));
     } else {
-      state.scale = 1;
+      state.scale = 1.0;
     }
     state.panX = 0;
     state.panY = 0;
-    content.style.transform = `translate(0px, 0px) scale(${state.scale})`;
+    clampAndApplyTransform();
     updateZoomDisplay();
   }
 
@@ -223,16 +390,230 @@
   }
 
   /* =====================================================
-     3. RENDER IKSHVAKU DYNASTY (39 GENERATIONS)
+     3. DYNAMIC SVG TREE CONNECTORS ENGINE
+     (Yellow: Parent-Child, Pink: Marriage, Blue: Siblings, Purple: Guru)
+  ===================================================== */
+  function drawTreeConnections() {
+    const content = document.getElementById("treeContent");
+    if (!content) return;
+
+    const catId = state.currentCategory;
+    const conns = CONNECTIONS[catId];
+    if (!conns || conns.length === 0) {
+      const oldSvg = document.getElementById("treeSvgCanvas");
+      if (oldSvg) oldSvg.remove();
+      return;
+    }
+
+    let svg = document.getElementById("treeSvgCanvas");
+    if (!svg) {
+      svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.id = "treeSvgCanvas";
+      svg.setAttribute("class", "rk-tree-svg-canvas");
+      content.insertBefore(svg, content.firstChild);
+    }
+
+    const cW = Math.max(content.scrollWidth, content.offsetWidth, 1200);
+    const cH = Math.max(content.scrollHeight, content.offsetHeight, 800);
+    svg.setAttribute("width", cW);
+    svg.setAttribute("height", cH);
+    svg.setAttribute("viewBox", `0 0 ${cW} ${cH}`);
+
+    // Definitions for arrowheads, dots, and glow filters
+    svg.innerHTML = `
+      <defs>
+        <!-- Yellow Down Arrow for Parent-to-Child -->
+        <marker id="arrowYellow" markerWidth="9" markerHeight="9" refX="5" refY="3.5" orient="auto">
+          <polygon points="0 0, 8 3.5, 0 7" fill="#ffd166"/>
+        </marker>
+        <!-- Blue Dot for Siblings -->
+        <marker id="dotBlue" markerWidth="6" markerHeight="6" refX="3" refY="3">
+          <circle cx="3" cy="3" r="2.5" fill="#74b9ff"/>
+        </marker>
+        <!-- Pink Glow Filter -->
+        <filter id="pinkGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ff7675" flood-opacity="0.8"/>
+        </filter>
+        <!-- Yellow Glow Filter -->
+        <filter id="yellowGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ffd166" flood-opacity="0.8"/>
+        </filter>
+      </defs>
+    `;
+
+    const contentRect = content.getBoundingClientRect();
+    const scale = state.scale || 1;
+
+    function getNodeCoords(id) {
+      const el = document.getElementById(`node-${id}`);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      const x = (r.left - contentRect.left) / scale;
+      const y = (r.top - contentRect.top) / scale;
+      const w = r.width / scale;
+      const h = r.height / scale;
+      return {
+        left: x,
+        right: x + w,
+        top: y,
+        bottom: y + h,
+        centerX: x + w / 2,
+        centerY: y + h / 2,
+        w,
+        h
+      };
+    }
+
+    let pathsHtml = "";
+
+    conns.forEach(conn => {
+      // 1. Marriage Line (Pink #ff7675)
+      if (conn.type === "marriage") {
+        const a = getNodeCoords(conn.from);
+        const b = getNodeCoords(conn.to);
+        if (a && b) {
+          const leftNode = a.centerX <= b.centerX ? a : b;
+          const rightNode = a.centerX <= b.centerX ? b : a;
+
+          if (Math.abs(leftNode.centerY - rightNode.centerY) < 45) {
+            // Horizontal side-by-side marriage connector
+            const y = (leftNode.centerY + rightNode.centerY) / 2;
+            const x1 = leftNode.right;
+            const x2 = rightNode.left;
+            const midX = (x1 + x2) / 2;
+
+            pathsHtml += `
+              <g class="rk-line-marriage">
+                <line x1="${x1}" y1="${y - 2}" x2="${x2}" y2="${y - 2}" stroke="#ff7675" stroke-width="2" filter="url(#pinkGlow)"/>
+                <line x1="${x1}" y1="${y + 2}" x2="${x2}" y2="${y + 2}" stroke="#ff7675" stroke-width="2" filter="url(#pinkGlow)"/>
+                <circle cx="${midX}" cy="${y}" r="4" fill="#ff7675" stroke="#ffeaa7" stroke-width="1.5"/>
+              </g>
+            `;
+          } else {
+            // Stepped marriage connector across rows
+            const x1 = leftNode.right;
+            const y1 = leftNode.centerY;
+            const x2 = rightNode.left;
+            const y2 = rightNode.centerY;
+            const midX = (x1 + x2) / 2;
+
+            pathsHtml += `
+              <g class="rk-line-marriage">
+                <path d="M ${x1},${y1} L ${midX},${y1} L ${midX},${y2} L ${x2},${y2}" stroke="#ff7675" stroke-width="2.5" fill="none" filter="url(#pinkGlow)"/>
+                <circle cx="${midX}" cy="${(y1 + y2) / 2}" r="4" fill="#ff7675" stroke="#ffeaa7" stroke-width="1.5"/>
+              </g>
+            `;
+          }
+        }
+      }
+
+      // 2. Parent-to-Child (Yellow #ffd166)
+      else if (conn.type === "parent_child") {
+        const parent = getNodeCoords(conn.from);
+        if (parent && conn.to && conn.to.length > 0) {
+          const children = conn.to.map(getNodeCoords).filter(Boolean);
+          if (children.length > 0) {
+            const minChildTop = Math.min(...children.map(c => c.top));
+            const startX = parent.centerX;
+            const startY = parent.bottom;
+            const railY = startY < minChildTop ? startY + (minChildTop - startY) * 0.45 : startY + 24;
+
+            pathsHtml += `
+              <g class="rk-line-parent-child">
+                <!-- Drop line from parent -->
+                <line x1="${startX}" y1="${startY}" x2="${startX}" y2="${railY}" stroke="#ffd166" stroke-width="2.5" filter="url(#yellowGlow)"/>
+                <circle cx="${startX}" cy="${startY}" r="3.5" fill="#ffd166"/>
+                <circle cx="${startX}" cy="${railY}" r="3" fill="#ffd166"/>
+            `;
+
+            if (children.length === 1) {
+              const ch = children[0];
+              pathsHtml += `
+                <path d="M ${startX},${railY} L ${ch.centerX},${railY} L ${ch.centerX},${ch.top}" stroke="#ffd166" stroke-width="2.5" fill="none" marker-end="url(#arrowYellow)" filter="url(#yellowGlow)"/>
+              `;
+            } else {
+              const minX = Math.min(startX, ...children.map(c => c.centerX));
+              const maxX = Math.max(startX, ...children.map(c => c.centerX));
+
+              pathsHtml += `
+                <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round" filter="url(#yellowGlow)"/>
+              `;
+
+              children.forEach(ch => {
+                pathsHtml += `
+                  <line x1="${ch.centerX}" y1="${railY}" x2="${ch.centerX}" y2="${ch.top}" stroke="#ffd166" stroke-width="2.5" marker-end="url(#arrowYellow)" filter="url(#yellowGlow)"/>
+                  <circle cx="${ch.centerX}" cy="${railY}" r="2.5" fill="#ffd166"/>
+                `;
+              });
+            }
+            pathsHtml += `</g>`;
+          }
+        }
+      }
+
+      // 3. Siblings (Blue Rail #74b9ff)
+      else if (conn.type === "siblings") {
+        const members = conn.members.map(getNodeCoords).filter(Boolean);
+        if (members.length >= 2) {
+          members.sort((a, b) => a.centerX - b.centerX);
+          const minX = members[0].centerX;
+          const maxX = members[members.length - 1].centerX;
+          const avgTop = members.reduce((sum, m) => sum + m.top, 0) / members.length;
+          const railY = avgTop - 14;
+
+          pathsHtml += `
+            <g class="rk-line-sibling">
+              <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#74b9ff" stroke-width="2.5" stroke-linecap="round"/>
+          `;
+
+          members.forEach(m => {
+            pathsHtml += `
+              <line x1="${m.centerX}" y1="${railY}" x2="${m.centerX}" y2="${m.top}" stroke="#74b9ff" stroke-width="2.5"/>
+              <circle cx="${m.centerX}" cy="${railY}" r="3" fill="#74b9ff"/>
+              <circle cx="${m.centerX}" cy="${m.top}" r="2.5" fill="#74b9ff"/>
+            `;
+          });
+          pathsHtml += `</g>`;
+        }
+      }
+
+      // 4. Guru-to-Disciple (Purple Dashed #a29bfe)
+      else if (conn.type === "guru_disciple") {
+        const guru = getNodeCoords(conn.from);
+        if (guru && conn.to) {
+          const disciples = conn.to.map(getNodeCoords).filter(Boolean);
+          disciples.forEach(d => {
+            const startX = guru.centerX;
+            const startY = guru.bottom;
+            const endX = d.centerX;
+            const endY = d.top;
+            const midY = (startY + endY) / 2;
+
+            pathsHtml += `
+              <g class="rk-line-guru">
+                <path d="M ${startX},${startY} C ${startX},${midY} ${endX},${midY} ${endX},${endY}" stroke="#a29bfe" stroke-width="2" stroke-dasharray="6,4" fill="none"/>
+                <circle cx="${startX}" cy="${startY}" r="3" fill="#a29bfe"/>
+                <circle cx="${endX}" cy="${endY}" r="3" fill="#a29bfe"/>
+              </g>
+            `;
+          });
+        }
+      }
+    });
+
+    svg.innerHTML += pathsHtml;
+  }
+
+  /* =====================================================
+     4. RENDER IKSHVAKU DYNASTY (39 GENERATIONS)
   ===================================================== */
   function renderIkshvakuDynasty(container) {
     const data = getData();
     if (!data) return;
     const lineage = data.IKSHVAKU_LINEAGE || [];
 
-    // Milestone ids
     const MILESTONES = [
-      "brahma", "marichi", "kashyapa", "surya", "vaivasvata_manu",
+      "brahma", "marichi", "kashyapa", "vivasvan", "vaivasvata_manu",
       "ikshvaku", "trishanku", "mandhata", "sagara", "bhagiratha",
       "kakutstha", "raghu", "ambarisha", "aja", "dasharatha", "sri_rama"
     ];
@@ -252,7 +633,7 @@
     lineage.forEach((king) => {
       const isMilestone = MILESTONES.includes(king.id);
       if (state.ikshvakuMode === "milestones" && !isMilestone) {
-        return; // Filter out non-milestone in simplified view
+        return;
       }
 
       html += `
@@ -278,7 +659,6 @@
     html += `</div>`;
     container.innerHTML = html;
 
-    // Attach click listeners to cards
     container.querySelectorAll(".rk-lineage-row").forEach(el => {
       el.addEventListener("click", () => {
         const id = el.getAttribute("data-char-id");
@@ -286,7 +666,6 @@
       });
     });
 
-    // Milestone / Full buttons
     const bMilestones = document.getElementById("btnIkMilestones");
     const bFull = document.getElementById("btnIkFull");
     if (bMilestones) {
@@ -304,7 +683,7 @@
   }
 
   /* =====================================================
-     4. RENDER HIERARCHICAL FAMILY TREES
+     5. RENDER HIERARCHICAL FAMILY TREES
   ===================================================== */
   function renderHierarchicalTree(catId, container) {
     const data = getData();
@@ -319,35 +698,116 @@
       return;
     }
 
-    let html = `<div style="display:flex; flex-direction:column; align-items:center; width:100%; gap:2.5rem;">`;
+    let html = `<div class="rk-tree-flowchart-wrap">`;
 
     treeSpec.generations.forEach((gen) => {
       html += `
-        <div class="rk-tree-level">
+        <div class="rk-tree-level" data-level="${gen.level}">
           <div class="rk-level-title-badge">
             ${state.lang === 'te' ? gen.titleTelugu : gen.titleEnglish}
           </div>
           <div class="rk-nodes-row">
       `;
 
-      if (catId === "dasharatha" && gen.level === 3) {
-        // Render 4 brothers with their married wives in couple clusters!
+      // Custom high-fidelity cluster layouts
+      if (catId === "dasharatha" && gen.level === 1) {
+        html += `
+          <div class="rk-couple-cluster" id="cluster-aja-indumati">
+            ${renderNodeCard(charMap["aja"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["indumati"])}
+          </div>
+        `;
+      } else if (catId === "dasharatha" && gen.level === 3) {
         const couples = [
-          { husband: "sri_rama", wife: "sita" },
-          { husband: "lakshmana", wife: "urmila" },
-          { husband: "bharata", wife: "mandavi" },
-          { husband: "shatrughna", wife: "shrutakirti" }
+          { c1: "shanta", c2: "rishyashringa" },
+          { c1: "sri_rama", c2: "sita" },
+          { c1: "lakshmana", c2: "urmila" },
+          { c1: "bharata", c2: "mandavi" },
+          { c1: "shatrughna", c2: "shrutakirti" }
         ];
 
         couples.forEach(cp => {
-          html += `
-            <div class="rk-couple-cluster">
-              ${renderNodeCard(charMap[cp.husband])}
-              <span class="rk-marriage-heart">💍</span>
-              ${renderNodeCard(charMap[cp.wife])}
-            </div>
-          `;
+          if (charMap[cp.c1] && charMap[cp.c2]) {
+            html += `
+              <div class="rk-couple-cluster" id="cluster-${cp.c1}-${cp.c2}">
+                ${renderNodeCard(charMap[cp.c1])}
+                <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+                ${renderNodeCard(charMap[cp.c2])}
+              </div>
+            `;
+          }
         });
+      } else if (catId === "janaka" && gen.level === 3) {
+        const couples = [
+          { c1: "sita", c2: "sri_rama" },
+          { c1: "urmila", c2: "lakshmana" },
+          { c1: "mandavi", c2: "bharata" },
+          { c1: "shrutakirti", c2: "shatrughna" }
+        ];
+
+        couples.forEach(cp => {
+          if (charMap[cp.c1] && charMap[cp.c2]) {
+            html += `
+              <div class="rk-couple-cluster" id="cluster-${cp.c1}-${cp.c2}">
+                ${renderNodeCard(charMap[cp.c1])}
+                <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+                ${renderNodeCard(charMap[cp.c2])}
+              </div>
+            `;
+          }
+        });
+      } else if (catId === "vanara" && gen.level === 1) {
+        html += `
+          <div class="rk-couple-cluster" id="cluster-kesari-anjana">
+            ${renderNodeCard(charMap["kesari"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["anjana"])}
+          </div>
+          ${charMap["jambavan"] ? renderNodeCard(charMap["jambavan"]) : ""}
+        `;
+      } else if (catId === "vanara" && gen.level === 2) {
+        html += `
+          <div class="rk-couple-cluster" id="cluster-vali-tara">
+            ${renderNodeCard(charMap["vali"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["tara"])}
+          </div>
+          <div class="rk-couple-cluster" id="cluster-sugriva-ruma">
+            ${renderNodeCard(charMap["sugriva"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["ruma"])}
+          </div>
+          ${charMap["hanuman"] ? renderNodeCard(charMap["hanuman"]) : ""}
+        `;
+      } else if (catId === "rakshasa" && gen.level === 2) {
+        html += `
+          <div class="rk-couple-cluster" id="cluster-vishrava-kaikasi">
+            ${renderNodeCard(charMap["vishrava"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["kaikasi"])}
+          </div>
+        `;
+      } else if (catId === "rakshasa" && gen.level === 3) {
+        html += `
+          ${charMap["kubera"] ? renderNodeCard(charMap["kubera"]) : ""}
+          <div class="rk-couple-cluster" id="cluster-ravana-mandodari">
+            ${renderNodeCard(charMap["ravana"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["mandodari"])}
+          </div>
+          <div class="rk-couple-cluster" id="cluster-kumbhakarna-vajrajvala">
+            ${renderNodeCard(charMap["kumbhakarna"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["vajrajvala"])}
+          </div>
+          <div class="rk-couple-cluster" id="cluster-vibhishana-sarama">
+            ${renderNodeCard(charMap["vibhishana"])}
+            <span class="rk-marriage-heart" title="వివాహ బంధం">💍</span>
+            ${renderNodeCard(charMap["sarama"])}
+          </div>
+          ${charMap["shurpanakha"] ? renderNodeCard(charMap["shurpanakha"]) : ""}
+        `;
       } else {
         gen.members.forEach(mId => {
           const charObj = charMap[mId];
@@ -370,7 +830,6 @@
     container.querySelectorAll(".rk-char-node").forEach(card => {
       const charId = card.getAttribute("data-char-id");
 
-      // Hover network highlight
       card.addEventListener("mouseenter", () => {
         if (state.highlightActive) highlightNetwork(charId);
       });
@@ -378,10 +837,14 @@
         if (state.highlightActive) clearNetworkHighlight();
       });
 
-      // Click to open profile
       card.addEventListener("click", () => {
         openCharacterProfile(charId);
       });
+    });
+
+    // Draw SVG connecting lines after DOM paint
+    requestAnimationFrame(() => {
+      setTimeout(drawTreeConnections, 50);
     });
   }
 
@@ -403,7 +866,7 @@
   }
 
   /* =====================================================
-     5. HIGHLIGHT FAMILY NETWORK
+     6. HIGHLIGHT FAMILY NETWORK
   ===================================================== */
   function highlightNetwork(charId) {
     const data = getData();
@@ -414,42 +877,35 @@
     const target = charMap[charId];
     if (!target) return;
 
-    // Remove old highlights
     clearNetworkHighlight();
 
-    const targetNode = document.getElementById(`node-${charId}`);
-    if (targetNode) targetNode.classList.add("highlight-target");
+    const targetEl = document.getElementById(`node-${charId}`);
+    if (targetEl) targetEl.classList.add("highlight-target");
 
-    // Highlight parents
-    [target.fatherId, target.motherId].forEach(pId => {
-      if (pId) {
-        const el = document.getElementById(`node-${pId}`);
-        if (el) el.classList.add("highlight-parent");
-      }
+    (target.fatherId ? [target.fatherId] : []).concat(target.motherId ? [target.motherId] : []).forEach(pId => {
+      const el = document.getElementById(`node-${pId}`);
+      if (el) el.classList.add("highlight-parent");
     });
 
-    // Highlight spouses
     (target.spouseIds || []).forEach(sId => {
       const el = document.getElementById(`node-${sId}`);
       if (el) el.classList.add("highlight-spouse");
     });
 
-    // Highlight children
     (target.childrenIds || []).forEach(cId => {
       const el = document.getElementById(`node-${cId}`);
       if (el) el.classList.add("highlight-child");
     });
 
-    // Highlight siblings
-    (target.siblingIds || []).forEach(sId => {
-      const el = document.getElementById(`node-${sId}`);
+    (target.siblingIds || []).forEach(sbId => {
+      const el = document.getElementById(`node-${sbId}`);
       if (el) el.classList.add("highlight-sibling");
     });
   }
 
   function clearNetworkHighlight() {
-    document.querySelectorAll(".rk-char-node").forEach(node => {
-      node.classList.remove(
+    document.querySelectorAll(".rk-char-node").forEach(el => {
+      el.classList.remove(
         "highlight-target",
         "highlight-parent",
         "highlight-spouse",
@@ -460,33 +916,31 @@
   }
 
   /* =====================================================
-     6. CHARACTER PROFILE MODAL
+     7. CHARACTER PROFILE MODAL
   ===================================================== */
   function openCharacterProfile(charId) {
     const data = getData();
     if (!data) return;
 
-    const charMap = {};
-    (data.CHARACTERS || []).forEach(c => { charMap[c.id] = c; });
+    let char = (data.CHARACTERS || []).find(c => c.id === charId);
+    let isKingLineage = false;
 
-    let char = charMap[charId];
-    // If not in CHARACTERS, check IKSHVAKU_LINEAGE
     if (!char && data.IKSHVAKU_LINEAGE) {
-      const k = data.IKSHVAKU_LINEAGE.find(x => x.id === charId);
-      if (k) {
+      const king = data.IKSHVAKU_LINEAGE.find(k => k.id === charId);
+      if (king) {
+        isKingLineage = true;
         char = {
-          id: k.id,
-          nameTelugu: k.nameTe,
-          nameEnglish: k.nameEn,
-          kingdom: "ఇక్ష్వాకు రాజవంశం (సూర్యవంశం)",
-          descriptionTelugu: k.roleTe,
-          descriptionEnglish: `${k.nameEn} is the ${k.gen}th king in the Ikshvaku Dynasty according to Valmiki Ramayana Bala Kanda Sarga 70.`,
-          citation: k.sarga || "బాలకాండ 70వ సర్గ",
-          roleInRamayana: k.titleTe || "ఇక్ష్వాకు చక్రవర్తి",
-          fatherId: null,
-          spouseIds: [],
-          childrenIds: [],
-          siblingIds: []
+          id: king.id,
+          nameTelugu: king.nameTe,
+          nameEnglish: king.nameEn,
+          category: "ikshvaku",
+          kingdom: "అయోధ్య (Ayodhya)",
+          descriptionTelugu: king.roleTe,
+          descriptionEnglish: `Generation #${king.gen} in the Solar Dynasty.`,
+          roleInRamayana: king.titleTe,
+          kandaReferences: king.sarga || "వాల్మీకి రామాయణం, బాలకాండ సర్గ 70",
+          sourceTradition: "శ్రీమద్వాల్మీకి రామాయణం",
+          avatar: "👑"
         };
       }
     }
@@ -494,74 +948,160 @@
     if (!char) return;
 
     const modal = document.getElementById("profileModal");
-    const container = document.getElementById("profileModalContent");
-    if (!modal || !container) return;
+    const modalContent = document.getElementById("profileModalContent");
+    if (!modal || !modalContent) return;
 
-    const avatar = getAvatar(char.id);
-
-    // Build relations chips
-    function makeChip(id, prefix) {
-      if (!id) return "";
-      const other = charMap[id];
-      const name = other ? other.nameTelugu : id;
-      return `
-        <span class="rk-prof-chip" onclick="window.RamayanaExplorer.openCharacterProfile('${id}')">
-          ${prefix}: ${name}
-        </span>
-      `;
-    }
-
-    let relationsHtml = "";
-    if (char.fatherId) relationsHtml += makeChip(char.fatherId, "తండ్రి");
-    if (char.motherId) relationsHtml += makeChip(char.motherId, "తల్లి");
-    (char.spouseIds || []).forEach(s => { relationsHtml += makeChip(s, "భార్య/భర్త"); });
-    (char.siblingIds || []).forEach(s => { relationsHtml += makeChip(s, "సోదరుడు/సోదరి"); });
-    (char.childrenIds || []).forEach(c => { relationsHtml += makeChip(c, "సంతానం"); });
-    (char.guruIds || []).forEach(g => { relationsHtml += makeChip(g, "గురువు"); });
-
-    container.innerHTML = `
+    modalContent.innerHTML = `
       <div class="rk-profile-top">
-        <div class="rk-profile-avatar-wrap">${avatar}</div>
+        <div class="rk-profile-avatar-wrap">
+          <span id="modalCharAvatar">${getAvatar(char.id)}</span>
+        </div>
         <div class="rk-profile-title-block">
-          <h2>${char.nameTelugu}</h2>
-          <div class="rk-prof-en">${char.nameEnglish}</div>
-          ${char.kingdom ? `<div class="rk-prof-kingdom">🏛️ ${char.kingdom}</div>` : ''}
-          ${char.roleInRamayana ? `<div style="font-size:0.86rem; color:var(--rk-gold-main); margin-top:4px;">${char.roleInRamayana}</div>` : ''}
+          <h2 id="modalCharNameTe">${char.nameTelugu}</h2>
+          <div class="rk-prof-en" id="modalCharNameEn">${char.nameEnglish}</div>
+          <div class="rk-prof-kingdom" id="modalCharRoleBadge">🏛️ ${char.kingdom || "శ్రీమద్రామాయణం"}</div>
         </div>
       </div>
+      <div class="rk-profile-body">
+        <div class="rk-profile-section-title">📜 సంక్షిప్త పరిచయం (About)</div>
+        <div class="rk-profile-desc" id="modalCharBioTe">${char.descriptionTelugu || char.roleTe || ""}</div>
+        ${char.descriptionEnglish ? `<div class="rk-profile-desc" style="font-family:var(--font-ui); font-size:0.88rem; color:var(--rk-text-dim);" id="modalCharBioEn">${char.descriptionEnglish}</div>` : ""}
 
-      <div class="rk-profile-section-title">📜 పరిచయం & విశేషాలు</div>
-      <p class="rk-profile-desc">${char.descriptionTelugu || ''}</p>
-      ${char.descriptionEnglish ? `<p class="rk-profile-desc" style="font-family:var(--font-ui); font-size:0.88rem; color:var(--rk-text-dim);">${char.descriptionEnglish}</p>` : ''}
+        <div class="rk-profile-section-title">🌟 రామాయణంలో ప్రాముఖ్యత (Significance)</div>
+        <div class="rk-profile-desc" id="modalRoleInRamayana">${char.roleInRamayana || "శ్రీమద్రామాయణంలో విశిష్ట పాత్ర."}</div>
 
-      ${relationsHtml ? `
-        <div class="rk-profile-section-title">🔗 కుటుంబ & బంధుత్వ సంబంధాలు</div>
-        <div class="rk-profile-chips-grid">
-          ${relationsHtml}
+        <div class="rk-res-meta-row" style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid rgba(255,209,102,0.12);">
+          <span id="modalCitations">📖 ప్రమాణం: <strong>${char.kandaReferences || 'బాలకాండ 70'}</strong></span>
+          <span>సనాతన ధర్మ గ్రంథాలంబన</span>
         </div>
-      ` : ''}
-
-      <div class="rk-prof-citation-box">
-        <strong>📖 వాల్మీకి రామాయణ ప్రస్తావన:</strong> ${char.citation || char.kandaReferences || 'శ్రీమద్వాల్మీకి రామాయణం'}
       </div>
     `;
 
     modal.classList.add("active");
+    state.selectedCharId = charId;
   }
 
   function closeCharacterProfile() {
     const modal = document.getElementById("profileModal");
     if (modal) modal.classList.remove("active");
+    state.selectedCharId = null;
   }
 
   /* =====================================================
-     7. SEARCH AUTOCOMPLETE & LIVE FILTER
+     8. SEARCH AUTOCOMPLETE & JUMP
   ===================================================== */
   function initSearch() {
-    const input = document.getElementById("characterSearchInput");
+    const input = document.getElementById("heroSearchInput");
     const resultsBox = document.getElementById("searchResultsBox");
-    const clearBtn = document.getElementById("searchClearBtn");
     if (!input || !resultsBox) return;
+
+    const data = getData();
+    if (!data) return;
+
+    const allItems = [];
+    (data.CHARACTERS || []).forEach(c => {
+      allItems.push({
+        id: c.id,
+        nameTe: c.nameTelugu,
+        nameEn: c.nameEnglish,
+        role: c.roleInRamayana || c.kingdom,
+        category: c.category,
+        avatar: getAvatar(c.id)
+      });
+    });
+
+    (data.IKSHVAKU_LINEAGE || []).forEach(k => {
+      if (!allItems.some(x => x.id === k.id)) {
+        allItems.push({
+          id: k.id,
+          nameTe: k.nameTe,
+          nameEn: k.nameEn,
+          role: `ఇక్ష్వాకు తరం #${k.gen} - ${k.titleTe}`,
+          category: "ikshvaku",
+          avatar: "👑"
+        });
+      }
+    });
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        resultsBox.innerHTML = "";
+        resultsBox.classList.remove("active");
+        return;
+      }
+
+      const matches = allItems.filter(item => {
+        return (
+          item.nameTe.toLowerCase().includes(q) ||
+          item.nameEn.toLowerCase().includes(q) ||
+          (item.role && item.role.toLowerCase().includes(q))
+        );
+      }).slice(0, 8);
+
+      if (matches.length === 0) {
+        resultsBox.innerHTML = `<div style="padding:1rem; text-align:center; color:var(--rk-text-dim);">పాత్ర లభించలేదు</div>`;
+        resultsBox.classList.add("active");
+        return;
+      }
+
+      let html = "";
+      matches.forEach(item => {
+        html += `
+          <div class="rk-search-result-item" data-id="${item.id}" data-cat="${item.category}">
+            <div class="rk-search-res-left">
+              <span class="rk-search-res-avatar">${item.avatar}</span>
+              <div>
+                <div class="rk-search-res-name-te">${item.nameTe}</div>
+                <div class="rk-search-res-name-en">${item.nameEn}</div>
+              </div>
+            </div>
+            <span class="rk-search-res-category">${item.role || ''}</span>
+          </div>
+        `;
+      });
+
+      resultsBox.innerHTML = html;
+      resultsBox.classList.add("active");
+
+      resultsBox.querySelectorAll(".rk-search-result-item").forEach(el => {
+        el.addEventListener("click", () => {
+          const id = el.getAttribute("data-id");
+          const cat = el.getAttribute("data-cat");
+          resultsBox.classList.remove("active");
+          input.value = "";
+          if (cat && cat !== state.currentCategory) {
+            selectCategory(cat);
+          }
+          openCharacterProfile(id);
+        });
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".rk-search-wrapper")) {
+        resultsBox.classList.remove("active");
+      }
+    });
+  }
+
+  /* =====================================================
+     9. SEARCHABLE RELATIONSHIP FINDER COMPONENT
+  ===================================================== */
+  function initRelationshipFinderUI() {
+    const input1 = document.getElementById("charInput1");
+    const input2 = document.getElementById("charInput2");
+    const drop1 = document.getElementById("pickerDrop1");
+    const drop2 = document.getElementById("pickerDrop2");
+    const arrow1 = document.getElementById("arrowBtn1");
+    const arrow2 = document.getElementById("arrowBtn2");
+    const avatar1 = document.getElementById("pickerAvatar1");
+    const avatar2 = document.getElementById("pickerAvatar2");
+    const sel1 = document.getElementById("charSelect1");
+    const sel2 = document.getElementById("charSelect2");
+    const btnFind = document.getElementById("btnFindRelationship");
+    const btnSwap = document.getElementById("btnSwapChars");
+    const resultCard = document.getElementById("relationshipResultCard");
 
     const data = getData();
     if (!data) return;
@@ -572,8 +1112,8 @@
         id: c.id,
         nameTe: c.nameTelugu,
         nameEn: c.nameEnglish,
-        role: c.kingdom || "",
-        category: c.category || ""
+        role: c.roleInRamayana || c.kingdom || "",
+        avatar: getAvatar(c.id)
       });
     });
 
@@ -583,186 +1123,14 @@
           id: k.id,
           nameTe: k.nameTe,
           nameEn: k.nameEn,
-          role: `ఇక్ష్వాకు ${k.gen}వ తరం`,
-          category: "ikshvaku"
-        });
-      }
-    });
-
-    input.addEventListener("input", () => {
-      const q = input.value.trim().toLowerCase();
-      if (clearBtn) clearBtn.style.display = q ? "block" : "none";
-
-      if (!q) {
-        resultsBox.classList.remove("active");
-        resultsBox.innerHTML = "";
-        return;
-      }
-
-      const matches = allChars.filter(c =>
-        c.nameTe.toLowerCase().includes(q) ||
-        c.nameEn.toLowerCase().includes(q) ||
-        c.role.toLowerCase().includes(q)
-      ).slice(0, 8);
-
-      if (matches.length === 0) {
-        resultsBox.innerHTML = `<div style="padding:1rem; text-align:center; color:var(--rk-text-dim);">పాత్ర కనుగొనబడలేదు</div>`;
-        resultsBox.classList.add("active");
-        return;
-      }
-
-      let html = "";
-      matches.forEach(m => {
-        html += `
-          <div class="rk-search-item" data-char-id="${m.id}" data-cat="${m.category}">
-            <div class="rk-search-item-left">
-              <span class="rk-search-item-avatar">${getAvatar(m.id)}</span>
-              <div>
-                <div class="rk-search-item-name">${m.nameTe}</div>
-                <div class="rk-search-item-en">${m.nameEn}</div>
-              </div>
-            </div>
-            <span class="rk-search-item-badge">${m.role}</span>
-          </div>
-        `;
-      });
-
-      resultsBox.innerHTML = html;
-      resultsBox.classList.add("active");
-
-      resultsBox.querySelectorAll(".rk-search-item").forEach(item => {
-        item.addEventListener("click", () => {
-          const charId = item.getAttribute("data-char-id");
-          const cat = item.getAttribute("data-cat");
-          resultsBox.classList.remove("active");
-          input.value = "";
-          if (clearBtn) clearBtn.style.display = "none";
-
-          // Switch category if needed
-          if (cat && cat !== state.currentCategory) {
-            selectCategory(cat);
-          }
-
-          // Open profile modal
-          openCharacterProfile(charId);
-        });
-      });
-    });
-
-    if (clearBtn) {
-      clearBtn.addEventListener("click", () => {
-        input.value = "";
-        clearBtn.style.display = "none";
-        resultsBox.classList.remove("active");
-      });
-    }
-
-    // Close dropdown on outside click
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".rk-search-box-wrap")) {
-        resultsBox.classList.remove("active");
-      }
-    });
-  }
-
-  /* =====================================================
-     8. CATEGORY SELECTOR & WORKSPACE RENDERER
-  ===================================================== */
-  function selectCategory(catId) {
-    state.currentCategory = catId;
-
-    // Update Category Tab buttons
-    document.querySelectorAll(".rk-cat-tab-btn").forEach(btn => {
-      if (btn.getAttribute("data-cat") === catId) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
-    });
-
-    // Update Toolbar Title & Subtitle
-    const data = getData();
-    if (data && data.CATEGORIES) {
-      const catMeta = data.CATEGORIES.find(c => c.id === catId);
-      if (catMeta) {
-        const iconEl = document.getElementById("wsCatIcon");
-        const titleEl = document.getElementById("wsCatTitle");
-        const subEl = document.getElementById("wsCatSubtitle");
-        if (iconEl) iconEl.textContent = catMeta.icon;
-        if (titleEl) titleEl.textContent = catMeta.titleTelugu;
-        if (subEl) subEl.textContent = catMeta.titleEnglish;
-      }
-    }
-
-    renderActiveCategory();
-    resetZoom();
-
-    // Smooth scroll to workspace
-    const ws = document.getElementById("treeWorkspace");
-    if (ws) {
-      ws.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
-
-  function renderActiveCategory() {
-    const content = document.getElementById("treeContent");
-    if (!content) return;
-
-    if (state.currentCategory === "ikshvaku") {
-      renderIkshvakuDynasty(content);
-    } else {
-      renderHierarchicalTree(state.currentCategory, content);
-    }
-  }
-
-  /* =====================================================
-     9. RELATIONSHIP FINDER UI HANDLER (SEARCHABLE PICKERS)
-  ===================================================== */
-  function initRelationshipFinderUI() {
-    const input1 = document.getElementById("charInput1");
-    const input2 = document.getElementById("charInput2");
-    const avatar1 = document.getElementById("pickerAvatar1");
-    const avatar2 = document.getElementById("pickerAvatar2");
-    const drop1 = document.getElementById("pickerDrop1");
-    const drop2 = document.getElementById("pickerDrop2");
-    const arrow1 = document.getElementById("arrowBtn1");
-    const arrow2 = document.getElementById("arrowBtn2");
-    const btnFind = document.getElementById("btnFindRelationship");
-    const btnSwap = document.getElementById("btnSwapChars");
-    const resultCard = document.getElementById("relationshipResultCard");
-    const sel1 = document.getElementById("charSelect1");
-    const sel2 = document.getElementById("charSelect2");
-
-    const data = getData();
-    if (!data) return;
-
-    // Collect all unique characters
-    const allChars = [];
-    (data.CHARACTERS || []).forEach(c => {
-      allChars.push({
-        id: c.id,
-        nameTe: c.nameTelugu,
-        nameEn: c.nameEnglish,
-        role: c.kingdom || "",
-        avatar: getAvatar(c.id)
-      });
-    });
-
-    (data.IKSHVAKU_LINEAGE || []).forEach(k => {
-      if (!allChars.some(o => o.id === k.id)) {
-        allChars.push({
-          id: k.id,
-          nameTe: k.nameTe,
-          nameEn: k.nameEn,
-          role: `ఇక్ష్వాకు ${k.gen}వ తరం`,
-          avatar: getAvatar(k.id)
+          role: `ఇక్ష్వాకు #${k.gen}`,
+          avatar: "👑"
         });
       }
     });
 
     allChars.sort((a, b) => a.nameTe.localeCompare(b.nameTe, "te"));
 
-    // Populate hidden select for fallback/programmatic access
     if (sel1 && sel2) {
       let optsHtml = `<option value="">-- పాత్రను ఎంచుకోండి --</option>`;
       allChars.forEach(c => {
@@ -803,13 +1171,19 @@
       dropEl.innerHTML = html;
       dropEl.classList.add("active");
 
+      // Handle pointerdown/mousedown for instant touch selection without 300ms mobile lag
       dropEl.querySelectorAll(".rk-picker-item").forEach(item => {
-        item.addEventListener("click", () => {
+        const handleSelect = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const id = item.getAttribute("data-id");
           const found = allChars.find(x => x.id === id);
           if (found) onSelect(found);
           dropEl.classList.remove("active");
-        });
+        };
+
+        item.addEventListener("pointerdown", handleSelect);
+        item.addEventListener("click", handleSelect);
       });
     }
 
@@ -831,7 +1205,6 @@
       computeAndShow();
     }
 
-    // Input 1 listeners
     if (input1) {
       input1.addEventListener("focus", () => renderDropdown(drop1, "", selectChar1));
       input1.addEventListener("input", () => renderDropdown(drop1, input1.value, selectChar1));
@@ -847,7 +1220,6 @@
       });
     }
 
-    // Input 2 listeners
     if (input2) {
       input2.addEventListener("focus", () => renderDropdown(drop2, "", selectChar2));
       input2.addEventListener("input", () => renderDropdown(drop2, input2.value, selectChar2));
@@ -863,13 +1235,11 @@
       });
     }
 
-    // Close dropdowns on click outside
     document.addEventListener("click", (e) => {
       if (!e.target.closest("#pickerWrap1") && drop1) drop1.classList.remove("active");
       if (!e.target.closest("#pickerWrap2") && drop2) drop2.classList.remove("active");
     });
 
-    // Compute and display
     function computeAndShow() {
       const id1 = (input1 && input1.getAttribute("data-selected-id")) || (sel1 && sel1.value) || "sri_rama";
       const id2 = (input2 && input2.getAttribute("data-selected-id")) || (sel2 && sel2.value) || "bharata";
@@ -892,12 +1262,13 @@
       if (detailsEl) detailsEl.textContent = res.detailsTe || "";
       if (citationEl) citationEl.textContent = `📖 వాల్మీకి రామాయణ ప్రమాణం: ${res.kanda || 'శ్రీమద్వాల్మీకి రామాయణం'}`;
 
-      if (resultCard) resultCard.classList.add("active");
+      if (resultCard) {
+        resultCard.classList.add("active");
+      }
     }
 
     if (btnFind) btnFind.addEventListener("click", computeAndShow);
 
-    // Swap button
     if (btnSwap) {
       btnSwap.addEventListener("click", () => {
         const id1 = (input1 && input1.getAttribute("data-selected-id")) || "sri_rama";
@@ -911,7 +1282,6 @@
       });
     }
 
-    // Quick preset buttons
     document.querySelectorAll(".rk-preset-pill").forEach(pill => {
       pill.addEventListener("click", () => {
         const p1 = pill.getAttribute("data-c1");
@@ -925,7 +1295,6 @@
       });
     });
 
-    // Default selection
     const defaultC1 = allChars.find(x => x.id === "sri_rama");
     const defaultC2 = allChars.find(x => x.id === "bharata");
     if (defaultC1) {
@@ -947,22 +1316,66 @@
   }
 
   /* =====================================================
-     10. INITIALIZATION
+     10. CATEGORY SELECTOR & WORKSPACE RENDERER
+  ===================================================== */
+  function selectCategory(catId) {
+    state.currentCategory = catId;
+
+    document.querySelectorAll(".rk-cat-tab-btn").forEach(btn => {
+      if (btn.getAttribute("data-cat") === catId) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    const data = getData();
+    if (data && data.CATEGORIES) {
+      const catMeta = data.CATEGORIES.find(c => c.id === catId);
+      if (catMeta) {
+        const iconEl = document.getElementById("wsCatIcon");
+        const titleEl = document.getElementById("wsCatTitle");
+        const subEl = document.getElementById("wsCatSubtitle");
+        if (iconEl) iconEl.textContent = catMeta.icon;
+        if (titleEl) titleEl.textContent = catMeta.titleTelugu;
+        if (subEl) subEl.textContent = catMeta.titleEnglish;
+      }
+    }
+
+    renderActiveCategory();
+    resetZoom();
+  }
+
+  function renderActiveCategory() {
+    const content = document.getElementById("treeContent");
+    if (!content) return;
+
+    if (state.currentCategory === "ikshvaku") {
+      renderIkshvakuDynasty(content);
+    } else {
+      renderHierarchicalTree(state.currentCategory, content);
+    }
+  }
+
+  /* =====================================================
+     11. INITIALIZATION & RESIZE
   ===================================================== */
   function init() {
     initPanZoom();
     initSearch();
     initRelationshipFinderUI();
 
-    // Category card clicks
     document.querySelectorAll(".rk-category-card").forEach(card => {
       card.addEventListener("click", () => {
         const catId = card.getAttribute("data-category");
-        if (catId) selectCategory(catId);
+        if (catId) {
+          selectCategory(catId);
+          const ws = document.getElementById("treeWorkspace");
+          if (ws) ws.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       });
     });
 
-    // Category Tab button clicks
     document.querySelectorAll(".rk-cat-tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const catId = btn.getAttribute("data-cat");
@@ -970,7 +1383,6 @@
       });
     });
 
-    // Language toggle
     const langBtn = document.getElementById("langToggleBtn");
     if (langBtn) {
       langBtn.addEventListener("click", () => {
@@ -980,7 +1392,6 @@
       });
     }
 
-    // Modal close handlers
     const modalClose = document.getElementById("modalCloseBtn");
     const modal = document.getElementById("profileModal");
     if (modalClose) modalClose.addEventListener("click", closeCharacterProfile);
@@ -990,16 +1401,23 @@
       });
     }
 
+    // Redraw SVG on window resize
+    window.addEventListener("resize", () => {
+      if (state.currentCategory !== "ikshvaku") {
+        drawTreeConnections();
+      }
+    });
+
     // Initial render
     selectCategory("dasharatha");
   }
 
-  // Global namespace export
   const RamayanaExplorer = {
     init,
     selectCategory,
     openCharacterProfile,
     closeCharacterProfile,
+    drawTreeConnections,
     state
   };
 
