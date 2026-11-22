@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="te">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; connect-src 'self' https://*.googleapis.com; base-uri 'self';">
+
+  <title>రామాయణ బంధుత్వాలు – Ramayana Relationships & Genealogy | సన్నివేశం</title>
+  <meta name="description" content="శ్రీమద్వాల్మీకి రామాయణంలోని పవిత్ర వంశవృక్షాలు, బంధుత్వాలు మరియు గురుశిష్య సంబంధాల ఇంటరాక్టివ్ దర్శిని.">
+  <link rel="icon" type="image/png" href="../images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- Ambient Gold Sparkles Canvas -->
+  <canvas id="ambientCanvas"></canvas>
+
+  <div class="rk-container">
+
+    <!-- Top Navigation Bar -->
+    <nav class="rk-nav">
+      <a href="../" class="rk-nav-back">
+        <span>←</span>
+        <span>ముఖ్య పేజీ (Home)</span>
+      </a>
+      <div class="rk-nav-brand">
+        <span>సన్నివేశం</span>
+        <span style="font-size: 0.85rem; color: var(--rk-text-dim); font-weight: 400;">• రామాయణ దర్శిని</span>
+      </div>
+      <button class="rk-nav-lang-btn" id="langToggleBtn">English</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="rk-hero">
+      <div class="rk-om-symbol">ॐ</div>
+      <h1 class="rk-hero-title">రామాయణ బంధుత్వాలు</h1>
+      <div class="rk-hero-subtitle">Ramayana Relationships & Genealogy</div>
+      <p class="rk-hero-desc">
+        రామాయణంలోని మహనీయ పాత్రలు, వారి వంశవృక్షాలు, కుటుంబ సంబంధాలు మరియు అనుబంధాలను తెలుసుకుందాం.
+        (శ్రీమద్వాల్మీకి రామాయణ మూల ప్రమాణాల ఆధారంగా రూపొందించబడింది)
+      </p>
+
+      <div class="rk-ornament-divider">
+        <span class="rk-ornament-line"></span>
+        <span class="rk-ornament-icon">⚜️</span>
+        <span class="rk-ornament-line"></span>
+      </div>
+
+      <!-- Character Search Bar -->
+      <div class="rk-search-box-wrap">
+        <div class="rk-search-input-group">
+          <span class="rk-search-icon">🔍</span>
+          <input 
+            type="text" 
+            class="rk-search-input" 
+            id="characterSearchInput" 
+            placeholder="పాత్ర పేరుతో వెతకండి (ఉదా: శ్రీరాముడు, సీత, లక్ష్మణుడు, వాలి, రావణుడు...)" 
+            autocomplete="off"
+          >
+          <button class="rk-search-clear" id="searchClearBtn" title="Clear search">✕</button>
+        </div>
+        <div class="rk-search-results" id="searchResultsBox"></div>
+      </div>
+    </header>
+
+    <!-- Category Cards Section -->
+    <section class="rk-categories-section">
+      <div class="rk-section-heading">
+        <h2 class="rk-section-title">ప్రధాన వంశవృక్షాలు & సంబంధాలు</h2>
+        <p class="rk-section-subtitle">అన్వేషించడానికి క్రింది విభాగాలలో ఒకదానిని ఎంచుకోండి</p>
+      </div>
+
+      <div class="rk-category-grid">
+        <!-- 1. Ikshvaku Dynasty -->
+        <article class="rk-category-card" data-category="ikshvaku">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">☀️</div>
+              <span class="rk-cat-badge">39 తరాలు</span>
+            </div>
+            <h3 class="rk-cat-title-te">ఇక్ష్వాకు వంశవృక్షం</h3>
+            <div class="rk-cat-title-en">Ikshvaku Dynasty • Solar Lineage</div>
+            <p class="rk-cat-desc">
+              సృష్టికర్త బ్రహ్మ దేవుని నుండి శ్రీరామచంద్రుని వరకు 39 తరాల పవిత్ర రాజవంశానుక్రమం (వాల్మీకి రామాయణం బాలకాండ సర్గ 70 ప్రకారం).
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">బాలకాండ సర్గ 70</span>
+            <span class="rk-cat-explore-btn">వంశాన్ని దర్శించండి →</span>
+          </div>
+        </article>
+
+        <!-- 2. Dasharatha Family -->
+        <article class="rk-category-card" data-category="dasharatha">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">🏹</div>
+              <span class="rk-cat-badge">ప్రధాన కుటుంబం</span>
+            </div>
+            <h3 class="rk-cat-title-te">దశరథ మహారాజు కుటుంబం</h3>
+            <div class="rk-cat-title-en">Dasharatha Family • Ayodhya Royalty</div>
+            <p class="rk-cat-desc">
+              దశరథ మహారాజు, ముగ్గురు రాణులు, నలుగురు సోదరులు, వారి ధర్మపత్నులు, సంతానం మరియు శాంతాదేవి కుటుంబ బంధాలు.
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">అయోధ్యా కాండ</span>
+            <span class="rk-cat-explore-btn">కుటుంబాన్ని దర్శించండి →</span>
+          </div>
+        </article>
+
+        <!-- 3. Janaka Dynasty -->
+        <article class="rk-category-card" data-category="janaka">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">🪷</div>
+              <span class="rk-cat-badge">మిథిలా వంశం</span>
+            </div>
+            <h3 class="rk-cat-title-te">జనక మహారాజు వంశం</h3>
+            <div class="rk-cat-title-en">Janaka Dynasty • Mithila Royalty</div>
+            <p class="rk-cat-desc">
+              హ్రస్వరోముడు, జనకుడు, కుశధ్వజుడు, సీత, ఊర్మిళ, మాండవి, శ్రుతకీర్తిల పవిత్ర బంధుత్వాలు మరియు అయోధ్యతో నాలుగు వివాహాలు.
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">బాలకాండ 71-73</span>
+            <span class="rk-cat-explore-btn">వంశాన్ని దర్శించండి →</span>
+          </div>
+        </article>
+
+        <!-- 4. Vanara Family -->
+        <article class="rk-category-card" data-category="vanara">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">🐒</div>
+              <span class="rk-cat-badge">కిష్కింధ</span>
+            </div>
+            <h3 class="rk-cat-title-te">వానర వంశవృక్షం</h3>
+            <div class="rk-cat-title-en">Vanara Family • Kishkindha Kings</div>
+            <p class="rk-cat-desc">
+              కిష్కింధ ప్రభువులు వాలి, సుగ్రీవుడు, తార, అంగదుడు, మరియు పరమభక్త హనుమంతుని పవిత్ర బంధుత్వాలు.
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">కిష్కింధా కాండ</span>
+            <span class="rk-cat-explore-btn">వానరులను దర్శించండి →</span>
+          </div>
+        </article>
+
+        <!-- 5. Rakshasa Family -->
+        <article class="rk-category-card" data-category="rakshasa">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">🔱</div>
+              <span class="rk-cat-badge">లంకా వంశం</span>
+            </div>
+            <h3 class="rk-cat-title-te">రాక్షస వంశవృక్షం</h3>
+            <div class="rk-cat-title-en">Rakshasa Family • Pulastya Lineage</div>
+            <p class="rk-cat-desc">
+              పులస్త్య మహర్షి, విశ్రవసుడు, కైకసి, రావణుడు, కుంభకర్ణుడు, విభీషణుడు, కుబేరుడు మరియు లంకా వీరుల వంశానుక్రమం.
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">ఉత్తర & యుద్ధ కాండ</span>
+            <span class="rk-cat-explore-btn">లంకా వంశం దర్శించండి →</span>
+          </div>
+        </article>
+
+        <!-- 6. Guru-Disciple Relationships -->
+        <article class="rk-category-card" data-category="guru">
+          <div>
+            <div class="rk-cat-header">
+              <div class="rk-cat-icon">📜</div>
+              <span class="rk-cat-badge">గురు పరంపర</span>
+            </div>
+            <h3 class="rk-cat-title-te">గురు శిష్య సంబంధాలు</h3>
+            <div class="rk-cat-title-en">Guru & Disciple Mentorship</div>
+            <p class="rk-cat-desc">
+              వశిష్ఠుడు, విశ్వామిత్రుడు, వాల్మీకి, అగస్త్యుడు, జాబాలి మహర్షుల మార్గదర్శకత్వం మరియు శిష్యుల దివ్య సంబంధాలు.
+            </p>
+          </div>
+          <div class="rk-cat-footer">
+            <span style="font-size:0.84rem; color:var(--rk-text-dim);">సమగ్ర రామాయణం</span>
+            <span class="rk-cat-explore-btn">గురు పరంపర దర్శించండి →</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Relationship Finder ("ఎవరు ఎవరికీ ఏమవుతారు?") -->
+    <section class="rk-finder-section">
+      <div class="rk-finder-header">
+        <h2 class="rk-finder-title">ఎవరు ఎవరికీ ఏమవుతారు?</h2>
+        <div class="rk-finder-subtitle">Ramayana Kinship & Relationship Finder</div>
+        <p class="rk-finder-desc">
+          రామాయణంలోని ఏ ఇద్దరు మహనీయుల మధ్యనైనా కుటుంబ, వైవాహిక లేదా గురుశిష్య సంబంధాలను తెలుసుకోండి.
+        </p>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div class="rk-presets-wrap">
+        <span class="rk-preset-label">ముఖ్యమైన సంబంధాలు:</span>
+        <button class="rk-preset-pill" data-c1="sri_rama" data-c2="bharata">శ్రీరాముడు – భరతుడు</button>
+        <button class="rk-preset-pill" data-c1="sita" data-c2="lakshmana">సీతాదేవి – లక్ష్మణుడు</button>
+        <button class="rk-preset-pill" data-c1="dasharatha" data-c2="rishyashringa">దశరథుడు – ఋష్యశృంగుడు</button>
+        <button class="rk-preset-pill" data-c1="vali" data-c2="angada">వాలి – అంగదుడు</button>
+        <button class="rk-preset-pill" data-c1="sri_rama" data-c2="hanuman">శ్రీరాముడు – హనుమంతుడు</button>
+        <button class="rk-preset-pill" data-c1="bhagiratha" data-c2="sri_rama">భగీరథుడు – శ్రీరాముడు</button>
+        <button class="rk-preset-pill" data-c1="ravana" data-c2="vibhishana">రావణుడు – విభీషణుడు</button>
+      </div>
+
+      <div class="rk-finder-controls">
+        <div class="rk-selector-group">
+          <label class="rk-selector-label" for="charSelect1">
+            <span>👤 మొదటి పాత్ర (Character 1)</span>
+          </label>
+          <select id="charSelect1" class="rk-select"></select>
+        </div>
+
+        <button class="rk-finder-swap-btn" id="btnSwapChars" title="Swap characters">⇄</button>
+
+        <div class="rk-selector-group">
+          <label class="rk-selector-label" for="charSelect2">
+            <span>👤 రెండవ పాత్ర (Character 2)</span>
+          </label>
+          <select id="charSelect2" class="rk-select"></select>
+        </div>
+      </div>
+
+      <div class="rk-finder-action-row">
+        <button class="rk-finder-btn" id="btnFindRelationship">
+          🔍 సంబంధం తెలుసుకోండి (Find Relationship)
+        </button>
+      </div>
+
+      <!-- Result Card -->
+      <div class="rk-result-card" id="relationshipResultCard">
+        <div class="rk-res-title-row">
+          <span class="rk-res-badge" id="resRelBadge">తమ్ముడు</span>
+          <span class="rk-res-en" id="resRelEn">Younger Brother</span>
+        </div>
+        <div class="rk-res-honorific" id="resHonorific">శ్రీరామునికి భరతుడు ప్రాణసమానుడైన తమ్ముడు</div>
+        <p class="rk-res-details" id="resDetails">
+          దశరథ-కైకేయిల కుమారుడు. శ్రీరాముని పాదుకలను సింహాసనంపై ఉంచి 14 ఏళ్లు నందిగ్రామం నుండి ధర్మపాలన చేసిన పరమ భ్రాతృభక్తుడు.
+        </p>
+        <div class="rk-res-meta-row">
+          <span class="rk-res-citation" id="resCitation">📖 వాల్మీకి రామాయణ ప్రమాణం: అయోధ్యా కాండ</span>
+          <span>సనాతన ధర్మ బంధుత్వం</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Tree & Explorer Workspace -->
+    <section class="rk-explorer-wrap" id="treeWorkspace">
+      <div class="rk-workspace-card">
+        
+        <!-- Toolbar -->
+        <div class="rk-ws-toolbar">
+          <div class="rk-ws-title-group">
+            <span class="rk-ws-cat-icon" id="wsCatIcon">🏹</span>
+            <div>
+              <div class="rk-ws-cat-title" id="wsCatTitle">దశరథ మహారాజు కుటుంబం</div>
+              <div class="rk-ws-cat-subtitle" id="wsCatSubtitle">Dasharatha Family Tree Explorer</div>
+            </div>
+          </div>
+
+          <!-- Category Tabs Switcher -->
+          <div class="rk-cat-tabs">
+            <button class="rk-cat-tab-btn" data-cat="ikshvaku">ఇక్ష్వాకు</button>
+            <button class="rk-cat-tab-btn active" data-cat="dasharatha">దశరథ కుటుంబం</button>
+            <button class="rk-cat-tab-btn" data-cat="janaka">జనక వంశం</button>
+            <button class="rk-cat-tab-btn" data-cat="vanara">వానరులు</button>
+            <button class="rk-cat-tab-btn" data-cat="rakshasa">రాక్షసులు</button>
+            <button class="rk-cat-tab-btn" data-cat="guru">గురు-శిష్య</button>
+          </div>
+
+          <!-- Toolbar Controls -->
+          <div class="rk-ws-actions">
+            <button class="rk-ctrl-btn" id="btnZoomOut" title="Zoom Out">−</button>
+            <span class="rk-ctrl-btn rk-ctrl-btn-text" id="zoomLevelLabel">100%</span>
+            <button class="rk-ctrl-btn" id="btnZoomIn" title="Zoom In">+</button>
+            <button class="rk-ctrl-btn" id="btnResetZoom" title="Reset Zoom">↺</button>
+            <button class="rk-ctrl-btn" id="btnFit" title="Fit to Screen">[ ]</button>
+          </div>
+        </div>
+
+        <!-- Lineage Legend Bar -->
+        <div class="rk-tree-legend">
+          <div class="rk-legend-item">
+            <span class="rk-leg-line solid"></span>
+            <span>సంతానం (Parent-Child)</span>
+          </div>
+          <div class="rk-legend-item">
+            <span class="rk-leg-line double"></span>
+            <span>వివాహ బంధం (Marriage)</span>
+          </div>
+          <div class="rk-legend-item">
+            <span class="rk-leg-line lateral"></span>
+            <span>తోబుట్టువులు (Siblings)</span>
+          </div>
+          <div class="rk-legend-item">
+            <span class="rk-leg-line dashed"></span>
+            <span>గురు-శిష్య (Guru-Disciple)</span>
+          </div>
+          <div class="rk-legend-item" style="color: var(--rk-gold-main);">
+            <span>💡 కార్డుపై క్లిక్ చేసి సమగ్ర వివరాలు చూడండి</span>
+          </div>
+        </div>
+
+        <!-- Canvas Viewport -->
+        <div class="rk-tree-viewport" id="treeViewport">
+          <div class="rk-tree-content" id="treeContent">
+            <!-- Dynamically populated by tree-renderer.js -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Character Profile Modal -->
+    <div class="rk-modal-backdrop" id="profileModal">
+      <div class="rk-modal-sheet">
+        <button class="rk-modal-close-btn" id="modalCloseBtn" title="Close modal">✕</button>
+        <div id="profileModalContent">
+          <!-- Populated dynamically by openCharacterProfile -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="rk-footer">
+      <p>శ్రీరామ జయరామ జయజయ రామ • సనాతన ధర్మం • సన్నివేశం</p>
+      <p style="margin-top: 6px; font-size: 0.84rem;">
+        © 2026 <a href="../">సన్నివేశం (Sannivesham)</a>. సర్వహక్కులు ప్రత్యేకించబడినవి.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Background Ambient Particles Script -->
+  <script>
+    (function initSparkles() {
+      const canvas = document.getElementById("ambientCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener("resize", () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const P_COUNT = 35;
+      for (let i = 0; i < P_COUNT; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2 + 0.6,
+          speedY: Math.random() * 0.35 + 0.1,
+          speedX: (Math.random() - 0.5) * 0.2,
+          alpha: Math.random() * 0.45 + 0.2
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "rgba(255, 209, 102, 0.45)";
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          p.y -= p.speedY;
+          p.x += p.speedX;
+          if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+        });
+        requestAnimationFrame(render);
+      }
+      render();
+    })();
+  </script>
+
+  <!-- Feature Scripts -->
+  <script src="data.js"></script>
+  <script src="relationships.js"></script>
+  <script src="tree-renderer.js"></script>
+</body>
+
+</html>
