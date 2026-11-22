@@ -1,6 +1,7 @@
 /**
  * SANNIVESHAM – RAMAYANA FAMILY TREE & VISUAL EXPLORER ENGINE
- * Interactive Flowchart Tree, SVG Connector Lines, Calibrated Mobile Gestures, and Kinship Resolver
+ * Traditional Indian Manuscript & Parchment Gold Flowchart Engine
+ * Authenticated against Srimad Valmiki Ramayana
  */
 
 (function (global) {
@@ -26,7 +27,7 @@
   ===================================================== */
   const state = {
     currentCategory: "dasharatha",
-    ikshvakuMode: "milestones",
+    ikshvakuMode: "milestones", // "milestones" or "full"
     scale: 1,
     panX: 0,
     panY: 0,
@@ -35,6 +36,7 @@
     selectedCharId: null
   };
 
+  /* Divine Character Icons & Emblem Data */
   const AVATARS = {
     sri_rama: "🏹",
     sita: "🪷",
@@ -93,17 +95,37 @@
     vishwamitra: "🏹",
     valmiki: "✍️",
     agastya: "🌊",
-    jabali: "🧘"
+    jabali: "🧘",
+    surya: "☀️",
+    vivasvan: "☀️",
+    vaivasvata_manu: "👑",
+    ikshvaku: "☀️",
+    sagara: "🌊",
+    bhagiratha: "🌊",
+    raghu: "👑"
   };
 
   function getAvatar(id) {
     return AVATARS[id] || "👑";
   }
 
+  /* Render Circular Portrait with Real Artwork or Traditional Illustrated Emblem */
+  function renderCharacterAvatar(charId, isLarge = false) {
+    if (charId === "sri_rama") {
+      return `<img src="../chant-counter/images/rama.jpg" alt="శ్రీరాముడు" class="${isLarge ? 'rk-modal-portrait-img' : 'rk-node-avatar-img'}" onerror="this.outerHTML='<span class=\\'rk-node-avatar-art\\'>🏹</span>'">`;
+    }
+    if (charId === "hanuman") {
+      return `<img src="../chant-counter/images/hanuman.jpg" alt="హనుమంతుడు" class="${isLarge ? 'rk-modal-portrait-img' : 'rk-node-avatar-img'}" onerror="this.outerHTML='<span class=\\'rk-node-avatar-art\\'>🙏</span>'">`;
+    }
+
+    const icon = getAvatar(charId);
+    return `<span class="rk-node-avatar-art" style="${isLarge ? 'font-size: 5.5rem;' : ''}">${icon}</span>`;
+  }
+
   /* Explicit genealogical connections for rendering flowcharts */
   const CONNECTIONS = {
     dasharatha: [
-      // 1. Marriages (Pink Lines #ff7675)
+      // 1. Marriages (Pink Lines #d63031)
       { type: "marriage", from: "aja", to: "indumati" },
       { type: "marriage", from: "dasharatha", to: "kausalya" },
       { type: "marriage", from: "dasharatha", to: "sumitra" },
@@ -114,14 +136,14 @@
       { type: "marriage", from: "bharata", to: "mandavi" },
       { type: "marriage", from: "shatrughna", to: "shrutakirti" },
 
-      // 2. Siblings (Blue Lines #74b9ff)
+      // 2. Siblings (Blue Lines #0984e3)
       { type: "siblings", members: ["sri_rama", "lakshmana", "bharata", "shatrughna"] },
       { type: "siblings", members: ["lava", "kusha"] },
       { type: "siblings", members: ["angada_lakshmana", "chandraketu"] },
       { type: "siblings", members: ["taksha", "pushkala"] },
       { type: "siblings", members: ["subahu_shatrughna", "shatrughati"] },
 
-      // 3. Parent-Child (Yellow Lines #ffd166)
+      // 3. Parent-Child (Yellow/Gold Lines #c59b27)
       { type: "parent_child", from: "aja", to: ["dasharatha"] },
       { type: "parent_child", from: "dasharatha", to: ["shanta"] },
       { type: "parent_child", from: "kausalya", to: ["sri_rama"] },
@@ -145,7 +167,7 @@
       { type: "siblings", members: ["sita", "urmila"] },
       { type: "siblings", members: ["mandavi", "shrutakirti"] },
 
-      // Parent-Child (Yellow)
+      // Parent-Child (Gold)
       { type: "parent_child", from: "hrasvaroman", to: ["janaka", "kushadhvaja"] },
       { type: "parent_child", from: "janaka", to: ["sita", "urmila"] },
       { type: "parent_child", from: "kushadhvaja", to: ["mandavi", "shrutakirti"] }
@@ -160,7 +182,7 @@
       // Siblings (Blue)
       { type: "siblings", members: ["vali", "sugriva"] },
 
-      // Parent-Child (Yellow)
+      // Parent-Child (Gold)
       { type: "parent_child", from: "kesari", to: ["hanuman"] },
       { type: "parent_child", from: "anjana", to: ["hanuman"] },
       { type: "parent_child", from: "vali", to: ["angada_vali"] }
@@ -177,7 +199,7 @@
       { type: "siblings", members: ["ravana", "kumbhakarna", "vibhishana", "shurpanakha"] },
       { type: "siblings", members: ["indrajit", "akshayakumara", "atikaya", "narantaka", "devantaka", "trishira"] },
 
-      // Parent-Child (Yellow)
+      // Parent-Child (Gold)
       { type: "parent_child", from: "pulastya", to: ["vishrava"] },
       { type: "parent_child", from: "vishrava", to: ["kubera"] },
       { type: "parent_child", from: "kaikasi", to: ["ravana", "kumbhakarna", "vibhishana", "shurpanakha"] },
@@ -194,7 +216,7 @@
   };
 
   /* =====================================================
-     2. PAN & ZOOM CONTROLLER (CALIBRATED FOR MOBILE & DESKTOP)
+     2. PAN & ZOOM CONTROLLER (CALIBRATED MOBILE PHYSICS)
   ===================================================== */
   function clampAndApplyTransform() {
     const viewport = document.getElementById("treeViewport");
@@ -277,13 +299,13 @@
         const dx = e.touches[0].clientX - touchStartX;
         const dy = e.touches[0].clientY - touchStartY;
 
-        // If intent hasn't been established yet, detect direction
+        // Detect user intent (vertical page scroll vs horizontal tree pan)
         if (touchMode === "idle") {
           const absX = Math.abs(dx);
           const absY = Math.abs(dy);
 
           if (absY > absX && absY > 7) {
-            // Natural page scroll: Let browser scroll the page naturally!
+            // Natural vertical page scroll: Let browser scroll the page naturally!
             touchMode = "scroll";
             return;
           } else if (absX > absY && absX > 7) {
@@ -352,7 +374,7 @@
   }
 
   function zoomBy(delta) {
-    const newScale = Math.min(Math.max(state.scale + delta, 0.75), 1.6);
+    const newScale = Math.min(Math.max(state.scale + delta, 0.75), 1.5);
     state.scale = Number(newScale.toFixed(2));
     clampAndApplyTransform();
     updateZoomDisplay();
@@ -391,7 +413,7 @@
 
   /* =====================================================
      3. DYNAMIC SVG TREE CONNECTORS ENGINE
-     (Yellow: Parent-Child, Pink: Marriage, Blue: Siblings, Purple: Guru)
+     (Gold: Parent-Child, Pink/Red: Marriage, Blue: Siblings, Purple: Guru)
   ===================================================== */
   function drawTreeConnections() {
     const content = document.getElementById("treeContent");
@@ -422,22 +444,17 @@
     // Definitions for arrowheads, dots, and glow filters
     svg.innerHTML = `
       <defs>
-        <!-- Yellow Down Arrow for Parent-to-Child -->
+        <!-- Gold/Yellow Down Arrow for Parent-to-Child -->
+        <marker id="arrowGold" markerWidth="9" markerHeight="9" refX="5" refY="3.5" orient="auto">
+          <polygon points="0 0, 8 3.5, 0 7" fill="#ffd166"/>
+        </marker>
         <marker id="arrowYellow" markerWidth="9" markerHeight="9" refX="5" refY="3.5" orient="auto">
           <polygon points="0 0, 8 3.5, 0 7" fill="#ffd166"/>
         </marker>
         <!-- Blue Dot for Siblings -->
         <marker id="dotBlue" markerWidth="6" markerHeight="6" refX="3" refY="3">
-          <circle cx="3" cy="3" r="2.5" fill="#74b9ff"/>
+          <circle cx="3" cy="3" r="2.5" fill="#0984e3"/>
         </marker>
-        <!-- Pink Glow Filter -->
-        <filter id="pinkGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ff7675" flood-opacity="0.8"/>
-        </filter>
-        <!-- Yellow Glow Filter -->
-        <filter id="yellowGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ffd166" flood-opacity="0.8"/>
-        </filter>
       </defs>
     `;
 
@@ -467,7 +484,7 @@
     let pathsHtml = "";
 
     conns.forEach(conn => {
-      // 1. Marriage Line (Pink #ff7675)
+      // 1. Marriage Line (Sacred Red/Pink #d63031)
       if (conn.type === "marriage") {
         const a = getNodeCoords(conn.from);
         const b = getNodeCoords(conn.to);
@@ -484,9 +501,9 @@
 
             pathsHtml += `
               <g class="rk-line-marriage">
-                <line x1="${x1}" y1="${y - 2}" x2="${x2}" y2="${y - 2}" stroke="#ff7675" stroke-width="2" filter="url(#pinkGlow)"/>
-                <line x1="${x1}" y1="${y + 2}" x2="${x2}" y2="${y + 2}" stroke="#ff7675" stroke-width="2" filter="url(#pinkGlow)"/>
-                <circle cx="${midX}" cy="${y}" r="4" fill="#ff7675" stroke="#ffeaa7" stroke-width="1.5"/>
+                <line x1="${x1}" y1="${y - 2}" x2="${x2}" y2="${y - 2}" stroke="#d63031" stroke-width="2"/>
+                <line x1="${x1}" y1="${y + 2}" x2="${x2}" y2="${y + 2}" stroke="#d63031" stroke-width="2"/>
+                <circle cx="${midX}" cy="${y}" r="4" fill="#d63031" stroke="#f5df88" stroke-width="1.5"/>
               </g>
             `;
           } else {
@@ -499,15 +516,15 @@
 
             pathsHtml += `
               <g class="rk-line-marriage">
-                <path d="M ${x1},${y1} L ${midX},${y1} L ${midX},${y2} L ${x2},${y2}" stroke="#ff7675" stroke-width="2.5" fill="none" filter="url(#pinkGlow)"/>
-                <circle cx="${midX}" cy="${(y1 + y2) / 2}" r="4" fill="#ff7675" stroke="#ffeaa7" stroke-width="1.5"/>
+                <path d="M ${x1},${y1} L ${midX},${y1} L ${midX},${y2} L ${x2},${y2}" stroke="#d63031" stroke-width="2.5" fill="none"/>
+                <circle cx="${midX}" cy="${(y1 + y2) / 2}" r="4" fill="#d63031" stroke="#f5df88" stroke-width="1.5"/>
               </g>
             `;
           }
         }
       }
 
-      // 2. Parent-to-Child (Yellow #ffd166)
+      // 2. Parent-to-Child (Gold #c59b27)
       else if (conn.type === "parent_child") {
         const parent = getNodeCoords(conn.from);
         if (parent && conn.to && conn.to.length > 0) {
@@ -521,28 +538,28 @@
             pathsHtml += `
               <g class="rk-line-parent-child">
                 <!-- Drop line from parent -->
-                <line x1="${startX}" y1="${startY}" x2="${startX}" y2="${railY}" stroke="#ffd166" stroke-width="2.5" filter="url(#yellowGlow)"/>
-                <circle cx="${startX}" cy="${startY}" r="3.5" fill="#ffd166"/>
-                <circle cx="${startX}" cy="${railY}" r="3" fill="#ffd166"/>
+                <line x1="${startX}" y1="${startY}" x2="${startX}" y2="${railY}" stroke="#c59b27" stroke-width="2.5"/>
+                <circle cx="${startX}" cy="${startY}" r="3.5" fill="#c59b27"/>
+                <circle cx="${startX}" cy="${railY}" r="3" fill="#c59b27"/>
             `;
 
             if (children.length === 1) {
               const ch = children[0];
               pathsHtml += `
-                <path d="M ${startX},${railY} L ${ch.centerX},${railY} L ${ch.centerX},${ch.top}" stroke="#ffd166" stroke-width="2.5" fill="none" marker-end="url(#arrowYellow)" filter="url(#yellowGlow)"/>
+                <path d="M ${startX},${railY} L ${ch.centerX},${railY} L ${ch.centerX},${ch.top}" stroke="#c59b27" stroke-width="2.5" fill="none" marker-end="url(#arrowGold)"/>
               `;
             } else {
               const minX = Math.min(startX, ...children.map(c => c.centerX));
               const maxX = Math.max(startX, ...children.map(c => c.centerX));
 
               pathsHtml += `
-                <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round" filter="url(#yellowGlow)"/>
+                <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#c59b27" stroke-width="2.5" stroke-linecap="round"/>
               `;
 
               children.forEach(ch => {
                 pathsHtml += `
-                  <line x1="${ch.centerX}" y1="${railY}" x2="${ch.centerX}" y2="${ch.top}" stroke="#ffd166" stroke-width="2.5" marker-end="url(#arrowYellow)" filter="url(#yellowGlow)"/>
-                  <circle cx="${ch.centerX}" cy="${railY}" r="2.5" fill="#ffd166"/>
+                  <line x1="${ch.centerX}" y1="${railY}" x2="${ch.centerX}" y2="${ch.top}" stroke="#c59b27" stroke-width="2.5" marker-end="url(#arrowGold)"/>
+                  <circle cx="${ch.centerX}" cy="${railY}" r="2.5" fill="#c59b27"/>
                 `;
               });
             }
@@ -551,7 +568,7 @@
         }
       }
 
-      // 3. Siblings (Blue Rail #74b9ff)
+      // 3. Siblings (Blue Rail #0984e3)
       else if (conn.type === "siblings") {
         const members = conn.members.map(getNodeCoords).filter(Boolean);
         if (members.length >= 2) {
@@ -563,21 +580,21 @@
 
           pathsHtml += `
             <g class="rk-line-sibling">
-              <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#74b9ff" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="${minX}" y1="${railY}" x2="${maxX}" y2="${railY}" stroke="#0984e3" stroke-width="2.5" stroke-linecap="round"/>
           `;
 
           members.forEach(m => {
             pathsHtml += `
-              <line x1="${m.centerX}" y1="${railY}" x2="${m.centerX}" y2="${m.top}" stroke="#74b9ff" stroke-width="2.5"/>
-              <circle cx="${m.centerX}" cy="${railY}" r="3" fill="#74b9ff"/>
-              <circle cx="${m.centerX}" cy="${m.top}" r="2.5" fill="#74b9ff"/>
+              <line x1="${m.centerX}" y1="${railY}" x2="${m.centerX}" y2="${m.top}" stroke="#0984e3" stroke-width="2.5"/>
+              <circle cx="${m.centerX}" cy="${railY}" r="3" fill="#0984e3"/>
+              <circle cx="${m.centerX}" cy="${m.top}" r="2.5" fill="#0984e3"/>
             `;
           });
           pathsHtml += `</g>`;
         }
       }
 
-      // 4. Guru-to-Disciple (Purple Dashed #a29bfe)
+      // 4. Guru-to-Disciple (Purple Dashed #6c5ce7)
       else if (conn.type === "guru_disciple") {
         const guru = getNodeCoords(conn.from);
         if (guru && conn.to) {
@@ -591,9 +608,9 @@
 
             pathsHtml += `
               <g class="rk-line-guru">
-                <path d="M ${startX},${startY} C ${startX},${midY} ${endX},${midY} ${endX},${endY}" stroke="#a29bfe" stroke-width="2" stroke-dasharray="6,4" fill="none"/>
-                <circle cx="${startX}" cy="${startY}" r="3" fill="#a29bfe"/>
-                <circle cx="${endX}" cy="${endY}" r="3" fill="#a29bfe"/>
+                <path d="M ${startX},${startY} C ${startX},${midY} ${endX},${midY} ${endX},${endY}" stroke="#6c5ce7" stroke-width="2" stroke-dasharray="6,4" fill="none"/>
+                <circle cx="${startX}" cy="${startY}" r="3" fill="#6c5ce7"/>
+                <circle cx="${endX}" cy="${endY}" r="3" fill="#6c5ce7"/>
               </g>
             `;
           });
@@ -605,18 +622,12 @@
   }
 
   /* =====================================================
-     4. RENDER IKSHVAKU DYNASTY (39 GENERATIONS)
+     4. RENDER IKSHVAKU DYNASTY (MATCHING BOTTOM-RIGHT PANEL)
   ===================================================== */
   function renderIkshvakuDynasty(container) {
     const data = getData();
     if (!data) return;
     const lineage = data.IKSHVAKU_LINEAGE || [];
-
-    const MILESTONES = [
-      "brahma", "marichi", "kashyapa", "vivasvan", "vaivasvata_manu",
-      "ikshvaku", "trishanku", "mandhata", "sagara", "bhagiratha",
-      "kakutstha", "raghu", "ambarisha", "aja", "dasharatha", "sri_rama"
-    ];
 
     let html = `
       <div class="rk-ikshvaku-view-controls">
@@ -627,39 +638,94 @@
           📜 పూర్తి 39 తరాల అనుక్రమణిక (Complete 39 Lineage)
         </button>
       </div>
-      <div class="rk-lineage-timeline">
     `;
 
-    lineage.forEach((king) => {
-      const isMilestone = MILESTONES.includes(king.id);
-      if (state.ikshvakuMode === "milestones" && !isMilestone) {
-        return;
-      }
-
+    if (state.ikshvakuMode === "milestones") {
+      // Flow layout matching Bottom-Right reference mockup panel
       html += `
-        <div class="rk-lineage-row" data-char-id="${king.id}">
-          <div class="rk-gen-badge ${isMilestone ? 'milestone' : ''}">
-            ${king.gen}
-          </div>
-          <div class="rk-lineage-info-card">
-            <div class="rk-lineage-header">
-              <span class="rk-lineage-name-te">${king.nameTe}</span>
-              <span class="rk-lineage-name-en">${king.nameEn}</span>
+        <div class="rk-milestone-flow">
+          <!-- Row 1: Surya -> Vaivasvata Manu -> Ikshvaku -> Sagara -> Bhagiratha -->
+          <div class="rk-milestone-row">
+            <div class="rk-milestone-node" data-char-id="vivasvan">
+              <div class="rk-milestone-avatar">☀️</div>
+              <div class="rk-milestone-name-te">సూర్యుడు</div>
             </div>
-            <div class="rk-lineage-title-te">${king.titleTe || ''}</div>
-            <div class="rk-lineage-desc">${king.roleTe || ''}</div>
-            <div class="rk-lineage-sarga">
-              <span>📖 వాల్మీకి రామాయణం: ${king.sarga || 'బాలకాండ సర్గ 70'}</span>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="vaivasvata_manu">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">వైవస్వత మనువు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="ikshvaku">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">ఇక్ష్వాకు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="sagara">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">సగరుడు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="bhagiratha">
+              <div class="rk-milestone-avatar">🌊</div>
+              <div class="rk-milestone-name-te">భగీరథుడు</div>
+            </div>
+          </div>
+
+          <!-- Row 2: Raghu -> Aja -> Dasharatha -> Sri Rama -->
+          <div class="rk-milestone-row">
+            <div class="rk-milestone-node" data-char-id="raghu">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">రఘువు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="aja">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">అజుడు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="dasharatha">
+              <div class="rk-milestone-avatar">👑</div>
+              <div class="rk-milestone-name-te">దశరథుడు</div>
+            </div>
+            <span class="rk-milestone-arrow">➔</span>
+            <div class="rk-milestone-node" data-char-id="sri_rama">
+              <div class="rk-milestone-avatar golden-halo">🏹</div>
+              <div class="rk-milestone-name-te" style="color:var(--rk-maroon-main); font-weight:900;">శ్రీరాముడు</div>
             </div>
           </div>
         </div>
       `;
-    });
+    } else {
+      // Full 39 Generations view
+      html += `<div class="rk-lineage-timeline">`;
+      lineage.forEach((king) => {
+        html += `
+          <div class="rk-lineage-row" data-char-id="${king.id}">
+            <div class="rk-gen-badge milestone">
+              ${king.gen}
+            </div>
+            <div class="rk-lineage-info-card">
+              <div class="rk-lineage-header">
+                <span class="rk-lineage-name-te">${king.nameTe}</span>
+                <span class="rk-lineage-name-en">${king.nameEn}</span>
+              </div>
+              <div class="rk-lineage-title-te">${king.titleTe || ''}</div>
+              <div class="rk-lineage-desc">${king.roleTe || ''}</div>
+              <div class="rk-lineage-sarga">
+                <span>📖 వాల్మీకి రామాయణం: ${king.sarga || 'బాలకాండ సర్గ 70'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
 
-    html += `</div>`;
     container.innerHTML = html;
 
-    container.querySelectorAll(".rk-lineage-row").forEach(el => {
+    // Attach profile openers
+    container.querySelectorAll(".rk-milestone-node, .rk-lineage-row").forEach(el => {
       el.addEventListener("click", () => {
         const id = el.getAttribute("data-char-id");
         openCharacterProfile(id);
@@ -683,7 +749,7 @@
   }
 
   /* =====================================================
-     5. RENDER HIERARCHICAL FAMILY TREES
+     5. RENDER HIERARCHICAL FAMILY TREES (MATCHING MOCKUP)
   ===================================================== */
   function renderHierarchicalTree(catId, container) {
     const data = getData();
@@ -850,14 +916,16 @@
 
   function renderNodeCard(char) {
     if (!char) return "";
-    const avatar = getAvatar(char.id);
+    const avatarHtml = renderCharacterAvatar(char.id);
     const name = state.lang === "te" ? char.nameTelugu : char.nameEnglish;
     const subName = state.lang === "te" ? char.nameEnglish : char.nameTelugu;
     const kingdom = char.kingdom || "";
 
     return `
       <div class="rk-char-node" data-char-id="${char.id}" id="node-${char.id}">
-        <span class="rk-node-avatar">${avatar}</span>
+        <div class="rk-node-avatar-frame">
+          ${avatarHtml}
+        </div>
         <div class="rk-node-name-te" title="${char.nameTelugu}">${name}</div>
         <div class="rk-node-name-en">${subName}</div>
         ${kingdom ? `<span class="rk-node-role-pill">${kingdom}</span>` : ''}
@@ -867,7 +935,7 @@
 
   /* =====================================================
      6. HIGHLIGHT FAMILY NETWORK
-  ===================================================== */
+  ==================================================== */
   function highlightNetwork(charId) {
     const data = getData();
     if (!data) return;
@@ -916,19 +984,20 @@
   }
 
   /* =====================================================
-     7. CHARACTER PROFILE MODAL
+     7. CHARACTER PROFILE MODAL (MATCHING TOP-RIGHT PANEL)
   ===================================================== */
   function openCharacterProfile(charId) {
     const data = getData();
     if (!data) return;
 
-    let char = (data.CHARACTERS || []).find(c => c.id === charId);
-    let isKingLineage = false;
+    const charMap = {};
+    (data.CHARACTERS || []).forEach(c => { charMap[c.id] = c; });
+
+    let char = charMap[charId];
 
     if (!char && data.IKSHVAKU_LINEAGE) {
       const king = data.IKSHVAKU_LINEAGE.find(k => k.id === charId);
       if (king) {
-        isKingLineage = true;
         char = {
           id: king.id,
           nameTelugu: king.nameTe,
@@ -951,31 +1020,134 @@
     const modalContent = document.getElementById("profileModalContent");
     if (!modal || !modalContent) return;
 
+    // Helper to format relationship names
+    function getNames(ids) {
+      if (!ids || ids.length === 0) return "—";
+      return ids.map(id => {
+        const found = charMap[id];
+        return found ? found.nameTelugu : id;
+      }).join(", ");
+    }
+
+    const fatherName = char.fatherId ? (charMap[char.fatherId] ? charMap[char.fatherId].nameTelugu : char.fatherId) : "—";
+    const motherName = char.motherId ? (charMap[char.motherId] ? charMap[char.motherId].nameTelugu : char.motherId) : "—";
+    const spousesName = getNames(char.spouseIds);
+    const siblingsName = getNames(char.siblingIds);
+    const childrenName = getNames(char.childrenIds);
+
     modalContent.innerHTML = `
-      <div class="rk-profile-top">
-        <div class="rk-profile-avatar-wrap">
-          <span id="modalCharAvatar">${getAvatar(char.id)}</span>
+      <div class="rk-modal-split-grid">
+        <!-- Left Column: Large Sacred Portrait -->
+        <div class="rk-modal-portrait-wrap">
+          ${renderCharacterAvatar(char.id, true)}
+          <div style="font-size:0.88rem; font-weight:700; color:var(--rk-maroon-main); margin-top:0.6rem;">
+            🏛️ ${char.kingdom || "శ్రీమద్రామాయణం"}
+          </div>
         </div>
-        <div class="rk-profile-title-block">
-          <h2 id="modalCharNameTe">${char.nameTelugu}</h2>
-          <div class="rk-prof-en" id="modalCharNameEn">${char.nameEnglish}</div>
-          <div class="rk-prof-kingdom" id="modalCharRoleBadge">🏛️ ${char.kingdom || "శ్రీమద్రామాయణం"}</div>
-        </div>
-      </div>
-      <div class="rk-profile-body">
-        <div class="rk-profile-section-title">📜 సంక్షిప్త పరిచయం (About)</div>
-        <div class="rk-profile-desc" id="modalCharBioTe">${char.descriptionTelugu || char.roleTe || ""}</div>
-        ${char.descriptionEnglish ? `<div class="rk-profile-desc" style="font-family:var(--font-ui); font-size:0.88rem; color:var(--rk-text-dim);" id="modalCharBioEn">${char.descriptionEnglish}</div>` : ""}
 
-        <div class="rk-profile-section-title">🌟 రామాయణంలో ప్రాముఖ్యత (Significance)</div>
-        <div class="rk-profile-desc" id="modalRoleInRamayana">${char.roleInRamayana || "శ్రీమద్రామాయణంలో విశిష్ట పాత్ర."}</div>
+        <!-- Right Column: Details & Key-Values Table -->
+        <div class="rk-modal-details-col">
+          <div class="rk-modal-header">
+            <h2 class="rk-modal-title-te" id="modalCharNameTe">${char.nameTelugu}</h2>
+            <div class="rk-modal-title-en" id="modalCharNameEn">${char.nameEnglish}</div>
+          </div>
 
-        <div class="rk-res-meta-row" style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid rgba(255,209,102,0.12);">
-          <span id="modalCitations">📖 ప్రమాణం: <strong>${char.kandaReferences || 'బాలకాండ 70'}</strong></span>
-          <span>సనాతన ధర్మ గ్రంథాలంబన</span>
+          <!-- Key Relations Table -->
+          <table class="rk-relations-table">
+            <tbody>
+              <tr><td class="rel-label">తండ్రి</td><td class="rel-value">${fatherName}</td></tr>
+              <tr><td class="rel-label">తల్లి</td><td class="rel-value">${motherName}</td></tr>
+              <tr><td class="rel-label">భార్య / భర్త</td><td class="rel-value">${spousesName}</td></tr>
+              <tr><td class="rel-label">సోదరులు</td><td class="rel-value">${siblingsName}</td></tr>
+              <tr><td class="rel-label">సంతానం</td><td class="rel-value">${childrenName}</td></tr>
+              <tr><td class="rel-label">రాజ్యం</td><td class="rel-value">${char.kingdom || "అయోధ్య"}</td></tr>
+            </tbody>
+          </table>
+
+          <!-- 3 Interactive Tabs -->
+          <div class="rk-prof-tabs">
+            <button class="rk-prof-tab-btn active" id="tabBtnIntro">పాత్ర పరిచయం</button>
+            <button class="rk-prof-tab-btn" id="tabBtnFamily">కుటుంబ సంబంధాలు</button>
+            <button class="rk-prof-tab-btn" id="tabBtnEvents">ముఖ్య ఘట్టాలు</button>
+          </div>
+
+          <div class="rk-prof-tab-content" id="profTabContent">
+            <p><strong>రామాయణంలో పాత్ర:</strong> ${char.roleInRamayana || "శ్రీమద్రామాయణంలో విశిష్ట పాత్ర."}</p>
+            <p style="margin-top:0.5rem;">${char.descriptionTelugu || char.roleTe || ""}</p>
+          </div>
+
+          <div class="rk-prof-actions-row">
+            <button class="rk-focus-tree-btn" id="btnFocusInTree" type="button">
+              వంశవృక్షంలో గుర్తించండి 🎯
+            </button>
+          </div>
+
+          <div style="font-size:0.8rem; color:var(--rk-text-dim); margin-top:1rem; border-top:1px solid rgba(197,155,39,0.2); padding-top:0.5rem;">
+            📖 ప్రమాణం: <strong>${char.kandaReferences || 'వాల్మీకి రామాయణం'}</strong>
+          </div>
         </div>
       </div>
     `;
+
+    // Tab switching
+    const bIntro = document.getElementById("tabBtnIntro");
+    const bFamily = document.getElementById("tabBtnFamily");
+    const bEvents = document.getElementById("tabBtnEvents");
+    const tabContent = document.getElementById("profTabContent");
+
+    if (bIntro && bFamily && bEvents && tabContent) {
+      bIntro.addEventListener("click", () => {
+        bIntro.classList.add("active");
+        bFamily.classList.remove("active");
+        bEvents.classList.remove("active");
+        tabContent.innerHTML = `
+          <p><strong>రామాయణంలో పాత్ర:</strong> ${char.roleInRamayana || "శ్రీమద్రామాయణంలో విశిష్ట పాత్ర."}</p>
+          <p style="margin-top:0.5rem;">${char.descriptionTelugu || char.roleTe || ""}</p>
+        `;
+      });
+
+      bFamily.addEventListener("click", () => {
+        bFamily.classList.add("active");
+        bIntro.classList.remove("active");
+        bEvents.classList.remove("active");
+        tabContent.innerHTML = `
+          <p><strong>బంధుత్వాల వివరణ:</strong></p>
+          <ul style="padding-left:1.2rem; margin-top:0.4rem; line-height:1.7;">
+            <li><strong>తల్లిదండ్రులు:</strong> ${fatherName}, ${motherName}</li>
+            <li><strong>వైవాహిక బంధం:</strong> ${spousesName}</li>
+            <li><strong>తోబుట్టువులు:</strong> ${siblingsName}</li>
+            <li><strong>సంతానం:</strong> ${childrenName}</li>
+          </ul>
+        `;
+      });
+
+      bEvents.addEventListener("click", () => {
+        bEvents.classList.add("active");
+        bIntro.classList.remove("active");
+        bFamily.classList.remove("active");
+        tabContent.innerHTML = `
+          <p><strong>రామాయణ కాండల ప్రస్తావనలు:</strong></p>
+          <p style="margin-top:0.4rem;">${char.kandaReferences || 'శ్రీమద్వాల్మీకి రామాయణ మూల గ్రంథం.'}</p>
+          <p style="margin-top:0.4rem; font-size:0.9rem; color:var(--rk-text-dim);">ఈ పాత్ర భారతీయ సనాతన ధర్మంలో అత్యంత పూజనీయమైన ఆదర్శ జీవన సత్యాలను ప్రతిబింబిస్తుంది.</p>
+        `;
+      });
+    }
+
+    // Focus in tree
+    const btnFocus = document.getElementById("btnFocusInTree");
+    if (btnFocus) {
+      btnFocus.addEventListener("click", () => {
+        closeCharacterProfile();
+        if (char.category && char.category !== state.currentCategory) {
+          selectCategory(char.category);
+        }
+        const ws = document.getElementById("treeWorkspace");
+        if (ws) ws.scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => {
+          highlightNetwork(char.id);
+        }, 300);
+      });
+    }
 
     modal.classList.add("active");
     state.selectedCharId = charId;
@@ -991,8 +1163,9 @@
      8. SEARCH AUTOCOMPLETE & JUMP
   ===================================================== */
   function initSearch() {
-    const input = document.getElementById("heroSearchInput");
+    const input = document.getElementById("characterSearchInput") || document.getElementById("heroSearchInput");
     const resultsBox = document.getElementById("searchResultsBox");
+    const clearBtn = document.getElementById("searchClearBtn");
     if (!input || !resultsBox) return;
 
     const data = getData();
@@ -1025,6 +1198,8 @@
 
     input.addEventListener("input", () => {
       const q = input.value.trim().toLowerCase();
+      if (clearBtn) clearBtn.style.display = q ? "block" : "none";
+
       if (!q) {
         resultsBox.innerHTML = "";
         resultsBox.classList.remove("active");
@@ -1070,6 +1245,7 @@
           const cat = el.getAttribute("data-cat");
           resultsBox.classList.remove("active");
           input.value = "";
+          if (clearBtn) clearBtn.style.display = "none";
           if (cat && cat !== state.currentCategory) {
             selectCategory(cat);
           }
@@ -1078,8 +1254,17 @@
       });
     });
 
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        input.value = "";
+        clearBtn.style.display = "none";
+        resultsBox.innerHTML = "";
+        resultsBox.classList.remove("active");
+      });
+    }
+
     document.addEventListener("click", (e) => {
-      if (!e.target.closest(".rk-search-wrapper")) {
+      if (!e.target.closest(".rk-search-box-wrap")) {
         resultsBox.classList.remove("active");
       }
     });
@@ -1101,6 +1286,7 @@
     const sel2 = document.getElementById("charSelect2");
     const btnFind = document.getElementById("btnFindRelationship");
     const btnSwap = document.getElementById("btnSwapChars");
+    const btnJump = document.getElementById("btnJumpToTree");
     const resultCard = document.getElementById("relationshipResultCard");
 
     const data = getData();
@@ -1113,6 +1299,7 @@
         nameTe: c.nameTelugu,
         nameEn: c.nameEnglish,
         role: c.roleInRamayana || c.kingdom || "",
+        category: c.category,
         avatar: getAvatar(c.id)
       });
     });
@@ -1124,6 +1311,7 @@
           nameTe: k.nameTe,
           nameEn: k.nameEn,
           role: `ఇక్ష్వాకు #${k.gen}`,
+          category: "ikshvaku",
           avatar: "👑"
         });
       }
@@ -1171,7 +1359,7 @@
       dropEl.innerHTML = html;
       dropEl.classList.add("active");
 
-      // Handle pointerdown/mousedown for instant touch selection without 300ms mobile lag
+      // Handle pointerdown/click for instant touch selection without 300ms mobile delay
       dropEl.querySelectorAll(".rk-picker-item").forEach(item => {
         const handleSelect = (e) => {
           e.preventDefault();
@@ -1258,7 +1446,7 @@
 
       if (badgeEl) badgeEl.textContent = res.relationTe;
       if (enEl) enEl.textContent = res.relationEn;
-      if (honorificEl) honorificEl.textContent = res.honorificTe || "";
+      if (honorificEl) honorificEl.textContent = res.honorificTe || `${res.relationTe}`;
       if (detailsEl) detailsEl.textContent = res.detailsTe || "";
       if (citationEl) citationEl.textContent = `📖 వాల్మీకి రామాయణ ప్రమాణం: ${res.kanda || 'శ్రీమద్వాల్మీకి రామాయణం'}`;
 
@@ -1282,6 +1470,25 @@
       });
     }
 
+    // Jump to tree button handler
+    if (btnJump) {
+      btnJump.addEventListener("click", () => {
+        const id1 = (input1 && input1.getAttribute("data-selected-id")) || "sri_rama";
+        const id2 = (input2 && input2.getAttribute("data-selected-id")) || "bharata";
+        const c1 = allChars.find(x => x.id === id1);
+        const cat = (c1 && c1.category) || "dasharatha";
+
+        selectCategory(cat);
+        const ws = document.getElementById("treeWorkspace");
+        if (ws) ws.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        setTimeout(() => {
+          highlightNetwork(id1);
+        }, 350);
+      });
+    }
+
+    // Quick preset pills
     document.querySelectorAll(".rk-preset-pill").forEach(pill => {
       pill.addEventListener("click", () => {
         const p1 = pill.getAttribute("data-c1");
