@@ -520,24 +520,24 @@
     <main class="rm-sections-grid">
 
       <!-- 1. RAMAYANAM RELATIONSHIPS (రామాయణ బంధుత్వాలు) -->
-      <article class="rm-section-card" data-section="relationships">
+      <a href="../ramayana-relationships/" class="rm-section-card" data-section="relationships" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between;">
         <div>
           <div class="rm-card-top">
-            <div class="rm-card-icon">👨‍👩‍👦‍👦</div>
+            <div class="rm-card-icon">👑</div>
             <div class="rm-card-header-text">
-              <span class="rm-card-badge">వంశవృక్షం & సంబంధాలు</span>
+              <span class="rm-card-badge" style="background: rgba(255, 209, 102, 0.18); color: var(--rm-gold); border: 1px solid var(--rm-gold);">వంశవృక్షం & బంధుత్వాలు</span>
               <h2 class="rm-card-title">రామాయణ బంధుత్వాలు</h2>
             </div>
           </div>
           <p class="rm-card-desc">
-            శ్రీరాముడు, సీతాదేవి, దశరథుడు, కౌసల్య, సుమిత్ర, కైకేయి, లక్ష్మణ, భరత, శత్రుఘ్నుల రఘువంశ బంధాలు మరియు జనక మహారాజు మిథిలా సంబంధాల సంపూర్ణ వంశవృక్షం.
+            శ్రీరాముడు, సీతాదేవి, దశరథుడు, కౌసల్య, సుమిత్ర, కైకేయి, లక్ష్మణ, భరత, శత్రుఘ్నుల రఘువంశ బంధాలు, 39 తరాల ఇక్ష్వాకు వంశానుక్రమం మరియు ఇంటరాక్టివ్ బంధుత్వ దర్శిని.
           </p>
         </div>
         <div class="rm-card-footer">
-          <span class="rm-card-tag">🔗 బంధుత్వాల పరిచయం</span>
-          <span class="rm-card-action">వీక్షించండి ➜</span>
+          <span class="rm-card-tag">✨ ప్రత్యక్ష దర్శిని</span>
+          <span class="rm-card-action" style="color: var(--rm-gold); font-weight: 700;">అన్వేషించండి ➜</span>
         </div>
-      </article>
+      </a>
 
       <!-- 2. RAMAYANA SHLOKALU (రామాయణ శ్లోకాలు) -->
       <article class="rm-section-card" data-section="shlokas">
@@ -855,8 +855,13 @@
 
     // Attach click listeners to all cards
     document.querySelectorAll(".rm-section-card").forEach(card => {
-      card.addEventListener("click", () => {
+      card.addEventListener("click", (e) => {
         const sectionKey = card.dataset.section;
+        if (sectionKey === "relationships") {
+          // Direct navigation to Ramayana Relationships Explorer
+          return;
+        }
+        e.preventDefault();
         openSectionModal(sectionKey);
       });
     });

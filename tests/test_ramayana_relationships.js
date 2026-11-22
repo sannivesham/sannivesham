@@ -136,11 +136,16 @@ requiredIds.forEach(id => {
 });
 console.log("✓ All 29 required DOM element IDs verified in index.html");
 
-// 5. Verify Main Homepage Integration
+// 5. Verify Hierarchy Integration (Ithihasalu -> Ramayanam -> Ramayana Bandhutvalu)
 const mainHtmlPath = path.join(__dirname, "../index.html");
 const mainHtml = fs.readFileSync(mainHtmlPath, "utf8");
-assert.ok(mainHtml.includes('href="ramayana-relationships/"'), "Main index.html must link to ramayana-relationships/");
-console.log("✓ Main index.html category grid successfully links to ramayana-relationships/");
+assert.strictEqual(mainHtml.includes('href="ramayana-relationships/"'), false, "Homepage must NOT link to ramayana-relationships/ directly per user instruction");
+console.log("✓ Homepage correctly does NOT contain ramayana-relationships");
+
+const ramayanamHtmlPath = path.join(__dirname, "../ithihasalu/ramayanam.html");
+const ramayanamHtml = fs.readFileSync(ramayanamHtmlPath, "utf8");
+assert.ok(ramayanamHtml.includes('href="../ramayana-relationships/"'), "Ramayanam section in Ithihasalu must link to ramayana-relationships/");
+console.log("✓ Ithihasalu -> Ramayanam categories section successfully links to ramayana-relationships/");
 
 console.log("\n=======================================================");
 console.log("🎉 ALL RAMAYANA RELATIONSHIPS TESTS PASSED WITH 100% SUCCESS!");
