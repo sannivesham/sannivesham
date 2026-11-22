@@ -74,6 +74,7 @@
         <button class="dash-btn" data-section="ithihasaluSection">ఇతిహాసాలు</button>
         <button class="dash-btn" data-section="eventsSection">Events</button>
         <button class="dash-btn" data-section="storeSection">🛍️ Store</button>
+        <button class="dash-btn" data-section="ramakotiSection">🏹 రామకోటి</button>
         <button class="dash-btn" data-section="festivalsSection">Festivals</button>
         <button class="dash-btn" data-section="templesSection">Temples</button>
         <button class="dash-btn" data-section="librarySection">Library</button>
@@ -559,6 +560,64 @@
         </div>
         <h2 class="admin-section-title">అన్ని వీడియోలు</h2>
         <div id="adminVideosList"></div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+           RAMAKOTI DASHBOARD & LEADERBOARD
+      ═══════════════════════════════════ -->
+      <div id="ramakotiSection" class="dash-section">
+        <h2 class="admin-section-title">🏹 శ్రీరామకోటి నిర్వహణ & లీడర్‌బోర్డ్</h2>
+
+        <!-- Overview Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+          <div style="background: rgba(255,209,102,0.1); border: 1px solid rgba(255,209,102,0.3); border-radius: 12px; padding: 18px; text-align: center;">
+            <div style="font-size: 0.85rem; color: #ffd166; font-weight: 700; text-transform: uppercase;">లక్ష్యం పూర్తికి మిగిలిన నామాలు</div>
+            <div id="adminRkRemaining" style="font-size: 2rem; font-weight: 900; color: #fff; margin: 8px 0;">--</div>
+            <div style="font-size: 0.78rem; color: #aaa;">మొత్తం లక్ష్యం: 1,00,00,000 (ఒక కోటి)</div>
+          </div>
+          <div style="background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 12px; padding: 18px; text-align: center;">
+            <div style="font-size: 0.85rem; color: #2ecc71; font-weight: 700; text-transform: uppercase;">పూర్తయిన రామనామాలు</div>
+            <div id="adminRkCompleted" style="font-size: 2rem; font-weight: 900; color: #2ecc71; margin: 8px 0;">--</div>
+            <div id="adminRkPercent" style="font-size: 0.78rem; color: #aaa;">0.00% పూర్తయింది</div>
+          </div>
+          <div style="background: rgba(52, 152, 219, 0.1); border: 1px solid rgba(52, 152, 219, 0.3); border-radius: 12px; padding: 18px; text-align: center;">
+            <div style="font-size: 0.85rem; color: #3498db; font-weight: 700; text-transform: uppercase;">టాప్ భక్తుల సంఖ్య</div>
+            <div style="font-size: 2rem; font-weight: 900; color: #3498db; margin: 8px 0;">Top 10</div>
+            <div style="font-size: 0.78rem; color: #aaa;">ఈమెయిల్స్‌తో కూడిన జాబితా</div>
+          </div>
+        </div>
+
+        <!-- Leaderboard Table Container -->
+        <div class="add-event-box" style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+            <h2 style="margin: 0; color: #ffd166;">🏆 టాప్ 10 రామభక్తులు (Emails & Scores)</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button id="copyTopEmailsBtn" style="padding: 8px 16px; background: #ffd166; color: #000; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">📋 Copy All Emails</button>
+              <button id="exportRkCsvBtn" style="padding: 8px 16px; background: #3498db; color: #fff; font-weight: 700; border: none; border-radius: 8px; cursor: pointer;">📥 Export CSV</button>
+              <button id="refreshRkBtn" style="padding: 8px 16px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer;">🔄 Refresh</button>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid rgba(255,209,102,0.3); color: #ffd166;">
+                  <th style="padding: 12px 10px;">ర్యాంక్</th>
+                  <th style="padding: 12px 10px;">భక్తుని పేరు</th>
+                  <th style="padding: 12px 10px;">ఈమెయిల్ ఐడీ (Email ID)</th>
+                  <th style="padding: 12px 10px; text-align: right;">లిఖించిన నామాలు</th>
+                  <th style="padding: 12px 10px;">చివరి నామలేఖనం</th>
+                  <th style="padding: 12px 10px; text-align: center;">చర్య (Action)</th>
+                </tr>
+              </thead>
+              <tbody id="adminRkLeaderboardBody">
+                <tr>
+                  <td colspan="6" style="padding: 24px; text-align: center; color: #888;">డేటా లోడ్ అవుతోంది...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- ═══════════════════════════════════

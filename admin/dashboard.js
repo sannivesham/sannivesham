@@ -2,7 +2,7 @@ import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   collection, addDoc, getDocs, getDoc, updateDoc,
-  setDoc, deleteDoc, doc, serverTimestamp, query, orderBy
+  setDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import {
   escapeHtml,
@@ -579,6 +579,9 @@ function loadSectionData(sectionId) {
       case "storeSection":
         if (typeof loadStoreCategories === "function") loadStoreCategories();
         if (typeof loadStoreProducts === "function") loadStoreProducts();
+        break;
+      case "ramakotiSection":
+        if (typeof loadAdminRamakoti === "function") loadAdminRamakoti();
         break;
       case "backgroundsSection":
         if (typeof loadThemeBackgroundsAdmin === "function") loadThemeBackgroundsAdmin();
@@ -5372,3 +5375,195 @@ if (resetQotdBtn) {
     }
   });
 }
+
+/* =====================================================
+   RAMAKOTI DASHBOARD CMS & LEADERBOARD WITH EMAILS
+===================================================== */
+let cachedTopRamakotiDevotees = [];
+
+function formatIndianNumberHelper(num) {
+  if (num === null || num === undefined || isNaN(num)) return "0";
+  const s = Math.floor(Math.max(0, num)).toString();
+  if (s.length <= 3) return s;
+  const last3 = s.substring(s.length - 3);
+  const rest = s.substring(0, s.length - 3);
+  const withCommas = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+  return withCommas + "," + last3;
+}
+
+async function loadAdminRamakoti() {
+  const tbody = document.getElementById("adminRkLeaderboardBody");
+  const remainingEl = document.getElementById("adminRkRemaining");
+  const completedEl = document.getElementById("adminRkCompleted");
+  const percentEl = document.getElementById("adminRkPercent");
+
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #ffd166;">డేటా లోడ్ అవుతోంది...</td></tr>`;
+
+  try {
+    // 1. Fetch Global Count from ramakoti/global
+    const globalSnap = await getDoc(doc(db, "ramakoti", "global"));
+    const TOTAL_TARGET = 10000000;
+    let completed = 0;
+    if (globalSnap.exists()) {
+      completed = globalSnap.data().completedCount || 0;
+    }
+    const remaining = Math.max(0, TOTAL_TARGET - completed);
+    const percent = Math.min(100, (completed / TOTAL_TARGET) * 100);
+
+    if (remainingEl) remainingEl.textContent = formatIndianNumberHelper(remaining);
+    if (completedEl) completedEl.textContent = formatIndianNumberHelper(completed);
+    if (percentEl) percentEl.textContent = percent.toFixed(4) + "% పూర్తయింది";
+
+    // 2. Fetch Top Devotees from users collection
+    const qUsers = query(
+      collection(db, "users"),
+      orderBy("ramakotiCount", "desc"),
+      limit(10)
+    );
+    const snapUsers = await getDocs(qUsers);
+
+    const list = [];
+    snapUsers.forEach(d => {
+      const data = d.data();
+      if ((data.ramakotiCount || 0) > 0) {
+        list.push({
+          uid: d.id,
+          displayName: data.displayName || data.name || "శ్రీ రామభక్తులు",
+          email: data.email || "ఈమెయిల్ నమోదు కాలేదు",
+          count: data.ramakotiCount || 0,
+          lastActive: data.lastRamakotiAt ? data.lastRamakotiAt.toDate() : null
+        });
+      }
+    });
+
+    // Also check ramakoti_leaderboard collection if users collection had sparse data
+    if (list.length < 10) {
+      try {
+        const qLb = query(
+          collection(db, "ramakoti_leaderboard"),
+          orderBy("count", "desc"),
+          limit(10)
+        );
+        const snapLb = await getDocs(qLb);
+        for (const lbDoc of snapLb.docs) {
+          const lbData = lbDoc.data();
+          if (!list.some(u => u.uid === lbDoc.id)) {
+            let userEmail = "ఈమెయిల్ నమోదు కాలేదు";
+            try {
+              const uDoc = await getDoc(doc(db, "users", lbDoc.id));
+              if (uDoc.exists() && uDoc.data().email) {
+                userEmail = uDoc.data().email;
+              }
+            } catch(e) {}
+
+            list.push({
+              uid: lbDoc.id,
+              displayName: lbData.displayName || "శ్రీ రామభక్తులు",
+              email: userEmail,
+              count: lbData.count || 0,
+              lastActive: lbData.updatedAt ? lbData.updatedAt.toDate() : null
+            });
+          }
+        }
+      } catch (errLb) {
+        console.warn("Could not query ramakoti_leaderboard:", errLb);
+      }
+    }
+
+    // Sort descending by count and take top 10
+    list.sort((a, b) => b.count - a.count);
+    cachedTopRamakotiDevotees = list.slice(0, 10);
+
+    if (cachedTopRamakotiDevotees.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #888;">ఇంకా రామకోటి నామలేఖన రికార్డులు నమోదు కాలేదు.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = cachedTopRamakotiDevotees.map((u, i) => {
+      const rank = i + 1;
+      let medal = `#${rank}`;
+      if (rank === 1) medal = "🥇 1";
+      else if (rank === 2) medal = "🥈 2";
+      else if (rank === 3) medal = "🥉 3";
+
+      const timeStr = u.lastActive ? u.lastActive.toLocaleString("te-IN", { dateStyle: "short", timeStyle: "short" }) : "—";
+      const hasValidEmail = u.email && u.email.includes("@");
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,209,102,0.05)'" onmouseout="this.style.background='transparent'">
+          <td style="padding: 12px 10px; font-weight: 800; color: #ffd166;">${medal}</td>
+          <td style="padding: 12px 10px; font-weight: 700; color: #fff;">${escapeHtml(u.displayName)}</td>
+          <td style="padding: 12px 10px;">
+            ${hasValidEmail ? `
+              <a href="mailto:${escapeHtml(u.email)}" style="color: #64b5f6; text-decoration: underline; font-family: monospace;">${escapeHtml(u.email)}</a>
+              <button onclick="navigator.clipboard.writeText('${escapeHtml(u.email)}'); alert('Copied: ${escapeHtml(u.email)}');" style="margin-left: 6px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: #fff; cursor: pointer; font-size: 0.72rem;" title="Copy Email">📋</button>
+            ` : `<span style="color: #777; font-style: italic;">${escapeHtml(u.email)}</span>`}
+          </td>
+          <td style="padding: 12px 10px; font-weight: 800; color: #ffd166; font-family: monospace; font-size: 1.05rem; text-align: right;">${formatIndianNumberHelper(u.count)}</td>
+          <td style="padding: 12px 10px; color: #aaa; font-size: 0.85rem;">${timeStr}</td>
+          <td style="padding: 12px 10px; text-align: center;">
+            ${hasValidEmail ? `
+              <a href="mailto:${escapeHtml(u.email)}?subject=శ్రీరామకోటి%20నామలేఖనం%20అభినందనలు%20-%20సన్నివేశం" style="padding: 4px 10px; background: rgba(46,204,113,0.2); border: 1px solid #2ecc71; color: #2ecc71; border-radius: 6px; font-size: 0.8rem; text-decoration: none; font-weight: 600;">✉️ ఈమెయిల్ పంపండి</a>
+            ` : '—'}
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+  } catch (err) {
+    console.error("Error loading Ramakoti admin CMS:", err);
+    tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #ff6b6b;">డేటా లోడ్ చేయడంలో లోపం: ${escapeHtml(err.message)}</td></tr>`;
+  }
+}
+
+// Wire up Buttons for Ramakoti Admin
+const refreshRkBtn = document.getElementById("refreshRkBtn");
+if (refreshRkBtn) {
+  refreshRkBtn.addEventListener("click", () => loadAdminRamakoti());
+}
+
+const copyTopEmailsBtn = document.getElementById("copyTopEmailsBtn");
+if (copyTopEmailsBtn) {
+  copyTopEmailsBtn.addEventListener("click", () => {
+    const validEmails = cachedTopRamakotiDevotees
+      .map(u => u.email)
+      .filter(e => e && e.includes("@"));
+
+    if (validEmails.length === 0) {
+      alert("కాపీ చేయడానికి చెల్లుబాటు అయ్యే ఈమెయిల్ ఐడీలు ఏవీ లేవు.");
+      return;
+    }
+
+    const emailListStr = validEmails.join(", ");
+    navigator.clipboard.writeText(emailListStr).then(() => {
+      alert(`✅ టాప్ ${validEmails.length} మంది భక్తుల ఈమెయిల్స్ క్లిప్‌బోర్డ్‌కు కాపీ అయ్యాయి!\n\n${emailListStr}`);
+    }).catch(() => {
+      prompt("ఈ క్రింది ఈమెయిల్స్‌ను కాపీ చేసుకోండి:", emailListStr);
+    });
+  });
+}
+
+const exportRkCsvBtn = document.getElementById("exportRkCsvBtn");
+if (exportRkCsvBtn) {
+  exportRkCsvBtn.addEventListener("click", () => {
+    if (!cachedTopRamakotiDevotees.length) {
+      alert("ఎక్స్‌పోర్ట్ చేయడానికి డేటా లేదు.");
+      return;
+    }
+    let csv = "Rank,Name,Email,Count,LastActive\n";
+    cachedTopRamakotiDevotees.forEach((u, i) => {
+      const timeStr = u.lastActive ? u.lastActive.toISOString() : "";
+      csv += `${i + 1},"${(u.displayName || "").replace(/"/g, '""')}","${(u.email || "").replace(/"/g, '""')}",${u.count},"${timeStr}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ramakoti_top_devotees_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
