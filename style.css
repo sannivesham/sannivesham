@@ -1742,6 +1742,10 @@ body {
   transition: 0.45s ease;
 }
 
+#ramakotiCardImg {
+  object-position: center 25%;
+}
+
 .category-card::after {
   content: "";
 
