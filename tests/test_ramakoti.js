@@ -16,7 +16,7 @@ const requiredIds = [
   'authGateView', 'writerView', 'globalCountdownVal', 'globalProgressFill',
   'globalPercentText', 'personalAvatar', 'personalUserName', 'personalCountVal',
   'ramaInput', 'submitBtn', 'spaceBtn', 'backspaceBtn', 'leaderboardList',
-  'ledgerGrid', 'ledgerEmpty', 'sessionCountText', 'googleSignInBtn'
+  'googleSignInBtn'
 ];
 
 requiredIds.forEach(id => {

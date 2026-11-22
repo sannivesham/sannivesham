@@ -894,92 +894,6 @@
       margin-top: 4px;
     }
 
-    /* 5. Sacred Ledger Card */
-    .rk-ledger-card {
-      background: rgba(22, 11, 5, 0.75);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 209, 102, 0.22);
-      border-radius: 24px;
-      padding: 26px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-    }
-
-    .rk-ledger-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 209, 102, 0.18);
-    }
-
-    .rk-ledger-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #fff4dd;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .rk-ledger-count {
-      font-size: 0.92rem;
-      color: var(--rk-gold);
-      font-family: "Outfit", sans-serif;
-    }
-
-    .rk-ledger-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-      gap: 8px;
-      max-height: 220px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .rk-ledger-grid::-webkit-scrollbar {
-      width: 6px;
-    }
-    .rk-ledger-grid::-webkit-scrollbar-thumb {
-      background: rgba(255, 209, 102, 0.25);
-      border-radius: 999px;
-    }
-
-    .rk-ledger-item {
-      background: rgba(12, 7, 3, 0.75);
-      border: 1px solid rgba(255, 209, 102, 0.18);
-      border-radius: 10px;
-      padding: 8px 10px;
-      text-align: center;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--rk-gold);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      animation: fadeInItem 0.3s ease;
-    }
-
-    @keyframes fadeInItem {
-      from { opacity: 0; transform: scale(0.92); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .rk-ledger-item-num {
-      font-size: 0.72rem;
-      color: var(--rk-text-muted);
-      font-family: "Outfit", sans-serif;
-    }
-
-    .rk-ledger-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 30px 10px;
-      color: var(--rk-text-muted);
-      font-size: 0.95rem;
-    }
-
     /* Footer */
     .rk-footer {
       text-align: center;
@@ -1229,25 +1143,6 @@
         </div>
       </section>
 
-      <!-- Sacred Ledger / Recent Names Written in Session -->
-      <section class="rk-ledger-card">
-        <div class="rk-ledger-header">
-          <div class="rk-ledger-title">
-            <span>📖</span>
-            <span>ఈ సెషన్ లిఖిత పట్టిక (Sacred Ledger)</span>
-          </div>
-          <div class="rk-ledger-count">
-            ఈ సెషన్‌లో: <b id="sessionCountText">0</b>
-          </div>
-        </div>
-
-        <div class="rk-ledger-grid" id="ledgerGrid">
-          <div class="rk-ledger-empty" id="ledgerEmpty">
-            ఇంకా నామలేఖనం ప్రారంభం కాలేదు. పైన ఉన్న బాక్స్‌లో 'SRIRAMA' అని టైప్ చేసి Space లేదా Enter నొక్కండి!
-          </div>
-        </div>
-      </section>
-
     </main>
 
     <!-- 4. Real-Time Leaderboard: Top 10 Devotees (Always Visible to All Devices) -->
@@ -1356,7 +1251,6 @@
     let currentProfileName = "";
     let personalTotal = 0;
     let globalCompleted = 0;
-    let sessionCount = 0;
     let pendingPersonalIncrement = 0;
     let pendingGlobalIncrement = 0;
     let batchSaveTimer = null;
@@ -1378,9 +1272,6 @@
     const spaceBtn = document.getElementById("spaceBtn");
     const backspaceBtn = document.getElementById("backspaceBtn");
     const leaderboardList = document.getElementById("leaderboardList");
-    const ledgerGrid = document.getElementById("ledgerGrid");
-    const ledgerEmpty = document.getElementById("ledgerEmpty");
-    const sessionCountText = document.getElementById("sessionCountText");
     const googleSignInBtn = document.getElementById("googleSignInBtn");
 
     /* =====================================================
@@ -1861,12 +1752,7 @@
         scoreEl.classList.add("bump");
       }
 
-      // 3. Add to Ledger Grid
-      for (let i = 0; i < countToAdd; i++) {
-        addLedgerItem(personalTotal - countToAdd + i + 1);
-      }
-
-      // 4. Batch save to Firestore
+      // 3. Batch save to Firestore
       pendingPersonalIncrement += countToAdd;
       pendingGlobalIncrement += countToAdd;
 
@@ -1936,7 +1822,7 @@
     });
 
     /* =====================================================
-       9. FLOATING ANIMATION & LEDGER
+       9. FLOATING ANIMATION
     ===================================================== */
     function createFloatingRipple(text) {
       const el = document.createElement("div");
@@ -1954,17 +1840,6 @@
       setTimeout(() => {
         el.remove();
       }, 1200);
-    }
-
-    function addLedgerItem(num) {
-      if (ledgerEmpty) ledgerEmpty.style.display = "none";
-      const item = document.createElement("div");
-      item.className = "rk-ledger-item";
-      item.innerHTML = `
-        <span>శ్రీరామ</span>
-        <span class="rk-ledger-item-num">#${num}</span>
-      `;
-      ledgerGrid.insertBefore(item, ledgerGrid.firstChild);
     }
 
   </script>
