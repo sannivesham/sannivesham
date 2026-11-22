@@ -83,14 +83,22 @@ body {
   padding: 0 1.25rem 3rem;
 }
 
-/* Top Navigation Bar */
+/* Top Navigation Bar (Signature Sannivesham Clean Pill Navbar) */
 .rk-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid var(--rk-maroon-border);
-  margin-bottom: 2rem;
+  gap: 14px;
+  padding: 10px 22px;
+  background: rgba(24, 13, 7, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 209, 102, 0.25);
+  border-radius: 999px;
+  margin: 1.25rem 0 2.2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .rk-nav-back {
@@ -99,50 +107,79 @@ body {
   gap: 0.5rem;
   color: var(--rk-gold-main);
   text-decoration: none;
-  font-family: var(--font-ui);
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
+  font-family: var(--font-telugu);
+  font-size: 0.94rem;
+  font-weight: 600;
+  padding: 0.45rem 1.1rem;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--rk-maroon-border);
-  background: rgba(255, 209, 102, 0.06);
+  border: 1px solid rgba(255, 209, 102, 0.22);
+  background: rgba(255, 209, 102, 0.08);
   transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
 .rk-nav-back:hover {
-  background: rgba(255, 209, 102, 0.16);
+  background: rgba(255, 209, 102, 0.2);
   border-color: var(--rk-gold-main);
-  box-shadow: 0 0 12px rgba(255, 209, 102, 0.2);
+  box-shadow: 0 0 14px rgba(255, 209, 102, 0.3);
   transform: translateX(-2px);
+  color: var(--rk-gold-light);
 }
 
-.rk-nav-brand {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--rk-gold-main);
-  text-shadow: 0 0 12px rgba(255, 209, 102, 0.35);
-  display: flex;
+.rk-nav-right {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 14px;
 }
 
 .rk-nav-lang-btn {
   background: rgba(255, 209, 102, 0.08);
-  border: 1px solid var(--rk-maroon-border);
+  border: 1px solid rgba(255, 209, 102, 0.22);
   color: var(--rk-gold-light);
-  padding: 0.45rem 0.95rem;
+  padding: 0.42rem 0.95rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
   font-family: var(--font-ui);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 600;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .rk-nav-lang-btn:hover {
   background: var(--rk-gold-main);
   color: #1a0808;
   border-color: var(--rk-gold-main);
+  box-shadow: 0 0 10px rgba(255, 209, 102, 0.35);
+}
+
+.rk-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: opacity 0.25s;
+}
+
+.rk-nav-brand:hover {
+  opacity: 0.9;
+}
+
+.rk-nav-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--rk-gold-main);
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.3);
+}
+
+.rk-nav-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--rk-gold-light);
+  text-shadow: 0 0 10px rgba(255, 209, 102, 0.35);
+  font-family: var(--font-telugu);
 }
 
 /* Hero Section */
@@ -1547,6 +1584,35 @@ body {
 }
 
 @media (max-width: 640px) {
+  .rk-nav {
+    padding: 8px 14px;
+    margin: 0.75rem 0 1.5rem;
+    gap: 8px;
+  }
+
+  .rk-nav-back {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .rk-nav-right {
+    gap: 8px;
+  }
+
+  .rk-nav-logo {
+    width: 26px;
+    height: 26px;
+  }
+
+  .rk-nav-title {
+    font-size: 1.05rem;
+  }
+
+  .rk-nav-lang-btn {
+    padding: 0.32rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
   .rk-hero-title {
     font-size: 2rem;
   }
